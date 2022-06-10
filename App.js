@@ -163,6 +163,8 @@ const A = () => {
 	return (
 		<Provider store={store}>
 			<NativeBaseProvider theme={theme}>
+				{/* Only the loader will appear until the persisted state is fully loaded. */}
+				{/* Previously saved state must be found beforehand. */}
 				<PersistGate loading={loading} persistor={persistor}>
 					<Container bg="bg">
 						<VStack space="sm" justifyContent={"start"}>

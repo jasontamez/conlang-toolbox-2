@@ -5,6 +5,9 @@ const Header = <h1>Header</h1>;
 const Welcome = <p>Welcome</p>;
 const Nav = <div>Nav</div>;
 const Footer = <div>Foot</div>;
+const Home = <div>Home</div>;
+const Content = <p>Content</p>;
+const ref = "ref";
 
 export default function App() { return (
 	<div className="app">
