@@ -7,21 +7,29 @@ import { persistStore, persistReducer } from 'redux-persist';
 import { configureStore } from '@reduxjs/toolkit';
 import { StateStorage } from './PersistentInfo';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+//import packageJson from '../../package.json';
 
-const maybeSetState = async () => {
-	let storedState = await StateStorage.getItem("lastState");
-	if(storedState !== null) {
-		if(storedState && (typeof storedState) === "object") {
-			if (compareVersions.compare(storedState.currentVersion, VERSION.current, "<")) {
-				// Do stuff to possibly bring storedState up to date
-				storedState.currentVersion = VERSION.current;
-			}
-			if(checkIfState(storedState)) {
-				return dispatch(overwriteState(storedState));
-			}
+const reconcile = async (incoming, original, reduced) => {
+	if(!incoming || typeof incoming !== 'object') {
+		// If we have no incoming state, then there might be previously stored state.
+		let storedState = await StateStorage.getItem("lastState");
+		if(storedState !== null && (typeof storedState) === "object") {
+			// Deleted stored state
+			StateStorage.removeItem("lastState");
+			// Not going to use a currentVersion prop anymore
+			delete storedState.currentVersion;
+			//
+			// Make any other changes if needed
+			//
+			return storedState;
+			//const VERSION = packageJson.version;
+			//if(checkIfState(storedState)) {
+			//	return dispatch(overwriteState(storedState));
+			//}
 		}
 	}
-	return dispatch(overwriteState(initialAppState));
+	// Previous state given? No state found from old method? Just pass along.
+	return autoMergeLevel2(incoming, original, reduced);
 };
 
 
@@ -30,7 +38,7 @@ export default () => {
 		key: 'root',
 		storage: ExpoFileSystemStorage,
 		version: 0,
-		stateReconciler: autoMergeLevel2
+		stateReconciler: reconcile
 	}
 	//let store = createStore(persistedReducer(reducer), blankAppState, applyMiddleware(thunk));
 	const persistedReducer = persistReducer(persistConfig, reducer);

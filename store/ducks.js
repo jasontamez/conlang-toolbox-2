@@ -1,7 +1,6 @@
 //import maybeUpdateTheme from './MaybeUpdateTheme';
 //import { StateStorage } from './PersistentInfo';
 //import debounce from './debouncer';
-import packageJson from '../package.json';
 import appJson from '../app.json';
 import { v4 as uuidv4 } from 'uuid';
 import { getTodayArray } from '../components/datefuncs';
@@ -11,9 +10,6 @@ import { getTodayArray } from '../components/datefuncs';
 // CONSTS
 //
 //
-export let VERSION = {
-	current: packageJson.version
-};
 const p = "paychecktopaycheck/reducer/";
 const UPDATE_THEME = p+"UPDATE_THEME";
 const SET_PAGE = p+"SET_PAGE";
@@ -78,7 +74,6 @@ export function setTextProp(payload) {
 //
 //
 export const blankAppStateNull = {
-	currentVersion: VERSION.current,
 	bills: [],		// all bills
 	paydays: [],	// all paydays
 	timeline: [],	// all bills and paydays, made into sub-bills and sub-paydays and arranged in the given timeframe
@@ -93,6 +88,8 @@ export const blankAppStateNull = {
 	theme: "Default",
 	page: "home"
 };
+
+
 const blankBill = {
 	// id: "",
 	subId: null,
