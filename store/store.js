@@ -14,12 +14,15 @@ const reconcile = async (incoming, original, reduced) => {
 		// If we have no incoming state, then there might be previously stored state.
 		let storedState = await StateStorage.getItem("lastState");
 		if(storedState !== null && (typeof storedState) === "object") {
-			// Deleted stored state
+			// Delete stored state
 			StateStorage.removeItem("lastState");
 			// Not going to use a currentVersion prop anymore
 			delete storedState.currentVersion;
 			//
+			//
 			// Make any other changes if needed
+			//
+			//
 			//
 			return storedState;
 			//const VERSION = packageJson.version;

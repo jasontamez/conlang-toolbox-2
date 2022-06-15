@@ -139,8 +139,11 @@ const A = () => {
 	const themeName = useSelector(state => state.theme);
 	const theme = getTheme(themeName);
 
+	const Menu = <nav></nav>;
+	const Content = <div></div>;
+
 	const loading = (
-		<VStack justifyContent={"center"}>
+		<VStack justifyContent={"center"} safeArea>
 			<HStack space="md" justifyContent={"center"}>
 				<Spinner accessibilityLabel="Loading info" color="secondary.500" />
 				<Heading color="primary.500" fontSize="md">Loading...</Heading>
@@ -154,7 +157,7 @@ const A = () => {
 				{/* Only the loader will appear until the persisted state is fully loaded. */}
 				{/* Previously saved state must be found beforehand. */}
 				<PersistGate loading={loading} persistor={persistor}>
-					<Container bg="bg">
+					<Container bg="bg" safeArea>
 						<VStack space="sm" justifyContent={"start"}>
 							<Menu />
 							<Content />
