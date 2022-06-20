@@ -72,6 +72,34 @@ function App() {
 	);
 };
 
-// Need to build in Links to test the routes more thoroughly
+const Testo = () => {
+	return (
+		<NativeRouter>
+			<Routes>
+				<Route path="/wg/*" element={<WG />}>
+				</Route>
+				<Route path="/we/*"  element={<WE />}>
+				</Route>
+				<Route path="/lex/*" element={<Lexicon />}>
+				</Route>
+				<Route path="/ms/*" element={<MS />}>
+					<Route index element={<MSSettings />} />
+					<Route path=":msPage" element={<MSSection />} />
+				</Route>
+				<Route path="/ph/*" element={<Lexicon />}>
+				</Route>
+				<Route path="/dc/*" element={<Lexicon />}>
+				</Route>
+				<Route path="/settings" element={<Settings />} />
+				<Route path="/wordlists" element={<WordLists />} />
+				<Route path="/credits" element={<Credits />} />
+				<Route path="/about" element={<About />} />
+				<Route index element={<About />} />
+			</Routes>
+		</NativeRouter>
+	);
+};
+
+// Need to change "default" links to "/" indexes in all pages
 
 export default App;
