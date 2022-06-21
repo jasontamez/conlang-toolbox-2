@@ -1,16 +1,4 @@
 {
-	"titles": [
-		"1. Morphological Typology",
-		"2. Grammatical Categories",
-		"3. Constituent Order Typology",
-		"4. Noun and Noun Phrase Operations",
-		"5. Predicate Nominals and Related Constructions",
-		"6. Grammatical Relations",
-		"7. Voice and Valence Adjusting Operations",
-		"8. Other Verb and Verb Phrase Operations",
-		"9. Pragmatically Marked Structures",
-		"10. Clause Combinations"
-	],
 	"sections": [
 		"s1",
 		"s2",
@@ -50,6 +38,7 @@
 			"prop": "synthesis",
 			"start": "Isolating",
 			"end": "Polysynthetic",
+			"label": "Degree of synthesis, from Isolating to Polysynthetic",
 			"spectrum": true,
 			"max": 10
 		},
@@ -63,6 +52,7 @@
 			"prop": "fusion",
 			"start": "Agglutinative",
 			"end": "Fusional",
+			"label": "Degree of fusion, from Agglutinative to Fusional",
 			"spectrum": true,
 			"max": 10
 		},
@@ -140,6 +130,7 @@
 		{
 			"tag": "Range",
 			"prop": "stemMod",
+			"label": "How often stem modification is used",
 			"start": "Not Used",
 			"end": "Used Often"
 		},
@@ -151,6 +142,7 @@
 		{
 			"tag": "Range",
 			"prop": "suppletion",
+			"label": "How often suppletion is used",
 			"start": "Not Used",
 			"end": "Used Often"
 		},
@@ -162,6 +154,7 @@
 		{
 			"tag": "Range",
 			"prop": "redupe",
+			"label": "How often reduplication is used",
 			"start": "Not Used",
 			"end": "Used Often"
 		},
@@ -173,6 +166,7 @@
 		{
 			"tag": "Range",
 			"prop": "supraMod",
+			"label": "How often suprasegmental modification is used",
 			"start": "Not Used",
 			"end": "Used Often"
 		},
@@ -192,6 +186,7 @@
 			"prop": "headDepMarked",
 			"start": "Head Marked",
 			"end": "Dependant Marked",
+			"label": "Degree of marking, from totally head-marked to totally dependant-marked",
 			"spectrum": true,
 			"max": 4
 		},

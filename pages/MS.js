@@ -1,30 +1,37 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { shallowEqual, useSelector } from "react-redux";
-import { settingsSharp } from 'ionicons/icons';
+import { Ionicons, Entypo } from '@expo/vector-icons';
 
 import { NavBar } from '../components/Layout';
-import { Button, ScrollView, Heading } from 'native-base';
+import { Button, ScrollView, Heading, IconButton } from 'native-base';
 
 const MS = () => {
 	const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
 	const navigate = useNavigate();
 	const NavTab = (props) => {
+		// if page == props.link, render as outline instead of ghost
+		if(props.icon) {
+			return (
+				<IconButton variant="ghost" onPress={() => navigate(props.link)} icon={props.icon} _icon={{size: "md"}} />
+			);
+		}
 		return (
-			<Button onPress={() => navigate(props.link)}>{props.label}</Button>
+			<Button variant="ghost" onPress={() => navigate(props.link)}>{props.label}</Button>
 		);
 	};
 	const NavTabs = () => {
 		let range = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 		return (
 			<NavBar>
-				<NavTab label="*" link="/ms" />
+				<NavTab icon={<Icon as={Ionicons} name="settingsSharp" />} link="/ms" />
 				{range.map((n, i) => <NavTab label={String(i+1)} link={"ms" + n} />)}
 			</NavBar>
 		);
 	};
+	const Menu = <IconButton onPress={() => navigate(props.link)} variant="ghost" icon={<Icon as={Entypo} size="md" />} />;
 	return (
-		<VStack d="flex" h="100%">
-			<Heading>MorphoSyntax</Heading>
+		<VStack d="flex" h="100%" alignItems="stretch" justifyContent="space-between">
+			<Heading isTruncated><Menu />MorphoSyntax</Heading>
 			<ScrollView flexGrow={1}>
 				<Outlet />
 			</ScrollView>

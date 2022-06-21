@@ -13,23 +13,45 @@ import { useDispatch } from "react-redux";
 
 import ms from './ms.json';
 import doParse from 'html-react-parser';
+import { useParams } from 'react-router-dom';
+import { Heading, Slider, Text } from 'native-base';
 
 const parseMSJSON = (page) => {
 	const doc = ms[page];
-	const key = page + "-";
-	let counter = 0;
+	const headings = {
+		0: "1rem",
+		1: "1.4rem",
+		2: "1.25rem",
+		3: "1.1rem"
+	};
 	return doc.map((bit) => {
-		counter++;
 		const tag = (bit.tag || "");
 		switch(tag) {
 			case "Header":
-				return <HeaderItem key={key + String(counter)} level={bit.level}>{bit.content}</HeaderItem>;
+				return <Heading bold fontSize={headings[bit.level || 0]}>{bit.content}</Heading>;
 			case "Range":
-				return <RangeItem key={key + String(counter)} prop={bit.prop} start={bit.start} end={bit.end} innerClass={bit.spectrum ? "spectrum" : undefined} max={bit.max || undefined} />;
+				const dispatch = useDispatch();
+				const synNum = useSelector((state) => state.morphoSyntaxInfo.num)
+				const what = bit.prop;
+				const setNum = (what, value) => {
+					dispatch(setSyntaxNum(what, value));
+				};
+				return (
+					<HStack d="flex" w="100%" alignItems="stretch" justifyContent="space-between">
+						<Text>{bit.start}</Text>
+						<Slider flexGrow={1} w="3/4" defaultValue={synNum[what] || 0} minValue={0} maxValue={bit.max || 4} accessibilityLabel={bit.label} step={1} colorScheme="secondary" onChangeEnd={(v) => setNum(what, v)}>
+							<Slider.Track bg="secondary.900">
+								{bit.spectrum ? <Slider.FilledTrack /> : <></>}
+							</Slider.Track>
+							<Slider.Thumb />
+						</Slider>
+						<Text>{bit.end}</Text>
+					</HStack>
+				);
 			case "Text":
-				return <TextItem key={key + String(counter)} prop={bit.prop} rows={bit.rows || undefined}>{bit.content || ""}</TextItem>
+				return <TextItem prop={bit.prop} rows={bit.rows || undefined}>{bit.content || ""}</TextItem>
 			case "Modal":
-				return <InfoModal key={key + String(counter)} title={bit.title} label={bit.label || undefined}>{
+				return <InfoModal title={bit.title} label={bit.label || undefined}>{
 					doParse(bit.content || "", {
 						replace: node => {
 							if(node instanceof Element && node.attribs && node.name === "transtable") {
@@ -63,51 +85,47 @@ const parseMSJSON = (page) => {
 						temp = [];
 					}
 				});
-				const printRow = (row, key, cn = "") => {
+				const printRow = (row, cn = "") => {
 					const label = row.pop() || "";
-					let cc = 0;
 					return (
-						<IonRow className={cn || undefined} key={"ROW-" + String(key)}>
-							{row.map((c) => <IonCol className="cbox" key={"X-" + String(cc++)}><RadioBox prop={String(c)} /></IonCol>)}
-							<IonCol key={"LX-" + String(cc++)}>{doParse(label)}</IonCol>
+						<IonRow className={cn || undefined}>
+							{row.map((c) => <IonCol className="cbox"><RadioBox prop={String(c)} /></IonCol>)}
+							<IonCol>{doParse(label)}</IonCol>
 						</IonRow>
 					);
 				};
-				const printRowWithLabel = (row, key, cn = "") => {
+				const printRowWithLabel = (row, cn = "") => {
 					const final = row.pop() || "";
 					const label = labels.shift() || "";
 					const labelClass = disp.labelClass || "label"
-					let cc = 0;
 					return (
-						<IonRow className={cn || undefined} key={"ROW-" + String(key)}>
-							{row.map((c) => <IonCol className="cbox" key={"C-" + String(cc++)}><RadioBox prop={String(c)} /></IonCol>)}
-							<IonCol className={labelClass} key={"LC-" + String(cc++)}>{doParse(label)}</IonCol>
-							<IonCol key={"FC-" + String(cc++)}>{doParse(final)}</IonCol>
+						<IonRow className={cn || undefined}>
+							{row.map((c) => <IonCol className="cbox"><RadioBox prop={String(c)} /></IonCol>)}
+							<IonCol className={labelClass}>{doParse(label)}</IonCol>
+							<IonCol>{doParse(final)}</IonCol>
 						</IonRow>
 					);
 				};
-				const printHeaderRow = (row, key, hasLabel = false) => {
+				const printHeaderRow = (row, hasLabel = false) => {
 					const final = row.pop() || "";
 					let label = "";
 					if(hasLabel) {
 						label = row.pop();
 					}
-					let cc = 0;
 					return (
-						<IonRow className="header" key={"ROW-" + String(key)}>
-							{row.map((c) => <IonCol className="cbox" key={"B-" + String(cc++)}>{c}</IonCol>)}
-							{label ? <IonCol className={disp.labelClass || "label"} key={"L-" + String(cc++)}>{doParse(label)}</IonCol> : label}
-							<IonCol key={"F-" + String(cc++)}>{doParse(final)}</IonCol>
+						<IonRow className="header">
+							{row.map((c) => <IonCol className="cbox">{c}</IonCol>)}
+							{label ? <IonCol className={disp.labelClass || "label"}>{doParse(label)}</IonCol> : label}
+							<IonCol>{doParse(final)}</IonCol>
 						</IonRow>
 					);
 				};
-				count = 1;
 				return (
-					<IonItem className="content" key={key + String(counter)}>
+					<IonItem className="content">
 						<IonGrid className={disp.class || undefined}>
-							{header ? <IonRow key="headerRow-0" className="header"><IonCol>{doParse(header)}</IonCol></IonRow> : ""}
-							{inlineHeaders ? printHeaderRow(inlineHeaders.slice(), count++, !!disp.labels) : ""}
-							{rows.map((r) => disp.labels ? printRowWithLabel(r.slice(), count++) : printRow(r.slice(), count++))}
+							{header ? <IonRow  className="header"><IonCol>{doParse(header)}</IonCol></IonRow> : ""}
+							{inlineHeaders ? printHeaderRow(inlineHeaders.slice(), !!disp.labels) : ""}
+							{rows.map((r) => disp.labels ? printRowWithLabel(r.slice()) : printRow(r.slice()))}
 						</IonGrid>
 					</IonItem>
 				);
@@ -116,7 +134,7 @@ const parseMSJSON = (page) => {
 	});
 };
 
-const Section = () => {
+const OldSection = () => {
 	const dispatch = useDispatch();
 	const viewInfo = ['ms', 'ms01'];
 	useIonViewDidEnter(() => {
@@ -137,6 +155,17 @@ const Section = () => {
 				</IonList>
 			</IonContent>
 		</IonPage>
+	);
+};
+
+const Section = () => {
+	const { msPage } = useParams();
+	const pageName = "s" + msPage.slice(-2);
+
+	return (
+		<>
+			{parseMSJSON(pageName)}
+		</>
 	);
 };
 
