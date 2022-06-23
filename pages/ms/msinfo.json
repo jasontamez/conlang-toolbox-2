@@ -26,7 +26,7 @@
 			"tag": "Modal",
 			"title": "Synthesis and Fusion",
 			"label": "The Basic Building Blocks of Words",
-			"newcontent": [
+			"content": [
 				"Languages can be broadly classified on two continuums based on their **morphemes**.",
 				[
 					"A morpheme is the most basic unit of meaning in a language. For example, the word \"cats\" has two morphemes: \"cat\" (a feline animal) and \"s\" (more than one of them are being talked about)."
@@ -46,6 +46,7 @@
 					[
 						"e.g. \"antidisestablishmentarianism\"",
 						{
+							"tabular": true,
 							"rows": [
 								[
 									"anti",
@@ -115,32 +116,36 @@
 			"title": "Affixes and Other Modifications",
 			"label": "Read About Them",
 			"content": [
-				"<li>**Affixes**:",
+				"**Affixes**:",
 				[
-					"<li>Completely fusional languages will usually lack affixes.",
-					"<li>Most natural languages use suffixes. Some also have prefixes and/or infixes or circumfixes. Few only use prefixes, and none have only infixes or circumfixes.",
-					"<li>NOTE: this section is not needed if the language is not agglutinative at all."
+					"Completely fusional languages will usually lack affixes.",
+					"Most natural languages use suffixes. Some also have prefixes and/or infixes or circumfixes. Few only use prefixes, and none have only infixes or circumfixes.",
+					"NOTE: this section is not needed if the language is not agglutinative at all."
 				],
-				"<li class=\"newSection\">**Stem Modification**:",
+				true,
+				"**Stem Modification**:",
 				[
-					"<li>e.g. swim/swam/swum."
+					"e.g. swim/swam/swum."
 				],
-				"<li class=\"newSection\">**Suppletion**:",
+				true,
+				"**Suppletion**:",
 				[
-					"<li>An entirely new stem is substituted for the root, e.g. \"be\" being replaced by is/am/are/was/were."
+					"An entirely new stem is substituted for the root, e.g. \"be\" being replaced by is/am/are/was/were."
 				],
-				"<li class=\"newSection\">**Reduplication**:",
+				true,
+				"**Reduplication**:",
 				[
-					"<li>Part or all of a word is duplicated.",
-					"<li>Often used for plurality."
+					"Part or all of a word is duplicated.",
+					"Often used for plurality."
 				],
-				"<li class=\"newSection\">**Suprasegmental Modification**:",
+				true,
+				"**Suprasegmental Modification**:",
 				[
-					"<li>Words can change stress when in different roles.",
+					"Words can change stress when in different roles.",
 					[
-						"<li>e.g. \"permit\" has different stress when used as a noun or as a verb."
+						"e.g. \"permit\" has different stress when used as a noun or as a verb."
 					],
-					"<li>Tone changes also fall under this category."
+					"Tone changes also fall under this category."
 				]
 			]
 		},
@@ -266,19 +271,19 @@
 			"tag": "Modal",
 			"title": "Head/Dependant Marking",
 			"content": [
-				"<li>The **Head** of a phrase is the element that determines the syntactic function of the whole phrase.",
+				"The **Head** of a phrase is the element that determines the syntactic function of the whole phrase.",
 				[
-					"<li>Example sentence: //\"The smallest dog ate a porkchop with Mark's approval.\"//",
+					"Example sentence: //\"The smallest dog ate a porkchop with Mark's approval.\"//",
 					[
-						"<li>\"dog\" is Head of \"the smallest dog\" (noun phrase)",
-						"<li>\"porkchop\" is Head of \"a porkchop\" (noun phrase)",
-						"<li>\"with\" is Head of \"with Mark's approval\" (prepositional phrase)",
-						"<li>\"approval\" is Head of \"Mark's approval\" (noun phrase)"
+						"\"dog\" is Head of \"the smallest dog\" (noun phrase)",
+						"\"porkchop\" is Head of \"a porkchop\" (noun phrase)",
+						"\"with\" is Head of \"with Mark's approval\" (prepositional phrase)",
+						"\"approval\" is Head of \"Mark's approval\" (noun phrase)"
 					]
 				],
-				"<li>English is predominantly dependant-marked (\"the queen's crown\").",
-				"<li>Most languages are head-marked (\"the queen crown's\").",
-				"<li>Some are mixed, but use only one pattern for certain types of phrases (e.g. head-marked for noun phrases, but dependant-marked for verb and adpositional phrases)."
+				"English is predominantly dependant-marked (\"the queen's crown\").",
+				"Most languages are head-marked (\"the queen crown's\").",
+				"Some are mixed, but use only one pattern for certain types of phrases (e.g. head-marked for noun phrases, but dependant-marked for verb and adpositional phrases)."
 			]
 		},
 		{
@@ -313,8 +318,8 @@
 			"title": "Proper Names",
 			"label": "Read About Them",
 			"content": [
-				"<li>In English, they do not easily take articles, quantifiers and other modifiers.",
-				"<li>Other languages may have special case markers (4.4) for them."
+				"In English, they do not easily take articles, quantifiers and other modifiers.",
+				"Other languages may have special case markers (4.4) for them."
 			]
 		},
 		{
@@ -332,20 +337,23 @@
 			"title": "Possessability",
 			"label": "Systems of Possession",
 			"content": [
-				"<li>Languages may have one of the following systems to differentiate nouns.",
+				"Languages may have one of the following systems to differentiate nouns.",
 				[
-					"<li class=\"newSection\">**Possessable vs Unpossessable**:",
+					true,
+					"**Possessable vs Unpossessable**:",
 					[
-						"<li>Some nouns cannot be possessed (e.g. land, stars)."
+						"Some nouns cannot be possessed (e.g. land, stars)."
 					],
-					"<li class=\"newSection\">**Inherent vs Optional**:",
+					true,
+					"**Inherent vs Optional**:",
 					[
-						"<li>Some nouns //must// be possessed (e.g. body parts, kinship terms)."
+						"Some nouns //must// be possessed (e.g. body parts, kinship terms)."
 					],
-					"<li class=\"newSection\">**Alienable vs Inalienable**:",
+					true,
+					"**Alienable vs Inalienable**:",
 					[
-						"<li>Alienable possession can be ended (my car becomes your car).",
-						"<li>Inalienable possession cannot be ended (my brother is always my brother)."
+						"Alienable possession can be ended (my car becomes your car).",
+						"Inalienable possession cannot be ended (my brother is always my brother)."
 					]
 				]
 			]
@@ -366,8 +374,8 @@
 			"title": "Count Nouns and Mass Nouns",
 			"label": "A Piece of Information",
 			"content": [
-				"<li>Typically, most nouns are countable, while fewer are considered as a mass.",
-				"<li>e.g. \"sand\" requires \"a grain of sand\" to be countable, and \"confetti\" requires \"a piece of confetti\"."
+				"Typically, most nouns are countable, while fewer are considered as a mass.",
+				"e.g. \"sand\" requires \"a grain of sand\" to be countable, and \"confetti\" requires \"a piece of confetti\"."
 			]
 		},
 		{
@@ -385,22 +393,41 @@
 			"title": "Pronouns and Anaphoric Clitics",
 			"label": "What Are They?",
 			"content": [
-				"<li>**Pronouns**:",
+				"**Pronouns**:",
 				[
-					"<li>Free forms that are used to refer to or replace a word used earlier in a sentence, to avoid repetition.",
-					"<li>Also known as //anaphoric references//."
+					"Free forms that are used to refer to or replace a word used earlier in a sentence, to avoid repetition.",
+					"Also known as //anaphoric references//."
 				],
-				"<li class=\"newSection\">**Anaphoric Clitics**:",
+				true,
+				"**Anaphoric Clitics**:",
 				[
-					"<li>A //clitic// is a bound morpheme that functions on the phrase or clause level, but is bound phonologically to another word.",
-					"<li>An Anaphoric Clitic functions as a full noun phrase.",
+					"A //clitic// is a bound morpheme that functions on the phrase or clause level, but is bound phonologically to another word.",
+					"An Anaphoric Clitic functions as a full noun phrase.",
 					[
-						"<li>Spanish:<br /><TransTable rows=\"lav-o.....el.....auto...../.....wash-1s.....the.....car\">\"I wash the car\" :: **-o** functions as the noun phrase \"I\"</TransTable>"
+						"Spanish:",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"lav-o",
+									"el",
+									"auto"
+								],
+								[
+									"wash-1s",
+									"the",
+									"car"
+								]
+							],
+							"final": "\\\"I wash the car\\\" :: **-o** functions as the noun phrase \\\"I\\\""
+						}
 					]
 				],
-				"<li class=\"newSection\">Both types often differ according to person (3rd/2nd/1st including inclusive/exclusive), number (singular/plural), noun class (gender/animacy), grammatical role (subject/object/ergative/etc), semantic role (Agent/Patient), definiteness and/or specificness (a/the), and honorifics.",
-				"<li>English has frequent pronouns that agree with the verb, and may be stressed for emphasis or contrast: \"**He** died\" (not her, as expected).",
-				"<li>Spanish has anaphoric forms attached to the verb, but will use pronouns for emphasis or contrast."
+				true,
+				"Both types often differ according to person (3rd/2nd/1st including inclusive/exclusive), number (singular/plural), noun class (gender/animacy), grammatical role (subject/object/ergative/etc), semantic role (Agent/Patient), definiteness and/or specificness (a/the), and honorifics.",
+				"English has frequent pronouns that agree with the verb, and may be stressed for emphasis or contrast: \"**He** died\" (not her, as expected).",
+				"Spanish has anaphoric forms attached to the verb, but will use pronouns for emphasis or contrast."
 			]
 		},
 		{
@@ -424,21 +451,24 @@
 			"title": "Semantic Roles",
 			"label": "A Quick Primer",
 			"content": [
-				"<li>Verbs can be divided into groups depending on which roles they require.",
+				"Verbs can be divided into groups depending on which roles they require.",
 				[
-					"<li class=\"newSection\">**Agent**: active, physical, has volition",
-					"<li>**Patient**: undergoes a change, no volition (direct object in English)",
-					"<li>**Recipient**: moving object (indirect object in English), or often a destination",
-					"<li>**Force**: directly instigates, not necessarily conscious or voluntary",
-					"<li>**Instrument**: indirectly instigates (usually by an Agent)",
-					"<li>**Experiencer**: does not participate, merely observes"
+					true,
+					"**Agent**: active, physical, has volition",
+					"**Patient**: undergoes a change, no volition (direct object in English)",
+					"**Recipient**: moving object (indirect object in English), or often a destination",
+					"**Force**: directly instigates, not necessarily conscious or voluntary",
+					"**Instrument**: indirectly instigates (usually by an Agent)",
+					"**Experiencer**: does not participate, merely observes"
 				],
-				"<li class=\"newSection\">In English, all verbs require an Agent, and many also require a Patient, but no other roles are encoded into the verb.",
-				"<li class=\"newSection\">NOTE: Roles can change according to the perspective of the speaker:",
+				true,
+				"In English, all verbs require an Agent, and many also require a Patient, but no other roles are encoded into the verb.",
+				true,
+				"NOTE: Roles can change according to the perspective of the speaker:",
 				[
-					"<li>I hit Steve with the hammer.",
-					"<li>The hammer hit Steve.",
-					"<li>Steve was hit."
+					"I hit Steve with the hammer.",
+					"The hammer hit Steve.",
+					"Steve was hit."
 				]
 			]
 		},
@@ -553,34 +583,52 @@
 			"title": "Verb Structure",
 			"label": "Structure and Operations Info",
 			"content": [
-				"<li>In polysynthetic languages, verbs tend to be the most complex.",
+				"In polysynthetic languages, verbs tend to be the most complex.",
 				[
-					"<li>English is very simple:",
+					"English is very simple:",
 					[
-						"<li>root verb<br />+ (optional tense marker OR agreement marker)"
+						"root verb",
+						false,
+						"+ (optional tense marker OR agreement marker)"
 					],
-					"<li>Panare is much more complex:",
-						"<li>person/neutral marker<br />+ (optional valence marker)<br />+ (optional detransification marker)<br />+ (optional incorporation marker)<br />+ root verb<br />+ (optional derivation marker)<br />+ tense/aspect/mode marker"
+					"Panare is much more complex:",
+					[
+						"person/neutral marker",
+						false,
+						"+ (optional valence marker)",
+						false,
+						"+ (optional detransification marker)",
+						false,
+						"+ (optional incorporation marker)",
+						false,
+						"+ root verb",
+						false,
+						"+ (optional derivation marker)",
+						false,
+						"+ tense/aspect/mode marker"
+					]
 				],
-				"==<li class=\"newSection\">Polysynthetic languages may have any/all of these operations",
+				true,
+				"Polysynthetic languages may have any/all of these operations",
 				[
-					"<li>Verb agreement (6)",
-					"<li>Semantic role markers (applicatives) (7.1.2)",
-					"<li>Valence increasing/decreasing (7.1, 7.2)",
-					"<li>Tense/Apect/Mode (8.3)",
-					"<li>Evidentials (8.5)",
-					"<li>Location and direction (8.4)",
-					"<li>Speech act markers (9.3)",
-					"<li>Verb and verb-phrase negation (9.2)",
-					"<li>Subordination/Nominalization (8.1, 10)",
-					"<li>Switch-Reference (10.4)"
+					"Verb agreement (6)",
+					"Semantic role markers (applicatives) (7.1.2)",
+					"Valence increasing/decreasing (7.1, 7.2)",
+					"Tense/Apect/Mode (8.3)",
+					"Evidentials (8.5)",
+					"Location and direction (8.4)",
+					"Speech act markers (9.3)",
+					"Verb and verb-phrase negation (9.2)",
+					"Subordination/Nominalization (8.1, 10)",
+					"Switch-Reference (10.4)"
 				],
-				"<li>In more isolating languages, those operations are more likely to be expressed through particles or adverbs.",
-				"<li class=\"newSection\">Things to consider:",
+				"In more isolating languages, those operations are more likely to be expressed through particles or adverbs.",
+				true,
+				"Things to consider:",
 				[
-					"<li>Where does the stem lie in relation to any affixes/particles/etc?",
-					"<li>Are directional and/or locational notions expressed in the verb/phrase at all?",
-					"<li>Are particular operations obligatory? Productive (for all/most roots)?"
+					"Where does the stem lie in relation to any affixes/particles/etc?",
+					"Are directional and/or locational notions expressed in the verb/phrase at all?",
+					"Are particular operations obligatory? Productive (for all/most roots)?"
 				]
 			]
 		},
@@ -637,31 +685,37 @@
 			"title": "Property Concepts",
 			"label": "More Info",
 			"content": [
-				"<li>If Property Concepts (adjectives) exist as a separate category, they will express:",
+				"If Property Concepts (adjectives) exist as a separate category, they will express:",
 				[
-					"<li>age",
-					"<li>dimension (big, short, long, tall, wide)",
-					"<li>value (good, bad)",
-					"<li>color"
+					"age",
+					"dimension (big, short, long, tall, wide)",
+					"value (good, bad)",
+					"color"
 				],
-				"<li>Other properties may be expressed:",
+				"Other properties may be expressed:",
 				[
-					"<li>physical properties (hard, smooth, heavy)",
-					"<li>shape",
-					"<li>speed",
-					"<li>human propensity (happy, jealous, smart, wary)"
+					"physical properties (hard, smooth, heavy)",
+					"shape",
+					"speed",
+					"human propensity (happy, jealous, smart, wary)"
 				],
-				"<li class=\"newSection\">In Acehnese, property concepts can take the same sort of morphology as verbs, thus they are lexicalized as verbs.",
+				true,
+				"In Acehnese, property concepts can take the same sort of morphology as verbs, thus they are lexicalized as verbs.",
 				[
-					"<li class=\"newSection\">In Finnish, property concepts are required to take the same sort of morphology as the noun they modify, thus they are lexicalized as nouns.",
-					"<li class=\"newSection\">In Dutch, property concepts are treated as verbs when used as a predicator (\"That car is //pink//!\") and as nouns when used as a modifier (\"I love //pink// cars!\").",
-					"<li class=\"newSection\">In Yoruba, some property concepts are always treated as nouns, while others are always treated as verbs.",
-					"<li class=\"newSection\">In English, they are labeled as a separate class because they don't follow the same patterns as nouns or verbs:",
-						"<li>1. They cannot take past tense like a verb, nor do they \"agree\" with their head noun in the same way.",
-						"<li>2. They do not take plural markers like a noun, nor can they take articles, modifiers or quantifiers.",
-						"<li>3. Rarely, an adjective can be treated as a noun (e.g. \"//The wealthy// are obnoxious\", \"Which car do you prefer, //the gray// or //the red//?\"), but these are actually //zero derivations// (8.1)."
-				],
-				"==</ul>"
+					true,
+					"In Finnish, property concepts are required to take the same sort of morphology as the noun they modify, thus they are lexicalized as nouns.",
+					true,
+					"In Dutch, property concepts are treated as verbs when used as a predicator (\"That car is //pink//!\") and as nouns when used as a modifier (\"I love //pink// cars!\").",
+					true,
+					"In Yoruba, some property concepts are always treated as nouns, while others are always treated as verbs.",
+					true,
+					"In English, they are labeled as a separate class because they don't follow the same patterns as nouns or verbs:",
+					[
+						"1. They cannot take past tense like a verb, nor do they \"agree\" with their head noun in the same way.",
+						"2. They do not take plural markers like a noun, nor can they take articles, modifiers or quantifiers.",
+						"3. Rarely, an adjective can be treated as a noun (e.g. \"//The wealthy// are obnoxious\", \"Which car do you prefer, //the gray// or //the red//?\"), but these are actually //zero derivations// (8.1)."
+					]
+				]
 			]
 		},
 		{
@@ -689,27 +743,30 @@
 			"title": "Numerals",
 			"label": "Things to Consider",
 			"content": [
-				"<li>**Extent**:",
+				"**Extent**:",
 				[
-					"<li>Some languages have restricted numerals: e.g. 1, 2, 3, many.",
-					"<li>Only very advanced societies will have a need for numbers beyond a thousand.",
-					"<li>Many societies will end up borrowing larger number words from nearby languages that invent them first."
+					"Some languages have restricted numerals: e.g. 1, 2, 3, many.",
+					"Only very advanced societies will have a need for numbers beyond a thousand.",
+					"Many societies will end up borrowing larger number words from nearby languages that invent them first."
 				],
-				"<li class=\"newSection\">**Base**:",
+				true,
+				"**Base**:",
 				[
-					"<li>Usually base 5 or 10. Sometimes 20. (English is base 10.)",
-					"<li>Words for \"five\" usually come from the word for \"hand\". Words for \"twenty\" can come from the word for an entire human being.",
-					"<li>More advanced cultures with merchants or bureaucracies tend to create systems based around 12 as well, due to its greater number of factors, but this system almost never replaces the original base system.",
-					"<li>Numerals can be described from greatest to least (\"twenty-two\"), from least to greatest (\"two-twenty\"), or not give base multiples a special name (\"two-two\")."
+					"Usually base 5 or 10. Sometimes 20. (English is base 10.)",
+					"Words for \"five\" usually come from the word for \"hand\". Words for \"twenty\" can come from the word for an entire human being.",
+					"More advanced cultures with merchants or bureaucracies tend to create systems based around 12 as well, due to its greater number of factors, but this system almost never replaces the original base system.",
+					"Numerals can be described from greatest to least (\"twenty-two\"), from least to greatest (\"two-twenty\"), or not give base multiples a special name (\"two-two\")."
 				],
-				"<li class=\"newSection\">**Agreement**:",
+				true,
+				"**Agreement**:",
 				[
-					"<li>Languages may inflect their numerals to agree with their head.",
-					"<li>Some languages use entirely different sets of numerals for different situations.",
-						"<li>English has separate numerals for counting (one, two, three, etc.) and ordering things (first, second, third, etc.)",
-						"<li>Irish has a set of numbers that represent the numbers themselves, a second set for counting or ordering things (one goat, two goats, three goats, etc.), and third set of numerals used only for counting people."
-				],
-				"==</ul>"
+					"Languages may inflect their numerals to agree with their head.",
+					"Some languages use entirely different sets of numerals for different situations.",
+					[
+						"English has separate numerals for counting (one, two, three, etc.) and ordering things (first, second, third, etc.)",
+						"Irish has a set of numbers that represent the numbers themselves, a second set for counting or ordering things (one goat, two goats, three goats, etc.), and third set of numerals used only for counting people."
+					]
+				]
 			]
 		},
 		{
@@ -802,14 +859,14 @@
 			"title": "Adverbs",
 			"label": "A \"Catch-All\" Category",
 			"content": [
-				"<li>These may or may not exist as a separate category of words.",
-				"<li>Languages may use adjectives in special phrases to fulfill this role.",
-				"<li>Adverbs can describe the following:",
+				"These may or may not exist as a separate category of words.",
+				"Languages may use adjectives in special phrases to fulfill this role.",
+				"Adverbs can describe the following:",
 				[
-					"<li>**Manner**: e.g. quickly, slowly, patiently.",
-					"<li>**Time**: e.g. yesterday, today, early, next year.",
-					"<li>**Direction/Location**: e.g. up/downriver, north(ward), left(ward), hither.",
-					"<li>**Evidential/Epistemic**: e.g. possibly, definitely, from conjecture, from direct observation, from second-hand information."
+					"**Manner**: e.g. quickly, slowly, patiently.",
+					"**Time**: e.g. yesterday, today, early, next year.",
+					"**Direction/Location**: e.g. up/downriver, north(ward), left(ward), hither.",
+					"**Evidential/Epistemic**: e.g. possibly, definitely, from conjecture, from direct observation, from second-hand information."
 				]
 			]
 		},
@@ -876,48 +933,54 @@
 			"title": "Basic Typology",
 			"label": "What is This?",
 			"content": [
-				"<li>Human languages tend towards one of six different basic forms.",
+				"Human languages tend towards one of six different basic forms.",
 				[
-					"<li>**S** is the Subject of an intransitive clause.",
+					"**S** is the Subject of an intransitive clause.",
 					[
-						"<li>//Steve// pitches."
+						"//Steve// pitches."
 					],
-					"<li>**V** is the verb in a clause.",
+					"**V** is the verb in a clause.",
 					[
-						"<li>Steve //pitches//."
+						"Steve //pitches//."
 					],
-					"<li>**A** is the Agent of a transitive clause.",
+					"**A** is the Agent of a transitive clause.",
 					[
-						"<li>//Steve// pitches softballs."
+						"//Steve// pitches softballs."
 					],
-					"<li>**P** is the Patient of a transitive clause.",
-						"<li>Steve pitches //softballs//."
+					"**P** is the Patient of a transitive clause.",
+					[
+						"Steve pitches //softballs//."
+					]
 				],
-				"==<li class=\"newSection\">Languages may use one typology most of the time, but switch to another for certain clauses:",
+				true,
+				"Languages may use one typology most of the time, but switch to another for certain clauses:",
 				[
-					"<li>Dependant clauses",
-					"<li>Paragraph-initial clauses",
-					"<li>Clauses that introduce participants",
-					"<li>Questions",
-					"<li>Negative clauses",
-					"<li>Clearly contrastive clauses"
+					"Dependant clauses",
+					"Paragraph-initial clauses",
+					"Clauses that introduce participants",
+					"Questions",
+					"Negative clauses",
+					"Clearly contrastive clauses"
 				],
-				"<li class=\"newSection\">\"Rigid\" systems may put other constituents into the **P** slot on a regular basis.",
+				true,
+				"\"Rigid\" systems may put other constituents into the **P** slot on a regular basis.",
 				[
-					"<li>The softball was //filthy//: predicate adjective.",
-					"<li>Steve was //an awful pitcher//: predicate nominative.",
-					"<li>Steve went //to the dugouts//: oblique."
+					"The softball was //filthy//: predicate adjective.",
+					"Steve was //an awful pitcher//: predicate nominative.",
+					"Steve went //to the dugouts//: oblique."
 				],
-				"<li class=\"newSection\">\"Flexible\" or \"free\" systems use something other than grammatical relations to determine order:",
+				true,
+				"\"Flexible\" or \"free\" systems use something other than grammatical relations to determine order:",
 				[
-					"<li>Biblical Hebrew puts new, indefinite info pre-verb, definite info post-verb.",
-					"<li>Some will fix PV or AV relations in almost all cases, leaving the other \"free\".",
-						"<li>Fixed PV → may allow APV and PVA.",
-						"<li>Fixed AV → may allow PAV and AVP.",
-						"<li>Fixed VP → may allow AVP and VPA.",
-						"<li>Fixed VA → may allow VAP and PVA."
-				],
-				"==</ul>"
+					"Biblical Hebrew puts new, indefinite info pre-verb, definite info post-verb.",
+					"Some will fix PV or AV relations in almost all cases, leaving the other \"free\".",
+					[
+						"Fixed PV → may allow APV and PVA.",
+						"Fixed AV → may allow PAV and AVP.",
+						"Fixed VP → may allow AVP and VPA.",
+						"Fixed VA → may allow VAP and PVA."
+					]
+				]
 			]
 		},
 		{
@@ -983,9 +1046,9 @@
 			"title": "Adpositions",
 			"label": "More Info",
 			"content": [
-				"<li>Many **Adpositions** derive from verbs, especially serial verbs (see 10.1).",
-				"<li>Others derive from nouns, especially body parts (top, back, face, head, etc).",
-				"<li>Adpositional phrases may appear the same as possessed noun phrases (in front of vs. on his face) or regular nouns (top vs. on top of)."
+				"Many **Adpositions** derive from verbs, especially serial verbs (see 10.1).",
+				"Others derive from nouns, especially body parts (top, back, face, head, etc).",
+				"Adpositional phrases may appear the same as possessed noun phrases (in front of vs. on his face) or regular nouns (top vs. on top of)."
 			]
 		},
 		{
@@ -1004,13 +1067,13 @@
 			"title": "Comparatives",
 			"label": "Comparing Things",
 			"content": [
-				"<li>Does the language even have a form? Some languages get by with strategies like \"X is big, Y is very big.\"",
-				"<li>A comparison phrase requires a known standard, a marker that signals this is a comparison, and the quality of comparison.",
+				"Does the language even have a form? Some languages get by with strategies like \"X is big, Y is very big.\"",
+				"A comparison phrase requires a known standard, a marker that signals this is a comparison, and the quality of comparison.",
 				[
-					"<li>For example, in //\"X is bigger than Y\"//, (//Y//) is the known standard, (//is __er than//) is a comparison marker, and (//big//) is the quality."
+					"For example, in //\"X is bigger than Y\"//, (//Y//) is the known standard, (//is __er than//) is a comparison marker, and (//big//) is the quality."
 				],
-				"<li>PV languages generally use a Standard-Quality-Marker order.",
-				"<li>VP languages tend towards Quality-Marker-Standard."
+				"PV languages generally use a Standard-Quality-Marker order.",
+				"VP languages tend towards Quality-Marker-Standard."
 			]
 		},
 		{
@@ -1027,9 +1090,10 @@
 			"tag": "Modal",
 			"title": "Questions",
 			"content": [
-				"<li>In many languages, yes/no questions are indicated by a change in intonation. In others, a question particle is used; e.g. //do// you understand?",
-				"<li>Informal questions may require a specific question word.",
-				"<li class=\"newSection\">This subject is handled in depth in 9.3.1."
+				"In many languages, yes/no questions are indicated by a change in intonation. In others, a question particle is used; e.g. //do// you understand?",
+				"Informal questions may require a specific question word.",
+				true,
+				"This subject is handled in depth in 9.3.1."
 			]
 		},
 		{
@@ -1064,12 +1128,12 @@
 			"title": "Compounding",
 			"label": "Noun-Piles",
 			"content": [
-				"<li>When two nouns are combined into one, several changes may occur.",
+				"When two nouns are combined into one, several changes may occur.",
 				[
-					"<li>Stress pattern change, e.g. \"//black//bird\" vs \"black //bird//\".",
-					"<li>Unusual word order, e.g. \"housekeeper\" vs \"keeper of the house\".",
-					"<li>Morphology specific to compounds, e.g. \"can-opener\" does not imply the existence of a verb \"to can-open\".",
-					"<li>A resulting meaning that is either more specific than its components (e.g. \"windshield\" vs. \"wind\" or \"shield\") or altogether different (e.g. \"heaven-breath\" means \"weather\" in Mandarin)."
+					"Stress pattern change, e.g. \"//black//bird\" vs \"black //bird//\".",
+					"Unusual word order, e.g. \"housekeeper\" vs \"keeper of the house\".",
+					"Morphology specific to compounds, e.g. \"can-opener\" does not imply the existence of a verb \"to can-open\".",
+					"A resulting meaning that is either more specific than its components (e.g. \"windshield\" vs. \"wind\" or \"shield\") or altogether different (e.g. \"heaven-breath\" means \"weather\" in Mandarin)."
 				]
 			]
 		},
@@ -1089,10 +1153,10 @@
 			"title": "Denominalization",
 			"label": "Verbing a Noun",
 			"content": [
-				"<li>Some languages have many ways of changing a noun into a non-noun.",
+				"Some languages have many ways of changing a noun into a non-noun.",
 				[
-					"<li>English can append //-like// to make an adjective.",
-					"<li>Eskimo has many verbalizing forms, e.g. to be X, to go towards X, to play with X, to hunt X."
+					"English can append //-like// to make an adjective.",
+					"Eskimo has many verbalizing forms, e.g. to be X, to go towards X, to play with X, to hunt X."
 				]
 			]
 		},
@@ -1112,16 +1176,16 @@
 			"title": "Number Marking",
 			"label": "Plurality, etc.",
 			"content": [
-				"<li>Some languages only mark number occassionally or optionally depending on the type of noun.",
-				"<li>This is often intertwined with other markers, such as case marking in Romance languages.",
-				"<li>Most languages leave the singular unmarked, but not all!",
-				"<li>Number marking may have many distinctions:",
+				"Some languages only mark number occassionally or optionally depending on the type of noun.",
+				"This is often intertwined with other markers, such as case marking in Romance languages.",
+				"Most languages leave the singular unmarked, but not all!",
+				"Number marking may have many distinctions:",
 				[
-					"<li>singular (one)",
-					"<li>dual (two)",
-					"<li>trial (three)",
-					"<li>paucal (small amount)",
-					"<li>plural (any amount larger than the others used)"
+					"singular (one)",
+					"dual (two)",
+					"trial (three)",
+					"paucal (small amount)",
+					"plural (any amount larger than the others used)"
 				]
 			]
 		},
@@ -1172,19 +1236,48 @@
 			"title": "Case Marking",
 			"label": "How it works",
 			"content": [
-				"<li>Case markings can describe the role a noun plays in a sentence.",
-				"<li>In English, most case markings only survive in the pronouns, with word order doing the job for regular nouns. The major exception is the genitive case (possessive), which is marked with //'s//.",
-				"<li>Some cases, and the semantic role (2.2.1) they usually indicate, include:",					"<li>nominative/ergative (Agent, see section 6)",
+				"Case markings can describe the role a noun plays in a sentence.",
+				"In English, most case markings only survive in the pronouns, with word order doing the job for regular nouns. The major exception is the genitive case (possessive), which is marked with //'s//.",
+				"Some cases, and the semantic role (2.2.1) they usually indicate, include:",
 				[
-					"<li>accusative/absolutive (Patient, see section 6)",
-					"<li>dative (Recipient)",
-					"<li>genitive (Possessor)"
+					"nominative/ergative (Agent, see section 6)",
+					"accusative/absolutive (Patient, see section 6)",
+					"dative (Recipient)",
+					"genitive (Possessor)"
 				],
-				"<li>In Latin, if a Patient occurs in some other case, either the sentence is ungrammatical or another sense of the verb results.",
-				"<li>In some languages, verbs and/or adpositions //govern// their arguments, requiring a specific case marker on their nouns. This allows similar-sounding verbs to be discerned by these case markers. For example, in Yagua, the verb //dííy// can mean either \"kill\" or \"see\" depending on which case the Patient is in:",
+				"In Latin, if a Patient occurs in some other case, either the sentence is ungrammatical or another sense of the verb results.",
+				"In some languages, verbs and/or adpositions //govern// their arguments, requiring a specific case marker on their nouns. This allows similar-sounding verbs to be discerned by these case markers. For example, in Yagua, the verb //dííy// can mean either \"kill\" or \"see\" depending on which case the Patient is in:",
 				[
-					"<li>He killed the alligator:<br /><TransTable rows=\"sa-dííy.....nurutú-0...../.....he-kill.....alligator-ACC\"></TransTable>",
-					"<li>He saw the alligator:<TransTable rows=\"sa-dííy.....nurutí-íva...../.....he-see.....alligator-DAT\"></TransTable>"
+					"He killed the alligator:",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"sa-dííy",
+								"nurutú-0"
+							],
+							[
+								"he-kill",
+								"alligator-ACC"
+							]
+						]
+					},
+					"He saw the alligator:",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"sa-dííy",
+								"nurutí-íva"
+							],
+							[
+								"he-see",
+								"alligator-DAT"
+							]
+						]
+					}
 				]
 			]
 		},
@@ -1204,9 +1297,10 @@
 			"title": "Articles",
 			"label": "What Are They?",
 			"content": [
-				"<li>English is relatively rare in having **Articles**: a, an, the. More often, languages have a broader class of demonstratives.",
-				"<li class=\"newSection\">**Demonstratives** are words that distinguish or identify a noun without modifying it, such as this, that, these and those.",
-				"<li>They tend to encode distance (\"this\" is closer to you than \"that\"; Spanish has a third level of distance, too)."
+				"English is relatively rare in having **Articles**: a, an, the. More often, languages have a broader class of demonstratives.",
+				true,
+				"**Demonstratives** are words that distinguish or identify a noun without modifying it, such as this, that, these and those.",
+				"They tend to encode distance (\"this\" is closer to you than \"that\"; Spanish has a third level of distance, too)."
 			]
 		},
 		{
@@ -1231,9 +1325,10 @@
 			"title": "Possessors",
 			"label": "Possessor Expressions",
 			"content": [
-				"<li>Refer back to 2.1.1.2 to note your system of possession. This does **not** refer to possessive clauses! (5.4)",
-				"<li class=\"newSection\">How are possessors expressed in the noun phrase?",
-				"<li>Do nouns agree with their possessors? Vice versa?"
+				"Refer back to 2.1.1.2 to note your system of possession. This does **not** refer to possessive clauses! (5.4)",
+				true,
+				"How are possessors expressed in the noun phrase?",
+				"Do nouns agree with their possessors? Vice versa?"
 			]
 		},
 		{
@@ -1252,10 +1347,10 @@
 			"title": "Class and Gender",
 			"label": "What They Are",
 			"content": [
-				"<li>Class system often require classifiers (special operators) to declare class.",
-				"<li>Pure gender systems use \"agreement\" instead of classifiers. At the very least, numerical expressions will \"agree\" with their head noun.",
-				"<li>Classes generally care about one dimension of reality, such as biological gender, animacy, shape, or function. (Other dimensions may be relevant, too.) There are almost always exceptions to the rule, however (e.g. Yagua treats rocks and pineapples as animates).",
-				"<li>Classifiers may occur with verbs, numerals and adjectives, though they may serve a different function in those cases."
+				"Class system often require classifiers (special operators) to declare class.",
+				"Pure gender systems use \"agreement\" instead of classifiers. At the very least, numerical expressions will \"agree\" with their head noun.",
+				"Classes generally care about one dimension of reality, such as biological gender, animacy, shape, or function. (Other dimensions may be relevant, too.) There are almost always exceptions to the rule, however (e.g. Yagua treats rocks and pineapples as animates).",
+				"Classifiers may occur with verbs, numerals and adjectives, though they may serve a different function in those cases."
 			]
 		},
 		{
@@ -1299,12 +1394,12 @@
 			"title": "Diminution and Augmentation",
 			"label": "Bigger and Smaller",
 			"content": [
-				"<li>If diminution (making smaller) and/or augmentation (making bigger) is used in the language, answer the following questions:",
+				"If diminution (making smaller) and/or augmentation (making bigger) is used in the language, answer the following questions:",
 				[
-					"<li>Is it obligatory? Does one member have to occur in every full noun phrase?",
-					"<li>Is it productive? Does it work with all full noun phrases and does it have the same meaning for each?",
-					"<li>Is it expressed lexically, morphologically, or analytically?",
-					"<li>Where in the NP is this operation likely to be located? Can it occur in more than one place?"
+					"Is it obligatory? Does one member have to occur in every full noun phrase?",
+					"Is it productive? Does it work with all full noun phrases and does it have the same meaning for each?",
+					"Is it expressed lexically, morphologically, or analytically?",
+					"Where in the NP is this operation likely to be located? Can it occur in more than one place?"
 				]
 			]
 		},
@@ -1351,16 +1446,16 @@
 			"title": "Predicate Nominals",
 			"label": "General Information to Consider",
 			"content": [
-				"<li>These forms generally encode the following information:",
+				"These forms generally encode the following information:",
 				[
-					"<li>**Equation**: X is Y",
-					"<li>**Proper Inclusion**: X is a Y",
-					"<li>**Location**: X is located Y",
-					"<li>**Attribution**: X is made Y",
-					"<li>**Existence**: X exists in Y",
-					"<li>**Possession**: X has Y"
+					"**Equation**: X is Y",
+					"**Proper Inclusion**: X is a Y",
+					"**Location**: X is located Y",
+					"**Attribution**: X is made Y",
+					"**Existence**: X exists in Y",
+					"**Possession**: X has Y"
 				],
-				"<li>The forms at the top of the list are much more likely to lack a semantically rich verb, while those at the bottom are less likely to."
+				"The forms at the top of the list are much more likely to lack a semantically rich verb, while those at the bottom are less likely to."
 			]
 		},
 		{
@@ -1373,42 +1468,45 @@
 			"title": "Predicate Nominals and Adjectives",
 			"label": "What It Is and What It Seems Like",
 			"content": [
-				"<li>May encode //proper inclusion// (X is a Y) and //equation// (X is Y)",
-				"<li>Predicate adjectives are usually handled the same as predicate nominals, though they will sometimes use a different copula than the nouns.",
-				"<li>If they use a verb, it will not be a very //semantically rich// verb (e.g. to be, to do)",
-				"<li>Will generally use one of the following strategies:",
+				"May encode //proper inclusion// (X is a Y) and //equation// (X is Y)",
+				"Predicate adjectives are usually handled the same as predicate nominals, though they will sometimes use a different copula than the nouns.",
+				"If they use a verb, it will not be a very //semantically rich// verb (e.g. to be, to do)",
+				"Will generally use one of the following strategies:",
 				[
-					"<li>//Juxtaposition//",
-						"<li>Two nouns (or a noun and adjective) are placed next to each other.",
-						"<li>Ex: Steve doctor. Mouse small. (Steve is a doctor. A mouse is small.)"
-				],
-				"<li>//Joined by copula//",
-				[
-					"<li>A //copula// is a morpheme that \"couples\" two elements. Often encodes Tense/Aspect (8.3), and can be restricted to certain situations (e.g. only in non-present tenses).",
-					"<li>The copula can take different forms:",
+					"//Juxtaposition//",
 					[
-						"<li>//Verb//",
+						"Two nouns (or a noun and adjective) are placed next to each other.",
+						"Ex: Steve doctor. Mouse small. (Steve is a doctor. A mouse is small.)"
+					]
+				],
+				"//Joined by copula//",
+				[
+					"A //copula// is a morpheme that \"couples\" two elements. Often encodes Tense/Aspect (8.3), and can be restricted to certain situations (e.g. only in non-present tenses).",
+					"The copula can take different forms:",
+					[
+						"//Verb//",
 						[
-							"<li>These tend to be very irregular verbs.",
-							"<li>They tend to belong to the same verb class as stative verbs.",
-							"<li>They tend to function as auxiliaries in other constructions.",
-							"<li>Ex: Steve is a doctor."
+							"These tend to be very irregular verbs.",
+							"They tend to belong to the same verb class as stative verbs.",
+							"They tend to function as auxiliaries in other constructions.",
+							"Ex: Steve is a doctor."
 						],
-						"<li>//Pronoun//",
-						"<li>The pronoun corresponds to the subject.",
-						"<li>Ex: Steve, he a doctor."
+						"//Pronoun//",
+						"The pronoun corresponds to the subject.",
+						"Ex: Steve, he a doctor."
 					],
-					"<li>//Invariant particle//",
+					"//Invariant particle//",
 					[
-						"<li>This particle may derive from a verb or pronoun.",
-						"<li>The particle will not encode tense/aspect/gender/anything.",
-						"<li>Ex: Steve blorp doctor."
+						"This particle may derive from a verb or pronoun.",
+						"The particle will not encode tense/aspect/gender/anything.",
+						"Ex: Steve blorp doctor."
 					],
-					"<li>//Derivational operation//",
-						"<li>Predicate noun becomes a verb.",
-						"<li>Ex: Steve doctor-being."
-				],
-				"======</ul>"
+					"//Derivational operation//",
+					[
+						"Predicate noun becomes a verb.",
+						"Ex: Steve doctor-being."
+					]
+				]
 			]
 		},
 		{
@@ -1427,14 +1525,15 @@
 			"title": "Predicate Locatives",
 			"label": "Where It Is",
 			"content": [
-				"<li>Many languages use a word that gets translated as \"be at\".",
-				"<li>The locative word is often the same as a locative adposition.",
-				"<li>Word order usually distinguishes possessive clauses from locational clauses.",
+				"Many languages use a word that gets translated as \"be at\".",
+				"The locative word is often the same as a locative adposition.",
+				"Word order usually distinguishes possessive clauses from locational clauses.",
 				[
-					"<li>Ex: Steve has a cat (possessive); the cat is behind Steve (locational)."
+					"Ex: Steve has a cat (possessive); the cat is behind Steve (locational)."
 				],
-				"<li class=\"newSection\">English bases locatives on possessive clauses, but with an inanimate possessor.",
-				"<li>Russian bases possessive clauses on locatives, but with an animate possessor."
+				true,
+				"English bases locatives on possessive clauses, but with an inanimate possessor.",
+				"Russian bases possessive clauses on locatives, but with an animate possessor."
 			]
 		},
 		{
@@ -1453,21 +1552,22 @@
 			"title": "Existentials",
 			"label": "These Exist",
 			"content": [
-				"<li>These constructions usually serve a presentative function, introducing new participants.",
-				"<li>Usually, the nominal is indefinite: Consider \"There are lions in Africa\" (valid) vs. \"There are the lions in Africa\" (invalid).",
-				"<li>There is usually little to no case marking, verb agreement, etc.",
-				"<li>They often share features of predicate nominals (copula), but some languages prohibit such forms.",
-				"<li>They often have special negation stategies (e.g. a verb meaning 'to lack': \"Under the bed lacks a cat\").",
-				"<li>They often play a role in:",
+				"These constructions usually serve a presentative function, introducing new participants.",
+				"Usually, the nominal is indefinite: Consider \"There are lions in Africa\" (valid) vs. \"There are the lions in Africa\" (invalid).",
+				"There is usually little to no case marking, verb agreement, etc.",
+				"They often share features of predicate nominals (copula), but some languages prohibit such forms.",
+				"They often have special negation stategies (e.g. a verb meaning 'to lack': \"Under the bed lacks a cat\").",
+				"They often play a role in:",
 				[
-					"<li>\"Impersonal\" or \"circumstantial\" constructions.",
+					"\"Impersonal\" or \"circumstantial\" constructions.",
 					[
-						"<li>e.g. There will be dancing in the streets!"
+						"e.g. There will be dancing in the streets!"
 					],
-					"<li>Situations that lack the need for any specific actor, or to downplay the significance of an actor.",
-						"<li>e.g. Someone is crying."
-				],
-				"==</ul>"
+					"Situations that lack the need for any specific actor, or to downplay the significance of an actor.",
+					[
+						"e.g. Someone is crying."
+					]
+				]
 			]
 		},
 		{
@@ -1485,10 +1585,10 @@
 			"tag": "Modal",
 			"title": "Possessive Clauses",
 			"content": [
-				"<li>These follow two main strategies:",
+				"These follow two main strategies:",
 				[
-					"<li>Verb strategy: \"I have a book.\"",
-					"<li>Copula strategy: \"The book is at me.\""
+					"Verb strategy: \"I have a book.\"",
+					"Copula strategy: \"The book is at me.\""
 				]
 			]
 		},
@@ -1510,52 +1610,59 @@
 			"title": "Alignments",
 			"label": "Show the Alignments",
 			"content": [
-				"<li>**Nominative/Accusative Alignment**:",
+				"**Nominative/Accusative Alignment**:",
 				[
-					"<li>(S)ubjects and (A)gents are treated the same, in the nominative case.",
+					"(S)ubjects and (A)gents are treated the same, in the nominative case.",
 					[
-						"<li>//I// fell.",
-						"<li>//I// pushed him."
+						"//I// fell.",
+						"//I// pushed him."
 					],
-					"<li>(P)atients are given the accusative case.",
+					"(P)atients are given the accusative case.",
 					[
-						"<li>I pushed //him//."
+						"I pushed //him//."
 					],
-					"<li>S and A are both viewed as agents, having volition",
-					"<li>A tends to stick with the (V)erb, leaving the P floating:",
-						"<li>AVP; PAV; VAP; PVA"
+					"S and A are both viewed as agents, having volition",
+					"A tends to stick with the (V)erb, leaving the P floating:",
+					[
+						"AVP; PAV; VAP; PVA"
+					]
 				],
-				"==<li class=\"newSection\">**Ergative/Absolutive Alignment**:",
+				true,
+				"**Ergative/Absolutive Alignment**:",
 				[
-					"<li>(S)ubjects and (P)atients are treated the same, in the ergative case.",
+					"(S)ubjects and (P)atients are treated the same, in the ergative case.",
 					[
-						"<li>//I// fell.",
-						"<li>Me pushed //he//."
+						"//I// fell.",
+						"Me pushed //he//."
 					],
-					"<li>(A)gents are given the absolutive case.",
+					"(A)gents are given the absolutive case.",
 					[
-						"<li>//Me// pushed he."
+						"//Me// pushed he."
 					],
-					"<li>S and P are both viewed as typically being new information, or undergoing change.",
-					"<li>P tends to stick with the (V)erb, leaving the A floating:",
+					"S and P are both viewed as typically being new information, or undergoing change.",
+					"P tends to stick with the (V)erb, leaving the A floating:",
 					[
-						"<li>AVP; VPA; APV; PVA"
+						"AVP; VPA; APV; PVA"
 					],
-					"<li class=\"newSection\">**Split Ergativity**:",
-						"<li>In natural languages, ergativity tends to coexist in a hierarchy, with the nominative/accusative system used for the higher level. Typical hierarchies:",
+					true,
+					"**Split Ergativity**:",
+					[
+						"In natural languages, ergativity tends to coexist in a hierarchy, with the nominative/accusative system used for the higher level. Typical hierarchies:",
 						[
-							"<li>1st person &gt; 2nd person &gt; 3rd person &gt; humans &gt; animates &gt; inanimates",
-							"<li>agreement &gt; pronouns/case marking",
-							"<li>definite &gt; indefinite",
-							"<li>non-past tense &gt; past tense",
-							"<li>imperfect aspect &gt; perfect aspect"
+							"1st person &gt; 2nd person &gt; 3rd person &gt; humans &gt; animates &gt; inanimates",
+							"agreement &gt; pronouns/case marking",
+							"definite &gt; indefinite",
+							"non-past tense &gt; past tense",
+							"imperfect aspect &gt; perfect aspect"
 						],
-						"<li class=\"splitErgativity hide\">The split in the hierarchy can happen at any point. e.g.",
-							"<li>Dyirbal uses n/a for 1st/2nd person, e/a for everything else (this is a very common split point)",
-							"<li>Cashinawa uses n/a for 1/2, separate marking for A and P in 3rd person, and e/a for everything else",
-							"<li>Managalasi uses e/a for pronouns, n/a for person marking on verbs"
-				],
-				"====</ul>"
+						"The split in the hierarchy can happen at any point. e.g.",
+						[
+							"Dyirbal uses n/a for 1st/2nd person, e/a for everything else (this is a very common split point)",
+							"Cashinawa uses n/a for 1/2, separate marking for A and P in 3rd person, and e/a for everything else",
+							"Managalasi uses e/a for pronouns, n/a for person marking on verbs"
+						]
+					]
+				]
 			]
 		},
 		{
@@ -1595,15 +1702,16 @@
 			"title": "Valence",
 			"label": "What is Valence?",
 			"content": [
-				"<li>**Valence** refers to the amount of arguments in a clause.",
+				"**Valence** refers to the amount of arguments in a clause.",
 				[
-					"<li>\"I fell\" has a valence of 1.",
-					"<li>\"I pushed Steve\" has a valence of 2.",
-					"<li>\"I gave Steve a coconut\" has a valence of 3.",
-					"<li>\"I gave a coconut to Steve\" has a valence of 2.",
-						"<li>\"To Steve\" is in an oblique case, forming a verb modifier instead of being an argument of the verb."
-				],
-				"==</ul>"
+					"\"I fell\" has a valence of 1.",
+					"\"I pushed Steve\" has a valence of 2.",
+					"\"I gave Steve a coconut\" has a valence of 3.",
+					"\"I gave a coconut to Steve\" has a valence of 2.",
+					[
+						"\"To Steve\" is in an oblique case, forming a verb modifier instead of being an argument of the verb."
+					]
+				]
 			]
 		},
 		{
@@ -1621,56 +1729,70 @@
 			"title": "Causatives",
 			"label": "Forcing You to Read This",
 			"content": [
-				"<li>**Lexical**:",
+				"**Lexical**:",
 				[
-					"<li>Most languages have at least some form of this. There are three major methods employed:",
-						"<li>No change in the verb:",
+					"Most languages have at least some form of this. There are three major methods employed:",
+					[
+						"No change in the verb:",
 						[
-							"<li>\"The vase broke\" becomes \"Steve broke the vase\"."
+							"\"The vase broke\" becomes \"Steve broke the vase\"."
 						],
-						"<li>Some idiosyncratic change in the verb:",
+						"Some idiosyncratic change in the verb:",
 						[
-							"<li>\"The tree fell\" becomes \"Steve felled the tree\"."
+							"\"The tree fell\" becomes \"Steve felled the tree\"."
 						],
-						"<li>Different verb:",
-							"<li>\"The tree died\" becomes \"Steve killed the tree\"."
-				],
-				"====<li>**Morphological**:",
-				[
-					"<li>The verb change applies to all verbs (not just one, like //fell// vs //felled//).",
-					"<li>Often expresses causation and permission.",
-					"<li>May be restricted to only intransitive verbs.",
-					"<li>In transitive verbs, the causee often goes into a different case."
-				],
-				"<li>**Analytical**:",
-				[
-					"<li>A separate causative verb is used. This usually isn't valence-increasing!",
-						"<li>\"Steve caused the tree to die\".",
-						"<li>\"Steve forced the stick into the ground.\""
-				],
-				"==<li class=\"newSection\">**Coding Principles**:",
-				[
-					"<li>**Structural Distance**",
-						"<li>If the language has more than one formal type of causative, the \"smaller\" one will be used for more direct causation, while the \"larger\" one will be used for less direct causation. Longer linguistic distance correlates to greater conceptual distance.",
+						"Different verb:",
 						[
-							"<li>\"George killed Joe\" is more direct than \"George caused Joe to die\".",
-							"<li>Amharic has an //a-// prefix for direct causation, //as-// for indirect."
+							"\"The tree died\" becomes \"Steve killed the tree\"."
+						]
+					]
+				],
+				"**Morphological**:",
+				[
+					"The verb change applies to all verbs (not just one, like //fell// vs //felled//).",
+					"Often expresses causation and permission.",
+					"May be restricted to only intransitive verbs.",
+					"In transitive verbs, the causee often goes into a different case."
+				],
+				"**Analytical**:",
+				[
+					"A separate causative verb is used. This usually isn't valence-increasing!",
+					[
+						"\"Steve caused the tree to die\".",
+						"\"Steve forced the stick into the ground.\""
+					]
+				],
+				true,
+				"**Coding Principles**:",
+				[
+					"**Structural Distance**",
+					[
+						"If the language has more than one formal type of causative, the \"smaller\" one will be used for more direct causation, while the \"larger\" one will be used for less direct causation. Longer linguistic distance correlates to greater conceptual distance.",
+						[
+							"\"George killed Joe\" is more direct than \"George caused Joe to die\".",
+							"Amharic has an //a-// prefix for direct causation, //as-// for indirect."
 						],
-						"<li>Analytic causatives often \"require\" an animate causee.",
-							"<li>Japanese has a morphological causative when the causee has some control over the event, but requires a lexical causative for inanimate causees.",
-							"<li>Consider \"Joe made George come down\" vs \"Joe brought the golf clubs down\"."
+						"Analytic causatives often \"require\" an animate causee.",
+						[
+							"Japanese has a morphological causative when the causee has some control over the event, but requires a lexical causative for inanimate causees.",
+							"Consider \"Joe made George come down\" vs \"Joe brought the golf clubs down\"."
+						]
+					]
 				],
-				"====<li>**Finite vs. Non-Finite Verbs**",
+				"**Finite vs. Non-Finite Verbs**",
 				[
-					"<li>The more distant the cause from the effect in space or time, the more finite the verb will be.",
-						"<li>Ex: //\"Jorge **hizo comer** pan a Josef\"// indicates Jorge forced Josef to eat bread directly, while //\"Jorge **hizo** que Josef **comiera** pan\"// indicates he forced Josef indirectly, maybe by removing all other food."
+					"The more distant the cause from the effect in space or time, the more finite the verb will be.",
+					[
+						"Ex: //\"Jorge **hizo comer** pan a Josef\"// indicates Jorge forced Josef to eat bread directly, while //\"Jorge **hizo** que Josef **comiera** pan\"// indicates he forced Josef indirectly, maybe by removing all other food."
+					]
 				],
-				"==<li>**Case**",
+				"**Case**",
 				[
-					"<li>If the causee retains a high degree of control, it will appear in a case associated with Agents, but with little control, will appear in a Patient case.",
-						"<li>Ex: \"Steve asked that //he// leave\" gives Steve less control over the situation than \"Steve asked //him// to leave\"."
-				],
-				"====</ul>"
+					"If the causee retains a high degree of control, it will appear in a case associated with Agents, but with little control, will appear in a Patient case.",
+					[
+						"Ex: \"Steve asked that //he// leave\" gives Steve less control over the situation than \"Steve asked //him// to leave\"."
+					]
+				]
 			]
 		},
 		{
@@ -1689,9 +1811,33 @@
 			"title": "Applicatives",
 			"label": "Adding a Third Participant",
 			"content": [
-				"<li>The verb is marked for the role of a direct object, bringing a peripheral participant (the applied object) on stage in a more central role.",
+				"The verb is marked for the role of a direct object, bringing a peripheral participant (the applied object) on stage in a more central role.",
 				[
-					"<li>This may turn a transitive verb ditransitive, or it may replace the direct object entirely (which technically isn't valence-increasing!)<br /><span><br />\"I arrived at Shionti's\" in Nomatsiguenga.</span><TransTable rows=\"n-areeka.....Sionti-ke/.....I-arrive.....Shionti-LOC (valence: 1)/.....n-areeka-re.....Sionti/.....I-arrive-him.....Shionti (valence: 2)\"></TransTable>"
+					"This may turn a transitive verb ditransitive, or it may replace the direct object entirely (which technically isn't valence-increasing!)",
+					false,
+					"\"I arrived at Shionti's\" in Nomatsiguenga.",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"n-areeka",
+								"Sionti-ke"
+							],
+							[
+								"I-arrive",
+								"Shionti-LOC (valence: 1)"
+							],
+							[
+								"n-areeka-re",
+								"Sionti"
+							],
+							[
+								"I-arrive-him",
+								"Shionti (valence: 2)"
+							]
+						]
+					}
 				]
 			]
 		},
@@ -1711,13 +1857,13 @@
 			"title": "Dative Shift",
 			"label": "Looking Shifty",
 			"content": [
-				"<li>This only applies to verbs that take an Agent, a Patient and a Recipient or Experiencer. This latter argument is usually put in the //dative// case.",
-				"<li>Applicatives mark the verb, while a Dative Shift does not.",
-				"<li>Applicatives usually promote Instrumentals, while Dative Shifts usually promote Recipients and Benefactives.",
-				"<li>Example:",
+				"This only applies to verbs that take an Agent, a Patient and a Recipient or Experiencer. This latter argument is usually put in the //dative// case.",
+				"Applicatives mark the verb, while a Dative Shift does not.",
+				"Applicatives usually promote Instrumentals, while Dative Shifts usually promote Recipients and Benefactives.",
+				"Example:",
 				[
-					"<li>\"Steve gave the ball to Linda.\" Valence: 2",
-					"<li>\"Steve gave Linda the ball.\" Valence: 3, recipient promoted."
+					"\"Steve gave the ball to Linda.\" Valence: 2",
+					"\"Steve gave Linda the ball.\" Valence: 3, recipient promoted."
 				]
 			]
 		},
@@ -1737,10 +1883,48 @@
 			"title": "Dative of Interest",
 			"label": "Pique Your Interest",
 			"content": [
-				"<li>This is adding a participant that is associated in some way.",
+				"This is adding a participant that is associated in some way.",
 				[
-					"<li>\"Dinner is burned [for me]\" in Spanish<br /><TransTable rows=\"Se.....me.....quemó.....la.....cena....../.....REFL.....1s.....burn.3s.PST.....DEF.f.s.....din&shy;ner\"></TransTable>",
-					"<li>\"She cut the hair [on him]\" in Spanish.<br /><TransTable rows=\"Le.....cortó.....el.....pelo....../.....3.DAT.....cut.3s.PST.....DEF.M.s.....hair\"></TransTable>"
+					"\"Dinner is burned [for me]\" in Spanish",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"Se",
+								"me",
+								"quemó",
+								"la",
+								"cena."
+							],
+							[
+								"REFL",
+								"1s",
+								"burn.3s.PST",
+								"DEF.f.s",
+								"dinner"
+							]
+						]
+					},
+					"\"She cut the hair [on him]\" in Spanish.",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"Le",
+								"cortó",
+								"el",
+								"pelo."
+							],
+							[
+								"3.DAT",
+								"cut.3s.PST",
+								"DEF.M.s",
+								"hair"
+							]
+						]
+					}
 				]
 			]
 		},
@@ -1760,9 +1944,35 @@
 			"title": "Possessor Raising",
 			"label": "What is This?",
 			"content": [
-				"<li>In many languages, this exists separate from a dative of interest.",
+				"In many languages, this exists separate from a dative of interest.",
 				[
-					"<li>\"I fixed the railroad track\" in Choctaw.<br /><TransTable rows=\"Tali.....i-hina-ya.....ayska-li-tok/.....rock.....AGR(III)-road-NS.....fix-1s-PST (nor&shy;mal con&shy;struc&shy;tion)/.....Tali-ya.....hina.....im-ayska-li-tok/.....rock-NS.....road.....AGR(III)-fix-1s-PST (pos&shy;ses&shy;sor raised)\"></TransTable>"
+					"\"I fixed the railroad track\" in Choctaw.",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"Tali",
+								"i-hina-ya",
+								"ayska-li-tok"
+							],
+							[
+								"rock",
+								"AGR(III)-road-NS",
+								"fix-1s-PST (normal construction"
+							],
+							[
+								"Tali-ya",
+								"hina",
+								"im-ayska-li-to"
+							],
+							[
+								"rock-NS",
+								"road",
+								"AGR(III)-fix-1s-PST (possessor raised)"
+							]
+						]
+					}
 				]
 			]
 		},
@@ -1787,27 +1997,33 @@
 			"title": "Reflexives",
 			"label": "You Are Me?",
 			"content": [
-				"<li>The Agent and Patient are the same, so one is omitted.",
-				"<li class=\"newSection\">Lexical reflexives:",
+				"The Agent and Patient are the same, so one is omitted.",
+				true,
+				"Lexical reflexives:",
 				[
-					"<li>The verb itself implies reflexivity.",
-						"<li>e.g.: Steve washed and shaved every morning."
-				],
-				"==<li>Morpholigical reflexives:",
-				[
-					"<li>A word (or words) is modified to indicate the reflexive.",
-						"<li>e.g.: Spanish: Jorge se lavo. (George washed himself, \"se lavo\" being a morphing of the root verb \"lavarse\".)"
-				],
-				"==<li>Analytic reflexives:",
-				[
-					"<li>Inserting a lexical word, making a semantic valence-lowering (but not a lexical one).",
+					"The verb itself implies reflexivity.",
 					[
-						"<li>e.g.: Steve washed himself."
-					],
-					"<li>These are often based on body parts.",
-						"<li>e.g.: Another face in the crowd; Move your butt!"
+						"e.g.: Steve washed and shaved every morning."
+					]
 				],
-				"==</ul>"
+				"Morpholigical reflexives:",
+				[
+					"A word (or words) is modified to indicate the reflexive.",
+					[
+						"e.g.: Spanish: Jorge se lavo. (George washed himself, \"se lavo\" being a morphing of the root verb \"lavarse\".)"
+					]
+				],
+				"Analytic reflexives:",
+				[
+					"Inserting a lexical word, making a semantic valence-lowering (but not a lexical one).",
+					[
+						"e.g.: Steve washed himself."
+					],
+					"These are often based on body parts.",
+					[
+						"e.g.: Another face in the crowd; Move your butt!"
+					]
+				]
 			]
 		},
 		{
@@ -1826,13 +2042,16 @@
 			"title": "Reciprocals",
 			"label": "Working Together",
 			"content": [
-				"<li>The Agent and Patient are performing the same action, or performing an action together. These are often expressed the same way as reflexives.",
-				"<li class=\"newSection\">Lexical reciprocals:",
+				"The Agent and Patient are performing the same action, or performing an action together. These are often expressed the same way as reflexives.",
+				true,
+				"Lexical reciprocals:",
 				[
-					"<li>The verb itself implies reciprocity.",
-						"<li>e.g.: Steve and Jane shook hands [with each other]."
+					"The verb itself implies reciprocity.",
+					[
+						"e.g.: Steve and Jane shook hands [with each other]."
+					]
 				],
-				"==<li>Morpholigical and lexical reciprocals follow the same patterns as those for reflexives."
+				"Morpholigical and lexical reciprocals follow the same patterns as those for reflexives."
 			]
 		},
 		{
@@ -1851,24 +2070,30 @@
 			"title": "Passives",
 			"label": "Moving Focus From the Agent",
 			"content": [
-				"<li>A semantically transitive verb with omitted Agent, the Patient treated as Subject, and the verb behaves as if it is intransitive. (The Agent is made less topical than the Patient.)",
-				"<li class=\"newSection\">Personal passive: Agent is implied, or expressed obliquely.",
+				"A semantically transitive verb with omitted Agent, the Patient treated as Subject, and the verb behaves as if it is intransitive. (The Agent is made less topical than the Patient.)",
+				true,
+				"Personal passive: Agent is implied, or expressed obliquely.",
 				[
-					"<li>Lexical passives are rare.",
-					"<li>Morphological passives are more common, often the same morphology as perfect aspect. May be derived from copulas or nominalizations.",
-					"<li>English has analytic passives, with a copula and a \"past participle\" (Patient nominalization).",
-						"<li>e.g.: The tree has been killed."
+					"Lexical passives are rare.",
+					"Morphological passives are more common, often the same morphology as perfect aspect. May be derived from copulas or nominalizations.",
+					"English has analytic passives, with a copula and a \"past participle\" (Patient nominalization).",
+					[
+						"e.g.: The tree has been killed."
+					]
 				],
-				"==<li class=\"newSection\">Impersonal passive: no Agent directly indicated; can be used for intransitive verbs as well as transitive.",
+				true,
+				"Impersonal passive: no Agent directly indicated; can be used for intransitive verbs as well as transitive.",
 				[
-					"<li>No known languages uses a specific morphology for this!"
+					"No known languages uses a specific morphology for this!"
 				],
-				"<li class=\"newSection\">Other kinds of passives may exist.",
+				true,
+				"Other kinds of passives may exist.",
 				[
-					"<li>English has the basic \"Steve was eaten by a bear\" but can also express it with other verbs, as in \"Steve got eaten by a bear.\"",
-					"<li>Yup'ik has an adversative passive (to the detriment of the subject), abilitative passive (X can be Y [by Z]), and a negative abilitiative (X cannot be Y [by Z])."
+					"English has the basic \"Steve was eaten by a bear\" but can also express it with other verbs, as in \"Steve got eaten by a bear.\"",
+					"Yup'ik has an adversative passive (to the detriment of the subject), abilitative passive (X can be Y [by Z]), and a negative abilitiative (X cannot be Y [by Z])."
 				],
-				"<li class=\"newSection\">Passive construction may be obligatory in a particular environment, e.g. when the Patient outranks the Agent."
+				true,
+				"Passive construction may be obligatory in a particular environment, e.g. when the Patient outranks the Agent."
 			]
 		},
 		{
@@ -1887,8 +2112,8 @@
 			"title": "Inverses",
 			"label": "Playing The Reverse Card",
 			"content": [
-				"<li>This is a valence \"rearranging\" device, e.g. \"Steve taught him\" becomes \"Him, Steve taught.\"",
-				"<li>Often follows a hierarchy where a \"higher\" Agent requires direct and a \"lower\" Agent requires the inverse."
+				"This is a valence \"rearranging\" device, e.g. \"Steve taught him\" becomes \"Him, Steve taught.\"",
+				"Often follows a hierarchy where a \"higher\" Agent requires direct and a \"lower\" Agent requires the inverse."
 			]
 		},
 		{
@@ -1929,11 +2154,11 @@
 			"title": "Middle Constructions",
 			"label": "What Are These?",
 			"content": [
-				"<li>Also known as anticausatives or detransitivation: a semantically transitive situation expressed as a process undergone by a Patient (rather than carried out by an Agent).",
-				"<li>Many languages express this the same way as they express passives.",
-				"<li>This often express the notion that the subject is both controller and affected.",
+				"Also known as anticausatives or detransitivation: a semantically transitive situation expressed as a process undergone by a Patient (rather than carried out by an Agent).",
+				"Many languages express this the same way as they express passives.",
+				"This often express the notion that the subject is both controller and affected.",
 				[
-					"<li>e.g. \"Steve broke the car\" becomes \"The car broke\" (and it was no fault of Steve's)."
+					"e.g. \"Steve broke the car\" becomes \"The car broke\" (and it was no fault of Steve's)."
 				]
 			]
 		},
@@ -1953,9 +2178,9 @@
 			"title": "Antipassives",
 			"label": "What Are These?",
 			"content": [
-				"<li>Similar to passives, but the Patient is downgraded instead of the Agent.",
-				"<li>Generally, this only happens in ergative languages or in languages without verbal agreement, but many exceptions exist.",
-				"<li>Often, the Patient is omitted or oblique, the verb is marked intrasitive, and the Agent is placed in absolutive case."
+				"Similar to passives, but the Patient is downgraded instead of the Agent.",
+				"Generally, this only happens in ergative languages or in languages without verbal agreement, but many exceptions exist.",
+				"Often, the Patient is omitted or oblique, the verb is marked intrasitive, and the Agent is placed in absolutive case."
 			]
 		},
 		{
@@ -1974,15 +2199,18 @@
 			"title": "Object Demotion and Related Functions",
 			"label": "What Are These?",
 			"content": [
-				"<li>**Demotion**: \"Steve shot Bob\" becomes \"Steve shot at Bob\".",
-				"<li class=\"newSection\">**Omission**: \"Steve shot Bob\" becomes \"Steve shot\".",
-				"<li class=\"newSection\">**Incorporation**: \"Steve shot Bob\" becomes \"Steve Bob-shot\".",
+				"**Demotion**: \"Steve shot Bob\" becomes \"Steve shot at Bob\".",
+				true,
+				"**Omission**: \"Steve shot Bob\" becomes \"Steve shot\".",
+				true,
+				"**Incorporation**: \"Steve shot Bob\" becomes \"Steve Bob-shot\".",
 				[
-					"<li>The incorporated object is usually the Patient, rarely the Agent.",
-					"<li>May have other semantic functions.",
-						"<li>In Panare, incorporating a body part noun into a cutting verb means the part was cut completely off (\"Darth Vader hand-cut\"), whereas leaving it unincorporated means it was merely injured (\"Darth Vader cut hand\")."
-				],
-				"==</ul>"
+					"The incorporated object is usually the Patient, rarely the Agent.",
+					"May have other semantic functions.",
+					[
+						"In Panare, incorporating a body part noun into a cutting verb means the part was cut completely off (\"Darth Vader hand-cut\"), whereas leaving it unincorporated means it was merely injured (\"Darth Vader cut hand\")."
+					]
+				]
 			]
 		},
 		{
@@ -2008,60 +2236,75 @@
 			"title": "Nominalization",
 			"label": "Making Nouns",
 			"content": [
-				"<li>Every language has strategies of adjusting the grammatical category of a root. Turning a word into a noun is //nominalization//.",
-				"<li class=\"newSection\">English has multiple methods, with differing levels of productivity.",
-				"<li>Typically, a language will use differing methods to create nominalizations according to the result.",
-				"<li class=\"newSection\">Some methods:",
+				"Every language has strategies of adjusting the grammatical category of a root. Turning a word into a noun is //nominalization//.",
+				true,
+				"English has multiple methods, with differing levels of productivity.",
+				"Typically, a language will use differing methods to create nominalizations according to the result.",
+				true,
+				"Some methods:",
 				[
-					"<li>**Zero Operator**: walk → a walk, look → a look",
-					"<li>**Affix**: walk → walking, employ → employment, grow → growth, construct → construction",
-					"<li>**Merge with Adposition**: hang + up → hangup, make + over → makeover, talk + to → talking to",
-					"<li>**Analytical**: Mandarin uses a particle //de// to indicate some nominalizations",
-						"<li>//hézuò// (cooperate) + //de// → cooperation"
-				],
-				"==<li class=\"newSection\">Types of nominalization:<li>**Action**:",
-				[
-					"<li>Usually refers to the action in the abstract.",
-						"<li>walk → walking",
-						"<li>think → thinking"
-				],
-				"==<li>**Agent**:",
-				[
-					"<li>Typically refers to an Agent who is characteristic of the root verb (teach → a teacher), but some languages instead refer to someone engaged in the activity at the moment (teach → one who is presently teaching)."
-				],
-				"<li>**Patient**:",
-				[
-					"<li>In English, this mostly happens with the modifiers \"good\" and \"bad\".",
+					"**Zero Operator**: walk → a walk, look → a look",
+					"**Affix**: walk → walking, employ → employment, grow → growth, construct → construction",
+					"**Merge with Adposition**: hang + up → hangup, make + over → makeover, talk + to → talking to",
+					"**Analytical**: Mandarin uses a particle //de// to indicate some nominalizations",
 					[
-						"<li>buy → a good buy",
-						"<li>fall → a bad fall"
+						"//hézuò// (cooperate) + //de// → cooperation"
+					]
+				],
+				true,
+				"Types of nominalization:",
+				[
+					"**Action**:",
+					[
+						"Usually refers to the action in the abstract.",
+						[
+							"walk → walking",
+							"think → thinking"
+						]
 					],
-					"<li>This can also form the \"past participle\" in a language.",
-						"<li>employ → employee : this form comes from the French past participle!"
-				],
-				"==<li>**Instrument**:",
-				[
-					"<li>Refers to the object used in the action.",
-					"<li>In English, this usually follows the same format as an Agent nominalization.",
-					"<li>In Spanish, compounding a verb with a plural object makes an instrument.",
-						"<li>e.g. //abre// (open) + //latas// (cans) → //el abrelatas// (can-opener)"
-				],
-				"==<li>**Location**:",
-				[
-					"<li>Many languages use this to refer generally to a place where the action tends to occur, e.g. work → workshop, burn → fireplace."
-				],
-				"<li>**Product**:",
-				[
-					"<li>This refers to something that exists because of an action.",
-					"<li>English tends to do this with zero operators (scratch → a scratch) or by changing the stress pattern (permit → a permit, reject → a reject, convert → a convert)."
-				],
-				"<li>**Manner**:",
-				[
-					"<li>This is uncommon among languages, but English has a couple, generally confined to sports terminology.",
-						"<li>curve → a curve (That pitcher's curve is unhittable.)",
-						"<li>serve → a serve (Serena's serve is imposing.)"
-				],
-				"==</li></ul>"
+					"**Agent**:",
+					[
+						"Typically refers to an Agent who is characteristic of the root verb (teach → a teacher), but some languages instead refer to someone engaged in the activity at the moment (teach → one who is presently teaching)."
+					],
+					"**Patient**:",
+					[
+						"In English, this mostly happens with the modifiers \"good\" and \"bad\".",
+						[
+							"buy → a good buy",
+							"fall → a bad fall"
+						],
+						"This can also form the \"past participle\" in a language.",
+						[
+							"employ → employee : this form comes from the French past participle!"
+						]
+					],
+					"**Instrument**:",
+					[
+						"Refers to the object used in the action.",
+						"In English, this usually follows the same format as an Agent nominalization.",
+						"In Spanish, compounding a verb with a plural object makes an instrument.",
+						[
+							"e.g. //abre// (open) + //latas// (cans) → //el abrelatas// (can-opener)"
+						]
+					],
+					"**Location**:",
+					[
+						"Many languages use this to refer generally to a place where the action tends to occur, e.g. work → workshop, burn → fireplace."
+					],
+					"**Product**:",
+					[
+						"This refers to something that exists because of an action.",
+						"English tends to do this with zero operators (scratch → a scratch) or by changing the stress pattern (permit → a permit, reject → a reject, convert → a convert)."
+					],
+					"**Manner**:",
+					[
+						"This is uncommon among languages, but English has a couple, generally confined to sports terminology.",
+						[
+							"curve → a curve (That pitcher's curve is unhittable.)",
+							"serve → a serve (Serena's serve is imposing.)"
+						]
+					]
+				]
 			]
 		},
 
@@ -2081,14 +2324,15 @@
 			"title": "Compounding",
 			"label": "Word-Making",
 			"content": [
-				"<li>**Noun Incorporation**: noun becomes attached to a verb (see 7.2.7).",
+				"**Noun Incorporation**: noun becomes attached to a verb (see 7.2.7).",
 				[
-					"<li>The most common form is Patient incorporation (sell pigs → to pig-sell)."
+					"The most common form is Patient incorporation (sell pigs → to pig-sell)."
 				],
-				"<li class=\"newSection\">**Verb Incorporation**: two verbs merge, one modifying the other.",
+				true,
+				"**Verb Incorporation**: two verbs merge, one modifying the other.",
 				[
-					"<li>Often, verbs of motion enter into these pairings (shout-rise → he shouts rising).",
-					"<li>Verbs that freely compound like this typically lose their verbal character and become derivational affixes."
+					"Often, verbs of motion enter into these pairings (shout-rise → he shouts rising).",
+					"Verbs that freely compound like this typically lose their verbal character and become derivational affixes."
 				]
 			]
 		},
@@ -2109,18 +2353,19 @@
 			"title": "Tense, Aspect and Mode",
 			"label": "What Are They?",
 			"content": [
-				"<li>**TAM** (Tense, Aspect, Mode) are sometimes hard to tease apart, and may only be considered separate because of how they are in western language.",
-				"<li>Some languages pay more attention to tense (English), aspect (Austronesian languages), or mode (Eskimo).",
+				"**TAM** (Tense, Aspect, Mode) are sometimes hard to tease apart, and may only be considered separate because of how they are in western language.",
+				"Some languages pay more attention to tense (English), aspect (Austronesian languages), or mode (Eskimo).",
 				[
-					"<li>Furthermore, some verb stems may not allow certain operations while favoring others."
+					"Furthermore, some verb stems may not allow certain operations while favoring others."
 				],
-				"<li>Many languages don't morphologically indicate one or more of these divisions. (When not indicated morphologically, the language will use lexical or analytical methods.)",
+				"Many languages don't morphologically indicate one or more of these divisions. (When not indicated morphologically, the language will use lexical or analytical methods.)",
 				[
-					"<li>Aspect: only 74% of languages use morphology",
-					"<li>Mode: only 68% of languages do",
-					"<li>Tense: barely 50% of languages do!"
+					"Aspect: only 74% of languages use morphology",
+					"Mode: only 68% of languages do",
+					"Tense: barely 50% of languages do!"
 				],
-				"<li class=\"newSection\">TAM morphemes often interact significantly with case or number marking (nom/acc in one aspect, erg/abs in another; merging aspect with number)."
+				true,
+				"TAM morphemes often interact significantly with case or number marking (nom/acc in one aspect, erg/abs in another; merging aspect with number)."
 			]
 		},
 		{
@@ -2162,24 +2407,28 @@
 			"title": "Tense",
 			"label": "Info on Tense",
 			"content": [
-				"<li>**Tense** sets an action in time in relation to \"now\".",
-				"<li>Languages can divide time up into different sets of tenses:",
+				"**Tense** sets an action in time in relation to \"now\".",
+				"Languages can divide time up into different sets of tenses:",
 				[
-					"<li>Past/Present/Future",
-					"<li>Past/Nonpast",
-					"<li>Nonfuture/Future",
-					"<li>Not-Now/Now/Not-Now (two tenses!)",
-					"<li>Distant Past/A Year Ago/A Month Ago/A Week Ago/Today or Yesterday/Now/Soon/Future",
-						"<li>When human languages have divided past or future into multiple segments, there are never more future segments than past segments!"
+					"Past/Present/Future",
+					"Past/Nonpast",
+					"Nonfuture/Future",
+					"Not-Now/Now/Not-Now (two tenses!)",
+					"Distant Past/A Year Ago/A Month Ago/A Week Ago/Today or Yesterday/Now/Soon/Future",
+					[
+						"When human languages have divided past or future into multiple segments, there are never more future segments than past segments!"
+					]
 				],
-				"==<li class=\"newSection\">Future tense markers often derive from \"want\", \"come\", or \"go\".",
+				true,
+				"Future tense markers often derive from \"want\", \"come\", or \"go\".",
 				[
-					"<li>These verbs may still function separately!",
-						"<li>He come (present)",
-						"<li>He come go (will go)",
-						"<li>He come come (will come)"
-				],
-				"==</ul>"
+					"These verbs may still function separately!",
+					[
+						"He come (present)",
+						"He come go (will go)",
+						"He come come (will come)"
+					]
+				]
 			]
 		},
 		{
@@ -2198,84 +2447,91 @@
 			"title": "Aspect",
 			"label": "Info on Aspect",
 			"content": [
-				"<li>**Aspect** describes the internal structure of an event or state. Here are some typical aspects:",
+				"**Aspect** describes the internal structure of an event or state. Here are some typical aspects:",
 				[
-					"<li>**Perfective**: The situation is viewed as a single event.",
+					"**Perfective**: The situation is viewed as a single event.",
 					[
-						"<li>\"She wrote a letter.\"",
-						"<li>\"He walked around the block.\""
+						"\"She wrote a letter.\"",
+						"\"He walked around the block.\""
 					],
-					"<li>**Imperfective**: The situation is viewed from \"inside\" as an ongoing process.",
+					"**Imperfective**: The situation is viewed from \"inside\" as an ongoing process.",
 					[
-						"<li>\"She writes a letter.\"",
-						"<li>\"He walks around the block.\""
+						"\"She writes a letter.\"",
+						"\"He walks around the block.\""
 					],
-					"<li>**Perfect**: A currently relevant state brought about by the verb.",
+					"**Perfect**: A currently relevant state brought about by the verb.",
 					[
-						"<li>\"She has written a letter.\"",
-						"<li>\"He has walked around the block.\""
+						"\"She has written a letter.\"",
+						"\"He has walked around the block.\""
 					],
-					"<li>**Pluperfect**: A combination of Perfect aspect and Past tense; the currently relevant state was brought about in the past.",
+					"**Pluperfect**: A combination of Perfect aspect and Past tense; the currently relevant state was brought about in the past.",
 					[
-						"<li>\"She had written a letter.\"",
-						"<li>\"He had walked around the block.\""
+						"\"She had written a letter.\"",
+						"\"He had walked around the block.\""
 					],
-					"<li>**Completive**: Refers to the end of a situation.",
+					"**Completive**: Refers to the end of a situation.",
 					[
-						"<li>\"She finished writing a letter.\"",
-						"<li>\"He finished walking around the block.\""
+						"\"She finished writing a letter.\"",
+						"\"He finished walking around the block.\""
 					],
-					"<li>**Inceptive**: Refers to the beginning of a situation.",
+					"**Inceptive**: Refers to the beginning of a situation.",
 					[
-						"<li>\"She started writing a letter.\"",
-						"<li>\"He began walking around the block.\""
+						"\"She started writing a letter.\"",
+						"\"He began walking around the block.\""
 					],
-					"<li>**Continuative/Progressive**: This implies an ongoing, dynamic situation.",
+					"**Continuative/Progressive**: This implies an ongoing, dynamic situation.",
 					[
-						"<li>\"She is writing a letter.\"",
-						"<li>\"He is walking around the block.\""
+						"\"She is writing a letter.\"",
+						"\"He is walking around the block.\""
 					],
-					"<li>**Habitual**: This implies an event or state happens regularly.",
+					"**Habitual**: This implies an event or state happens regularly.",
 					[
-						"<li>\"She often writes a letter.\"",
-						"<li>\"He usually walks around the block.\""
+						"\"She often writes a letter.\"",
+						"\"He usually walks around the block.\""
 					],
-					"<li>**Punctual**: The state or event is too short to have an internal structure.",
+					"**Punctual**: The state or event is too short to have an internal structure.",
 					[
-						"<li>\"She coughed.\""
+						"\"She coughed.\""
 					],
-					"<li>**Iterative**: A Punctual state or event takes place several times in succession.",
+					"**Iterative**: A Punctual state or event takes place several times in succession.",
 					[
-						"<li>\"He is coughing.\""
+						"\"He is coughing.\""
 					],
-					"<li>**Atelic**: An event that has no clearly defined end-point.",
+					"**Atelic**: An event that has no clearly defined end-point.",
 					[
-						"<li>\"He is coughing and coughing and coughing.\""
+						"\"He is coughing and coughing and coughing.\""
 					],
-					"<li>**Telic**: Has a clearly defined end-point.",
+					"**Telic**: Has a clearly defined end-point.",
 					[
-						"<li>\"She is near the end of her walk.\""
+						"\"She is near the end of her walk.\""
 					],
-					"<li>**Static**: A changeless state.",
-						"<li>\"He is just plain boring.\""
+					"**Static**: A changeless state.",
+					[
+						"\"He is just plain boring.\""
+					]
 				],
-				"==<li class=\"newSection\">Languages may handle certain aspects in different ways.",
+				true,
+				"Languages may handle certain aspects in different ways.",
 				[
-					"<li>English uses context for most aspects.",
-					"<li>Spanish uses morphology for Perfective and Imperfective aspects, and uses a morphological/analytical combination for Perfect.",
-					"<li>Mandarin has a Perfective particle.",
-					"<li>Finnish uses an accusative case for Perfective and a \"partitive\" case for Progressive.",
-						"<li>In human languages, case markers like this can be mistaken for TAM markers!"
+					"English uses context for most aspects.",
+					"Spanish uses morphology for Perfective and Imperfective aspects, and uses a morphological/analytical combination for Perfect.",
+					"Mandarin has a Perfective particle.",
+					"Finnish uses an accusative case for Perfective and a \"partitive\" case for Progressive.",
+					[
+						"In human languages, case markers like this can be mistaken for TAM markers!"
+					]
 				],
-				"==<li class=\"newSection\">Progressive aspect constructions often derive from locational structures.",
+				true,
+				"Progressive aspect constructions often derive from locational structures.",
 				[
-					"<li>English has gone from \"He is at walking\" to \"He is a-walking\" (still used in some places) to \"He is walking\"."
+					"English has gone from \"He is at walking\" to \"He is a-walking\" (still used in some places) to \"He is walking\"."
 				],
-				"<li class=\"newSection\">There is often a link between aspect marking and location/direction marking. English has some examples:",
+				true,
+				"There is often a link between aspect marking and location/direction marking. English has some examples:",
 				[
-					"<li>I //came// to see it as an abberation (inceptive)",
-					"<li>I cut //away// at the handcuffs (imperfective)",
-					"<li>I drank your milkshake //up// (perfective)"
+					"I //came// to see it as an abberation (inceptive)",
+					"I cut //away// at the handcuffs (imperfective)",
+					"I drank your milkshake //up// (perfective)"
 				]
 			]
 		},
@@ -2295,35 +2551,42 @@
 			"title": "Mode",
 			"label": "Info on Mode",
 			"content": [
-				"<li>**Mode** describes a speaker's attitude toward a situation, including how likely or truthful it is, or how relevant the situation is to them.",
-				"<li>Mode, Mood and Modality are often used interchangeably, though some linguists make distinctions between them.",
-				"<li class=\"newSection\">The highest-level Mode distinction is the Realis-Irrealis Continuum.",
+				"**Mode** describes a speaker's attitude toward a situation, including how likely or truthful it is, or how relevant the situation is to them.",
+				"Mode, Mood and Modality are often used interchangeably, though some linguists make distinctions between them.",
+				true,
+				"The highest-level Mode distinction is the Realis-Irrealis Continuum.",
 				[
-					"<li>**Realis**: the speaker insists the situation is real, or holds true.",
-					"<li>**Irrealis**: the speaker makes no claim as to the situation's reality or truthfulness.",
+					"**Realis**: the speaker insists the situation is real, or holds true.",
+					"**Irrealis**: the speaker makes no claim as to the situation's reality or truthfulness.",
 					[
-						"<li>Conditional statements (if X...) are inherently Irrealis.",
-						"<li>Interrogative statements (questions) and imperative statements (commands) tend to be treated as Irrealis.",
-						"<li>Other statements that tend to be treated as Irrealis:",
-							"<li>Subjunctive (possibility, what if)",
-							"<li>Optative (wishes)",
-							"<li>Hypothetical/Imaginary",
-							"<li>Probability",
-							"<li>Deontic (obligations: should, must, have to)",
-							"<li>Potential (might, ability to; sometimes considered very weak Deontic)"
+						"Conditional statements (if X...) are inherently Irrealis.",
+						"Interrogative statements (questions) and imperative statements (commands) tend to be treated as Irrealis.",
+						"Other statements that tend to be treated as Irrealis:",
+						[
+							"Subjunctive (possibility, what if)",
+							"Optative (wishes)",
+							"Hypothetical/Imaginary",
+							"Probability",
+							"Deontic (obligations: should, must, have to)",
+							"Potential (might, ability to; sometimes considered very weak Deontic)"
+						]
 					],
-					"==<li class=\"newSection\">Evidentiality and Validationality are sometimes part of the Mode system. They can also stand alone (8.5)."
+					true,
+					"Evidentiality and Validationality are sometimes part of the Mode system. They can also stand alone (8.5)."
 				],
-				"<li class=\"newSection\">Negative assertions (see 9.2) can be Realis or Irrealis depending on how strongly the assertion is, but some languages still treat all negative statements as Irrealis.",
-				"<li class=\"newSection\">Mode interacts strongly with Tense and Aspect.",
+				true,
+				"Negative assertions (see 9.2) can be Realis or Irrealis depending on how strongly the assertion is, but some languages still treat all negative statements as Irrealis.",
+				true,
+				"Mode interacts strongly with Tense and Aspect.",
 				[
-					"<li>Habitual aspect is inherently less Realis than Perfective aspect.",
-					"<li>Statements that are more Realis are more likely to be definite and referential.",
-						"<li>Steve ate the candy. (Perfective)",
-						"<li>Steve always eats candy. (Habitual)",
-						"<li>Steve always eats the candy. (Technically grammatical, but sounds \"wrong\")"
-				],
-				"==</ul>"
+					"Habitual aspect is inherently less Realis than Perfective aspect.",
+					"Statements that are more Realis are more likely to be definite and referential.",
+					[
+						"Steve ate the candy. (Perfective)",
+						"Steve always eats candy. (Habitual)",
+						"Steve always eats the candy. (Technically grammatical, but sounds \"wrong\")"
+					]
+				]
 			]
 		},
 		{
@@ -2342,17 +2605,23 @@
 			"title": "Location and Direction",
 			"label": "Where?",
 			"content": [
-				"<li>While Tense grounds statements in time, some languages grammaticize location and/or direction markers to ground statements in space. It may be even more central to discourse than tense in some languages.",
-				"<li class=\"newSection\">Directional formatives are often related to basic verbs of motion (go, come, arrive, depart, return, go up, go down).",
-				"<li class=\"newSection\">Some languages (Lahu, Tibeto-Burman languages) have one motion verb and use directional formatives to indicate progression towards (hither) or away from (thither) a point of reference.",
-				"<li class=\"newSection\">Locational marking is often culturally or geographically relevant to the culture that speaks it.",
+				"While Tense grounds statements in time, some languages grammaticize location and/or direction markers to ground statements in space. It may be even more central to discourse than tense in some languages.",
+				true,
+				"Directional formatives are often related to basic verbs of motion (go, come, arrive, depart, return, go up, go down).",
+				true,
+				"Some languages (Lahu, Tibeto-Burman languages) have one motion verb and use directional formatives to indicate progression towards (hither) or away from (thither) a point of reference.",
+				true,
+				"Locational marking is often culturally or geographically relevant to the culture that speaks it.",
 				[
-					"<li>Quechua, spoken in the Andes mountains, has suffixes that indicate uphill, downhill, and \"at the same altitude\".",
-					"<li>Yagua, spoken in Peruvian lowland rivers, has suffixes that indicate an action was performed upriver, downriver, or moving horizontally across land or water.",
-						"<li>There are also suffixes that express if an action happened on arrival at a new scene, or on arrival at the current scene."
+					"Quechua, spoken in the Andes mountains, has suffixes that indicate uphill, downhill, and \"at the same altitude\".",
+					"Yagua, spoken in Peruvian lowland rivers, has suffixes that indicate an action was performed upriver, downriver, or moving horizontally across land or water.",
+					[
+						"There are also suffixes that express if an action happened on arrival at a new scene, or on arrival at the current scene."
+					]
 				],
-				"==<li class=\"newSection\">Papuan languages have extensive markers that can be used in combination, i.e. \"She moved it down and away from her.\"",
-				"<li>Otomí has auxiliaries than indicate an action is towards (centric) or away from (exocentric) a designated center (usually where the speaker is)."
+				true,
+				"Papuan languages have extensive markers that can be used in combination, i.e. \"She moved it down and away from her.\"",
+				"Otomí has auxiliaries than indicate an action is towards (centric) or away from (exocentric) a designated center (usually where the speaker is)."
 			]
 		},
 		{
@@ -2371,27 +2640,30 @@
 			"title": "Evidentiality",
 			"label": "Truth and Certainty",
 			"content": [
-				"<li>**Evidentiality** expresses how much evidence the speaker has to make this assertion. For instance, first-hand knowledge is more evidential than third-hand suspect information.",
-				"<li>**Validationality** is sometimes separate from Evidentiality. It is how languages express relative certainty of truth. We are more likely to be certain of:",
+				"**Evidentiality** expresses how much evidence the speaker has to make this assertion. For instance, first-hand knowledge is more evidential than third-hand suspect information.",
+				"**Validationality** is sometimes separate from Evidentiality. It is how languages express relative certainty of truth. We are more likely to be certain of:",
 				[
-					"<li>Past events vs future events",
-					"<li>The completion of Perfective events vs still-in-progress events",
-					"<li>Realis assertions vs Irrealis assertions"
+					"Past events vs future events",
+					"The completion of Perfective events vs still-in-progress events",
+					"Realis assertions vs Irrealis assertions"
 				],
-				"<li>**Mirativity** expresses how well this information fits into the speaker's worldview.",
+				"**Mirativity** expresses how well this information fits into the speaker's worldview.",
 				[
-					"<li>\"The cat was found on the roof\" has high mirativity.",
-					"<li>\"The elephant was found on the roof\" would be surprising, and therefore has very low mirativity."
+					"\"The cat was found on the roof\" has high mirativity.",
+					"\"The elephant was found on the roof\" would be surprising, and therefore has very low mirativity."
 				],
-				"<li class=\"newSection\">These markers often operate on the clause level rather than the verb-phrase level. They tend to be tightly tied to TAM.",
-				"<li class=\"newSection\">The most common type of evidential marker is the Hearsay particle.",
-				"<li class=\"newSection\">Tuyuca has a complex, five-level system:",
+				true,
+				"These markers often operate on the clause level rather than the verb-phrase level. They tend to be tightly tied to TAM.",
+				true,
+				"The most common type of evidential marker is the Hearsay particle.",
+				true,
+				"Tuyuca has a complex, five-level system:",
 				[
-					"<li>Witnessed by the speaker",
-					"<li>Not witnessed by the speaker",
-					"<li>General knowledge",
-					"<li>Inferred from evidence",
-					"<li>Hearsay"
+					"Witnessed by the speaker",
+					"Not witnessed by the speaker",
+					"General knowledge",
+					"Inferred from evidence",
+					"Hearsay"
 				]
 			]
 		},
@@ -2411,17 +2683,17 @@
 			"title": "Miscelaneous",
 			"label": "Leftovers",
 			"content": [
-				"<li>There are miscellaneous verb-phrase operations that might or might not exist.",
+				"There are miscellaneous verb-phrase operations that might or might not exist.",
 				[
-					"<li>Lexical time reference (as opposed to tense)",
+					"Lexical time reference (as opposed to tense)",
 					[
-						"<li>English: \"Yesterday\", \"today\"",
-						"<li>Koyukon: \"ee-\" means \"once only\"",
-						"<li>Yagua: \"-jásiy\" means \"earlier today\""
+						"English: \"Yesterday\", \"today\"",
+						"Koyukon: \"ee-\" means \"once only\"",
+						"Yagua: \"-jásiy\" means \"earlier today\""
 					],
-					"<li>Distributive, i.e. \"back and forth\" or \"all over the place\"",
-					"<li>Environmental modification of motion verbs, i.e. \"at night\", \"over water\"",
-					"<li>Speaker attitude, i.e. \"disgusted\" or \"complaining\""
+					"Distributive, i.e. \"back and forth\" or \"all over the place\"",
+					"Environmental modification of motion verbs, i.e. \"at night\", \"over water\"",
+					"Speaker attitude, i.e. \"disgusted\" or \"complaining\""
 				]
 			]
 		},
@@ -2443,49 +2715,54 @@
 			"title": "Pragmatics",
 			"label": "What are Pragmatics?",
 			"content": [
-				"<li>Pragmatics is the interpretation of utterances, and Pragmatic Statuses relate the //content// of an utterance to its //context//. They cover the following concepts:",
+				"Pragmatics is the interpretation of utterances, and Pragmatic Statuses relate the //content// of an utterance to its //context//. They cover the following concepts:",
 				[
-					"<li>**Identifiability**: can an argument be identified by the listener?",
+					"**Identifiability**: can an argument be identified by the listener?",
 					[
-						"<li>English uses proper names and \"the\" to indicate identifiability."
+						"English uses proper names and \"the\" to indicate identifiability."
 					],
-					"<li>**Objective Referentiality**: is an argument a bounded, individual entity?",
+					"**Objective Referentiality**: is an argument a bounded, individual entity?",
 					[
-						"<li>English can be ambiguous: Does \"I'm looking for a housekeeper\" mean anyone who is housekeeper, or a specific housekeeper the speaker is not naming?",
-						"<li>Spanish has a particle //a// for human arguments that indicates a specific individual is being talked about.",
-							"<li>\"Buscando una empleada\" - I'm looking for a (any) housekeeper",
-							"<li>\"Buscando a una empleada\" - I'm looking for a (specific) housekeeper"
+						"English can be ambiguous: Does \"I'm looking for a housekeeper\" mean anyone who is housekeeper, or a specific housekeeper the speaker is not naming?",
+						"Spanish has a particle //a// for human arguments that indicates a specific individual is being talked about.",
+						[
+							"\"Buscando una empleada\" - I'm looking for a (any) housekeeper",
+							"\"Buscando a una empleada\" - I'm looking for a (specific) housekeeper"
+						]
 					],
-					"==<li>**Discourse Referentiality**: is an argument relevant to the discourse or just adjacent?",
+					"**Discourse Referentiality**: is an argument relevant to the discourse or just adjacent?",
 					[
-						"<li>Panago: putting a new argument before a verb \"foreshadows\" that the argument will be important later. Putting it after the verb means it's just transitory.",
-						"<li>English often uses //this// to indicate importance. If you hear someone say, \"Take a look at //this// guy,\" you can be sure they're going to continue talking about the guy!"
+						"Panago: putting a new argument before a verb \"foreshadows\" that the argument will be important later. Putting it after the verb means it's just transitory.",
+						"English often uses //this// to indicate importance. If you hear someone say, \"Take a look at //this// guy,\" you can be sure they're going to continue talking about the guy!"
 					],
-					"<li>**Focus** covers multiple concepts:",
+					"**Focus** covers multiple concepts:",
 					[
-						"<li>**Marked Focus**:",
+						"**Marked Focus**:",
 						[
-							"<li>\"Mom //did// give me permission!\" - English uses \"do\" to focus on the truth of a statement, often in opposition to the listener's beliefs."
+							"\"Mom //did// give me permission!\" - English uses \"do\" to focus on the truth of a statement, often in opposition to the listener's beliefs."
 						],
-						"<li>**Assertive Focus**:",
+						"**Assertive Focus**:",
 						[
-							"<li>\"Mary was wearing //this hideous bridesmaid's dress//.\" - the speaker believes the listener has no knowledge of the information."
+							"\"Mary was wearing //this hideous bridesmaid's dress//.\" - the speaker believes the listener has no knowledge of the information."
 						],
-						"<li>**Counter-Presuppositional Focus**:",
+						"**Counter-Presuppositional Focus**:",
 						[
-							"<li>\"The nerd and the cheerleader came to the party, but //the nerd// won everyone's hearts.\" - the speaker believes the listener believes the opposite."
+							"\"The nerd and the cheerleader came to the party, but //the nerd// won everyone's hearts.\" - the speaker believes the listener believes the opposite."
 						],
-						"<li>**Exhaustive Focus**:",
+						"**Exhaustive Focus**:",
 						[
-							"<li>\"I //only// spoke to Ned.\" - the speaker excludes all other possible options."
+							"\"I //only// spoke to Ned.\" - the speaker excludes all other possible options."
 						],
-						"<li>**Contrastive Focus**:",
-							"<li>\"//Mary// chose the dresses.\" - the listener may believe one participant had a specific role, but the speaker is saying someone else held that role."
+						"**Contrastive Focus**:",
+						[
+							"\"//Mary// chose the dresses.\" - the listener may believe one participant had a specific role, but the speaker is saying someone else held that role."
+						]
 					],
-					"==<li>**Topic**:",
-						"<li>\"//Beans//, how I hate them.\" - a new argument is declared as a topic of further discourse."
-				],
-				"==</ul>"
+					"**Topic**:",
+					[
+						"\"//Beans//, how I hate them.\" - a new argument is declared as a topic of further discourse."
+					]
+				]
 			]
 		},
 		{
@@ -2498,52 +2775,65 @@
 			"title": "Focus, Contrast, etc.",
 			"label": "Focus is What This is About",
 			"content": [
-				"<li>**Intonation and Vocalization**, such as tempo changes (\"Do. Not. Do. That.\"), volume changes (screaming, whispering), and pitch changes (\"Do //not// do that\"), are nearly universal.",
-				"<li class=\"newSection\">**Constituent Order**:",
+				"**Intonation and Vocalization**, such as tempo changes (\"Do. Not. Do. That.\"), volume changes (screaming, whispering), and pitch changes (\"Do //not// do that\"), are nearly universal.",
+				true,
+				"**Constituent Order**:",
 				[
-					"<li>Practically all language use **Preposing**, moving an argument by itself to a position before a clause that it's relative to. The opposite is **Postposing**.",
+					"Practically all language use **Preposing**, moving an argument by itself to a position before a clause that it's relative to. The opposite is **Postposing**.",
 					[
-						"<li>\"//Potatoes//, I like them.\""
+						"\"//Potatoes//, I like them.\""
 					],
-					"<li>**Fronting** is similar, but rearranges arguments so that Pragmatic Status is given to the moved argument.",
+					"**Fronting** is similar, but rearranges arguments so that Pragmatic Status is given to the moved argument.",
 					[
-						"<li>\"//Potatoes// I like.\""
+						"\"//Potatoes// I like.\""
 					],
-					"<li>**Apposition** is adding a free noun phrase to a clause.",
+					"**Apposition** is adding a free noun phrase to a clause.",
 					[
-						"<li>\"//Termites//. Why does the universe hate me?\""
+						"\"//Termites//. Why does the universe hate me?\""
 					],
-					"<li>**Clefting** is a type of predicate nominal where a noun phrase is joined to a relative clause that references that original noun phrase. (See below.)",
-						"<li>\"//You// are //the one that I want//.\""
+					"**Clefting** is a type of predicate nominal where a noun phrase is joined to a relative clause that references that original noun phrase. (See below.)",
+					[
+						"\"//You// are //the one that I want//.\""
+					]
 				],
-				"==<li class=\"newSection\">**Formatives** move along a continuum between morphological case markers (4.4) and pragmatic status markers:",
+				true,
+				"**Formatives** move along a continuum between morphological case markers (4.4) and pragmatic status markers:",
 				[
-					"<li>The continuum:",
+					"The continuum:",
 					[
-						"<li>**Pragmatic Status Markers**: English articles, Aghem focus particles (see below), etc.",
-						"<li>**Overlay systems**: Japanese and Korean \"topic marking\"",
-						"<li>**Case Markers**: Latin, Eskimo, Russian, Quechua, etc."
+						"**Pragmatic Status Markers**: English articles, Aghem focus particles (see below), etc.",
+						"**Overlay systems**: Japanese and Korean \"topic marking\"",
+						"**Case Markers**: Latin, Eskimo, Russian, Quechua, etc."
 					],
-					"<li>Remember that these can partially correlate with grammatical roles: e.g. English //subjects// are often also //identifiable//.",
-						"<li class=\"newSection\">Aghem uses verb morphology and focus particles to express various pragmatic nuances.",
+					"Remember that these can partially correlate with grammatical roles: e.g. English //subjects// are often also //identifiable//.",
+					[
+						true,
+						"Aghem uses verb morphology and focus particles to express various pragmatic nuances.",
 						[
-							"<li>\"énáʔ //mɔ̀// fúo kí-bɛ́ â fín-ghɔ́\" - Inah gave fufu to his friends.",
-							"<li>\"énáʔ //má՚á// fúo kí-bɛ́ â fín-ghɔ́\" - Inah //DID// give fufu to his friends. (truth focus)",
-							"<li class=\"newSection\">\"fú kí mɔ̀ ñiŋ //nò// á kí-՚bé\" - The rat //ran// (did not walk, scurry, etc) in the compound.",
-							"<li>\"fú kí mɔ̀ ñiŋ á kí-՚bé //nò//\" - The rat ran in //the compound// (not in the house, church, etc.)."
+							"\"énáʔ //mɔ̀// fúo kí-bɛ́ â fín-ghɔ́\" - Inah gave fufu to his friends.",
+							"\"énáʔ //má՚á// fúo kí-bɛ́ â fín-ghɔ́\" - Inah //DID// give fufu to his friends. (truth focus)",
+							true,
+							"\"fú kí mɔ̀ ñiŋ //nò// á kí-՚bé\" - The rat //ran// (did not walk, scurry, etc) in the compound.",
+							"\"fú kí mɔ̀ ñiŋ á kí-՚bé //nò//\" - The rat ran in //the compound// (not in the house, church, etc.)."
 						],
-						"<li class=\"newSection\">Akam has a focus particle //na// and a contrastive particle //de//.",
+						true,
+						"Akam has a focus particle //na// and a contrastive particle //de//.",
 						[
-							"<li>\"Kwame //na// ɔbɛyɛ adwuma no.\" - It's Kwame (not anyone else) who will do the work.",
-							"<li>\"Kwame //de// ɔbɛkɔ, na Kofi //de// ɔbɛtena ha.\" - Kwame will go, but Kofi will stay here."
+							"\"Kwame //na// ɔbɛyɛ adwuma no.\" - It's Kwame (not anyone else) who will do the work.",
+							"\"Kwame //de// ɔbɛkɔ, na Kofi //de// ɔbɛtena ha.\" - Kwame will go, but Kofi will stay here."
 						],
-						"<li class=\"newSection\">**Overlay** systems are a combination of case-marking systems and pragmatic status-marking systems: one or more basic case markers are replaced (overlaid) by the status marker when a nominal is singled out for pragmatic treatment.",
-							"<li>The Japanese topic marker //wa// can overlay the subject marker //ga// or the object marker //o//.",
-								"<li>\"taroo //ga// hon //o// katta.\" - Taro bought a book.",
-								"<li>\"taroo //wa// hon o katta.\" - As for Taro, he bought a book.",
-								"<li>\"hon //wa// taroo ga katta.\" - As for the book, Taro bought it."
-				],
-				"======</ul>"
+						true,
+						"**Overlay** systems are a combination of case-marking systems and pragmatic status-marking systems: one or more basic case markers are replaced (overlaid) by the status marker when a nominal is singled out for pragmatic treatment.",
+						[
+							"The Japanese topic marker //wa// can overlay the subject marker //ga// or the object marker //o//.",
+							[
+								"\"taroo //ga// hon //o// katta.\" - Taro bought a book.",
+								"\"taroo //wa// hon o katta.\" - As for Taro, he bought a book.",
+								"\"hon //wa// taroo ga katta.\" - As for the book, Taro bought it."
+							]
+						]
+					]
+				]
 			]
 		},
 		{
@@ -2562,94 +2852,125 @@
 			"title": "Negation",
 			"label": "Don't not read this.",
 			"content": [
-				"<li>Common negation strategies:",
+				"Common negation strategies:",
 				[
-					"<li>**Clausal negation** - negates an entire proposition",
+					"**Clausal negation** - negates an entire proposition",
 					[
-						"<li>\"I didn't do it.\""
+						"\"I didn't do it.\""
 					],
-					"<li>**Constituent negation** - negates a particular constituent of a proposition",
-						"<li>\"I have no motive.\""
+					"**Constituent negation** - negates a particular constituent of a proposition",
+					[
+						"\"I have no motive.\""
+					]
 				],
-				"==<li class=\"newSection\">**Clausal Negation**",
+				true,
+				"**Clausal Negation**",
 				[
-					"<li class=\"newSection\">**Lexical Negation**",
+					true,
+					"**Lexical Negation**",
 					[
-						"<li>Some verbs just function as the opposite of other verbs, such as \"have\" vs \"lack\"."
+						"Some verbs just function as the opposite of other verbs, such as \"have\" vs \"lack\"."
 					],
-					"<li class=\"newSection\">**Morphological Negation**",
+					true,
+					"**Morphological Negation**",
 					[
-						"<li>Clausal negations are usually associated with the verb.",
-						"<li>Often tied to other verbal inflections, such as expressing aspect or tense."
+						"Clausal negations are usually associated with the verb.",
+						"Often tied to other verbal inflections, such as expressing aspect or tense."
 					],
-					"<li class=\"newSection\">**Analytical Negation**",
+					true,
+					"**Analytical Negation**",
 					[
-						"<li>This includes negative particles and negative finite verbs.",
-						"<li class=\"newSection\">**Multiple Expressions of Negation**",
+						"This includes negative particles and negative finite verbs.",
+						true,
+						"**Multiple Expressions of Negation**",
 						[
-							"<li>It's common for negative constructions to have multiple operators, e.g:",
-								"<li>two particles",
-								"<li>a particle and an affix",
-								"<li>a particle, an affix, and a word order change"
-						],
-						"==<li class=\"newSection\">**Different Kinds of Negation**",
-							"<li>In many languages, the negative affix or particle varies according to tense, aspect, mode, or other factors.",
+							"It's common for negative constructions to have multiple operators, e.g:",
 							[
-								"<li>It's fairly common for negative imperatives to differ from negative assertions (e.g. Mandarin, Hebrew, Tennet).",
-								"<li>Tagalog and many Austronesian languages use different particles for plain negatives and negation of existence.",
+								"two particles",
+								"a particle and an affix",
+								"a particle, an affix, and a word order change"
+							]
+						],
+						true,
+						"**Different Kinds of Negation**",
+						[
+							"In many languages, the negative affix or particle varies according to tense, aspect, mode, or other factors.",
+							[
+								"It's fairly common for negative imperatives to differ from negative assertions (e.g. Mandarin, Hebrew, Tennet).",
+								"Tagalog and many Austronesian languages use different particles for plain negatives and negation of existence.",
 								[
-									"<li>\"Mayroon ka ang pera?\" \"Wala.\" - Do you have any money? None.",
-									"<li>\"Pupunta ka ba sa sayawan?\" \"Hindi.\" - Are you going to the dance? No."
+									"\"Mayroon ka ang pera?\" \"Wala.\" - Do you have any money? None.",
+									"\"Pupunta ka ba sa sayawan?\" \"Hindi.\" - Are you going to the dance? No."
 								],
-								"<li>Mandarin has //méi// for existential negatives, //bié// for negative imperatives, and //bu// for everything else.",
-								"<li>Iraqi Arabic has one particle (mɑː) for verbal predicates and another (muː) for verbless predicates (predicate nominals, locationals, existentials, etc.)."
+								"Mandarin has //méi// for existential negatives, //bié// for negative imperatives, and //bu// for everything else.",
+								"Iraqi Arabic has one particle (mɑː) for verbal predicates and another (muː) for verbless predicates (predicate nominals, locationals, existentials, etc.)."
 							],
-							"<li class=\"newSection\">Another method is a finite negative verb and a complement clause (10, 10.2)",
-								"<li>The negative verb will take finite inflectional morphology and occur in the normal position for a verb. The affirmative verb will be treated like a complement verb.",
-								"<li>This occurs primarily in verb-initial and verb-final languages.",
-									"<li>Tungan, a verb-initial language:",
-										"<li>\"Na'e-//alu// 'a Siale\" - Charlie went.",
-										"<li>\"Na'e-//'ikai// ke //'alu// 'a Siele\" - Charlie didn't go."
+							true,
+							"Another method is a finite negative verb and a complement clause (10, 10.2)",
+							[
+								"The negative verb will take finite inflectional morphology and occur in the normal position for a verb. The affirmative verb will be treated like a complement verb.",
+								"This occurs primarily in verb-initial and verb-final languages.",
+								[
+									"Tungan, a verb-initial language:",
+									[
+										"\"Na'e-//alu// 'a Siale\" - Charlie went.",
+										"\"Na'e-//'ikai// ke //'alu// 'a Siele\" - Charlie didn't go."
+									]
+								]
+							]
+						]
 					],
-					"========<li class=\"newSection\">**Secondary Methods of Negation**",
+					true,
+					"**Secondary Methods of Negation**",
 					[
-						"<li>Alternate word order:",
+						"Alternate word order:",
 						[
-							"<li>Many VP languages change their order for negative clauses. For example, Kru uses AVP for affirmative clauses and APV in negative clauses."
+							"Many VP languages change their order for negative clauses. For example, Kru uses AVP for affirmative clauses and APV in negative clauses."
 						],
-						"<li>Change in tone:",
+						"Change in tone:",
 						[
-							"<li>Igbo carries a low tone in affirmative clauses and a high tone in negative clauses."
+							"Igbo carries a low tone in affirmative clauses and a high tone in negative clauses."
 						],
-						"<li>Neutralization of tense-aspect distinctions:",
+						"Neutralization of tense-aspect distinctions:",
 						[
-							"<li>Komi has a present-future distinction in affirmative, but no such distinction in the negative.",
-							"<li>Bembe allows two future tense markers in affirmative, but only one of them in the negative."
+							"Komi has a present-future distinction in affirmative, but no such distinction in the negative.",
+							"Bembe allows two future tense markers in affirmative, but only one of them in the negative."
 						],
-						"<li>Special inflections:",
+						"Special inflections:",
 						[
-							"<li>A few languages have special person/number ot TAM markers on verbs in negative clauses. (Negative verbs tend to hold onto older patterns that have been lost in affirmative clauses!)"
+							"A few languages have special person/number ot TAM markers on verbs in negative clauses. (Negative verbs tend to hold onto older patterns that have been lost in affirmative clauses!)"
 						],
-						"<li>Alternative case-marking patterns:",
-							"<li>Special case-marking patterns may occur in negative clauses. For example, with certain Russian verbs, the object will be in accusative for affirmative clauses and in genitive case in negative clauses."
+						"Alternative case-marking patterns:",
+						[
+							"Special case-marking patterns may occur in negative clauses. For example, with certain Russian verbs, the object will be in accusative for affirmative clauses and in genitive case in negative clauses."
+						]
 					],
-					"==<li class=\"newSection\">**Constituent Negation**",
+					true,
+					"**Constituent Negation**",
 					[
-						"<li class=\"newSection\">**Derivational Negation**:",
+						true,
+						"**Derivational Negation**:",
 						[
-							"<li>Some languages allow a derivation of a stem to transform it into its opposite.",
-							"<li>English has the not-fully-productive //non-// and //un-// prefixes that only work on adjectives and nominals.",
-							"<li>Panare has a verbal suffix //-(i)ka// that forms something akin to the opposite of the root verb."
+							"Some languages allow a derivation of a stem to transform it into its opposite.",
+							"English has the not-fully-productive //non-// and //un-// prefixes that only work on adjectives and nominals.",
+							"Panare has a verbal suffix //-(i)ka// that forms something akin to the opposite of the root verb."
 						],
-						"<li class=\"newSection\">**Negative Quantifiers**:",
-							"<li>Many languages have inherently negative quantifiers (\"none\", \"nothing\") or can be negated independent of clause (\"not many\").",
-							"<li>Most languages allow or require such quantifiers to be accompanied by clausal negation.",
-								"<li>Standard English is rare in disallowing such use of \"double negatives\"."
+						true,
+						"**Negative Quantifiers**:",
+						[
+							"Many languages have inherently negative quantifiers (\"none\", \"nothing\") or can be negated independent of clause (\"not many\").",
+							"Most languages allow or require such quantifiers to be accompanied by clausal negation.",
+							[
+								"Standard English is rare in disallowing such use of \"double negatives\"."
+							]
+						]
 					],
-					"====<li class=\"newSection\">**Negative Scope**:",
-						"<li>Sometimes the two types of negation interact to cause variations in the scope of what can be negated.<table class=\"informational\"><tr><th>Statement</th><th>Scope</th></tr><tr><td>\"Not many rats survive to adulthood.\"</td><td>Quantifier only</td></tr><tr><td>\"Many rats do not survive to adulthood.\"</td><td>Entire clause</td></tr><tr><td>\"I deliberately didn't eat the cheese.\"</td><td>Entire clause</td></tr><tr><td>\"I didn't deliberately eat the cheese.\"</td><td>Adverb only</td></tr><tr><td>\"He won't force you to volunteer.\"</td><td>Entire clause</td></tr><tr><td>\"He will force you not to volunteer.\"</td><td>Complement clause</td></tr></table>"
-				],
-				"==</ul>"
+					true,
+					"**Negative Scope**:",
+					[
+						"Sometimes the two types of negation interact to cause variations in the scope of what can be negated.<table class=\"informational\"><tr><th>Statement</th><th>Scope</th></tr><tr><td>\"Not many rats survive to adulthood.\"</td><td>Quantifier only</td></tr><tr><td>\"Many rats do not survive to adulthood.\"</td><td>Entire clause</td></tr><tr><td>\"I deliberately didn't eat the cheese.\"</td><td>Entire clause</td></tr><tr><td>\"I didn't deliberately eat the cheese.\"</td><td>Adverb only</td></tr><tr><td>\"He won't force you to volunteer.\"</td><td>Entire clause</td></tr><tr><td>\"He will force you not to volunteer.\"</td><td>Complement clause</td></tr></table>"
+					]
+				]
 			]
 		},
 		{
@@ -2668,9 +2989,10 @@
 			"title": "Declarative Statements",
 			"label": "Minor Note on Declaratives",
 			"content": [
-				"<li>A declarative statement is an assertion. Most speech is declarative.",
-				"<li>Other types of statements are usually handled as \"modes\" in a language, such as interrogative (questions) and imperatives (commands).",
-				"<li class=\"newSection\">Most often, a language will leave declarative statements unmarked and only mark the others. But some (e.g. Tibetan) will mark declaratives, too."
+				"A declarative statement is an assertion. Most speech is declarative.",
+				"Other types of statements are usually handled as \"modes\" in a language, such as interrogative (questions) and imperatives (commands).",
+				true,
+				"Most often, a language will leave declarative statements unmarked and only mark the others. But some (e.g. Tibetan) will mark declaratives, too."
 			]
 		},
 		{
@@ -2694,61 +3016,131 @@
 			"title": "Yes/NoQuestions",
 			"label": "Yes? No?",
 			"content": [
-				"<li>**Yes/No Questions**, hereafter referred to as //YNQs//, are interrogative clauses where the expected answer is either \"yes\" or \"no\". They can employ any or all of the strategies below.",
-				"<li class=\"newSection\">//Intonation//:",
+				"**Yes/No Questions**, hereafter referred to as //YNQs//, are interrogative clauses where the expected answer is either \"yes\" or \"no\". They can employ any or all of the strategies below.",
+				true,
+				"//Intonation//:",
 				[
-					"<li>There tends to be distinct intonation patterns in YNQs.",
-					"<li>The pattern is usually rising, as in English, but can be falling, as in Russian.",
-					"<li class=\"newSection\">Some languages //only// employ intonation!"
+					"There tends to be distinct intonation patterns in YNQs.",
+					"The pattern is usually rising, as in English, but can be falling, as in Russian.",
+					true,
+					"Some languages //only// employ intonation!"
 				],
-				"<li class=\"newSection\">//Word Order//:",
+				true,
+				"//Word Order//:",
 				[
-					"<li>Many languages, especially VP languages, use distinctive constituent orders for YNQs.",
-					"<li>Usually, this is an inversion of the Agent and Verb, as in many European and Austronesian languages.",
+					"Many languages, especially VP languages, use distinctive constituent orders for YNQs.",
+					"Usually, this is an inversion of the Agent and Verb, as in many European and Austronesian languages.",
 					[
-						"<li>\"bapak datangkah nanti\" - Father will come later (Malay)",
-						"<li>\"datangkah bapak nanti\" - Will father come later?"
+						"\"bapak datangkah nanti\" - Father will come later (Malay)",
+						"\"datangkah bapak nanti\" - Will father come later?"
 					],
-					"<li>English has a strange system where it reverses the Agent and the auxiliary verb. If no auxiliary is present, the verb \"do\" is inserted.",
+					"English has a strange system where it reverses the Agent and the auxiliary verb. If no auxiliary is present, the verb \"do\" is inserted.",
 					[
-						"<li>\"He will arrive on time\" → \"Will he arrive on time?\"",
-						"<li>\"They can eat cake\" → \"Can they eat cake?\"",
-						"<li>\"You want to join me\" (no auxiliary) → \"Do you want to join me?\""
+						"\"He will arrive on time\" → \"Will he arrive on time?\"",
+						"\"They can eat cake\" → \"Can they eat cake?\"",
+						"\"You want to join me\" (no auxiliary) → \"Do you want to join me?\""
 					],
-					"<li>American English uses simple Agent/Verb inversion in predicate nominals, existential and locational clauses. British English extends this to possessive constructions.",
-						"<li>\"He is a cat\" → \"Is he a cat?\"",
-						"<li>\"Cats are under the bed\" → \"Are cats under the bed?\"",
-						"<li>\"You were in the garden\" → \"Were you in the garden?\"",
-						"<li>\"You have a match\" → \"Have you a match?\" (British)"
-				],
-				"==<li class=\"newSection\">//Interrogative Particle//:",
-				[
-					"<li>Question Particles (QPs) are very common, especially among PV languages, but they do appear in VP languages, too.",
-					"<li>The QP can be cliticized to the first constituent in the clause, either before or after it.",
+					"American English uses simple Agent/Verb inversion in predicate nominals, existential and locational clauses. British English extends this to possessive constructions.",
 					[
-						"<li>Latin:<br /><TransTable rows=\"erat-ne.....te-cum...../.....he:was-QP.....you-with\" final=\"Was he with you?\"></TransTable>",
-						"<li>Mandarin:<br /><TransTable rows=\"tā.....xihuan.....chī.....pǐngguǒ.....ma...../.....she.....like.....eat.....apple.....QP\" final=\"Does she like to eat apples?\"></TransTable>",
-						"<li>Tagalog:<br /><TransTable rows=\"mabait.....ba.....si.....Pilar?...../.....kind.....QP.....is.....Pilar\" final=\"Is Pilar kind?\"></TransTable>"
+						"\"He is a cat\" → \"Is he a cat?\"",
+						"\"Cats are under the bed\" → \"Are cats under the bed?\"",
+						"\"You were in the garden\" → \"Were you in the garden?\"",
+						"\"You have a match\" → \"Have you a match?\" (British)"
+					]
+				],
+				true,
+				"//Interrogative Particle//:",
+				[
+					"Question Particles (QPs) are very common, especially among PV languages, but they do appear in VP languages, too.",
+					"The QP can be cliticized to the first constituent in the clause, either before or after it.",
+					[
+						"Latin:",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"erat-ne",
+									"te-cum"
+								],
+								[
+									"he:was-QP",
+									"you-with"
+								]
+							],
+							"final": "Was he with you?"
+						},
+						"Mandarin:",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"tā",
+									"xihuan",
+									"chī",
+									"pǐngguǒ",
+									"ma"
+								],
+								[
+									"she",
+									"like",
+									"eat",
+									"apple",
+									"QP"
+								]
+							],
+							"final": "Does she like to eat apples?"
+						},
+						"Tagalog:",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"mabait",
+									"ba",
+									"si",
+									"Pilar?"
+								],
+								[
+									"kind",
+									"QP",
+									"is",
+									"Pilar"
+								]
+							],
+							"final": "Is Pilar kind?"
+						}
 					],
-					"<li>Often, the QP can be omitted, letting context and intonation do the job instead.",
-					"<li class=\"newSection\">Some varieties of English has developed a QP as an alternative to word order inversion",
-						"<li>\"You want to go for a ride, //eh//?\""
+					"Often, the QP can be omitted, letting context and intonation do the job instead.",
+					true,
+					"Some varieties of English has developed a QP as an alternative to word order inversion",
+					[
+						"\"You want to go for a ride, //eh//?\""
+					]
 				],
-				"==<li class=\"newSection\">//Tag Question//:",
+				true,
+				"//Tag Question//:",
 				[
-					"<li>This involves a simple declarative statement, followed by a Tag that requests confirmation or disconfirmation of the statement.",
-					"<li>These are universally a secondary way of forming YNQs, though they are often the historical source of the currently-used QPs.",
-					"<li class=\"newSection\">English has Tags for certain times the speaker is assuming they'll get a Yes response:",
-						"<li>\"Nice day, //isn't it//?\"",
-						"<li>\"You're going to the club with us tonight, //right//?\""
+					"This involves a simple declarative statement, followed by a Tag that requests confirmation or disconfirmation of the statement.",
+					"These are universally a secondary way of forming YNQs, though they are often the historical source of the currently-used QPs.",
+					true,
+					"English has Tags for certain times the speaker is assuming they'll get a Yes response:",
+					[
+						"\"Nice day, //isn't it//?\"",
+						"\"You're going to the club with us tonight, //right//?\""
+					]
 				],
-				"==<li class=\"newSection\">**Functions**:",
+				true,
+				"**Functions**:",
 				[
-					"<li>YNQs are used for additional purposes other than simply asking questions in most languages.",
-					"<li class=\"newSection\">//To request action//: \"Could you close the door?\"",
-					"<li>//Rhetorical effect//: \"Are you always so messy?\"",
-					"<li>//Confirmation//: \"Aren't you going?\"",
-					"<li>//Intensification//: \"Did he ever yell!\""
+					"YNQs are used for additional purposes other than simply asking questions in most languages.",
+					true,
+					"//To request action//: \"Could you close the door?\"",
+					"//Rhetorical effect//: \"Are you always so messy?\"",
+					"//Confirmation//: \"Aren't you going?\"",
+					"//Intensification//: \"Did he ever yell!\""
 				]
 			]
 		},
@@ -2768,24 +3160,29 @@
 			"title": "Question-Word Questions",
 			"label": "Who? What? Why?",
 			"content": [
-				"<li>Also known as **Content Questions** or **Information Questions**, Question-Word Questions (QWs) are best exemplified by the English words who, whom, what, where, when, why, which, and how.",
-				"<li>All languages have a set of special QWQs. Often, they're similar or identical to a set of pronouns used elsewhere in the language. (e.g. English's who, where, when.)",
-				"<li>QWs accomplish two things:",
+				"Also known as **Content Questions** or **Information Questions**, Question-Word Questions (QWs) are best exemplified by the English words who, whom, what, where, when, why, which, and how.",
+				"All languages have a set of special QWQs. Often, they're similar or identical to a set of pronouns used elsewhere in the language. (e.g. English's who, where, when.)",
+				"QWs accomplish two things:",
 				[
-					"<li>1. Mark the clause as a question.",
-					"<li>2. Indicate what information is being requested."
+					"1. Mark the clause as a question.",
+					"2. Indicate what information is being requested."
 				],
-				"<li class=\"newSection\">In VP languages (like English) it is typical for the QW to appear at the start of the clause, possibly leaving a gap in the normal position.",
+				true,
+				"In VP languages (like English) it is typical for the QW to appear at the start of the clause, possibly leaving a gap in the normal position.",
 				[
-					"<li>\"Mark gave the cakes to Jimmy.\" → \"Who gave the cakes to Jimmy?\" → \"Who did Mark give the cakes to?\"</li>"
+					"\"Mark gave the cakes to Jimmy.\" → \"Who gave the cakes to Jimmy?\" → \"Who did Mark give the cakes to?\""
 				],
-				"<li>Many PV languages leave the QW in the \"normal\" position, such as Japanese and Tibetan.</li>",
-				"<li>Most PV languages can either leave the QW in position, or it can move to the front.</li>",
-				"<li>Some VP languages allow or require leaving the QW in position, such as Mandarin and many eastern African languages.</li>",
-				"<li class=\"newSection\">QWs can usually take case markers and/or adpositions.</li><li>When the QW from an oblique clause is fronted, the adposition may or may not come with it.",
+				"Many PV languages leave the QW in the \"normal\" position, such as Japanese and Tibetan.",
+				"Most PV languages can either leave the QW in position, or it can move to the front.",
+				"Some VP languages allow or require leaving the QW in position, such as Mandarin and many eastern African languages.",
+				true,
+				"QWs can usually take case markers and/or adpositions.",
 				[
-					"<li>//What// did you travel //with//?",
-					"<li>//With what// did you travel?</li>"
+					"When the QW from an oblique clause is fronted, the adposition may or may not come with it.",
+					[
+						"//What// did you travel //with//?",
+						"//With what// did you travel?"
+					]
 				]
 			]
 		},
@@ -2805,20 +3202,24 @@
 			"title": "Imperatives",
 			"label": "Command Sentences",
 			"content": [
-				"<li>Imperatives are direct commands to an addressee.",
-				"<li>It is often not necessary to indicate the Agent (addressee), since the actor is obvious.",
-				"<li>Fewer TAM constructs are typically allowed, since it is pragmatically impossible to perform certain actions (past tense, present progressive, etc).",
-				"<li>Sometimes imperatives take special verb forms or affixes, as in Greenlandic Iñupiat, and/or special negation strategies.",
-				"<li class=\"newSection\">Imperatives are often associated with Irrealis modes (8.3.3)",
-				"<li class=\"newSection\">Sometimes imperatives affect case marking.",
+				"Imperatives are direct commands to an addressee.",
+				"It is often not necessary to indicate the Agent (addressee), since the actor is obvious.",
+				"Fewer TAM constructs are typically allowed, since it is pragmatically impossible to perform certain actions (past tense, present progressive, etc).",
+				"Sometimes imperatives take special verb forms or affixes, as in Greenlandic Iñupiat, and/or special negation strategies.",
+				true,
+				"Imperatives are often associated with Irrealis modes (8.3.3)",
+				true,
+				"Sometimes imperatives affect case marking.",
 				[
-					"<li>Finnish puts the Patients of imperatives in nominative case instead of accusative case."
+					"Finnish puts the Patients of imperatives in nominative case instead of accusative case."
 				],
-				"<li class=\"newSection\">Different types of imperatives may exist.",
+				true,
+				"Different types of imperatives may exist.",
 				[
-					"<li>In Panare, the suffix //-kë// is for plain imperatives, while //-ta'// is used for imperatives involving motion."
+					"In Panare, the suffix //-kë// is for plain imperatives, while //-ta'// is used for imperatives involving motion."
 				],
-				"<li class=\"newSection\">First-person imperatives are rare. (e.g. \"Let's eat.\" vs \"Come eat with me.\")"
+				true,
+				"First-person imperatives are rare. (e.g. \"Let's eat.\" vs \"Come eat with me.\")"
 			]
 		},
 		{
@@ -2839,13 +3240,20 @@
 			"title": "Terms",
 			"label": "Quick Primer on Clauses",
 			"content": [
-				"<li>An **Independant Clause** is one that is fully inflected and can stand on its own.",
-				"<li>A **Dependant Clause** depends on some other clause for at least a part of its inflectional information.",
-				"<li class=\"newSection\">\"The gull beat its wings, achieving liftoff easily.\"<li>//The gull beat its wings// is Independant.",
-				"<li>//Achieving liftoff easily// is Dependant.",
-				"==<li class=\"newSection\">\"Breathing heavily, the runner crossed the finish line.\"<li>//The runner crossed the finish line// is Independant.",
-				"<li>//Breathing heavily// is Dependant.",
-				"==</ul>"
+				"An **Independant Clause** is one that is fully inflected and can stand on its own.",
+				"A **Dependant Clause** depends on some other clause for at least a part of its inflectional information.",
+				true,
+				"\"The gull beat its wings, achieving liftoff easily.\"",
+				[
+					"//The gull beat its wings// is Independant.",
+					"//Achieving liftoff easily// is Dependant."
+				],
+				true,
+				"\"Breathing heavily, the runner crossed the finish line.\"",
+				[
+					"//The runner crossed the finish line// is Independant.",
+					"//Breathing heavily// is Dependant."
+				]
 			]
 		},
 		{
@@ -2858,41 +3266,49 @@
 			"title": "Serial Verbs",
 			"label": "Go Tap on This",
 			"content": [
-				"<li>**Serial Verbs** are two or more verb roots that aren't compounded (8.2) or members of different clauses.",
-				"<li>These occur in all sorts of languages, but may be more common in isolating languages (1.1).",
-				"<li>English marginally employs serial verbs, e.g. \"Run go get me a coffee\" having three in a row.",
-				"<li class=\"newSection\">Typically, verbs in a series will each express a facet of one complex event.",
+				"**Serial Verbs** are two or more verb roots that aren't compounded (8.2) or members of different clauses.",
+				"These occur in all sorts of languages, but may be more common in isolating languages (1.1).",
+				"English marginally employs serial verbs, e.g. \"Run go get me a coffee\" having three in a row.",
+				true,
+				"Typically, verbs in a series will each express a facet of one complex event.",
 				[
-					"<li>For example, the English word \"bring\" has a facet \"get something\" and another that's \"move towards place\". In a language like Yoruba, this is expressed with serial verbs:",
-						"<li>\"mo mú ìwé wá ilé\" / I take book come house - \"I brought a book home\""
-				],
-				"==<li class=\"newSection\">In general, serial verbs tend to follow these patterns:",
-				[
-					"<li>TAM information is carried by the first verb.",
+					"For example, the English word \"bring\" has a facet \"get something\" and another that's \"move towards place\". In a language like Yoruba, this is expressed with serial verbs:",
 					[
-						"<li>However, some languages mandate that at least some inflectional information gets carried by the second verb."
-					],
-					"<li>If a constituent of the second verb is clefted, it moves to the front of the entire construction.",
-					[
-						"<li>Youruba: \"ilé ni mo mú ìwé wá\" / house is I take book come - \"It was to the house that I brought a book\""
-					],
-					"<li>They can get ambiguous out of context.",
-						"<li>Thai: \"John khàp rót chon kwaay taay\" / John drive car collide buffalo die",
-						"<li>The above means \"John drove the car into the buffalo and [any one of those three] died.\" Only context can make it clear that John, the buffalo or the car died."
+						"\"mo mú ìwé wá ilé\" / I take book come house - \"I brought a book home\""
+					]
 				],
-				"==<li class=\"newSection\">Verbs of motion are often used in serial constructions to express TAM information.",
+				true,
+				"In general, serial verbs tend to follow these patterns:",
 				[
-					"<li>\"Go\" is used in this way so much that it often becomes a marker for future tense, as in English and Spanish.",
+					"TAM information is carried by the first verb.",
 					[
-						"<li>\"I'm going to finish this sandwich.\""
+						"However, some languages mandate that at least some inflectional information gets carried by the second verb."
 					],
-					"<li>Tibetan uses motion verbs in serial to provide directional information for the other verb."
+					"If a constituent of the second verb is clefted, it moves to the front of the entire construction.",
+					[
+						"Youruba: \"ilé ni mo mú ìwé wá\" / house is I take book come - \"It was to the house that I brought a book\""
+					],
+					"They can get ambiguous out of context.",
+					[
+						"Thai: \"John khàp rót chon kwaay taay\" / John drive car collide buffalo die",
+						"The above means \"John drove the car into the buffalo and [any one of those three] died.\" Only context can make it clear that John, the buffalo or the car died."
+					]
 				],
-				"<li class=\"newSection\">Verbs in serial will sometimes turn into other role markers.",
+				true,
+				"Verbs of motion are often used in serial constructions to express TAM information.",
 				[
-					"<li>Yoruba: \"give\" can mark a Recipient role.",
-					"<li>Efik: \"give\" has become a benefactive preposition.",
-					"<li>Sùpyìré: \"use\" has become a postpositional marker for an Instrumental role."
+					"\"Go\" is used in this way so much that it often becomes a marker for future tense, as in English and Spanish.",
+					[
+						"\"I'm going to finish this sandwich.\""
+					],
+					"Tibetan uses motion verbs in serial to provide directional information for the other verb."
+				],
+				true,
+				"Verbs in serial will sometimes turn into other role markers.",
+				[
+					"Yoruba: \"give\" can mark a Recipient role.",
+					"Efik: \"give\" has become a benefactive preposition.",
+					"Sùpyìré: \"use\" has become a postpositional marker for an Instrumental role."
 				]
 			]
 		},
@@ -2912,37 +3328,42 @@
 			"title": "Complement Clauses",
 			"label": "Enter The Matrix",
 			"content": [
-				"<li>A **Complement Clause** (or Embedded Clause) functions as an argument to another clause.",
-				"<li>A **Matrix Clause** (or Main Clause) has a Complement Clause as an argument.",
-				"<li class=\"newSection\">Complements can be in the Agent or Patient role. They are marked with [brackets] below:",
+				"A **Complement Clause** (or Embedded Clause) functions as an argument to another clause.",
+				"A **Matrix Clause** (or Main Clause) has a Complement Clause as an argument.",
+				true,
+				"Complements can be in the Agent or Patient role. They are marked with [brackets] below:",
 				[
-					"<li>//Agent//: [That he survived] was unexpected.",
+					"//Agent//: [That he survived] was unexpected.",
 					[
-						"<li>English typically postposes an Agent Complement Clause and uses a dummy \"It\": //[It] was unexpected [that he survived].//"
+						"English typically postposes an Agent Complement Clause and uses a dummy \"It\": //[It] was unexpected [that he survived].//"
 					],
-					"<li>//Patient//: He wants [to have a drink]."
+					"//Patient//: He wants [to have a drink]."
 				],
-				"<li>A Matrix Clause can be a Complement Clause to another Matrix Clause:",
+				"A Matrix Clause can be a Complement Clause to another Matrix Clause:",
 				[
-					"<li>Mulder wants [to believe [that aliens are real]]."
+					"Mulder wants [to believe [that aliens are real]]."
 				],
-				"<li class=\"newSection\">Complement Clauses run in a continuum from **finite clauses** to **non-finite clauses**.",
+				true,
+				"Complement Clauses run in a continuum from **finite clauses** to **non-finite clauses**.",
 				[
-					"<li>//Finite//: [That he would be handsome] could not have been anticipated.",
+					"//Finite//: [That he would be handsome] could not have been anticipated.",
 					[
-						"<li>The complement can stand alone as a complete sentence (minus the marker \"That\").",
-						"<li>It can have completely different TAM markers than the maxtrix clause.",
-						"<li>The matrix verb will likely be an utterance verb or a verb of cognition."
+						"The complement can stand alone as a complete sentence (minus the marker \"That\").",
+						"It can have completely different TAM markers than the maxtrix clause.",
+						"The matrix verb will likely be an utterance verb or a verb of cognition."
 					],
-					"<li>//Non-finite//: It's very easy [to make a sandwich].",
-						"<li>The subject of the clause will almost always be the subject of the matrix clause.",
-						"<li>TAM markers are absent or highly constrained.",
-						"<li>The verb in the clause will likely be non-finite."
+					"//Non-finite//: It's very easy [to make a sandwich].",
+					[
+						"The subject of the clause will almost always be the subject of the matrix clause.",
+						"TAM markers are absent or highly constrained.",
+						"The verb in the clause will likely be non-finite."
+					]
 				],
-				"==<li class=\"newSection\">**Indirect Questions** are a subset of Complement Clauses.",
+				true,
+				"**Indirect Questions** are a subset of Complement Clauses.",
 				[
-					"<li>Example: [Whether Mr. Wayne lied] is not relavant here.",
-					"<li>They may share formal properties with interrogative clauses and relative clauses."
+					"Example: [Whether Mr. Wayne lied] is not relavant here.",
+					"They may share formal properties with interrogative clauses and relative clauses."
 				]
 			]
 		},
@@ -2962,63 +3383,64 @@
 			"title": "Adverbial Clauses",
 			"label": "Tap This When You're Ready",
 			"content": [
-				"<li>Also called //Adjuncts//, **Adverbial Clauses** behave as adverbs.",
-				"<li>They can convey certain kinds of information:",
+				"Also called //Adjuncts//, **Adverbial Clauses** behave as adverbs.",
+				"They can convey certain kinds of information:",
 				[
-					"<li>//Time//:",
+					"//Time//:",
 					[
-						"<li>\"We will go [when he gets here].\""
+						"\"We will go [when he gets here].\""
 					],
-					"<li>//Location//:",
+					"//Location//:",
 					[
-						"<li>\"I will meet you [where the old oak tree used to stand].\""
+						"\"I will meet you [where the old oak tree used to stand].\""
 					],
-					"<li>//Manner//:",
+					"//Manner//:",
 					[
-						"<li>\"He talks [like a 3-year-old].\"",
-						"<li>\"He walks [as a mummy would shamble].\""
+						"\"He talks [like a 3-year-old].\"",
+						"\"He walks [as a mummy would shamble].\""
 					],
-					"<li>//Purpose//:",
+					"//Purpose//:",
 					[
-						"<li>\"He stands on tiptoes [in order to see better].\""
+						"\"He stands on tiptoes [in order to see better].\""
 					],
-					"<li>//Reason//:",
+					"//Reason//:",
 					[
-						"<li>\"He arrived early [because he wanted a good seat].\""
+						"\"He arrived early [because he wanted a good seat].\""
 					],
-					"<li>//Circumstantial// adverbial clauses are rare:",
+					"//Circumstantial// adverbial clauses are rare:",
 					[
-						"<li>\"He got into the army [by lying about his age].\""
+						"\"He got into the army [by lying about his age].\""
 					],
-					"<li>//Simultaneous//:",
+					"//Simultaneous//:",
 					[
-						"<li>\"He woke up [crying].\"",
-						"<li>\"She woke up [in a cold sweat]\"."
+						"\"He woke up [crying].\"",
+						"\"She woke up [in a cold sweat]\"."
 					],
-					"<li>//Conditional//:",
+					"//Conditional//:",
 					[
-						"<li>\"[If it's raining outside], then my car is getting wet.\""
+						"\"[If it's raining outside], then my car is getting wet.\""
 					],
-					"<li>//Negative Conditional//:",
+					"//Negative Conditional//:",
 					[
-						"<li>\"[Unless it rains], we will be having a picnic.\""
+						"\"[Unless it rains], we will be having a picnic.\""
 					],
-					"<li>//Concessive Clause//:",
+					"//Concessive Clause//:",
 					[
-						"<li>\"[Even though the band sucks], she agreed to go to the concert.\""
+						"\"[Even though the band sucks], she agreed to go to the concert.\""
 					],
-					"<li>//Substitutive//:",
+					"//Substitutive//:",
 					[
-						"<li>\"[Instead of barbecuing chicken], we went out to eat.\""
+						"\"[Instead of barbecuing chicken], we went out to eat.\""
 					],
-					"<li>//Additive//:",
+					"//Additive//:",
 					[
-						"<li>\"You must have your hand stamped [in addition to having your ticket].\""
+						"\"You must have your hand stamped [in addition to having your ticket].\""
 					],
-					"<li>//Absolutive//:",
-						"<li>\"[Seeing a bully], Billy hid behind a curtain.\""
-				],
-				"==</ul>"
+					"//Absolutive//:",
+					[
+						"\"[Seeing a bully], Billy hid behind a curtain.\""
+					]
+				]
 			]
 		},
 		{
@@ -3037,32 +3459,73 @@
 			"title": "Clause Chaining, Medial Clauses, and Switch References",
 			"label": "Chain Chain Chain...",
 			"content": [
-				"<li>**Clause Chains** are clauses presented in series. They can form a large part of discourse in many languages, such as the ones of New Guinea, Australia, and the Americas.",
+				"**Clause Chains** are clauses presented in series. They can form a large part of discourse in many languages, such as the ones of New Guinea, Australia, and the Americas.",
 				[
-					"<li>Typially, the last clause in the chain will have inflections for Tense and Aspect.",
-					"<li>Panare and a minority of languages switch this up, giving the inflections to the first clause.",
-					"<li>**Medial clauses** occur before the **Final clause**.",
-						"<li>They tend to have a reduce range of Tense/Aspect possibilities.",
-						"<li>Their subject is referenced in terms of subject of the final clause.",
-						"<li>Their placement represents temporal relations such as overlapping or in succession."
-				],
-				"==<li class=\"newSection\">**Switch References** are verbal inflections that indicate the subject of a verb is the same as the subject of another verb.",
-				[
-					"<li>Yuman uses //-k// to indicate the next verb uses the same subject (SS) as this one, and //-m// to indicate the next verb will have a different subject (DS).",
+					"Typially, the last clause in the chain will have inflections for Tense and Aspect.",
+					"Panare and a minority of languages switch this up, giving the inflections to the first clause.",
+					"**Medial clauses** occur before the **Final clause**.",
 					[
-						"<li>\"I sang and danced\"<br /><TransTable rows=\"Nyaa.....'-ashvar-k.....'-iima-k...../.....I.....1-sing-SS.....1-dance-ASPECT\"></TransTable>",
-						"<li>\"Bonnie sang and I danced\"<br /><TransTable rows=\"Bonnie-sh.....0-ashvar-m.....'-iima-k...../.....Bon&shy;nie-SUBJ.....3-sing-DS.....1-dance-ASPECT\"></TransTable>"
-					],
-					"<li class=\"newSection\">Ergative languages often have complex Switch Reference systems that indicate the temporal relations of the clauses, whether or not the verbs' subjects agree, and strongly indicate a reason why the clauses are linked.",
-						"<li>Panare: Suffix / Temporal / Agreement / Linkage<br />",
-							"<li>-séjpe / succession / Actor = Actor / purpose",
-							"<li>-séñape / succession / Absolutive = Patient / result",
-							"<li>-ñére / succession / Actors are different / movement or purpose",
-							"<li>-npan / overlap / Actor = Actor / none",
-							"<li>-tááñe / overlap / Actor = Actor / none",
-							"<li>-jpómën / anteriority / Actor = Actor / reason"
+						"They tend to have a reduce range of Tense/Aspect possibilities.",
+						"Their subject is referenced in terms of subject of the final clause.",
+						"Their placement represents temporal relations such as overlapping or in succession."
+					]
 				],
-				"====</ul>"
+				true,
+				"**Switch References** are verbal inflections that indicate the subject of a verb is the same as the subject of another verb.",
+				[
+					"Yuman uses //-k// to indicate the next verb uses the same subject (SS) as this one, and //-m// to indicate the next verb will have a different subject (DS).",
+					[
+						"\"I sang and danced\"",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"Nyaa",
+									"'-ashvar-k",
+									"'-iima-k"
+								],
+								[
+									"I",
+									"1-sing-SS",
+									"1-dance-ASPECT"
+								]
+							]
+						},
+						"\"Bonnie sang and I danced\"",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"Bonnie-sh",
+									"0-ashvar-m",
+									"'-iima-k"
+								],
+								[
+									"Bonnie-SUBJ",
+									"3-sing-DS",
+									"1-dance-ASPECT"
+								]
+							]
+						}
+					],
+					true,
+					"Ergative languages often have complex Switch Reference systems that indicate the temporal relations of the clauses, whether or not the verbs' subjects agree, and strongly indicate a reason why the clauses are linked.",
+					[
+						"Panare: Suffix / Temporal / Agreement / Linkage",
+						false,
+						"",
+						[
+							"-séjpe / succession / Actor = Actor / purpose",
+							"-séñape / succession / Absolutive = Patient / result",
+							"-ñére / succession / Actors are different / movement or purpose",
+							"-npan / overlap / Actor = Actor / none",
+							"-tááñe / overlap / Actor = Actor / none",
+							"-jpómën / anteriority / Actor = Actor / reason"
+						]
+					]
+				]
 			]
 		},
 		{
@@ -3146,80 +3609,264 @@
 			"title": "Relative Clauses",
 			"label": "Clauses as Adjectives",
 			"content": [
-				"<li>A **Relative Clause** is a clause that functions as a nominal modifier. They can be identified by four points.",
+				"A **Relative Clause** is a clause that functions as a nominal modifier. They can be identified by four points.",
 				[
-					"<li>Example: \"The fumes that made Chris faint.\"",
-						"<li>1. //Head//: The noun phrase modified by the clause (fumes)",
-						"<li>2. //Restricting Clause//: The relative clause itself (made Chris faint)",
-						"<li>3. //Relativized Noun Phrase//: The part of the Restricting Clause that refers to the Head (English uses a Gap Strategy, explained below)",
-						"<li>4. //Relativizer//: Morpheme or particle that sets off the relative clause (that)"
-				],
-				"==<li class=\"newSection\">Relative Clauses (RCs) are usually positioned in the same place as other nominal modifiers, but there is a strong tendency towards placing them postnomial, even if other modifiers fall before the noun phrase.",
-				[
-					"<li>//Prenomial//: before the Head",
-					"<li>//Postnomial//: after the Head (most common, especially in VP languages)",
-					"<li>//Internally headed//: the Head is placed within the relative clause",
+					"Example: \"The fumes that made Chris faint.\"",
 					[
-						"<li>This is common in PV languages, such as Bambara:<br /><TransTable rows=\"ne.....ye.....so.....ye...../.....1s.....PST.....horse.....see\" final=\"\"I saw a horse\"\"></TransTable><TransTable rows=\"ce.....ye.....[ne.....ye.....so.....min.....ye].....san...../.....man.....PST.....1s.....PST.....horse.....REL.....see.....buy\" final=\"\"The man bought the horse that I saw\"\"></TransTable>"
-					],
-					"<li>//Headless//: the clause itself refers to the Head",
-						"<li>This is common in languages that use nouns to modify other nouns, such as Ndjuká:",
-						[
-							"<li>Non-specific subject:<br /><TransTable rows=\"[Di.....o.....doo.....fosi].....o.....wini...../.....REL.....FUT.....arrive.....first.....FUT.....win\" final=\"\"Whoever arrives first will win\"\"></TransTable>",
-							"<li>Specific subject:<br /><TransTable rows=\"A.....mainsí.....ya.....a.....[di.....e.....tan.....a.....ini.....se]...../.....the.....eel.....here.....COP.....REL.....CONT.....stay.....LOC.....in&shy;side.....sea\" final=\"\"The eel is what (the one that) lives in the sea\"\"></TransTable>"
-						],
-						"<li>But it can happen in other languages, such as English:",
-						[
-							"<li>Headless RC: [That which John said] annoyed her. (Something specific he said annoyed her)",
-							"<li>Complementary Clause: [That John said anything] annoyed her. (The action itself annoyed her)"
-						],
-						"<li>In many languages, headless construction is allowed when the head noun is nonspecific.",
-							"<li>[Whenever I'm afraid] I call her. (Refers to a time that is not specified otherwise)"
+						"1. //Head//: The noun phrase modified by the clause (fumes)",
+						"2. //Restricting Clause//: The relative clause itself (made Chris faint)",
+						"3. //Relativized Noun Phrase//: The part of the Restricting Clause that refers to the Head (English uses a Gap Strategy, explained below)",
+						"4. //Relativizer//: Morpheme or particle that sets off the relative clause (that)"
+					]
 				],
-				"====<li class=\"newSection\">The Relativized Noun Phrase (RNP) can be expressed in different ways.",
+				true,
+				"Relative Clauses (RCs) are usually positioned in the same place as other nominal modifiers, but there is a strong tendency towards placing them postnomial, even if other modifiers fall before the noun phrase.",
 				[
-					"<li>**Gap Strategy**: the RNP is represented by a \"gap\" in the phrase, a missing space (0) where logically some argument would normally go.",
+					"//Prenomial//: before the Head",
+					"//Postnomial//: after the Head (most common, especially in VP languages)",
+					"//Internally headed//: the Head is placed within the relative clause",
 					[
-						"<li>English uses this:",
-						[
-							"<li>Example: The man [that I loved 0] died.",
-							"<li>Full noun phrase: [I loved the man]"
-						],
-						"<li>This is a useful strategy when the semantic role of the Head is different in the RC:",
-						[
-							"<li>The alligator [that 0 saw me] ate Alice.",
-							"<li>The alligator [that I saw 0] ate Alice."
-						],
-						"<li>However, this can become ambiguous if the constituent order changes often, or when the A and P are next to each other in normal discourse:",
-							"<li>Ithsmus Zapotee is a VAP language.<br /><TransTable rows=\"junaa.....ni.....[najii.....0 Juan]...../.....junaa.....ni.....[najii.....Juan 0]...../.....woman.....REL.....loves.....John\" final=\"This could be either \"A woman that loves John\" (top) or \"A woman that Jon loves\".\"></TransTable>"
+						"This is common in PV languages, such as Bambara:",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"ne",
+									"ye",
+									"so",
+									"ye"
+								],
+								[
+									"1s",
+									"PST",
+									"horse",
+									"see"
+								]
+							],
+							"final": "\"I saw a horse\""
+						},
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"ce",
+									"ye",
+									"[ne",
+									"ye",
+									"so",
+									"min",
+									"ye]",
+									"san"
+								],
+								[
+									"man",
+									"PST",
+									"1s",
+									"PST",
+									"horse",
+									"REL",
+									"see",
+									"buy"
+								]
+							],
+							"final": "\"The man bought the horse that I saw\""
+						}
 					],
-					"==<li>**Pronoun Retention**: a pronoun is retained to indicate grammatical role.",
+					"//Headless//: the clause itself refers to the Head",
 					[
-						"<li>Typically, the pronoun is similar to other pronouns, either question words or pronouns used for non-specific, indefinite things.",
-							"<li>Example: That's the guy who [I can never remember //his// name]"
+						"This is common in languages that use nouns to modify other nouns, such as Ndjuká:",
+						[
+							"Non-specific subject:",
+							false,
+							{
+								"tabular": true,
+								"rows": [
+									[
+										"[Di",
+										"o",
+										"doo",
+										"fosi]",
+										"o",
+										"wini"
+									],
+									[
+										"REL",
+										"FUT",
+										"arrive",
+										"first",
+										"FUT",
+										"win"
+									]
+								],
+								"final": "\"Whoever arrives first will win\""
+							},
+							"Specific subject:",
+							false,
+							{
+								"tabular": true,
+								"rows": [
+									[
+										"A",
+										"mainsí",
+										"ya",
+										"a",
+										"[di",
+										"e",
+										"tan",
+										"a",
+										"ini",
+										"se]"
+									],
+									[
+										"the",
+										"eel",
+										"here",
+										"COP",
+										"REL",
+										"CONT",
+										"stay",
+										"LOC",
+										"inside",
+										"sea"
+									]
+								],
+								"final": "\"The eel is what (the one that) lives in the sea\""
+							}
+						],
+						"But it can happen in other languages, such as English:",
+						[
+							"Headless RC: [That which John said] annoyed her. (Something specific he said annoyed her)",
+							"Complementary Clause: [That John said anything] annoyed her. (The action itself annoyed her)"
+						],
+						"In many languages, headless construction is allowed when the head noun is nonspecific.",
+						[
+							"[Whenever I'm afraid] I call her. (Refers to a time that is not specified otherwise)"
+						]
+					]
+				],
+				true,
+				"The Relativized Noun Phrase (RNP) can be expressed in different ways.",
+				[
+					"**Gap Strategy**: the RNP is represented by a \"gap\" in the phrase, a missing space (0) where logically some argument would normally go.",
+					[
+						"English uses this:",
+						[
+							"Example: The man [that I loved 0] died.",
+							"Full noun phrase: [I loved the man]"
+						],
+						"This is a useful strategy when the semantic role of the Head is different in the RC:",
+						[
+							"The alligator [that 0 saw me] ate Alice.",
+							"The alligator [that I saw 0] ate Alice."
+						],
+						"However, this can become ambiguous if the constituent order changes often, or when the A and P are next to each other in normal discourse:",
+						[
+							"Ithsmus Zapotee is a VAP language.",
+							false,
+							{
+								"tabular": true,
+								"rows": [
+									[
+										"junaa",
+										"ni",
+										"[najii",
+										"0 Juan]"
+									],
+									[
+										"junaa",
+										"ni",
+										"[najii",
+										"Juan 0]"
+									],
+									[
+										"woman",
+										"REL",
+										"loves",
+										"John"
+									]
+								],
+								"final": "This could be either \"A woman that loves John\" (top) or \"A woman that Jon loves\"."
+							}
+						]
 					],
-					"==<li class=\"newSection\">The Relativizer may be marked to show the NPR's role.",
-						"<li>Chickasaw:<br /><TransTable rows=\"ihoo.....yamma-ay.....ofi'.....pĩs-tokat.....illi-tok/.....woman.....that-SUB.....dog.....see-PST:DEP:SS.....die-PST\" final=\"\"The woman that saw the dog died\"\"></TransTable><br /><TransTable rows=\"ihoo-at.....ofi'.....yamma.....pĩs-tokã.....illi-tok/.....woman-SUB.....dog.....that.....see-PST:DEP:DS.....die-PST\" final=\"\"The woman that the dog saw died\"\"></TransTable>"
+					"**Pronoun Retention**: a pronoun is retained to indicate grammatical role.",
+					[
+						"Typically, the pronoun is similar to other pronouns, either question words or pronouns used for non-specific, indefinite things.",
+						[
+							"Example: That's the guy who [I can never remember //his// name]"
+						]
+					],
+					true,
+					"The Relativizer may be marked to show the NPR's role.",
+					[
+						"Chickasaw:",
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"ihoo",
+									"yamma-ay",
+									"ofi'",
+									"pĩs-tokat",
+									"illi-tok"
+								],
+								[
+									"woman",
+									"that-SUB",
+									"dog",
+									"see-PST:DEP:SS",
+									"die-PST"
+								]
+							],
+							"final": "\"The woman that saw the dog died\""
+						},
+						false,
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"ihoo-at",
+									"ofi'",
+									"yamma",
+									"pĩs-tokã",
+									"illi-tok"
+								],
+								[
+									"woman-SUB",
+									"dog",
+									"that",
+									"see-PST:DEP:DS",
+									"die-PST"
+								]
+							],
+							"final": "\"The woman that the dog saw died\""
+						}
+					]
 				],
-				"==<li class=\"newSection\">Relativization Hierarchy:",
+				true,
+				"Relativization Hierarchy:",
 				[
-					"<li>Subject",
-					"<li>Direct Object",
-					"<li>Indirect Object",
-					"<li>Oblique",
-					"<li>Possessor"
+					"Subject",
+					"Direct Object",
+					"Indirect Object",
+					"Oblique",
+					"Possessor"
 				],
-				"<li>No language (that uses the above grammatical roles) allows relativization of an element, using a single strategy, without also allowing relativizing of the elements above it in the hierarchy. Other elements may have other relativization strategies. For example, English uses the Gap Strategy down through the Obliques, but it doesn't apply to the Possessors:",
+				"No language (that uses the above grammatical roles) allows relativization of an element, using a single strategy, without also allowing relativizing of the elements above it in the hierarchy. Other elements may have other relativization strategies. For example, English uses the Gap Strategy down through the Obliques, but it doesn't apply to the Possessors:",
 				[
-					"<li>//Subject//: I hate the guy that [0 dumped her].",
-					"<li>//Direct Object//: I hate the guy that [she dated 0].",
-					"<li>//Indirect Object//: I hate the guy that [she gave her heart to 0].",
-					"<li>//Oblique//: I hate the guy that [she lived with 0].",
-					"<li>//Oblique//: I hate the guy that [she is older than 0].",
-					"<li>//Possessor//: <del>I hate the guy that [0 head is bald].</del>",
-						"<li>This is not valid English. Another strategy has to be used: \"I hate the guy [whose head is bald].\"</li>"
-				],
-				"==</ul>"
+					"//Subject//: I hate the guy that [0 dumped her].",
+					"//Direct Object//: I hate the guy that [she dated 0].",
+					"//Indirect Object//: I hate the guy that [she gave her heart to 0].",
+					"//Oblique//: I hate the guy that [she lived with 0].",
+					"//Oblique//: I hate the guy that [she is older than 0].",
+					"//Possessor//: --I hate the guy that [0 head is bald].--",
+					[
+						"This is not valid English. Another strategy has to be used: \"I hate the guy [whose head is bald].\""
+					]
+				]
 			]
 		},
 		{
@@ -3261,35 +3908,136 @@
 			"title": "Coordinating Clauses",
 			"label": "This And That",
 			"content": [
-				"<li>**Coordinating Clauses** are linked together, equal in grammatical status. They may be difficult to distinguish from juxtaposition.",
-				"<li>They often use methods identical to those used to join noun phrases:",
+				"**Coordinating Clauses** are linked together, equal in grammatical status. They may be difficult to distinguish from juxtaposition.",
+				"They often use methods identical to those used to join noun phrases:",
 				[
-					"<li>John //and// Mary",
-					"<li>John cried //and// Mary laughed."
+					"John //and// Mary",
+					"John cried //and// Mary laughed."
 				],
-				"<li>It's also common for special strategies to exist that do not work for noun phrases:",
+				"It's also common for special strategies to exist that do not work for noun phrases:",
 				[
-					"<li>John cried //but// Mary laughed."
+					"John cried //but// Mary laughed."
 				],
-				"<li class=\"newSection\">CCs often express **Coordination** (x and y, neither x nor y), **Disjunction** (either x or y), and **Exclusion** (x and not y).",
-				"<li class=\"newSection\">The **Zero Strategy** looks just like juxtaposition. Vietnamese:",
+				true,
+				"CCs often express **Coordination** (x and y, neither x nor y), **Disjunction** (either x or y), and **Exclusion** (x and not y).",
+				true,
+				"The **Zero Strategy** looks just like juxtaposition. Vietnamese:",
 				[
-					"<li>//Noun Phrases//:<br /><TransTable rows=\"Nháng.....tiráp.....[tilêt,.....callóh,.....acóq]...../.....we.....pre&shy;pare.....bas&shy;ket.....spear.....knife\" final=\"We prepared the basket, the spear and the knife.\"></TransTable>",
-					"<li>//Prepositional Phrases//:<br /><TransTable rows=\"Do.....chô.....[tôq.....cyâq,.....tôq.....apây]...../.....she.....re&shy;turn.....to.....hus&shy;band.....to.....grand&shy;moth&shy;er\" final=\"She returned to her husband and to her grandmother.\"></TransTable>",
-					"<li>//Verb Phrases//:<br /><TransTable rows=\"Do.....[chô.....tôq.....cayâq,.....chô.....tôq.....apây]...../.....she.....re&shy;turn.....to.....hus&shy;band.....re&shy;turn.....to.....grand&shy;moth&shy;er\" final=\"She returned to her husband and returned to her grandmother.\"></TransTable>"
+					"//Noun Phrases//:",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"Nháng",
+								"tiráp",
+								"[tilêt,",
+								"callóh,",
+								"acóq]"
+							],
+							[
+								"we",
+								"prepare",
+								"basket",
+								"spear",
+								"knife"
+							]
+						],
+						"final": "We prepared the basket, the spear and the knife."
+					},
+					"//Prepositional Phrases//:",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"Do",
+								"chô",
+								"[tôq",
+								"cyâq,",
+								"tôq",
+								"apây]"
+							],
+							[
+								"she",
+								"return",
+								"to",
+								"husband",
+								"to",
+								"grandmother"
+							]
+						],
+						"final": "She returned to her husband and to her grandmother."
+					},
+					"//Verb Phrases//:",
+					false,
+					{
+						"tabular": true,
+						"rows": [
+							[
+								"Do",
+								"[chô",
+								"tôq",
+								"cayâq,",
+								"chô",
+								"tôq",
+								"apây]"
+							],
+							[
+								"she",
+								"return",
+								"to",
+								"husband",
+								"return",
+								"to",
+								"grandmother"
+							]
+						],
+						"final": "She returned to her husband and returned to her grandmother."
+					}
 				],
-				"<li class=\"newSection\">**Coordinating Conjunctions** (CCs) are a common strategy.<li>The conjunction is often the same as \"with\". English uses \"and\" and \"but\", among others.",
-				"<li>In VP languages:",
+				true,
+				"**Coordinating Conjunctions** (CCs) are a common strategy.",
 				[
-					"<li>The CC is usually between the two clauses:",
+					"The conjunction is often the same as \"with\". English uses \"and\" and \"but\", among others.",
+					"In VP languages:",
 					[
-						"<li>The dog growled //and// the cat hissed."
+						"The CC is usually between the two clauses:",
+						[
+							"The dog growled //and// the cat hissed."
+						],
+						"But sometimes, the CC comes after the first element of the second clause.",
+						[
+							"Yoruba:",
+							false,
+							{
+								"tabular": true,
+								"rows": [
+									[
+										"mo",
+										"mú",
+										"ìwé;",
+										"mo",
+										"sì",
+										"w's",
+										"ilé"
+									],
+									[
+										"I",
+										"take",
+										"book",
+										"I",
+										"and",
+										"come",
+										"house"
+									]
+								],
+								"final": "I took a book and I came home."
+							}
+						]
 					],
-					"<li>But sometimes, the CC comes after the first element of the second clause.",
-						"<li>Yoruba:<br /><TransTable rows=\"mo.....mú.....ìwé;.....mo.....sì.....w's.....ilé...../.....I.....take.....book.....I.....and.....come.....house\" final=\"I took a book and I came home.\"></TransTable>"
-				],
-				"==<li>In PV languages, the CC either comes between the two clauses (Farsi) or after the last element (Walapai).",
-				"</li></ul>"
+					"In PV languages, the CC either comes between the two clauses (Farsi) or after the last element (Walapai)."
+				]
 			]
 		},
 		{
