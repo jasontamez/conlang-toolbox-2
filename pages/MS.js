@@ -23,7 +23,7 @@ const MS = () => {
 		let range = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 		return (
 			<NavBar>
-				<NavTab icon={<Icon as={Ionicons} name="settingsSharp" />} link="/ms" />
+				<NavTab icon={<Icon as={Ionicons} name="settings-sharp" />} link="/ms" />
 				{range.map((n, i) => <NavTab label={String(i+1)} link={"ms" + n} />)}
 			</NavBar>
 		);

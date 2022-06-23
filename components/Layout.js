@@ -1,4 +1,5 @@
-import { ScrollView } from "native-base";
+import { Factory, ScrollView } from "native-base";
+import RH from 'react-native-render-html';
 
 export const NavBar = (props) => {
 	return <ScrollView horizontal {...props} />
@@ -9,3 +10,4 @@ export const NavBar = (props) => {
 	//);
 };
 
+export const RenderHtml = Factory(RH);
