@@ -143,8 +143,8 @@ const A = () => {
 	const Content = <div></div>;
 
 	const loading = (
-		<VStack justifyContent={"center"} safeArea>
-			<HStack space="md" justifyContent={"center"}>
+		<VStack justifyContent={"center"} safeArea h="full" w="full">
+			<HStack space="md" justifyContent={"center"} h="full" w="full">
 				<Spinner accessibilityLabel="Loading info" color="secondary.500" />
 				<Heading color="primary.500" fontSize="md">Loading...</Heading>
 			</HStack>

@@ -8,6 +8,11 @@ import { NativeRouter, Outlet } from "react-router-native";
 import { Route, Routes } from "react-router";
 import { useNavigate, useParams } from "react-router-dom";
 
+import MS from "./pages/MS";
+import MSSection from "./pages/ms/msSection";
+import MSSettings from "./pages/ms/msSettings";
+
+import About from "./pages/About.js";
 
 const Main = () => {
 	let navigate = useNavigate();
@@ -74,29 +79,35 @@ function App() {
 
 const Testo = () => {
 	return (
-		<NativeRouter>
-			<Routes>
-				<Route path="/wg/*" element={<WG />}>
-				</Route>
-				<Route path="/we/*"  element={<WE />}>
-				</Route>
-				<Route path="/lex/*" element={<Lexicon />}>
-				</Route>
-				<Route path="/ms/*" element={<MS />}>
-					<Route index element={<MSSettings />} />
-					<Route path=":msPage" element={<MSSection />} />
-				</Route>
-				<Route path="/ph/*" element={<Lexicon />}>
-				</Route>
-				<Route path="/dc/*" element={<Lexicon />}>
-				</Route>
-				<Route path="/settings" element={<Settings />} />
-				<Route path="/wordlists" element={<WordLists />} />
-				<Route path="/credits" element={<Credits />} />
-				<Route path="/about" element={<About />} />
-				<Route index element={<About />} />
-			</Routes>
-		</NativeRouter>
+		<NativeBaseProvider>
+			<Box mt="64" color="white" safeArea>
+				<NativeRouter>
+					<VStack d="flex" h="full" alignItems="stretch" justifyContent="space-between">
+						<Routes> { /* 
+							<Route path="/wg/*" element={<WG />}>
+							</Route>
+							<Route path="/we/*"  element={<WE />}>
+							</Route>
+							<Route path="/lex/*" element={<Lexicon />}>
+							</Route> */ }
+							<Route path="/ms/*" element={<MS />}>
+								<Route index element={<MSSettings />} />
+								<Route path=":msPage" element={<MSSection />} />
+							</Route> { /*
+							<Route path="/ph/*" element={<Lexicon />}>
+							</Route>
+							<Route path="/dc/*" element={<Lexicon />}>
+							</Route>
+							<Route path="/settings" element={<Settings />} />
+							<Route path="/wordlists" element={<WordLists />} />
+							<Route path="/credits" element={<Credits />} />
+							<Route path="/about" element={<About />} /> */ }
+							<Route index element={<About />} />
+						</Routes>
+					</VStack>
+				</NativeRouter>
+			</Box>
+		</NativeBaseProvider>
 	);
 };
 

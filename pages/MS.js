@@ -1,23 +1,25 @@
 import { useNavigate } from 'react-router-dom';
 import { shallowEqual, useSelector } from "react-redux";
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
-import { NavBar } from '../components/Layout';
-import { Button, ScrollView, Heading, IconButton } from 'native-base';
-import { openModal } from '../../store/dFuncs';
+import { NavBar } from '../components/layoutTags';
+import { Button, ScrollView, IconButton } from 'native-base';
+import Header from '../components/Header';
 
 const MS = () => {
 	const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
 	const navigate = useNavigate();
 	const NavTab = (props) => {
+		// TO-DO:
 		// if page == props.link, render as outline instead of ghost
+		const variant = "ghost";
 		if(props.icon) {
 			return (
-				<IconButton variant="ghost" onPress={() => navigate(props.link)} icon={props.icon} _icon={{size: "md"}} />
+				<IconButton variant={variant} onPress={() => navigate(props.link)} icon={props.icon} _icon={{size: "md"}} />
 			);
 		}
 		return (
-			<Button variant="ghost" onPress={() => navigate(props.link)}>{props.label}</Button>
+			<Button variant={variant} onPress={() => navigate(props.link)}>{props.label}</Button>
 		);
 	};
 	const NavTabs = () => {
@@ -29,24 +31,14 @@ const MS = () => {
 			</NavBar>
 		);
 	};
-	const Menu = <IconButton onPress={() => navigate(props.link)} variant="ghost" icon={<Icon as={Entypo} size="md" />} />;
-	const ExtraChars = () => {
-		return (
-			<IconButton variant="ghost" icon={<Icon as={Ionicons} name="globe-outline" />} onPress={() => dispatch(openModal("ExtraCharacters"))} />
-		);
-	};
 	return (
-		<VStack d="flex" h="100%" alignItems="stretch" justifyContent="space-between">
-			<HStack>
-				<Menu />
-				<Heading flexGrow={1} isTruncated>MorphoSyntax</Heading>
-				<ExtraChars />
-			</HStack>
+		<>
+			<Header>MorphoSyntax</Header>
 			<ScrollView flexGrow={1}>
 				<Outlet />
 			</ScrollView>
 			<NavTabs />
-		</VStack>
+		</>
 	);
 };
 
