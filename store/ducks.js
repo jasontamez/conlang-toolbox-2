@@ -1,5 +1,5 @@
 //import maybeUpdateTheme from './MaybeUpdateTheme';
-//import { StateStorage } from './PersistentInfo';
+//import { StateStorage } from './persistentInfo';
 //import debounce from './debouncer';
 import appJson from '../app.json';
 import { v4 as uuidv4 } from 'uuid';

@@ -24,7 +24,7 @@ import { overwriteState } from './components/ReduxDucksFuncs';
 import { VERSION } from './components/ReduxDucksConst';
 import compareVersions from 'compare-versions';
 import store from './components/ReduxStore';
-import { StateStorage } from './components/PersistentInfo';
+import { StateStorage } from './components/persistentInfo';
 
 
 

@@ -5,7 +5,7 @@ import { reducer, blankAppState } from "./ducks";
 import { persistStore, persistReducer } from 'redux-persist';
 //import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import { StateStorage } from './PersistentInfo';
+import { StateStorage } from './persistentInfo';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 //import packageJson from '../../package.json';
 
