@@ -167,7 +167,6 @@
 				"infixLess"
 			],
 			"display": {
-				"class": "cols3",
 				"boxesPerRow": 2,
 				"inlineHeaders": [
 					"Used Most",
@@ -503,7 +502,7 @@
 				"otherVerbClass"
 			],
 			"display": {
-				"class": "striped",
+				"striped": true,
 				"boxesPerRow": 1,
 				"inlineHeaders": [
 					"Special?",
@@ -658,7 +657,6 @@
 				"adjectives"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Different Ways Property Concepts Are Handled in Human Language",
 				"rowLabels": [
@@ -778,7 +776,6 @@
 				"baseOther"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Number Base",
 				"rowLabels": [
@@ -806,7 +803,6 @@
 				"numNone"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Number Format",
 				"rowLabels": [
@@ -831,7 +827,6 @@
 				"inflectNum"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Other Properties",
 				"rowLabels": [
@@ -899,7 +894,6 @@
 				"PVA"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"inlineHeaders": [
 					"Primary?",
@@ -1023,7 +1017,6 @@
 				"circumP"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"rowLabels": [
 					"Preposition (//with// an apple)",
@@ -1199,7 +1192,6 @@
 				"numPlural"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Which Distinctions Are Marked in the Noun Phrase?",
 				"rowLabels": [
@@ -1363,7 +1355,6 @@
 				"classOther"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Which Class Distinctions Exist?",
 				"rowLabels": [
@@ -1411,7 +1402,6 @@
 				"dimAugProductive"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"rowLabels": [
 					"Dim/Aug System Exists",
@@ -1672,7 +1662,6 @@
 				"ergAbs"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Primary Alignment System",
 				"rowLabels": [
@@ -2125,7 +2114,6 @@
 				"wordOrderChange"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"rowLabels": [
 					"Marked inverse only",
@@ -2377,7 +2365,6 @@
 				"otherMorph"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Morphology Exists For:",
 				"rowLabels": [
@@ -2968,7 +2955,40 @@
 					true,
 					"**Negative Scope**:",
 					[
-						"Sometimes the two types of negation interact to cause variations in the scope of what can be negated.<table class=\"informational\"><tr><th>Statement</th><th>Scope</th></tr><tr><td>\"Not many rats survive to adulthood.\"</td><td>Quantifier only</td></tr><tr><td>\"Many rats do not survive to adulthood.\"</td><td>Entire clause</td></tr><tr><td>\"I deliberately didn't eat the cheese.\"</td><td>Entire clause</td></tr><tr><td>\"I didn't deliberately eat the cheese.\"</td><td>Adverb only</td></tr><tr><td>\"He won't force you to volunteer.\"</td><td>Entire clause</td></tr><tr><td>\"He will force you not to volunteer.\"</td><td>Complement clause</td></tr></table>"
+						"Sometimes the two types of negation interact to cause variations in the scope of what can be negated.",
+						{
+							"tabular": true,
+							"rows": [
+								[
+									"**Statement**",
+									"**Scope**"
+								],
+								[
+									"\"Not many rats survive to adulthood.\"",
+									"Quantifier only"
+								],
+								[
+									"\"Many rats do not survive to adulthood.\"",
+									"Entire clause"
+								],
+								[
+									"\"I deliberately didn't eat the cheese.\"",
+									"Entire clause"
+								],
+								[
+									"\"I didn't deliberately eat the cheese.\"",
+									"Adverb only"
+								],
+								[
+									"\"He won't force you to volunteer.\"",
+									"Entire clause"
+								],
+								[
+									"\"He will force you not to volunteer.\"",
+									"Complement clause"
+								]
+							]
+						}
 					]
 				]
 			]
@@ -3535,7 +3555,6 @@
 				"chainLast"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Which Clause is Inflected?",
 				"rowLabels": [
@@ -3555,7 +3574,6 @@
 				"chainCj"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Which Element is Marked?",
 				"rowLabels": [
@@ -3578,7 +3596,6 @@
 				"chainOther"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "What Other Information Does the Marker Encode?",
 				"rowLabels": [
@@ -3878,7 +3895,6 @@
 				"relHeadless"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Types of Relative Clauses",
 				"rowLabels": [
@@ -4048,7 +4064,6 @@
 				"coordLast"
 			],
 			"display": {
-				"class": "cols2",
 				"boxesPerRow": 1,
 				"header": "Coordinating Conjunction Positions",
 				"rowLabels": [
