@@ -4,6 +4,7 @@ import { Ionicons, Entypo } from '@expo/vector-icons';
 
 import { NavBar } from '../components/Layout';
 import { Button, ScrollView, Heading, IconButton } from 'native-base';
+import { openModal } from '../../store/dFuncs';
 
 const MS = () => {
 	const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
@@ -29,9 +30,18 @@ const MS = () => {
 		);
 	};
 	const Menu = <IconButton onPress={() => navigate(props.link)} variant="ghost" icon={<Icon as={Entypo} size="md" />} />;
+	const ExtraChars = () => {
+		return (
+			<IconButton variant="ghost" icon={<Icon as={Ionicons} name="globe-outline" />} onPress={() => dispatch(openModal("ExtraCharacters"))} />
+		);
+	};
 	return (
 		<VStack d="flex" h="100%" alignItems="stretch" justifyContent="space-between">
-			<Heading isTruncated><Menu />MorphoSyntax</Heading>
+			<HStack>
+				<Menu />
+				<Heading flexGrow={1} isTruncated>MorphoSyntax</Heading>
+				<ExtraChars />
+			</HStack>
 			<ScrollView flexGrow={1}>
 				<Outlet />
 			</ScrollView>
