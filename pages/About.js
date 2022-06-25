@@ -29,17 +29,46 @@ import { VERSION } from '../components/ReduxDucksConst';
 import { openModal } from '../components/ReduxDucksFuncs';
 import ExtraCharactersModal from './M-ExtraCharacters';
 
-import { Icon } from 'native-base';
-import { FontAwesome } from '@expo/vector-icons';
+import { Box, Heading, ScrollView, HStack, VStack } from 'native-base';
 import { useNavigate } from "react-router-dom";
 
-const Circle = (props) => <Icon as={FontAwesome} size="sm" {...props} />;
+import { Circle, MorphoSyntaxIcon, WordGenIcon } from '../components/icons';
+
+const Indented = (props) => (
+	<HStack pl={2}>
+		<Circle />
+		<Text>{props.children}</Text>
+	</HStack>
+);
 
 const Home = () => {
-	let navigate = useNavigate();
+	//let navigate = useNavigate();
 	return (
 		<>
-			
+			<ScrollView>
+				<VStack>
+					<Pressable>
+						<VStack>
+							<Heading><MorphoSyntaxIcon />MorphoSyntax</Heading>
+							<Box><Text>This tool is for designing the basic structure of your language.</Text></Box>
+							<Indented>Covers large-scale structures and small</Indented>							
+							<Indented>Grouped into ten sections</Indented>							
+							<Indented>Use as many or as little of the prompts as you like</Indented>							
+							<Indented>xxx</Indented>							
+						</VStack>
+					</Pressable>
+					<Pressable>
+						<VStack>
+							<Heading><WordGenIcon />WordGen</Heading>
+							<Box><Text>This tool is for creating words according to rules you set up.</Text></Box>
+							<Indented>Organize your language's sounds into groups</Indented>							
+							<Indented>Construct syllable formations using those groups</Indented>							
+							<Indented>Tweak the output through transformations</Indented>							
+							<Indented>Jumpstart your process with built-in presets</Indented>							
+						</VStack>
+					</Pressable>
+				</VStack>
+			</ScrollView>
 		</>
 	);
 };
