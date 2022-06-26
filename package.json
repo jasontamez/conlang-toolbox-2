@@ -26,6 +26,7 @@
     "react-router-dom": "^6.3.0",
     "react-router-native": "^6.3.0",
     "redux-persist": "^6.0.0",
+    "redux-persist-expo-filesystem": "^2.0.0",
     "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
