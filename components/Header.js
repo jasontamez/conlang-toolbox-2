@@ -9,14 +9,15 @@ const openExtraChars = () => {
 	//() => dispatch(openModal("ExtraCharacters"))
 }
 
-const Menu = <IconButton onPress={() => openMenu()} variant="ghost" icon={<MenuIcon />} />;
-const ExtraChars = <IconButton variant="ghost" icon={<ExtraCharactersIcon />} onPress={() => openExtraChars()} />;
+const Menu = () => <IconButton variant="ghost" icon={<MenuIcon />} onPress={() => openMenu()} />;
+const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon />} onPress={() => openExtraChars()} />;
 
 const Header = (props) => {
+	const title = props.title;
 	return (
 		<HStack w="full">
 			<Menu />
-			<Heading flexGrow={1} isTruncated>{props.children}</Heading>
+			<Heading flexGrow={1} isTruncated>{title}</Heading>
 			<ExtraChars />
 		</HStack>
 	);

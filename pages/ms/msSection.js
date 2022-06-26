@@ -1,7 +1,7 @@
-import { useDispatch } from "react-redux";
-import ms from './ms.json';
+import { useDispatch, useSelector } from "react-redux";
+import ms from './msinfo.json';
 import { useParams } from 'react-router-dom';
-import { Checkbox, HStack, Modal, ScrollView, Slider, Text, TextArea, VStack } from 'native-base';
+import { Checkbox, HStack, Modal, ScrollView, Slider, Text, TextArea, VStack, Icon } from 'native-base';
 import {
 	setSyntaxBool,
 	setSyntaxNum,
@@ -91,7 +91,7 @@ const parseMSJSON = (page) => {
 			return final;
 		}
 		// Multi-lined texts
-		return <Text bold={makeBold}>{...temp2}</Text>;
+		return <Text bold={makeBold}>{temp2}</Text>;
 	};
 	return doc.map((bit) => {
 		const tag = (bit.tag || "");
@@ -240,7 +240,7 @@ const parseMSJSON = (page) => {
 					//
 					// END WHILE LOOP
 					//
-					return <>{...output}</>;
+					return <>{output}</>;
 				};
 				//
 				// END MODAL CONTENT DECLARATION

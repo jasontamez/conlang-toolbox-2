@@ -1,4 +1,4 @@
-import * as consts from './ReduxDucksConst';
+import * as consts from './dConsts';
 
 // action creators
 //

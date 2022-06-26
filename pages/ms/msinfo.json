@@ -1,17 +1,18 @@
 {
 	"sections": [
-		"s1",
-		"s2",
-		"s3",
-		"s4",
-		"s5",
-		"s6",
-		"s7",
-		"s8",
-		"s9",
-		"s10"
+		"s01",
+		"s02",
+		"s03",
+		"s04",
+		"s05",
+		"s06",
+		"s07",
+		"s08",
+		"s09",
+		"s10",
+		"IS THIS PROP EVEN NEEDED?"
 	],
-	"s1": [
+	"s01": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -291,7 +292,7 @@
 			"content": "Describe when the head/dependant marking system changes, if needed."
 		}
 	],
-	"s2": [
+	"s02": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -872,7 +873,7 @@
 			"content": "How are adverbs (or adverb-like phrases) handled?"
 		}
 	],
-	"s3": [
+	"s03": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -1105,7 +1106,7 @@
 			"content": "When it comes to Agent/Patient/Verb order, is the language very consistent, fairly consistent, or very inconsistent? Note consistency and any deviations not already covered."
 		}
 	],
-	"s4": [
+	"s04": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -1425,7 +1426,7 @@
 			"content": "Describe the language's relation to diminution and augmentation."
 		}
 	],
-	"s5": [
+	"s05": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -1589,7 +1590,7 @@
 			"content": "Does the language use a verb or copula strategy?"
 		}
 	],
-	"s6": [
+	"s06": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -1680,7 +1681,7 @@
 			"content": "Are there any exceptions to the primary alignment? Do they exist in a hierarchy?"
 		}
 	],
-	"s7": [
+	"s07": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -2208,7 +2209,7 @@
 			"content": "Is object demotion/omission allowed? How about incorporation?"
 		}
 	],
-	"s8": [
+	"s08": [
 		{
 			"tag": "Header",
 			"level": 1,
@@ -2691,7 +2692,7 @@
 			"content": "Does the language have any other notable verb phrase operations?"
 		}
 	],
-	"s9": [
+	"s09": [
 		{
 			"tag": "Header",
 			"level": 1,

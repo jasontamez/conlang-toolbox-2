@@ -1,7 +1,18 @@
+import { Button, Text, VStack } from "native-base";
+import Header from "../../components/Header";
+import { useNavigate } from 'react-router-dom';
 
 
 
-const settings = () => {
+const Settings = () => {
+	const nav = useNavigate();
+	return (
+		<VStack>
+			<Header title="Settings: MorphoSyntax" />
+			<Text>(they would go here)</Text>
+			<Button onPress={() => nav('/ms')}>Go Back</Button>
+		</VStack>
+	); /*
 	return (
 		<IonPage>
 			<IonLoading
@@ -10,7 +21,7 @@ const settings = () => {
     		    onDidDismiss={() => dispatch(setLoadingPage(false))}
 	        	message={'Please wait...'}
 				spinner="bubbles"
-				/*duration={300000}*/
+				/*duration={300000}*    /
 				duration={1000}
 			/>
 			<LoadMS />
@@ -56,5 +67,7 @@ const settings = () => {
 				</IonList>
 			</IonContent>
 		</IonPage>
-	);
+	); */
 };
+
+export default Settings;

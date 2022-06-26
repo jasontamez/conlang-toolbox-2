@@ -3,11 +3,12 @@ import { shallowEqual, useSelector } from "react-redux";
 import { Ionicons } from '@expo/vector-icons';
 
 import { NavBar } from '../components/layoutTags';
-import { Button, ScrollView, IconButton } from 'native-base';
+import { Button, ScrollView, IconButton, Icon } from 'native-base';
 import Header from '../components/Header';
+import { Outlet } from 'react-router-native';
 
 const MS = () => {
-	const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
+	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
 	const navigate = useNavigate();
 	const NavTab = (props) => {
 		// TO-DO:
@@ -33,7 +34,7 @@ const MS = () => {
 	};
 	return (
 		<>
-			<Header>MorphoSyntax</Header>
+			<Header title="MorphoSyntax" />
 			<ScrollView flexGrow={1}>
 				<Outlet />
 			</ScrollView>

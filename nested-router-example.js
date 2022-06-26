@@ -7,7 +7,10 @@ import { NativeBaseProvider, Box, Text, VStack, HStack, Button } from "native-ba
 import { NativeRouter, Outlet } from "react-router-native";
 import { Route, Routes } from "react-router";
 import { useNavigate, useParams } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
+import getStoreInfo from './store/store';
 import MS from "./pages/MS";
 import MSSection from "./pages/ms/msSection";
 import MSSettings from "./pages/ms/msSettings";
@@ -55,7 +58,7 @@ const Item = () => {
 };
 
 //export default function App() { return (
-function App() {
+function Testo() {
 	return (
 		<NativeBaseProvider>
 			<Box mt="64" color="white" safeArea>
@@ -77,10 +80,12 @@ function App() {
 	);
 };
 
-const Testo = () => {
+const App = () => {
+	const {store, persistor} = getStoreInfo();
 	return (
-		<NativeBaseProvider>
-			<Box mt="64" color="white" safeArea>
+		<Provider store={store}>
+		<NativeBaseProvider><PersistGate persistor={persistor}>
+			<Box safeArea>
 				<NativeRouter>
 					<VStack d="flex" h="full" alignItems="stretch" justifyContent="space-between">
 						<Routes> { /* 
@@ -107,7 +112,8 @@ const Testo = () => {
 					</VStack>
 				</NativeRouter>
 			</Box>
-		</NativeBaseProvider>
+		</PersistGate></NativeBaseProvider>
+		</Provider>
 	);
 };
 

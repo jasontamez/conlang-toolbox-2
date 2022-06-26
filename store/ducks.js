@@ -1,9 +1,10 @@
 //import maybeUpdateTheme from './MaybeUpdateTheme';
 //import { StateStorage } from './persistentInfo';
 //import debounce from './debouncer';
-import appJson from '../app.json';
+import appJson from '../appInfo.json';
+import packageJson from '../package.json';
 import { v4 as uuidv4 } from 'uuid';
-import { getTodayArray } from '../components/datefuncs';
+//import { getTodayArray } from '../components/datefuncs';
 
 //
 //
@@ -78,7 +79,7 @@ export const blankAppStateNull = {
 	paydays: [],	// all paydays
 	timeline: [],	// all bills and paydays, made into sub-bills and sub-paydays and arranged in the given timeframe
 	calc: null,	// if null, not in use. otherwise, this is a user-made arrangement of sub-bills and sub-paydays
-	today: getTodayArray(),	// [4, 17, 1, 2022] would be Thursday, February 17th, 2022
+	today: [4, 17, 1, 2022],	// [4, 17, 1, 2022] would be Thursday, February 17th, 2022
 	previous: 0,	// how far back does the timeline go? is this a set number of days, or a set number of paydays?
 	next: 0,		// as above, but for how far into the future
 	bill: "bill",
@@ -466,7 +467,7 @@ export const maybeLog = (...args) => {
 
 
 export const blankAppState = {
-	currentVersion: consts.VERSION.current,
+	currentVersion: packageJson.version,
 	appSettings: {
 		theme: "Default",
 		disableConfirms: false
@@ -489,7 +490,7 @@ export const blankAppState = {
 		editing: null
 	},
 	wordgenSettings: {
-		...simple.wordgenSettings,
+		//...simple.wordgenSettings,
 		output: "text",
 		showSyllableBreaks: false,
 		sentencesPerText: 30,
@@ -606,7 +607,7 @@ export const blankAppState = {
 };
 export const initialAppState = {
 	...blankAppState,
-	wordgenCategories: simple.wordgenCategories,
-	wordgenSyllables: simple.wordgenSyllables,
-	wordgenRewriteRules: simple.wordgenRewriteRules
+	//wordgenCategories: simple.wordgenCategories,
+	//wordgenSyllables: simple.wordgenSyllables,
+	//wordgenRewriteRules: simple.wordgenRewriteRules
 };
