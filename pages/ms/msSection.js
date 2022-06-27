@@ -1,24 +1,36 @@
 import { useDispatch, useSelector } from "react-redux";
 import ms from './msinfo.json';
 import { useParams } from 'react-router-dom';
-import { Checkbox, HStack, Modal, ScrollView, Slider, Text, TextArea, VStack, Icon } from 'native-base';
-import {
-	setSyntaxBool,
-	setSyntaxNum,
-	setSyntaxText,
-	setSyntaxState
-} from '../../store/dFuncs';
+import { Button, Box, Checkbox, HStack, Modal, ScrollView, Slider, Text, TextArea, VStack, Icon, Center } from 'native-base';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const parseMSJSON = (page) => {
+import { useState } from "react";
+import { /*
+	setKey,
+	setLastSavec,
+	setTitlec,
+	setDescriptionc,*/
+	setBool,
+	setNum,
+	setText
+} from '../../store/morphoSyntaxSlice';
+
+
+const ParseMSJSON = (props) => {
+	const [modalState, setModal] = useState('');
+	const synBool = useSelector((state) => state.morphoSyntax.bool);
+	const synNum = useSelector((state) => state.morphoSyntax.num);
+	const synText = useSelector((state) => state.morphoSyntax.text);
+	const { page } = props;
 	const doc = ms[page];
 	const headings = {
-		0: "1rem",
-		1: "1.4rem",
-		2: "1.25rem",
-		3: "1.1rem"
+		0: "2xl",
+		1: "xl",
+		2: "lg",
+		3: "md"
 	};
 	// Text formatting
-	const formatText = (bit, makeBold=false) => {
+	const formatText = (bit, forceBold=false) => {
 		let temp = [bit];
 		let temp2 = [];
 		// Check for BOLD text
@@ -37,6 +49,8 @@ const parseMSJSON = (page) => {
 						toggle = true;
 					}
 				});
+			} else {
+				temp2.push(t);
 			}
 		});
 		temp = [...temp2];
@@ -57,6 +71,8 @@ const parseMSJSON = (page) => {
 						toggle = true;
 					}
 				});
+			} else {
+				temp2.push(t);
 			}
 		});
 		temp = [...temp2];
@@ -77,6 +93,8 @@ const parseMSJSON = (page) => {
 						toggle = true;
 					}
 				});
+			} else {
+				temp2.push(t);
 			}
 		});
 		// If only one line of text, present it simply
@@ -84,14 +102,14 @@ const parseMSJSON = (page) => {
 			const oneLine = temp2[0];
 			let final;
 			if(typeof oneLine === "string") {
-				final = <Text bold={makeBold}>{oneLine}</Text>;
+				final = <Text bold={forceBold}>{oneLine}</Text>;
 			} else {
 				final = oneLine;
 			}
 			return final;
 		}
 		// Multi-lined texts
-		return <Text bold={makeBold}>{temp2}</Text>;
+		return <Text bold={forceBold}>{temp2}</Text>;
 	};
 	return doc.map((bit) => {
 		const tag = (bit.tag || "");
@@ -100,27 +118,25 @@ const parseMSJSON = (page) => {
 			case "Header":
 				return <Text bold fontSize={headings[bit.level || 0]}>{bit.content}</Text>;
 			case "Range":
-				const synNum = useSelector((state) => state.morphoSyntaxInfo.num)
 				const what = bit.prop;
-				const setNum = (what, value) => {
-					dispatch(setSyntaxNum(what, value));
+				const doSetNum = (prop, value) => {
+					dispatch(setNum({prop, value}));
 				};
 				return (
-					<HStack d="flex" w="100%" alignItems="stretch" justifyContent="space-between">
-						<Text>{bit.start}</Text>
-						<Slider flexGrow={1} flexBasis="75%" defaultValue={synNum[what] || 0} minValue={0} maxValue={bit.max || 4} accessibilityLabel={bit.label} step={1} colorScheme="secondary" onChangeEnd={(v) => setNum(what, v)}>
+					<HStack d="flex" w="full" alignItems="stretch">
+						<Box mr={3}><Text>{bit.start}</Text></Box>
+						<Slider flexGrow={1} flexShrink={1} flexBasis="75%" defaultValue={synNum[what] || 0} minValue={0} maxValue={bit.max || 4} accessibilityLabel={bit.label} step={1} colorScheme="secondary" onChangeEnd={(v) => doSetNum(what, v)}>
 							<Slider.Track bg="secondary.900">
 								{bit.spectrum ? <Slider.FilledTrack /> : <></>}
 							</Slider.Track>
 							<Slider.Thumb />
 						</Slider>
-						<Text>{bit.end}</Text>
+						<Box ml={3}><Text>{bit.end}</Text></Box>
 					</HStack>
 				);
 			case "Text":
-				const synText = useSelector((state) => state.morphoSyntaxInfo.text)
-				const setText = (what, value) => {
-					dispatch(setSyntaxText(what, value));
+				const doSetText = (prop, value) => {
+					dispatch(setText({prop, value}));
 				};
 				const lines = bit.rows === undefined ? 3 : (bit.rows);
 				// bit.classes does not seem to be useful anymore?
@@ -128,19 +144,22 @@ const parseMSJSON = (page) => {
 				return (
 					<>
 						<Text>{bit.content || ""}</Text>
-						<TextArea totalLines={lines} placeholder={bit.placeholder || undefined} onBlur={(e) => setText(what, e.currentTarget.value || "")} defaultValue={synText[what] || ""} />
+						<TextArea totalLines={lines} placeholder={bit.placeholder || undefined} onBlur={(e) => doSetText(what, e.currentTarget.value || "")} defaultValue={synText[what] || ""} />
 					</>
 				);
 			case "Modal":
-				const synState = useSelector((state) => state.morphoSyntaxModalState);
 				//
 				// BEGIN MODAL CONTENT DECLARATION
 				//
-				const ModalContent = (content) => {
+				const ModalContent = (props) => {
+					const content = props.content;
+					if(!Array.isArray(content)) {
+						return <Text>Missing Content Array</Text>;
+					}
 					const regularMargin = 2;
 					const noMargin = 0;
 					const biggerMargin = 4;
-					let input = [...content];
+					let input = content.slice();
 					let output = [];
 					let margin = regularMargin;
 					let indent = 0;
@@ -177,8 +196,8 @@ const parseMSJSON = (page) => {
 							input.unshift(...newContent);
 						} else if (typeof bit === "string") {
 							// Make a simple text
-							output.push(
-								<Box mt={margin} pl={String(indent * 2)+"rem"}>
+							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
+								<Box mt={margin} pl={indent}>
 									{formatText(bit)}
 								</Box>
 							);
@@ -186,23 +205,37 @@ const parseMSJSON = (page) => {
 							margin = regularMargin;
 						} else {
 							// some type of object - currently only have the tabular object so I won't bother checking
+							// Reorganize row info
+							let newRows = [];
+							let oldRows = bit.rows.slice().map((orig) => orig.slice());
+							let flag = true;
+							while(flag) {
+								// Put the first bit of each row together
+								const newRow = oldRows.map((row) => {
+									if(row.length <= 1) {
+										flag = false;
+									}
+									return row.shift();
+								});
+								newRows.push(newRow);
+							}
 							// Make a vertical stack of all row elements
 							const makeLine = (rows) => {
 								return (
 									<VStack m={2} alignItems="center" justifyContent="space-between">
 										{rows.map((r) => {
-											return <Text>{r.unshift()}</Text>;
+											return <Text>{r}</Text>;
 										})}
 									</VStack>
 								);
 							};
-							output.push(
-								<ScrollView horizontal mt={margin} pl={String(indent * 2)+"rem"}>
+							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
+								<ScrollView horizontal mt={margin} pl={indent}>
 									<VStack>
 										<HStack>
-											{data.map(() => makeLine([...bit.rows]))}
+											{newRows.map((line) => makeLine(line.slice()))}
 										</HStack>
-										{bit.final ? <Text>{bit.final}</Text> : ""}
+										{bit.final ? <Text>{bit.final}</Text> : []}
 									</VStack>
 								</ScrollView>
 							);
@@ -245,35 +278,39 @@ const parseMSJSON = (page) => {
 				//
 				// END MODAL CONTENT DECLARATION
 				//
+				const id = bit.id;
 				return (
 					<>
-						<Modal size="5/6" m="auto" isOpen={synState[id] !== undefined} onClose={() => dispatch(setSyntaxState(id, false))}>
+						<Modal size="5/6" m="auto" isOpen={modalState === id} onClose={() => setModal('')} bg="gray.50">
 							<Modal.CloseButton />
-							<Modal.Header><Text>{bit.title}</Text></Modal.Header>
+							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
 							<Modal.Body>
 								<VStack>
 									<ModalContent content={bit.content} />
 								</VStack>
 							</Modal.Body>
-							<Modal.Footer>
-								<Button startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />}>Done</Button>
+							<Modal.Footer w="full">
+								<Button startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
-						<Button startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => dispatch(setSyntaxState(id, true))}>{bit.label || "Read About It"}</Button>
+						<HStack justifyContent="flex-end">
+							<Button size="md" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{bit.label || "Read About It"}</Button>
+						</HStack>
 					</>
 				);
 			case "Checkboxes":
-				const synBool = useSelector((state) => state.morphoSyntaxInfo.bool);
-				const setBool = (what, value) => {
-					dispatch(setSyntaxBool(what, value));
-				};				const disp = bit.display;
+				//return <Box><Text bold>CHECKBOX HERE</Text></Box>;
+				const doSetBool = (prop, value) => {
+					dispatch(setBool({prop, value}));
+				};
+				const disp = bit.display;
 				if(!disp) {
 					return <Box><Text bold>CHECKBOX DISPLAY ERROR</Text></Box>;
 				}
 				const boxes = (bit.boxes || []).slice();
-				const rowLabels = (disp.rowLabels || []).slice();
+				const rowLabels = (disp.rowLabels || []);
 				const perRow = disp.boxesPerRow;
-				const labels = (disp.labels || []).slice();
+				const labels = (disp.labels || []);
 				const header = disp.header;
 				const inlineHeaders = disp.inlineHeaders;
 				// Assemble tabular section
@@ -290,28 +327,29 @@ const parseMSJSON = (page) => {
 				while(boxes.length > 0) {
 					cols.forEach((col) => {
 						const id = boxes.shift();
-						col.push(id ? <Checkbox value={id} onChange={(val) => setBool(what, val)} defaultIsChecked={synBool[what] || false} /> : <Text>ERROR</Text>);
+						col.push(id ? <Checkbox value={id} onChange={(val) => doSetBool(what, val)} defaultIsChecked={synBool[what] || false} /> : <Text>MISSING CHECKBOX</Text>);
 					});
 				}
 				// If labels exist, add them as a new column
-				if(labels) {
+				if(labels.length > 0) {
 					cols.push(labels.map((l) => formatText(l)));
 				}
-				// Add rowlabels
+				// Add rowlabels as a new column
 				cols.push(rowLabels.map(rl => formatText(rl)));
-				// Add inlineheaders, if any
+				// Add inlineheaders, if any, to the tops of the existing columns
 				if(inlineHeaders) {
-					cols.forEach(col => {
-						const header = inlineHeaders.shift() || "ERROR";
+					const iH = inlineHeaders.slice()
+					cols.forEach((col) => {
+						const header = iH.shift();
 						// Force headers to be bold
-						col.unshift(formatText(header, true));
+						col.unshift(formatText(header || "MISSING INLINE HEADER", true));
 					});
 				}
 				// Put it all together
 				return (
 					<ScrollView horizontal>
 						<VStack>
-							{header ? <Box>{formatText(header, true)}</Box> : ""}
+							{header ? <Box>{formatText(header, true)}</Box> : <Text fontSize={1}></Text>}
 							<HStack>
 								{cols.map(col => <VStack>{col.map(c => <Box>{c}</Box>)}</VStack>)}
 							</HStack>
@@ -320,7 +358,7 @@ const parseMSJSON = (page) => {
 				);
 		}
 		// No switch matched?
-		return "";
+		return <Text>No Switch Matched: {tag}</Text>;
 	});
 };
 
@@ -330,7 +368,7 @@ const Section = () => {
 
 	return (
 		<>
-			{parseMSJSON(pageName)}
+			<ParseMSJSON page={pageName} />
 		</>
 	);
 };

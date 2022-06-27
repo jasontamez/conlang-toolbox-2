@@ -1,5 +1,4 @@
 import { Button, Text, VStack } from "native-base";
-import Header from "../../components/Header";
 import { useNavigate } from 'react-router-dom';
 
 
@@ -8,8 +7,7 @@ const Settings = () => {
 	const nav = useNavigate();
 	return (
 		<VStack>
-			<Header title="Settings: MorphoSyntax" />
-			<Text>(they would go here)</Text>
+			<Text>(settings will go here)</Text>
 			<Button onPress={() => nav('/ms')}>Go Back</Button>
 		</VStack>
 	); /*

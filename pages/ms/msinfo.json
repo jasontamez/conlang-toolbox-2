@@ -25,6 +25,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "SynthesisandFusion",
 			"title": "Synthesis and Fusion",
 			"label": "The Basic Building Blocks of Words",
 			"content": [
@@ -114,6 +115,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "AffixesandOtherModifications",
 			"title": "Affixes and Other Modifications",
 			"label": "Read About Them",
 			"content": [
@@ -169,6 +171,16 @@
 			],
 			"display": {
 				"boxesPerRow": 2,
+				"accessibilityLabels": [
+					"The prefix is used Most",
+					"The prefix is used Less",
+					"The suffix is used Most",
+					"The suffix is used Less",
+					"The circumfix is used Most",
+					"The circumfix is used Less",
+					"The infix is used Most",
+					"The infix is used Less"	
+				],
 				"inlineHeaders": [
 					"Used Most",
 					"Used Less",
@@ -269,6 +281,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "HeadDependantMarking",
 			"title": "Head/Dependant Marking",
 			"content": [
 				"The **Head** of a phrase is the element that determines the syntactic function of the whole phrase.",
@@ -315,6 +328,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "ProperNames",
 			"title": "Proper Names",
 			"label": "Read About Them",
 			"content": [
@@ -334,6 +348,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Possessability",
 			"title": "Possessability",
 			"label": "Systems of Possession",
 			"content": [
@@ -371,6 +386,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "CountNounsandMassNouns",
 			"title": "Count Nouns and Mass Nouns",
 			"label": "A Piece of Information",
 			"content": [
@@ -390,6 +406,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PronounsandAnaphoricClitics",
 			"title": "Pronouns and Anaphoric Clitics",
 			"label": "What Are They?",
 			"content": [
@@ -448,6 +465,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "SemanticRoles",
 			"title": "Semantic Roles",
 			"label": "A Quick Primer",
 			"content": [
@@ -580,6 +598,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "VerbStructure",
 			"title": "Verb Structure",
 			"label": "Structure and Operations Info",
 			"content": [
@@ -681,6 +700,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PropertyConcepts",
 			"title": "Property Concepts",
 			"label": "More Info",
 			"content": [
@@ -739,6 +759,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Numerals",
 			"title": "Numerals",
 			"label": "Things to Consider",
 			"content": [
@@ -852,6 +873,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Adverbs",
 			"title": "Adverbs",
 			"label": "A \"Catch-All\" Category",
 			"content": [
@@ -925,6 +947,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "BasicTypology",
 			"title": "Basic Typology",
 			"label": "What is This?",
 			"content": [
@@ -1037,6 +1060,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Adpositions",
 			"title": "Adpositions",
 			"label": "More Info",
 			"content": [
@@ -1058,6 +1082,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Comparatives",
 			"title": "Comparatives",
 			"label": "Comparing Things",
 			"content": [
@@ -1082,6 +1107,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Questions",
 			"title": "Questions",
 			"content": [
 				"In many languages, yes/no questions are indicated by a change in intonation. In others, a question particle is used; e.g. //do// you understand?",
@@ -1119,6 +1145,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Compounding",
 			"title": "Compounding",
 			"label": "Noun-Piles",
 			"content": [
@@ -1144,6 +1171,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Denominalization",
 			"title": "Denominalization",
 			"label": "Verbing a Noun",
 			"content": [
@@ -1167,6 +1195,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "NumberMarking",
 			"title": "Number Marking",
 			"label": "Plurality, etc.",
 			"content": [
@@ -1226,6 +1255,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "CaseMarking",
 			"title": "Case Marking",
 			"label": "How it works",
 			"content": [
@@ -1287,6 +1317,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Articles",
 			"title": "Articles",
 			"label": "What Are They?",
 			"content": [
@@ -1315,6 +1346,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Possessors",
 			"title": "Possessors",
 			"label": "Possessor Expressions",
 			"content": [
@@ -1337,6 +1369,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "ClassandGender",
 			"title": "Class and Gender",
 			"label": "What They Are",
 			"content": [
@@ -1383,6 +1416,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "DiminutionandAugmentation",
 			"title": "Diminution and Augmentation",
 			"label": "Bigger and Smaller",
 			"content": [
@@ -1434,6 +1468,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PredicateNominals",
 			"title": "Predicate Nominals",
 			"label": "General Information to Consider",
 			"content": [
@@ -1456,6 +1491,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PredicateNominalsandAdjectives",
 			"title": "Predicate Nominals and Adjectives",
 			"label": "What It Is and What It Seems Like",
 			"content": [
@@ -1513,6 +1549,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PredicateLocatives",
 			"title": "Predicate Locatives",
 			"label": "Where It Is",
 			"content": [
@@ -1540,6 +1577,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Existentials",
 			"title": "Existentials",
 			"label": "These Exist",
 			"content": [
@@ -1574,6 +1612,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PossessiveClauses",
 			"title": "Possessive Clauses",
 			"content": [
 				"These follow two main strategies:",
@@ -1598,6 +1637,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Alignments",
 			"title": "Alignments",
 			"label": "Show the Alignments",
 			"content": [
@@ -1689,6 +1729,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Valence",
 			"title": "Valence",
 			"label": "What is Valence?",
 			"content": [
@@ -1716,6 +1757,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Causatives",
 			"title": "Causatives",
 			"label": "Forcing You to Read This",
 			"content": [
@@ -1798,6 +1840,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Applicatives",
 			"title": "Applicatives",
 			"label": "Adding a Third Participant",
 			"content": [
@@ -1844,6 +1887,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "DativeShift",
 			"title": "Dative Shift",
 			"label": "Looking Shifty",
 			"content": [
@@ -1870,6 +1914,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "DativeofInterest",
 			"title": "Dative of Interest",
 			"label": "Pique Your Interest",
 			"content": [
@@ -1931,6 +1976,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "PossessorRaising",
 			"title": "Possessor Raising",
 			"label": "What is This?",
 			"content": [
@@ -1984,6 +2030,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Reflexives",
 			"title": "Reflexives",
 			"label": "You Are Me?",
 			"content": [
@@ -2029,6 +2076,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Reciprocals",
 			"title": "Reciprocals",
 			"label": "Working Together",
 			"content": [
@@ -2057,6 +2105,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Passives",
 			"title": "Passives",
 			"label": "Moving Focus From the Agent",
 			"content": [
@@ -2099,6 +2148,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Inverses",
 			"title": "Inverses",
 			"label": "Playing The Reverse Card",
 			"content": [
@@ -2140,6 +2190,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "MiddleConstructions",
 			"title": "Middle Constructions",
 			"label": "What Are These?",
 			"content": [
@@ -2164,6 +2215,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Antipassives",
 			"title": "Antipassives",
 			"label": "What Are These?",
 			"content": [
@@ -2185,6 +2237,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "ObjectDemotionandRelatedFunctions",
 			"title": "Object Demotion and Related Functions",
 			"label": "What Are These?",
 			"content": [
@@ -2222,6 +2275,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Nominalization",
 			"title": "Nominalization",
 			"label": "Making Nouns",
 			"content": [
@@ -2310,6 +2364,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Compounding",
 			"title": "Compounding",
 			"label": "Word-Making",
 			"content": [
@@ -2339,6 +2394,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "TenseAspectandMode",
 			"title": "Tense, Aspect and Mode",
 			"label": "What Are They?",
 			"content": [
@@ -2392,6 +2448,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Tense",
 			"title": "Tense",
 			"label": "Info on Tense",
 			"content": [
@@ -2432,6 +2489,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Aspect",
 			"title": "Aspect",
 			"label": "Info on Aspect",
 			"content": [
@@ -2536,6 +2594,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Mode",
 			"title": "Mode",
 			"label": "Info on Mode",
 			"content": [
@@ -2590,6 +2649,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "LocationandDirection",
 			"title": "Location and Direction",
 			"label": "Where?",
 			"content": [
@@ -2625,6 +2685,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Evidentiality",
 			"title": "Evidentiality",
 			"label": "Truth and Certainty",
 			"content": [
@@ -2668,6 +2729,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Miscelaneous",
 			"title": "Miscelaneous",
 			"label": "Leftovers",
 			"content": [
@@ -2700,6 +2762,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Pragmatics",
 			"title": "Pragmatics",
 			"label": "What are Pragmatics?",
 			"content": [
@@ -2760,6 +2823,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "FocusContrastetc",
 			"title": "Focus, Contrast, etc.",
 			"label": "Focus is What This is About",
 			"content": [
@@ -2837,6 +2901,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Negation",
 			"title": "Negation",
 			"label": "Don't not read this.",
 			"content": [
@@ -3007,6 +3072,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "DeclarativeStatements",
 			"title": "Declarative Statements",
 			"label": "Minor Note on Declaratives",
 			"content": [
@@ -3034,6 +3100,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "YesNoQuestions",
 			"title": "Yes/NoQuestions",
 			"label": "Yes? No?",
 			"content": [
@@ -3178,6 +3245,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "QuestionWordQuestions",
 			"title": "Question-Word Questions",
 			"label": "Who? What? Why?",
 			"content": [
@@ -3220,6 +3288,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Imperatives",
 			"title": "Imperatives",
 			"label": "Command Sentences",
 			"content": [
@@ -3258,6 +3327,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "Terms",
 			"title": "Terms",
 			"label": "Quick Primer on Clauses",
 			"content": [
@@ -3284,6 +3354,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "SerialVerbs",
 			"title": "Serial Verbs",
 			"label": "Go Tap on This",
 			"content": [
@@ -3346,6 +3417,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "ComplementClauses",
 			"title": "Complement Clauses",
 			"label": "Enter The Matrix",
 			"content": [
@@ -3401,6 +3473,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "AdverbialClauses",
 			"title": "Adverbial Clauses",
 			"label": "Tap This When You're Ready",
 			"content": [
@@ -3477,6 +3550,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "ClauseChainingMedialClausesandSwitchReferences",
 			"title": "Clause Chaining, Medial Clauses, and Switch References",
 			"label": "Chain Chain Chain...",
 			"content": [
@@ -3624,6 +3698,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "RelativeClauses",
 			"title": "Relative Clauses",
 			"label": "Clauses as Adjectives",
 			"content": [
@@ -3922,6 +3997,7 @@
 		},
 		{
 			"tag": "Modal",
+			"id": "CoordinatingClauses",
 			"title": "Coordinating Clauses",
 			"label": "This And That",
 			"content": [

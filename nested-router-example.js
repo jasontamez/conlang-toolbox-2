@@ -8,7 +8,7 @@ import { NativeRouter, Outlet } from "react-router-native";
 import { Route, Routes } from "react-router";
 import { useNavigate, useParams } from "react-router-dom";
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+//import { PersistGate } from 'redux-persist/integration/react';
 
 import getStoreInfo from './store/store';
 import MS from "./pages/MS";
@@ -84,7 +84,7 @@ const App = () => {
 	const {store, persistor} = getStoreInfo();
 	return (
 		<Provider store={store}>
-		<NativeBaseProvider><PersistGate persistor={persistor}>
+		<NativeBaseProvider>
 			<Box safeArea>
 				<NativeRouter>
 					<VStack d="flex" h="full" alignItems="stretch" justifyContent="space-between">
@@ -112,7 +112,7 @@ const App = () => {
 					</VStack>
 				</NativeRouter>
 			</Box>
-		</PersistGate></NativeBaseProvider>
+		</NativeBaseProvider>
 		</Provider>
 	);
 };
