@@ -2,11 +2,11 @@ import { Box, Heading, ScrollView, HStack, VStack, Link, Pressable, Text } from 
 import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
 
-import { Circle, ExtraCharactersIcon, LexiconIcon, MorphoSyntaxIcon, WordEvolveIcon, WordGenIcon, WordListsIcon } from '../components/icons';
+import { CircleIcon, ExtraCharactersIcon, LexiconIcon, MorphoSyntaxIcon, WordEvolveIcon, WordGenIcon, WordListsIcon } from '../components/icons';
 
 const Indented = (props) => (
-	<HStack pl={2}>
-		<Circle />
+	<HStack pl={2} justifyContent="start" alignItems="start">
+		<CircleIcon m={1} mr="0.5" />
 		<Text>{props.children}</Text>
 	</HStack>
 );
@@ -19,7 +19,7 @@ const Home = () => {
 				<VStack space={2}>
 					<Pressable onPress={() => {navigate("/ms")}}>
 						<VStack>
-							<Heading><MorphoSyntaxIcon />MorphoSyntax</Heading>
+							<Heading fontSize="xl"><MorphoSyntaxIcon />MorphoSyntax</Heading>
 							<Box><Text>This tool is for designing the basic structure of your language.</Text></Box>
 							<Indented>Covers large-scale structures and small</Indented>							
 							<Indented>Grouped into ten sections</Indented>							
@@ -29,7 +29,7 @@ const Home = () => {
 					</Pressable>
 					<Pressable>
 						<VStack>
-							<Heading><WordGenIcon />WordGen</Heading>
+							<Heading fontSize="xl"><WordGenIcon />WordGen</Heading>
 							<Box><Text>This tool is for creating words according to rules you set up.</Text></Box>
 							<Indented>Organize your language's sounds into groups</Indented>							
 							<Indented>Construct syllable formations using those groups</Indented>							
@@ -39,7 +39,7 @@ const Home = () => {
 					</Pressable>
 					<Pressable>
 						<VStack>
-							<Heading><WordEvolveIcon />WordEvolve</Heading>
+							<Heading fontSize="xl"><WordEvolveIcon />WordEvolve</Heading>
 							<Box><Text>This tool is for modifying words according to rules you set up, mimicking the evolution of natural languages.</Text></Box>
 							<Indented>Start with words from a language (natural or otherwise)</Indented>							
 							<Indented>Use standard rules to determine how they evolve</Indented>							
@@ -48,7 +48,7 @@ const Home = () => {
 					</Pressable>
 					<Pressable>
 						<VStack>
-							<Heading><LexiconIcon />Lexicon</Heading>
+							<Heading fontSize="xl"><LexiconIcon />Lexicon</Heading>
 							<Box><Text>A place to store your conlangs.</Text></Box>
 							<Indented>Store bits of information for each word, such as part of speech or definition</Indented>							
 							<Indented>Sort your words by any criteria</Indented>							
@@ -59,7 +59,7 @@ const Home = () => {
 					</Pressable>
 					<Pressable>
 						<VStack>
-							<Heading><WordListsIcon />Word Lists</Heading>
+							<Heading fontSize="xl"><WordListsIcon />Word Lists</Heading>
 							<Box><Text>A small storehouse of basic words, useful for starting a lexicon.</Text></Box>
 							<Indented>Easily add words to Lexicon</Indented>							
 							<Indented>Contains the Swadesh-100, -207 and other variants</Indented>							
@@ -68,7 +68,7 @@ const Home = () => {
 					</Pressable>
 					<Pressable>
 						<VStack>
-							<Heading><ExtraCharactersIcon />Extra Characters</Heading>
+							<Heading fontSize="xl"><ExtraCharactersIcon />Extra Characters</Heading>
 							<Box><Text>On many pages, you'll see the Extra Characters icon at the top of the page.</Text></Box>
 							<Indented>Contains hundreds of characters that may not appear on your mobile keyboard, organized according to groups such as Latin, Cyrillic, Arabic and Katakana</Indented>							
 							<Indented>All IPA (International Phonetic Alphabet) characters grouped together</Indented>							
@@ -78,7 +78,7 @@ const Home = () => {
 					</Pressable>
 					<Pressable>
 						<VStack>
-							<Heading><WordListsIcon />Word Lists</Heading>
+							<Heading fontSize="xl"><WordListsIcon />Word Lists</Heading>
 							<Box><Text>A small storehouse of basic words, useful for starting a lexicon.</Text></Box>
 							<Indented>v.{packageJson.current}</Indented>							
 							<Indented>Contact: <Link href="mailto:jasontankapps@gmail.com">jasontankapps@gmail.com</Link></Indented>							

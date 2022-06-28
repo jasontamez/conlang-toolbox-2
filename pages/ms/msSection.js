@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import ms from './msinfo.json';
 import { useParams } from 'react-router-dom';
-import { Button, Box, Checkbox, HStack, Modal, ScrollView, Slider, Text, TextArea, VStack, Icon, Center } from 'native-base';
+import { Button, Box, Checkbox, HStack, Modal, ScrollView, Slider, Text as Tx, TextArea, VStack, Icon, Center } from 'native-base';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import React, { useState } from "react";
@@ -14,6 +14,7 @@ import { /*
 	setNum,
 	setText
 } from '../../store/morphoSyntaxSlice';
+import { CircleIcon } from "../../components/icons";
 
 
 const ParseMSJSON = (props) => {
@@ -33,6 +34,7 @@ const ParseMSJSON = (props) => {
 	const getKey = (msg = "parsedJSON") => {
 		return msg + String(keyCounter++);
 	};
+	const Text = (props) => <Tx m={0} p={0} borderWidth={0} lineHeight="md" fontSize="md" {...props} />
 	// Text formatting
 	const FormatText = (props) => {
 		const bit = props.content;
@@ -163,13 +165,14 @@ const ParseMSJSON = (props) => {
 					}
 					const regularMargin = 2;
 					const noMargin = 0;
-					const biggerMargin = 4;
+					const biggerMargin = 6;
 					let input = content.slice();
 					let output = [];
 					let margin = regularMargin;
 					let indent = 0;
 					let unindent = 0;
 					let unindentStorage = [];
+					let prefix = true;
 					//
 					// BEGIN WHILE LOOP
 					//
@@ -182,6 +185,9 @@ const ParseMSJSON = (props) => {
 						} else if (bit === false) {
 							// Next line needs zero top margin
 							margin = noMargin;
+						} else if (bit === null) {
+							// Toggle adding the circle icon before
+							prefix = !prefix;
 						} else if (Array.isArray(bit)) {
 							// The next section is indented.
 							//
@@ -202,9 +208,10 @@ const ParseMSJSON = (props) => {
 						} else if (typeof bit === "string") {
 							// Make a simple text
 							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
-								<Box mt={margin} pl={indent} key={getKey(id)}>
+								<HStack space={0} m={0} mt={margin} p={0} ml={indent * 4} alignItems="flex-start" justifyContent="flex-start" key={getKey(id)}>
+									{prefix ? <CircleIcon m={0} p={0} mt={1.5} mr={1} size="2xs" /> : <></>}
 									<FormatText key={getKey("FormattedText")} content={bit} />
-								</Box>
+								</HStack>
 							);
 							// Reset margin, if needed
 							margin = regularMargin;
@@ -229,18 +236,18 @@ const ParseMSJSON = (props) => {
 								return (
 									<VStack m={2} alignItems="center" justifyContent="space-between" key={getKey(id)}>
 										{rows.map((r) => {
-											return <Text key={getKey(id + "InnerRow")}>{r}</Text>;
+											return <FormatText key={getKey(id + "InnerRow")} content={r} />;
 										})}
 									</VStack>
 								);
 							};
 							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
-								<ScrollView horizontal mt={margin} pl={indent} key={getKey(id)}>
+								<ScrollView horizontal mt={margin} pl={indent * 4} key={getKey(id)} bg="gray.200">
 									<VStack key={getKey("TabularVStack")}>
 										<HStack key={getKey("tabular")}>
 											{newRows.map((line) => makeLine(line.slice()))}
 										</HStack>
-										{bit.final ? <Text key={getKey(id + "FinalRow")}>{bit.final}</Text> : <React.Fragment key={getKey("Fragment")}></React.Fragment>}
+										{bit.final ? <FormatText key={getKey(id + "FinalRow")} content={bit.final} /> : <React.Fragment key={getKey("Fragment")}></React.Fragment>}
 									</VStack>
 								</ScrollView>
 							);
@@ -278,27 +285,25 @@ const ParseMSJSON = (props) => {
 					//
 					// END WHILE LOOP
 					//
-					return <React.Fragment key={getKey("Fragment")}>{output}</React.Fragment>;
+					return <VStack space={0} key={getKey("MainModal")}>{output}</VStack>;
 				};
 				//
 				// END MODAL CONTENT DECLARATION
 				//
 				return (
 					<React.Fragment key={getKey("Fragment")}>
-						<Modal size="5/6" m="auto" isOpen={modalState === id} onClose={() => setModal('')} bg="gray.50" key={getKey("Modal")}>
+						<Modal size="full" m={0} isOpen={modalState === id} onClose={() => setModal('')} bg="gray.50" key={getKey("Modal")}>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
-							<Modal.Body w="5/6" m="auto">
-								<VStack>
-									<ModalContent content={bit.content} />
-								</VStack>
+							<Modal.Body w="5/6" mx="auto">
+								<ModalContent content={bit.content} />
 							</Modal.Body>
 							<Modal.Footer w="full">
 								<Button startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
 						<HStack justifyContent="flex-end" key={getKey("ModalButton")}>
-							<Button size="md" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{bit.label || "Read About It"}</Button>
+							<Button size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
 						</HStack>
 					</React.Fragment>
 				);

@@ -34,7 +34,7 @@ const MS = () => {
 	};
 	return (
 		<>
-			<Header title="MorphoSyntax" />
+			<Header title="MorphoSyntax" textAlign="center" />
 			<ScrollView flexGrow={1}>
 				<Outlet />
 			</ScrollView>
