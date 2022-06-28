@@ -170,7 +170,7 @@
 				"infixLess"
 			],
 			"display": {
-				"boxesPerRow": 2,
+				"multiBoxes": 2,
 				"accessibilityLabels": [
 					"The prefix is used Most",
 					"The prefix is used Less",
@@ -186,7 +186,7 @@
 					"Used Less",
 					"Affix"
 				],
-				"rowLabels": [
+				"rowDescriptions": [
 					"Prefix",
 					"Suffix",
 					"Circumfix",
@@ -522,10 +522,8 @@
 			],
 			"display": {
 				"striped": true,
-				"boxesPerRow": 1,
 				"inlineHeaders": [
 					"Special?",
-					"Type",
 					"Description"
 				],
 				"labels": [
@@ -545,7 +543,7 @@
 					"Manipulation",
 					"Other Verb Class(es)"
 				],
-				"rowLabels": [
+				"rowDescriptions": [
 					"Agent affects Patient.",
 					"Agent only.",
 					"In English, these require a dummy Agent (\"//It// is raining\"); this is not the case in many other languages!",
@@ -677,9 +675,8 @@
 				"adjectives"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Different Ways Property Concepts Are Handled in Human Language",
-				"rowLabels": [
+				"labels": [
 					"Lexicalized as verbs (Acehnese)",
 					"Lexicalized as nouns (Finnish)",
 					"Lexicalized as nouns or verbs depending on the demands of discourse (Dutch)",
@@ -798,9 +795,8 @@
 				"baseOther"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Number Base",
-				"rowLabels": [
+				"labels": [
 					"Base Five",
 					"Base Ten",
 					"Base Twenty",
@@ -825,9 +821,8 @@
 				"numNone"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Number Format",
-				"rowLabels": [
+				"labels": [
 					"Greatest-to-Least (twenty-two)",
 					"Least-to-Greatest (two-twenty)",
 					"Single Digits Only (two-two)"
@@ -849,9 +844,8 @@
 				"inflectNum"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Other Properties",
-				"rowLabels": [
+				"labels": [
 					"Multiple Sets of Numerals",
 					"Numerals Agree With Head"
 				],
@@ -917,10 +911,8 @@
 				"PVA"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"inlineHeaders": [
-					"Primary?",
-					"Order",
+					"Primary Order?",
 					"Example"
 				],
 				"labels": [
@@ -932,7 +924,7 @@
 					"PVA/VS"
 				],
 				"labelClass": "cbox leftA",
-				"rowLabels": [
+				"rowDescriptions": [
 					"\"Steve softballs pitches; Steve pitches.\"",
 					"\"Steve pitches softballs; Steve pitches.\"",
 					"\"Pitches Steve softballs; Pitches Steve.\"",
@@ -1041,8 +1033,7 @@
 				"circumP"
 			],
 			"display": {
-				"boxesPerRow": 1,
-				"rowLabels": [
+				"labels": [
 					"Preposition (//with// an apple)",
 					"Postpostition (an apple //with//)",
 					"Circumposition (rare; //with// an apple //with//)"
@@ -1222,9 +1213,8 @@
 				"numPlural"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Which Distinctions Are Marked in the Noun Phrase?",
-				"rowLabels": [
+				"labels": [
 					"Singular",
 					"Dual",
 					"Trial",
@@ -1389,9 +1379,8 @@
 				"classOther"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Which Class Distinctions Exist?",
-				"rowLabels": [
+				"labels": [
 					"Gender",
 					"Animacy",
 					"Shape",
@@ -1437,8 +1426,7 @@
 				"dimAugProductive"
 			],
 			"display": {
-				"boxesPerRow": 1,
-				"rowLabels": [
+				"labels": [
 					"Dim/Aug System Exists",
 					"...and is Obligatory",
 					"...and is Productive"
@@ -1703,9 +1691,8 @@
 				"ergAbs"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Primary Alignment System",
-				"rowLabels": [
+				"labels": [
 					"Nominative / Accusative",
 					"Ergative / Absolutive"
 				],
@@ -2165,8 +2152,7 @@
 				"wordOrderChange"
 			],
 			"display": {
-				"boxesPerRow": 1,
-				"rowLabels": [
+				"labels": [
 					"Marked inverse only",
 					"Both direct and inverse explicitly marked",
 					"Special verb agreement markers for inverse",
@@ -2422,9 +2408,8 @@
 				"otherMorph"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Morphology Exists For:",
-				"rowLabels": [
+				"labels": [
 					"Tense",
 					"Aspect",
 					"Mode",
@@ -3630,9 +3615,8 @@
 				"chainLast"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Which Clause is Inflected?",
-				"rowLabels": [
+				"labels": [
 					"First",
 					"Last"
 				],
@@ -3649,9 +3633,8 @@
 				"chainCj"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Which Element is Marked?",
-				"rowLabels": [
+				"labels": [
 					"Noun",
 					"Verb",
 					"Conjunction"
@@ -3671,9 +3654,8 @@
 				"chainOther"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "What Other Information Does the Marker Encode?",
-				"rowLabels": [
+				"labels": [
 					"Tense",
 					"Aspect",
 					"Person",
@@ -3971,9 +3953,8 @@
 				"relHeadless"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Types of Relative Clauses",
-				"rowLabels": [
+				"labels": [
 					"Prenomial",
 					"Postnomial",
 					"Internally Headed",
@@ -4141,9 +4122,8 @@
 				"coordLast"
 			],
 			"display": {
-				"boxesPerRow": 1,
 				"header": "Coordinating Conjunction Positions",
-				"rowLabels": [
+				"labels": [
 					"Between the clauses",
 					"After the first element of the second clause",
 					"After the last element"
