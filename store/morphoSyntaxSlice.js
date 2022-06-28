@@ -29,22 +29,25 @@ const setBoolFunc = (state, action) => {
 	} else {
 		delete state.bool[prop];
 	}
+	return state;
 };
 const setNumFunc = (state, action) => {
 	const { prop, value } = action.payload;
 	if(value) {
-		state.num[prop] = true;
+		state.num[prop] = value;
 	} else {
 		delete state.num[prop];
 	}
+	return state;
 };
 const setTextFunc = (state, action) => {
 	const { prop, value } = action.payload;
 	if(value) {
-		state.text[prop] = true;
+		state.text[prop] = value;
 	} else {
 		delete state.text[prop];
 	}
+	return state;
 };
 
 const morphoSyntaxSlice = createSlice({

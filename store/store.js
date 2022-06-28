@@ -5,7 +5,7 @@
 ////import { persistStore, persistReducer } from 'redux-persist';
 //import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import { OldStateStorage } from './persistentInfo';
+import { StateStorage as OldStateStorage } from './persistentInfo';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 import packageJson from '../package.json';
