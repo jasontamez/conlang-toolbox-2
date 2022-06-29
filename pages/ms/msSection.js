@@ -292,7 +292,7 @@ const ParseMSJSON = (props) => {
 				//
 				return (
 					<React.Fragment key={getKey("Fragment")}>
-						<Modal size="full" m={0} isOpen={modalState === id} onClose={() => setModal('')} bg="gray.50" key={getKey("Modal")}>
+						<Modal size="full" m={0} isOpen={modalState === id} onClose={() => setModal('')} key={getKey("Modal")}>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
 							<Modal.Body w="5/6" mx="auto">
@@ -323,6 +323,7 @@ const ParseMSJSON = (props) => {
 				const header = disp.header;
 				const inlineHeaders = disp.inlineHeaders;
 				const accessibilityLabels = (disp.accessibilityLabels || []).slice();
+				const stripes = disp.striped;
 				// Assemble tabular section
 				//
 				let cols = [];
@@ -339,7 +340,7 @@ const ParseMSJSON = (props) => {
 						cols.forEach((col) => {
 							const id = boxes.shift();
 							const label = accessibilityLabels.shift() || "MISSING LABEL";
-							col.push(id ? <Checkbox value={id} onChange={() => doSetBool(id, !synBool[id])} defaultIsChecked={synBool[id] || false} accessibilityLabel={label} key={getKey(id+"CheckBox")} /> : <Text key={getKey(id+"Missing")}>MISSING CHECKBOX</Text>);
+							col.push(id ? <Checkbox mx="auto" value={id} onChange={() => doSetBool(id, !synBool[id])} defaultIsChecked={synBool[id] || false} accessibilityLabel={label} key={getKey(id+"CheckBox")} /> : <Text key={getKey(id+"Missing")}>MISSING CHECKBOX</Text>);
 						});
 					}
 				} else {
@@ -361,12 +362,34 @@ const ParseMSJSON = (props) => {
 					});
 				}
 				// Put it all together
+				let striping = stripes ? 1 : 0;
 				return (
 					<ScrollView horizontal key={getKey("TabularScroll")}>
 						<VStack key={getKey("TabularVStack")}>
 							{header ? <Box key={getKey(id+"Header")}><FormatText key={getKey("FormattedText")} content={header} forceBold /></Box> : <React.Fragment key={getKey("Fragment")}></React.Fragment>}
 							<HStack key={getKey("TabularHStack")}>
-								{cols.map(col => <VStack key={getKey(id+"ColStack")}>{col.map(c => <Box key={getKey(id+"Col")}>{c}</Box>)}</VStack>)}
+								{cols.map(col => {
+									// Reset to 1 before each loop.
+									striping = striping && 1;
+									return (
+										<VStack key={getKey(id+"ColStack")}>{
+											col.map(c => {
+												let bgStripe = {};
+												if(striping) {
+													if(striping > 0) {
+														// Stripe
+														bgStripe.bg = "#00000066";
+														striping = -1;
+													} else {
+														// No stripe
+														striping = 1;
+													}
+												}
+												return <Box p={1} key={getKey(id+"Col")} {...bgStripe}>{c}</Box>;
+											})
+										}</VStack>
+									);
+								})}
 							</HStack>
 						</VStack>
 					</ScrollView>

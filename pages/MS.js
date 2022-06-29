@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { shallowEqual, useSelector } from "react-redux";
+//import { shallowEqual, useSelector } from "react-redux";
 import { Ionicons } from '@expo/vector-icons';
 
 import { NavBar } from '../components/layoutTags';

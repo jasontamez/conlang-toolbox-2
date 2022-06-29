@@ -10,6 +10,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Provider } from 'react-redux';
 //import { PersistGate } from 'redux-persist/integration/react';
 
+import getTheme from './components/theme';
+
 import getStoreInfo from './store/store';
 import MS from "./pages/MS";
 import MSSection from "./pages/ms/msSection";
@@ -82,10 +84,11 @@ function Testo() {
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
+	const theme = getTheme("Default")
 	return (
 		<Provider store={store}>
-		<NativeBaseProvider>
-			<Box safeArea>
+		<NativeBaseProvider theme={theme}>
+			<Box safeArea bg="primary.800">
 				<NativeRouter>
 					<VStack d="flex" h="full" alignItems="stretch" justifyContent="space-between">
 						<Routes> { /* 

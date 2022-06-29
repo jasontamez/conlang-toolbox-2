@@ -1,6 +1,127 @@
 //import React from 'react';
 import { extendTheme } from 'native-base';
 
+const primaryButton = {
+	defaultProps: {
+		colorScheme: "info",
+		color: "white"
+	}
+};
+const primaryBG = {
+	defaultProps: {
+		bg: "primary.800"
+	}
+};
+const primaryFG = {
+	defaultProps: {
+		color: "white"
+	}
+};
+
+const components = {
+	Button: {...primaryButton},
+	IconButton: {...primaryButton},
+	Modal: {...primaryBG},
+	ModalBody: {...primaryBG},
+	ModalHeader: {
+		defaultProps: {
+			bg: "secondary.700",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 5,
+			},
+			shadowOpacity: 0.34,
+			shadowRadius: 6.27,
+			elevation: 10,
+			borderColor: "secondary.500"
+		}
+	},
+	ModalContent: {...primaryBG},
+	ModalFooter: {
+		defaultProps: {
+			bg: "secondary.700",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: -5,
+			},
+			shadowOpacity: 0.34,
+			shadowRadius: 6.27,
+			elevation: 10,
+			borderColor: "secondary.500"
+		}
+	},
+	ModalCloseButton: {...primaryFG},
+	ScrollView: {
+		variants: {
+			tabular: {
+				baseStyle: {
+					bg: "primary.900",
+					borderWidth: "2px",
+					borderColor: "primary.200"
+				}
+			}
+		}
+	},
+	Heading: {...primaryFG},
+	Text: {...primaryFG},
+	TextArea: {
+		baseStyle: {
+			bg: "primary.900"
+		}
+	},
+	Checkbox: {
+		defaultProps: {
+			bg: 'primary.900',
+			borderColor: 'primary.400',
+			_text: {
+				color: 'white',
+			},
+			_icon: {
+				color: `secondary.900`,
+			},
+			_checked: {
+				borderColor: "secondary.500",
+				bg: "secondary.500",
+				_hover: {
+					borderColor: "secondary.400",
+					bg: "secondary.400",
+					_disabled: {
+						borderColor: "secondary.500",
+						bg: "secondary.500",
+					},
+				},
+				_pressed: {
+					borderColor: "secondary.300",
+					bg: "secondary.300",
+				},
+			},
+			_hover: {
+				borderColor: 'secondary.400',
+				_disabled: {
+					borderColor: 'secondary.500',
+				},
+			},
+			_pressed: {
+				borderColor: 'secondary.300',
+			},
+			_invalid: {
+				borderColor: 'error.500',
+			},
+		}
+	},
+	Icon: {...primaryFG},
+	NativeBaseProvider: {...primaryBG},
+	Box: {
+		variants: {
+			main: {
+				...primaryBG
+			}
+		}
+	}
+};
+
 const themes = {
 	Default: {
 		colors: {
@@ -109,22 +230,29 @@ const themes = {
 		}
 	}
 };
-const mappings = [
-	["Default",
-		["purple", "rose", "pink", "orange", "lightBlue", "blue", "green", "red"]
-	]
-];
-const themeNames = mappings.map(map => map[0]);
-mappings.forEach((map) => {
-	const [key, colors] = map;
+const mappings = {
+	"Default": ["purple", "rose", "pink", "orange", "lightBlue", "blue", "green", "red"]
+};
+const themeNames = Object.keys(mappings);
+themeNames.forEach((themeName) => {
+	const colors = mappings[themeName];
 	const props = ["danger", "error", "success", "warning", "info", "primary", "secondary", "tertiary"];
+	const themeColors = themes[themeName].colors;
 	colors.forEach(color => {
 		const prop = props.shift();
-		themes[key][prop] = themes[key][color];
+		themeColors[prop] = {...themeColors[color]};
 	});
+	// Apply component defaults to the theme
+	themes[themeName].components = {...components};
 });
 
-const getTheme = (theme) => extendTheme(themes[theme] || {});
+const getTheme = (themeName) => {
+	const theme = extendTheme(themes[themeName] || {});
+	//console.log(themeName);
+	//console.log(themes[themeName]);
+	//console.log(theme);
+	return theme;
+};
 
 export {
 	getTheme as default,
