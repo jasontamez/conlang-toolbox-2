@@ -18,4 +18,5 @@ export const PhonoGraphIcon = (props) => <Icon as={MCI} name="headphones" size="
 export const DeclenjugatorIcon = (props) => <Icon as={Foundation} name="results" size="sm" {...props} />
 
 export const MenuIcon = (props) => <Icon as={Entypo} name="menu" size="sm" {...props} />;
-export const ExtraCharactersIcon = (props) => <Icon as={Entypo} name="language" size="sm" {...props} />;
+export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" size="sm" {...props} />;
+// as={Entypo} name="language"

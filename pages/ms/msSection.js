@@ -130,14 +130,14 @@ const ParseMSJSON = (props) => {
 				};
 				return (
 					<HStack d="flex" w="full" alignItems="stretch" key={getKey("range")}>
-						<Box mr={3} key={getKey("rangeBoxTop")}><Text key={getKey("Text")}>{bit.start}</Text></Box>
-						<Slider key={getKey("Slider")} flexGrow={1} flexShrink={1} flexBasis="75%" defaultValue={synNum[what] || 0} minValue={0} maxValue={bit.max || 4} accessibilityLabel={bit.label} step={1} colorScheme="secondary" onChangeEnd={(v) => doSetNum(what, v)}>
-							<Slider.Track bg="secondary.900" key={getKey("SliderTrack")}>
-								{bit.spectrum ? <Slider.FilledTrack key={getKey("FilledTrack")} /> : <React.Fragment key={getKey("Fragment")}></React.Fragment>}
+						<Box mr={3}><Text>{bit.start}</Text></Box>
+						<Slider flexGrow={1} flexShrink={1} flexBasis="75%" defaultValue={synNum[what] || 0} minValue={0} maxValue={bit.max || 4} accessibilityLabel={bit.label} step={1} colorScheme="secondary" onChangeEnd={(v) => doSetNum(what, v)}>
+							<Slider.Track bg="secondary.900">
+								{bit.spectrum ? <Slider.FilledTrack /> : <React.Fragment></React.Fragment>}
 							</Slider.Track>
-							<Slider.Thumb key={getKey("SliderThumb")} />
+							<Slider.Thumb />
 						</Slider>
-						<Box ml={3} key={getKey("rangeBoxBottom")}><Text key={getKey("Text")}>{bit.end}</Text></Box>
+						<Box ml={3}><Text>{bit.end}</Text></Box>
 					</HStack>
 				);
 			case "Text":
@@ -150,8 +150,8 @@ const ParseMSJSON = (props) => {
 				//return <TextItem prop={bit.prop} rows={bit.rows || undefined}>{bit.content || ""}</TextItem>
 				return (
 					<React.Fragment key={getKey("Fragment")}>
-						<Text key={getKey("textInfo")}>{bit.content || ""}</Text>
-						<TextArea totalLines={lines} placeholder={bit.placeholder || undefined} onBlur={(e) => doSetText(prop, e.currentTarget.value || "")} defaultValue={synText[prop] || ""} key={getKey("textBox")} />
+						<Text>{bit.content || ""}</Text>
+						<TextArea totalLines={lines} placeholder={bit.placeholder || undefined} onBlur={(e) => doSetText(prop, e.currentTarget.value || "")} defaultValue={synText[prop] || ""} />
 					</React.Fragment>
 				);
 			case "Modal":
@@ -207,10 +207,10 @@ const ParseMSJSON = (props) => {
 							input.unshift(...newContent);
 						} else if (typeof bit === "string") {
 							// Make a simple text
-							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
+							output.push(
 								<HStack space={0} m={0} mt={margin} p={0} ml={indent * 4} alignItems="flex-start" justifyContent="flex-start" key={getKey(id)}>
 									{prefix ? <CircleIcon m={0} p={0} mt={1.5} mr={1} size="2xs" /> : <></>}
-									<FormatText key={getKey("FormattedText")} content={bit} />
+									<FormatText content={bit} />
 								</HStack>
 							);
 							// Reset margin, if needed
@@ -242,12 +242,12 @@ const ParseMSJSON = (props) => {
 								);
 							};
 							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
-								<ScrollView horizontal mt={margin} pl={indent * 4} key={getKey(id)} bg="gray.200">
-									<VStack key={getKey("TabularVStack")}>
-										<HStack key={getKey("tabular")}>
+								<ScrollView horizontal mt={margin} ml={indent * 4} key={getKey(id)} variant="tabular">
+									<VStack>
+										<HStack>
 											{newRows.map((line) => makeLine(line.slice()))}
 										</HStack>
-										{bit.final ? <FormatText key={getKey(id + "FinalRow")} content={bit.final} /> : <React.Fragment key={getKey("Fragment")}></React.Fragment>}
+										{bit.final ? <FormatText content={bit.final} /> : <React.Fragment></React.Fragment>}
 									</VStack>
 								</ScrollView>
 							);
@@ -292,7 +292,7 @@ const ParseMSJSON = (props) => {
 				//
 				return (
 					<React.Fragment key={getKey("Fragment")}>
-						<Modal size="full" m={0} isOpen={modalState === id} onClose={() => setModal('')} key={getKey("Modal")}>
+						<Modal size="full" m={0} isOpen={modalState === id} onClose={() => setModal('')}>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
 							<Modal.Body w="5/6" mx="auto">
@@ -302,7 +302,7 @@ const ParseMSJSON = (props) => {
 								<Button startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
-						<HStack justifyContent="flex-end" key={getKey("ModalButton")}>
+						<HStack justifyContent="flex-end">
 							<Button size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
 						</HStack>
 					</React.Fragment>
@@ -314,7 +314,7 @@ const ParseMSJSON = (props) => {
 				};
 				const disp = bit.display;
 				if(!disp) {
-					return <Box key={getKey()}><Text bold key={getKey()}>CHECKBOX DISPLAY ERROR</Text></Box>;
+					return <Box key={getKey()}><Text bold>CHECKBOX DISPLAY ERROR</Text></Box>;
 				}
 				const boxes = (bit.boxes || []).slice();
 				const rowDescriptions = (disp.rowDescriptions || []);
@@ -323,80 +323,77 @@ const ParseMSJSON = (props) => {
 				const header = disp.header;
 				const inlineHeaders = disp.inlineHeaders;
 				const accessibilityLabels = (disp.accessibilityLabels || []).slice();
-				const stripes = disp.striped;
+				const isStripedTable = disp.striped;
+				const isCentered = (disp.centering || []);
 				// Assemble tabular section
 				//
-				let cols = [];
-				let count = 0;
+				let rows = [];
 				// See if we have multiple boxes per row
 				if(perRow) {
-					// Make X arrays of checkboxes, where X is multiBoxes
-					while(count < perRow) {
-						cols.push([]);
-						count++;
-					}
-					// Iterate over the columns until no boxes remain
+					// Iterate over the boxes until none remain
 					while(boxes.length > 0) {
-						cols.forEach((col) => {
+						let counter = 0;
+						let row = [];
+						while(counter < perRow) {
 							const id = boxes.shift();
 							const label = accessibilityLabels.shift() || "MISSING LABEL";
-							col.push(id ? <Checkbox mx="auto" value={id} onChange={() => doSetBool(id, !synBool[id])} defaultIsChecked={synBool[id] || false} accessibilityLabel={label} key={getKey(id+"CheckBox")} /> : <Text key={getKey(id+"Missing")}>MISSING CHECKBOX</Text>);
-						});
+							row.push(id ? <Checkbox mx="auto" value={id} onChange={() => doSetBool(id, !synBool[id])} defaultIsChecked={synBool[id] || false} accessibilityLabel={label} key={getKey(id+"CheckBox")} /> : <Text key={getKey(id+"Missing")}>MISSING CHECKBOX</Text>);
+							counter++;
+						}
+						rows.push(row);
 					}
 				} else {
-					let temp = [];
 					boxes.forEach((box) => {
-						temp.push(<Checkbox value={box} onChange={() => doSetBool(box, !synBool[id])} defaultIsChecked={synBool[box] || false} key={getKey(id + "CheckBox")}><FormatText key={getKey("FormattedText")} content={(labels.shift() || "MISSING LABEL")} /></Checkbox>);
+						const label = labels.shift() || "MISSING LABEL";
+						rows.push([<Checkbox value={box} onChange={() => doSetBool(box, !synBool[id])} defaultIsChecked={synBool[box] || false} key={getKey(id + "CheckBox")}><FormatText content={label} /></Checkbox>]);
 					});
-					cols.push(temp);
 				}
-				// Add rowDescriptions as a new column
-				cols.push(rowDescriptions.map(rl => <FormatText key={getKey("FormattedText")} content={rl} />));
+				// Add rowDescriptions as a new column, if they exist
+				rowDescriptions.length && rows.forEach((row, i) => {
+					const rDesc = rowDescriptions[i] || "MISSING INFO";
+					row.push(<FormatText key={getKey("FormattedText")} content={rDesc} />);
+				});
 				// Add inlineheaders, if any, to the tops of the existing columns
 				if(inlineHeaders) {
-					const iH = inlineHeaders.slice()
-					cols.forEach((col) => {
-						const header = iH.shift();
-						// Force headers to be bold
-						col.unshift(<FormatText key={getKey("FormattedText")} content={(header || "MISSING INLINE HEADER")} forceBold />);
+					//rows.unshift(inlineHeaders.map((ih) => <FormatText key={getKey("InlineHeader")} content={ih} forceBold />));
+					let row = [];
+					inlineHeaders.forEach((ih) => {
+						row.push(<FormatText key={getKey("InlineHeader")} content={ih} forceBold />);
 					});
+					rows.unshift(row);
 				}
+				const fractions = {
+					1: "full",
+					2: "1/2",
+					3: "1/3",
+					4: "1/4",
+					5: "1/5"
+				};
 				// Put it all together
-				let striping = stripes ? 1 : 0;
 				return (
-					<ScrollView horizontal key={getKey("TabularScroll")}>
-						<VStack key={getKey("TabularVStack")}>
-							{header ? <Box key={getKey(id+"Header")}><FormatText key={getKey("FormattedText")} content={header} forceBold /></Box> : <React.Fragment key={getKey("Fragment")}></React.Fragment>}
-							<HStack key={getKey("TabularHStack")}>
-								{cols.map(col => {
-									// Reset to 1 before each loop.
-									striping = striping && 1;
-									return (
-										<VStack key={getKey(id+"ColStack")}>{
-											col.map(c => {
-												let bgStripe = {};
-												if(striping) {
-													if(striping > 0) {
-														// Stripe
-														bgStripe.bg = "#00000066";
-														striping = -1;
-													} else {
-														// No stripe
-														striping = 1;
-													}
-												}
-												return <Box p={1} key={getKey(id+"Col")} {...bgStripe}>{c}</Box>;
-											})
-										}</VStack>
-									);
-								})}
-							</HStack>
+					<Box p={4} m={0} key={getKey("CheckboxesContainer")}>
+						<VStack bg="tertiary.700" m={0} mr="auto" minWidth="300px">
+							{header ? <Box><FormatText content={header} forceBold /></Box> : <React.Fragment></React.Fragment>}
+							{rows.map((row, i) => {
+								// Stripe odd-numbered rows
+								let stripedRow = isStripedTable && (i % 2) ? {bg: "#00000066"} : {};
+								const maxWidth = fractions[row.length] || "1/6";
+								return (
+									<HStack key={getKey(id+"Row")} {...stripedRow}>
+										{row.map((col, i) => {
+											const alignment = isCentered[i] ? {textAlign: "center"} : {};
+											return <Box p={1} key={getKey(id+"Col")} w={maxWidth} {...alignment}>{col}</Box>;
+										})}
+									</HStack>
+								);
+							})}
 						</VStack>
-					</ScrollView>
+					</Box>
 				);
+			default:
+				// No switch matched?
+				return <Text key={getKey("ERROR")}>No Switch Matched: {tag}</Text>;
 		}
-		// No switch matched?
-		return <Text key={getKey()}>No Switch Matched: {tag}</Text>;
 	});
 };
 

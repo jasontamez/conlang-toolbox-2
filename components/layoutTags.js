@@ -1,10 +1,13 @@
-import { HStack, ScrollView } from "native-base";
+import { Box, HStack, ScrollView } from "native-base";
 
 export const NavBar = (props) => {
+	const outerProps = props.outerProps || {};
 	return (
-		<ScrollView horizontal w="full">
-			<HStack space="2" justifyContent="space-between" {...props} />
-		</ScrollView>
+		<Box w="full" {...outerProps}>
+			<ScrollView horizontal w="full">
+				<HStack w="full" space={4} justifyContent="space-between" {...props} />
+			</ScrollView>
+		</Box>
 	);
 	//return (
 	//	<ScrollView horizontal>

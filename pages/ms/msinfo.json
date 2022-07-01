@@ -171,6 +171,7 @@
 			],
 			"display": {
 				"multiBoxes": 2,
+				"centering": [true, true, false],
 				"accessibilityLabels": [
 					"The prefix is used Most",
 					"The prefix is used Less",
@@ -929,7 +930,6 @@
 					"PAV/SV",
 					"PVA/VS"
 				],
-				"labelClass": "cbox leftA",
 				"rowDescriptions": [
 					"\"Steve softballs pitches; Steve pitches.\"",
 					"\"Steve pitches softballs; Steve pitches.\"",

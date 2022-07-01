@@ -56,11 +56,9 @@ const components = {
 	ScrollView: {
 		variants: {
 			tabular: {
-				baseStyle: {
-					bg: "primary.900",
-					borderWidth: "2px",
-					borderColor: "primary.200"
-				}
+				bg: "primary.900",
+				borderWidth: 2,
+				borderColor: "primary.700"
 			}
 		}
 	},

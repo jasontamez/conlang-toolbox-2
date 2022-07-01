@@ -88,9 +88,8 @@ const App = () => {
 	return (
 		<Provider store={store}>
 		<NativeBaseProvider theme={theme}>
-			<Box safeArea bg="primary.800">
+			<Box h="full" safeArea bg="primary.800">
 				<NativeRouter>
-					<VStack d="flex" h="full" alignItems="stretch" justifyContent="space-between">
 						<Routes> { /* 
 							<Route path="/wg/*" element={<WG />}>
 							</Route>
@@ -112,7 +111,6 @@ const App = () => {
 							<Route path="/about" element={<About />} /> */ }
 							<Route index element={<About />} />
 						</Routes>
-					</VStack>
 				</NativeRouter>
 			</Box>
 		</NativeBaseProvider>
