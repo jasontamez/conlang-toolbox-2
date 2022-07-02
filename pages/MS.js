@@ -26,16 +26,16 @@ const MS = () => {
 	const NavTabs = () => {
 		let range = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 		return (
-			<NavBar outerProps={{flexGrow: 0}}>
+			<NavBar boxProps={{flexGrow: 0, borderColor: "primary.400", borderTopWidth: 2}}>
 				<NavTab icon={<Icon as={Ionicons} name="settings-sharp" size="2xs" />} link="/ms" key="NavTabSettings" />
 				{range.map((n, i) => <NavTab label={String(i+1)} link={"ms" + n} key={"Tab"+n} />)}
 			</NavBar>
 		);
 	};
 	return (
-		<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full">
-			<Header title="MorphoSyntax" textAlign="center" outerProps={{flexGrow: 0}} />
-			<Box flexGrow={2} flexShrink={2} flexBasis="5/6" m={0}>
+		<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
+			<Header title="MorphoSyntax" textAlign="center" boxProps={{flexGrow: 0, bg: "primary.400"}} />
+			<Box flexGrow={2} flexShrink={2} flexBasis="5/6" my={0} mx={4}>
 				<ScrollView h="full">
 					<Outlet />
 				</ScrollView>

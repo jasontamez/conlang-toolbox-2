@@ -17,6 +17,12 @@ const primaryFG = {
 		color: "white"
 	}
 };
+const primaryBGFG = {
+	defaultProps: {
+		bg: "primary.400",
+		color: "white"
+	}
+};
 
 const components = {
 	Button: {...primaryButton},
@@ -64,11 +70,8 @@ const components = {
 	},
 	Heading: {...primaryFG},
 	Text: {...primaryFG},
-	TextArea: {
-		baseStyle: {
-			bg: "primary.900"
-		}
-	},
+	Input: {...primaryBGFG},
+	TextArea: {...primaryBGFG},
 	Checkbox: {
 		defaultProps: {
 			bg: 'primary.900',

@@ -14,9 +14,9 @@ const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon 
 
 const Header = (props) => {
 	const title = props.title;
-	const outerProps = props.outerProps || {};
+	const boxProps = props.boxProps || {};
 	return (
-		<HStack w="full" alignItems="center" safeArea {...outerProps}>
+		<HStack w="full" alignItems="center" safeArea {...boxProps}>
 			<Menu />
 			<Heading flexGrow={1} isTruncated fontSize="lg" {...props}>{title}</Heading>
 			<ExtraChars />

@@ -2,11 +2,11 @@ import { Box, Heading, ScrollView, HStack, VStack, Link, Pressable, Text } from 
 import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
 
-import { CircleIcon, ExtraCharactersIcon, LexiconIcon, MorphoSyntaxIcon, WordEvolveIcon, WordGenIcon, WordListsIcon } from '../components/icons';
+import { DotIcon, ExtraCharactersIcon, LexiconIcon, MorphoSyntaxIcon, WordEvolveIcon, WordGenIcon, WordListsIcon } from '../components/icons';
 
 const Indented = (props) => (
 	<HStack pl={2} justifyContent="flex-start" alignItems="flex-start">
-		<CircleIcon m={1} mr="0.5" />
+		<DotIcon m={1} mr="0.5" />
 		<Text>{props.children}</Text>
 	</HStack>
 );

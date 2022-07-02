@@ -7,14 +7,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState } from "react";
 import { /*
 	setKey,
-	setLastSavec,
-	setTitlec,
-	setDescriptionc,*/
+	setLastSave,*/
 	setBool,
 	setNum,
 	setText
 } from '../../store/morphoSyntaxSlice';
-import { CircleIcon } from "../../components/icons";
+import { DotIcon } from "../../components/icons";
+import { TextAreaSetting } from "../../components/layoutTags";
+import { Dimensions } from "react-native";
 
 
 const ParseMSJSON = (props) => {
@@ -29,6 +29,10 @@ const ParseMSJSON = (props) => {
 		1: "xl",
 		2: "lg",
 		3: "md"
+	};
+	const margins = {
+		0: 2,
+		1: 3
 	};
 	let keyCounter = 0;
 	const getKey = (msg = "parsedJSON") => {
@@ -116,13 +120,17 @@ const ParseMSJSON = (props) => {
 		// Multi-lined texts
 		return <Text bold={forceBold} key={getKey("formattedText")}>{temp2}</Text>;
 	};
-	return doc.map((bit) => {
+	const content = doc.map((bit) => {
 		const tag = (bit.tag || "");
 		const dispatch = useDispatch();
 		const id = bit.id;
 		switch(tag) {
 			case "Header":
-				return <Text bold fontSize={headings[bit.level || 0]} key={getKey("header")}>{bit.content}</Text>;
+				return (
+					<Box my={margins[bit.level || 0]}>
+						<Text bold fontSize={headings[bit.level || 0]} key={getKey("header")}>{bit.content}</Text>
+					</Box>
+				);
 			case "Range":
 				const what = bit.prop;
 				const doSetNum = (prop, value) => {
@@ -145,16 +153,18 @@ const ParseMSJSON = (props) => {
 					dispatch(setText({prop, value}));
 				};
 				const prop = bit.prop;
-				const lines = bit.rows === undefined ? 3 : (bit.rows);
-				// bit.classes does not seem to be useful anymore?
-				//return <TextItem prop={bit.prop} rows={bit.rows || undefined}>{bit.content || ""}</TextItem>
 				return (
-					<React.Fragment key={getKey("Fragment")}>
-						<Text>{bit.content || ""}</Text>
-						<TextArea totalLines={lines} placeholder={bit.placeholder || undefined} onBlur={(e) => doSetText(prop, e.currentTarget.value || "")} defaultValue={synText[prop] || ""} />
-					</React.Fragment>
+					<TextAreaSetting
+						key={getKey("Fragment")}
+						rows={bit.rows}
+						placeholder={bit.placeholder}
+						onChangeEnd={(e) => doSetText(prop, e.currentTarget.value || "")}
+						defaultValue={synText[prop] || ""}
+					>{bit.content || ""}</TextAreaSetting>
 				);
 			case "Modal":
+				const screen = Dimensions.get('screen');
+				const screenWidth = String(screen.width) + "px";
 				//
 				// BEGIN MODAL CONTENT DECLARATION
 				//
@@ -209,7 +219,7 @@ const ParseMSJSON = (props) => {
 							// Make a simple text
 							output.push(
 								<HStack space={0} m={0} mt={margin} p={0} ml={indent * 4} alignItems="flex-start" justifyContent="flex-start" key={getKey(id)}>
-									{prefix ? <CircleIcon m={0} p={0} mt={1.5} mr={1} size="2xs" /> : <></>}
+									{prefix ? <DotIcon m={0} p={0} mt={1.5} mr={1} size="2xs" /> : <></>}
 									<FormatText content={bit} />
 								</HStack>
 							);
@@ -285,27 +295,25 @@ const ParseMSJSON = (props) => {
 					//
 					// END WHILE LOOP
 					//
-					return <VStack space={0} key={getKey("MainModal")}>{output}</VStack>;
+					return <VStack space={0} key={getKey("MainModal")} mx={4}>{output}</VStack>;
 				};
 				//
 				// END MODAL CONTENT DECLARATION
 				//
 				return (
-					<React.Fragment key={getKey("Fragment")}>
-						<Modal size="full" m={0} isOpen={modalState === id} onClose={() => setModal('')}>
+					<HStack justifyContent="flex-end" key={getKey("ModalButton")} safeArea>
+						<Modal m={0} isOpen={modalState === id} maxWidth={screenWidth} onClose={() => setModal('')} safeArea>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
-							<Modal.Body w="5/6" mx="auto">
+							<Modal.Body maxWidth={screenWidth} safeArea mx="auto">
 								<ModalContent content={bit.content} />
 							</Modal.Body>
 							<Modal.Footer w="full">
 								<Button startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
-						<HStack justifyContent="flex-end">
-							<Button size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
-						</HStack>
-					</React.Fragment>
+						<Button size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
+					</HStack>
 				);
 			case "Checkboxes":
 				//return <Box><Text bold>CHECKBOX HERE</Text></Box>;
@@ -395,17 +403,17 @@ const ParseMSJSON = (props) => {
 				return <Text key={getKey("ERROR")}>No Switch Matched: {tag}</Text>;
 		}
 	});
+	return (
+		<VStack space={4}>{content}</VStack>
+	);
+	
 };
 
 const Section = () => {
 	const { msPage } = useParams();
 	const pageName = "s" + msPage.slice(-2);
 
-	return (
-		<>
-			<ParseMSJSON page={pageName} key={"ParsingASection" + pageName} />
-		</>
-	);
+	return <ParseMSJSON page={pageName} key={"ParsingASection" + pageName} />;
 };
 
 export default Section;
