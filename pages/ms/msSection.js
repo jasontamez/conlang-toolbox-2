@@ -127,8 +127,8 @@ const ParseMSJSON = (props) => {
 		switch(tag) {
 			case "Header":
 				return (
-					<Box my={margins[bit.level || 0]}>
-						<Text bold fontSize={headings[bit.level || 0]} key={getKey("header")}>{bit.content}</Text>
+					<Box my={margins[bit.level || 0]} key={getKey("header")}>
+						<Text bold fontSize={headings[bit.level || 0]}>{bit.content}</Text>
 					</Box>
 				);
 			case "Range":
@@ -404,7 +404,7 @@ const ParseMSJSON = (props) => {
 		}
 	});
 	return (
-		<VStack space={4}>{content}</VStack>
+		<VStack space={4} key={getKey("Content")}>{content}</VStack>
 	);
 	
 };
