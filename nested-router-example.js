@@ -88,7 +88,7 @@ const App = () => {
 	return (
 		<Provider store={store}>
 		<NativeBaseProvider theme={theme}>
-			<Box h="full" safeArea bg="primary.800">
+			<Box h="full" safeArea bg="main.800">
 				<NativeRouter>
 						<Routes> { /* 
 							<Route path="/wg/*" element={<WG />}>

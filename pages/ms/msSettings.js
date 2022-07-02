@@ -39,12 +39,12 @@ const Settings = () => {
 			>Description:</TextAreaSetting>
 			<Button onPress={() => nav('/')} maxWidth="1/4">Go Back</Button>
 			<VStack alignSelf="flex-end">
-				<StoredInfoButton bg="primary.400" icon="remove-circle-outline" onPress={() => 2222}>Clear MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="primary.600" icon="add-circle-outline" onPress={() => 2222}>Load MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="primary.400" icon="save-outline" onPress={() => 2222}>Save MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="primary.600" icon="save-outline" onPress={() => 2222}>Save As</StoredInfoButton>
-				<StoredInfoButton bg="primary.400" icon="export" as={Fontisto} onPress={() => 2222}>Export MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="primary.600" icon="trash-outline" onPress={() => 2222}>Delete Saved MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="lighter" icon="remove-circle-outline" onPress={() => 2222}>Clear MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="darker" icon="add-circle-outline" onPress={() => 2222}>Load MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="lighter" icon="save-outline" onPress={() => 2222}>Save MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="darker" icon="save-outline" onPress={() => 2222}>Save As</StoredInfoButton>
+				<StoredInfoButton bg="lighter" icon="export" as={Fontisto} onPress={() => 2222}>Export MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="darker" icon="trash-outline" onPress={() => 2222}>Delete Saved MorphoSyntax Info</StoredInfoButton>
 			</VStack>
 		</VStack>
 	);

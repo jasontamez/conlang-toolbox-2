@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Foundation from '@expo/vector-icons/Foundation';
 
 
-export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" size="xs" {...props} />;
+export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" size="2xs" {...props} />;
 
 export const MorphoSyntaxIcon = (props) => <Icon as={FAFive} name="drafting-compass" size="sm" {...props} />;
 export const WordGenIcon = (props) => <Icon as={MCI} name="factory" size="sm" {...props} />

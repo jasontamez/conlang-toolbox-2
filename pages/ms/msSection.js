@@ -219,7 +219,7 @@ const ParseMSJSON = (props) => {
 							// Make a simple text
 							output.push(
 								<HStack space={0} m={0} mt={margin} p={0} ml={indent * 4} alignItems="flex-start" justifyContent="flex-start" key={getKey(id)}>
-									{prefix ? <DotIcon m={0} p={0} mt={1.5} mr={1} size="2xs" /> : <></>}
+									{prefix ? <DotIcon m={0} p={0} mt={1.5} mr={1} /> : <></>}
 									<FormatText content={bit} />
 								</HStack>
 							);
@@ -380,11 +380,11 @@ const ParseMSJSON = (props) => {
 				// Put it all together
 				return (
 					<Box p={4} m={0} key={getKey("CheckboxesContainer")}>
-						<VStack bg="tertiary.700" m={0} mr="auto" minWidth="300px">
+						<VStack bg="darker" m={0} mr="auto" minWidth="300px">
 							{header ? <Box><FormatText content={header} forceBold /></Box> : <React.Fragment></React.Fragment>}
 							{rows.map((row, i) => {
 								// Stripe odd-numbered rows
-								let stripedRow = isStripedTable && (i % 2) ? {bg: "#00000066"} : {};
+								let stripedRow = isStripedTable && (i % 2) ? {bg: "darker"} : {};
 								const maxWidth = fractions[row.length] || "1/6";
 								return (
 									<HStack key={getKey(id+"Row")} {...stripedRow}>

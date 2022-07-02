@@ -1,38 +1,50 @@
 //import React from 'react';
 import { extendTheme } from 'native-base';
 
-const primaryButton = {
+const mainButton = {
 	defaultProps: {
 		colorScheme: "info",
-		color: "white"
+		color: "white",
+		_icon: {
+			color: "main.50"
+		},
+		_text: {
+			color: "main.50"
+		}
 	}
 };
-const primaryBG = {
+const mainBG = {
 	defaultProps: {
-		bg: "primary.800"
+		bg: "main.800"
 	}
 };
-const primaryFG = {
+const mainFG = {
 	defaultProps: {
-		color: "white"
+		color: "main.50"
 	}
 };
-const primaryBGFG = {
+const mainInput = {
 	defaultProps: {
-		bg: "primary.400",
-		color: "white"
+		bg: "darker",
+		color: "main.50",
+		borderColor: "main.700",
+		_focus: {
+			borderColor: "main.500",
+			color: "main.50",
+			bg: "darker"
+		}
 	}
 };
 
 const components = {
-	Button: {...primaryButton},
-	IconButton: {...primaryButton},
-	Modal: {...primaryBG},
-	ModalBody: {...primaryBG},
+	Button: {...mainButton},
+	IconButton: {...mainButton},
+	Modal: {...mainBG},
+	ModalBody: {...mainBG},
 	ModalHeader: {
 		defaultProps: {
-			bg: "secondary.700",
-			shadowColor: "#000",
+			bg: "main.700",
+			shadowColor: "main.900",
 			shadowOffset: {
 				width: 0,
 				height: 5,
@@ -40,14 +52,14 @@ const components = {
 			shadowOpacity: 0.34,
 			shadowRadius: 6.27,
 			elevation: 10,
-			borderColor: "secondary.500"
+			borderColor: "main.500"
 		}
 	},
-	ModalContent: {...primaryBG},
+	ModalContent: {...mainBG},
 	ModalFooter: {
 		defaultProps: {
-			bg: "secondary.700",
-			shadowColor: "#000",
+			bg: "main.700",
+			shadowColor: "main.900",
 			shadowOffset: {
 				width: 0,
 				height: -5,
@@ -55,23 +67,23 @@ const components = {
 			shadowOpacity: 0.34,
 			shadowRadius: 6.27,
 			elevation: 10,
-			borderColor: "secondary.500"
+			borderColor: "main.500"
 		}
 	},
-	ModalCloseButton: {...primaryFG},
+	ModalCloseButton: {...mainFG},
 	ScrollView: {
 		variants: {
 			tabular: {
-				bg: "primary.900",
+				bg: "main.900",
 				borderWidth: 2,
-				borderColor: "primary.700"
+				borderColor: "main.700"
 			}
 		}
 	},
-	Heading: {...primaryFG},
-	Text: {...primaryFG},
-	Input: {...primaryBGFG},
-	TextArea: {...primaryBGFG},
+	Heading: {...mainFG},
+	Text: {...mainFG},
+	Input: {...mainInput},
+	TextArea: {...mainInput},
 	Checkbox: {
 		defaultProps: {
 			bg: 'primary.900',
@@ -112,12 +124,12 @@ const components = {
 			},
 		}
 	},
-	Icon: {...primaryFG},
-	NativeBaseProvider: {...primaryBG},
+	Icon: {...mainFG},
+	NativeBaseProvider: {...mainBG},
 	Box: {
 		variants: {
 			main: {
-				...primaryBG
+				...mainBG
 			}
 		}
 	}
@@ -126,17 +138,17 @@ const components = {
 const themes = {
 	Default: {
 		colors: {
-			blue: {
-				50: "#5b3cfe",
-				100: "#4622fe",
-				200: "#3109fe",
-				300: "#2801ec",
-				400: "#2301d2",
-				500: "#1f01b9",
-				600: "#1b01a0",
-				700: "#170186",
-				800: "#12016d",
-				900: "#0e0054"
+			teal: {
+				50: '#d8ffff',
+				100: '#acffff',
+				200: '#7dffff',
+				300: '#4dffff',
+				400: '#28ffff',
+				500: '#18e5e6',
+				600: '#00b2b3',
+				700: '#007f80',
+				800: '#004d4e',
+				900: '#001b1d',
 			},
 			green: {
 				50: "#55d068",
@@ -149,6 +161,18 @@ const themes = {
 				700: "#195a23",
 				800: "#13461b",
 				900: "#0e3213"
+			},
+			emerald: {
+				50: '#e7f9f4',
+				100: '#cbe6e0',
+				200: '#add5cd',
+				300: '#8cc4bb',
+				400: '#6eb4aa',
+				500: '#559a93',
+				600: '#427874',
+				700: '#2e5554',
+				800: '#193434',
+				900: '#001211',
 			},
 			red: {
 				50: "#fb2249",
@@ -222,6 +246,8 @@ const themes = {
 				800: "#a55c01",
 				900: "#8b4e01"
 			},
+			lighter: "#ffffff11",
+			darker: "#00000033",
 			bg: "#070707",
 			fg: "#f8f8f8",
 			white: '#f8f8f8',
@@ -232,12 +258,12 @@ const themes = {
 	}
 };
 const mappings = {
-	"Default": ["purple", "rose", "pink", "orange", "lightBlue", "blue", "green", "red"]
+	"Default": ["emerald", "purple", "rose", "pink", "orange", "lightBlue", "teal", "green", "red"]
 };
 const themeNames = Object.keys(mappings);
 themeNames.forEach((themeName) => {
 	const colors = mappings[themeName];
-	const props = ["danger", "error", "success", "warning", "info", "primary", "secondary", "tertiary"];
+	const props = ["main", "danger", "error", "success", "warning", "info", "primary", "secondary", "tertiary"];
 	const themeColors = themes[themeName].colors;
 	colors.forEach(color => {
 		const prop = props.shift();

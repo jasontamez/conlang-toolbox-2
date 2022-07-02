@@ -1,4 +1,4 @@
-import { Heading, HStack, IconButton } from "native-base";
+import { Text, HStack, IconButton } from "native-base";
 //import { openModal } from '../store/dFuncs';
 import { ExtraCharactersIcon, MenuIcon } from "./icons";
 
@@ -15,11 +15,12 @@ const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon 
 const Header = (props) => {
 	const title = props.title;
 	const boxProps = props.boxProps || {};
+	const textProps = props.textProps || {};
 	return (
-		<HStack w="full" alignItems="center" safeArea {...boxProps}>
+		<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea {...boxProps}>
 			<Menu />
-			<Heading flexGrow={1} isTruncated fontSize="lg" {...props}>{title}</Heading>
-			<ExtraChars />
+			<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
+			{props.hideExtraChars ? <></> : <ExtraChars />}
 		</HStack>
 	);
 };
