@@ -12,15 +12,19 @@ const initialState = {
 
 const setKeyFunc = (state, action) => {
 	state.key = action.payload;
+	return state;
 };
 const setLastSaveFunc = (state, action) => {
 	state.lastSave = action.payload;
+	return state;
 };
 const setTitleFunc = (state, action) => {
 	state.title = action.payload;
+	return state;
 };
 const setDescriptionFunc = (state, action) => {
 	state.description = action.payload;
+	return state;
 };
 const setBoolFunc = (state, action) => {
 	const { prop, value } = action.payload;

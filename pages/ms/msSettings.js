@@ -1,71 +1,53 @@
-import { Button, Text, VStack } from "native-base";
-import { useNavigate } from 'react-router-dom';
+import { Button, Text, VStack, Pressable, Icon, HStack } from "native-base";
+//import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Fontisto from '@expo/vector-icons/Fontisto';
 
-
+import { TextAreaSetting, TextSetting } from '../../components/layoutTags';
+import { setTitle, setDescription } from "../../store/morphoSyntaxSlice";
+import { useNavigate } from "react-router-native";
 
 const Settings = () => {
+	//const { msPage } = useParams();
+	//const pageName = "s" + msPage.slice(-2);
+	const synTitle = useSelector((state) => state.morphoSyntax.title);
+	const synDescription = useSelector((state) => state.morphoSyntax.description);
+	const dispatch = useDispatch();
 	const nav = useNavigate();
+	const StoredInfoButton = (props) => {
+		return (
+			<Pressable onPress={props.onPress} mx={4}>
+				<HStack bg={props.bg} space={3} p={2} alignItems="center">
+					<Icon as={props.as || Ionicons} name={props.icon} size="sm" />
+					<Text>{props.children}</Text>
+				</HStack>
+			</Pressable>
+		);
+	};
 	return (
-		<VStack>
-			<Text>(settings will go here)</Text>
-			<Button onPress={() => nav('/ms')}>Go Back</Button>
+		<VStack space={4} mt={3}>
+			<TextSetting
+				placeholder="Usually the language name."
+				value={synTitle}
+				onChangeEnd={(v) => dispatch(setTitle(v))}
+			>MorphoSyntax Title:</TextSetting>
+			<TextAreaSetting
+				placeholder="A short description of this document."
+				value={synDescription}
+				onChangeEnd={(v) => dispatch(setDescription(v))}
+			>Description:</TextAreaSetting>
+			<Button onPress={() => nav('/')} maxWidth="1/4">Go Back</Button>
+			<VStack alignSelf="flex-end">
+				<StoredInfoButton bg="primary.400" icon="remove-circle-outline" onPress={() => 2222}>Clear MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="primary.600" icon="add-circle-outline" onPress={() => 2222}>Load MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="primary.400" icon="save-outline" onPress={() => 2222}>Save MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="primary.600" icon="save-outline" onPress={() => 2222}>Save As</StoredInfoButton>
+				<StoredInfoButton bg="primary.400" icon="export" as={Fontisto} onPress={() => 2222}>Export MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton bg="primary.600" icon="trash-outline" onPress={() => 2222}>Delete Saved MorphoSyntax Info</StoredInfoButton>
+			</VStack>
 		</VStack>
-	); /*
-	return (
-		<IonPage>
-			<IonLoading
-	        	cssClass='loadingPage'
-    	    	isOpen={modalState.loadingPage === "lookingForSyntaxDocs"}
-    		    onDidDismiss={() => dispatch(setLoadingPage(false))}
-	        	message={'Please wait...'}
-				spinner="bubbles"
-				/*duration={300000}*    /
-				duration={1000}
-			/>
-			<LoadMS />
-			<ExportMS />
-			<DeleteMS />
-			<SyntaxHeader title="MorphoSyntax Settings" />
-			<IonContent fullscreen className="evenBackground disappearingHeaderKludgeFix" id="morphoSyntaxPage">
-				<IonList lines="none">
-					<IonItem>
-						<IonLabel position="stacked" style={ {fontSize: "20px"} }>MorphoSyntax Title:</IonLabel>
-						<IonInput value={msInfo.title} id="msTitle" className="ion-margin-top" placeholder="Usually the language name." onIonChange={() => setNewInfo("msTitle", "title")}></IonInput>
-					</IonItem>
-					<IonItem>
-						<IonLabel position="stacked" style={ {fontSize: "20px"} }>Description:</IonLabel>
-						<IonTextarea value={msInfo.description} id="msDesc" className="ion-margin-top" placeholder="A short description of this document." rows={3} onIonChange={() => setNewInfo("msDesc", "description")} />
-					</IonItem>
-				</IonList>
-				<IonList lines="none" className="ion-float-end aside">
-					<IonItem button={true} onClick={() => clearMS()}>
-						<IonIcon icon={removeCircleOutline} className="ion-padding-end" />
-						<IonLabel>Clear MorphoSyntax Info</IonLabel>
-					</IonItem>
-					<IonItem button={true} onClick={() => openMSModal("LoadMS")}>
-						<IonIcon icon={addCircleOutline} className="ion-padding-end" />
-						<IonLabel>Load MorphoSyntax Info</IonLabel>
-					</IonItem>
-					<IonItem button={true} onClick={() => saveMSDoc()}>
-						<IonIcon icon={saveOutline} className="ion-padding-end" />
-						<IonLabel>Save MorphoSyntax Info</IonLabel>
-					</IonItem>
-					<IonItem button={true} onClick={() => saveMSNew()}>
-						<IonIcon icon={saveOutline} className="ion-padding-end" />
-						<IonLabel>Save As New</IonLabel>
-					</IonItem>
-					<IonItem button={true} onClick={() => maybeExportMS()}>
-						<IonIcon icon={codeDownloadOutline} className="ion-padding-end" />
-						<IonLabel>Export MorphoSyntax Info</IonLabel>
-					</IonItem>
-					<IonItem button={true} onClick={() => openMSModal("DeleteMS")}>
-						<IonIcon icon={trashOutline} className="ion-padding-end" />
-						<IonLabel>Delete Saved MorphoSyntax Info</IonLabel>
-					</IonItem>
-				</IonList>
-			</IonContent>
-		</IonPage>
-	); */
+	);
 };
 
 export default Settings;
