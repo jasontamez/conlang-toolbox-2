@@ -1,14 +1,64 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 
 //import React from "react";
-import { NativeBaseProvider, Box, Text, VStack, HStack, Button } from "native-base";
+import { NativeBaseProvider, Box } from "native-base";
 
-import { NativeRouter, Outlet } from "react-router-native";
+import { NativeRouter } from "react-router-native";
 import { Route, Routes } from "react-router";
-import { useNavigate, useParams } from "react-router-dom";
 import { Provider } from 'react-redux';
 //import { PersistGate } from 'redux-persist/integration/react';
+
+import { useFonts } from 'expo-font';
+import {
+	Arimo_400Regular,
+	Arimo_400Regular_Italic,
+	Arimo_700Bold,
+	Arimo_700Bold_Italic
+} from '@expo-google-fonts/arimo';
+import { 
+	NotoSans_400Regular,
+	NotoSans_400Regular_Italic,
+	NotoSans_700Bold,
+	NotoSans_700Bold_Italic
+} from '@expo-google-fonts/noto-sans';
+import { 
+	NotoSansJP_100Thin,
+	NotoSansJP_300Light,
+	NotoSansJP_400Regular,
+	NotoSansJP_500Medium,
+	NotoSansJP_700Bold,
+	NotoSansJP_900Black
+} from '@expo-google-fonts/noto-sans-jp';
+import { 
+	NotoSerif_400Regular,
+	NotoSerif_400Regular_Italic,
+	NotoSerif_700Bold,
+	NotoSerif_700Bold_Italic
+} from '@expo-google-fonts/noto-serif';
+import { 
+	NotoSerifJP_200ExtraLight,
+	NotoSerifJP_300Light,
+	NotoSerifJP_400Regular,
+	NotoSerifJP_500Medium,
+	NotoSerifJP_600SemiBold,
+	NotoSerifJP_700Bold,
+	NotoSerifJP_900Black
+} from '@expo-google-fonts/noto-serif-jp';
+import { 
+	DMMono_300Light,
+	DMMono_300Light_Italic,
+	DMMono_400Regular,
+	DMMono_400Regular_Italic,
+	DMMono_500Medium,
+	DMMono_500Medium_Italic
+} from '@expo-google-fonts/dm-mono';
+import { 
+	Scheherazade_400Regular,
+	Scheherazade_700Bold
+} from '@expo-google-fonts/scheherazade';
+import { 
+	Sriracha_400Regular
+} from '@expo-google-fonts/sriracha'
 
 import getTheme from './components/theme';
 
@@ -19,72 +69,47 @@ import MSSettings from "./pages/ms/msSettings";
 
 import About from "./pages/About.js";
 
-const Main = () => {
-	let navigate = useNavigate();
-	const navv = (where) => {
-		console.log("Going: " + where);
-		navigate("/catalog/" + where, {replace: true});
-	};
-	return (
-		<HStack bg="gray.600">
-			<VStack bg="blue.900">
-				<Button variant="link" colorScheme="red" onPress={() => navv("red")}>Red</Button>
-				<Button variant="link" colorScheme="green" onPress={() => navv("green")}>Green</Button>
-				<Button variant="link" colorScheme="purple" onPress={() => navv("purple")}>Purple</Button>
-			</VStack>
-			<VStack>
-				<Text color="white">Header</Text>
-				<Outlet />
-				<Text color="white">Footer</Text>
-			</VStack>
-		</HStack>
-	);
-};
-
-const Sub = () => {
-	let navigate = useNavigate();
-	return (
-		<HStack>
-			<Box bg="amber.500">
-				<Outlet />
-			</Box>
-			<Box><Button colorScheme="lime" onPress={() => navigate("/catalog")}>OK</Button></Box>
-		</HStack>
-	);
-};
-
-const Item = () => {
-	let params = useParams();
-	const color = params.id;
-	return <Text color="white">This is {color} content.</Text>;
-};
-
-//export default function App() { return (
-function Testo() {
-	return (
-		<NativeBaseProvider>
-			<Box mt="64" color="white" safeArea>
-				<NativeRouter>
-					<Routes>
-						<Route path="/welcome" element={<Box><Text color="white">Welcome</Text></Box>} />
-						<Route path="*" element={<Main />}>
-							<Route path="catalog/*" element={<Sub />}>
-								<Route path=":id" element={<Item />} />
-								<Route index element={<Text color="white">Use the left nav to selet a catalog item</Text>} />
-							</Route>
-							<Route index element={<Text color="red.300">This is home.</Text>} />
-						</Route>
-					</Routes>
-				</NativeRouter>
-			</Box>
-			<StatusBar style="auto" />
-		</NativeBaseProvider>
-	);
-};
-
 const App = () => {
 	const {store, persistor} = getStoreInfo();
-	const theme = getTheme("Default")
+	const [fontsloaded] = useFonts({
+		Arimo_400Regular,
+		Arimo_400Regular_Italic,
+		Arimo_700Bold,
+		Arimo_700Bold_Italic,
+		NotoSans_400Regular,
+		NotoSans_400Regular_Italic,
+		NotoSans_700Bold,
+		NotoSans_700Bold_Italic,
+		NotoSansJP_100Thin,
+		NotoSansJP_300Light,
+		NotoSansJP_400Regular,
+		NotoSansJP_500Medium,
+		NotoSansJP_700Bold,
+		NotoSansJP_900Black,
+		NotoSerif_400Regular,
+		NotoSerif_400Regular_Italic,
+		NotoSerif_700Bold,
+		NotoSerif_700Bold_Italic,
+		NotoSerifJP_200ExtraLight,
+		NotoSerifJP_300Light,
+		NotoSerifJP_400Regular,
+		NotoSerifJP_500Medium,
+		NotoSerifJP_600SemiBold,
+		NotoSerifJP_700Bold,
+		NotoSerifJP_900Black,
+		DMMono_300Light,
+		DMMono_300Light_Italic,
+		DMMono_400Regular,
+		DMMono_400Regular_Italic,
+		DMMono_500Medium,
+		DMMono_500Medium_Italic,
+		Scheherazade_400Regular,
+		Scheherazade_700Bold,
+		'ArTarumianKamar': require('./assets/fonts/ArTarumianKamar-Regular.ttf'),
+		'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
+		'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
+	});
+	const theme = getTheme("Default");
 	return (
 		<Provider store={store}>
 		<NativeBaseProvider theme={theme}>

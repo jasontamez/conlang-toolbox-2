@@ -16,11 +16,10 @@ const Highlight = (props) => (
 	<Box alignSelf="center" textAlign="center" bg="lighter" p={2} mb={3}><Text>{props.children}</Text></Box>
 );
 
-const Pressable = (props) => <Press p={4} pt={0} {...props} bg="main.800" />;
+const Pressable = (props) => <Press bg="main.800" p={4} pt={0} {...props} />;
 
 const Home = () => {
 	let navigate = useNavigate();
-	console.log(packageJson);
 	return (
 		<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
 			<Header title="Conlang Toolbox" hideExtraChars />

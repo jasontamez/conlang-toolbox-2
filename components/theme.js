@@ -1,9 +1,127 @@
 //import React from 'react';
 import { extendTheme } from 'native-base';
 
+const fontConfig = {
+	Arimo: {
+		400: {
+			normal: 'Arimo_400Regular',
+			italic: 'Arimo_400Regular_Italic'
+		},
+		700: {
+			normal: 'Arimo_700Bold',
+			italic: 'Arimo_700Bold_Italic'
+		}
+	},
+	"Noto Sans": {
+		400: {
+			normal: 'NotoSans_400Regular',
+			italic: 'NotoSans_400Regular_Italic'
+		},
+		700: {
+			normal: 'NotoSans_700Bold',
+			italic: 'NotoSans_700Bold_Italic'
+		}
+	},
+	"Noto Sans JP": {
+		100: {
+			normal: 'NotoSansJP_100Thin',
+		},
+		300: {
+			normal: 'NotoSansJP_300Light',
+		},
+		400: {
+			normal: 'NotoSansJP_400Regular',
+		},
+		500: {
+			normal: 'NotoSansJP_500Medium',
+		},
+		700: {
+			normal: 'NotoSansJP_700Bold',
+		},
+		900: {
+			normal: 'NotoSansJP_900Black',
+		}
+	},
+	"Noto Serif": {
+		400: {
+			normal: 'NotoSerif_400Regular',
+			italic: 'NotoSerif_400Regular_Italic'
+		},
+		700: {
+			normal: 'NotoSerif_700Bold',
+			italic: 'NotoSerif_700Bold_Italic'
+		}
+	},
+	"Noto Serif JP": {
+		200: {
+			normal: 'NotoSerifJP_200ExtraLight',
+		},
+		300: {
+			normal: 'NotoSerifJP_300Light',
+		},
+		400: {
+			normal: 'NotoSerifJP_400Regular',
+		},
+		500: {
+			normal: 'NotoSerifJP_500Medium',
+		},
+		600: {
+			normal: 'NotoSerifJP_600SemiBold',
+		},
+		700: {
+			normal: 'NotoSerifJP_700Bold',
+		},
+		900: {
+			normal: 'NotoSerifJP_900Black',
+		}
+	},
+	"DM Mono": {
+		300: {
+			normal: 'DMMono_300Light',
+			italic: 'DMMono_300Light_Italic'
+		},
+		400: {
+			normal: 'DMMono_400Regular',
+			italic: 'DMMono_400Regular_Italic'
+		},
+		500: {
+			normal: 'DMMono_500Medium',
+			italic: 'DMMono_500Medium_Italic'
+		}
+	},
+	Scherherazade: {
+		400: {
+			normal: 'Scheherazade_400Regular',
+		},
+		700: {
+			normal: 'Scheherazade_700Bold',
+		}
+	},
+	ArTarumianKamar: {
+		500: {
+			normal: 'ArTarumianKamar'
+		}
+	},
+	Leelawadee: {
+		500: {
+			normal: 'LeelawadeeUI'
+		},
+		700: {
+			normal: 'LeelawadeeUI_Bold'
+		}
+	}
+};
+
+const fonts = {
+	heading: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
+	body: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
+	mono: "DM Mono",
+	serif: "'Noto Serif', 'Noto Serif JP'"
+};
+
 const mainButton = {
 	defaultProps: {
-		colorScheme: "info",
+		colorScheme: "success",
 		color: "white",
 		_icon: {
 			color: "main.50"
@@ -222,17 +340,17 @@ const themes = {
 				800: "#27081f",
 				900: "#12030e"
 			},
-			pink: {
-				50: "#ffe2eb",
-				100: "#ffc9d9",
-				200: "#ffafc7",
-				300: "#ff96b6",
-				400: "#ff7ca4",
-				500: "#ff6392",
-				600: "#ff4980",
-				700: "#ff306e",
-				800: "#ff165d",
-				900: "#fc004c"
+			lime: {
+				50: '#ebfbe4',
+				100: '#d1eec1',
+				200: '#b5e19c',
+				300: '#97d576',
+				400: '#7bc950',
+				500: '#61af36',
+				600: '#4b8829',
+				700: '#34611c',
+				800: '#1d3b0e',
+				900: '#051500',
 			},
 			orange: {
 				50: "#fec173",
@@ -258,30 +376,36 @@ const themes = {
 	}
 };
 const mappings = {
-	"Default": ["emerald", "purple", "rose", "pink", "orange", "lightBlue", "teal", "green", "red"]
+	"Default": ["emerald", "purple", "rose", "lime", "orange", "lightBlue", "teal", "green", "red"]
 };
 const themeNames = Object.keys(mappings);
 themeNames.forEach((themeName) => {
+	// Isolate the current theme
+	const workingTheme = themes[themeName];
+	// Get the map of colors
 	const colors = mappings[themeName];
+	// Get the color namespaces
 	const props = ["main", "danger", "error", "success", "warning", "info", "primary", "secondary", "tertiary"];
-	const themeColors = themes[themeName].colors;
+	// Isolate the colors property of the theme
+	const themeColors = workingTheme.colors;
+	// Apply the namespaces to the theme
 	colors.forEach(color => {
 		const prop = props.shift();
 		themeColors[prop] = {...themeColors[color]};
 	});
 	// Apply component defaults to the theme
-	themes[themeName].components = {...components};
+	workingTheme.components = {...components};
+	// Apply font defaults to the theme
+	workingTheme.fontConfig = fontConfig;
+	workingTheme.fonts = fonts;
 });
 
 const getTheme = (themeName) => {
 	const theme = extendTheme(themes[themeName] || {});
-	//console.log(themeName);
-	//console.log(themes[themeName]);
-	//console.log(theme);
 	return theme;
 };
 
 export {
 	getTheme as default,
-	themeNames as themes
+	themeNames as availableThemes
 };

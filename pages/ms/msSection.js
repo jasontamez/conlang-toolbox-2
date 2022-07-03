@@ -308,11 +308,11 @@ const ParseMSJSON = (props) => {
 							<Modal.Body maxWidth={screenWidth} safeArea mx="auto">
 								<ModalContent content={bit.content} />
 							</Modal.Body>
-							<Modal.Footer w="full">
-								<Button startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
+							<Modal.Footer w="full" p={2}>
+								<Button m={0} startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
-						<Button size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
+						<Button colorScheme="primary" size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
 					</HStack>
 				);
 			case "Checkboxes":
@@ -404,7 +404,7 @@ const ParseMSJSON = (props) => {
 		}
 	});
 	return (
-		<VStack space={4} key={getKey("Content")}>{content}</VStack>
+		<VStack space={4} key={getKey("Content")} mb={4}>{content}</VStack>
 	);
 	
 };
