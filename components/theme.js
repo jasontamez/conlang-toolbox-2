@@ -128,10 +128,10 @@ const mainButton = {
 	defaultProps: {
 		colorScheme: "success",
 		_icon: {
-			color: "main.900"
+			color: "main.50"
 		},
 		_text: {
-			color: "main.900",
+			color: "main.50",
 			fontFamily: "body"
 		}
 	}
@@ -263,7 +263,7 @@ const components = {
 			bg: "main.900",
 			borderColor: "primary.700",
 			_text: {
-				color: "white",
+				color: "primary.50",
 				fontFamily: "body"
 			},
 			_icon: {
@@ -403,17 +403,108 @@ const themes = {
 			},
 			lighter: "#ffffff11",
 			darker: "#00000033",
-			bg: "#070707",
-			fg: "#f8f8f8",
 			white: "#f8f8f8",
 			black: "#070707",
-			lightText: "#f8f8f8",
-			darkText: "#070707"
+			sliderTickColor: "#7425f3" // purple 400
+		}
+	},
+	"Solarized Dark": {
+		colors: {
+			lightBlue: {
+				50: "#defbff",
+				100: "#b3efff",
+				200: "#86e4fd",
+				300: "#5bdafc",
+				400: "#3dcffb",
+				500: "#30b6e2",
+				600: "#218db0",
+				700: "#13667e",
+				800: "#003d4d",
+				900: "#00151d",
+			},
+			orange: {
+				50: "#ffebe0",
+				100: "#fdcbb6",
+				200: "#f5a98a",
+				300: "#ef885d",
+				400: "#e96630",
+				500: "#cf4d16",
+				600: "#a23b10",
+				700: "#742a0a",
+				800: "#471702",
+				900: "#1e0600",
+			},
+			indigo: {
+				50: "#ececff",
+				100: "#c7caee",
+				200: "#a3a7dc",
+				300: "#8084cd",
+				400: "#5b61bd",
+				500: "#4247a4",
+				600: "#323780",
+				700: "#24285d",
+				800: "#14183b",
+				900: "#05071a",
+			},
+			cyan: {
+				50: "#dffaff",
+				100: "#bce7f2",
+				200: "#98d5e5",
+				300: "#72c4da",
+				400: "#4db4ce",
+				500: "#359ab5",
+				600: "#25788d",
+				700: "#175666",
+				800: "#04343f",
+				900: "#001319",
+			},
+			lime: {
+				50: "#fbffdc",
+				100: "#f5ffaf",
+				200: "#eeff7f",
+				300: "#e8ff4d",
+				400: "#e1ff1f",
+				500: "#c8e608",
+				600: "#9bb300",
+				700: "#6f8000",
+				800: "#414d00",
+				900: "#151b00",
+			},
+			amber: {
+				50: "#fff9db",
+				100: "#ffecaf",
+				200: "#ffe07f",
+				300: "#ffd44d",
+				400: "#ffc71e",
+				500: "#e6ae06",
+				600: "#b38700",
+				700: "#806100",
+				800: "#4e3a00",
+				900: "#1d1300",
+			},
+			red: {
+				50: "#ffe5e5",
+				100: "#f9bcbc",
+				200: "#ef9291",
+				300: "#e66765",
+				400: "#de3d3b",
+				500: "#c42421",
+				600: "#9a1b19",
+				700: "#6e1211",
+				800: "#440808",
+				900: "#1e0000",
+			},
+			lighter: "#ffffff11",
+			darker: "#00000033",
+			white: "#f8f8f8",
+			black: "#070707",
+			sliderTickColor: "#4247a4" // indigo 500
 		}
 	}
 };
 const mappings = {
-	"Default": ["emerald", "red", "red", "lime", "yellow", "teal", "teal", "purple", "blue"]
+	"Default": ["emerald", "red", "red", "lime", "yellow", "teal", "teal", "purple", "blue"],
+	"Solarized Dark": ["lightBlue", "red", "red", "lime", "amber", "orange", "orange", "indigo", "cyan"]
 };
 const themeNames = Object.keys(mappings);
 themeNames.forEach((themeName) => {

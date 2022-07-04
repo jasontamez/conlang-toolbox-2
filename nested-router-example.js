@@ -110,7 +110,7 @@ const App = () => {
 		'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
 	});
-	const theme = getTheme("Default");
+	const theme = getTheme("Solarized Dark");
 	return (
 		<Provider store={store}>
 		<NativeBaseProvider theme={theme}>

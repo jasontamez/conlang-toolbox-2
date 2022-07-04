@@ -64,14 +64,14 @@ export const SliderWithTicks = (props) => {
 	const tickProps = props.tickProps || {};
 	const stackProps = props.stackProps || {};
 	const sliderProps = props.sliderProps || {};
-	const Tick = (props) => <Bar size="xs" color="secondary.400" {...tickProps} {...props} />;
+	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...tickProps} {...props} />;
 	let middleTicks = [<Tick key="FirstTick" color="transparent" size="2xs" />];
 	for (let c = min + 1; c < max; c++) {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
 	return (
-		<HStack d="flex" w="full" alignItems="stretch">
+		<HStack d="flex" w="full" bg="darker" px={2} py={1} rounded="md" alignItems="stretch">
 			<Box mr={3} flexShrink={1}><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
 			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis="75%" {...stackProps}>
 				<HStack alignItems="center" justifyContent="space-between" w="full" children={middleTicks}>

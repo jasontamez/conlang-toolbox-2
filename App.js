@@ -157,7 +157,7 @@ const A = () => {
 				{/* Only the loader will appear until the persisted state is fully loaded. */}
 				{/* Previously saved state must be found beforehand. */}
 				<PersistGate loading={loading} persistor={persistor}>
-					<Container bg="bg" safeArea>
+					<Container bg="main.900" safeArea>
 						<VStack space="sm" justifyContent={"start"}>
 							<Menu />
 							<Content />
