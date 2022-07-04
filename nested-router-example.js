@@ -105,6 +105,7 @@ const App = () => {
 		DMMono_500Medium_Italic,
 		Scheherazade_400Regular,
 		Scheherazade_700Bold,
+		Sriracha_400Regular,
 		'ArTarumianKamar': require('./assets/fonts/ArTarumianKamar-Regular.ttf'),
 		'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')

@@ -89,6 +89,11 @@ const fontConfig = {
 			italic: "DMMono_500Medium_Italic"
 		}
 	},
+	ArTarumianKamar: {
+		500: {
+			normal: "ArTarumianKamar"
+		}
+	},
 	Scherherazade: {
 		400: {
 			normal: "Scheherazade_400Regular",
@@ -97,9 +102,9 @@ const fontConfig = {
 			normal: "Scheherazade_700Bold",
 		}
 	},
-	ArTarumianKamar: {
-		500: {
-			normal: "ArTarumianKamar"
+	Sriracha: {
+		400: {
+			normal: "Sriracha_400Regular"
 		}
 	},
 	Leelawadee: {
