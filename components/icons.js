@@ -5,7 +5,7 @@ import MCI from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Foundation from '@expo/vector-icons/Foundation';
-
+import Octicons from '@expo/vector-icons/Octicons';
 
 export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" size="2xs" {...props} />;
 
@@ -20,3 +20,5 @@ export const DeclenjugatorIcon = (props) => <Icon as={Foundation} name="results"
 export const MenuIcon = (props) => <Icon as={Entypo} name="menu" size="sm" {...props} />;
 export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" size="sm" {...props} />;
 // as={Entypo} name="language"
+
+export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} size="sm" {...props} />

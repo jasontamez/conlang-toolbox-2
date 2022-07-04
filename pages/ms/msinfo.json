@@ -83,9 +83,9 @@
 		{
 			"tag": "Range",
 			"prop": "synthesis",
-			"start": "Isolating",
-			"end": "Polysynthetic",
-			"label": "Degree of synthesis, from Isolating to Polysynthetic",
+			"start": "I\u00ADso\u00ADla\u00ADting",
+			"end": "Po\u00ADly\u00ADsyn\u00ADthe\u00ADtic",
+			"label": "Degree of synthesis, from Iso\u00ADlating to Poly\u00ADsynthetic",
 			"spectrum": true,
 			"max": 10
 		},
@@ -97,8 +97,8 @@
 		{
 			"tag": "Range",
 			"prop": "fusion",
-			"start": "Agglutinative",
-			"end": "Fusional",
+			"start": "Ag\u00ADglu\u00ADtin\u00ADa\u00ADtive",
+			"end": "Fu\u00ADsion\u00ADal",
 			"label": "Degree of fusion, from Agglutinative to Fusional",
 			"spectrum": true,
 			"max": 10

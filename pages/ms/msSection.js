@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import ms from './msinfo.json';
 import { useParams } from 'react-router-dom';
-import { Button, Box, Checkbox, HStack, Modal, ScrollView, Slider, Text as Tx, TextArea, VStack, Icon, Center } from 'native-base';
+import { Button, Box, Checkbox, HStack, Modal, ScrollView, Text as Tx, VStack, Icon, Center } from 'native-base';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import React, { useState } from "react";
@@ -13,7 +13,7 @@ import { /*
 	setText
 } from '../../store/morphoSyntaxSlice';
 import { DotIcon } from "../../components/icons";
-import { TextAreaSetting } from "../../components/layoutTags";
+import { SliderWithTicks, TextAreaSetting } from "../../components/layoutTags";
 import { Dimensions } from "react-native";
 
 
@@ -136,18 +136,18 @@ const ParseMSJSON = (props) => {
 				const doSetNum = (prop, value) => {
 					dispatch(setNum({prop, value}));
 				};
-				return (
-					<HStack d="flex" w="full" alignItems="stretch" key={getKey("range")}>
-						<Box mr={3}><Text>{bit.start}</Text></Box>
-						<Slider flexGrow={1} flexShrink={1} flexBasis="75%" defaultValue={synNum[what] || 0} minValue={0} maxValue={bit.max || 4} accessibilityLabel={bit.label} step={1} colorScheme="secondary" onChangeEnd={(v) => doSetNum(what, v)}>
-							<Slider.Track bg="secondary.900">
-								{bit.spectrum ? <Slider.FilledTrack /> : <React.Fragment></React.Fragment>}
-							</Slider.Track>
-							<Slider.Thumb />
-						</Slider>
-						<Box ml={3}><Text>{bit.end}</Text></Box>
-					</HStack>
-				);
+				return <SliderWithTicks
+					key={getKey("range")}
+					beginLabel={bit.start}
+					endLabel={bit.end}
+					spectrum={bit.spectrum}
+					min={0} max={bit.max || 4}
+					sliderProps={{
+						defaultValue: (synNum[what] || 0),
+						accessibilityLabel: bit.label,
+						onChangeEnd: (v) => doSetNum(what, v)
+					}}
+				/>;
 			case "Text":
 				const doSetText = (prop, value) => {
 					dispatch(setText({prop, value}));
@@ -379,9 +379,9 @@ const ParseMSJSON = (props) => {
 				};
 				// Put it all together
 				return (
-					<Box p={4} m={0} key={getKey("CheckboxesContainer")}>
+					<Box m={0} key={getKey("CheckboxesContainer")}>
 						<VStack bg="darker" m={0} mr="auto" minWidth="300px">
-							{header ? <Box><FormatText content={header} forceBold /></Box> : <React.Fragment></React.Fragment>}
+							{header ? <Box p={2}><FormatText content={header} forceBold /></Box> : <React.Fragment></React.Fragment>}
 							{rows.map((row, i) => {
 								// Stripe odd-numbered rows
 								let stripedRow = isStripedTable && (i % 2) ? {bg: "darker"} : {};
@@ -390,7 +390,7 @@ const ParseMSJSON = (props) => {
 									<HStack key={getKey(id+"Row")} {...stripedRow}>
 										{row.map((col, i) => {
 											const alignment = isCentered[i] ? {textAlign: "center"} : {};
-											return <Box p={1} key={getKey(id+"Col")} w={maxWidth} {...alignment}>{col}</Box>;
+											return <Box p={2} key={getKey(id+"Col")} w={maxWidth} {...alignment}>{col}</Box>;
 										})}
 									</HStack>
 								);
