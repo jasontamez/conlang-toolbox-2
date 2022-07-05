@@ -8,8 +8,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import { StateStorage as OldStateStorage } from './persistentInfo';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
-import packageJson from '../package.json';
+//import packageJson from '../package.json';
 import morphoSyntaxSlice from './morphoSyntaxSlice';
+import appStateSlice from './appStateSlice';
 
 //const reconcile = async (incoming, original, reduced) => {
 //	// Nothing for now.
@@ -19,7 +20,8 @@ import morphoSyntaxSlice from './morphoSyntaxSlice';
 export default () => {
 	const reducer = {
 		// SLICES here
-		morphoSyntax: morphoSyntaxSlice
+		morphoSyntax: morphoSyntaxSlice,
+		appState: appStateSlice
 	};
 	//const persistConfig = {
 	//	key: 'root',
@@ -124,6 +126,9 @@ export const blankAppState = {/*
 		bool: {},
 		num: {},
 		text: {}
+	},
+	appState: {
+		menuToggleOpen: ''
 	},/*
 	lexicon: {
 		key: "",
