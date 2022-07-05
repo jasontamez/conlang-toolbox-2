@@ -140,7 +140,7 @@ const ParseMSJSON = (props) => {
 					key={getKey("range")}
 					beginLabel={bit.start}
 					endLabel={bit.end}
-					spectrum={bit.spectrum}
+					notFilled={bit.notFilled}
 					min={0} max={bit.max || 4}
 					sliderProps={{
 						defaultValue: (synNum[what] || 0),
@@ -301,7 +301,7 @@ const ParseMSJSON = (props) => {
 				// END MODAL CONTENT DECLARATION
 				//
 				return (
-					<HStack justifyContent="flex-end" key={getKey("ModalButton")} safeArea>
+					<HStack justifyContent="flex-start" key={getKey("ModalButton")} safeArea>
 						<Modal m={0} isOpen={modalState === id} maxWidth={screenWidth} onClose={() => setModal('')} safeArea>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
@@ -312,7 +312,7 @@ const ParseMSJSON = (props) => {
 								<Button m={0} startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
-						<Button colorScheme="primary" size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
+						<Button py={1} px={2} ml={4} colorScheme="primary" size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
 					</HStack>
 				);
 			case "Checkboxes":

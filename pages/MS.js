@@ -16,11 +16,11 @@ const MS = () => {
 		const variant = "ghost";
 		if(props.icon) {
 			return (
-				<IconButton minWidth={6} variant={variant} color="main.50" onPress={() => navigate(props.link)} icon={props.icon} _icon={{size: "md", color: "main.50"}} />
+				<IconButton minWidth={6} variant={variant} color="text.50" onPress={() => navigate(props.link)} icon={props.icon} _icon={{size: "md", color: "text.50"}} />
 			);
 		}
 		return (
-			<Button minWidth={8} variant={variant} color="main.50" _text={{color: "main.50"}} onPress={() => navigate(props.link)}>{props.label}</Button>
+			<Button minWidth={8} variant={variant} color="text.50" _text={{color: "text.50"}} onPress={() => navigate(props.link)}>{props.label}</Button>
 		);
 	};
 	const NavTabs = () => {

@@ -78,7 +78,7 @@ export const SliderWithTicks = (props) => {
 				</HStack>
 				<Slider size="sm" minValue={min} maxValue={max} step={1} {...sliderProps}>
 					<Slider.Track>
-						{props.spectrum ? <Slider.FilledTrack /> : <></>}
+						{props.notFilled ? <></> : <Slider.FilledTrack />}
 					</Slider.Track>
 					<Slider.Thumb />
 				</Slider>

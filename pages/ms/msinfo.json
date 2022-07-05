@@ -86,7 +86,7 @@
 			"start": "I\u00ADso\u00ADla\u00ADting",
 			"end": "Po\u00ADly\u00ADsyn\u00ADthe\u00ADtic",
 			"label": "Degree of synthesis, from Iso\u00ADlating to Poly\u00ADsynthetic",
-			"spectrum": true,
+			"notFilled": true,
 			"max": 10
 		},
 		{
@@ -100,7 +100,7 @@
 			"start": "Ag\u00ADglu\u00ADtin\u00ADa\u00ADtive",
 			"end": "Fu\u00ADsion\u00ADal",
 			"label": "Degree of fusion, from Agglutinative to Fusional",
-			"spectrum": true,
+			"notFilled": true,
 			"max": 10
 		},
 		{
@@ -277,7 +277,7 @@
 			"start": "Head Marked",
 			"end": "Dependant Marked",
 			"label": "Degree of marking, from totally head-marked to totally dependant-marked",
-			"spectrum": true,
+			"notFilled": true,
 			"max": 4
 		},
 		{

@@ -9,8 +9,8 @@ const openExtraChars = () => {
 	//() => dispatch(openModal("ExtraCharacters"))
 }
 
-const Menu = () => <IconButton variant="ghost" icon={<MenuIcon />} onPress={() => openMenu()} />;
-const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon />} onPress={() => openExtraChars()} />;
+const Menu = () => <IconButton variant="ghost" icon={<MenuIcon color="text.50" />} onPress={() => openMenu()} />;
+const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" />} onPress={() => openExtraChars()} />;
 
 const Header = (props) => {
 	const title = props.title;
