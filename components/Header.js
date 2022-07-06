@@ -1,15 +1,13 @@
 import { Text, HStack, IconButton } from "native-base";
+import Menu from "../pages/MenuModal";
 //import { openModal } from '../store/dFuncs';
-import { ExtraCharactersIcon, MenuIcon } from "./icons";
+import { ExtraCharactersIcon } from "./icons";
 
-const openMenu = () => {
-	// Open modal for Menu
-};
+
 const openExtraChars = () => {
 	//() => dispatch(openModal("ExtraCharacters"))
 }
 
-const Menu = () => <IconButton variant="ghost" icon={<MenuIcon color="text.50" />} onPress={() => openMenu()} />;
 const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" />} onPress={() => openExtraChars()} />;
 
 const Header = (props) => {

@@ -10,6 +10,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 const Icon = (props) => <ICON size="sm" {...props} />;
 
 export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" size="2xs" {...props} />;
+export const CaretIcon = (props) => <Icon as={Ionicons} name="caret-forward-sharp" {...props} />
 
 export const MorphoSyntaxIcon = (props) => <Icon as={FAFive} name="drafting-compass" {...props} />;
 export const WordGenIcon = (props) => <Icon as={MCI} name="factory" {...props} />
@@ -19,7 +20,7 @@ export const WordListsIcon = (props) => <Icon as={Entypo} name="list" {...props}
 export const PhonoGraphIcon = (props) => <Icon as={MCI} name="headphones" {...props} />;
 export const DeclenjugatorIcon = (props) => <Icon as={Foundation} name="results" {...props} />
 
-export const AboutIcon = (props) => <Icon as={Ionicons} name="chatbox-ellipsis-sharp" {...props} />;
+export const AboutIcon = (props) => <Icon as={Ionicons} name="chatbox-ellipses-sharp" {...props} />;
 export const SettingsIcon = (props) => <Icon as={Ionicons} name="settings-sharp" {...props} />;
 
 export const MenuIcon = (props) => <Icon as={Entypo} name="menu" {...props} />;

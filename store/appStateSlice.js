@@ -1,11 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-	menuToggleOpen: ''
+	menuToggleName: '',
+	menuToggleNumber: 0
 };
 
-const setMenuToggleOpenFunc = (state, action) => {
-	state.menuToggleOpen = action.payload;
+const setMenuToggleNameFunc = (state, action) => {
+	state.menuToggleName = action.payload;
+	return state;
+};
+
+const setMenuToggleNumberFunc = (state, action) => {
+	state.menuToggleNumber = action.payload;
 	return state;
 };
 
@@ -13,10 +19,11 @@ const appStateSlice = createSlice({
 	name: 'morphoSyntax',
 	initialState,
 	reducers: {
-		setMenuToggleOpen: setMenuToggleOpenFunc
+		setMenuToggleName: setMenuToggleNameFunc,
+		setMenuToggleNumber: setMenuToggleNumberFunc
 	}
 });
 
-export const { setMenuToggleOpen } = appStateSlice.actions;
+export const { setMenuToggleName, setMenuToggleNumber } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

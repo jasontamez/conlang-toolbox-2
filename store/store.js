@@ -128,7 +128,8 @@ export const blankAppState = {/*
 		text: {}
 	},
 	appState: {
-		menuToggleOpen: ''
+		menuToggleOpen: '',
+		menuToggleNumber: 0
 	},/*
 	lexicon: {
 		key: "",
