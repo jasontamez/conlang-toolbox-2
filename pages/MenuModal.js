@@ -17,7 +17,7 @@ import {
 //import Header from '../components/Header';
 import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMenuToggleOpen } from '../store/appStateSlice';
+import { setMenuToggleNumber, setMenuToggleName } from '../store/appStateSlice';
 import { MenuIcon } from "../components/icons";
 import { Animated } from 'react-native';
 
@@ -237,7 +237,6 @@ const Menu = () => {
 	let [openSectionName, setOpenSectionName] = useState(toggledMenuSectionName || '');
 	//const location = useLocation();
 	const dispatch = useDispatch();
-	let toDispatch = 0;
 	const openSectionInfo = useRef(new Animated.Value(openSectionNumber)).current;
 	let numberOfSections = 0;
 	let sectionInterpolationInfo = [];
@@ -288,6 +287,12 @@ const Menu = () => {
 					}
 					// Not this section
 					c++;
+					if(c >= sectionInterpolationInfo.length) {
+						// We've run out of options, somehow.
+						console.log("ERROR");
+						// Just use the given begin value
+						begin = beginValue;
+					}
 				}
 				// Section should be found.
 				// Close the open section quickly, then open the new section afterward.
@@ -335,10 +340,11 @@ const Menu = () => {
 		<Press onPress={() => toggleSection(props.sectionName, props.beginValue, props.endValue)}>{props.children}</Press>
 	);
 	const closeMenu = () => {
-		// Save current state
-		dispatch(setMenuToggleOpen(toDispatch));
 		// Close menu
 		setMenuOpen(false);
+		// Save current state
+		dispatch(setMenuToggleNumber(openSectionNumber));
+		dispatch(setMenuToggleName(openSectionName));
 	};
 	return (
 		<>
