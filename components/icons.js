@@ -9,7 +9,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 
 const Icon = (props) => <ICON size="sm" {...props} />;
 
-export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" size="2xs" {...props} />;
+export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" size="xs" {...props} />;
 export const CaretIcon = (props) => <Icon as={Ionicons} name="caret-forward-sharp" {...props} />
 
 export const MorphoSyntaxIcon = (props) => <Icon as={FAFive} name="drafting-compass" {...props} />;

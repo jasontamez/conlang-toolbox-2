@@ -1,24 +1,11 @@
-import { Box, Heading, HStack, VStack, Pressable as Press, Text, Modal, Divider, IconButton } from 'native-base';
+import { Factory, Heading, HStack, VStack, Pressable, Text, Modal, Divider, IconButton, ZStack } from 'native-base';
 import { useLocation, useNavigate } from "react-router-dom";
 
-import {
-	DeclenjugatorIcon,
-	DotIcon,
-	LexiconIcon,
-	MorphoSyntaxIcon,
-	PhonoGraphIcon,
-	WordEvolveIcon,
-	WordGenIcon,
-	WordListsIcon,
-	AboutIcon,
-	SettingsIcon,
-	CaretIcon
-} from '../components/icons';
+import * as Icons from '../components/icons';
 //import Header from '../components/Header';
 import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMenuToggleNumber, setMenuToggleName } from '../store/appStateSlice';
-import { MenuIcon } from "../components/icons";
 import { Animated } from 'react-native';
 
 const appMenuPages = [
@@ -27,13 +14,13 @@ const appMenuPages = [
 			{
 				title: 'MorphoSyntax',
 				url: '/ms',
-				icon: <MorphoSyntaxIcon />,
+				icon: 'MorphoSyntaxIcon',
 				id: 'menuitemSyntax',
-				parentOf: 'ms'
+				parentId: 'ms'
 			},
 			{
 				title: 'Settings',
-				url: '/ms/msSettings',
+				url: '/ms',
 				id: 'menuitemMSSettings',
 				childId: 'ms'
 			},
@@ -100,9 +87,9 @@ const appMenuPages = [
 			{
 				title: 'WordGen',
 				url: '/wg',
-				icon: <WordGenIcon />,
+				icon: 'WordGenIcon',
 				id: 'menuitemWG',
-				parentOf: 'wg'
+				parentId: 'wg'
 			},
 			{
 				title: 'Character Groups',
@@ -137,9 +124,9 @@ const appMenuPages = [
 			{
 				title: 'WordEvolve',
 				url: '/we',
-				icon: <WordEvolveIcon />,
+				icon: 'WordEvolveIcon',
 				id: 'menuitemWE',
-				parentOf: 'we'
+				parentId: 'we'
 			},
 			{
 				title: 'Input',
@@ -174,25 +161,25 @@ const appMenuPages = [
 			{
 				title: 'Declenjugator',
 				url: '/dc',
-				icon: <DeclenjugatorIcon />,
+				icon: 'DeclenjugatorIcon',
 				id: 'menuitemDC'
-			}, // https://github.com/apache/cordova-plugin-media
+			}, // https://github.com/apache/cordova-plugin-media ??
 			{
 				title: 'PhonoGraph',
 				url: '/ph',
-				icon: <PhonoGraphIcon />,
+				icon: 'PhonoGraphIcon',
 				id: 'menuitemPG'
 			},
 			{
 				title: 'Lexicon',
 				url: '/lex',
-				icon: <LexiconIcon />,
+				icon: 'LexiconIcon',
 				id: 'menuitemLX'
 			},
 			{
 				title: 'Word Lists',
 				url: '/wordlists',
-				icon: <WordListsIcon />,
+				icon: 'WordListsIcon',
 				id: 'menuitemWL'
 			}
 		],
@@ -203,31 +190,39 @@ const appMenuPages = [
 			{
 				title: 'Settings',
 				url: '/settings',
-				icon: <SettingsIcon />,
+				icon: 'SettingsIcon',
 				id: 'menuitemSettings'
 			},
 			{
 				title: 'About',
 				url: '/about',
-				icon: <AboutIcon />,
+				icon: 'AboutIcon',
 				id: 'menuitemAbout'
-			}
-		],
-		id: 'menuOthers'
-	},
-	{
-		pages: [
+			},
 			{
 				title: 'Credits',
 				url: '/credits',
-				icon: <></>,
-				id: 'menuitemAbout'
+				id: 'menuitemCredits',
+				fontOptions: {
+					fontFamily: 'mono',
+					fontSize: 'xs'
+				},
+				styleOptions: {
+					alignItems: 'end',
+					justifyContent: 'end',
+					mt: 8,
+					mr: 6
+				},
+				alignOptions: {
+					alignItems: 'end'
+				}
 			}
 		],
-		id: 'menuCredits'
+		id: 'menuOthers'
 	}
 ];
 
+const AnimatedView = Factory(Animated.View);
 
 const Menu = () => {
 	const toggledMenuSectionNumber = useSelector((state) => state.appState.menuToggleNumber);
@@ -235,12 +230,13 @@ const Menu = () => {
 	let [menuOpen, setMenuOpen] = useState(false);
 	let [openSectionNumber, setOpenSectionNumber] = useState(toggledMenuSectionNumber || 0);
 	let [openSectionName, setOpenSectionName] = useState(toggledMenuSectionName || '');
-	//const location = useLocation();
+	const location = useLocation();
 	const dispatch = useDispatch();
-	const openSectionInfo = useRef(new Animated.Value(openSectionNumber)).current;
 	let numberOfSections = 0;
-	let sectionInterpolationInfo = [];
-	const getNewInterpolationInfo = () => {
+	let sectionAnimationValues = {
+		orderedList: []
+	};
+	const getToggleInterpolationInfo = () => {
 		// additive starts at 0, goes up by 100s
 		const additive = numberOfSections * 100;
 		// create the input range
@@ -253,65 +249,101 @@ const Menu = () => {
 			91 + additive,	// 91, 191, 291...
 			92 + additive	// 92, 192, 292...
 		];
-		// create the output range
-		const outputRange = [
+		// create the output range - rotation
+		const outputRangeRotation = [
 			"0deg",		// make a dead zone before this
-			"0deg",		// end this zone
+			"0deg",		// begin this zone
 			"90deg",	// end this zone
 			"0deg",		// start another dead zone
 			"0deg",		// continue the dead zone after this
 		];
-		// Note that we have a new section
-		numberOfSections++;
-		// Save the new range
-		sectionInterpolationInfo.push([begin, end]);
+		// create the output range - translation
+		const outputRangeTranslation = [
+			"0%",	// make a dead zone before this
+			"0%",	// begin this zone
+			"20%",	// end this zone
+			"0%",	// start another dead zone
+			"0%",	// continue the dead zone after this
+		];
 		// Return info
 		return {
-			interpolator: { inputRange, outputRange },
+			rotateInterpolator: {
+				inputRange,
+				outputRange: outputRangeRotation
+			},
+			translateInterpolator: {
+				inputRange,
+				outputRange: outputRangeTranslation
+			},
 			begin,
 			end
 		};
 	};
-	const toggleSection = (sectionName, beginValue, endValue) => {
+	const getSubsectionInterpolationInfo = () => {
+		// additive starts at 0, goes up by 100s
+		const additive = (numberOfSections - 1) * 100;
+		// create the input range
+		const inputRange = [
+			-1 + additive,	// -1, 99, 199...
+			0 + additive,	// 0, 100, 200...
+			90 + additive,	// 90, 190, 290...
+			91 + additive,	// 91, 191, 291...
+			92 + additive	// 92, 192, 292...
+		];
+		// create the output range
+		const outputRange = [
+			0,	// make a dead zone before this
+			0,	// begin this zone
+			36,	// end this zone (equal to height={9})
+			0,	// start another dead zone
+			0,	// continue the dead zone after this
+		];
+		// Return info
+		return { inputRange, outputRange };
+	};
+	const toggleSection = (sectionName) => {
+		const [targetedSectionAnimationValue, beginValue, endValue] = sectionAnimationValues[sectionName];
 		let newValue = endValue;
 		if((openSectionNumber < beginValue || openSectionNumber > endValue)) {
 			// We're not at the correct section
 			if(openSectionName) {
 				// Another section is open. Find it.
-				let begin = -1, c = 0;
-				while(begin < 0) {
-					let [b, e] = sectionInterpolationInfo[c];
+				let c = 0;
+				let animations = [];
+				let orderedList = sectionAnimationValues.orderedList;
+				while(true) {
+					let [sectionInfo, b, e] = sectionAnimationValues[orderedList[c]];
 					if(openSectionNumber >= b && openSectionNumber <= e) {
 						// This is the open section
-						begin = b;
+						// Add animation to close the open section quickly.
+						animations.push(Animated.timing(sectionInfo, {
+							toValue: b,
+							duration: 500,
+							useNativeDriver: true
+						}));
+						break;
 					}
 					// Not this section
 					c++;
-					if(c >= sectionInterpolationInfo.length) {
+					if(c >= numberOfSections) {
 						// We've run out of options, somehow.
-						console.log("ERROR");
-						// Just use the given begin value
-						begin = beginValue;
+						console.log("ERROR: ran out of sections?!?");
+						// Just go on as if there was no other section open.
 					}
 				}
 				// Section should be found.
-				// Close the open section quickly, then open the new section afterward.
-				Animated.timing(openSectionInfo, {
-					toValue: begin,
-					duration: 150,
+				// Add the animation for the current section we're opening.
+				animations.push(Animated.timing(targetedSectionAnimationValue, {
+					toValue: endValue,
+					duration: 500,
 					useNativeDriver: true
-				}).start(() => {
-					openSectionInfo.setValue(beginValue);
-					Animated.timing(openSectionInfo, {
-						toValue: endValue,
-						duration: 350,
-						useNativeDriver: true
-					}).start();
-				});
+				}))
+				// Run animation(s) simultaneously
+				Animated.parallel(animations).start();
 			} else {
-				// Reset to the "closed" state of our current section, then animate
-				openSectionInfo.setValue(beginValue);
-				Animated.timing(openSectionInfo, {
+				// Reset to the "closed" state of our current section, then animate it opening
+				targetedSectionAnimationValue.setValue(beginValue);
+				Animated.timing(targetedSectionAnimationValue, {
 					toValue: newValue,
 					duration: 500,
 					useNativeDriver: true
@@ -323,7 +355,7 @@ const Menu = () => {
 				// We're closing our section
 				newValue = beginValue;
 			}
-			Animated.timing(openSectionInfo, {
+			Animated.timing(targetedSectionAnimationValue, {
 				toValue: newValue,
 				duration: 500,
 				useNativeDriver: true
@@ -333,12 +365,6 @@ const Menu = () => {
 		setOpenSectionName(sectionName === openSectionName ? '' : sectionName);
 	}
 	const navigate = useNavigate();
-	const Pressable = (props) => (
-		<Press onPress={() => navigate(props.url)}>{props.children}</Press>
-	);
-	const Toggleable = (props) => (
-		<Press onPress={() => toggleSection(props.sectionName, props.beginValue, props.endValue)}>{props.children}</Press>
-	);
 	const closeMenu = () => {
 		// Close menu
 		setMenuOpen(false);
@@ -349,9 +375,9 @@ const Menu = () => {
 	return (
 		<>
 			<Modal h="full" isOpen={menuOpen} onClose={() => closeMenu()} animationPreset="slide" _slide={{delay: 0, placement: "left"}}>
-				<Modal.Content w="full" maxWidth="full" maxHeight="full">
+				<Modal.Content alignItems="flex-start" justifyContent="flex-start" style={{shadowOpacity: 0}} w="full" maxWidth="full" minHeight="full">
 					<Modal.Header borderBottomWidth={0} h={0} m={0} p={0} />
-					<Modal.Body p={0}>
+					<Modal.Body h="full" minHeight="full" maxHeight="full" p={0} m={0}>
 						<VStack mb={3} p={2}>
 							<Heading size="md">Conlang Toolbox</Heading>
 							<Text fontSize="sm" color="primary.200">tools for language invention</Text>
@@ -362,44 +388,108 @@ const Menu = () => {
 							let output = [];
 							if(i) {
 								// Add a divider between sections
-								output.push(<Divider key={"Divider"+String(i)} my={4} mx={1} />);
+								output.push(<Divider key={"Divider"+String(i)} my={2} mx="auto" w="90%" bg="text.50" opacity={25} />);
 							}
 							pages.forEach(page => {
 								const {
-									parentOf,
+									parentId,
 									childId,
 									icon,
 									id,
 									title,
 									url
 								} = page;
-								if(parentOf) {
+								if(parentId) {
 									// App Section w/subpages
+									const isSelected = location.pathname.startsWith(url);
+									const bgOptions = isSelected ? { bg: "primary.500" } : {};
+									const textOptions = isSelected ? { color: "primary.500" } : {};
 									// Get new information for this section
-									const { interpolator, begin, end } = getNewInterpolationInfo();
+									const { rotateInterpolator, translateInterpolator, begin, end } = getToggleInterpolationInfo();
+									const thisSectionAnimationValue = useRef(new Animated.Value(begin)).current;
+									sectionAnimationValues[parentId] = [thisSectionAnimationValue, begin, end];
+									// Note that we have a new section
+									numberOfSections++;
+									sectionAnimationValues.orderedList.push(parentId);
 									output.push(
-										<Toggleable key={sectionId + "-" + id} sectionName={parentOf} beginValue={begin} endValue={end}>
-											<HStack alignItems="space-between" justifyContent="center">
-												<Box m={2}>{icon}</Box>
-												<Box flexGrow={1} m={2} textAlign="end"><Text>{title}</Text></Box>
-												<Animated.View style={[{transform: [{rotate: openSectionInfo.interpolate(interpolator)}]}]}>
-													<CaretIcon m={2} />
-												</Animated.View>
-											</HStack>
-										</Toggleable>
+										<Pressable height={10} onPress={() => toggleSection(parentId, begin, end)} key={sectionId + "-" + id}>
+											<ZStack>
+												<HStack height={10} w="full" {...bgOptions} opacity={20} />
+												<HStack height={10} alignItems="center" w="full" justifyContent="flex-start">
+													<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
+														{icon ? Icons[icon](textOptions) : <></>}
+													</VStack>
+													<VStack alignItems="flex-start" justifyContent="center" flexGrow={1} m={2} textAlign="end">
+														<Text {...textOptions}>{title}</Text>
+													</VStack>
+													<VStack alignItems="center" justifyContent="center" m={2}>
+														<Animated.View
+															style={[{
+																transform: [
+																	{ rotate: thisSectionAnimationValue.interpolate(rotateInterpolator) },
+																	{ translateX: thisSectionAnimationValue.interpolate(translateInterpolator) },
+																	{ perspective: 1000 }
+																]
+															}]}
+														>
+															<Icons.CaretIcon {...textOptions} />
+														</Animated.View>
+													</VStack>
+												</HStack>
+											</ZStack>
+										</Pressable>
 									);
 								} else if (childId) {
 									// Sub-page of App Section
+									const interpolator = getSubsectionInterpolationInfo();
+									const isSelected = location.pathname === url;
+									const dotOptions = isSelected ? { color: "primary.500" } : { color: "transparent" };
+									const textOptions = isSelected ? { color: "primary.500" } : {};
+									const thisSectionAnimationValue = sectionAnimationValues[childId][0];
 									output.push(
-										<Pressable key={sectionId + "-" + id} url={url}>
-											<Text>{icon}{title}</Text>
-										</Pressable>
+										<AnimatedView
+											key={sectionId + "-" + id}
+											m={0}
+											bg="darker"
+											p={0}
+											d="flex"
+											justifyContent="center"
+											style={[{
+												height: thisSectionAnimationValue.interpolate(interpolator),
+												minHeight: thisSectionAnimationValue.interpolate(interpolator),
+												overflow: "hidden"
+											}]}
+										>
+											<Pressable height={9} onPress={() => navigate(url)}>
+												<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
+													<VStack alignItems="flex-end" justifyContent="center" flexGrow={1} m={2} ml={4}>
+														<Text fontSize="xs" {...textOptions}>{title}</Text>
+													</VStack>
+													<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
+														<Icons.DotIcon {...dotOptions} />
+													</VStack>
+												</HStack>
+											</Pressable>
+										</AnimatedView>
 									);
 								} else {
 									// App Section (standalone)
+									const fontOptions = page.fontOptions || {};
+									const styleOptions = page.styleOptions || {};
+									const alignOptions = page.alignOptions || {};
+									const isSelected = location.pathname === url;
+									const boxOptions = isSelected ? { color: "primary.500", ...styleOptions } : { color: "transparent", ...styleOptions };
+									const textOptions = isSelected ? { color: "primary.500", fontOptions } : fontOptions;
 									output.push(
-										<Pressable key={sectionId + "-" + id} url={url}>
-											<Text>{icon}{title}</Text>
+										<Pressable key={sectionId + "-" + id} onPress={() => navigate(url)}>
+											<HStack w="full" height={10} alignItems="center" justifyContent="flex-start" {...boxOptions}>
+												<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
+													{icon ? Icons[icon](textOptions) : <></>}
+												</VStack>
+												<VStack alignItems="flex-start" justifyContent="center" flexGrow={1} m={2} {...alignOptions}>
+													<Text {...textOptions}>{title}</Text>
+												</VStack>
+											</HStack>
 										</Pressable>
 									);
 								}
@@ -409,64 +499,8 @@ const Menu = () => {
 					</Modal.Body>
 					<Modal.Footer borderTopWidth={0} h={0} m={0} p={0} />
 				</Modal.Content>
-		{/*<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
-			{appMenuPages.map((menuSection) => {
-				const pages = menuSection.pages.map((appPage) => {
-					if(appPage.parentOf) {
-						return (
-							<IonItem
-								key={appPage.id}
-								className={
-									'mainHeading'
-									+ (location.pathname.startsWith(appPage.url) ? ' selected' : '')
-									+ (toggledSection === appPage.parentOf ? ' toggled' : '')
-								}
-								onPress={
-									() => dispatch(
-										toggleTo(
-											toggledSection === appPage.parentOf
-												? ''
-												: appPage.parentOf
-										)
-									)
-								}
-							>
-								<IonIcon slot="start" icon={appPage.icon} />
-								<IonLabel>{appPage.title}</IonLabel>
-								<IonIcon className="caret" slot="end" icon={caretForwardSharp} />
-							</IonItem>
-						);
-					} else if(appPage.parent) {
-						return (
-							<IonMenuToggle key={appPage.id} autoHide={false}>
-								<IonItem className={'subHeading' + (location.pathname.startsWith(appPage.url) ? ' selected' : '') + (toggledSection === appPage.parent ? '' : ' hidden')} routerLink={appPage.url} routerDirection="forward" lines="none" detail={false}>
-									<IonLabel>{appPage.title}</IonLabel>
-									<IonIcon slot="end" size="small" icon={ellipseSharp} />
-								</IonItem>
-							</IonMenuToggle>
-						);
-					}
-					return (
-						<IonMenuToggle key={appPage.id} autoHide={false}>
-							<IonItem className={'mainHeading' + (location.pathname.startsWith(appPage.url) ? ' selected' : '')} routerLink={appPage.url} routerDirection="forward" lines="none" detail={false}>
-								{appPage.icon ? (<IonIcon slot="start" icon={appPage.icon} />) : ""}
-								<IonLabel>{appPage.title}</IonLabel>
-							</IonItem>
-						</IonMenuToggle>
-					);
-				});
-				let head = (menuSection.header) ? (<IonListHeader>{menuSection.header}</IonListHeader>) : <></>,
-					note = (menuSection.note) ? (<IonNote>{menuSection.note}</IonNote>) : <></>;
-				return (
-					<IonList key={menuSection.id} id={menuSection.id}>
-						{head}{note}
-						{pages}
-					</IonList>
-				);
-			})}
-		</VStack>*/}
 			</Modal>
-			<IconButton variant="ghost" icon={<MenuIcon color="text.50" />} onPress={() => setMenuOpen(true)} />
+			<IconButton variant="ghost" icon={<Icons.MenuIcon color="text.50" />} onPress={() => setMenuOpen(true)} />
 		</>
 	);
 };
