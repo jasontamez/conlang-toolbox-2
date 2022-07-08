@@ -1,18 +1,39 @@
-import { shallowEqual, useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import WL from '../components/WordLists';
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
-import { HStack, Icon, Menu, Pressable, ScrollView, VStack, Text, Divider } from 'native-base';
+import { HStack, Icon, Menu, Pressable, ScrollView, VStack, Text, Divider, Button } from 'native-base';
 import { DotsIcon } from '../components/icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MenuModal from "../pages/MenuModal";
-import { setCenterWordList } from '../store/appStateSlice';
+import { centerTheDisplayedWords, addList, removeList } from '../store/wordListsSlice';
 
 const WordListsPage = () => {
+	const equalityCheck = (stateA, stateB) => {
+		if (stateA === stateB) {
+			return true;
+		} else if (String(stateA.centerTheDisplayedWords) !== String(stateB.centerTheDisplayedWords)) {
+			return false;
+		}
+		try {
+			const listA = stateA.listsDisplayed;
+			const listB = stateB.listsDisplayed;
+			if(listA === listB) {
+				return true;
+			}
+			const keysA = Object.keys(listA);
+			const keysB = Object.keys(listB);
+			return (keysA.length === keysB.length && String(keysA.sort()) === String(keysB.sort()));
+		} catch (error) {
+			console.log(error);
+			// Assume false
+			return false;
+		}
+	};
 	//const [modalState, wordListsState, waitingToAdd] = useSelector((state) => [state.modalState, state.wordListsState, state.lexicon.waitingToAdd], shallowEqual);
-	const initialCenterState = useSelector((state) => state.appState.centerWordList);
-	const [centerMenuOption, setCenterMenuOption] = useState(initialCenterState);
-	const [centerAlignText, setCenterAlignText] = useState(initialCenterState.length > 0);
+	const {centerTheDisplayedWords, listsDisplayed} = useSelector((state) => state.wordLists, equalityCheck);
+	const [centerMenuOption, setCenterMenuOption] = useState(centerTheDisplayedWords);
+	const [centerAlignText, setCenterAlignText] = useState(centerTheDisplayedWords.length > 0);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [waitingToAdd, setWaitingToAdd] = useState([]);
 	const dispatch = useDispatch();
@@ -68,46 +89,57 @@ const WordListsPage = () => {
 		// close menu
 		setMenuOpen(false);
 		// save state of the centering option
-		dispatch(setCenterWordList(centerMenuOption));
+		dispatch(centerTheDisplayedWords(centerMenuOption));
 	};
 	return (
-		<>
-			<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
-				<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea>
-					<MenuModal />
-					<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center">Word Lists</Text>
-					<Menu
-						placement="bottom right"
-						closeOnSelect={false}
-						w="full"
-						trigger={(triggerProps) => (
-							<Pressable m="auto" w={6} accessibilityLabel="More options menu" {...triggerProps}>
-								<DotsIcon />
-							</Pressable>
-						)}
-						onOpen={() => setMenuOpen(true)}
-						onPress={() => setMenuOpen(true)}
-						onClose={() => onMenuClose()}
-						isOpen={menuOpen}
-					>
-						<Menu.OptionGroup defaultValue={centerMenuOption} value={centerMenuOption} type="checkbox" onChange={(v) => handleCenterText(v)}>
-							<Menu.ItemOption value="center">Center-Justify Text</Menu.ItemOption>
-						</Menu.OptionGroup>
-						<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
-						<Menu.Item>
-							<Icon as={Ionicons} name="save-outline" size="xs" m={2} />
-							<Text>Save All to Lexicon</Text>
-						</Menu.Item>
-						<Menu.Item>
-							<Icon as={Ionicons} name="save-outline" size="xs" m={2} />
-							<Text>Choose what to save</Text>
-						</Menu.Item>
-					</Menu>
-				</HStack>
-				<ScrollView flexGrow={1}>
-				</ScrollView>
-			</VStack>
-		</>
+		<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
+			<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea>
+				<MenuModal />
+				<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center">Word Lists</Text>
+				<Menu
+					placement="bottom right"
+					closeOnSelect={false}
+					w="full"
+					trigger={(triggerProps) => (
+						<Pressable m="auto" w={6} accessibilityLabel="More options menu" {...triggerProps}>
+							<DotsIcon />
+						</Pressable>
+					)}
+					onOpen={() => setMenuOpen(true)}
+					onPress={() => setMenuOpen(true)}
+					onClose={() => onMenuClose()}
+					isOpen={menuOpen}
+				>
+					<Menu.OptionGroup defaultValue={centerMenuOption} value={centerMenuOption} type="checkbox" onChange={(v) => handleCenterText(v)}>
+						<Menu.ItemOption value="center">Center-Justify Text</Menu.ItemOption>
+					</Menu.OptionGroup>
+					<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
+					<Menu.Item>
+						<Icon as={Ionicons} name="save-outline" size="xs" m={2} />
+						<Text>Save All to Lexicon</Text>
+					</Menu.Item>
+					<Menu.Item>
+						<Icon as={Ionicons} name="save-outline" size="xs" m={2} />
+						<Text>Choose what to save</Text>
+					</Menu.Item>
+				</Menu>
+			</HStack>
+			<ScrollView flexGrow={1}>
+				<VStack>
+					<Text>Display:</Text>
+					<HStack flexWrap="wrap" justifyContent="center">
+						{WL.sources.map((list) => {
+							const variant = listsDisplayed[list] ? "outline" : "ghost";
+							return (
+								<Button key={list} variant={variant} onClick={() => 222}>
+									<Text>{list}</Text>
+								</Button>	
+							);
+						})}
+					</HStack>
+				</VStack>
+			</ScrollView>
+		</VStack>
 	);
 
 	/*return (

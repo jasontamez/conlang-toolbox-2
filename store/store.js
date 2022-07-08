@@ -10,6 +10,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 //import packageJson from '../package.json';
 import morphoSyntaxSlice from './morphoSyntaxSlice';
+import wordListsSlice from './wordListsSlice';
 import appStateSlice from './appStateSlice';
 
 //const reconcile = async (incoming, original, reduced) => {
@@ -21,7 +22,8 @@ export default () => {
 	const reducer = {
 		// SLICES here
 		morphoSyntax: morphoSyntaxSlice,
-		appState: appStateSlice
+		appState: appStateSlice,
+		wordLists: wordListsSlice
 	};
 	//const persistConfig = {
 	//	key: 'root',
@@ -130,7 +132,10 @@ export const blankAppState = {/*
 	appState: {
 		menuToggleOpen: '',
 		menuToggleNumber: 0,
-		centerWordList: []
+	},
+	wordLists: {
+		centerTheDisplayedWords: [],
+		listsDisplayed: {}
 	},/*
 	lexicon: {
 		key: "",
@@ -205,10 +210,6 @@ export const blankAppState = {/*
 		deleting: false,
 		showNames: false,
 		showHelp: false
-	},
-	wordListsState: {
-		display: [],
-		textCenter: true
 	},
 	temporaryInfo: undefined*/
 };

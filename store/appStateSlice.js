@@ -2,8 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	menuToggleName: '',
-	menuToggleNumber: 0,
-	centerWordList: []
+	menuToggleNumber: 0
 };
 
 const setMenuToggleNameFunc = (state, action) => {
@@ -16,18 +15,12 @@ const setMenuToggleNumberFunc = (state, action) => {
 	return state;
 };
 
-const setCenterWordListFunc = (state, action) => {
-	state.centerWordList = action.payload;
-	return state;
-};
-
 const appStateSlice = createSlice({
-	name: 'morphoSyntax',
+	name: 'appState',
 	initialState,
 	reducers: {
 		setMenuToggleName: setMenuToggleNameFunc,
-		setMenuToggleNumber: setMenuToggleNumberFunc,
-		setCenterWordList: setCenterWordListFunc
+		setMenuToggleNumber: setMenuToggleNumberFunc
 	}
 });
 

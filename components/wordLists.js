@@ -1,1324 +1,1324 @@
 const WordListSources = [
-	["Swadesh 100", "s100"],
-	["Swadesh 207", "s207"],
-	["Swadesh-Yakhontov", "sy"],
-	["Swadesh-Woodward", "ssl"],
-	["Dogolposky", "d"],
-	["Leipzig-Jakarta", "lj"],
-	["ASJP", "asjp"]
+	"Swadesh 100",
+	"Swadesh 207",
+	"Swadesh-Yakhontov",
+	"Swadesh-Woodward",
+	"Dogolposky",
+	"Leipzig-Jakarta",
+	"ASJP"
 ];
 
 const WordList = [
 	{
 		word: "1st-person plural pronoun (we)",
-		s100: true,
-		s207: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		ASJP: true
 	},
 	{
 		word: "1st-person singular pronoun (I)",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "2nd-person plural pronoun (you)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "2nd-person singular pronoun (you)",
-		sy: true,
-		s207: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "3rd-person plural pronoun (they)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "3rd-person singular pronoun (he/she/it/him/her)",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "all (of a number)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "and",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "animal",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "ant",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "arm",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "ash(es)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "at",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "back",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "bad",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "bark (of a tree)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "because",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "belly (lower part of body, abdomen)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "big",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "bird",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "bite (verb)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "bitter",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "black (color)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "blood",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "blow (verb)",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "bone",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "breast (woman's)",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "breathe (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "brother",
-		ssl: true
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "burn (verb)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "carry (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "cat",
-		ssl: true
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "child",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "child (kin term)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "claw",
-		s100: true
+		"Swadesh 100": true
 	},
 	{
 		word: "cloud (not fog)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "cold",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "come (verb)",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "correct",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "count (verb)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "crush/grind (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "cry/weep (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "cut (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "dance",
-		ssl: true
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "day",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "dead",
-		d: true
+		Dogolposky: true
 	},
 	{
 		word: "die (verb)",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		ASJP: true
 	},
 	{
 		word: "dig (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "dirty",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "do/make (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "dog",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "drink (verb)",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "dry (substance)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "dull (as a knife)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "dust",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "ear",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "earth (soil)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "eat (verb)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "egg",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "eye (noun)",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "fall (verb)",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "far",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "father",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "fear (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "feather (large, not down)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "few",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "fight (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "fingernail",
-		s207: true,
-		d: true
+		"Swadesh 207": true,
+		Dogolposky: true
 	},
 	{
 		word: "fire (noun)",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "fish (noun)",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "five",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "flesh (meat)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "float (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "flow (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "flower",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "fly (verb)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "fog",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "foot (not leg)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "forest",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "four",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "freeze (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "fruit",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "full",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		ASJP: true
 	},
 	{
 		word: "give (verb)",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "go (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "good",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "grass",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "grease/fat",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "green (color)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "guts",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "hair (on head of humans)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "hand",
-		sy: true,
-		s100: true,
-		s207: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		ASJP: true
 	},
 	{
 		word: "hard",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "head (anatomic)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "hear (verb)",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "heart",
-		s100: true,
-		s207: true,
-		d: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		Dogolposky: true
 	},
 	{
 		word: "heavy",
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "here",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "hide (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "hit/beat (verb)",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "hold (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "horn (animal part)",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "hot",
-		s100: true
+		"Swadesh 100": true
 	},
 	{
 		word: "house",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "how",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "hunt (verb)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "husband",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "ice",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "if",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "in",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "kill (verb)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "knee",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "know (verb)",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "lake",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "laugh (verb)",
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "leaf (botanics)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "left (not right)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "leg",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "lie (on side, recline, as in a bed)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "live (verb)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "liver",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "long (not wide)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "louse/nit",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "man (adult male)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "many",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "moon",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "mother",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "mountain (not hill)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		ASJP: true
 	},
 	{
 		word: "mouth",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "name (noun)",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "narrow",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "navel",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "near",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "neck (not nape)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "new",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "night (dark time)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "no/not",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		d: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true
 	},
 	{
 		word: "nose",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "old",
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "one",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "other",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "path/road/trail (not street)",
-		s100: true,
-		s207: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		ASJP: true
 	},
 	{
 		word: "person (individual human)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		ASJP: true
 	},
 	{
 		word: "pig",
-		ssl: true
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "play (verb)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "pull (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "push (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "rain (noun)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "red (color)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "right (not left)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "river",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "root (botanics)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "rope",
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "rotten",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "round",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "rub (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "run (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "salt",
-		sy: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "sand",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "say (verb)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "scratch (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "sea",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "see (verb)",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "seed (noun)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "sew (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "shade/shadow",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "sharp (as a knife)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "short",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "sing (verb)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "sister",
-		ssl: true
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "sit (verb)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "skin/hide",
-		s100: true,
-		s207: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "sky",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "sleep (verb)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "small",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "smell (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "smoke (noun, of fire)",
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "smooth",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "snake",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "snow",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "soil",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "some",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "spit (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "split (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "squeeze (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "stab (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "stand (verb)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "star",
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "stick",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "stone/rock",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		ASJP: true
 	},
 	{
 		word: "straight",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "suck (verb)",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "sun",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		ASJP: true
 	},
 	{
 		word: "sweet",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "swell (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "swim (verb)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "tail",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "take (verb)",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "tear/teardrop",
-		d: true
+		Dogolposky: true
 	},
 	{
 		word: "that",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "there",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "thick",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "thigh",
-		lj: true
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "thin",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "think (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "this",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "three",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "throw (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "tie (verb)",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "tongue (part of body)",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "tooth",
-		sy: true,
-		s100: true,
-		s207: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "tree (not log)",
-		s100: true,
-		s207: true,
-		ssl: true,
-		asjp: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		ASJP: true
 	},
 	{
 		word: "turn (intransitive) (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "two/pair",
-		sy: true,
-		s100: true,
-		s207: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "vomit (verb)",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "walk (verb)",
-		s100: true,
-		s207: true
+		"Swadesh 100": true,
+		"Swadesh 207": true
 	},
 	{
 		word: "warm",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "wash (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "water (noun)",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		d: true,
-		asjp: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true,
+		ASJP: true
 	},
 	{
 		word: "wet",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "what?",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		d: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true
 	},
 	{
 		word: "when?",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "where?",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "white (color)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "who?",
-		sy: true,
-		s100: true,
-		s207: true,
-		ssl: true,
-		lj: true,
-		d: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true,
+		Dogolposky: true
 	},
 	{
 		word: "wide",
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "wife",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "wind",
-		sy: true,
-		s207: true,
-		ssl: true,
-		lj: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "wing",
-		s207: true,
-		lj: true
+		"Swadesh 207": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "wipe (verb)",
-		s207: true
+		"Swadesh 207": true
 	},
 	{
 		word: "with",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "woman",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "wood",
-		ssl: true,
-		lj: true
+		"Swadesh-Woodward": true,
+		"Leipzig-Jakarta": true
 	},
 	{
 		word: "work",
-		ssl: true
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "worm",
-		s207: true,
-		ssl: true
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "year",
-		sy: true,
-		s207: true,
-		ssl: true
+		"Swadesh-Yakhontov": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "yellow (color)",
-		s100: true,
-		s207: true,
-		ssl: true
+		"Swadesh 100": true,
+		"Swadesh 207": true,
+		"Swadesh-Woodward": true
 	},
 	{
 		word: "yesterday",
-		lj: true
+		"Leipzig-Jakarta": true
 	}
 ];
 
