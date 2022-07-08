@@ -129,7 +129,8 @@ export const blankAppState = {/*
 	},
 	appState: {
 		menuToggleOpen: '',
-		menuToggleNumber: 0
+		menuToggleNumber: 0,
+		centerWordList: []
 	},/*
 	lexicon: {
 		key: "",

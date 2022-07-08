@@ -2,21 +2,21 @@ import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import WL from '../components/WordLists';
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
-import Header from '../components/Header';
 import { HStack, Icon, Menu, Pressable, ScrollView, VStack, Text, Divider } from 'native-base';
 import { DotsIcon } from '../components/icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MenuModal from "../pages/MenuModal";
+import { setCenterWordList } from '../store/appStateSlice';
 
 const WordListsPage = () => {
 	//const [modalState, wordListsState, waitingToAdd] = useSelector((state) => [state.modalState, state.wordListsState, state.lexicon.waitingToAdd], shallowEqual);
-	const initialCenterState = false;
-	const [centerAlignText, setCenterAlignText] = useState(initialCenterState);
-	const [centerMenuOption, setCenterMenuOption] = useState([]);
+	const initialCenterState = useSelector((state) => state.appState.centerWordList);
+	const [centerMenuOption, setCenterMenuOption] = useState(initialCenterState);
+	const [centerAlignText, setCenterAlignText] = useState(initialCenterState.length > 0);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [waitingToAdd, setWaitingToAdd] = useState([]);
-	/*const theDisplay = wordListsState.display;
 	const dispatch = useDispatch();
+	/*const theDisplay = wordListsState.display;
 	const toggleChars = (what) => {
 		if(theDisplay.some((p) => p === what)) {
 			return dispatch(updateWordListsDisplay(theDisplay.filter((p) => p !== what)));
@@ -64,6 +64,12 @@ const WordListsPage = () => {
 		setCenterMenuOption(checkboxes);
 		setCenterAlignText(checkboxes.length > 0);
 	};
+	const onMenuClose = () => {
+		// close menu
+		setMenuOpen(false);
+		// save state of the centering option
+		dispatch(setCenterWordList(centerMenuOption));
+	};
 	return (
 		<>
 			<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
@@ -81,7 +87,7 @@ const WordListsPage = () => {
 						)}
 						onOpen={() => setMenuOpen(true)}
 						onPress={() => setMenuOpen(true)}
-						onClose={() => setMenuOpen(false)}
+						onClose={() => onMenuClose()}
 						isOpen={menuOpen}
 					>
 						<Menu.OptionGroup defaultValue={centerMenuOption} value={centerMenuOption} type="checkbox" onChange={(v) => handleCenterText(v)}>
