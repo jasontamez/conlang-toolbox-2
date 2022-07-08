@@ -66,6 +66,7 @@ import getStoreInfo from './store/store';
 import MS from "./pages/MS";
 import MSSection from "./pages/ms/msSection";
 import MSSettings from "./pages/ms/msSettings";
+import WordLists from './pages/WordLists';
 
 import About from "./pages/About.js";
 
@@ -131,9 +132,9 @@ const App = () => {
 							</Route>
 							<Route path="/dc/*" element={<Lexicon />}>
 							</Route>
-							<Route path="/settings" element={<Settings />} />
+							<Route path="/settings" element={<Settings />} /> */ }
 							<Route path="/wordlists" element={<WordLists />} />
-							<Route path="/credits" element={<Credits />} />
+							{ /* <Route path="/credits" element={<Credits />} />
 							<Route path="/about" element={<About />} /> */ }
 							<Route index element={<About />} />
 						</Routes>

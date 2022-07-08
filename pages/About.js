@@ -60,7 +60,7 @@ const Home = () => {
 						<Indented>Store multiple lexicons</Indented>							
 						<Indented>Export your data</Indented>							
 					</Pressable>
-					<Pressable>
+					<Pressable onPress={() => {navigate("/wordlists")}}>
 						<Heading color="primary.500" p={4} fontSize="xl" alignSelf="center"><WordListsIcon color="primary.500" mr={3} />Word Lists</Heading>
 						<Highlight>A small storehouse of basic words, useful for starting a lexicon.</Highlight>
 						<Indented>Easily add words to Lexicon</Indented>							

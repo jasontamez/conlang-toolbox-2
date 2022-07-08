@@ -232,6 +232,7 @@ const Menu = () => {
 	let [openSectionName, setOpenSectionName] = useState(toggledMenuSectionName || '');
 	const location = useLocation();
 	const dispatch = useDispatch();
+	const navigator = useNavigate();
 	let numberOfSections = 0;
 	let sectionAnimationValues = {
 		orderedList: []
@@ -364,7 +365,10 @@ const Menu = () => {
 		setOpenSectionNumber(newValue);
 		setOpenSectionName(sectionName === openSectionName ? '' : sectionName);
 	}
-	const navigate = useNavigate();
+	const navigate = (url) => {
+		navigator(url);
+		closeMenu();
+	};
 	const closeMenu = () => {
 		// Close menu
 		setMenuOpen(false);

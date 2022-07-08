@@ -376,6 +376,43 @@ const components = {
 				bg: "gray.900"
 			}
 		}
+	},
+	Menu: {
+		defaultProps: {
+			bg: "main.900"
+		}
+	},
+	MenuItem: {
+		defaultProps: {
+			_text: {
+				color: "main.50",
+				fontSize: "sm"
+			},
+			d: "flex",
+			alignItems: "center",
+			justifyContent: "space-between",
+			flexDirection: "row",
+			_focus: {
+				bg: "lighter"
+			},
+			_hover: {
+				bg: "lighter"
+			},
+			_pressed: {
+				bg: "lighter"
+			}
+		}
+	},
+	MenuItemOption: {
+		defaultProps: {
+			_text: {
+				color: "main.50",
+				fontSize: "sm"
+			},
+			_icon: {
+				color: "tertiary.500"
+			}
+		}
 	}
 };
 
