@@ -132,6 +132,13 @@ export const blankAppState = {/*
 	appState: {
 		menuToggleName: '',
 		menuToggleNumber: 0,
+		headerState: {
+			title: 'Conlang Toolbox',
+			textProps: false,
+			boxProps: false,
+			extraChars: true,
+			rightHeader: []
+		}
 	},
 	wordLists: {
 		centerTheDisplayedWords: [],

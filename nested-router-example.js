@@ -1,11 +1,11 @@
 import React from 'react';
 
 //import React from "react";
-import { NativeBaseProvider, Box } from "native-base";
+import { NativeBaseProvider, Box, VStack, ScrollView, HStack, Text, IconButton } from "native-base";
 
 import { NativeRouter } from "react-router-native";
 import { Route, Routes } from "react-router";
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 //import { PersistGate } from 'redux-persist/integration/react';
 
 import { useFonts } from 'expo-font';
@@ -61,17 +61,26 @@ import {
 } from '@expo-google-fonts/sriracha'
 
 import getTheme from './components/theme';
+import MenuModal from "./pages/MenuModal";
 
 import getStoreInfo from './store/store';
 import MS from "./pages/MS";
 import MSSection from "./pages/ms/msSection";
 import MSSettings from "./pages/ms/msSettings";
 import WordLists from './pages/WordLists';
+import { ExtraCharactersIcon } from "./components/icons";
+import * as Headers from './components/Header.js'
 
 import About from "./pages/About.js";
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
+	return (
+		<Provider store={store}><Layout /></Provider>
+	);
+};
+
+const Layout = () => {
 	const [fontsloaded] = useFonts({
 		Arimo_400Regular,
 		Arimo_400Regular_Italic,
@@ -111,37 +120,53 @@ const App = () => {
 		'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
 	});
+	const headerState = useSelector((state) => state.appState.headerState);
+	const boxProps = headerState.boxProps || {};
+	const textProps = headerState.textProps | {};
+	const {title, extraChars, rightHeader} = headerState;
+	const openExtraChars = () => {
+		//() => dispatch(openModal("ExtraCharacters"))
+	}
+	const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" />} onPress={() => openExtraChars()} />;
 	const theme = getTheme("Solarized Dark");
 	return (
-		<Provider store={store}>
 		<NativeBaseProvider theme={theme}>
-			<Box h="full" safeArea bg="main.800">
-				<NativeRouter>
-						<Routes> { /* 
-							<Route path="/wg/*" element={<WG />}>
-							</Route>
-							<Route path="/we/*"  element={<WE />}>
-							</Route>
-							<Route path="/lex/*" element={<Lexicon />}>
-							</Route> */ }
-							<Route path="/ms/*" element={<MS />}>
-								<Route index element={<MSSettings />} />
-								<Route path=":msPage" element={<MSSection />} />
-							</Route> { /*
-							<Route path="/ph/*" element={<Lexicon />}>
-							</Route>
-							<Route path="/dc/*" element={<Lexicon />}>
-							</Route>
-							<Route path="/settings" element={<Settings />} /> */ }
-							<Route path="/wordlists" element={<WordLists />} />
-							{ /* <Route path="/credits" element={<Credits />} />
-							<Route path="/about" element={<About />} /> */ }
-							<Route index element={<About />} />
-						</Routes>
-				</NativeRouter>
+			<Box h="full" w="full" safeArea bg="main.800">
+				<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
+					<NativeRouter>
+						<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea {...boxProps}>
+							<MenuModal location={location} />
+							<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
+							{extraChars ? <ExtraChars /> : <></>}
+							{rightHeader.map(header => <React.Fragment key={"Header-" + header}>{Headers[header]}</React.Fragment>)}
+						</HStack>
+						<ScrollView flexGrow={1}>
+							<Routes> { /* 
+								<Route path="/wg/*" element={<WG />}>
+								</Route>
+								<Route path="/we/*"  element={<WE />}>
+								</Route>
+								<Route path="/lex/*" element={<Lexicon />}>
+								</Route> */ }
+								<Route path="/ms/*" element={<MS />}>
+									<Route index element={<MSSettings />} />
+									<Route path=":msPage" element={<MSSection />} />
+								</Route> { /*
+								<Route path="/ph/*" element={<Lexicon />}>
+								</Route>
+								<Route path="/dc/*" element={<Lexicon />}>
+								</Route>
+								<Route path="/settings" element={<Settings />} /> */ }
+								<Route path="/wordlists" element={<WordLists  />} />
+								{ /* <Route path="/credits" element={<Credits />} />
+								<Route path="/about" element={<About />} /> */ }
+								<Route index element={<About />} />
+							</Routes>
+						</ScrollView>
+					</NativeRouter>
+				</VStack>
 			</Box>
 		</NativeBaseProvider>
-		</Provider>
 	);
 };
 
