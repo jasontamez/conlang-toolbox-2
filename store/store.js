@@ -130,7 +130,7 @@ export const blankAppState = {/*
 		text: {}
 	},
 	appState: {
-		menuToggleOpen: '',
+		menuToggleName: '',
 		menuToggleNumber: 0,
 	},
 	wordLists: {

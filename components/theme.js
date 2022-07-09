@@ -202,7 +202,13 @@ const components = {
 			borderColor: "main.500"
 		}
 	},
-	ModalCloseButton: {...mainFG},
+	ModalCloseButton: {
+		defaultProps: {
+			_icon: {
+				color: "text.50"
+			}
+		}
+	},
 	ScrollView: {
 		variants: {
 			tabular: {
@@ -390,7 +396,7 @@ const components = {
 			},
 			d: "flex",
 			alignItems: "center",
-			justifyContent: "space-between",
+			justifyContent: "flex-start",
 			flexDirection: "row",
 			_focus: {
 				bg: "lighter"

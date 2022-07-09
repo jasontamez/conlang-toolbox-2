@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as Icons from '../components/icons';
 //import Header from '../components/Header';
 import { useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { setMenuToggleNumber, setMenuToggleName } from '../store/appStateSlice';
 import { Animated } from 'react-native';
 
@@ -225,11 +225,10 @@ const appMenuPages = [
 const AnimatedView = Factory(Animated.View);
 
 const Menu = () => {
-	const toggledMenuSectionNumber = useSelector((state) => state.appState.menuToggleNumber);
-	const toggledMenuSectionName = useSelector((state) => state.appState.menuToggleName);
+	const {menuToggleName, menuToggleNumber} = useSelector((state) => state.appState, shallowEqual);
 	let [menuOpen, setMenuOpen] = useState(false);
-	let [openSectionNumber, setOpenSectionNumber] = useState(toggledMenuSectionNumber || 0);
-	let [openSectionName, setOpenSectionName] = useState(toggledMenuSectionName || '');
+	let [openSectionNumber, setOpenSectionNumber] = useState(menuToggleNumber || 0);
+	let [openSectionName, setOpenSectionName] = useState(menuToggleName || '');
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigator = useNavigate();
@@ -410,7 +409,7 @@ const Menu = () => {
 									const textOptions = isSelected ? { color: "primary.500" } : {};
 									// Get new information for this section
 									const { rotateInterpolator, translateInterpolator, begin, end } = getToggleInterpolationInfo();
-									const thisSectionAnimationValue = useRef(new Animated.Value(begin)).current;
+									const thisSectionAnimationValue = useRef(new Animated.Value(openSectionNumber)).current;
 									sectionAnimationValues[parentId] = [thisSectionAnimationValue, begin, end];
 									// Note that we have a new section
 									numberOfSections++;
