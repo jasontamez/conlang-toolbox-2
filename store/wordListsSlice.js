@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	centerTheDisplayedWords: [],
-	listsDisplayed: {ASJP: true}
+	listsDisplayed: {}
 };
 
-const centerTheDisplayedWordsFunc = (state, action) => {
+const setCenterTheDisplayedWordsFunc = (state, action) => {
 	state.centerTheDisplayedWords = action.payload;
 	return state;
 };
@@ -24,12 +24,16 @@ const wordListsSlice = createSlice({
 	name: 'wordLists',
 	initialState,
 	reducers: {
-		centerTheDisplayedWords: centerTheDisplayedWordsFunc,
+		setCenterTheDisplayedWords: setCenterTheDisplayedWordsFunc,
 		addList: addListFunc,
 		removeList: removeListFunc
 	}
 });
 
-export const { setMenuToggleName, setMenuToggleNumber } = wordListsSlice.actions;
+export const {
+	addList,
+	removeList,
+	setCenterTheDisplayedWords
+} = wordListsSlice.actions;
 
 export default wordListsSlice.reducer;

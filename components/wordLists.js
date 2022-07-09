@@ -11,1314 +11,1790 @@ const WordListSources = [
 const WordList = [
 	{
 		word: "1st-person plural pronoun (we)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"ASJP"
+		]
 	},
 	{
 		word: "1st-person singular pronoun (I)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "2nd-person plural pronoun (you)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "2nd-person singular pronoun (you)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "3rd-person plural pronoun (they)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "3rd-person singular pronoun (he/she/it/him/her)",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "all (of a number)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "and",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "animal",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "ant",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "arm",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "ash(es)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "at",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "back",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "bad",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "bark (of a tree)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "because",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "belly (lower part of body, abdomen)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "big",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "bird",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "bite (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "bitter",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "black (color)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "blood",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "blow (verb)",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "bone",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "breast (woman's)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "breathe (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "brother",
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "burn (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "carry (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "cat",
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "child",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "child (kin term)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "claw",
-		"Swadesh 100": true
+		lists: [
+			"Swadesh 100"
+		]
 	},
 	{
 		word: "cloud (not fog)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "cold",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "come (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "correct",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "count (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "crush/grind (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "cry/weep (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "cut (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "dance",
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "day",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "dead",
-		Dogolposky: true
+		lists: [
+			"Dogolposky"
+		]
 	},
 	{
 		word: "die (verb)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"ASJP"
+		]
 	},
 	{
 		word: "dig (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "dirty",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "do/make (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "dog",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "drink (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "dry (substance)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "dull (as a knife)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "dust",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "ear",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "earth (soil)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "eat (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "egg",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "eye (noun)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "fall (verb)",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "far",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "father",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "fear (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "feather (large, not down)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "few",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "fight (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "fingernail",
-		"Swadesh 207": true,
-		Dogolposky: true
+		lists: [
+			"Swadesh 207",
+			"Dogolposky"
+		]
 	},
 	{
 		word: "fire (noun)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "fish (noun)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "five",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "flesh (meat)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "float (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "flow (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "flower",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "fly (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "fog",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "foot (not leg)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "forest",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "four",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "freeze (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "fruit",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "full",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"ASJP"
+		]
 	},
 	{
 		word: "give (verb)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "go (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "good",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "grass",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "grease/fat",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "green (color)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "guts",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "hair (on head of humans)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "hand",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"ASJP"
+		]
 	},
 	{
 		word: "hard",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "head (anatomic)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "hear (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "heart",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		Dogolposky: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Dogolposky"
+		]
 	},
 	{
 		word: "heavy",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "here",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "hide (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "hit/beat (verb)",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "hold (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "horn (animal part)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "hot",
-		"Swadesh 100": true
+		lists: [
+			"Swadesh 100"
+		]
 	},
 	{
 		word: "house",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "how",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "hunt (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "husband",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "ice",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "if",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "in",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "kill (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "knee",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "know (verb)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "lake",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "laugh (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "leaf (botanics)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "left (not right)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "leg",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "lie (on side, recline, as in a bed)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "live (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "liver",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "long (not wide)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "louse/nit",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "man (adult male)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "many",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "moon",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "mother",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "mountain (not hill)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"ASJP"
+		]
 	},
 	{
 		word: "mouth",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "name (noun)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "narrow",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "navel",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "near",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "neck (not nape)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "new",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "night (dark time)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "no/not",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"Dogolposky"
+		]
 	},
 	{
 		word: "nose",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "old",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "one",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "other",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "path/road/trail (not street)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"ASJP"
+		]
 	},
 	{
 		word: "person (individual human)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"ASJP"
+		]
 	},
 	{
 		word: "pig",
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "play (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "pull (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "push (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "rain (noun)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "red (color)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "right (not left)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "river",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "root (botanics)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "rope",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "rotten",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "round",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "rub (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "run (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "salt",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "sand",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "say (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "scratch (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "sea",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "see (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "seed (noun)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "sew (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "shade/shadow",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "sharp (as a knife)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "short",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "sing (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "sister",
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "sit (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "skin/hide",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "sky",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "sleep (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "small",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "smell (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "smoke (noun, of fire)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "smooth",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "snake",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "snow",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "soil",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "some",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "spit (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "split (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "squeeze (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "stab (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "stand (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "star",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "stick",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "stone/rock",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"ASJP"
+		]
 	},
 	{
 		word: "straight",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "suck (verb)",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "sun",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"ASJP"
+		]
 	},
 	{
 		word: "sweet",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "swell (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "swim (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "tail",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "take (verb)",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "tear/teardrop",
-		Dogolposky: true
+		lists: [
+			"Dogolposky"
+		]
 	},
 	{
 		word: "that",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "there",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "thick",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "thigh",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "thin",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "think (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "this",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "three",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "throw (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "tie (verb)",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "tongue (part of body)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "tooth",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "tree (not log)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		ASJP: true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"ASJP"
+		]
 	},
 	{
 		word: "turn (intransitive) (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "two/pair",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "vomit (verb)",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "walk (verb)",
-		"Swadesh 100": true,
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "warm",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "wash (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "water (noun)",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true,
-		ASJP: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"Dogolposky",
+			"ASJP"
+		]
 	},
 	{
 		word: "wet",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "what?",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"Dogolposky"
+		]
 	},
 	{
 		word: "when?",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "where?",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "white (color)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "who?",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true,
-		Dogolposky: true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta",
+			"Dogolposky"
+		]
 	},
 	{
 		word: "wide",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "wife",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "wind",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "wing",
-		"Swadesh 207": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh 207",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "wipe (verb)",
-		"Swadesh 207": true
+		lists: [
+			"Swadesh 207"
+		]
 	},
 	{
 		word: "with",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "woman",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "wood",
-		"Swadesh-Woodward": true,
-		"Leipzig-Jakarta": true
+		lists: [
+			"Swadesh-Woodward",
+			"Leipzig-Jakarta"
+		]
 	},
 	{
 		word: "work",
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "worm",
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "year",
-		"Swadesh-Yakhontov": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh-Yakhontov",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "yellow (color)",
-		"Swadesh 100": true,
-		"Swadesh 207": true,
-		"Swadesh-Woodward": true
+		lists: [
+			"Swadesh 100",
+			"Swadesh 207",
+			"Swadesh-Woodward"
+		]
 	},
 	{
 		word: "yesterday",
-		"Leipzig-Jakarta": true
+		lists: [
+			"Leipzig-Jakarta"
+		]
 	}
 ];
 
