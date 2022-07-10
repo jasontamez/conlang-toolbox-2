@@ -4,25 +4,16 @@ import { ExtraCharactersIcon } from "./icons";
 import MenuModal from "../pages/MenuModal";
 import { allMainPages } from '../appLayoutInfo';
 import { useLocation } from "react-router-dom";
-
-
-const Header = (props) => {
-	const title = props.title;
-	const boxProps = props.boxProps || {};
-	const textProps = props.textProps || {};
-	return (
-		<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea {...boxProps}>
-			<Menu />
-			<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
-			{props.hideExtraChars ? <></> : <ExtraChars />}
-		</HStack>
-	);
-};
+import React from "react";
+import WordListsContextMenu from '../pages/WordListsContextMenu';
 
 const AppHeader = () => {
 	const location = useLocation();
 	const here = location.pathname;
 	const currentPage = allMainPages.find(page => here.startsWith(page.url)) || {};
+	const Headers = {
+		WordListsContextMenu: <WordListsContextMenu key="header1" />
+	};
 	const defaultProps = {
 		title: 'Conlang Toolbox',
 		boxProps: {},
@@ -40,7 +31,9 @@ const AppHeader = () => {
 			<MenuModal />
 			<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
 			{extraChars ? <ExtraChars /> : <></>}
-			{rightHeader.map(header => <React.Fragment key={"Header-" + header}>{Headers[header]}</React.Fragment>)}
+			{rightHeader.map(header => {
+				return <React.Fragment key={"Header-" + header}>{Headers[header]}</React.Fragment>;
+			})}
 		</HStack>
 	);
 };

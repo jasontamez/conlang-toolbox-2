@@ -11,8 +11,6 @@ import { appMenuPages } from '../appLayoutInfo';
 
 const AnimatedView = Factory(Animated.View);
 
-let zzzz = 0;
-
 const MenuModal = () => {
 	const {menuToggleName, menuToggleNumber} = useSelector((state) => state.appState, shallowEqual);
 	let [menuOpen, setMenuOpen] = useState(false);
@@ -164,14 +162,13 @@ const MenuModal = () => {
 		dispatch(setMenuToggleNumber(openSectionNumber));
 		dispatch(setMenuToggleName(openSectionName));
 	};
-	console.log(zzzz++);
 	return (
 		<>
 			<Modal h="full" isOpen={menuOpen} onClose={() => closeMenu()} animationPreset="slide" _slide={{delay: 0, placement: "left"}}>
 				<Modal.Content alignItems="flex-start" justifyContent="flex-start" style={{shadowOpacity: 0}} w="full" maxWidth="full" minHeight="full">
 					<Modal.Header borderBottomWidth={0} h={0} m={0} p={0} />
 					<Modal.Body h="full" minHeight="full" maxHeight="full" p={0} m={0}>
-						<VStack mb={3} p={2}>
+						<VStack mb={3} p={2} w="full" mr={5}>
 							<Heading size="md">Conlang Toolbox</Heading>
 							<Text fontSize="sm" color="primary.200">tools for language invention</Text>
 						</VStack>
@@ -184,7 +181,7 @@ const MenuModal = () => {
 								output.push(<Divider key={"Divider"+String(i)} my={2} mx="auto" w="90%" bg="text.50" opacity={25} />);
 							}
 							pages.forEach(page => {
-								const { icon, id, title, url, children } = page;
+								const { icon, id, title, menuTitle, url, children } = page;
 								if(children) {
 									// App Section w/subpages
 									const isSelected = location.pathname.startsWith(url);
@@ -198,7 +195,7 @@ const MenuModal = () => {
 									numberOfSections++;
 									sectionAnimationValues.orderedList.push(id);
 									output.push(
-										<Pressable key={sectionId + "-" + id} height={10} onPress={() => toggleSection(id, begin, end)}>
+										<Pressable key={sectionId + "-" + id} height={10} onPress={() => toggleSection(id, begin, end)} w="full">
 											<ZStack>
 												<HStack height={10} w="full" {...bgOptions} opacity={20} />
 												<HStack height={10} alignItems="center" w="full" justifyContent="flex-start">
@@ -206,7 +203,7 @@ const MenuModal = () => {
 														{icon ? Icons[icon](textOptions) : <></>}
 													</VStack>
 													<VStack alignItems="flex-start" justifyContent="center" flexGrow={1} m={2} textAlign="end">
-														<Text {...textOptions}>{title}</Text>
+														<Text {...textOptions}>{menuTitle || title}</Text>
 													</VStack>
 													<VStack alignItems="center" justifyContent="center" m={2}>
 														<Animated.View
@@ -226,62 +223,68 @@ const MenuModal = () => {
 										</Pressable>
 									);
 									// Deal with the kids
-									const Kids = () => {
-										const interpolator = getSubsectionInterpolationInfo(children.length);
-										const kidsSectionAnimationValue = sectionAnimationValues[id][0];
-										return (
-											<AnimatedView
-												key={sectionId + "-" + id + '-AllChildren'}
-												m={0}
-												bg="darker"
-												p={0}
-												d="flex"
-												justifyContent="center"
-												style={[{
-													height: kidsSectionAnimationValue.interpolate(interpolator),
-													minHeight: kidsSectionAnimationValue.interpolate(interpolator),
-													overflow: "hidden"
-												}]}
-											>
-												{children.map(child => {
-													const isSelected = location.pathname === child.url;
-													const dotOptions = isSelected ? { color: "primary.500" } : { color: "transparent" };
-													const textOptions = isSelected ? { color: "primary.500" } : {};
-													return (
-														<Pressable key={sectionId + "-" + id + '-' + child.id} height={9} onPress={() => navigate(child.url)}>
-															<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
-																<VStack alignItems="flex-end" justifyContent="center" flexGrow={1} m={2} ml={4}>
-																	<Text fontSize="xs" {...textOptions}>{child.title}</Text>
-																</VStack>
-																<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
-																	<Icons.DotIcon {...dotOptions} />
-																</VStack>
-															</HStack>
-														</Pressable>
-													);
-												})}
-											</AnimatedView>
-										);
-									};
-									output.push(<Kids />);
+									const interpolator = getSubsectionInterpolationInfo(children.length);
+									const kidsSectionAnimationValue = sectionAnimationValues[id][0];
+									output.push((
+										<AnimatedView
+											key={sectionId + "-" + id + '-AllChildren'}
+											m={0}
+											bg="darker"
+											p={0}
+											d="flex"
+											justifyContent="center"
+											style={[{
+												height: kidsSectionAnimationValue.interpolate(interpolator),
+												minHeight: kidsSectionAnimationValue.interpolate(interpolator),
+												overflow: "hidden"
+											}]}
+										>
+											{children.map(child => {
+												const { id, title, menuTitle, url } = child;
+												const isSelected = location.pathname === url;
+												const dotOptions = isSelected ? { color: "primary.500" } : { color: "transparent" };
+												const textOptions = isSelected ? { color: "primary.500" } : {};
+												const bgOptions = isSelected ? { bg: "primary.500" } : {};
+												return (
+													<Pressable key={sectionId + "-" + id + '-' + id} height={9} w="full" onPress={() => navigate(url)}>
+													<ZStack>
+														<HStack height={9} w="full" {...bgOptions} opacity={10} />
+														<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
+															<VStack alignItems="flex-end" justifyContent="center" flexGrow={1} m={2} ml={4}>
+																<Text fontSize="xs" {...textOptions}>{menuTitle || title}</Text>
+															</VStack>
+															<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
+																<Icons.DotIcon {...dotOptions} />
+															</VStack>
+														</HStack>
+													</ZStack>
+													</Pressable>
+												);
+											})}
+										</AnimatedView>
+									));
 								} else {
 									// App Section (standalone)
 									const fontOptions = page.fontOptions || {};
 									const styleOptions = page.styleOptions || {};
 									const alignOptions = page.alignOptions || {};
 									const isSelected = location.pathname === url;
+									const bgOptions = isSelected ? { bg: "primary.500" } : {};
 									const boxOptions = isSelected ? { color: "primary.500", ...styleOptions } : { color: "transparent", ...styleOptions };
 									const textOptions = isSelected ? { color: "primary.500", fontOptions } : fontOptions;
 									output.push(
-										<Pressable key={sectionId + "-" + id} onPress={() => navigate(url)}>
-											<HStack w="full" height={10} alignItems="center" justifyContent="flex-start" {...boxOptions}>
+										<Pressable key={sectionId + "-" + id} h={10} onPress={() => navigate(url)} w="full">
+											<ZStack>
+												<HStack height={10} w="full" {...bgOptions} opacity={20} />
+												<HStack w="full" height={10} alignItems="center" justifyContent="flex-start" {...boxOptions}>
 												<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
 													{icon ? Icons[icon](textOptions) : <></>}
 												</VStack>
 												<VStack alignItems="flex-start" justifyContent="center" flexGrow={1} m={2} {...alignOptions}>
-													<Text {...textOptions}>{title}</Text>
+													<Text {...textOptions}>{menuTitle || title}</Text>
 												</VStack>
 											</HStack>
+											</ZStack>
 										</Pressable>
 									);
 								}

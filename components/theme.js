@@ -383,6 +383,14 @@ const components = {
 			}
 		}
 	},
+	Switch: {
+		defaultProps: {
+			onTrackColor: "primary.900",
+			onThumbColor: "primary.500",
+			offTrackColor: "darker",
+			offThumbColor: "text.50"
+		}
+	},
 	Menu: {
 		defaultProps: {
 			bg: "main.900"

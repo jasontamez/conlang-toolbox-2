@@ -69,7 +69,8 @@ import MS from "./pages/MS";
 import MSSection from "./pages/ms/msSection";
 import MSSettings from "./pages/ms/msSettings";
 import WordLists from './pages/WordLists';
-import AppHeader from './components/Header.js'
+import AppHeader from './components/Header.js';
+import AppSettings from './pages/AppSettings';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -118,9 +119,9 @@ const Layout = () => {
 		'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
 	});
-	const theme = getTheme("Solarized Dark");
+	const theme = useSelector((state) => state.appState.theme);
 	return (
-		<NativeBaseProvider theme={theme}>
+		<NativeBaseProvider theme={getTheme(theme)}>
 			<Box h="full" w="full" safeArea bg="main.800">
 				<NativeRouter>
 					<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
@@ -140,8 +141,8 @@ const Layout = () => {
 								<Route path="/ph/*" element={<Lexicon />}>
 								</Route>
 								<Route path="/dc/*" element={<Lexicon />}>
-								</Route>
-								<Route path="/settings" element={<Settings />} /> */ }
+								</Route> */}
+								<Route path="/settings" element={<AppSettings />} />
 								<Route path="/wordlists" element={<WordLists  />} />
 								{ /* <Route path="/credits" element={<Credits />} />
 								<Route path="/about" element={<About />} /> */ }

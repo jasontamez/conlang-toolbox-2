@@ -131,7 +131,9 @@ export const blankAppState = {/*
 	},
 	appState: {
 		menuToggleName: '',
-		menuToggleNumber: 0
+		menuToggleNumber: 0,
+		theme: 'Default',
+		disableConfirms: false
 	},
 	wordLists: {
 		centerTheDisplayedWords: [],

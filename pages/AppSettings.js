@@ -1,48 +1,43 @@
 import React from 'react';
-import {
-	IonLabel,
-	IonPage,
-	IonContent,
-	IonHeader,
-	IonToolbar,
-	IonTitle,
-	IonList,
-	IonItem,
-	IonToggle,
-	IonButtons,
-	IonMenuButton,
-	IonNote
-} from '@ionic/react';
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import {
-	toggleDisableConfirm,
-	openModal
-} from '../components/ReduxDucksFuncs';
-import ChooseThemeModal from './M-Theme';
-import { HStack, Text, VStack } from 'native-base';
+import { HStack, Menu, Switch, Text, VStack } from 'native-base';
+import { setTheme, setDisableConfirms } from '../store/appStateSlice';
 
 
-const AppSettings = ({headerSetter}) => {
+const AppSettings = () => {
 	const dispatch = useDispatch();
-	const settings = useSelector((state) => state.appSettings, shallowEqual);
-	headerSetter({
-		title: 'App Settings',
-		extraChars: false
-	});
-	const Item = ({label, description, element}) => {
-		return (
-			<HStack w="full" justifyContent="space-between" alignItems="flex-end" p={2} borderBottomWidth={1} borderBottomColor="text.500">
-				<VStack>
-					<Text fontSize="md">{label}</Text>
-					<Text fontSize="xs">{description}</Text>
-				</VStack>
-				{element}
-			</HStack>
-		);
-	};
+	const settings = useSelector((state) => state.appState, shallowEqual);
 	return (
 		<VStack>
-			<Item />
+			<HStack w="full" justifyContent="space-between" alignItems="center" p={2} borderBottomWidth={1} borderBottomColor="main.900">
+				<VStack flexGrow={1} flexShrink={2} mr={2}>
+					<Text fontSize="md">Disable Confirmation Prompts</Text>
+					<Text fontSize="xs" color="main.500">Eliminates yes/no prompts when deleting or overwriting data.</Text>
+				</VStack>
+				<Switch defaultIsChecked={settings.disableConfirms} onValueChange={(value) => dispatch(setDisableConfirms(value))} />
+			</HStack>
+			<HStack w="full" justifyContent="space-between" alignItems="center" p={2} borderBottomWidth={1} borderBottomColor="main.900">
+				<VStack>
+					<Text fontSize="md">Change Theme</Text>
+				</VStack>
+				<Menu
+					placement="bottom right"
+					closeOnSelect={false}
+					trigger={(props) => <Text color="primary.500" {...props}>{settings.theme}</Text>}
+				>
+					<Menu.OptionGroup
+						defaultValue={settings.theme}
+						type="radio"
+						onChange={(newTheme) => dispatch(setTheme(newTheme))}
+					>
+						<Menu.ItemOption value="Default">Default</Menu.ItemOption>
+						<Menu.ItemOption value="Light">Light</Menu.ItemOption>
+						<Menu.ItemOption value="Dark">Dark</Menu.ItemOption>
+						<Menu.ItemOption value="Solarized Light">Solarized Light</Menu.ItemOption>
+						<Menu.ItemOption value="Solarized Dark">Solarized Dark</Menu.ItemOption>
+					</Menu.OptionGroup>
+				</Menu>
+			</HStack>
 		</VStack>
 	);
 	/*return (

@@ -1,5 +1,3 @@
-import { WordListMenu } from './pages/WordLists';
-
 const msSettings = {
 	title: 'Settings',
 	url: '/ms',
@@ -168,7 +166,7 @@ const WL = {
 	icon: 'WordListsIcon',
 	id: 'WL',
 	extraChars: false,
-	rightHeader: [WordListMenu]
+	rightHeader: ["WordListsContextMenu"]
 };
 
 const AppSettings = {
@@ -179,8 +177,8 @@ const AppSettings = {
 	extraChars: false
 };
 const About = {
-	title: 'About',
-	url: '/about',
+	menuTitle: 'About',
+	url: '/',
 	icon: 'AboutIcon',
 	id: 'About',
 	extraChars: false
