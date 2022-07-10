@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
 
 import { DotIcon, ExtraCharactersIcon, LexiconIcon, MorphoSyntaxIcon, WordEvolveIcon, WordGenIcon, WordListsIcon } from '../components/icons';
-import { setHeaderState } from '../store/appStateSlice';
-import { useDispatch } from 'react-redux';
 
 const Indented = (props) => (
 	<HStack m={1} mx={4} justifyContent="flex-start" alignItems="flex-start">
@@ -25,10 +23,6 @@ const Pressable = (props) => (
 
 const About = () => {
 	let navigate = useNavigate();
-	let dispatch = useDispatch();
-	dispatch(setHeaderState({
-		extraChars: false
-	}));
 	return (
 		<>
 			<VStack space={8} p={2} bg="darker">

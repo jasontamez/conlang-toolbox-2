@@ -1,7 +1,7 @@
 import React from 'react';
 
 //import React from "react";
-import { NativeBaseProvider, Box, VStack, ScrollView, HStack, Text, IconButton } from "native-base";
+import { NativeBaseProvider, Box, VStack, ScrollView } from "native-base";
 
 import { NativeRouter } from "react-router-native";
 import { Route, Routes } from "react-router";
@@ -61,17 +61,15 @@ import {
 } from '@expo-google-fonts/sriracha'
 
 import getTheme from './components/theme';
-import MenuModal from "./pages/MenuModal";
 
 import getStoreInfo from './store/store';
+
+import About from "./pages/About.js";
 import MS from "./pages/MS";
 import MSSection from "./pages/ms/msSection";
 import MSSettings from "./pages/ms/msSettings";
 import WordLists from './pages/WordLists';
-import { ExtraCharactersIcon } from "./components/icons";
-import * as Headers from './components/Header.js'
-
-import About from "./pages/About.js";
+import AppHeader from './components/Header.js'
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -120,26 +118,13 @@ const Layout = () => {
 		'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
 	});
-	const headerState = useSelector((state) => state.appState.headerState);
-	const boxProps = headerState.boxProps || {};
-	const textProps = headerState.textProps | {};
-	const {title, extraChars, rightHeader} = headerState;
-	const openExtraChars = () => {
-		//() => dispatch(openModal("ExtraCharacters"))
-	}
-	const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" />} onPress={() => openExtraChars()} />;
 	const theme = getTheme("Solarized Dark");
 	return (
 		<NativeBaseProvider theme={theme}>
 			<Box h="full" w="full" safeArea bg="main.800">
-				<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
-					<NativeRouter>
-						<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea {...boxProps}>
-							<MenuModal location={location} />
-							<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
-							{extraChars ? <ExtraChars /> : <></>}
-							{rightHeader.map(header => <React.Fragment key={"Header-" + header}>{Headers[header]}</React.Fragment>)}
-						</HStack>
+				<NativeRouter>
+					<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
+						<AppHeader />
 						<ScrollView flexGrow={1}>
 							<Routes> { /* 
 								<Route path="/wg/*" element={<WG />}>
@@ -163,8 +148,8 @@ const Layout = () => {
 								<Route index element={<About />} />
 							</Routes>
 						</ScrollView>
-					</NativeRouter>
-				</VStack>
+					</VStack>
+				</NativeRouter>
 			</Box>
 		</NativeBaseProvider>
 	);

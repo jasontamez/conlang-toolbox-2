@@ -3,228 +3,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import * as Icons from '../components/icons';
 //import Header from '../components/Header';
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { setMenuToggleNumber, setMenuToggleName } from '../store/appStateSlice';
 import { Animated } from 'react-native';
-
-const appMenuPages = [
-	{
-		pages: [
-			{
-				title: 'MorphoSyntax',
-				url: '/ms',
-				icon: 'MorphoSyntaxIcon',
-				id: 'menuitemSyntax',
-				parentId: 'ms'
-			},
-			{
-				title: 'Settings',
-				url: '/ms',
-				id: 'menuitemMSSettings',
-				childId: 'ms'
-			},
-			{
-				title: '1. Morphological Typology',
-				url: '/ms/ms01',
-				id: 'menuitemMS1',
-				childId: 'ms'
-			},
-			{
-				title: '2. Grammatical Categories',
-				url: '/ms/ms02',
-				id: 'menuitemMS2',
-				childId: 'ms'
-			},
-			{
-				title: '3. Constituent Order Typology',
-				url: '/ms/ms03',
-				id: 'menuitemMS3',
-				childId: 'ms'
-			},
-			{
-				title: '4. Noun Operations',
-				url: '/ms/ms04',
-				id: 'menuitemMS4',
-				childId: 'ms'
-			},
-			{
-				title: '5. Predicate Nominals etc.',
-				url: '/ms/ms05',
-				id: 'menuitemMS5',
-				childId: 'ms'
-			},
-			{
-				title: '6. Grammatical Relations',
-				url: '/ms/ms06',
-				id: 'menuitemMS6',
-				childId: 'ms'
-			},
-			{
-				title: '7. Voice/Valence Operations',
-				url: '/ms/ms07',
-				id: 'menuitemMS7',
-				childId: 'ms'
-			},
-			{
-				title: '8. Other Verb Operations',
-				url: '/ms/ms08',
-				id: 'menuitemMS8',
-				childId: 'ms'
-			},
-			{
-				title: '9. Pragmatic Marking',
-				url: '/ms/ms09',
-				id: 'menuitemMS9',
-				childId: 'ms'
-			},
-			{
-				title: '10. Clause Combinations',
-				url: '/ms/ms10',
-				id: 'menuitemMS10',
-				childId: 'ms'
-			},
-			{
-				title: 'WordGen',
-				url: '/wg',
-				icon: 'WordGenIcon',
-				id: 'menuitemWG',
-				parentId: 'wg'
-			},
-			{
-				title: 'Character Groups',
-				url: '/wg/categories',
-				id: 'menuitemWGcat',
-				childId: 'wg'
-			},
-			{
-				title: 'Syllables',
-				url: '/wg/syllables',
-				id: 'menuitemWGsyl',
-				childId: 'wg'
-			},
-			{
-				title: 'Transformations',
-				url: '/wg/rewriterules',
-				id: 'menuitemWGrew',
-				childId: 'wg'
-			},
-			{
-				title: 'Output',
-				url: '/wg/output',
-				id: 'menuitemWGout',
-				childId: 'wg'
-			},
-			{
-				title: 'Settings',
-				url: '/wg/settings',
-				id: 'menuitemWGset',
-				childId: 'wg'
-			},
-			{
-				title: 'WordEvolve',
-				url: '/we',
-				icon: 'WordEvolveIcon',
-				id: 'menuitemWE',
-				parentId: 'we'
-			},
-			{
-				title: 'Input',
-				url: '/we/input',
-				id: 'menuitemWEinp',
-				childId: 'we'
-			},
-			{
-				title: 'Character Groups',
-				url: '/we/categories',
-				id: 'menuitemWEcat',
-				childId: 'we'
-			},
-			{
-				title: 'Transformations',
-				url: '/we/transformations',
-				id: 'menuitemWEtns',
-				childId: 'we'
-			},
-			{
-				title: 'Sound Changes',
-				url: '/we/soundchanges',
-				id: 'menuitemWEscs',
-				childId: 'we'
-			},
-			{
-				title: 'Output',
-				url: '/we/output',
-				id: 'menuitemWEout',
-				childId: 'we'
-			},
-			{
-				title: 'Declenjugator',
-				url: '/dc',
-				icon: 'DeclenjugatorIcon',
-				id: 'menuitemDC'
-			}, // https://github.com/apache/cordova-plugin-media ??
-			{
-				title: 'PhonoGraph',
-				url: '/ph',
-				icon: 'PhonoGraphIcon',
-				id: 'menuitemPG'
-			},
-			{
-				title: 'Lexicon',
-				url: '/lex',
-				icon: 'LexiconIcon',
-				id: 'menuitemLX'
-			},
-			{
-				title: 'Word Lists',
-				url: '/wordlists',
-				icon: 'WordListsIcon',
-				id: 'menuitemWL'
-			}
-		],
-		id: 'menuMain'
-	},
-	{
-		pages: [
-			{
-				title: 'Settings',
-				url: '/settings',
-				icon: 'SettingsIcon',
-				id: 'menuitemSettings'
-			},
-			{
-				title: 'About',
-				url: '/about',
-				icon: 'AboutIcon',
-				id: 'menuitemAbout'
-			},
-			{
-				title: 'Credits',
-				url: '/credits',
-				id: 'menuitemCredits',
-				fontOptions: {
-					fontFamily: 'mono',
-					fontSize: 'xs'
-				},
-				styleOptions: {
-					alignItems: 'end',
-					justifyContent: 'end',
-					mt: 8,
-					mr: 6
-				},
-				alignOptions: {
-					alignItems: 'end'
-				}
-			}
-		],
-		id: 'menuOthers'
-	}
-];
+import { appMenuPages } from '../appLayoutInfo';
 
 const AnimatedView = Factory(Animated.View);
 
-const Menu = () => {
+let zzzz = 0;
+
+const MenuModal = () => {
 	const {menuToggleName, menuToggleNumber} = useSelector((state) => state.appState, shallowEqual);
 	let [menuOpen, setMenuOpen] = useState(false);
 	let [openSectionNumber, setOpenSectionNumber] = useState(menuToggleNumber || 0);
@@ -279,7 +68,7 @@ const Menu = () => {
 			end
 		};
 	};
-	const getSubsectionInterpolationInfo = () => {
+	const getSubsectionInterpolationInfo = (childrenNumber) => {
 		// additive starts at 0, goes up by 100s
 		const additive = (numberOfSections - 1) * 100;
 		// create the input range
@@ -294,7 +83,7 @@ const Menu = () => {
 		const outputRange = [
 			0,	// make a dead zone before this
 			0,	// begin this zone
-			36,	// end this zone (equal to height={9})
+			36 * childrenNumber,	// end this zone (equal to height={9})
 			0,	// start another dead zone
 			0,	// continue the dead zone after this
 		];
@@ -375,6 +164,7 @@ const Menu = () => {
 		dispatch(setMenuToggleNumber(openSectionNumber));
 		dispatch(setMenuToggleName(openSectionName));
 	};
+	console.log(zzzz++);
 	return (
 		<>
 			<Modal h="full" isOpen={menuOpen} onClose={() => closeMenu()} animationPreset="slide" _slide={{delay: 0, placement: "left"}}>
@@ -394,15 +184,8 @@ const Menu = () => {
 								output.push(<Divider key={"Divider"+String(i)} my={2} mx="auto" w="90%" bg="text.50" opacity={25} />);
 							}
 							pages.forEach(page => {
-								const {
-									parentId,
-									childId,
-									icon,
-									id,
-									title,
-									url
-								} = page;
-								if(parentId) {
+								const { icon, id, title, url, children } = page;
+								if(children) {
 									// App Section w/subpages
 									const isSelected = location.pathname.startsWith(url);
 									const bgOptions = isSelected ? { bg: "primary.500" } : {};
@@ -410,12 +193,12 @@ const Menu = () => {
 									// Get new information for this section
 									const { rotateInterpolator, translateInterpolator, begin, end } = getToggleInterpolationInfo();
 									const thisSectionAnimationValue = useRef(new Animated.Value(openSectionNumber)).current;
-									sectionAnimationValues[parentId] = [thisSectionAnimationValue, begin, end];
+									sectionAnimationValues[id] = [thisSectionAnimationValue, begin, end];
 									// Note that we have a new section
 									numberOfSections++;
-									sectionAnimationValues.orderedList.push(parentId);
+									sectionAnimationValues.orderedList.push(id);
 									output.push(
-										<Pressable height={10} onPress={() => toggleSection(parentId, begin, end)} key={sectionId + "-" + id}>
+										<Pressable key={sectionId + "-" + id} height={10} onPress={() => toggleSection(id, begin, end)}>
 											<ZStack>
 												<HStack height={10} w="full" {...bgOptions} opacity={20} />
 												<HStack height={10} alignItems="center" w="full" justifyContent="flex-start">
@@ -442,39 +225,45 @@ const Menu = () => {
 											</ZStack>
 										</Pressable>
 									);
-								} else if (childId) {
-									// Sub-page of App Section
-									const interpolator = getSubsectionInterpolationInfo();
-									const isSelected = location.pathname === url;
-									const dotOptions = isSelected ? { color: "primary.500" } : { color: "transparent" };
-									const textOptions = isSelected ? { color: "primary.500" } : {};
-									const thisSectionAnimationValue = sectionAnimationValues[childId][0];
-									output.push(
-										<AnimatedView
-											key={sectionId + "-" + id}
-											m={0}
-											bg="darker"
-											p={0}
-											d="flex"
-											justifyContent="center"
-											style={[{
-												height: thisSectionAnimationValue.interpolate(interpolator),
-												minHeight: thisSectionAnimationValue.interpolate(interpolator),
-												overflow: "hidden"
-											}]}
-										>
-											<Pressable height={9} onPress={() => navigate(url)}>
-												<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
-													<VStack alignItems="flex-end" justifyContent="center" flexGrow={1} m={2} ml={4}>
-														<Text fontSize="xs" {...textOptions}>{title}</Text>
-													</VStack>
-													<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
-														<Icons.DotIcon {...dotOptions} />
-													</VStack>
-												</HStack>
-											</Pressable>
-										</AnimatedView>
-									);
+									// Deal with the kids
+									const Kids = () => {
+										const interpolator = getSubsectionInterpolationInfo(children.length);
+										const kidsSectionAnimationValue = sectionAnimationValues[id][0];
+										return (
+											<AnimatedView
+												key={sectionId + "-" + id + '-AllChildren'}
+												m={0}
+												bg="darker"
+												p={0}
+												d="flex"
+												justifyContent="center"
+												style={[{
+													height: kidsSectionAnimationValue.interpolate(interpolator),
+													minHeight: kidsSectionAnimationValue.interpolate(interpolator),
+													overflow: "hidden"
+												}]}
+											>
+												{children.map(child => {
+													const isSelected = location.pathname === child.url;
+													const dotOptions = isSelected ? { color: "primary.500" } : { color: "transparent" };
+													const textOptions = isSelected ? { color: "primary.500" } : {};
+													return (
+														<Pressable key={sectionId + "-" + id + '-' + child.id} height={9} onPress={() => navigate(child.url)}>
+															<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
+																<VStack alignItems="flex-end" justifyContent="center" flexGrow={1} m={2} ml={4}>
+																	<Text fontSize="xs" {...textOptions}>{child.title}</Text>
+																</VStack>
+																<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
+																	<Icons.DotIcon {...dotOptions} />
+																</VStack>
+															</HStack>
+														</Pressable>
+													);
+												})}
+											</AnimatedView>
+										);
+									};
+									output.push(<Kids />);
 								} else {
 									// App Section (standalone)
 									const fontOptions = page.fontOptions || {};
@@ -508,4 +297,4 @@ const Menu = () => {
 	);
 };
 
-export default Menu;
+export default MenuModal;

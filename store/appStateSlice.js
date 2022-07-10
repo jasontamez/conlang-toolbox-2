@@ -2,14 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	menuToggleName: '',
-	menuToggleNumber: 0,
-	headerState: {
-		title: 'Conlang Toolbox',
-		textProps: false,
-		boxProps: false,
-		extraChars: true,
-		rightHeader: []
-	}
+	menuToggleNumber: 0
 };
 
 const setMenuToggleNameFunc = (state, action) => {
@@ -22,22 +15,15 @@ const setMenuToggleNumberFunc = (state, action) => {
 	return state;
 };
 
-const setHeaderStateFunc = (state, action) => {
-	const initHeader = {...initialState.headerState};
-	state.headerState = {...initHeader, ...action.payload};
-	return state;
-};
-
 const appStateSlice = createSlice({
 	name: 'appState',
 	initialState,
 	reducers: {
 		setMenuToggleName: setMenuToggleNameFunc,
-		setMenuToggleNumber: setMenuToggleNumberFunc,
-		setHeaderState: setHeaderStateFunc
+		setMenuToggleNumber: setMenuToggleNumberFunc
 	}
 });
 
-export const { setMenuToggleName, setMenuToggleNumber, setHeaderState } = appStateSlice.actions;
+export const { setMenuToggleName, setMenuToggleNumber } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

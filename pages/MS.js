@@ -5,15 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavBar } from '../components/layoutTags';
 import { Button, ScrollView, IconButton, Icon, VStack, Box } from 'native-base';
 import { Outlet } from 'react-router-native';
-import { useDispatch } from 'react-redux';
-import { setHeaderState } from '../store/appStateSlice';
 
 const MS = () => {
 	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
-	const dispatch = useDispatch();
-	dispatch(setHeaderState({
-		title: 'MorphoSyntax'
-	}));
 	const navigate = useNavigate();
 	const location = useLocation();
 	const pathname = location.pathname;
