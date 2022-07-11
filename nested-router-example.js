@@ -1,10 +1,10 @@
 import React from 'react';
 
 //import React from "react";
-import { NativeBaseProvider, Box, VStack, ScrollView } from "native-base";
+import { NativeBaseProvider, Box, VStack, ScrollView } from 'native-base';
 
-import { NativeRouter } from "react-router-native";
-import { Route, Routes } from "react-router";
+import { NativeRouter } from 'react-router-native';
+import { Route, Routes } from 'react-router';
 import { Provider, useSelector } from 'react-redux';
 //import { PersistGate } from 'redux-persist/integration/react';
 
@@ -64,10 +64,11 @@ import getTheme from './components/theme';
 
 import getStoreInfo from './store/store';
 
-import About from "./pages/About.js";
-import MS from "./pages/MS";
-import MSSection from "./pages/ms/msSection";
-import MSSettings from "./pages/ms/msSettings";
+import About from './pages/About.js';
+import MS from './pages/MS';
+import MSSection from './pages/ms/msSection';
+import MSSettings from './pages/ms/msSettings';
+import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
@@ -131,9 +132,8 @@ const Layout = () => {
 								<Route path="/wg/*" element={<WG />}>
 								</Route>
 								<Route path="/we/*"  element={<WE />}>
-								</Route>
-								<Route path="/lex/*" element={<Lexicon />}>
 								</Route> */ }
+								<Route path="/lex" element={<Lexicon />} />
 								<Route path="/ms/*" element={<MS />}>
 									<Route index element={<MSSettings />} />
 									<Route path=":msPage" element={<MSSection />} />

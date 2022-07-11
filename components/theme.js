@@ -155,14 +155,16 @@ const mainHeading = {
 };
 const mainInput = {
 	defaultProps: {
-		bg: "darker",
+		bg: "lighter",
 		color: "text.50",
+		borderRadius: 0,
 		placeholderTextColor: "text.200",
-		borderColor: "main.700",
+		borderColor: "transparent",
 		_focus: {
 			borderColor: "main.500",
 			color: "text.50",
-			bg: "darker"
+			bg: "lighter",
+			borderRadius: 0
 		},
 		fontFamily: "body"
 	}
@@ -232,9 +234,18 @@ const components = {
 	Icon: {...mainFG},
 	NativeBaseProvider: {...mainBG},
 	Box: {
-		variants: {
-			main: {
-				...mainBG
+		sizes: {
+			lexXs: {
+				flex: "0 0 10px"
+			},
+			lexSm: {
+				flex: "1 1 40px"
+			},
+			lexMd: {
+				flex: "3 1 96px"
+			},
+			lexLg: {
+				flex: "5 1 200px"
 			}
 		}
 	},

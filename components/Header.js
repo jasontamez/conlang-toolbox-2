@@ -1,11 +1,11 @@
-import { Text, HStack, IconButton } from "native-base";
+import { Text, HStack } from "native-base";
 //import { openModal } from '../store/dFuncs';
-import { ExtraCharactersIcon } from "./icons";
 import MenuModal from "../pages/MenuModal";
 import { allMainPages } from '../appLayoutInfo';
 import { useLocation } from "react-router-dom";
 import React from "react";
 import WordListsContextMenu from '../pages/WordListsContextMenu';
+import ExtraChars from './ExtraCharsButton';
 
 const AppHeader = () => {
 	const location = useLocation();
@@ -22,10 +22,6 @@ const AppHeader = () => {
 		rightHeader: []
 	};
 	const {title, boxProps, textProps, extraChars, rightHeader } = {...defaultProps, ...currentPage};
-	const openExtraChars = () => {
-		//() => dispatch(openModal("ExtraCharacters"))
-	}
-	const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" />} onPress={() => openExtraChars()} />;
 	return (
 		<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea {...boxProps}>
 			<MenuModal />

@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { HStack, Menu, Switch, Text, VStack } from 'native-base';
 import { setTheme, setDisableConfirms } from '../store/appStateSlice';
@@ -40,34 +39,6 @@ const AppSettings = () => {
 			</HStack>
 		</VStack>
 	);
-	/*return (
-		<IonPage>
-			<ChooseThemeModal />
-			<IonHeader>
-				<IonToolbar>
-					<IonButtons slot="start">
-						<IonMenuButton />
-					</IonButtons>
-					<IonTitle>App Settings</IonTitle>
-				</IonToolbar>
-			</IonHeader>
-			<IonContent fullscreen>
-				<IonList>
-					<IonItem>
-						<IonLabel className="possiblyLargeLabel">
-							<h2>Disable Confirmation Prompts</h2>
-							<p>Eliminates yes/no prompts when deleting or overwriting data.</p>
-						</IonLabel>
-						<IonToggle slot="end" checked={settings.disableConfirms} onIonChange={e => dispatch(toggleDisableConfirm(e.detail.checked))} />
-					</IonItem>
-					<IonItem button={true} onClick={() => dispatch(openModal('AppTheme'))}>
-						<IonLabel>Change Theme</IonLabel>
-						<IonNote slot="end" color="primary" style={ { color: "var(--ion-color-primary"} } >{settings.theme || "Default"}</IonNote>
-					</IonItem>
-				</IonList>
-			</IonContent>
-		</IonPage>
-	);*/
 };
  
 export default AppSettings;

@@ -47,7 +47,7 @@ const About = () => {
 				<Indented>Use standard rules to determine how they evolve</Indented>
 				<Indented>Tweak the output through transformations</Indented>
 			</Pressable>
-			<Pressable>
+			<Pressable onPress={() => {navigate("/lex")}}>
 				<Heading color="primary.500" p={4} fontSize="xl" alignSelf="center"><LexiconIcon color="primary.500" mr={3} />Lexicon</Heading>
 				<Highlight>A place to store your conlangs.</Highlight>
 				<Indented>Store bits of information for each word, such as part of speech or definition</Indented>
