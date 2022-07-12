@@ -33,8 +33,10 @@ import ExtraCharactersModal from './M-ExtraCharacters';
 import ExportLexiconModal from './M-ExportLexicon';
 import debounce from '../components/Debounce';
 import { Clipboard } from '@capacitor/clipboard'; */
-import { Input, FlatList, Text, TextArea, VStack, HStack, Box, ScrollView } from 'native-base';
+import { Input, FlatList, Text, TextArea, VStack, HStack, Box, ScrollView, IconButton, Select, Menu, Button } from 'native-base';
+import { useState } from 'react';
 import { Dimensions } from "react-native";
+import { DoubleCaretIcon, SettingsIcon, SortDownIcon, SortUpIcon } from '../components/icons';
 
 const Lex = () => {
 	/*
@@ -444,6 +446,8 @@ const Lex = () => {
 		title: undefined,
 		description: "Hi, this is a description.",
 		wrap: false,
+		sortField: 0,
+		sortDir: 0,
 		columns: [
 			{
 				label: "Word",
@@ -581,9 +585,12 @@ const Lex = () => {
 			},
 		]
 	};
-	const lexicon = LEX.lexicon;
-	const extraData = [LEX.wrap, LEX.columns];
-	const sizes = LEX.columns.map(col => col.size);
+	const { lexicon, wrap, columns, sortDir, sortField } = LEX;
+	const [dir, setDir] = useState(sortDir);
+	const [field, setField] = useState(sortField+1);
+	const extraData = [wrap, columns];
+	const labels = columns.map(col => col.label);
+	const sizes = columns.map(col => col.size);
 	const isTruncated = !LEX.wrap;
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const renderList = ({item, index}) => {
@@ -619,13 +626,77 @@ const Lex = () => {
 					onChangeEnd={props.onChangeEnd}
 				/>
 			</VStack>
+			<HStack mx={3} justifyContent="space-between" alignItems="flex-end">
+				<Text fontSize="2xl" flex="1 0 10">{String(lexicon.length)} Words</Text>
+				<HStack mx={3} justifyContent="flex-end" alignItems="flex-end" flex={1}>
+					<Menu
+						placement="top left"
+						closeOnSelect={true}
+						trigger={
+							(props) => (
+								<Button
+									p={1}
+									ml={2}
+									mr={1}
+									bg="secondary.500"
+									flex="1 2 0%"
+									_text={{
+										color: "secondary.50",
+										w: "full",
+										isTruncated: true,
+										textAlign: "left",
+										noOfLines: 1,
+										style: {
+											overflow: "hidden",
+											textOverflow: "ellipsis"
+										}
+									}}
+									_stack={{
+										justifyContent: "space-between",
+										alignItems: "center",
+										flex: 1,
+										space: 0,
+										style: {
+											overflow: "hidden",
+											textOverflow: "ellipsis"
+										}
+									}}
+									startIcon={<DoubleCaretIcon mr={1} color="secondary.50" />}
+									{...props}
+								>
+									{labels[field-1]}
+								</Button>
+							)
+						}
+					>
+						<Menu.OptionGroup
+							title="Sort By:"
+							defaultValue={field}
+							type="radio"
+							onChange={(v) => setField(v)}
+						>
+							{labels.map((label, i) => <Menu.ItemOption key={label + "-" + i} value={i+1}>{label}</Menu.ItemOption>)}
+						</Menu.OptionGroup>
+					</Menu>
+					<IconButton
+						mr={2}
+						onPress={() => setDir(!dir)}
+						icon={dir ? <SortUpIcon /> : <SortDownIcon />}
+						p={1}
+						_icon={{color: "secondary.50"}}
+						bg="secondary.500"
+						accessibilityLabel="Change sort direction."
+					/>
+					<IconButton px={3} py={1} icon={<SettingsIcon color="tertiary.50" name="settings" />} bg="tertiary.500" />
+				</HStack>
+			</HStack>
 			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
 				<HStack alignItems="flex-end" pt={3.5} mx={1.5} flex="1 0 4">
-					{LEX.columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
+					{columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					{/* ... extra blank space here, with size="lexXs" */}
 				</HStack>
 				<HStack alignItems="flex-end" mx={1.5} mb={1} flex="1 0 4">
-					{LEX.columns.map((col, i) => <Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}><Input w="full" /></Box>)}
+					{columns.map((col, i) => <Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}><Input w="full" /></Box>)}
 					{/* ... extra buttons here, with size="lexXs" */}
 				</HStack>
 				<FlatList

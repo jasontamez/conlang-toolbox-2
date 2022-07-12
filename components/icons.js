@@ -28,4 +28,8 @@ export const MenuIcon = (props) => <Icon as={Entypo} name="menu" {...props} />;
 export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" {...props} />;
 // as={Entypo} name="language"
 
+export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />
+export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />
+export const DoubleCaretIcon = (props) => <ICON as={FAFive} name="sort" size="xs" {...props} />;
+
 export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />
