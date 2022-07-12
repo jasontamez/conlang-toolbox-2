@@ -33,7 +33,8 @@ import ExtraCharactersModal from './M-ExtraCharacters';
 import ExportLexiconModal from './M-ExportLexicon';
 import debounce from '../components/Debounce';
 import { Clipboard } from '@capacitor/clipboard'; */
-import { Input, FlatList, Text, TextArea, VStack, HStack, Box } from 'native-base';
+import { Input, FlatList, Text, TextArea, VStack, HStack, Box, ScrollView } from 'native-base';
+import { Dimensions } from "react-native";
 
 const Lex = () => {
 	/*
@@ -463,7 +464,7 @@ const Lex = () => {
 				columns: [
 					"fleeb",
 					"n",
-					"A thing you know and love"
+					"a thing you know and love"
 				]
 			},
 			{
@@ -479,7 +480,103 @@ const Lex = () => {
 				columns: [
 					"akorn",
 					"adj",
-					"warm wetness"
+					"damp and musty"
+				]
+			},
+			{
+				id: "10",
+				columns: [
+					"marr",
+					"n",
+					"a movie featuring a black dog and a brown cat"
+				]
+			},
+			{
+				id: "11",
+				columns: [
+					"treff",
+					"v",
+					"mispronounce words on purpose"
+				]
+			},
+			{
+				id: "12",
+				columns: [
+					"plo",
+					"adj",
+					"scary but heartwarming"
+				]
+			},
+			{
+				id: "20",
+				columns: [
+					"quog",
+					"n",
+					"a tower of cans"
+				]
+			},
+			{
+				id: "21",
+				columns: [
+					"ickthioraptorimino",
+					"v",
+					"imitating a potato"
+				]
+			},
+			{
+				id: "22",
+				columns: [
+					"rhyk",
+					"adj",
+					"juvenile and intelligent"
+				]
+			},
+			{
+				id: "30",
+				columns: [
+					"ulululu",
+					"n",
+					"a doorbell that doesn't work"
+				]
+			},
+			{
+				id: "31",
+				columns: [
+					"dru",
+					"v",
+					"mixing with broth"
+				]
+			},
+			{
+				id: "32",
+				columns: [
+					"fargu",
+					"adj",
+					"toothy"
+				]
+			},
+			{
+				id: "40",
+				columns: [
+					"tirg",
+					"n",
+					"a staircase to nowhere"
+				]
+			},
+			{
+				id: "41",
+				columns: [
+					"mimm",
+					"v",
+					"charming a snake or other reptile"
+				]
+			},
+			{
+				id: "42",
+				columns: [
+					"bilo",
+					"adj",
+					"dead for at least twenty years"
 				]
 			},
 		]
@@ -487,21 +584,21 @@ const Lex = () => {
 	const lexicon = LEX.lexicon;
 	const extraData = [LEX.wrap, LEX.columns];
 	const sizes = LEX.columns.map(col => col.size);
-	const lastCol = sizes.length - 1;
 	const isTruncated = !LEX.wrap;
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const renderList = ({item, index}) => {
 		const {id, columns} = item;
 		const bg = index % 2 ? "lighter" : "darker";
 		return (
-			<HStack key={id} py={3.5} bg={bg}>
-				{columns.map((text, i) => <Box px={1} size={sizes[i]} key={id + "-" + String(i)}><Text isTruncated={isTruncated}>{text}</Text></Box>)}
+			<HStack key={id} py={3.5} px={1.5} bg={bg}>
+				{columns.map((text, i) => <Box px={0.5} size={sizes[i]} key={id + "-" + String(i)}><Text isTruncated={isTruncated}>{text}</Text></Box>)}
 				{/* ... extra buttons here, with size="lexXs" */}
 			</HStack>
 		);
 	}
+	const screen = Dimensions.get("screen");
 	return (
-		<VStack>
+		<VStack flex={1}>
 			<VStack m={3} mb={0}>
 				<Text fontSize="sm">Lexicon Title:</Text>
 				<Input
@@ -522,21 +619,26 @@ const Lex = () => {
 					onChangeEnd={props.onChangeEnd}
 				/>
 			</VStack>
-			<HStack alignItems="flex-end" pt={3.5} mx={2}>
-				{LEX.columns.map((col, i) => <Box px={1} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
-			</HStack>
-			<HStack alignItems="flex-end" mx={2} mb={1}>
-				{LEX.columns.map((col, i) => <Box px={0.5} ml={i === 0 ? 0 : 0.5} mr={i === lastCol ? 0 : 0.5} size={col.size} key={String(i) + "-Input"}><Input w="full" /></Box>)}
-			</HStack>
-			<FlatList
-				m={2}
-				mt={0}
-				data={lexicon}
-				keyExtractor={(word) => word.id}
-				ListEmptyComponent={ListEmpty}
-				extraData={extraData}
-				renderItem={renderList}
-			/>
+			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
+				<HStack alignItems="flex-end" pt={3.5} mx={1.5} flex="1 0 4">
+					{LEX.columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
+					{/* ... extra blank space here, with size="lexXs" */}
+				</HStack>
+				<HStack alignItems="flex-end" mx={1.5} mb={1} flex="1 0 4">
+					{LEX.columns.map((col, i) => <Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}><Input w="full" /></Box>)}
+					{/* ... extra buttons here, with size="lexXs" */}
+				</HStack>
+				<FlatList
+					m={0}
+					mb={1}
+					flex="1 1 0%"
+					data={lexicon}
+					keyExtractor={(word) => word.id}
+					ListEmptyComponent={ListEmpty}
+					extraData={extraData}
+					renderItem={renderList}
+				/>
+			</VStack>
 		</VStack>
 	);
 	/*return (
