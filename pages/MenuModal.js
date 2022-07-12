@@ -11,7 +11,7 @@ import { appMenuPages } from '../appLayoutInfo';
 
 const AnimatedView = Factory(Animated.View);
 
-const MenuModal = () => {
+const MenuModal = ({ scrollToTop }) => {
 	const {menuToggleName, menuToggleNumber} = useSelector((state) => state.appState, shallowEqual);
 	let [menuOpen, setMenuOpen] = useState(false);
 	let [openSectionNumber, setOpenSectionNumber] = useState(menuToggleNumber || 0);
@@ -153,6 +153,7 @@ const MenuModal = () => {
 	}
 	const navigate = (url) => {
 		navigator(url);
+		scrollToTop();
 		closeMenu();
 	};
 	const closeMenu = () => {

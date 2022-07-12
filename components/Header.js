@@ -7,7 +7,7 @@ import React from "react";
 import WordListsContextMenu from '../pages/WordListsContextMenu';
 import ExtraChars from './ExtraCharsButton';
 
-const AppHeader = () => {
+const AppHeader = ({ scrollToTop }) => {
 	const location = useLocation();
 	const here = location.pathname;
 	const currentPage = allMainPages.find(page => here.startsWith(page.url)) || {};
@@ -24,7 +24,7 @@ const AppHeader = () => {
 	const {title, boxProps, textProps, extraChars, rightHeader } = {...defaultProps, ...currentPage};
 	return (
 		<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} safeArea {...boxProps}>
-			<MenuModal />
+			<MenuModal scrollToTop={scrollToTop} />
 			<Text flexGrow={1} isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
 			{extraChars ? <ExtraChars /> : <></>}
 			{rightHeader.map(header => {

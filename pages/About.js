@@ -21,11 +21,15 @@ const Pressable = (props) => (
 	</Press>
 );
 
-const About = () => {
+const About = ({ scrollToTop }) => {
 	let navigate = useNavigate();
+	const doNav = (where) => {
+		navigate(where);
+		scrollToTop();
+	};
 	return (
 		<VStack space={8} p={2} bg="darker">
-			<Pressable onPress={() => {navigate("/ms")}}>
+			<Pressable onPress={() => {doNav("/ms")}}>
 				<Heading color="primary.500" p={4} fontSize="xl" alignSelf="center"><MorphoSyntaxIcon color="primary.500" mr={3} />MorphoSyntax</Heading>
 				<Highlight>This tool is for designing the basic structure of your language.</Highlight>
 				<Indented>Covers large-scale structures and small</Indented>
@@ -47,7 +51,7 @@ const About = () => {
 				<Indented>Use standard rules to determine how they evolve</Indented>
 				<Indented>Tweak the output through transformations</Indented>
 			</Pressable>
-			<Pressable onPress={() => {navigate("/lex")}}>
+			<Pressable onPress={() => {doNav("/lex")}}>
 				<Heading color="primary.500" p={4} fontSize="xl" alignSelf="center"><LexiconIcon color="primary.500" mr={3} />Lexicon</Heading>
 				<Highlight>A place to store your conlangs.</Highlight>
 				<Indented>Store bits of information for each word, such as part of speech or definition</Indented>
@@ -56,7 +60,7 @@ const About = () => {
 				<Indented>Store multiple lexicons</Indented>
 				<Indented>Export your data</Indented>
 			</Pressable>
-			<Pressable onPress={() => {navigate("/wordlists")}}>
+			<Pressable onPress={() => {doNav("/wordlists")}}>
 				<Heading color="primary.500" p={4} fontSize="xl" alignSelf="center"><WordListsIcon color="primary.500" mr={3} />Word Lists</Heading>
 				<Highlight>A small storehouse of basic words, useful for starting a lexicon.</Highlight>
 				<Indented>Easily add words to Lexicon</Indented>

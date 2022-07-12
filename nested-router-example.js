@@ -1,6 +1,5 @@
-import React from 'react';
+import { useRef } from 'react';
 
-//import React from "react";
 import { NativeBaseProvider, Box, VStack, ScrollView } from 'native-base';
 
 import { NativeRouter } from 'react-router-native';
@@ -81,6 +80,10 @@ const App = () => {
 };
 
 const Layout = () => {
+	const scrollRef = useRef(null);
+	const scrollToTop = () => {
+		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
+	};
 	const [fontsloaded] = useFonts({
 		Arimo_400Regular,
 		Arimo_400Regular_Italic,
@@ -126,8 +129,8 @@ const Layout = () => {
 			<Box h="full" w="full" safeArea bg="main.800">
 				<NativeRouter>
 					<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
-						<AppHeader />
-						<ScrollView flexGrow={1}>
+						<AppHeader scrollToTop={scrollToTop} />
+						<ScrollView flex={1} ref={scrollRef}>
 							<Routes> { /* 
 								<Route path="/wg/*" element={<WG />}>
 								</Route>
@@ -146,7 +149,7 @@ const Layout = () => {
 								<Route path="/wordlists" element={<WordLists  />} />
 								{ /* <Route path="/credits" element={<Credits />} />
 								<Route path="/about" element={<About />} /> */ }
-								<Route index element={<About />} />
+								<Route index element={<About scrollToTop={scrollToTop} />} />
 							</Routes>
 						</ScrollView>
 					</VStack>

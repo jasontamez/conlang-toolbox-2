@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 //import { shallowEqual, useSelector } from "react-redux";
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +12,11 @@ const MS = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const pathname = location.pathname;
+	const scrollRef = useRef(null);
+	const doNav = (where) => {
+		navigate(where);
+		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});;
+	};
 	const NavTab = (props) => {
 		const { isCurrent, icon, link, label } = props;
 		const bg = isCurrent ? "lighter" : "transparent";
@@ -18,11 +24,11 @@ const MS = () => {
 		const textOptions = isCurrent ? {bold: true, color: colorString} : {color: colorString}
 		if(icon) {
 			return (
-				<IconButton minWidth={6} variant="ghost" bg={bg} color={colorString} onPress={() => navigate(link)} icon={icon} _icon={{size: "md", color: colorString}} />
+				<IconButton minWidth={6} variant="ghost" bg={bg} color={colorString} onPress={() => doNav(link)} icon={icon} _icon={{size: "md", color: colorString}} />
 			);
 		}
 		return (
-			<Button minWidth={8} variant="ghost" bg={bg} color={colorString} _text={textOptions} onPress={() => navigate(link)}>{label}</Button>
+			<Button minWidth={8} variant="ghost" bg={bg} color={colorString} _text={textOptions} onPress={() => doNav(link)}>{label}</Button>
 		);
 	};
 	const NavTabs = () => {
@@ -37,7 +43,7 @@ const MS = () => {
 	return (
 		<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
 			<Box flexGrow={2} flexShrink={2} flexBasis="5/6" my={0} mx={4}>
-				<ScrollView h="full">
+				<ScrollView ref={scrollRef} h="full">
 					<Outlet />
 				</ScrollView>
 			</Box>
