@@ -12,6 +12,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import morphoSyntaxSlice from './morphoSyntaxSlice';
 import wordListsSlice from './wordListsSlice';
 import appStateSlice from './appStateSlice';
+import lexiconSlice from './lexiconSlice';
 
 //const reconcile = async (incoming, original, reduced) => {
 //	// Nothing for now.
@@ -23,7 +24,8 @@ export default () => {
 		// SLICES here
 		morphoSyntax: morphoSyntaxSlice,
 		appState: appStateSlice,
-		wordLists: wordListsSlice
+		wordLists: wordListsSlice,
+		lexicon: lexiconSlice
 	};
 	//const persistConfig = {
 	//	key: 'root',
@@ -138,8 +140,153 @@ export const blankAppState = {/*
 	wordLists: {
 		centerTheDisplayedWords: [],
 		listsDisplayed: {}
-	},/*
+	},
 	lexicon: {
+		key: "",
+		lastSave: 0,
+		title: "",
+		description: "Hi, this is a description.",
+		wrap: false,
+		sortDir: false,
+		sortPattern: [0, 1, 2],
+		columns: [
+			{
+				label: "Word",
+				size: "lexMd"
+			},
+			{
+				label: "Part of Speech",
+				size: "lexSm"
+			},
+			{
+				label: "Definition",
+				size: "lexLg"
+			}
+		],
+		lexicon: [
+			{
+				id: "0",
+				columns: [
+					"fleeb",
+					"n",
+					"a thing you know and love"
+				]
+			},
+			{
+				id: "1",
+				columns: [
+					"boof",
+					"v",
+					"vocalize in a dog way"
+				]
+			},
+			{
+				id: "2",
+				columns: [
+					"akorn",
+					"adj",
+					"damp and musty"
+				]
+			},
+			{
+				id: "10",
+				columns: [
+					"marr",
+					"n",
+					"a movie featuring a black dog and a brown cat"
+				]
+			},
+			{
+				id: "11",
+				columns: [
+					"treff",
+					"v",
+					"mispronounce words on purpose"
+				]
+			},
+			{
+				id: "12",
+				columns: [
+					"plo",
+					"adj",
+					"scary but heartwarming"
+				]
+			},
+			{
+				id: "20",
+				columns: [
+					"quog",
+					"n",
+					"a tower of cans"
+				]
+			},
+			{
+				id: "21",
+				columns: [
+					"ickthioraptorimino",
+					"v",
+					"imitating a potato"
+				]
+			},
+			{
+				id: "22",
+				columns: [
+					"rhyk",
+					"adj",
+					"juvenile and intelligent"
+				]
+			},
+			{
+				id: "30",
+				columns: [
+					"ulululu",
+					"n",
+					"a doorbell that doesn't work"
+				]
+			},
+			{
+				id: "31",
+				columns: [
+					"dru",
+					"v",
+					"mixing with broth"
+				]
+			},
+			{
+				id: "32",
+				columns: [
+					"fargu",
+					"adj",
+					"toothy"
+				]
+			},
+			{
+				id: "40",
+				columns: [
+					"tirg",
+					"n",
+					"a staircase to nowhere"
+				]
+			},
+			{
+				id: "41",
+				columns: [
+					"mimm",
+					"v",
+					"charming a snake or other reptile"
+				]
+			},
+			{
+				id: "42",
+				columns: [
+					"bilo",
+					"adj",
+					"dead for at least twenty years"
+				]
+			},
+		]
+	},
+	/* lexicon: {
 		key: "",
 		lastSave: 0,
 		title: "",

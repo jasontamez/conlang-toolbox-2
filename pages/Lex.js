@@ -1,5 +1,4 @@
 //import React from 'react';
-//import { useSelector, useDispatch } from "react-redux";
 /* import {
 	openPopover,
 	closePopover,
@@ -33,14 +32,25 @@ import ExtraCharactersModal from './M-ExtraCharacters';
 import ExportLexiconModal from './M-ExportLexicon';
 import debounce from '../components/Debounce';
 import { Clipboard } from '@capacitor/clipboard'; */
-import { Input, FlatList, Text, TextArea, VStack, HStack, Box, ScrollView, IconButton, Select, Menu, Button } from 'native-base';
-import { useState } from 'react';
+import { Input, FlatList, Text, TextArea, VStack, HStack, Box, IconButton, Menu, Button } from 'native-base';
+//import { useState } from 'react';
 import { Dimensions } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { DoubleCaretIcon, SettingsIcon, SortDownIcon, SortUpIcon } from '../components/icons';
+import {
+	setTitle,
+	setDesc,
+	deleteLexiconItem,
+	addLexiconItem,
+	reorganizeLexiconItems,
+	changeSortOrder,
+	changeSortDir,
+	changeLexiconWrap,
+	equalityCheck
+} from '../store/lexiconSlice';
 
 const Lex = () => {
 	/*
-	const dispatch = useDispatch();
 	//const [appSettings, modalState, lexicon] = useSelector((state) => [state.appSettings, state.modalState, state.lexicon]);
 	const popstate = modalState.LexiconEllipsis;
 	const twoThirds = Math.ceil(useWindowHeight() / 3 * 2);
@@ -439,159 +449,35 @@ const Lex = () => {
 		}
 	};
 	*/
-	const props = {
-		value: "test"
-	};
-	const LEX = {
-		title: undefined,
-		description: "Hi, this is a description.",
-		wrap: false,
-		sortField: 0,
-		sortDir: 0,
-		columns: [
-			{
-				label: "Word",
-				size: "lexMd"
-			},
-			{
-				label: "Part of Speech",
-				size: "lexSm"
-			},
-			{
-				label: "Definition",
-				size: "lexLg"
-			}
-		],
-		lexicon: [
-			{
-				id: "0",
-				columns: [
-					"fleeb",
-					"n",
-					"a thing you know and love"
-				]
-			},
-			{
-				id: "1",
-				columns: [
-					"boof",
-					"v",
-					"vocalize in a dog way"
-				]
-			},
-			{
-				id: "2",
-				columns: [
-					"akorn",
-					"adj",
-					"damp and musty"
-				]
-			},
-			{
-				id: "10",
-				columns: [
-					"marr",
-					"n",
-					"a movie featuring a black dog and a brown cat"
-				]
-			},
-			{
-				id: "11",
-				columns: [
-					"treff",
-					"v",
-					"mispronounce words on purpose"
-				]
-			},
-			{
-				id: "12",
-				columns: [
-					"plo",
-					"adj",
-					"scary but heartwarming"
-				]
-			},
-			{
-				id: "20",
-				columns: [
-					"quog",
-					"n",
-					"a tower of cans"
-				]
-			},
-			{
-				id: "21",
-				columns: [
-					"ickthioraptorimino",
-					"v",
-					"imitating a potato"
-				]
-			},
-			{
-				id: "22",
-				columns: [
-					"rhyk",
-					"adj",
-					"juvenile and intelligent"
-				]
-			},
-			{
-				id: "30",
-				columns: [
-					"ulululu",
-					"n",
-					"a doorbell that doesn't work"
-				]
-			},
-			{
-				id: "31",
-				columns: [
-					"dru",
-					"v",
-					"mixing with broth"
-				]
-			},
-			{
-				id: "32",
-				columns: [
-					"fargu",
-					"adj",
-					"toothy"
-				]
-			},
-			{
-				id: "40",
-				columns: [
-					"tirg",
-					"n",
-					"a staircase to nowhere"
-				]
-			},
-			{
-				id: "41",
-				columns: [
-					"mimm",
-					"v",
-					"charming a snake or other reptile"
-				]
-			},
-			{
-				id: "42",
-				columns: [
-					"bilo",
-					"adj",
-					"dead for at least twenty years"
-				]
-			},
-		]
-	};
-	const { lexicon, wrap, columns, sortDir, sortField } = LEX;
-	const [dir, setDir] = useState(sortDir);
-	const [field, setField] = useState(sortField+1);
+	//
+	//
+	// GET DATA/STATE
+	//
+	//
+	const dispatch = useDispatch();
+	const { title, description, lexicon, wrap, columns, sortDir, sortPattern } = useSelector((state) => state.lexicon, equalityCheck);
 	const extraData = [wrap, columns];
 	const labels = columns.map(col => col.label);
 	const sizes = columns.map(col => col.size);
-	const isTruncated = !LEX.wrap;
+	const isTruncated = !wrap;
+	//
+	//
+	// SORTING ROUTINES
+	//
+	//
+	const doSortBy = (v) => {
+		// Adjust by -1, since "0" causes a display error in Menu
+		const col = v - 1;
+		// Put the chosen column first, followed by all previously chosen columns.
+		const newOrder = [col, ...sortPattern.filter(c => c !== col)];
+		// Save to state
+		dispatch(changeSortOrder(newOrder));
+	};
+	//
+	//
+	// RENDER
+	//
+	//
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const renderList = ({item, index}) => {
 		const {id, columns} = item;
@@ -610,20 +496,18 @@ const Lex = () => {
 				<Text fontSize="sm">Lexicon Title:</Text>
 				<Input
 					mt={2}
-					defaultValue={props.value}
+					defaultValue={title}
 					placeholder="Usually the language name."
-					onChange={props.onChange}
-					onChangeEnd={props.onChangeEnd}
+					onChangeText={(v) => dispatch(setTitle(v))}
 				/>
 			</VStack>
 			<VStack m={3} mt={2}>
 				<Text fontSize="sm">Description:</Text>
 				<TextArea mt={2}
-					defaultValue={props.area}
+					defaultValue={description}
 					placeholder="A short description of this lexicon."
 					totalLines={3}
-					onChange={props.onChange}
-					onChangeEnd={props.onChangeEnd}
+					onChangeText={(v) => dispatch(setDesc(v))}
 				/>
 			</VStack>
 			<HStack mx={3} justifyContent="space-between" alignItems="flex-end">
@@ -664,24 +548,24 @@ const Lex = () => {
 									startIcon={<DoubleCaretIcon mr={1} color="secondary.50" />}
 									{...props}
 								>
-									{labels[field-1]}
+									{labels[sortPattern[0]]}
 								</Button>
 							)
 						}
 					>
 						<Menu.OptionGroup
 							title="Sort By:"
-							defaultValue={field}
+							defaultValue={sortPattern[0]+1}
 							type="radio"
-							onChange={(v) => setField(v)}
+							onChange={(v) => doSortBy(v)}
 						>
 							{labels.map((label, i) => <Menu.ItemOption key={label + "-" + i} value={i+1}>{label}</Menu.ItemOption>)}
 						</Menu.OptionGroup>
 					</Menu>
 					<IconButton
 						mr={2}
-						onPress={() => setDir(!dir)}
-						icon={dir ? <SortUpIcon /> : <SortDownIcon />}
+						onPress={() => dispatch(changeSortDir(!sortDir))}
+						icon={sortDir ? <SortUpIcon /> : <SortDownIcon />}
 						p={1}
 						_icon={{color: "secondary.50"}}
 						bg="secondary.500"
