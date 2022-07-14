@@ -1,24 +1,56 @@
-import { Box, HStack, ZStack, Slider, Input, ScrollView, Text, TextArea } from "native-base";
+import { useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import {
+	Box,
+	HStack,
+	ZStack,
+	Slider,
+	Input,
+	ScrollView,
+	Text,
+	TextArea
+ } from "native-base";
+
 import { Bar } from "./icons";
+import debounce from './debounce';
 
 export const NavBar = (props) => {
+	const location = useLocation();
+	const [scrollPos, setScrollPos] = useState(0);
+	const navRef = useRef(null);
+	const maybeUpdateScrollPos = ({contentOffset}) => {
+		contentOffset && contentOffset.x && setScrollPos(contentOffset.x);
+	};
+	useEffect(() => {
+		navRef.current.scrollTo({x: scrollPos, y: 0, animated: false});
+	}, [location]);
 	const boxProps = props.boxProps || {};
 	const scrollProps = props.scrollProps || {};
 	const otherProps = {...props};
 	delete otherProps.boxProps;
 	delete otherProps.scrollProps;
 	return (
-		<Box w="full" {...boxProps}>
-			<ScrollView horizontal w="full" {...scrollProps}>
+		<Box
+			w="full"
+			position="absolute"
+			left={0}
+			bottom={0}
+			right={0}
+			bg="main.800"
+			{...boxProps}
+		>
+			<ScrollView
+				horizontal
+				w="full"
+				ref={navRef}
+				onScroll={({nativeEvent}) => debounce(maybeUpdateScrollPos, [nativeEvent], 250)}
+				scrollEventThrottle={16}
+				{...scrollProps}
+			>
 				<HStack w="full" space={4} justifyContent="space-between" {...otherProps} />
 			</ScrollView>
 		</Box>
 	);
-	//return (
-	//	<ScrollView horizontal>
-	//		{props.children}
-	//	</ScrollView>
-	//);
 };
 
 export const TextAreaSetting = (props) => {

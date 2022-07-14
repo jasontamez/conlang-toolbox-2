@@ -1,11 +1,9 @@
 import { useRef } from 'react';
-
-import { NativeBaseProvider, Box, VStack, ScrollView } from 'native-base';
-
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { Provider, useSelector } from 'react-redux';
 //import { PersistGate } from 'redux-persist/integration/react';
+import { NativeBaseProvider, Box, VStack, ScrollView } from 'native-base';
 
 import { useFonts } from 'expo-font';
 import {
@@ -71,6 +69,7 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
+import MSNavBar from './pages/ms/msNavBar';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -80,10 +79,6 @@ const App = () => {
 };
 
 const Layout = () => {
-	const scrollRef = useRef(null);
-	const scrollToTop = () => {
-		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
-	};
 	const [fontsloaded] = useFonts({
 		Arimo_400Regular,
 		Arimo_400Regular_Italic,
@@ -128,34 +123,60 @@ const Layout = () => {
 		<NativeBaseProvider theme={getTheme(theme)}>
 			<Box h="full" w="full" safeArea bg="main.800">
 				<NativeRouter>
-					<VStack h="full" alignItems="stretch" justifyContent="space-between" w="full" position="fixed" top={0} bottom={0}>
-						<AppHeader scrollToTop={scrollToTop} />
-						<ScrollView flex={1} ref={scrollRef}>
-							<Routes> { /* 
-								<Route path="/wg/*" element={<WG />}>
-								</Route>
-								<Route path="/we/*"  element={<WE />}>
-								</Route> */ }
-								<Route path="/lex" element={<Lexicon />} />
-								<Route path="/ms/*" element={<MS />}>
-									<Route index element={<MSSettings />} />
-									<Route path=":msPage" element={<MSSection />} />
-								</Route> { /*
-								<Route path="/ph/*" element={<Lexicon />}>
-								</Route>
-								<Route path="/dc/*" element={<Lexicon />}>
-								</Route> */}
-								<Route path="/settings" element={<AppSettings />} />
-								<Route path="/wordlists" element={<WordLists  />} />
-								{ /* <Route path="/credits" element={<Credits />} />
-								<Route path="/about" element={<About />} /> */ }
-								<Route index element={<About scrollToTop={scrollToTop} />} />
-							</Routes>
-						</ScrollView>
-					</VStack>
+					<AppRoutes />
 				</NativeRouter>
 			</Box>
 		</NativeBaseProvider>
+	);
+};
+
+const AppRoutes = () => {
+	const scrollRef = useRef(null);
+	const scrollToTop = () => {
+		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
+	};
+	return (
+		<VStack
+		h="full"
+		alignItems="stretch"
+		justifyContent="space-between"
+		w="full"
+		position="absolute"
+		top={0}
+		bottom={0}
+	>
+		<AppHeader scrollToTop={scrollToTop} />
+		<ScrollView
+			flex={1}
+			ref={scrollRef}
+		>
+			<Routes> { /* 
+				<Route path="/wg/*" element={<WG />}>
+				</Route>
+				<Route path="/we/*"  element={<WE />}>
+				</Route> */ }
+				<Route path="/lex" element={<Lexicon />} />
+				<Route path="/ms/*" element={<MS />}>
+					<Route index element={<MSSettings />} />
+					<Route path=":msPage" element={<MSSection />} />
+				</Route> { /*
+				<Route path="/ph/*" element={<Lexicon />}>
+				</Route>
+				<Route path="/dc/*" element={<Lexicon />}>
+				</Route> */}
+				<Route path="/settings" element={<AppSettings />} />
+				<Route path="/wordlists" element={<WordLists  />} />
+				{ /* <Route path="/credits" element={<Credits />} />
+				<Route path="/about" element={<About />} /> */ }
+				<Route index element={<About scrollToTop={scrollToTop} />} />
+			</Routes>
+		</ScrollView>
+		<Routes>
+			<Route path="/ms/*" element={<MSNavBar />} />
+			<Route path="/*" element={<></>} />
+		</Routes>
+	</VStack>
+
 	);
 };
 

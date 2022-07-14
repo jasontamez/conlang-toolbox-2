@@ -1,9 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
-import ms from './msinfo.json';
-import { useParams } from 'react-router-dom';
-import { Button, Box, Checkbox, HStack, Modal, ScrollView, Text as Tx, VStack, Center } from 'native-base';
-
 import React, { useState } from "react";
+import { Dimensions } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+import {
+	Button,
+	Box,
+	Checkbox,
+	HStack,
+	Modal,
+	ScrollView,
+	Text as Tx,
+	VStack,
+	Center
+} from 'native-base';
+
+import ms from './msinfo.json';
 import { /*
 	setKey,
 	setLastSave,*/
@@ -13,7 +24,6 @@ import { /*
 } from '../../store/morphoSyntaxSlice';
 import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, TextAreaSetting } from "../../components/layoutTags";
-import { Dimensions } from "react-native";
 
 
 const ParseMSJSON = (props) => {
@@ -301,7 +311,7 @@ const ParseMSJSON = (props) => {
 				//
 				return (
 					<HStack justifyContent="flex-start" key={getKey("ModalButton")} safeArea>
-						<Modal m={0} isOpen={modalState === id} maxWidth={screenWidth} onClose={() => setModal('')} safeArea>
+						<Modal bg="main.800" m={0} isOpen={modalState === id} maxWidth={screenWidth} onClose={() => setModal('')} safeArea>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
 							<Modal.Body maxWidth={screenWidth} safeArea mx="auto">
