@@ -3,10 +3,14 @@ import { Bar } from "./icons";
 
 export const NavBar = (props) => {
 	const boxProps = props.boxProps || {};
+	const scrollProps = props.scrollProps || {};
+	const otherProps = {...props};
+	delete otherProps.boxProps;
+	delete otherProps.scrollProps;
 	return (
 		<Box w="full" {...boxProps}>
-			<ScrollView horizontal w="full">
-				<HStack w="full" space={4} justifyContent="space-between" {...props} />
+			<ScrollView horizontal w="full" {...scrollProps}>
+				<HStack w="full" space={4} justifyContent="space-between" {...otherProps} />
 			</ScrollView>
 		</Box>
 	);
