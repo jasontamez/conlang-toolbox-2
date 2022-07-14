@@ -58,7 +58,7 @@ const WordListsContextMenu = () => {
 			</Menu>
 			<Modal isOpen={infoModalOpen} h="full">
 				<Modal.Content w="full" maxWidth="full" minHeight="full" p={0} m={0} borderTopRadius={0}>
-					<Modal.Header bg="primary.600" borderBottomWidth={0}>
+					<Modal.Header bg="primary.500" borderBottomWidth={0}>
 						<Text color="primaryContrast" fontSize="md">About the Lists</Text>
 					</Modal.Header>
 					<Modal.CloseButton _icon={{color: "primaryContrast"}} onPress={() => setInfoModalOpen(false)} />
