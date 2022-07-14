@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 //import { shallowEqual, useSelector } from "react-redux";
-import { Ionicons } from '@expo/vector-icons';
 
 import { NavBar } from '../components/layoutTags';
-import { Button, ScrollView, IconButton, Icon, VStack, Box } from 'native-base';
+import { Button, ScrollView, IconButton, VStack, Box } from 'native-base';
 import { Outlet } from 'react-router-native';
+import { SettingsIcon } from '../components/icons';
 
 const MS = () => {
 	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
@@ -35,7 +35,7 @@ const MS = () => {
 		let range = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 		return (
 			<NavBar boxProps={{flexGrow: 0, borderColor: "main.700", borderTopWidth: 1}}>
-				<NavTab isCurrent={pathname === "/ms"} icon={<Icon as={Ionicons} name="settings-sharp" size="2xs" />} link="/ms" key="NavTabSettings" />
+				<NavTab isCurrent={pathname === "/ms"} icon={<SettingsIcon size="2xs" />} link="/ms" key="NavTabSettings" />
 				{range.map((n, i) => <NavTab isCurrent={pathname === "/ms/ms" + n} label={String(i+1)} link={"ms" + n} key={"Tab"+n} />)}
 			</NavBar>
 		);

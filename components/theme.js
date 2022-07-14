@@ -173,7 +173,13 @@ const mainInput = {
 const components = {
 	Button: {...mainButton},
 	IconButton: {...mainButton},
-	Modal: {...mainBG},
+	Modal: {
+		defaultProps: {
+			_backdrop: {
+				opacity: 60
+			}
+		}
+	},
 	ModalBody: {...mainBG},
 	ModalHeader: {
 		defaultProps: {

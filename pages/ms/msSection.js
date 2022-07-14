@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import ms from './msinfo.json';
 import { useParams } from 'react-router-dom';
-import { Button, Box, Checkbox, HStack, Modal, ScrollView, Text as Tx, VStack, Icon, Center } from 'native-base';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Button, Box, Checkbox, HStack, Modal, ScrollView, Text as Tx, VStack, Center } from 'native-base';
 
 import React, { useState } from "react";
 import { /*
@@ -12,7 +11,7 @@ import { /*
 	setNum,
 	setText
 } from '../../store/morphoSyntaxSlice';
-import { DotIcon } from "../../components/icons";
+import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, TextAreaSetting } from "../../components/layoutTags";
 import { Dimensions } from "react-native";
 
@@ -309,10 +308,10 @@ const ParseMSJSON = (props) => {
 								<ModalContent content={bit.content} />
 							</Modal.Body>
 							<Modal.Footer w="full" p={2}>
-								<Button m={0} startIcon={<Icon as={Ionicons} name="checkmark-circle-outline" />} onPress={() => setModal('')}>Done</Button>
+								<Button m={0} startIcon={<OkIcon />} onPress={() => setModal('')}>Done</Button>
 							</Modal.Footer>
 						</Modal>
-						<Button py={1} px={2} ml={4} colorScheme="primary" size="sm" startIcon={<Icon as={Ionicons} name="information-circle-sharp" />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
+						<Button py={1} px={2} ml={4} colorScheme="primary" size="sm" startIcon={<InfoIcon />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
 					</HStack>
 				);
 			case "Checkboxes":

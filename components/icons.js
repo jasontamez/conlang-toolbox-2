@@ -6,6 +6,8 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Foundation from '@expo/vector-icons/Foundation';
 import Octicons from '@expo/vector-icons/Octicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Fontisto from '@expo/vector-icons/Fontisto';
 
 const Icon = (props) => <ICON size="sm" {...props} />;
 
@@ -28,8 +30,20 @@ export const MenuIcon = (props) => <Icon as={Entypo} name="menu" {...props} />;
 export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" {...props} />;
 // as={Entypo} name="language"
 
-export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />
-export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />
+export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />;
+export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />;
 export const DoubleCaretIcon = (props) => <ICON as={FAFive} name="sort" size="xs" {...props} />;
+export const EditIcon = (props) => <ICON as={MaterialIcons} name="edit" size="xs" {...props} />;
 
-export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />
+export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />;
+
+export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-outline" {...props} />;
+export const RemoveCircleIcon = (props) => <Icon as={Ionicons} name="remove-circle-outline" {...props} />;
+export const SaveIcon = (props) => <Icon as={Ionicons} name="save-outline" {...props} />;
+export const ExportIcon = (props) => <Icon as={Fontisto} name="export"  {...props} />;
+export const TrashIcon = (props) => <Icon as={Ionicons} name="trash-outline" {...props} />;
+export const CloseCircleIcon = (props) => <Icon as={Ionicons} name="close-circle-outline" {...props} />;
+
+export const InfoIcon = (props) => <Icon as={Ionicons} name="information-circle-sharp" {...props} />;
+export const OkIcon = (props) => <Icon as={Ionicons} name="checkmark-circle-outline" {...props} />;
+export const HelpIcon = (props) => <Icon as={Ionicons} name="help-circle-outline" {...props} />;

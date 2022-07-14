@@ -1,8 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
-import { Icon, Menu, Pressable, VStack, Text, Divider, Modal } from 'native-base';
-import { DotsIcon } from '../components/icons';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Menu, Pressable, VStack, Text, Divider, Modal } from 'native-base';
+import { DotsIcon, SaveIcon, HelpIcon } from '../components/icons';
 import { setCenterTheDisplayedWords } from '../store/wordListsSlice';
 
 const WordListsContextMenu = () => {
@@ -44,16 +43,16 @@ const WordListsContextMenu = () => {
 				</Menu.OptionGroup>
 				<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
 				<Menu.Item>
-					<Icon as={Ionicons} name="save-outline" size="sm" m={2} ml={0} />
+					<SaveIcon m={2} ml={0} />
 					<Text>Save All to Lexicon</Text>
 				</Menu.Item>
 				<Menu.Item>
-					<Icon as={Ionicons} name="save-outline" size="sm" m={2} ml={0} />
+					<SaveIcon m={2} ml={0} />
 					<Text>Choose what to save</Text>
 				</Menu.Item>
 				<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
 				<Menu.Item onPress={() => showInfo()}>
-				<Icon as={Ionicons} name="help-circle-outline" size="sm" m={2} ml={0} />
+					<HelpIcon size="sm" m={2} ml={0} />
 					<Text>Info About the Lists</Text>
 				</Menu.Item>
 			</Menu>

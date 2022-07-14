@@ -4,6 +4,9 @@ import { ExtraCharactersIcon } from "./icons";
 const openExtraChars = () => {
 	//() => dispatch(openModal("ExtraCharacters"))
 }
-const ExtraChars = () => <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" />} onPress={() => openExtraChars()} />;
+const ExtraChars = (props) => {
+	const { iconProps, buttonProps } = {iconProps: {}, buttonProps: {}, ...props};
+	return <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" {...iconProps} />} onPress={() => openExtraChars()} {...buttonProps} />;
+};
 
 export default ExtraChars;

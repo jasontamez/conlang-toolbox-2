@@ -195,11 +195,21 @@ const setDescFunc = (state, action) => {
 	return state;
 };
 const addLexiconItemFunc = (state, action) => {
+	//addLexiconItem({item})
 	const item = action.payload;
 	state.lexicon = sortLexicon([item, ...state.lexicon], state.sortPattern, state.sortDir);
 	return state;
 };
+const editLexiconItemFunc = (state, action) => {
+	//editLexiconItem({item})
+	const editedItem = action.payload;
+	const editedID = editedItem.id;
+	const editedLexicon = state.lexicon.map(item => item.id === editedID ? editedItem : item);
+	state.lexicon = sortLexicon(editedLexicon, state.sortPattern, state.sortDir);
+	return state;
+};
 const deleteLexiconItemFunc = (state, action) => {
+	//deleteLexiconItem("id")
 	const id = action.payload;
 	state.lexicon = state.lexicon.filter(item => item.id !== id);
 	return state;
@@ -277,6 +287,7 @@ const lexiconSlice = createSlice({
 		setTitle: setTitleFunc,
 		setDesc: setDescFunc,
 		addLexiconItem: addLexiconItemFunc,
+		editLexiconItem: editLexiconItemFunc,
 		deleteLexiconItem: deleteLexiconItemFunc,
 		addLexiconColumn: addLexiconColumnFunc,
 		deleteLexiconColumn: deleteLexiconColumnFunc,
@@ -292,8 +303,9 @@ export const {
 	loadNewLexicon,
 	setTitle,
 	setDesc,
-	deleteLexiconItem,
 	addLexiconItem,
+	editLexiconItem,
+	deleteLexiconItem,
 	reorganizeLexiconItems,
 	changeSortOrder,
 	changeSortDir,
