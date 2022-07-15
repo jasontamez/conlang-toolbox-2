@@ -158,7 +158,8 @@ const LX = {
 	title: 'Lexicon',
 	url: '/lex',
 	icon: 'LexiconIcon',
-	id: 'LX'
+	id: 'LX',
+	rightHeader: ["LexiconContextMenu"]
 };
 const WL = {
 	title: 'Word Lists',

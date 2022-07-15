@@ -1,8 +1,21 @@
-import { Input, FlatList, Text, TextArea, VStack, HStack, Box, IconButton, Menu, Button, Modal, Pressable, Heading } from 'native-base';
-import { useRef } from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import {
+	Input,
+	FlatList,
+	Text,
+	TextArea,
+	VStack,
+	HStack,
+	Box,
+	IconButton,
+	Menu,
+	Button,
+	Modal,
+	Heading
+} from 'native-base';
+
 import debounce from '../components/debounce';
 import ExtraChars from '../components/ExtraCharsButton';
 import {
@@ -16,6 +29,7 @@ import {
 	SaveIcon,
 	AddIcon
 } from '../components/icons';
+import StandardAlert from '../components/StandardAlert';
 import {
 	setTitle,
 	setDesc,
@@ -29,7 +43,14 @@ import {
 	editLexiconItem
 } from '../store/lexiconSlice';
 
-const EditingModal = ({isEditing, columns, labels, saveInfo, deleteInfo, endEditing}) => {
+const EditingModal = ({
+	isEditing,
+	columns,
+	labels,
+	saveItemFunc,
+	deleteItemFunc,
+	endEditingFunc
+}) => {
 	//
 	//
 	// 	EDITING MODAL
@@ -38,13 +59,14 @@ const EditingModal = ({isEditing, columns, labels, saveInfo, deleteInfo, endEdit
 	// (has to be separate to keep State updates from flickering this all the time)
 	const [newFields, setNewFields] = useState([]);
 	const [active, setActive] = useState(false);
+	const firstFieldRef = useRef(null);
 	const doClose = () => {
 		setActive(false);
 		setNewFields([]);
-		endEditing();
+		endEditingFunc();
 	};
 	return (
-		<Modal isOpen={isEditing} closeOnOverlayClick={false}>
+		<Modal isOpen={isEditing} closeOnOverlayClick={false} initialFocusRef={firstFieldRef}>
 			<Modal.Content>
 				<Modal.Header m={0} p={0}>
 					<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
@@ -64,6 +86,7 @@ const EditingModal = ({isEditing, columns, labels, saveInfo, deleteInfo, endEdit
 									<Input
 										defaultValue={info}
 										size="md"
+										ref={i ? null : firstFieldRef}
 										onChangeText={(value) => {
 											let fields = [...newFields];
 											if(!active) {
@@ -104,7 +127,7 @@ const EditingModal = ({isEditing, columns, labels, saveInfo, deleteInfo, endEdit
 							onPress={() => {
 								// yes/no prompt
 								setActive(false);
-								deleteInfo();
+								deleteItemFunc();
 							}}
 							_text={{color: "danger.50"}}
 							p={1}
@@ -115,7 +138,7 @@ const EditingModal = ({isEditing, columns, labels, saveInfo, deleteInfo, endEdit
 							bg="tertiary.500"
 							onPress={() => {
 								setActive(false);
-								saveInfo([...newFields]);
+								saveItemFunc([...newFields]);
 							}}
 							_text={{color: "tertiary.50"}}
 							p={1}
@@ -136,7 +159,17 @@ const Lex = () => {
 	//
 	//
 	const dispatch = useDispatch();
-	const { title, description, lexicon, wrap, columns, sortDir, sortPattern } = useSelector((state) => state.lexicon, equalityCheck);
+	const {
+		title,
+		description,
+		lexicon,
+		wrap,
+		columns,
+		sortDir,
+		sortPattern,
+		disableBlankConfirms,
+		maxColumns
+	} = useSelector((state) => state.lexicon, equalityCheck);
 	const extraData = [wrap, columns];
 	const initCols = [];
 	const labels = [];
@@ -154,10 +187,11 @@ const Lex = () => {
 	const [editingID, setEditingID] = useState(null);
 	const [editingColumns, setEditingColumns] = useState([]);
 	const [addingColumns, setAddingColumns] = useState([...initCols]);
+	const [alertOpen, setAlertOpen] = useState(false);
 	// Have to introduce a hard limit of 20 columns
 	// Perhaps changeable in settings?
 	const addingRefs = [];
-	for(let i=1; i < 20; i++) {
+	for(let i=1; i < maxColumns; i++) {
 		addingRefs.push(useRef(null));
 	}
 	//
@@ -185,21 +219,21 @@ const Lex = () => {
 		// open modal
 		setEditingID(id);
 	};
-	const endEditing = () => {
+	const endEditingFunc = () => {
 		setEditingID(null);
 		setEditingColumns([]);
 	};
-	const deleteInfo = () => {
+	const deleteItemFunc = () => {
 		dispatch(deleteLexiconItem(editingID));
-		endEditing();
+		endEditingFunc();
 	};
-	const saveInfo = (columns) => {
+	const saveItemFunc = (columns) => {
 		const edited = {
 			id: editingID,
 			columns: [...columns]
 		};
 		dispatch(editLexiconItem(edited));
-		endEditing();
+		endEditingFunc();
 	};
 	//
 	//
@@ -207,7 +241,16 @@ const Lex = () => {
 	//
 	//
 	const addToLexicon = () => {
-		// NEED SANITY CHECK FOR MISSING COLUMNS
+		// Check for blank columns
+		if(disableBlankConfirms || addingColumns.every((col) => col)) {
+			// None? Or we don't care? Continue!
+			return doAddToLexicon();
+		}
+		// We need to ask
+		setAlertOpen(true);
+	}
+	const doAddToLexicon = () => {
+		// Does the actual work of adding to the Lexicon
 		dispatch(addLexiconItem([...addingColumns]));
 		setAddingColumns([...initCols]);
 		// NEED TOAST ALERT
@@ -257,7 +300,21 @@ const Lex = () => {
 	const screen = Dimensions.get("screen");
 	return (
 		<VStack flex={1}>
-			<EditingModal isEditing={editingID !== null} saveInfo={saveInfo} deleteInfo={deleteInfo} endEditing={endEditing} columns={editingColumns} labels={labels} />
+			<EditingModal
+				isEditing={editingID !== null}
+				saveItemFunc={saveItemFunc}
+				deleteItemFunc={deleteItemFunc}
+				endEditingFunc={endEditingFunc}
+				columns={editingColumns}
+				labels={labels}
+			/>
+			<StandardAlert
+				continueText="Continue"
+				continueFunc={doAddToLexicon}
+				bodyContent="You have one or more blank columns in this entry."
+				alertOpen={alertOpen}
+				setAlertOpen={setAlertOpen}
+			/>
 			<VStack m={3} mb={0}>
 				<Text fontSize="sm">Lexicon Title:</Text>
 				<Input
@@ -277,7 +334,9 @@ const Lex = () => {
 				/>
 			</VStack>
 			<HStack mx={3} justifyContent="space-between" alignItems="flex-end">
-				<Text fontSize="2xl" flex="1 0 10">{String(lexicon.length)} Words</Text>
+				<Box flex="1 0 10">
+					<Text fontSize="2xl">{String(lexicon.length)} Word{lexicon.length === 1 ? "" : "s"}</Text>
+				</Box>
 				<HStack mx={3} justifyContent="flex-end" alignItems="flex-end" flex={1}>
 					<Menu
 						placement="top left"
@@ -289,7 +348,7 @@ const Lex = () => {
 									ml={2}
 									mr={1}
 									bg="secondary.500"
-									flex="1 2 0%"
+									flex="1 2 0"
 									_text={{
 										color: "secondary.50",
 										w: "full",
@@ -366,7 +425,7 @@ const Lex = () => {
 				<FlatList
 					m={0}
 					mb={1}
-					flex="1 1 0%"
+					flex="1 1"
 					data={lexicon}
 					keyExtractor={(word) => word.id}
 					ListEmptyComponent={ListEmpty}

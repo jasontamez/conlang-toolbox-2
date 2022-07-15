@@ -203,7 +203,7 @@ const MenuModal = ({ scrollToTop }) => {
 													<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
 														{icon ? Icons[icon](textOptions) : <></>}
 													</VStack>
-													<VStack alignItems="flex-start" justifyContent="center" flexGrow={1} m={2} textAlign="end">
+													<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} textAlign="end">
 														<Text {...textOptions}>{menuTitle || title}</Text>
 													</VStack>
 													<VStack alignItems="center" justifyContent="center" m={2}>
@@ -251,7 +251,7 @@ const MenuModal = ({ scrollToTop }) => {
 													<ZStack>
 														<HStack height={9} w="full" {...bgOptions} opacity={10} />
 														<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
-															<VStack alignItems="flex-end" justifyContent="center" flexGrow={1} m={2} ml={4}>
+															<VStack alignItems="flex-end" justifyContent="center" flex={1} m={2} ml={4}>
 																<Text fontSize="xs" {...textOptions}>{menuTitle || title}</Text>
 															</VStack>
 															<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
@@ -281,7 +281,7 @@ const MenuModal = ({ scrollToTop }) => {
 												<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
 													{icon ? Icons[icon](textOptions) : <></>}
 												</VStack>
-												<VStack alignItems="flex-start" justifyContent="center" flexGrow={1} m={2} {...alignOptions}>
+												<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} {...alignOptions}>
 													<Text {...textOptions}>{menuTitle || title}</Text>
 												</VStack>
 											</HStack>

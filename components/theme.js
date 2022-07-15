@@ -117,11 +117,14 @@ const fontConfig = {
 	}
 };
 
-const fonts = {
-	heading: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
-	body: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
+const fonts = { // Temporary fix until I figure out how to have fallback fonts (if possible?)
+//	heading: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
+	heading: "Noto Sans",
+//	body: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
+	body: "Noto Sans",
 	mono: "DM Mono",
-	serif: "'Noto Serif', 'Noto Serif JP'"
+//	serif: "'Noto Serif', 'Noto Serif JP'",
+	serif: "Noto Serif"
 };
 
 const mainButton = {
@@ -169,54 +172,64 @@ const mainInput = {
 		fontFamily: "body"
 	}
 };
+const modalProps = {
+	defaultProps: {
+		_backdrop: {
+			opacity: 60
+		}
+	}
+};
+const modalHeaderProps = {
+	defaultProps: {
+		bg: "main.700",
+		shadowColor: "main.900",
+		shadowOffset: {
+			width: 0,
+			height: 5,
+		},
+		shadowOpacity: 0.34,
+		shadowRadius: 6.27,
+		elevation: 10,
+		borderColor: "main.500"
+	}
+};
+const modalFooterProps = {
+	defaultProps: {
+		bg: "main.700",
+		shadowColor: "main.900",
+		shadowOffset: {
+			width: 0,
+			height: -5,
+		},
+		shadowOpacity: 0.34,
+		shadowRadius: 6.27,
+		elevation: 10,
+		borderColor: "main.500"
+	}
+};
+const modalCloseButtonProps = {
+	defaultProps: {
+		_icon: {
+			color: "text.50"
+		}
+	}
+};
 
 const components = {
 	Button: {...mainButton},
 	IconButton: {...mainButton},
-	Modal: {
-		defaultProps: {
-			_backdrop: {
-				opacity: 60
-			}
-		}
-	},
-	ModalBody: {...mainBG},
-	ModalHeader: {
-		defaultProps: {
-			bg: "main.700",
-			shadowColor: "main.900",
-			shadowOffset: {
-				width: 0,
-				height: 5,
-			},
-			shadowOpacity: 0.34,
-			shadowRadius: 6.27,
-			elevation: 10,
-			borderColor: "main.500"
-		}
-	},
+	Modal: {...modalProps},
 	ModalContent: {...mainBG},
-	ModalFooter: {
-		defaultProps: {
-			bg: "main.700",
-			shadowColor: "main.900",
-			shadowOffset: {
-				width: 0,
-				height: -5,
-			},
-			shadowOpacity: 0.34,
-			shadowRadius: 6.27,
-			elevation: 10,
-			borderColor: "main.500"
-		}
-	},
-	ModalCloseButton: {
-		defaultProps: {
-			_icon: {
-				color: "text.50"
-			}
-		}
-	},
+	ModalHeader: {...modalHeaderProps},
+	ModalBody: {...mainBG},
+	ModalFooter: {...modalFooterProps},
+	ModalCloseButton: {...modalCloseButtonProps},
+	AlertDialog: {...modalProps},
+	AlertDialogContent: {...mainBG},
+	AlertDialogHeader: {...modalHeaderProps},
+	AlertDialogBody: {...mainBG},
+	AlertDialogFooter: {...modalFooterProps},
+	AlertDialogCloseButton: {...modalCloseButtonProps},
 	ScrollView: {
 		variants: {
 			tabular: {

@@ -108,8 +108,8 @@ export const SliderWithTicks = (props) => {
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
 	return (
 		<HStack d="flex" w="full" bg="darker" px={2} py={1} rounded="md" alignItems="stretch">
-			<Box mr={3} flexShrink={1}><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
-			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis="75%" {...stackProps}>
+			<Box mr={3} flex="0 1"><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
+			<ZStack alignItems="center" justifyContent="center" flex="1 2 3/4" {...stackProps}>
 				<HStack alignItems="center" justifyContent="space-between" w="full" children={middleTicks}>
 				</HStack>
 				<Slider size="sm" minValue={min} maxValue={max} step={1} {...sliderProps}>
@@ -119,7 +119,7 @@ export const SliderWithTicks = (props) => {
 					<Slider.Thumb />
 				</Slider>
 			</ZStack>
-			<Box ml={3} flexShrink={1}><Text textAlign="center" fontSize="sm">{endLabel}</Text></Box>
+			<Box ml={3} flex="0 1"><Text textAlign="center" fontSize="sm">{endLabel}</Text></Box>
 		</HStack>
 	);
 };

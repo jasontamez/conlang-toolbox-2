@@ -284,7 +284,9 @@ export const blankAppState = {/*
 					"dead for at least twenty years"
 				]
 			},
-		]
+		],
+		disableBlankConfirms: false,
+		maxColumns: 20
 	},
 	/* lexicon: {
 		key: "",

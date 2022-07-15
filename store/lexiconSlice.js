@@ -144,7 +144,9 @@ const initialState = {
 				"dead for at least twenty years"
 			]
 		},
-	]
+	],
+	disableBlankConfirms: false,
+	maxColumns: 20
 };
 
 const sortLexicon = (lexicon, sortPattern, sortDir) => {
@@ -185,7 +187,11 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 
 
 const loadNewLexiconFunc = (state, action) => {
-
+	//
+	//
+	// TO-DO
+	//
+	//
 };
 const setTitleFunc = (state, action) => {
 	state.title = action.payload;
@@ -290,6 +296,14 @@ const changeLexiconWrapFunc = (state, action) => {
 	state.wrap = action.payload;
 	return state;
 };
+const setDisableBlankSettingFunc = (state, action) => {
+	state.disableBlankConfirms = action.payload;
+	return state;
+};
+const setMaxColumnsFunc = (state, action) => {
+	state.maxColumns = action.payload;
+	return state;
+};
 //const setTitleFunc = (state, action) => {};
 //const setTitleFunc = (state, action) => {};
 
@@ -310,7 +324,9 @@ const lexiconSlice = createSlice({
 		reorderLexiconColumns: reorderLexiconColumnsFunc,
 		changeSortOrder: changeSortOrderFunc,
 		changeSortDir: changeSortDirFunc,
-		changeLexiconWrap: changeLexiconWrapFunc
+		changeLexiconWrap: changeLexiconWrapFunc,
+		setDisableBlankSetting: setDisableBlankSettingFunc,
+		setMaxColumns: setMaxColumnsFunc
 	}
 });
 
@@ -324,7 +340,9 @@ export const {
 	reorganizeLexiconItems,
 	changeSortOrder,
 	changeSortDir,
-	changeLexiconWrap
+	changeLexiconWrap,
+	setDisableBlankSetting,
+	setMaxColumns
 } = lexiconSlice.actions;
 
 export default lexiconSlice.reducer;
@@ -341,6 +359,8 @@ export const equalityCheck = (stateA, stateB) => {
 	const columnsA = stateA.columns;
 	const sortDirA = stateA.sortDir;
 	const sortPatternA = stateA.sortPattern;
+	const disableBlankConfirmsA = stateA.disableBlankConfirms;
+	const maxColumnsA = stateA.maxColumns;
 	// stateB
 	const titleB = stateB.title;
 	const descriptionB = stateB.description;
@@ -349,6 +369,8 @@ export const equalityCheck = (stateA, stateB) => {
 	const columnsB = stateB.columns;
 	const sortDirB = stateB.sortDir;
 	const sortPatternB = stateB.sortPattern;
+	const disableBlankConfirmsB = stateB.disableBlankConfirms;
+	const maxColumnsB = stateB.maxColumns;
 	// flags
 	let lex = false;
 	let col = false;
@@ -357,6 +379,8 @@ export const equalityCheck = (stateA, stateB) => {
 		|| descriptionA !== descriptionB
 		|| wrapA !== wrapB
 		|| sortDirA !== sortDirB
+		|| disableBlankConfirmsA !== disableBlankConfirmsB
+		|| maxColumnsA !== maxColumnsB
 		|| String(sortPatternA) !== String(sortPatternB)
 	) {
 		return false;
@@ -377,11 +401,11 @@ export const equalityCheck = (stateA, stateB) => {
 					col.label === otherCol.label
 					&& col.size === otherCol.size
 				);
-		})
-	}
-	if(!col) {
-		// if still bad, we're unequal
-		return false;
+		});
+		if(!col) {
+			// if still bad, we're unequal
+			return false;
+		}
 	}
 	// Lex bad?
 	return lex || lexiconA.every((lex, i) => {
