@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
 	key: "",
@@ -196,7 +197,21 @@ const setDescFunc = (state, action) => {
 };
 const addLexiconItemFunc = (state, action) => {
 	//addLexiconItem({item})
-	const item = action.payload;
+	const lex = state.lexicon;
+	const columns = [...action.payload];
+	// Get unique ID
+	let ids = {};
+	lex.forEach((word) => (ids[word.id] = true));
+	let id;
+	do {
+		id = uuidv4();
+	} while(lex[id]);
+	// Construct new item
+	const item = {
+		id,
+		columns
+	};
+	// add it in (and sort)
 	state.lexicon = sortLexicon([item, ...state.lexicon], state.sortPattern, state.sortDir);
 	return state;
 };

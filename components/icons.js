@@ -37,6 +37,7 @@ export const EditIcon = (props) => <ICON as={MaterialIcons} name="edit" size="xs
 
 export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />;
 
+export const AddIcon = (props) => <Icon as={Ionicons} name="add" {...props} />;
 export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-outline" {...props} />;
 export const RemoveCircleIcon = (props) => <Icon as={Ionicons} name="remove-circle-outline" {...props} />;
 export const SaveIcon = (props) => <Icon as={Ionicons} name="save-outline" {...props} />;

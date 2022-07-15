@@ -242,7 +242,7 @@ const components = {
 	Box: {
 		sizes: {
 			lexXs: {
-				flex: "0 0 10px"
+				flex: "0 0 20px"
 			},
 			lexSm: {
 				flex: "1 1 40px"

@@ -43,7 +43,7 @@ export const NavBar = (props) => {
 				horizontal
 				w="full"
 				ref={navRef}
-				onScroll={({nativeEvent}) => debounce(maybeUpdateScrollPos, [nativeEvent], 250)}
+				onScroll={({nativeEvent}) => debounce(maybeUpdateScrollPos, [nativeEvent])}
 				scrollEventThrottle={16}
 				{...scrollProps}
 			>

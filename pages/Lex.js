@@ -1,7 +1,9 @@
 import { Input, FlatList, Text, TextArea, VStack, HStack, Box, IconButton, Menu, Button, Modal, Pressable, Heading } from 'native-base';
+import { useRef } from 'react';
 import { useState } from 'react';
 import { Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import debounce from '../components/debounce';
 import ExtraChars from '../components/ExtraCharsButton';
 import {
 	EditIcon,
@@ -11,7 +13,8 @@ import {
 	SortUpIcon,
 	CloseCircleIcon,
 	TrashIcon,
-	SaveIcon
+	SaveIcon,
+	AddIcon
 } from '../components/icons';
 import {
 	setTitle,
@@ -135,8 +138,10 @@ const Lex = () => {
 	const dispatch = useDispatch();
 	const { title, description, lexicon, wrap, columns, sortDir, sortPattern } = useSelector((state) => state.lexicon, equalityCheck);
 	const extraData = [wrap, columns];
+	const initCols = [];
 	const labels = [];
 	const sizes = columns.map(({label, size}) => {
+		initCols.push("");
 		labels.push(label);
 		return size;
 	});
@@ -148,6 +153,13 @@ const Lex = () => {
 	//
 	const [editingID, setEditingID] = useState(null);
 	const [editingColumns, setEditingColumns] = useState([]);
+	const [addingColumns, setAddingColumns] = useState([...initCols]);
+	// Have to introduce a hard limit of 20 columns
+	// Perhaps changeable in settings?
+	const addingRefs = [];
+	for(let i=1; i < 20; i++) {
+		addingRefs.push(useRef(null));
+	}
 	//
 	//
 	// SORTING ROUTINES
@@ -191,9 +203,32 @@ const Lex = () => {
 	};
 	//
 	//
+	// ADD/DELETE LEXICON
+	//
+	//
+	const addToLexicon = () => {
+		// NEED SANITY CHECK FOR MISSING COLUMNS
+		dispatch(addLexiconItem([...addingColumns]));
+		setAddingColumns([...initCols]);
+		// NEED TOAST ALERT
+		addingRefs.forEach(ref => {
+			ref && ref.current !== null && ref.current.clear();
+		});
+	};
+	const maybeUpdateText = (text, i) => {
+		let newCols = [...addingColumns];
+		newCols[i] = text;
+		debounce(setAddingColumns, [newCols]);
+	};
+	//
+	//
 	// RENDER
 	//
 	//
+	const xsButtonProps = {
+		p: 1,
+		m: 0.5
+	};
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const renderList = ({item, index}) => {
 		const {id, columns} = item;
@@ -202,7 +237,7 @@ const Lex = () => {
 			<HStack key={id} py={3.5} px={1.5} bg={bg}>
 				{columns.map(
 					(text, i) =>
-						<Box px={0.5} size={sizes[i]} key={id + "-" + String(i)}>
+						<Box px={1} size={sizes[i]} key={id + "-" + String(i)}>
 							<Text isTruncated={isTruncated}>{text}</Text>
 						</Box>
 					)
@@ -210,10 +245,10 @@ const Lex = () => {
 				<Box size="lexXs">
 					<IconButton
 						icon={<EditIcon size="xs" color="primary.400" />}
-						p={1}
 						accessibilityLabel="Edit"
 						bg="bg.400"
 						onPress={() => startEditing(item)}
+						{...xsButtonProps}
 					/>
 				</Box>
 			</HStack>
@@ -229,7 +264,7 @@ const Lex = () => {
 					mt={2}
 					defaultValue={title}
 					placeholder="Usually the language name."
-					onChangeText={(v) => dispatch(setTitle(v))}
+					onChangeText={(v) => debounce(() => dispatch(setTitle(v)))}
 				/>
 			</VStack>
 			<VStack m={3} mt={2}>
@@ -238,7 +273,7 @@ const Lex = () => {
 					defaultValue={description}
 					placeholder="A short description of this lexicon."
 					totalLines={3}
-					onChangeText={(v) => dispatch(setDesc(v))}
+					onChangeText={(v) => debounce(() => dispatch(setDesc(v)))}
 				/>
 			</VStack>
 			<HStack mx={3} justifyContent="space-between" alignItems="flex-end">
@@ -306,13 +341,27 @@ const Lex = () => {
 				</HStack>
 			</HStack>
 			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
-				<HStack alignItems="flex-end" pt={3.5} mx={1.5} flex="1 0 4">
+				<HStack alignItems="flex-end" pt={3.5} mx={2} flex="1 0 4">
 					{columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					{/* ... extra blank space here, with size="lexXs" */}
+					<Box size="lexXs"></Box>
 				</HStack>
-				<HStack alignItems="flex-end" mx={1.5} mb={1} flex="1 0 4">
-					{columns.map((col, i) => <Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}><Input w="full" /></Box>)}
-					{/* ... extra buttons here, with size="lexXs" */}
+				<HStack alignItems="center" mx={1.5} mb={1} flex="1 0 4">
+					{columns.map((col, i) => (
+						<Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}>
+							<Input w="full" p={0.5} ref={addingRefs[i]} defaultValue={addingColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
+						</Box>
+					))}
+					{/* ... add button here, with size="lexXs" */}
+					<Box size="lexXs" ml={0.5}>
+						<IconButton
+							icon={<AddIcon size="xs" color="success.50" />}
+							accessibilityLabel="Add to Lexicon"
+							bg="success.500"
+							onPress={() => addToLexicon()}
+							{...xsButtonProps}
+						/>
+					</Box>
 				</HStack>
 				<FlatList
 					m={0}
