@@ -13,7 +13,8 @@ import {
 	Menu,
 	Button,
 	Modal,
-	Heading
+	Heading,
+	useToast
 } from 'native-base';
 
 import debounce from '../components/debounce';
@@ -43,6 +44,7 @@ import {
 	editLexiconItem,
 	consts
 } from '../store/lexiconSlice';
+import doToast from '../components/toast';
 
 const EditingModal = ({
 	isEditing,
@@ -244,6 +246,7 @@ const Lex = () => {
 	// ADD/DELETE LEXICON
 	//
 	//
+	const toast = useToast();
 	const addToLexicon = () => {
 		// Check for blank columns
 		if(disableBlankConfirms || addingColumns.every((col) => col)) {
@@ -257,7 +260,7 @@ const Lex = () => {
 		// Does the actual work of adding to the Lexicon
 		dispatch(addLexiconItem([...addingColumns]));
 		setAddingColumns([...initCols]);
-		// NEED TOAST ALERT
+		doToast(toast, "Word Added");
 		addingRefs.forEach(ref => {
 			ref && ref.current !== null && ref.current.clear();
 		});

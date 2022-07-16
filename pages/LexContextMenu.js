@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { Menu, Pressable, HStack, Text, Divider, Modal, VStack, Box, Slider, Button } from 'native-base';
+import { Menu, Pressable, HStack, Text, Divider, Modal, VStack, Box, Slider, Button, useToast } from 'native-base';
 
 import { DotsIcon, SaveIcon } from '../components/icons';
 import { setDisableBlankSetting, setMaxColumns, consts } from "../store/lexiconSlice";
+import doToast from '../components/toast';
 
 const LexiconContextMenu = () => {
 	const { sortPattern, disableBlankConfirms, maxColumns } = useSelector((state) => state.lexicon, shallowEqual);
@@ -28,6 +29,7 @@ const LexiconContextMenu = () => {
 	const newColumnsChosenFunc = (cols) => {
 		dispatch(setMaxColumns(cols));
 	}
+	const toast = useToast();
 	return (
 		<>
 			<Menu
@@ -111,7 +113,7 @@ const LexiconContextMenu = () => {
 								onPress={() => {
 									setColumnsRangeOpen(false);
 									newColumnsChosenFunc(cols);
-									// TOAST?
+									doToast(toast, "Saved: " + String(cols) + " columns");
 								}}
 							>SAVE</Button>
 						</HStack>

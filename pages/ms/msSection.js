@@ -415,7 +415,7 @@ const ParseMSJSON = (props) => {
 	return (
 		<VStack space={4} key={getKey("Content")} mb={4}>{content}</VStack>
 	);
-	
+
 };
 
 const Section = () => {

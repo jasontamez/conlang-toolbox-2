@@ -98,7 +98,7 @@ const WordLists = () => {
 					return (
 						<Button colorScheme="primary" key={list} size="xs" borderRadius="full" py={1} m={1} onPress={() => toggleList(list)} {...displayProps}>
 							<Text fontSize="xs">{list}</Text>
-						</Button>	
+						</Button>
 					);
 				})}
 			</HStack>
@@ -132,7 +132,7 @@ const WordLists = () => {
 								return (
 									<IonChip key={prop} outline={!current} onClick={() => toggleChars(prop)} className={(ind === 0 ? ("ion-margin-start" + (current ? " " : "")) : "") + (current ? "active" : "")}>
 										<IonLabel>{list}</IonLabel>
-									</IonChip>	
+									</IonChip>
 								);
 							})}
 						</div>
