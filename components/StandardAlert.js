@@ -47,23 +47,25 @@ const StandardAlert = ({
 					borderTopWidth={0}
 					{...(footerProps || {})}
 				>
-					<Button
-						variant="unstyled"
-						ref={cancelRef}
-						_text={{color: "text.50"}}
-						{...(cancelProps || {})}
-						onPress={() => doCancel()}
-					>
-						{cancelText || "Cancel"}
-					</Button>
-					<Button
-						bg="danger.500"
-						_text={{color: "danger.50"}}
-						{...(continueProps || {})}
-						onPress={() => doContinue()}
-					>
-						{continueText || "Continue"}
-					</Button>
+					<Button.Group isAttached>
+						<Button
+							variant="unstyled"
+							ref={cancelRef}
+							_text={{color: "text.50"}}
+							{...(cancelProps || {})}
+							onPress={() => doCancel()}
+						>
+							{cancelText || "Cancel"}
+						</Button>
+						<Button
+							bg="success.500"
+							_text={{color: "success.50"}}
+							{...(continueProps || {})}
+							onPress={() => doContinue()}
+						>
+							{continueText || "Continue"}
+						</Button>
+					</Button.Group>
 				</AlertDialog.Footer>
 			</AlertDialog.Content>
 		</AlertDialog>

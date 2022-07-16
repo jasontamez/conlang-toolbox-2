@@ -40,7 +40,8 @@ import {
 	changeSortDir,
 	changeLexiconWrap,
 	equalityCheck,
-	editLexiconItem
+	editLexiconItem,
+	consts
 } from '../store/lexiconSlice';
 
 const EditingModal = ({
@@ -179,6 +180,7 @@ const Lex = () => {
 		return size;
 	});
 	const isTruncated = !wrap;
+	const {absoluteMaxColumns} = consts;
 	//
 	//
 	// GET STATE
@@ -188,10 +190,12 @@ const Lex = () => {
 	const [editingColumns, setEditingColumns] = useState([]);
 	const [addingColumns, setAddingColumns] = useState([...initCols]);
 	const [alertOpen, setAlertOpen] = useState(false);
-	// Have to introduce a hard limit of 20 columns
-	// Perhaps changeable in settings?
+	// Have to introduce a hard limit of 30 columns.
+	// We have to create the exact same number of Refs each time we render.
+	// 10 seems like a decent amount that would strain even a wide-screen
+	//   tablet, so 3x that is a good upper bound.
 	const addingRefs = [];
-	for(let i=1; i < maxColumns; i++) {
+	for(let i=1; i < absoluteMaxColumns; i++) {
 		addingRefs.push(useRef(null));
 	}
 	//
@@ -309,9 +313,10 @@ const Lex = () => {
 				labels={labels}
 			/>
 			<StandardAlert
-				continueText="Continue"
+				continueText="Yes"
 				continueFunc={doAddToLexicon}
-				bodyContent="You have one or more blank columns in this entry."
+				cancelProps={{bg: "darker"}}
+				bodyContent="You have one or more blank columns in this entry. Are you sure you want to add this to your Lexicon?"
 				alertOpen={alertOpen}
 				setAlertOpen={setAlertOpen}
 			/>

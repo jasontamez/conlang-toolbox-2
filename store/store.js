@@ -286,7 +286,7 @@ export const blankAppState = {/*
 			},
 		],
 		disableBlankConfirms: false,
-		maxColumns: 20
+		maxColumns: 10
 	},
 	/* lexicon: {
 		key: "",

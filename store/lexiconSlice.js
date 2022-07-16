@@ -146,7 +146,7 @@ const initialState = {
 		},
 	],
 	disableBlankConfirms: false,
-	maxColumns: 20
+	maxColumns: 10
 };
 
 const sortLexicon = (lexicon, sortPattern, sortDir) => {
@@ -347,6 +347,12 @@ export const {
 
 export default lexiconSlice.reducer;
 
+// Constants are not changeable.
+export const consts = {
+	absoluteMaxColumns: 30
+};
+
+// An equality-check function
 export const equalityCheck = (stateA, stateB) => {
 	if (stateA === stateB) {
 		return true;
