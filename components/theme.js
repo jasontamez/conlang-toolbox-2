@@ -172,6 +172,51 @@ const mainInput = {
 		fontFamily: "body"
 	}
 };
+const mainCheckboxes = {
+	defaultProps: {
+		bg: "lighter",
+		borderColor: "text.100",
+		_text: {
+			color: "primaryContrast",
+			fontFamily: "body"
+		},
+		_icon: {
+			color: "primaryContrast"
+		},
+		_checked: {
+			borderColor: "primary.500",
+			bg: "primary.500",
+			_hover: {
+				borderColor: "primary.300",
+				bg: "primary.300",
+				_disabled: {
+					borderColor: "gray.500",
+					bg: "gray.900"
+				},
+			},
+			_pressed: {
+				borderColor: "primary.300",
+				bg: "primary.300",
+			}
+		},
+		_hover: {
+			borderColor: "primary.400",
+			_disabled: {
+				borderColor: "gray.500",
+			}
+		},
+		_pressed: {
+			borderColor: "primary.300",
+		},
+		_invalid: {
+			borderColor: "error.500",
+		},
+		_disabled: {
+			borderColor: "gray.500",
+			bg: "gray.900"
+		}
+	}
+};
 const modalProps = {
 	defaultProps: {
 		_backdrop: {
@@ -179,7 +224,7 @@ const modalProps = {
 		}
 	}
 };
-const modalHeaderProps = {
+const mainModalHeader = {
 	defaultProps: {
 		bg: "main.700",
 		shadowColor: "main.900",
@@ -193,7 +238,7 @@ const modalHeaderProps = {
 		borderColor: "main.500"
 	}
 };
-const modalFooterProps = {
+const mainModalFooter = {
 	defaultProps: {
 		bg: "main.700",
 		shadowColor: "main.900",
@@ -207,7 +252,7 @@ const modalFooterProps = {
 		borderColor: "main.500"
 	}
 };
-const modalCloseButtonProps = {
+const mainModalCloseButton = {
 	defaultProps: {
 		_icon: {
 			color: "text.50"
@@ -220,16 +265,16 @@ const components = {
 	IconButton: {...mainButton},
 	Modal: {...modalProps},
 	ModalContent: {...mainBG},
-	ModalHeader: {...modalHeaderProps},
+	ModalHeader: {...mainModalHeader},
 	ModalBody: {...mainBG},
-	ModalFooter: {...modalFooterProps},
-	ModalCloseButton: {...modalCloseButtonProps},
+	ModalFooter: {...mainModalFooter},
+	ModalCloseButton: {...mainModalCloseButton},
 	AlertDialog: {...modalProps},
 	AlertDialogContent: {...mainBG},
-	AlertDialogHeader: {...modalHeaderProps},
+	AlertDialogHeader: {...mainModalHeader},
 	AlertDialogBody: {...mainBG},
-	AlertDialogFooter: {...modalFooterProps},
-	AlertDialogCloseButton: {...modalCloseButtonProps},
+	AlertDialogFooter: {...mainModalFooter},
+	AlertDialogCloseButton: {...mainModalCloseButton},
 	ScrollView: {
 		variants: {
 			tabular: {
@@ -248,7 +293,8 @@ const components = {
 	},
 	Input: {...mainInput},
 	TextArea: {...mainInput},
-	Radio: {...mainInput},
+	Radio: {...mainCheckboxes},
+	Checkbox: {...mainCheckboxes},
 	Select: {...mainInput},
 	Icon: {...mainFG},
 	NativeBaseProvider: {...mainBG},
@@ -365,51 +411,6 @@ const components = {
 						borderWidth: 2
 					}
 				}
-			}
-		}
-	},
-	Checkbox: {
-		defaultProps: {
-			bg: "lighter",
-			borderColor: "text.100",
-			_text: {
-				color: "primaryContrast",
-				fontFamily: "body"
-			},
-			_icon: {
-				color: "primaryContrast"
-			},
-			_checked: {
-				borderColor: "primary.500",
-				bg: "primary.500",
-				_hover: {
-					borderColor: "primary.300",
-					bg: "primary.300",
-					_disabled: {
-						borderColor: "gray.500",
-						bg: "gray.900"
-					},
-				},
-				_pressed: {
-					borderColor: "primary.300",
-					bg: "primary.300",
-				}
-			},
-			_hover: {
-				borderColor: "primary.400",
-				_disabled: {
-					borderColor: "gray.500",
-				}
-			},
-			_pressed: {
-				borderColor: "primary.300",
-			},
-			_invalid: {
-				borderColor: "error.500",
-			},
-			_disabled: {
-				borderColor: "gray.500",
-				bg: "gray.900"
 			}
 		}
 	},

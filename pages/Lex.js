@@ -12,256 +12,33 @@ import {
 	IconButton,
 	Menu,
 	Button,
-	Modal,
-	Heading,
 	useToast
 } from 'native-base';
 
 import debounce from '../components/debounce';
-import ExtraChars from '../components/ExtraCharsButton';
 import {
 	EditIcon,
 	DoubleCaretIcon,
 	SettingsIcon,
 	SortDownIcon,
 	SortUpIcon,
-	CloseCircleIcon,
-	TrashIcon,
-	SaveIcon,
-	AddIcon,
-	AddCircleIcon
+	AddIcon
 } from '../components/icons';
-import StandardAlert, { MultiAlert } from '../components/StandardAlert';
+import { MultiAlert } from '../components/StandardAlert';
 import {
 	setTitle,
 	setDesc,
 	addLexiconItem,
 	deleteLexiconItem,
-	reorganizeLexiconItems,
 	changeSortOrder,
 	changeSortDir,
-	changeLexiconWrap,
 	equalityCheck,
 	editLexiconItem,
 	consts
 } from '../store/lexiconSlice';
 import doToast from '../components/toast';
-
-const EditingLexiconItemModal = ({
-	isEditing,
-	columns,
-	labels,
-	saveItemFunc,
-	deleteItemFunc,
-	endEditingFunc
-}) => {
-	//
-	//
-	// 	EDITING LEXICON ITEM MODAL
-	//
-	//
-	// (has to be separate to keep State updates from flickering this all the time)
-	const [newFields, setNewFields] = useState([]);
-	const [active, setActive] = useState(false);
-	const firstFieldRef = useRef(null);
-	const doClose = () => {
-		setActive(false);
-		setNewFields([]);
-		endEditingFunc();
-	};
-	return (
-		<Modal isOpen={isEditing} closeOnOverlayClick={false} initialFocusRef={firstFieldRef}>
-			<Modal.Content>
-				<Modal.Header m={0} p={0}>
-					<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
-						<Heading color="primaryContrast" size="md">Edit Lexicon Item</Heading>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
-							<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
-						</HStack>
-					</HStack>
-				</Modal.Header>
-				<Modal.Body m={0} p={0}>
-					<VStack m={0} p={4} pb={10} space={6}>
-						{columns.map((info, i) => {
-							return (
-								<VStack key={info + "-" + String(i)} >
-									<Text fontSize="sm">{labels[i]}</Text>
-									<Input
-										defaultValue={info}
-										size="md"
-										ref={i ? null : firstFieldRef}
-										onChangeText={(value) => {
-											let fields = [...newFields];
-											if(!active) {
-												// We need to set everything up
-												fields = [...columns];
-												setActive(true);
-											}
-											fields.splice(i, 1, value);
-											setNewFields([...fields]);
-										}}
-										onBlurry={(e) => {
-											let value = e.target.value;
-											if(!active) {
-												// We need to set everything up
-												let fields = [...columns];
-												if(value !== undefined) {
-													fields.splice(i, 1, value);
-												}
-												setNewFields([...fields]);
-												setActive(true);
-											} else if(value !== undefined && value !== newFields[i]) {
-												let fields = [...newFields];
-												fields.splice(i, 1, value);
-												setNewFields(fields);
-											}
-										}}
-									/>
-								</VStack>
-							);
-						})}
-					</VStack>
-				</Modal.Body>
-				<Modal.Footer m={0} p={0} borderTopWidth={0}>
-					<HStack justifyContent="space-between" w="full">
-						<Button
-							startIcon={<TrashIcon color="danger.50" m={0} />}
-							bg="danger.500"
-							onPress={() => {
-								// TO-DO yes/no prompt
-								setActive(false);
-								deleteItemFunc();
-							}}
-							_text={{color: "danger.50"}}
-							p={1}
-							m={2}
-						>DELETE ITEM</Button>
-						<Button
-							startIcon={<SaveIcon color="tertiary.50" m={0} />}
-							bg="tertiary.500"
-							onPress={() => {
-								setActive(false);
-								saveItemFunc([...newFields]);
-							}}
-							_text={{color: "tertiary.50"}}
-							p={1}
-							m={2}
-						>SAVE ITEM</Button>
-					</HStack>
-				</Modal.Footer>
-			</Modal.Content>
-		</Modal>
-	);
-};
-
-
-const EditingLexiconColumnsModal = ({
-	isEditing,
-	labels,
-	sizes,
-	maxColumns,
-	saveItemFunc,
-	deleteItemFunc,
-	endEditingFunc
-}) => {
-	//
-	//
-	// EDITING LEXICON COLUMNS MODAL
-	//
-	//
-	const [newLabels, setNewLabels] = useState([]);
-	const [newSizes, setNewSizes] = useState([]);
-	const [active, setActive] = useState(false);
-	const doneRef = useRef(null);
-	const doClose = () => {
-		setActive(false);
-		setNewLabels([]);
-		setNewSizes([]);
-		endEditingFunc();
-	};
-	const colNum = labels.length;
-	const AddColumnButton = () => {
-		return colNum === maxColumns ? <></> : (
-			<Button
-				startIcon={<AddCircleIcon color="success.50" m={0} />}
-				bg="success.500"
-				onPress={() => {
-					// TO-DO yes/no prompt
-					setActive(false);
-					deleteItemFunc();
-				}}
-				_text={{color: "success.50"}}
-				p={1}
-				m={2}
-			>TO-DO ADD COLUMN</Button>
-		);
-	};
-	return (
-		<Modal isOpen={isEditing} closeOnOverlayClick={false} initialFocusRef={doneRef}>
-			<Modal.Content>
-				<Modal.Header m={0} p={0}>
-					<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
-						<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
-							<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
-						</HStack>
-					</HStack>
-				</Modal.Header>
-				<Modal.Body m={0} p={0}>
-					<VStack m={0} p={4} pb={10} space={6}>
-						{labels.map((label, i) => {
-							return (
-								<VStack key={label + "-" + String(i)} >
-									<HStack>
-										<Text>TO-DO Drag Handle</Text>
-										<VStack>
-											<Input
-												defaultValue={label}
-												size="md"
-												onChangeText={(value) => {
-													let fields = [...newLabels];
-													if(!active) {
-														// We need to set everything up
-														fields = [...labels];
-														setNewSizes(sizes);
-														setActive(true);
-													}
-													fields.splice(i, 1, value);
-													setNewLabels([...fields]);
-												}}
-											/>
-										</VStack>
-										<Text>TO-DO Delete Button</Text>
-									</HStack>
-								</VStack>
-							);
-						})}
-					</VStack>
-				</Modal.Body>
-				<Modal.Footer m={0} p={0} borderTopWidth={0}>
-					<HStack justifyContent="flex-end" w="full">
-						<AddColumnButton />
-						<Button
-							startIcon={<SaveIcon color="tertiary.50" m={0} />}
-							bg="tertiary.500"
-							onPress={() => {
-								setActive(false);
-								saveItemFunc([...newLabels], [...newSizes]);
-							}}
-							_text={{color: "tertiary.50"}}
-							p={1}
-							m={2}
-							ref={doneRef}
-						>DONE</Button>
-					</HStack>
-				</Modal.Footer>
-			</Modal.Content>
-		</Modal>
-	);
-};
-
+import ModalLexiconEditingItem from './LexEditItemModal';
+import ModalLexiconEditingColumns from './LexEditColumnsModal';
 
 const Lex = () => {
 	//
@@ -281,6 +58,7 @@ const Lex = () => {
 		disableBlankConfirms,
 		maxColumns
 	} = useSelector((state) => state.lexicon, equalityCheck);
+	const disableConfirms = useSelector((state) => state.appState.disableConfirms);
 	const extraData = [wrap, columns];
 	const initCols = [];
 	const labels = [];
@@ -296,8 +74,8 @@ const Lex = () => {
 	// GET STATE
 	//
 	//
-	const [editingID, setEditingID] = useState(null);
-	const [editingColumns, setEditingColumns] = useState([]);
+	const [editingItemID, setEditingItemID] = useState(null);
+	const [editingItemColumns, setEditingItemColumns] = useState([]);
 	const [addingColumns, setAddingColumns] = useState([...initCols]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	// Have to introduce a hard limit of 30 columns.
@@ -305,7 +83,7 @@ const Lex = () => {
 	// 10 seems like a decent amount that would strain even a wide-screen
 	//   tablet, so 3x that is a good upper bound.
 	const addingRefs = [];
-	for(let i=1; i < absoluteMaxColumns; i++) {
+	for(let i=1; i <= absoluteMaxColumns; i++) {
 		addingRefs.push(useRef(null));
 	}
 	//
@@ -323,27 +101,30 @@ const Lex = () => {
 	};
 	//
 	//
-	// HANDLE EDITING MODAL
+	// EDIT ITEM IN LEXICON
 	//
 	//
-	const startEditing = (item) => {
+	const startEditingFunc = (item) => {
 		const {id, columns} = item;
 		// set editing info
-		setEditingColumns([...columns]);
+		setEditingItemColumns([...columns]);
 		// open modal
-		setEditingID(id);
+		setEditingItemID(id);
 	};
 	const endEditingFunc = () => {
-		setEditingID(null);
-		setEditingColumns([]);
+		setEditingItemID(null);
+		setEditingItemColumns([]);
 	};
-	const deleteItemFunc = () => {
-		dispatch(deleteLexiconItem(editingID));
+	const deleteEditingItemFunc = () => {
+		disableConfirms ? doDeleteItem() : setAlertOpen("deleteLexiconItem");
+	};
+	const doDeleteItem = () => {
+		dispatch(deleteLexiconItem(editingItemID));
 		endEditingFunc();
 	};
 	const saveItemFunc = (columns) => {
 		const edited = {
-			id: editingID,
+			id: editingItemID,
 			columns: [...columns]
 		};
 		dispatch(editLexiconItem(edited));
@@ -351,7 +132,7 @@ const Lex = () => {
 	};
 	//
 	//
-	// ADD/DELETE TO/FROM LEXICON
+	// ADD/DELETE ITEM TO/FROM LEXICON
 	//
 	//
 	const toast = useToast();
@@ -370,9 +151,10 @@ const Lex = () => {
 		setAddingColumns([...initCols]);
 		doToast(toast, "Word Added");
 		addingRefs.forEach(ref => {
-			ref && ref.current !== null && ref.current.clear();
+			ref && ref.current && ref.current.clear();
 		});
 	};
+	// TO-DO: DELETING AN ITEM
 	const maybeUpdateText = (text, i) => {
 		let newCols = [...addingColumns];
 		newCols[i] = text;
@@ -405,7 +187,7 @@ const Lex = () => {
 						icon={<EditIcon size="xs" color="primary.400" />}
 						accessibilityLabel="Edit"
 						bg="bg.400"
-						onPress={() => startEditing(item)}
+						onPress={() => startEditingFunc(item)}
 						{...xsButtonProps}
 					/>
 				</Box>
@@ -413,17 +195,22 @@ const Lex = () => {
 		);
 	}
 	const screen = Dimensions.get("screen");
+	//
+	//
+	// RETURN JSX
+	//
+	//
 	return (
 		<VStack flex={1}>
-			<EditingLexiconItemModal
-				isEditing={editingID !== null}
+			<ModalLexiconEditingItem
+				isEditing={editingItemID !== null}
 				saveItemFunc={saveItemFunc}
-				deleteItemFunc={deleteItemFunc}
+				deleteEditingItemFunc={deleteEditingItemFunc}
 				endEditingFunc={endEditingFunc}
-				columns={editingColumns}
+				columns={editingItemColumns}
 				labels={labels}
 			/>
-			<EditingLexiconColumnsModal
+			<ModalLexiconEditingColumns
 				isEditing={false}
 				columns={columns}
 				labels={labels}
@@ -446,8 +233,17 @@ const Lex = () => {
 						}
 					},
 					{
-						id: "next",
-						properties: {}
+						id: "deleteLexiconItem",
+						properties: {
+							continueFunc: doDeleteItem,
+							continueText: "Yes",
+							bodyContent: (
+								<VStack space={5} px={2} py={3}>
+									<Text bold>{editingItemColumns.join(" / ")}</Text>
+									<Text>Are you sure you want to delete this? This cannot be undone.</Text>
+								</VStack>
+							)
+						}
 					}
 				]}
 			/>
