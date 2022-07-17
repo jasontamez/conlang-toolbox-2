@@ -28,9 +28,10 @@ import {
 	CloseCircleIcon,
 	TrashIcon,
 	SaveIcon,
-	AddIcon
+	AddIcon,
+	AddCircleIcon
 } from '../components/icons';
-import StandardAlert from '../components/StandardAlert';
+import StandardAlert, { MultiAlert } from '../components/StandardAlert';
 import {
 	setTitle,
 	setDesc,
@@ -46,7 +47,7 @@ import {
 } from '../store/lexiconSlice';
 import doToast from '../components/toast';
 
-const EditingModal = ({
+const EditingLexiconItemModal = ({
 	isEditing,
 	columns,
 	labels,
@@ -56,7 +57,7 @@ const EditingModal = ({
 }) => {
 	//
 	//
-	// 	EDITING MODAL
+	// 	EDITING LEXICON ITEM MODAL
 	//
 	//
 	// (has to be separate to keep State updates from flickering this all the time)
@@ -128,7 +129,7 @@ const EditingModal = ({
 							startIcon={<TrashIcon color="danger.50" m={0} />}
 							bg="danger.500"
 							onPress={() => {
-								// yes/no prompt
+								// TO-DO yes/no prompt
 								setActive(false);
 								deleteItemFunc();
 							}}
@@ -147,6 +148,113 @@ const EditingModal = ({
 							p={1}
 							m={2}
 						>SAVE ITEM</Button>
+					</HStack>
+				</Modal.Footer>
+			</Modal.Content>
+		</Modal>
+	);
+};
+
+
+const EditingLexiconColumnsModal = ({
+	isEditing,
+	labels,
+	sizes,
+	maxColumns,
+	saveItemFunc,
+	deleteItemFunc,
+	endEditingFunc
+}) => {
+	//
+	//
+	// EDITING LEXICON COLUMNS MODAL
+	//
+	//
+	const [newLabels, setNewLabels] = useState([]);
+	const [newSizes, setNewSizes] = useState([]);
+	const [active, setActive] = useState(false);
+	const doneRef = useRef(null);
+	const doClose = () => {
+		setActive(false);
+		setNewLabels([]);
+		setNewSizes([]);
+		endEditingFunc();
+	};
+	const colNum = labels.length;
+	const AddColumnButton = () => {
+		return colNum === maxColumns ? <></> : (
+			<Button
+				startIcon={<AddCircleIcon color="success.50" m={0} />}
+				bg="success.500"
+				onPress={() => {
+					// TO-DO yes/no prompt
+					setActive(false);
+					deleteItemFunc();
+				}}
+				_text={{color: "success.50"}}
+				p={1}
+				m={2}
+			>TO-DO ADD COLUMN</Button>
+		);
+	};
+	return (
+		<Modal isOpen={isEditing} closeOnOverlayClick={false} initialFocusRef={doneRef}>
+			<Modal.Content>
+				<Modal.Header m={0} p={0}>
+					<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
+						<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+						<HStack justifyContent="flex-end" space={2}>
+							<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
+							<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+						</HStack>
+					</HStack>
+				</Modal.Header>
+				<Modal.Body m={0} p={0}>
+					<VStack m={0} p={4} pb={10} space={6}>
+						{labels.map((label, i) => {
+							return (
+								<VStack key={label + "-" + String(i)} >
+									<HStack>
+										<Text>TO-DO Drag Handle</Text>
+										<VStack>
+											<Input
+												defaultValue={label}
+												size="md"
+												onChangeText={(value) => {
+													let fields = [...newLabels];
+													if(!active) {
+														// We need to set everything up
+														fields = [...labels];
+														setNewSizes(sizes);
+														setActive(true);
+													}
+													fields.splice(i, 1, value);
+													setNewLabels([...fields]);
+												}}
+											/>
+										</VStack>
+										<Text>TO-DO Delete Button</Text>
+									</HStack>
+								</VStack>
+							);
+						})}
+					</VStack>
+				</Modal.Body>
+				<Modal.Footer m={0} p={0} borderTopWidth={0}>
+					<HStack justifyContent="flex-end" w="full">
+						<AddColumnButton />
+						<Button
+							startIcon={<SaveIcon color="tertiary.50" m={0} />}
+							bg="tertiary.500"
+							onPress={() => {
+								setActive(false);
+								saveItemFunc([...newLabels], [...newSizes]);
+							}}
+							_text={{color: "tertiary.50"}}
+							p={1}
+							m={2}
+							ref={doneRef}
+						>DONE</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>
@@ -243,7 +351,7 @@ const Lex = () => {
 	};
 	//
 	//
-	// ADD/DELETE LEXICON
+	// ADD/DELETE TO/FROM LEXICON
 	//
 	//
 	const toast = useToast();
@@ -254,7 +362,7 @@ const Lex = () => {
 			return doAddToLexicon();
 		}
 		// We need to ask
-		setAlertOpen(true);
+		setAlertOpen("hasBlankColumns");
 	}
 	const doAddToLexicon = () => {
 		// Does the actual work of adding to the Lexicon
@@ -307,7 +415,7 @@ const Lex = () => {
 	const screen = Dimensions.get("screen");
 	return (
 		<VStack flex={1}>
-			<EditingModal
+			<EditingLexiconItemModal
 				isEditing={editingID !== null}
 				saveItemFunc={saveItemFunc}
 				deleteItemFunc={deleteItemFunc}
@@ -315,13 +423,33 @@ const Lex = () => {
 				columns={editingColumns}
 				labels={labels}
 			/>
-			<StandardAlert
-				continueText="Yes"
-				continueFunc={doAddToLexicon}
-				cancelProps={{bg: "darker"}}
-				bodyContent="You have one or more blank columns in this entry. Are you sure you want to add this to your Lexicon?"
+			<EditingLexiconColumnsModal
+				isEditing={false}
+				columns={columns}
+				labels={labels}
+				sizes={sizes}
+				maxColumns={maxColumns}
+			/>
+			<MultiAlert
 				alertOpen={alertOpen}
 				setAlertOpen={setAlertOpen}
+				sharedProps={{
+					cancelProps: {bg: "darker"}
+				}}
+				passedProps={[
+					{
+						id: "hasBlankColumns",
+						properties: {
+							continueFunc: doAddToLexicon,
+							continueText: "Yes",
+							bodyContent: "You have one or more blank columns in this entry. Are you sure you want to add this to your Lexicon?"
+						}
+					},
+					{
+						id: "next",
+						properties: {}
+					}
+				]}
 			/>
 			<VStack m={3} mb={0}>
 				<Text fontSize="sm">Lexicon Title:</Text>
@@ -404,7 +532,13 @@ const Lex = () => {
 						bg="secondary.500"
 						accessibilityLabel="Change sort direction."
 					/>
-					<IconButton px={3} py={1} icon={<SettingsIcon color="tertiary.50" name="settings" />} bg="tertiary.500" />
+					<IconButton
+						px={3}
+						py={1}
+						icon={<SettingsIcon color="tertiary.50" name="settings" />}
+						bg="tertiary.500"
+						onPress={() => 222}
+					/>
 				</HStack>
 			</HStack>
 			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>

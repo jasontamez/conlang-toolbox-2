@@ -2,14 +2,32 @@ import { useRef } from "react";
 import { AlertDialog, Button } from "native-base";
 
 const StandardAlert = ({
-	cancelProps, cancelText, cancelFunc,
-	continueProps, continueText, continueFunc,
+	alertOpen, setAlertOpen,
+	alertProps, contentProps,
 	headerProps, headerContent,
 	bodyProps, bodyContent,
 	footerProps,
-	alertProps, contentProps,
-	alertOpen, setAlertOpen
+	cancelProps, cancelText, cancelFunc,
+	continueProps, continueText, continueFunc
 }) => {
+	// Makes an AlertDialog box
+	//
+	// alertOpen: boolean indicating when the AlertDialog is shown
+	// setAlertOpen: a function fired with (false) when Cancel OR
+	//    Continue button is pressed
+	// alertProps: object of properties for AlertDialog
+	// contentProps: object of properties for AlertDialog.Content
+	// headerProps: object of properties for AlertDialog.Header
+	// headerContent: string text or JSX for AlertDialog.Header
+	// bodyProps: object of properties for AlertDialog.Body
+	// bodyContent: string text or JSX for AlertDialog.Body
+	// footerProps: object of properties for AlertDialog.Footer
+	// cancelProps: object of properties for the Cancel button
+	// cancelText: string text of the Cancel button
+	// cancelFunc: function fired (no args) when Cancel is pressed
+	// continueProps: same as cancelProps, but for Continue button
+	// continueText: same as above
+	// continueFunc: same as above
 	const cancelRef = useRef(null);
 	const doCancel = () => {
 		setAlertOpen(false);
@@ -73,3 +91,25 @@ const StandardAlert = ({
 };
 
 export default StandardAlert;
+
+export const MultiAlert = (props) => {
+	// Makes multiple StandardAlerts
+	//
+	// alertOpen = state variable
+	// setAlertOpen = state setter
+	// sharedProps = object of properties to be added to each StandardAlert
+	// passedProps = Array of objects, each object being:
+	//    {id: string, properties: object}
+	//
+	// Makes one StandardAlert for every object in passedProps.
+	//   Each StandardAlert opens when alertOpen === id.
+	//
+	// NOTE:
+	//   sharedProps can override alertOpen and setAlertOpen
+	//   passedProps can override sharedProps, alertOpen, and setAlertOpen
+	const {alertOpen, setAlertOpen, sharedProps, passedProps} = props;
+	return passedProps.map(({id, properties}) => {
+		return <StandardAlert key={id + "-MultiAlert"} alertOpen={alertOpen === id} setAlertOpen={setAlertOpen} {...sharedProps} {...properties} />;
+	});
+};
+
