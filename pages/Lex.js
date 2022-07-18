@@ -77,6 +77,7 @@ const Lex = () => {
 	const [editingItemID, setEditingItemID] = useState(null);
 	const [editingItemColumns, setEditingItemColumns] = useState([]);
 	const [addingColumns, setAddingColumns] = useState([...initCols]);
+	const [editingColumns, setEditingColumns] = useState(false);
 	const [alertOpen, setAlertOpen] = useState(false);
 	// Have to introduce a hard limit of 30 columns.
 	// We have to create the exact same number of Refs each time we render.
@@ -211,11 +212,14 @@ const Lex = () => {
 				labels={labels}
 			/>
 			<ModalLexiconEditingColumns
-				isEditing={false}
+				isEditing={editingColumns}
 				columns={columns}
 				labels={labels}
 				sizes={sizes}
 				maxColumns={maxColumns}
+				endEditingColumnsFunc={() => {
+					setEditingColumns(false);
+				}}
 			/>
 			<MultiAlert
 				alertOpen={alertOpen}
@@ -266,7 +270,7 @@ const Lex = () => {
 				/>
 			</VStack>
 			<HStack mx={3} justifyContent="space-between" alignItems="flex-end">
-				<Box flex="1 0 10">
+				<Box minW="110px">
 					<Text fontSize="2xl">{String(lexicon.length)} Word{lexicon.length === 1 ? "" : "s"}</Text>
 				</Box>
 				<HStack mx={3} justifyContent="flex-end" alignItems="flex-end" flex={1}>
@@ -280,7 +284,9 @@ const Lex = () => {
 									ml={2}
 									mr={1}
 									bg="secondary.500"
-									flex="1 2 0"
+									flexGrow={1}
+									flexShrink={2}
+									flexBasis={0}
 									_text={{
 										color: "secondary.50",
 										w: "full",
@@ -288,18 +294,18 @@ const Lex = () => {
 										textAlign: "left",
 										noOfLines: 1,
 										style: {
-											overflow: "hidden",
-											textOverflow: "ellipsis"
+											overflow: "hidden"
 										}
 									}}
 									_stack={{
 										justifyContent: "space-between",
 										alignItems: "center",
-										flex: 1,
+										flexGrow: 1,
+										flexShrink: 1,
+										flexBasis: 0,
 										space: 0,
 										style: {
-											overflow: "hidden",
-											textOverflow: "ellipsis"
+											overflow: "hidden"
 										}
 									}}
 									startIcon={<DoubleCaretIcon mr={1} color="secondary.50" />}
@@ -333,17 +339,17 @@ const Lex = () => {
 						py={1}
 						icon={<SettingsIcon color="tertiary.50" name="settings" />}
 						bg="tertiary.500"
-						onPress={() => 222}
+						onPress={() => setEditingColumns(true)}
 					/>
 				</HStack>
 			</HStack>
 			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
-				<HStack alignItems="flex-end" pt={3.5} mx={2} flex="1 0 4">
+				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis="40px">
 					{columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					{/* ... extra blank space here, with size="lexXs" */}
 					<Box size="lexXs"></Box>
 				</HStack>
-				<HStack alignItems="center" mx={1.5} mb={1} flex="1 0 4">
+				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis="40px">
 					{columns.map((col, i) => (
 						<Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}>
 							<Input w="full" p={0.5} ref={addingRefs[i]} defaultValue={addingColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
@@ -363,7 +369,6 @@ const Lex = () => {
 				<FlatList
 					m={0}
 					mb={1}
-					flex="1 1"
 					data={lexicon}
 					keyExtractor={(word) => word.id}
 					ListEmptyComponent={ListEmpty}

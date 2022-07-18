@@ -172,49 +172,47 @@ const mainInput = {
 		fontFamily: "body"
 	}
 };
-const mainCheckboxes = {
-	defaultProps: {
-		bg: "lighter",
-		borderColor: "text.100",
-		_text: {
-			color: "primaryContrast",
-			fontFamily: "body"
-		},
-		_icon: {
-			color: "primaryContrast"
-		},
-		_checked: {
-			borderColor: "primary.500",
-			bg: "primary.500",
-			_hover: {
-				borderColor: "primary.300",
-				bg: "primary.300",
-				_disabled: {
-					borderColor: "gray.500",
-					bg: "gray.900"
-				},
-			},
-			_pressed: {
-				borderColor: "primary.300",
-				bg: "primary.300",
-			}
-		},
+const mainCheckboxesDefaultProps = {
+	bg: "lighter",
+	borderColor: "text.100",
+	_text: {
+		color: "primaryContrast",
+		fontFamily: "body"
+	},
+	_icon: {
+		color: "primaryContrast"
+	},
+	_checked: {
+		borderColor: "primary.500",
+		bg: "primary.500",
 		_hover: {
-			borderColor: "primary.400",
+			borderColor: "primary.300",
+			bg: "primary.300",
 			_disabled: {
 				borderColor: "gray.500",
-			}
+				bg: "gray.900"
+			},
 		},
 		_pressed: {
 			borderColor: "primary.300",
-		},
-		_invalid: {
-			borderColor: "error.500",
-		},
+			bg: "primary.300",
+		}
+	},
+	_hover: {
+		borderColor: "primary.400",
 		_disabled: {
 			borderColor: "gray.500",
-			bg: "gray.900"
 		}
+	},
+	_pressed: {
+		borderColor: "primary.300",
+	},
+	_invalid: {
+		borderColor: "error.500",
+	},
+	_disabled: {
+		borderColor: "gray.500",
+		bg: "gray.900"
 	}
 };
 const modalProps = {
@@ -293,8 +291,23 @@ const components = {
 	},
 	Input: {...mainInput},
 	TextArea: {...mainInput},
-	Radio: {...mainCheckboxes},
-	Checkbox: {...mainCheckboxes},
+	Checkbox: {
+		defaultProps: {
+			...mainCheckboxesDefaultProps
+		}
+	},
+	Radio: {
+		defaultProps: {
+			...mainCheckboxesDefaultProps,
+			_text: {
+				color: "primary.50",
+				fontFamily: "body"
+			},
+			_icon: {
+				color: "primary.50"
+			},
+		}
+	},
 	Select: {...mainInput},
 	Icon: {...mainFG},
 	NativeBaseProvider: {...mainBG},
