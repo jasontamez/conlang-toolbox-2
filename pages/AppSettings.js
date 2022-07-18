@@ -9,7 +9,7 @@ const AppSettings = () => {
 	return (
 		<VStack>
 			<HStack w="full" justifyContent="space-between" alignItems="center" p={2} borderBottomWidth={1} borderBottomColor="main.900">
-				<VStack flex="1 2" mr={2}>
+				<VStack flexGrow={1} flexShrink={2} mr={2}>
 					<Text fontSize="md">Disable Confirmation Prompts</Text>
 					<Text fontSize="xs" color="main.500">Eliminates yes/no prompts when deleting or overwriting data.</Text>
 				</VStack>

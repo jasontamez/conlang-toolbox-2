@@ -26,9 +26,9 @@ const AppHeader = ({ scrollToTop }) => {
 	};
 	const {title, boxProps, textProps, extraChars, rightHeader } = {...defaultProps, ...currentPage};
 	return (
-		<HStack w="full" alignItems="center" bg="lighter" flex="0 0 auto" safeArea {...boxProps}>
+		<HStack w="full" alignItems="center" bg="lighter" flexGrow={0} flexShrink={0} safeArea {...boxProps}>
 			<MenuModal scrollToTop={scrollToTop} />
-			<Box flex="1 0 auto">
+			<Box flexGrow={1} flexShrink={0}>
 				<Text isTruncated fontSize="lg" textAlign="center" {...textProps}>{title}</Text>
 			</Box>
 			{extraChars ? <ExtraChars /> : <></>}

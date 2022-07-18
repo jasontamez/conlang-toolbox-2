@@ -203,7 +203,7 @@ const MenuModal = ({ scrollToTop }) => {
 													<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
 														{icon ? Icons[icon](textOptions) : <></>}
 													</VStack>
-													<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} textAlign="end">
+													<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} textAlign="right">
 														<Text {...textOptions}>{menuTitle || title}</Text>
 													</VStack>
 													<VStack alignItems="center" justifyContent="center" m={2}>

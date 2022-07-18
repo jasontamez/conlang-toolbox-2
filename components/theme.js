@@ -301,16 +301,24 @@ const components = {
 	Box: {
 		sizes: {
 			lexXs: {
-				flex: "0 0 20px"
+				flexGrow: 0,
+				flexShrink: 0,
+				flexBasis: "20px"
 			},
 			lexSm: {
-				flex: "1 1 40px"
+				flexGrow: 1,
+				flexShrink: 1,
+				flexBasis: "40px"
 			},
 			lexMd: {
-				flex: "3 1 96px"
+				flexGrow: 3,
+				flexShrink: 1,
+				flexBasis: "96px"
 			},
 			lexLg: {
-				flex: "5 1 200px"
+				flexGrow: 5,
+				flexShrink: 1,
+				flexBasis: "200px"
 			}
 		}
 	},

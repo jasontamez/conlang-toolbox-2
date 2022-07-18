@@ -42,7 +42,7 @@
 				true,
 				"**Fusion** is a measure of how many meanings a single morpheme can encode.",
 				[
-					"Completely isolating languages, be definiton, always lack fusion.",
+					"Completely isolating languages, by definition, always lack fusion.",
 					"Spanish can be very //fusional//, with a single suffix capable of encoding tense (8.3.1), aspect (8.3.2), mood (8.3.3) and number (4.3).",
 					"Though fusional forms are possible (e.g. swam, was), English is mostly //agglutinative//, with one meaning per morpheme.",
 					[
@@ -3194,7 +3194,7 @@
 					],
 					"Often, the QP can be omitted, letting context and intonation do the job instead.",
 					true,
-					"Some varieties of English has developed a QP as an alternative to word order inversion",
+					"Some varieties of English have developed a QP as an alternative to word order inversion",
 					[
 						"\"You want to go for a ride, //eh//?\""
 					]
