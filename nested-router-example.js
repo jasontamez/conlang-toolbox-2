@@ -71,6 +71,7 @@ import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
 import MSNavBar from './pages/ms/msNavBar';
+import 'react-native-gesture-handler';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
