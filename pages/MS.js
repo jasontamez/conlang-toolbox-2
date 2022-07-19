@@ -20,7 +20,7 @@ const MS = () => {
 			flex={1}
 			mb={8}
 		>
-			<Box flexGrow={2} flexShrink={2} flexBasis="5/6" mt={0} mx={4}>
+			<Box flexGrow={2} flexShrink={2} flexBasis="85%" mt={0} mx={4}>
 				<ScrollView ref={scrollRef} h="full">
 					<Outlet />
 				</ScrollView>

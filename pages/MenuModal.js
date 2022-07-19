@@ -46,11 +46,11 @@ const MenuModal = ({ scrollToTop }) => {
 		];
 		// create the output range - translation
 		const outputRangeTranslation = [
-			"0%",	// make a dead zone before this
-			"0%",	// begin this zone
-			"20%",	// end this zone
-			"0%",	// start another dead zone
-			"0%",	// continue the dead zone after this
+			0,	// make a dead zone before this
+			0,	// begin this zone
+			5,	// end this zone
+			0,	// start another dead zone
+			0,	// continue the dead zone after this
 		];
 		// Return info
 		return {
@@ -252,7 +252,7 @@ const MenuModal = ({ scrollToTop }) => {
 														<HStack height={9} w="full" {...bgOptions} opacity={10} />
 														<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
 															<VStack alignItems="flex-end" justifyContent="center" flex={1} m={2} ml={4}>
-																<Text fontSize="xs" {...textOptions}>{menuTitle || title}</Text>
+																<Text textAlign="right" fontSize="xs" {...textOptions}>{menuTitle || title}</Text>
 															</VStack>
 															<VStack alignItems="center" justifyContent="center" m={2} minW={4}>
 																<Icons.DotIcon {...dotOptions} />

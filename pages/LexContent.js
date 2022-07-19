@@ -333,12 +333,12 @@ const Lex = () => {
 				</HStack>
 			</HStack>
 			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
-				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis="40px">
+				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis={40}>
 					{columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					{/* ... extra blank space here, with size="lexXs" */}
 					<Box size="lexXs"></Box>
 				</HStack>
-				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis="40px">
+				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis={40}>
 					{columns.map((col, i) => (
 						<Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}>
 							<Input w="full" p={0.5} ref={addingRefs[i]} defaultValue={addingColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />

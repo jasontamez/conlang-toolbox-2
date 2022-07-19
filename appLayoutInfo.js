@@ -194,13 +194,13 @@ const Credits = {
 		fontSize: 'xs'
 	},
 	styleOptions: {
-		alignItems: 'end',
-		justifyContent: 'end',
+		alignItems: "flex-end",
+		justifyContent: "flex-end",
 		mt: 8,
 		mr: 6
 	},
 	alignOptions: {
-		alignItems: 'end'
+		alignItems: "flex-end"
 	}
 };
 

@@ -109,7 +109,7 @@ export const SliderWithTicks = (props) => {
 	return (
 		<HStack d="flex" w="full" bg="darker" px={2} py={1} rounded="md" alignItems="stretch">
 			<Box mr={3} flexGrow={0} flexShrink={1}><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
-			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis="3/4" {...stackProps}>
+			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis="75%" {...stackProps}>
 				<HStack alignItems="center" justifyContent="space-between" w="full" children={middleTicks}>
 				</HStack>
 				<Slider size="sm" minValue={min} maxValue={max} step={1} {...sliderProps}>

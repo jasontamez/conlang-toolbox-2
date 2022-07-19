@@ -316,22 +316,22 @@ const components = {
 			lexXs: {
 				flexGrow: 0,
 				flexShrink: 0,
-				flexBasis: "20px"
+				flexBasis: 20
 			},
 			lexSm: {
 				flexGrow: 1,
 				flexShrink: 1,
-				flexBasis: "40px"
+				flexBasis: 40
 			},
 			lexMd: {
 				flexGrow: 3,
 				flexShrink: 1,
-				flexBasis: "96px"
+				flexBasis: 96
 			},
 			lexLg: {
 				flexGrow: 5,
 				flexShrink: 1,
-				flexBasis: "200px"
+				flexBasis: 200
 			}
 		}
 	},
