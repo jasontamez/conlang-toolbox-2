@@ -16,13 +16,13 @@ import {
 } from 'native-base';
 
 import * as Icons from '../components/icons';
-import { setMenuToggleNumber, setMenuToggleName } from '../store/appStateSlice';
+import { setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
 
 const ReAnimatedView = Factory(ReAnimated.View);
 
 const MenuModal = ({ scrollToTop }) => {
-	const {menuToggleName, menuToggleNumber} = useSelector((state) => state.appState, shallowEqual);
+	const menuToggleName = useSelector((state) => state.appState.menuToggleName, shallowEqual);
 	let [menuOpen, setMenuOpen] = useState(false);
 	let [openId, setOpenId] = useState(menuToggleName || '');
 	const location = useLocation();
@@ -46,9 +46,12 @@ const MenuModal = ({ scrollToTop }) => {
 		}
 	};
 	const navigate = (url) => {
-		navigator(url);
-		scrollToTop();
+		// Close this menu
 		closeMenu();
+		// Go to page
+		navigator(url);
+		// Scroll the page to the top
+		scrollToTop();
 	};
 	const closeMenu = () => {
 		// Close menu
@@ -69,14 +72,16 @@ const MenuModal = ({ scrollToTop }) => {
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			// Get new information for this section
 			const caretAnimationValue = useSharedValue(id === openId ? 2 : 0);
-			const caretAnimationStyle = useAnimatedStyle(() => {return {
-				transform: [
-					{rotate: String(caretAnimationValue.value * 45) + "deg"},
-					{translateY: caretAnimationValue.value},
-					{translateX: caretAnimationValue.value}
-				]
-			}});
 			allAnimationValues[id] = caretAnimationValue;
+			const caretAnimationStyle = useAnimatedStyle(() => {
+				return {
+					transform: [
+						{rotate: String(caretAnimationValue.value * 45) + "deg"},
+						{translateY: caretAnimationValue.value},
+						{translateX: caretAnimationValue.value}
+					]
+				}
+			});
 			return (
 				<Pressable
 					onPress={() => toggleSection(id)}
@@ -140,38 +145,37 @@ const MenuModal = ({ scrollToTop }) => {
 					</Pressable>
 				</ReAnimatedView>
 			);
-		} else {
-			// App Section (standalone)
-			const fontOptions = item.fontOptions || {};
-			const styleOptions = item.styleOptions || {};
-			const alignOptions = item.alignOptions || {};
-			const isSelected = location.pathname === url;
-			const bgOptions = isSelected ? { bg: "primary.500" } : {};
-			const boxOptions = isSelected ? { color: "primary.500", ...styleOptions } : { color: "transparent", ...styleOptions };
-			const textOptions = isSelected ? { color: "primary.500", fontOptions } : fontOptions;
-			return (
-				<Pressable
-					onPress={() => navigate(url)}
-					zIndex={decrementingZIndex}
-					key={id}
-					h={10}
-					w="full"
-					bg="main.800"
-				>
-					<ZStack>
-						<HStack height={10} w="full" {...bgOptions} opacity={20} />
-						<HStack w="full" height={10} alignItems="center" justifyContent="flex-start" {...boxOptions}>
-						<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
-							{icon ? Icons[icon](textOptions) : <></>}
-						</VStack>
-						<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} {...alignOptions}>
-							<Text {...textOptions}>{menuTitle || title}</Text>
-						</VStack>
-					</HStack>
-					</ZStack>
-				</Pressable>
-			);
 		}
+		// App Section (standalone)
+		const fontOptions = item.fontOptions || {};
+		const styleOptions = item.styleOptions || {};
+		const alignOptions = item.alignOptions || {};
+		const isSelected = location.pathname === url;
+		const bgOptions = isSelected ? { bg: "primary.500" } : {};
+		const boxOptions = isSelected ? { color: "primary.500", ...styleOptions } : { color: "transparent", ...styleOptions };
+		const textOptions = isSelected ? { color: "primary.500", fontOptions } : fontOptions;
+		return (
+			<Pressable
+				onPress={() => navigate(url)}
+				zIndex={decrementingZIndex}
+				key={id}
+				h={10}
+				w="full"
+				bg="main.800"
+			>
+				<ZStack>
+					<HStack height={10} w="full" {...bgOptions} opacity={20} />
+					<HStack w="full" height={10} alignItems="center" justifyContent="flex-start" {...boxOptions}>
+					<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
+						{icon ? Icons[icon](textOptions) : <></>}
+					</VStack>
+					<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} {...alignOptions}>
+						<Text {...textOptions}>{menuTitle || title}</Text>
+					</VStack>
+				</HStack>
+				</ZStack>
+			</Pressable>
+		);
 	};
 	return (
 		<>
@@ -185,11 +189,9 @@ const MenuModal = ({ scrollToTop }) => {
 						</VStack>
 						<VStack m={0} p={0}>
 							{
-							appMenuPages.filter(
-									page => !page.isChildOf || page.isChildOf === openId
-								).map(
-									(page) => renderItem(page)
-								)
+								appMenuPages
+									.filter(page => !page.isChildOf || page.isChildOf === openId)
+									.map((page) => renderItem(page))
 							}
 						</VStack>
 					</Modal.Body>

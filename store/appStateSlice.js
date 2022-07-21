@@ -3,18 +3,12 @@ import { availableThemes } from '../components/theme';
 
 const initialState = {
 	menuToggleName: '',
-	menuToggleNumber: 0,
 	theme: 'Default',
 	disableConfirms: false
 };
 
 const setMenuToggleNameFunc = (state, action) => {
 	state.menuToggleName = action.payload;
-	return state;
-};
-
-const setMenuToggleNumberFunc = (state, action) => {
-	state.menuToggleNumber = action.payload;
 	return state;
 };
 
@@ -33,7 +27,6 @@ const appStateSlice = createSlice({
 	initialState,
 	reducers: {
 		setMenuToggleName: setMenuToggleNameFunc,
-		setMenuToggleNumber: setMenuToggleNumberFunc,
 		setTheme: setThemeFunc,
 		setDisableConfirms: setDisableConfirmsFunc
 	}
@@ -41,7 +34,6 @@ const appStateSlice = createSlice({
 
 export const {
 	setMenuToggleName,
-	setMenuToggleNumber,
 	setTheme,
 	setDisableConfirms
 } = appStateSlice.actions;
