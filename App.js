@@ -1,173 +1,189 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
-import { NativeBaseProvider, VStack, HStack, Spinner, Heading, Container, Text } from "native-base";
+import { useRef } from 'react';
+import { NativeRouter } from 'react-router-native';
+import { Route, Routes } from 'react-router';
 import { Provider, useSelector } from 'react-redux';
-import getStoreInfo from './store/store';
-import { PersistGate } from 'redux-persist/integration/react';
+//import { PersistGate } from 'redux-persist/integration/react';
+import { NativeBaseProvider, Box, VStack, ScrollView, Text } from 'native-base';
+
+import { useFonts } from 'expo-font';
+import {
+	Arimo_400Regular,
+	Arimo_400Regular_Italic,
+	Arimo_700Bold,
+	Arimo_700Bold_Italic
+} from '@expo-google-fonts/arimo';
+import { 
+	NotoSans_400Regular,
+	NotoSans_400Regular_Italic,
+	NotoSans_700Bold,
+	NotoSans_700Bold_Italic
+} from '@expo-google-fonts/noto-sans';
+import { 
+	NotoSansJP_100Thin,
+	NotoSansJP_300Light,
+	NotoSansJP_400Regular,
+	NotoSansJP_500Medium,
+	NotoSansJP_700Bold,
+	NotoSansJP_900Black
+} from '@expo-google-fonts/noto-sans-jp';
+import { 
+	NotoSerif_400Regular,
+	NotoSerif_400Regular_Italic,
+	NotoSerif_700Bold,
+	NotoSerif_700Bold_Italic
+} from '@expo-google-fonts/noto-serif';
+import { 
+	NotoSerifJP_200ExtraLight,
+	NotoSerifJP_300Light,
+	NotoSerifJP_400Regular,
+	NotoSerifJP_500Medium,
+	NotoSerifJP_600SemiBold,
+	NotoSerifJP_700Bold,
+	NotoSerifJP_900Black
+} from '@expo-google-fonts/noto-serif-jp';
+import { 
+	DMMono_300Light,
+	DMMono_300Light_Italic,
+	DMMono_400Regular,
+	DMMono_400Regular_Italic,
+	DMMono_500Medium,
+	DMMono_500Medium_Italic
+} from '@expo-google-fonts/dm-mono';
+import { 
+	Scheherazade_400Regular,
+	Scheherazade_700Bold
+} from '@expo-google-fonts/scheherazade';
+import { 
+	Sriracha_400Regular
+} from '@expo-google-fonts/sriracha'
+
 import getTheme from './components/theme';
 
+import getStoreInfo from './store/store';
 
-import Menu from './components/menu';
-import About from "./pages/About";
-import WordLists from "./pages/WordLists";
-import WG from "./pages/WG";
-import WE from "./pages/WE";
-import MS from "./pages/MS";
-import Lexicon from "./pages/Lex";
-import Settings from "./pages/AppSettings";
-import Credits from './pages/Credits';
+import About from './pages/About.js';
+import MS from './pages/MS';
+import MSSection from './pages/ms/msSection';
+import MSSettings from './pages/ms/msSettings';
+import Lexicon from './pages/Lex';
+import LexiconContent from './pages/LexContent';
+import WordLists from './pages/WordLists';
+import AppHeader from './components/Header.js';
+import AppSettings from './pages/AppSettings';
+import MSNavBar from './pages/ms/msNavBar';
+import 'react-native-gesture-handler';
 
-
-import { checkIfState, initialAppState } from './components/ReduxDucks';
-import { overwriteState } from './components/ReduxDucksFuncs';
-import { VERSION } from './components/ReduxDucksConst';
-import compareVersions from 'compare-versions';
-import store from './components/ReduxStore';
-import { StateStorage } from './components/persistentInfo';
-
-
-
-//Is this needed?
-import ReactDOM from 'react-dom';
-
-
-export default function App() {
-	return (
-		<View style={styles.container}>
-			<Text>Open up App.js to start working on your app!</Text>
-			<StatusBar style="auto" />
-		</View>
-	);
-}
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-});
-
-
-
-
-import { Route, Redirect } from 'react-router-dom';
-import {
-	IonApp,
-	IonRouterOutlet,
-	IonSplitPane
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-
-/* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
-
-/* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
-
-/* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
-
-/* Theme variables */
-import './theme/variables.css';
-/* My theming */
-import './theme/App.css';
-
-
-
-
-const Appp = () => {
-	const maybeSetState = () => {
-		return (dispatch) => {
-			return StateStorage.getItem("lastState").then((storedState) => {
-				if(storedState !== null) {
-					if(storedState && (typeof storedState) === "object") {
-						if (compareVersions.compare(storedState.currentVersion, VERSION.current, "<")) {
-							// Do stuff to possibly bring storedState up to date
-							storedState.currentVersion = VERSION.current;
-						}
-						if(checkIfState(storedState)) {
-							return dispatch(overwriteState(storedState));
-						}
-					}
-				}
-				return dispatch(overwriteState(initialAppState));
-			});
-		}
-	};
-	store.dispatch(maybeSetState());
-	return (
-		<IonApp id="conlangToolbox">
-			<IonReactRouter>
-				<IonSplitPane contentId="main" when="xl">
-					<Menu />
-					{/*
-						Using the render method prop cuts down the number of renders your components
-						will have due to route changes. Use the component prop when your component
-						depends on the RouterComponentProps passed in automatically.
-					*/}
-					<IonRouterOutlet id="main">
-						<Route path="/wg" render={() => <WG />} />
-						<Route path="/we"  render={() => <WE />} />
-						<Route path="/lex" render={() => <Lexicon />} />
-						<Route path="/ms" render={() => <MS />} />
-						<Route path="/ph" render={() => <Lexicon />} />
-						<Route path="/dc" render={() => <Lexicon />} />
-						<Route path="/settings" render={() => <Settings />} />
-						<Route path="/about" render={() => <About />} />
-						<Route path="/wordlists" render={() => <WordLists />} />
-						<Route path="/credits" render={() => <Credits />} />
-						<Redirect exact={true} from="/" to="/about" />
-					</IonRouterOutlet>
-				</IonSplitPane>
-			</IonReactRouter>
-		</IonApp>
-	);
-};
-
-const A = () => {
+const App = () => {
 	const {store, persistor} = getStoreInfo();
-	const themeName = useSelector(state => state.theme);
-	const theme = getTheme(themeName);
-
-	const Menu = <nav></nav>;
-	const Content = <div></div>;
-
-	const loading = (
-		<VStack justifyContent={"center"} safeArea h="full" w="full">
-			<HStack space="md" justifyContent={"center"} h="full" w="full">
-				<Spinner accessibilityLabel="Loading info" color="secondary.500" />
-				<Heading color="primary.500" fontSize="md">Loading...</Heading>
-			</HStack>
-		</VStack>
-	);
-
 	return (
-		<Provider store={store}>
-			<NativeBaseProvider theme={theme}>
-				{/* Only the loader will appear until the persisted state is fully loaded. */}
-				{/* Previously saved state must be found beforehand. */}
-				<PersistGate loading={loading} persistor={persistor}>
-					<Container bg="main.900" safeArea>
-						<VStack space="sm" justifyContent={"start"}>
-							<Menu />
-							<Content />
-						</VStack>
-					</Container>
-				</PersistGate>
-				<StatusBar style="default" backgroundColor="#69f" />
-			</NativeBaseProvider>
-		</Provider>
+		<Provider store={store}><Layout /></Provider>
 	);
 };
 
-//export default App;
+const Layout = () => {
+	const [fontsloaded] = useFonts({
+		//Arimo_400Regular,
+		//Arimo_400Regular_Italic,
+		//Arimo_700Bold,
+		//Arimo_700Bold_Italic,
+		NotoSans_400Regular,
+		NotoSans_400Regular_Italic,
+		NotoSans_700Bold,
+		NotoSans_700Bold_Italic,
+		//NotoSansJP_100Thin,
+		//NotoSansJP_300Light,
+		//NotoSansJP_400Regular,
+		//NotoSansJP_500Medium,
+		//NotoSansJP_700Bold,
+		//NotoSansJP_900Black,
+		NotoSerif_400Regular,
+		NotoSerif_400Regular_Italic,
+		NotoSerif_700Bold,
+		NotoSerif_700Bold_Italic,
+		//NotoSerifJP_200ExtraLight,
+		//NotoSerifJP_300Light,
+		//NotoSerifJP_400Regular,
+		//NotoSerifJP_500Medium,
+		//NotoSerifJP_600SemiBold,
+		//NotoSerifJP_700Bold,
+		//NotoSerifJP_900Black,
+		DMMono_300Light,
+		DMMono_300Light_Italic,
+		DMMono_400Regular,
+		DMMono_400Regular_Italic,
+		DMMono_500Medium,
+		DMMono_500Medium_Italic,
+		//Scheherazade_400Regular,
+		//Scheherazade_700Bold,
+		//Sriracha_400Regular,
+		//'ArTarumianKamar': require('./assets/fonts/ArTarumianKamar-Regular.ttf'),
+		//'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
+		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
+	});
+	const theme = useSelector((state) => state.appState.theme);
+	return (
+		<NativeBaseProvider theme={getTheme(theme)} safeArea bg="main.500">
+			{!fontsloaded ? <Box bg="main.900" safeArea><Text color="danger.500">Waiting for fonts...</Text></Box> :
+			<Box h="full" w="full" safeArea bg="main.800">
+				<NativeRouter>
+					<AppRoutes />
+				</NativeRouter>
+			</Box>}
+		</NativeBaseProvider>
+	);
+};
+
+const AppRoutes = () => {
+	const scrollRef = useRef(null);
+	const scrollToTop = () => {
+		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
+	};
+	return (
+		<VStack
+		h="full"
+		alignItems="stretch"
+		justifyContent="space-between"
+		w="full"
+		position="absolute"
+		top={0}
+		bottom={0}
+	>
+		<AppHeader scrollToTop={scrollToTop} />
+		<ScrollView
+			flex={1}
+			ref={scrollRef}
+		>
+			<Routes> { /* 
+				<Route path="/wg/*" element={<WG />}>
+				</Route>
+				<Route path="/we/*"  element={<WE />}>
+				</Route> */ }
+				<Route path="/lex" element={<Lexicon />} />
+				<Route path="/ms/*" element={<MS />}>
+					<Route index element={<MSSettings />} />
+					<Route path=":msPage" element={<MSSection />} />
+				</Route> { /*
+				<Route path="/ph/*" element={<Lexicon />}>
+				</Route>
+				<Route path="/dc/*" element={<Lexicon />}>
+				</Route> */}
+				<Route path="/settings" element={<AppSettings />} />
+				<Route path="/wordlists" element={<WordLists  />} />
+				{ /* <Route path="/credits" element={<Credits />} />
+				<Route path="/about" element={<About />} /> */ }
+				<Route index element={<About scrollToTop={scrollToTop} />} />
+			</Routes>
+		</ScrollView>
+		<Routes>
+			<Route path="/ms/*" element={<MSNavBar />} />
+			<Route path="/lex" element={<LexiconContent />} />
+			<Route path="/*" element={<></>} />
+		</Routes>
+	</VStack>
+
+	);
+};
+
+// Need to change "default" links to "/" indexes in all pages
+
+export default App;
