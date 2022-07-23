@@ -31,29 +31,54 @@ import {
 } from '../components/icons';
 import { equalityCheck } from '../store/lexiconSlice';
 
-const LexiconColumnEditor = ({
-	saveColumnsFunc
-}) => {
+const LexiconColumnEditorShell = () => {
+	const [active, setActive] = useState(false);
+	const Modal = Factory(ModalRN);
+	const doOpen = () => {
+		setActive(true);
+	};
+	const doClose = () => {
+		setActive(false);
+	};
+	return (
+		<>
+			<Modal
+				animationType="fade"
+				onRequestClose={() => {}}
+				visible={active}
+				transparent
+				h="full"
+				w="full"
+			>
+				<Center flex={1} h="full" w="full" bg="#000000cc">
+					<LexiconColumnEditor closeFunc={doClose} />
+				</Center>
+			</Modal>
+			<IconButton
+				px={3}
+				py={1}
+				icon={<SettingsIcon color="tertiary.50" name="settings" />}
+				bg="tertiary.500"
+				onPress={() => doOpen()}
+			/>
+		</>
+	);
+};
+
+const LexiconColumnEditor = ({closeFunc}) => {
 	const {columns, maxColumns} = useSelector((state) => state.lexicon, equalityCheck);
 	const DraggableFlatList = Factory(DFL);
-	const Modal = Factory(ModalRN);
 	//
 	//
 	// EDITING LEXICON COLUMNS MODAL
 	//
 	//
-	const [newColumns, setNewColumns] = useState([]);
-	const [active, setActive] = useState(false);
+	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
 	//const {width, height} = useWindowDimensions();
-	const ModalContent = gestureHandlerRootHOC((props) => <VStack {...props} />)
+	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />)
 
-	const doOpen = () => {
-		setActive(true);
-		setNewColumns(columns.map(c => {return {...c}}));
-	};
 	const doClose = () => {
-		setActive(false);
-		setNewColumns([]);
+		closeFunc();
 	};
 	const AddColumnButton = () => {
 		return newColumns.length === maxColumns ? <></> : (
@@ -86,11 +111,11 @@ const LexiconColumnEditor = ({
 		// TO-DO
 		// yes/no prompt?
 		// detect columns without labels
-		//saveItemFunc([...newLabels], [...newSizes]);
-		saveColumnsFunc(newColumns);
+		//saveColumnFunc([...newLabels], [...newSizes]);
 		doClose();
 	};
 	const reorderColumns = (info) => {
+		console.log("called reorder");
 		let {from, to} = info;
 		let nCols = [...newColumns];
 		let moved = nCols[from];
@@ -112,23 +137,25 @@ const LexiconColumnEditor = ({
 					borderBottomColor="lighter"
 					bg={isActive ? "main.700" : "main.800"}
 				>
-					<Text>{/* TO-DO drag handle */}[<DragHandleIcon />]</Text>
+					<DragHandleIcon />
 					<VStack px={4}>
 						<Input
 							defaultValue={label}
 							size="md"
 							p={1}
 							onChangeText={(value) => {
-								item.label = value.trim();
-								setNewColumns(newColumns);
+								let nCols = [...newColumns];
+								nCols[index].label = value.trim();
+								setNewColumns(nCols);
 							}}
 						/>
 						<Radio.Group
 							colorScheme="primary"
 							defaultValue={size}
 							onChange={(value) => {
-								item.size = value;
-								setNewColumns(newColumns);
+								let nCols = [...newColumns];
+								nCols[index].size = value;
+								setNewColumns(nCols);
 							}}
 							d="flex"
 							m={2}
@@ -159,57 +186,40 @@ const LexiconColumnEditor = ({
 			</Pressable>
 		);
 	};
-	return (<>
-		<Modal
-			animationType="fade"
-			onRequestClose={() => {}}
-			visible={active}
-			transparent
-			h="full"
-			w="full"
-		>
-			<Center flex={1} h="full" w="full" bg="#000000cc">
-				<ModalContent flex={1} justifyContent="center" alignItems="center" borderRadius="lg">
-					<HStack pl={2} w="full" justifyContent="space-between" alignItems="center" space={3} bg="primary.500" borderTopRadius="lg">
-						<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
-						<HStack justifyContent="flex-end" space={1}>
-							<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
-							<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
-						</HStack>
-					</HStack>
-					<HStack w="full" alignItems="center" justifyContent="center" bg="main.800">
-						<DraggableFlatList
-							m={0}
-							w="full"
-							data={newColumns}
-							renderItem={renderItem}
-							keyExtractor={(item, index) => item.id + "-" + String(index)}
-							onDragEnd={(data) => reorderColumns(data)}
-							dragItemOverflow
-						/>
-					</HStack>
-					<HStack justifyContent="flex-end" w="full" bg="main.700" borderBottomRadius="lg">
-						<AddColumnButton />
-						<Button
-							startIcon={<SaveIcon color="tertiary.50" m={0} />}
-							bg="tertiary.500"
-							onPress={() => maybeSaveColumns()}
-							_text={{color: "tertiary.50"}}
-							p={1}
-							m={2}
-						>DONE</Button>
-					</HStack>
-				</ModalContent>
-			</Center>
-		</Modal>
-		<IconButton
-			px={3}
-			py={1}
-			icon={<SettingsIcon color="tertiary.50" name="settings" />}
-			bg="tertiary.500"
-			onPress={() => doOpen()}
-		/>
-	</>);
+	return (
+		<ModalGuts flex={1} justifyContent="center" alignItems="center" borderRadius="lg">
+			<HStack pl={2} w="full" justifyContent="space-between" alignItems="center" space={3} bg="primary.500" borderTopRadius="lg">
+				<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+				<HStack justifyContent="flex-end" space={1}>
+					<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
+					<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+				</HStack>
+			</HStack>
+			<HStack w="full" alignItems="center" justifyContent="center" bg="main.800">
+				<DraggableFlatList
+					m={0}
+					w="full"
+					data={newColumns}
+					renderItem={renderItem}
+					keyExtractor={(item, index) => item.id + "-" + String(index)}
+					onDragEnd={(data) => reorderColumns(data)}
+					onRelease={() => {console.log("Release")}}
+					dragItemOverflow
+				/>
+			</HStack>
+			<HStack justifyContent="flex-end" w="full" bg="main.700" borderBottomRadius="lg">
+				<AddColumnButton />
+				<Button
+					startIcon={<SaveIcon color="tertiary.50" m={0} />}
+					bg="tertiary.500"
+					onPress={() => maybeSaveColumns()}
+					_text={{color: "tertiary.50"}}
+					p={1}
+					m={2}
+				>DONE</Button>
+			</HStack>
+		</ModalGuts>
+	);
 };
 
-export default LexiconColumnEditor;
+export default LexiconColumnEditorShell;
