@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Dimensions } from "react-native";
+import { useWindowDimensions  } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	Input,
@@ -18,7 +18,6 @@ import debounce from '../components/debounce';
 import {
 	EditIcon,
 	DoubleCaretIcon,
-	SettingsIcon,
 	SortDownIcon,
 	SortUpIcon,
 	AddIcon
@@ -35,7 +34,7 @@ import {
 } from '../store/lexiconSlice';
 import doToast from '../components/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
-import ModalLexiconEditingColumns from './LexEditColumnsModal';
+import LexiconColumnEditorModal from './LexEditColumnsModal';
 
 const Lex = () => {
 	//
@@ -50,18 +49,12 @@ const Lex = () => {
 		columns,
 		sortDir,
 		sortPattern,
-		disableBlankConfirms,
-		maxColumns
+		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector((state) => state.appState.disableConfirms);
 	const extraData = [wrap, columns];
 	const initCols = [];
 	const labels = [];
-	const sizes = columns.map(({label, size}) => {
-		initCols.push("");
-		labels.push(label);
-		return size;
-	});
 	const isTruncated = !wrap;
 	const {absoluteMaxColumns} = consts;
 	//
@@ -72,7 +65,6 @@ const Lex = () => {
 	const [editingItemID, setEditingItemID] = useState(null);
 	const [editingItemColumns, setEditingItemColumns] = useState([]);
 	const [addingColumns, setAddingColumns] = useState([...initCols]);
-	const [editingColumns, setEditingColumns] = useState(false);
 	const [alertOpen, setAlertOpen] = useState(false);
 	// Have to introduce a hard limit of 30 columns.
 	// We have to create the exact same number of Refs each time we render.
@@ -191,7 +183,7 @@ const Lex = () => {
 			</HStack>
 		);
 	}
-	const screen = Dimensions.get("screen");
+	const screenHeight = useWindowDimensions().height;
 	//
 	//
 	// RETURN JSX
@@ -218,15 +210,6 @@ const Lex = () => {
 				endEditingFunc={endEditingFunc}
 				columns={editingItemColumns}
 				labels={labels}
-			/>
-			<ModalLexiconEditingColumns
-				isEditing={editingColumns}
-				columns={columns}
-				maxColumns={maxColumns}
-				endEditingColumnsFunc={() => {
-					setEditingColumns(false);
-				}}
-				screen={screen}
 			/>
 			<MultiAlert
 				alertOpen={alertOpen}
@@ -323,16 +306,10 @@ const Lex = () => {
 						bg="secondary.500"
 						accessibilityLabel="Change sort direction."
 					/>
-					<IconButton
-						px={3}
-						py={1}
-						icon={<SettingsIcon color="tertiary.50" name="settings" />}
-						bg="tertiary.500"
-						onPress={() => setEditingColumns(true)}
-					/>
+					<LexiconColumnEditorModal />
 				</HStack>
 			</HStack>
-			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
+			<VStack flex={1} maxH={String(screenHeight - 40) + "px"}>
 				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis={40}>
 					{columns.map((col, i) => <Box px={0.5} key={col.id + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					{/* ... extra blank space here, with size="lexXs" */}
