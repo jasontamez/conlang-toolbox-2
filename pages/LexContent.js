@@ -167,13 +167,14 @@ const Lex = () => {
 	};
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const renderList = ({item, index}) => {
-		const {id, columns} = item;
+		const id = item.id;
+		const cols = item.columns;
 		const bg = index % 2 ? "lighter" : "darker";
 		return (
 			<HStack key={id} py={3.5} px={1.5} bg={bg}>
-				{columns.map(
+				{cols.map(
 					(text, i) =>
-						<Box px={1} size={sizes[i]} key={id + "-" + String(i)}>
+						<Box px={1} size={columns[i].size} key={id + "-" + String(i)}>
 							<Text isTruncated={isTruncated}>{text}</Text>
 						</Box>
 					)
@@ -221,12 +222,11 @@ const Lex = () => {
 			<ModalLexiconEditingColumns
 				isEditing={editingColumns}
 				columns={columns}
-				labels={labels}
-				sizes={sizes}
 				maxColumns={maxColumns}
 				endEditingColumnsFunc={() => {
 					setEditingColumns(false);
 				}}
+				screen={screen}
 			/>
 			<MultiAlert
 				alertOpen={alertOpen}
@@ -300,7 +300,7 @@ const Lex = () => {
 									startIcon={<DoubleCaretIcon mr={1} color="secondary.50" />}
 									{...props}
 								>
-									{labels[sortPattern[0]]}
+									{columns[sortPattern[0]].label}
 								</Button>
 							)
 						}
@@ -311,7 +311,7 @@ const Lex = () => {
 							type="radio"
 							onChange={(v) => doSortBy(v)}
 						>
-							{labels.map((label, i) => <Menu.ItemOption key={label + "-" + i} value={i+1}>{label}</Menu.ItemOption>)}
+							{columns.map((item, i) => <Menu.ItemOption key={item.id + "-Sorting"} value={i+1}>{item.label}</Menu.ItemOption>)}
 						</Menu.OptionGroup>
 					</Menu>
 					<IconButton
@@ -334,13 +334,13 @@ const Lex = () => {
 			</HStack>
 			<VStack flex={1} maxH={String(screen.height - 40) + "px"}>
 				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis={40}>
-					{columns.map((col, i) => <Box px={0.5} key={String(i) + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
+					{columns.map((col, i) => <Box px={0.5} key={col.id + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					{/* ... extra blank space here, with size="lexXs" */}
 					<Box size="lexXs"></Box>
 				</HStack>
 				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis={40}>
 					{columns.map((col, i) => (
-						<Box px={0.5} mx={0} size={col.size} key={String(i) + "-Input"}>
+						<Box px={0.5} mx={0} size={col.size} key={col.id + "-Input"}>
 							<Input w="full" p={0.5} ref={addingRefs[i]} defaultValue={addingColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
 						</Box>
 					))}

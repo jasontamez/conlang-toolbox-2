@@ -6,13 +6,18 @@ import {
 	HStack,
 	IconButton,
 	Button,
-	Modal,
+	//Modal,
 	Heading,
 	Radio,
 	Pressable,
-	Factory
+	Factory,
+	Center
 } from 'native-base';
 import DFL, { ShadowDecorator } from 'react-native-draggable-flatlist';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+import { Modal as ModalRN } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
+
 
 import ExtraChars from '../components/ExtraCharsButton';
 import {
@@ -22,21 +27,18 @@ import {
 	DragHandleIcon,
 	TrashIcon
 } from '../components/icons';
-import { gestureHandlerRootHOC, GestureHandlerRootView } from 'react-native-gesture-handler';
-
-
 
 const ModalLexiconEditingColumns = ({
 	isEditing,
-	labels,
-	sizes,
-	columns, //?
+	columns,
 	maxColumns,
 	saveColumnsFunc,
 	deleteColumnFunc,
-	endEditingColumnsFunc
+	endEditingColumnsFunc,
+	screen
 }) => {
 	const DraggableFlatList = Factory(DFL);
+	const Modal = Factory(ModalRN);
 	//
 	//
 	// EDITING LEXICON COLUMNS MODAL
@@ -50,20 +52,18 @@ const ModalLexiconEditingColumns = ({
 	//
 	//
 	//
-	const [newLabels, setNewLabels] = useState([]);
-	const [newSizes, setNewSizes] = useState([]);
+	const [newColumns, setNewColumns] = useState([]);
 	const [active, setActive] = useState(false);
 	const doneRef = useRef(null);
-	const ModalContent = gestureHandlerRootHOC((props) => <Modal.Content {...props} />)
+	const ModalContent = gestureHandlerRootHOC((props) => <VStack {...props} />)
 
 	const doClose = () => {
 		setActive(false);
-		setNewLabels([]);
-		setNewSizes([]);
+		setNewColumns([]);
 		endEditingColumnsFunc();
 	};
 	const AddColumnButton = () => {
-		return labels.length === maxColumns ? <></> : (
+		return columns.length === maxColumns ? <></> : (
 			<Button
 				startIcon={<AddCircleIcon color="success.50" m={0} />}
 				bg="success.500"
@@ -80,8 +80,15 @@ const ModalLexiconEditingColumns = ({
 	};
 	const addNewColumnFunc = () => {
 		// Adds a new column.
-		setNewLabels([...newLabels, ""]);
-		setNewSizes([...newSizes, "lexMd"]);
+		let id = "";
+		do {
+			id = uuidv4();
+		} while(columns.some(c => c.id === id));
+		setNewColumns([...newColumns, {
+			id,
+			label: "",
+			size: "lexMd"
+		}]);
 	};
 	const maybeSaveColumns = () => {
 		// TO-DO
@@ -90,9 +97,23 @@ const ModalLexiconEditingColumns = ({
 		//saveItemFunc([...newLabels], [...newSizes]);
 		doClose();
 	};
+	const reorderColumns = (info) => {
+		let {from, to} = info;
+		if(!active) {
+			// We need to set everything up
+			setNewColumns(getColumns());
+			setActive(true);
+		}
+		let x = [...newColumns];
+		let moved = x[from];
+		x.splice(from, 1);
+		x.splice(to, 0, moved);
+		setNewColumns(x);
+};
+	const getColumns = () => columns.map(c => {return {...c}});
 	// Data for sortable flatlist
 	const renderItem = ({item, index, drag, isActive}) => {
-		const size = sizes[index];
+		const {id, label, size} = item;
 		return (
 			<Pressable onLongPress={drag}>
 				<HStack
@@ -102,40 +123,35 @@ const ModalLexiconEditingColumns = ({
 					w="full"
 					borderBottomWidth={1}
 					borderBottomColor="lighter"
+					bg={isActive ? "main.700" : "main.800"}
 				>
 					<Text>{/* TO-DO drag handle */}[<DragHandleIcon />]</Text>
 					<VStack px={4}>
 						<Input
-							defaultValue={item}
+							defaultValue={label}
 							size="md"
 							p={1}
 							onChangeText={(value) => {
-								let fields = [...newLabels];
 								if(!active) {
 									// We need to set everything up
-									fields = [...labels];
-									setNewSizes([...sizes]);
+									setNewColumns(getColumns());
 									setActive(true);
 								}
-								//fields.splice(index, 1, value.trim());
-								fields[index] = value.trim();
-								setNewLabels(fields);
+								item.label = value.trim();
+								setNewColumns(newColumns);
 							}}
 						/>
 						<Radio.Group
 							colorScheme="primary"
 							defaultValue={size}
 							onChange={(value) => {
-								let fields = [...newSizes];
 								if(!active) {
 									// We need to set everything up
-									fields = [...sizes];
-									setNewLabels([...labels]);
+									setNewColumns(getColumns());
 									setActive(true);
 								}
-								//fields.splice(index, 1, value);
-								fields[index] = value;
-								setNewSizes(fields);	
+								item.size = value;
+								setNewColumns(newColumns);
 							}}
 							d="flex"
 							m={2}
@@ -156,8 +172,8 @@ const ModalLexiconEditingColumns = ({
 								}
 							}}
 						>
-							<Radio size="sm" value="lexSm">Small {String(item)}</Radio>
-							<Radio size="sm" value="lexMd">Med {String(index)}</Radio>
+							<Radio size="sm" value="lexSm">Small</Radio>
+							<Radio size="sm" value="lexMd">Med</Radio>
 							<Radio size="sm" value="lexLg">Large {String(isActive)}</Radio>
 						</Radio.Group>
 					</VStack>{/* TO-DO delete column */}
@@ -166,6 +182,53 @@ const ModalLexiconEditingColumns = ({
 			</Pressable>
 		);
 	};
+	return (
+		<Modal
+			animationType="fade"
+			onRequestClose={() => {}}
+			visible={isEditing}
+			transparent
+			h={screen.height} w={screen.width}
+		>
+			<Center flex={1} h={screen.height} w={screen.width} bg="#000000cc">
+				<ModalContent flex={1} borderRadius="lg" bg="main.900">
+					<Center>
+					<HStack pl={2} w="full" justifyContent="space-between" alignItems="center" bg="primary.500" borderTopRadius="lg">
+						<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+						<HStack justifyContent="flex-end" space={2}>
+							<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
+							<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+						</HStack>
+					</HStack>
+					<DraggableFlatList
+						m={0}
+						w="full"
+						data={columns}
+						renderItem={renderItem}
+						keyExtractor={(item, index) => item.id + "-" + String(index)}
+						onDragEnd={(data) => reorderColumns(data)}
+						dragItemOverflow
+					/>
+					<HStack justifyContent="flex-end" w="full" bg="main.700" borderBottomRadius="lg">
+						<AddColumnButton />
+						<Button
+							startIcon={<SaveIcon color="tertiary.50" m={0} />}
+							bg="tertiary.500"
+							onPress={() => maybeSaveColumns()}
+							_text={{color: "tertiary.50"}}
+							p={1}
+							m={2}
+							ref={doneRef}
+						>DONE {screen.height}h {screen.width}w</Button>
+					</HStack>
+					</Center>
+				</ModalContent>
+			</Center>
+		</Modal>
+	);
+};
+
+const old = () => {
 	return (
 		<Modal isOpen={isEditing} closeOnOverlayClick={false} initialFocusRef={doneRef}>
 			<ModalContent borderRadius={0} w="full" h="full">
@@ -195,7 +258,7 @@ const ModalLexiconEditingColumns = ({
 						m={0}
 						w="full"
 						bg="blue.900"
-						data={labels}
+						data={columns}
 						renderItem={renderItem}
 						keyExtractor={(item, index) => item + "-" + String(index)}
 						onDragEnd={(data) => console.log(data)}
@@ -224,6 +287,8 @@ const ModalLexiconEditingColumns = ({
 export default ModalLexiconEditingColumns;
 
 const OldColumns = () => {
+	const labels = [];
+	const sizes = [];
 return					
 	(<VStack m={0} p={4} pb={10} space={6}>
 		{labels.map((label, i) => {

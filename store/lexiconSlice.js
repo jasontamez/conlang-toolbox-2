@@ -11,14 +11,17 @@ const initialState = {
 	sortPattern: [0, 1, 2],
 	columns: [
 		{
+			id: "00",
 			label: "Word",
 			size: "lexMd"
 		},
 		{
+			id: "11",
 			label: "Part of Speech",
 			size: "lexSm"
 		},
 		{
+			id: "22",
 			label: "Definition",
 			size: "lexLg"
 		}
