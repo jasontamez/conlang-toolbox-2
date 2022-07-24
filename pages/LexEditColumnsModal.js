@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import {
 	Input,
-	Text,
 	VStack,
 	HStack,
 	IconButton,
 	Button,
-	//Modal,
 	Heading,
 	Radio,
 	Pressable,
@@ -16,7 +14,7 @@ import {
 import DFL, { ShadowDecorator } from 'react-native-draggable-flatlist';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { Modal as ModalRN } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -29,7 +27,7 @@ import {
 	TrashIcon,
 	SettingsIcon
 } from '../components/icons';
-import { equalityCheck } from '../store/lexiconSlice';
+import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 
 const LexiconColumnEditorShell = () => {
 	const [active, setActive] = useState(false);
@@ -67,15 +65,15 @@ const LexiconColumnEditorShell = () => {
 
 const LexiconColumnEditor = ({closeFunc}) => {
 	const {columns, maxColumns} = useSelector((state) => state.lexicon, equalityCheck);
+	const dispatch = useDispatch();
+	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
+	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />)
 	const DraggableFlatList = Factory(DFL);
 	//
 	//
 	// EDITING LEXICON COLUMNS MODAL
 	//
 	//
-	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
-	//const {width, height} = useWindowDimensions();
-	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />)
 
 	const doClose = () => {
 		closeFunc();
@@ -111,19 +109,20 @@ const LexiconColumnEditor = ({closeFunc}) => {
 		// TO-DO
 		// yes/no prompt?
 		// detect columns without labels
-		//saveColumnFunc([...newLabels], [...newSizes]);
+		dispatch(modifyLexiconColumns(newColumns));
 		doClose();
 	};
 	const reorderColumns = (info) => {
-		console.log("called reorder");
 		let {from, to} = info;
 		let nCols = [...newColumns];
 		let moved = nCols[from];
 		nCols.splice(from, 1);
 		nCols.splice(to, 0, moved);
 		setNewColumns(nCols);
+		return nCols;
 	};
 	// Data for sortable flatlist
+	//TO-DO limit to just the drag handle somehow?
 	const renderItem = ({item, index, drag, isActive}) => {
 		const {id, label, size} = item;
 		return (
@@ -203,7 +202,6 @@ const LexiconColumnEditor = ({closeFunc}) => {
 					renderItem={renderItem}
 					keyExtractor={(item, index) => item.id + "-" + String(index)}
 					onDragEnd={(data) => reorderColumns(data)}
-					onRelease={() => {console.log("Release")}}
 					dragItemOverflow
 				/>
 			</HStack>

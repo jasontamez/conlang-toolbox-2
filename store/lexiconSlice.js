@@ -154,7 +154,8 @@ const initialState = {
 
 const sortLexicon = (lexicon, sortPattern, sortDir) => {
 	const maxCol = sortPattern.length;
-	lexicon.sort((a, b) => {
+	let newLexicon = [...lexicon];
+	newLexicon.sort((a, b) => {
 		const columnsA = a.columns;
 		const columnsB = b.columns;
 		let comp = 0;
@@ -185,7 +186,7 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 		}
 		return comp;
 	});
-	return lexicon;
+	return newLexicon;
 };
 
 
@@ -267,8 +268,88 @@ const deleteLexiconColumnFunc = (state, action) => {
 	return state;
 };
 const modifyLexiconColumnsFunc = (state, action) => {
-	// Modify column headers and/or sizes, but not order
-	state.columns = action.payload;
+	// Columns have been changed
+	const oldCols = [...state.columns];
+	const newCols = action.payload;
+	const sortPattern = [...state.sortPattern];
+	const lexicon = [...state.lexicon];
+	//
+	//
+	// Determine how the columns have changed
+	//
+	//
+	let colStillExists = {};
+	// note which old columns remain
+	oldCols.forEach((oc, i) => {
+		const newI = newCols.findIndex(nc => nc.id === oc.id);
+		if (newI > -1) {
+			colStillExists[i] = newI;
+		}
+	});
+	let newToOld = [];
+	// create a map of the new columns to their position in the old columns
+	newCols.forEach(nc => {
+		newToOld.push(oldCols.findIndex(oc => oc.id === nc.id))
+	});
+	//
+	//
+	// Modify sortPattern
+	//
+	//
+	let newPattern = [];
+	// Reduce old pattern to just the remaining columns, keeping the same order
+	sortPattern.forEach(sp => {
+		const newI = colStillExists[sp];
+		if(newI !== undefined) {
+			newPattern.push(newI);
+		}
+	});
+	// Append new columns to the sort pattern
+	newToOld.forEach((oldI, newI) => {
+		if(oldI < 0) {
+			newPattern.push(newI);
+		}
+	});
+	//
+	//
+	// Modify all columns in lexicon
+	//
+	//
+	let newLexicon = [];
+	lexicon.forEach(lex => {
+		const currentCols = lex.columns;
+		let moddedCols = [];
+		// Construct new columns using the old columns,
+		//   inserting blank strings when we have a new column
+		newToOld.forEach(i => {
+			if(i < 0) {
+				moddedCols.push("");
+			} else {
+				moddedCols.push(currentCols[i]);
+			}
+		});
+		// Add new item to lexicon
+		newLexicon.push({id: lex.id, columns: moddedCols});
+	});
+	//
+	//
+	// Save everything to state
+	//
+	//
+	// TO-DO test deleting columns
+	//console.log("colStillExists:");
+	//console.log({...colStillExists});
+	//console.log(["newToOld", ...newToOld]);
+	//console.log(["oldPattern", ...state.sortPattern]);
+	//console.log(["newPattern", ...newPattern]);
+	//console.log(["oldLexicon", ...state.lexicon]);
+	//console.log(["newLexicon", ...newLexicon]);
+	//console.log(["oldCols", ...state.columns]);
+	//console.log(["newCols", ...newCols]);
+	state.sortPattern = newPattern;
+	// Sort lexicon before we save
+	state.lexicon = sortLexicon(newLexicon, newPattern, state.sortDir);
+	state.columns = newCols;
 	return state;
 };
 const reorderLexiconColumnsFunc = (state, action) => {
@@ -340,6 +421,7 @@ export const {
 	addLexiconItem,
 	editLexiconItem,
 	deleteLexiconItem,
+	modifyLexiconColumns,
 	reorganizeLexiconItems,
 	changeSortOrder,
 	changeSortDir,
