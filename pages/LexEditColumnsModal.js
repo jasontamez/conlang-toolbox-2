@@ -28,6 +28,7 @@ import {
 	SettingsIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
+import { MultiAlert } from '../components/StandardAlert';
 
 const LexiconColumnEditorShell = () => {
 	const [active, setActive] = useState(false);
@@ -64,9 +65,13 @@ const LexiconColumnEditorShell = () => {
 };
 
 const LexiconColumnEditor = ({closeFunc}) => {
-	const {columns, maxColumns} = useSelector((state) => state.lexicon, equalityCheck);
+	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
+	const disableConfirms = useSelector(state => state.appState.disableConfirms);
 	const dispatch = useDispatch();
 	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
+	const [openAlert, openThisAlert] = useState(false);
+	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
+	const [maybeDeletingThisColumn, setMaybeDeletingThisColumn] = useState(false);
 	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />)
 	const DraggableFlatList = Factory(DFL);
 	//
@@ -84,13 +89,12 @@ const LexiconColumnEditor = ({closeFunc}) => {
 				startIcon={<AddCircleIcon color="success.50" m={0} />}
 				bg="success.500"
 				onPress={() => {
-					// TO-DO yes/no prompt
 					addNewColumnFunc();
 				}}
 				_text={{color: "success.50"}}
 				p={1}
 				m={2}
-			>{/* TO-DO */}ADD COLUMN</Button>
+			>ADD COLUMN</Button>
 		);
 	};
 	const addNewColumnFunc = () => {
@@ -105,10 +109,44 @@ const LexiconColumnEditor = ({closeFunc}) => {
 			size: "lexMd"
 		}]);
 	};
+	const maybeDeleteColumn = (item, index) => {
+		// Check if we need to make a yes/no prompt
+		// Is this an existing column? (It may be one we made but haven't saved yet)
+		if(!columns.some(c => c.id === item.id)) {
+			// New, unsaved column. We can delete without hurting anything.
+			doDeleteColumn(index);
+		} else if(disableConfirms) {
+			// We are not bothering with destructuve yes/no prompts
+			return doDeleteColumn(index);
+		}
+		// Ask.
+		setMaybeDeletingThisColumn(index);
+		openThisAlert("deleteColumn");
+	};
+	const doDeleteColumn = (index = maybeDeletingThisColumn) => {
+		// Save this deleted column
+		setColumnLabelsToBeDeleted([...columnLabelsToBeDeleted, newColumns[index].label]);
+		// Reset the stored info
+		setMaybeDeletingThisColumn(false);
+		// Actually do the deleting
+		const newCols = newColumns.slice().splice(index, 1);
+		setNewColumns(newCols);
+	};
 	const maybeSaveColumns = () => {
-		// TO-DO
-		// yes/no prompt?
 		// detect columns without labels
+		if(!disableBlankConfirms && newColumns.some(nc => !nc.label)) {
+			return openThisAlert("saveWithBlankColumns");
+		}
+		maybeSaveColumns2();
+	};
+	const maybeSaveColumns2 = () => {
+		// see if we're deleting columns
+		if(!disableConfirms && columnLabelsToBeDeleted.length > 0) {
+			return openThisAlert("saveWithDeletedColumns");
+		}
+		doSaveColumns();
+	};
+	const doSaveColumns = () => {
 		dispatch(modifyLexiconColumns(newColumns));
 		doClose();
 	};
@@ -122,7 +160,8 @@ const LexiconColumnEditor = ({closeFunc}) => {
 		return nCols;
 	};
 	// Data for sortable flatlist
-	//TO-DO limit to just the drag handle somehow?
+	//TO-DO: limit to just the drag handle somehow?
+	//         or just omit the drag handle?
 	const renderItem = ({item, index, drag, isActive}) => {
 		const {id, label, size} = item;
 		return (
@@ -179,8 +218,16 @@ const LexiconColumnEditor = ({closeFunc}) => {
 							<Radio size="sm" value="lexMd">Med</Radio>
 							<Radio size="sm" value="lexLg">Large</Radio>
 						</Radio.Group>
-					</VStack>{/* TO-DO delete column */}
-					<IconButton size="sm" alignSelf="flex-start" px={2} py={1} icon={<TrashIcon color="danger.50" size="sm" />} bg="danger.500" />
+					</VStack>
+					<IconButton
+						size="sm"
+						alignSelf="flex-start"
+						px={2}
+						py={1}
+						icon={<TrashIcon color="danger.50" size="sm" />}
+						bg="danger.500"
+						onPress={() => maybeDeleteColumn(item, index)}
+					/>
 				</HStack>
 			</Pressable>
 		);
@@ -210,12 +257,70 @@ const LexiconColumnEditor = ({closeFunc}) => {
 				<Button
 					startIcon={<SaveIcon color="tertiary.50" m={0} />}
 					bg="tertiary.500"
+					disabled={newColumns.length === 0}
 					onPress={() => maybeSaveColumns()}
 					_text={{color: "tertiary.50"}}
 					p={1}
 					m={2}
 				>DONE</Button>
 			</HStack>
+			<MultiAlert
+				alertOpen={openAlert}
+				setAlertOpen={openThisAlert}
+				passedProps={[
+					{
+						id: "deleteColumn",
+						properties: {
+							bodyContent: "Deleting a column will destroy all data in the Lexicon associated with that column. Are you sure you want to do this?",
+							continueFunc: doDeleteColumn,
+							continueText: "Yes"
+						}
+					},
+					{
+						id: "saveWithBlankColumns",
+						properties: {
+							bodyContent: "One or more of the column labels are blank. This may make it harder for you to read your Lexicon or sort it.",
+							continueFunc: maybeSaveColumns2
+						}
+					},
+					{
+						id: "saveWithDeletedColumns",
+						properties: {
+							headerContent: "Final Warning",
+							bodyContent:
+								"Remember, you will be deleting all data associated with the column" +
+								((columnLabelsToBeDeleted.length > 1)
+									?
+										 "s "
+									:
+										" ") +
+								(
+									columnLabelsToBeDeleted.length === 1
+										?
+											"\"" + columnLabelsToBeDeleted[0] + "\""
+										: (
+											columnLabelsToBeDeleted.length === 2
+												?
+													"\"" + columnLabelsToBeDeleted.join("\" and \"") + "\""
+												: (
+													columnLabelsToBeDeleted.map((dc, i) => {
+														const test = i + 1;
+														if(i === 0) {
+															return "\"" + dc + "\"";
+														} else if (test === columnLabelsToBeDeleted.length) {
+															return ", and \"" + dc + "\"";
+														}
+														return ", \"" + dc + "\"";
+													})
+												)
+										)
+								) +
+								". Are you sure you want to do this?",
+							continueText: "Yes"
+						}
+					}
+				]}
+			/>
 		</ModalGuts>
 	);
 };

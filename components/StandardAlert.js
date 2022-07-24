@@ -13,20 +13,23 @@ const StandardAlert = ({
 	// Makes an AlertDialog box
 	//
 	// alertOpen: boolean indicating when the AlertDialog is shown
-	// setAlertOpen: a function fired with (false) when Cancel OR
-	//    Continue button is pressed
+	// setAlertOpen: func fired w/(false) when Cancel/Continue button pressed
 	// alertProps: object of properties for AlertDialog
 	// contentProps: object of properties for AlertDialog.Content
 	// headerProps: object of properties for AlertDialog.Header
 	// headerContent: string text or JSX for AlertDialog.Header
+	//    Defaults to "Warning"
 	// bodyProps: object of properties for AlertDialog.Body
 	// bodyContent: string text or JSX for AlertDialog.Body
+	//    Defaults to "Are you sure?"
 	// footerProps: object of properties for AlertDialog.Footer
 	// cancelProps: object of properties for the Cancel button
 	// cancelText: string text of the Cancel button
+	//    Defaults to "Cancel"
 	// cancelFunc: function fired (no args) when Cancel is pressed
 	// continueProps: same as cancelProps, but for Continue button
 	// continueText: same as above
+	//    Defaults to "Continue"
 	// continueFunc: same as above
 	const cancelRef = useRef(null);
 	const doCancel = () => {
