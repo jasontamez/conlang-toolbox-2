@@ -206,7 +206,7 @@ const setDescFunc = (state, action) => {
 	return state;
 };
 const addLexiconItemFunc = (state, action) => {
-	//addLexiconItem({item})
+	//addLexiconItem([columns])
 	const lex = state.lexicon;
 	const columns = [...action.payload];
 	// Get unique ID
@@ -215,7 +215,7 @@ const addLexiconItemFunc = (state, action) => {
 	let id;
 	do {
 		id = uuidv4();
-	} while(lex[id]);
+	} while(ids[id]);
 	// Construct new item
 	const item = {
 		id,

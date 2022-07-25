@@ -17,7 +17,7 @@ import { Modal as ModalRN, Alert, Platform, useWindowDimensions } from 'react-na
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-
+import debounce from '../components/debounce';
 import ExtraChars from '../components/ExtraCharsButton';
 import {
 	CloseCircleIcon,
@@ -66,6 +66,7 @@ const LexiconColumnEditor = ({closeFunc}) => {
 	const disableConfirms = useSelector(state => state.appState.disableConfirms);
 	const dispatch = useDispatch();
 	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
+	const [tempStoredInfo, setTempStoredInfo] = useState(columns.map(c => { return {...c} }));
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
@@ -73,12 +74,12 @@ const LexiconColumnEditor = ({closeFunc}) => {
 	const widthStyle = { minWidth: minWidth };
 	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />);
 	const DraggableFlatList = Factory(DFL);
+
 	//
 	//
 	// EDITING LEXICON COLUMNS MODAL
 	//
 	//
-
 	const doClose = () => {
 		closeFunc();
 	};
@@ -113,7 +114,7 @@ const LexiconColumnEditor = ({closeFunc}) => {
 		// Is this an existing column? (It may be one we made but haven't saved yet)
 		if(!columns.some(c => c.id === item.id)) {
 			// New, unsaved column. We can delete without hurting anything.
-			doDeleteColumn(index);
+			return doDeleteColumn(index, false);
 		} else if(disableConfirms) {
 			// We are not bothering with destructuve yes/no prompts
 			return doDeleteColumn(index);
@@ -126,9 +127,9 @@ const LexiconColumnEditor = ({closeFunc}) => {
 			"Yes"
 		);
 	};
-	const doDeleteColumn = (index) => {
+	const doDeleteColumn = (index, addToDeleteReminder = true) => {
 		// Save this deleted column
-		setColumnLabelsToBeDeleted([...columnLabelsToBeDeleted, newColumns[index].label]);
+		addToDeleteReminder && setColumnLabelsToBeDeleted([...columnLabelsToBeDeleted, newColumns[index].label]);
 		// Reset the stored info
 		// Actually do the deleting
 		const newCols = newColumns.slice();
@@ -201,6 +202,10 @@ const LexiconColumnEditor = ({closeFunc}) => {
 	// Data for sortable flatlist
 	//TO-DO: limit to just the drag handle somehow?
 	//         or just omit the drag handle?
+	//TO-DO: try to stop the de-focusing and re-rendering of
+	//         the modal, perhaps by only modifying a separate
+	//         state Array when labels/sizes are edited? Only
+	//         modify the main State when reordering or deleting?
 	const renderItem = ({item, index, drag, isActive}) => {
 		const {id, label, size} = item;
 		return (
@@ -219,10 +224,13 @@ const LexiconColumnEditor = ({closeFunc}) => {
 							defaultValue={label}
 							size="md"
 							p={1}
-							onChangeText={(value) => {
+							onBlur={(e) => {
+								//e.nativeEvent.text
+								//e.target.value
+								const { value } = e.target;
 								let nCols = [...newColumns];
 								nCols[index].label = value.trim();
-								setNewColumns(nCols);
+								debounce(setNewColumns, [nCols]);
 							}}
 						/> {/* TO-DO: fix the editing problem with debounce */}
 						<Radio.Group

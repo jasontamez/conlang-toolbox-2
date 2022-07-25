@@ -52,9 +52,12 @@ const Lex = () => {
 		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector((state) => state.appState.disableConfirms);
-	const extraData = [wrap, columns];
-	const initCols = [];
-	const labels = [];
+	const extraData = [wrap, ...columns];
+	const blankLexiconItemColumns = [];
+	const labels = columns.map(c => {
+		blankLexiconItemColumns.push("");
+		return c.label;
+	});
 	const isTruncated = !wrap;
 	const {absoluteMaxColumns} = consts;
 	//
@@ -64,15 +67,15 @@ const Lex = () => {
 	//
 	const [editingItemID, setEditingItemID] = useState(null);
 	const [editingItemColumns, setEditingItemColumns] = useState([]);
-	const [addingColumns, setAddingColumns] = useState([...initCols]);
+	const [newLexiconItemColumns, setNewLexiconItemColumns] = useState([...blankLexiconItemColumns]);
 	const [alertOpen, setAlertOpen] = useState(false);
-	// Have to introduce a hard limit of 30 columns.
+	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
 	// 10 seems like a decent amount that would strain even a wide-screen
 	//   tablet, so 3x that is a good upper bound.
-	const addingRefs = [];
+	const newLexiconRefs = [];
 	for(let i=1; i <= absoluteMaxColumns; i++) {
-		addingRefs.push(useRef(null));
+		newLexiconRefs.push(useRef(null));
 	}
 	//
 	//
@@ -120,13 +123,13 @@ const Lex = () => {
 	};
 	//
 	//
-	// ADD/DELETE ITEM TO/FROM LEXICON
+	// ADD ITEM TO LEXICON
 	//
 	//
 	const toast = useToast();
 	const addToLexicon = () => {
 		// Check for blank columns
-		if(disableBlankConfirms || addingColumns.every((col) => col)) {
+		if(disableBlankConfirms || newLexiconItemColumns.every((col) => col)) {
 			// None? Or we don't care? Continue!
 			return doAddToLexicon();
 		}
@@ -135,19 +138,20 @@ const Lex = () => {
 	}
 	const doAddToLexicon = () => {
 		// Does the actual work of adding to the Lexicon
-		dispatch(addLexiconItem([...addingColumns]));
-		setAddingColumns([...initCols]);
+		dispatch(addLexiconItem([...newLexiconItemColumns]));
+		setNewLexiconItemColumns([...blankLexiconItemColumns]);
 		doToast(toast, "Word Added");
-		addingRefs.forEach(ref => {
+		newLexiconRefs.forEach(ref => {
 			ref && ref.current && ref.current.clear();
 		});
 	};
-	// TO-DO: DELETING AN ITEM
 	const maybeUpdateText = (text, i) => {
-		let newCols = [...addingColumns];
+		let newCols = [...newLexiconItemColumns];
 		newCols[i] = text;
-		debounce(setAddingColumns, [newCols]);
+		debounce(setNewLexiconItemColumns, [newCols]);
 	};
+	// TO-DO: DELETING AN ITEM
+	//   Need context menu option to turn on mass-delete mode
 	//
 	//
 	// RENDER
@@ -318,7 +322,7 @@ const Lex = () => {
 				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis={40}>
 					{columns.map((col, i) => (
 						<Box px={0.5} mx={0} size={col.size} key={col.id + "-Input"}>
-							<Input w="full" p={0.5} ref={addingRefs[i]} defaultValue={addingColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
+							<Input w="full" p={0.5} ref={newLexiconRefs[i]} defaultValue={newLexiconItemColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
 						</Box>
 					))}
 					{/* ... add button here, with size="lexXs" */}
