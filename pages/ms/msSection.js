@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
 import {
@@ -31,6 +31,7 @@ const ParseMSJSON = (props) => {
 	const synBool = useSelector((state) => state.morphoSyntax.bool);
 	const synNum = useSelector((state) => state.morphoSyntax.num);
 	const synText = useSelector((state) => state.morphoSyntax.text);
+	const { width } = useWindowDimensions();
 	const { page } = props;
 	const doc = ms[page];
 	const headings = {
@@ -151,6 +152,7 @@ const ParseMSJSON = (props) => {
 					endLabel={bit.end}
 					notFilled={bit.notFilled}
 					min={0} max={bit.max || 4}
+					width={width}
 					sliderProps={{
 						defaultValue: (synNum[what] || 0),
 						accessibilityLabel: bit.label,
@@ -172,8 +174,7 @@ const ParseMSJSON = (props) => {
 					>{bit.content || ""}</TextAreaSetting>
 				);
 			case "Modal":
-				const screen = Dimensions.get('screen');
-				const screenWidth = String(screen.width) + "px";
+				const screenWidth = { maxWidth: width };
 				//
 				// BEGIN MODAL CONTENT DECLARATION
 				//
@@ -311,10 +312,10 @@ const ParseMSJSON = (props) => {
 				//
 				return (
 					<HStack justifyContent="flex-start" key={getKey("ModalButton")} safeArea>
-						<Modal bg="main.800" m={0} isOpen={modalState === id} maxWidth={screenWidth} onClose={() => setModal('')} safeArea>
+						<Modal bg="main.800" m={0} isOpen={modalState === id} style={screenWidth} onClose={() => setModal('')} safeArea>
 							<Modal.CloseButton />
 							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
-							<Modal.Body maxWidth={screenWidth} safeArea mx="auto">
+							<Modal.Body style={screenWidth} safeArea mx="auto">
 								<ModalContent content={bit.content} />
 							</Modal.Body>
 							<Modal.Footer w="full" p={2}>

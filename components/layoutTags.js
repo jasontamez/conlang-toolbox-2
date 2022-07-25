@@ -100,6 +100,7 @@ export const SliderWithTicks = (props) => {
 	const tickProps = props.tickProps || {};
 	const stackProps = props.stackProps || {};
 	const sliderProps = props.sliderProps || {};
+	const width = Math.floor((props.width || 1000) / 6);
 	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...tickProps} {...props} />;
 	let middleTicks = [<Tick key="FirstTick" color="transparent" size="2xs" />];
 	for (let c = min + 1; c < max; c++) {
@@ -107,9 +108,9 @@ export const SliderWithTicks = (props) => {
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
 	return (
-		<HStack d="flex" w="full" bg="darker" px={2} py={1} rounded="md" alignItems="stretch">
-			<Box mr={3} flexGrow={0} flexShrink={1}><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
-			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis="75%" {...stackProps}>
+		<HStack d="flex" w="full" bg="darker" px={2} py={1} rounded="md" alignItems="center">
+			<Box mr={3} flexGrow={0} flexShrink={1} flexBasis={width}><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
+			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis={width * 4} {...stackProps}>
 				<HStack alignItems="center" justifyContent="space-between" w="full" children={middleTicks}>
 				</HStack>
 				<Slider size="sm" minValue={min} maxValue={max} step={1} {...sliderProps}>
@@ -119,7 +120,7 @@ export const SliderWithTicks = (props) => {
 					<Slider.Thumb />
 				</Slider>
 			</ZStack>
-			<Box ml={3} flexGrow={0} flexShrink={1}><Text textAlign="center" fontSize="sm">{endLabel}</Text></Box>
+			<Box ml={3} flexGrow={0} flexShrink={1} flexBasis={width}><Text textAlign="center" fontSize="sm">{endLabel}</Text></Box>
 		</HStack>
 	);
 };
