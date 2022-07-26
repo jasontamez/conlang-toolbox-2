@@ -75,18 +75,38 @@ const fontConfig = {
 			normal: "NotoSerifJP_900Black",
 		}
 	},
-	"DM Mono": {
+	"Source Code Pro": {
+		200: {
+			normal: "SourceCodePro_200ExtraLight",
+			italic: "SourceCodePro_200ExtraLight_Italic",
+		},
 		300: {
-			normal: "DMMono_300Light",
-			italic: "DMMono_300Light_Italic"
+			normal: "SourceCodePro_300Light",
+			italic: "SourceCodePro_300Light_Italic",
 		},
 		400: {
-			normal: "DMMono_400Regular",
-			italic: "DMMono_400Regular_Italic"
+			normal: "SourceCodePro_400Regular",
+			italic: "SourceCodePro_400Regular_Italic",
 		},
 		500: {
-			normal: "DMMono_500Medium",
-			italic: "DMMono_500Medium_Italic"
+			normal: "SourceCodePro_500Medium",
+			italic: "SourceCodePro_500Medium_Italic",
+		},
+		600: {
+			normal: "SourceCodePro_600SemiBold",
+			italic: "SourceCodePro_600SemiBold_Italic",
+		},
+		700: {
+			normal: "SourceCodePro_700Bold",
+			italic: "SourceCodePro_700Bold_Italic",
+		},
+		700: {
+			normal: "SourceCodePro_800ExtraBold",
+			italic: "SourceCodePro_800ExtraBold_Italic",
+		},
+		900: {
+			normal: "SourceCodePro_900Black",
+			italic: "SourceCodePro_900Black_Italic",
 		}
 	},
 	ArTarumianKamar: {
@@ -122,7 +142,7 @@ const fonts = { // Temporary fix until I figure out how to have fallback fonts (
 	heading: "Noto Sans",
 //	body: "'Noto Sans', 'Noto Sans JP', 'Arimo', 'ArTarumianKamar', 'Scheherazade', 'Sriracha', 'Leelawadee'",
 	body: "Noto Sans",
-	mono: "DM Mono",
+	mono: "Source Code Pro",
 //	serif: "'Noto Serif', 'Noto Serif JP'",
 	serif: "Noto Serif"
 };
@@ -135,7 +155,9 @@ const mainButton = {
 		},
 		_text: {
 			color: "primaryContrast",
-			fontFamily: "body"
+			fontFamily: "body",
+			fontWeight: 400,
+			fontStyle: "normal"
 		}
 	}
 };
@@ -147,13 +169,17 @@ const mainBG = {
 const mainFG = {
 	defaultProps: {
 		color: "text.50",
-		fontFamily: "body"
+		fontFamily: "body",
+		fontWeight: 400,
+		fontStyle: "normal"
 	}
 };
 const mainHeading = {
 	defaultProps: {
 		color: "text.50",
-		fontFamily: "heading"
+		fontFamily: "heading",
+		fontWeight: 700,
+		fontStyle: "normal"
 	}
 };
 const mainInput = {
@@ -169,7 +195,9 @@ const mainInput = {
 			bg: "lighter",
 			borderRadius: 0
 		},
-		fontFamily: "body"
+		fontFamily: "body",
+		fontWeight: 400,
+		fontStyle: "normal"
 	}
 };
 const mainCheckboxesDefaultProps = {
@@ -177,7 +205,9 @@ const mainCheckboxesDefaultProps = {
 	borderColor: "text.100",
 	_text: {
 		color: "primaryContrast",
-		fontFamily: "body"
+		fontFamily: "body",
+		fontWeight: 400,
+		fontStyle: "normal"
 	},
 	_icon: {
 		color: "primaryContrast"
@@ -286,7 +316,9 @@ const components = {
 	Text: {...mainFG},
 	Link: {
 		defaultProps: {
-			fontFamily: "body"
+			fontFamily: "body",
+			fontWeight: 400,
+			fontStyle: "normal"
 		}
 	},
 	Input: {...mainInput},
@@ -301,7 +333,9 @@ const components = {
 			...mainCheckboxesDefaultProps,
 			_text: {
 				color: "primary.50",
-				fontFamily: "body"
+				fontFamily: "body",
+				fontWeight: 400,
+				fontStyle: "normal"
 			},
 			_icon: {
 				color: "primary.50"
@@ -922,16 +956,16 @@ const themes = {
 				50: "#00161a",
 			},
 			indigo: {
-				900: "#a780ff",
-				800: "#834dff",
-				700: "#601bfe",
-				600: "#4802e5",
-				500: "#3700b3",
-				400: "#3000a8",
-				300: "#270081",
-				200: "#200068",
-				100: "#17004f",
-				50: "#09001f",
+				50: '#eee4ff',
+				100: '#cab2ff',
+				200: '#b9a7ff',
+				300: '#a780ff',
+				400: '#9566ff',
+				500: '#834dff',
+				600: '#4802e5',
+				700: '#270081',
+				800: '#17004f',
+				900: '#09001f',
 			},
 			blue: {
 				900: "#e5e5ff",
