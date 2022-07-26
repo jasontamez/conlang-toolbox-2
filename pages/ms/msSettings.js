@@ -13,7 +13,6 @@ const Settings = () => {
 	const synTitle = useSelector((state) => state.morphoSyntax.title);
 	const synDescription = useSelector((state) => state.morphoSyntax.description);
 	const dispatch = useDispatch();
-	const nav = useNavigate();
 	const StoredInfoButton = (props) => {
 		return (
 			<Pressable onPress={props.onPress} mx={4}>
@@ -36,7 +35,6 @@ const Settings = () => {
 				value={synDescription}
 				onChangeEnd={(v) => dispatch(setDescription(v))}
 			>Description:</TextAreaSetting>
-			<Button onPress={() => nav('/')} maxWidth="1/4">Go Back</Button>
 			<VStack alignSelf="flex-end">
 				<StoredInfoButton bg="lighter" icon={<RemoveCircleIcon />} onPress={() => 2222}>Clear MorphoSyntax Info</StoredInfoButton>
 				<StoredInfoButton bg="darker" icon={<AddCircleIcon />} onPress={() => 2222}>Load MorphoSyntax Info</StoredInfoButton>
