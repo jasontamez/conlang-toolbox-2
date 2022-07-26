@@ -146,9 +146,11 @@ const Lex = () => {
 		});
 	};
 	const maybeUpdateText = (text, i) => {
-		let newCols = [...newLexiconItemColumns];
-		newCols[i] = text;
-		debounce(setNewLexiconItemColumns, [newCols]);
+		debounce(() => {
+			let newCols = [...newLexiconItemColumns];
+			newCols[i] = text;
+			setNewLexiconItemColumns(newCols)			;
+		}, [], 250, String(i));
 	};
 	// TO-DO: DELETING AN ITEM
 	//   Need context menu option to turn on mass-delete mode
@@ -316,7 +318,6 @@ const Lex = () => {
 			<VStack flex={1} maxH={String(screenHeight - 40) + "px"}>
 				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis={40}>
 					{columns.map((col, i) => <Box px={0.5} key={col.id + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
-					{/* ... extra blank space here, with size="lexXs" */}
 					<Box size="lexXs"></Box>
 				</HStack>
 				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis={40}>
@@ -325,7 +326,6 @@ const Lex = () => {
 							<Input w="full" p={0.5} ref={newLexiconRefs[i]} defaultValue={newLexiconItemColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
 						</Box>
 					))}
-					{/* ... add button here, with size="lexXs" */}
 					<Box size="lexXs" ml={0.5}>
 						<IconButton
 							icon={<AddIcon size="xs" color="success.50" />}
