@@ -7,9 +7,11 @@ import {
 	Button,
 	Heading,
 	Radio,
+	Text,
 	Pressable,
 	Factory,
-	Center
+	Center,
+	Modal as BaseModal
 } from 'native-base';
 import DFL, { ShadowDecorator } from 'react-native-draggable-flatlist';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
@@ -25,12 +27,15 @@ import {
 	AddCircleIcon,
 	DragHandleIcon,
 	TrashIcon,
-	SettingsIcon
+	SettingsIcon,
+	EditIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 
-const LexiconColumnEditorShell = () => {
+const LexiconColumnEditingShell = () => {
 	const [active, setActive] = useState(false);
+	const [columnToEdit, setColumnToEdit] = useState(false);
+	const [editedColumn, setEditedColumn] = useState(false);
 	const Modal = Factory(ModalRN);
 	const doOpen = () => {
 		setActive(true);
@@ -43,13 +48,28 @@ const LexiconColumnEditorShell = () => {
 			<Modal
 				animationType="fade"
 				onRequestClose={() => {}}
-				visible={active}
+				visible={active && !columnToEdit}
 				transparent
 			>
 				<Center flex={1} bg="#000000cc">
-					<LexiconColumnEditor closeFunc={doClose} />
+					<LexiconColumnReorderer
+						closeFunc={doClose}
+						columnEditorProps={{
+							columnToEdit,
+							setColumnToEdit,
+							editedColumn,
+							setEditedColumn
+						}}
+					/>
 				</Center>
 			</Modal>
+			<LexiconColumnEditor
+				columnEditorProps={{
+					columnToEdit,
+					setColumnToEdit,
+					setEditedColumn
+				}}
+			/>
 			<IconButton
 				px={3}
 				py={1}
@@ -61,23 +81,36 @@ const LexiconColumnEditorShell = () => {
 	);
 };
 
-const LexiconColumnEditor = ({closeFunc}) => {
+const LexiconColumnReorderer = ({closeFunc, columnEditorProps}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector(state => state.appState.disableConfirms);
 	const dispatch = useDispatch();
 	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
-	const [tempStoredInfo, setTempStoredInfo] = useState(columns.map(c => { return {...c} }));
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
+	const [editingColumnIndex, setEditingColumnIndex] = useState(-1);
+	const {setColumnToEdit, editedColumn, setEditedColumn} = columnEditorProps;
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
 	const minWidth = Math.min(300, Math.floor(width * 0.8));
-	const widthStyle = { minWidth: minWidth };
 	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />);
 	const DraggableFlatList = Factory(DFL);
 
 	//
 	//
-	// EDITING LEXICON COLUMNS MODAL
+	// HANDLE EDITED COLUMN
+	//
+	//
+	if(editedColumn) {
+		// Something has changed.
+		let newCols = [...newColumns];
+		newCols[editingColumnIndex] = editedColumn;
+		setNewColumns(newCols);
+		setEditedColumn(false);
+	}
+
+	//
+	//
+	// REODRERING LEXICON COLUMNS MODAL
 	//
 	//
 	const doClose = () => {
@@ -86,12 +119,12 @@ const LexiconColumnEditor = ({closeFunc}) => {
 	const AddColumnButton = () => {
 		return newColumns.length === maxColumns ? <></> : (
 			<Button
-				startIcon={<AddCircleIcon color="success.50" m={0} />}
-				bg="success.500"
+				startIcon={<AddCircleIcon color="tertiary.50" m={0} />}
+				bg="tertiary.700"
 				onPress={() => {
 					addNewColumnFunc();
 				}}
-				_text={{color: "success.50"}}
+				_text={{color: "tertiary.50"}}
 				p={1}
 				m={2}
 			>ADD COLUMN</Button>
@@ -146,6 +179,11 @@ const LexiconColumnEditor = ({closeFunc}) => {
 			);
 		}
 		maybeSaveColumns2();
+	};
+	const sizeObject = {
+		lexSm: "Small",
+		lexMd: "Medium",
+		lexLg: "Large"
 	};
 	const maybeSaveColumns2 = () => {
 		// see if we're deleting columns
@@ -202,10 +240,6 @@ const LexiconColumnEditor = ({closeFunc}) => {
 	// Data for sortable flatlist
 	//TO-DO: limit to just the drag handle somehow?
 	//         or just omit the drag handle?
-	//TO-DO: try to stop the de-focusing and re-rendering of
-	//         the modal, perhaps by only modifying a separate
-	//         state Array when labels/sizes are edited? Only
-	//         modify the main State when reordering or deleting?
 	const renderItem = ({item, index, drag, isActive}) => {
 		const {id, label, size} = item;
 		return (
@@ -224,7 +258,8 @@ const LexiconColumnEditor = ({closeFunc}) => {
 							defaultValue={label}
 							size="md"
 							p={1}
-							onBlur={(e) => {
+							disabled
+							onBlurry={(e) => {
 								//e.nativeEvent.text
 								//e.target.value
 								const { value } = e.target;
@@ -232,20 +267,119 @@ const LexiconColumnEditor = ({closeFunc}) => {
 								nCols[index].label = value.trim();
 								debounce(setNewColumns, [nCols]);
 							}}
-						/> {/* TO-DO: fix the editing problem with debounce */}
+						/>
+						<Text>Size: <Text fontFamily="mono" color="primary.200">[{sizeObject[size]}]</Text></Text>
+					</VStack>
+					<VStack justifyContent="space-between" alignItems="center">
+						<IconButton
+							size="sm"
+							alignSelf="flex-end"
+							p={1}
+							icon={<EditIcon color="tertiary.50" size="sm" />}
+							bg="tertiary.500"
+							onPress={() => {
+								setEditingColumnIndex(index);
+								setColumnToEdit(item);
+							}}
+						/>
+						<IconButton
+							size="sm"
+							alignSelf="flex-start"
+							p={1}
+							mt={1}
+							icon={<TrashIcon color="danger.50" size="sm" />}
+							bg="danger.500"
+							onPress={() => maybeDeleteColumn(item, index)}
+						/>
+					</VStack>
+				</HStack>
+			</Pressable>
+		);
+	};
+	return (
+		<ModalGuts
+			flex={1}
+			justifyContent="center"
+			alignItems="center"
+			borderRadius="lg"
+			style={{
+				maxHeight: maxHeight,
+				minWidth: minWidth
+			}}
+		>
+			<HStack style={{minWidth: minWidth}} pl={2} justifyContent="space-between" alignItems="center" space={3} bg="primary.500" borderTopRadius="lg">
+				<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+				<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+			</HStack>
+			<HStack style={{minWidth: minWidth}} alignItems="center" justifyContent="center" bg="main.800">
+				<DraggableFlatList
+					m={0}
+					w="full"
+					data={newColumns}
+					renderItem={renderItem}
+					keyExtractor={(item, index) => item.id + "-" + String(index)}
+					onDragEnd={(data) => reorderColumns(data)}
+					dragItemOverflow
+				/>
+			</HStack>
+			<HStack style={{minWidth: minWidth}} justifyContent="flex-end" bg="main.700" borderBottomRadius="lg">
+				<AddColumnButton />
+				<Button
+					startIcon={<SaveIcon color="success.50" m={0} />}
+					bg="success.500"
+					disabled={newColumns.length === 0}
+					onPress={() => maybeSaveColumns()}
+					_text={{color: "success.50"}}
+					p={1}
+					m={2}
+				>DONE</Button>
+			</HStack>
+		</ModalGuts>
+	);
+};
+
+	// LATEST ERROR:
+	// cannot update outside of component
+	//
+	// need to either...
+	// 1) expose the columns in the base component and alter them there
+	//     (this will likely make the Modal flash)
+	// 2) dispatch an event from the editor
+	//     (will need to move blank-column-label logic to that editor)
+	// 3) scrap dragging altogether and just use fancy arrow buttons
+	//     (can go back to editing in-line again)
+
+const LexiconColumnEditor = ({columnEditorProps}) => {
+	const {columnToEdit, setColumnToEdit, setEditedColumn} = columnEditorProps;
+	const [label, setLabel] = useState(false);
+	const [size, setSize] = useState(false);
+	return (
+		<BaseModal isOpen={columnToEdit}>
+			<BaseModal.Content>
+				<BaseModal.Header>
+						<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+						<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
+				</BaseModal.Header>
+				<BaseModal.Body>
+					<VStack alignItems="center" justifyContent="center" bg="main.800">
+						<Input
+							defaultValue={label || columnToEdit ? columnToEdit.label : "null"}
+							size="md"
+							p={1}
+							onChangeText={(value) => {
+								setLabel(value.trim());
+							}}
+						/>
 						<Radio.Group
 							colorScheme="primary"
-							defaultValue={size}
+							defaultValue={size || columnToEdit ? columnToEdit.size : "lexMd"}
 							onChange={(value) => {
-								let nCols = [...newColumns];
-								nCols[index].size = value;
-								setNewColumns(nCols);
+								setSize(value);
 							}}
 							d="flex"
 							m={2}
 							flexDirection="row"
 							flexWrap="wrap"
-							w="full"
 							accessibilityLabel="Column Size"
 							_stack={{
 								justifyContent: "space-between",
@@ -265,61 +399,28 @@ const LexiconColumnEditor = ({closeFunc}) => {
 							<Radio size="sm" value="lexLg">Large</Radio>
 						</Radio.Group>
 					</VStack>
-					<IconButton
-						size="sm"
-						alignSelf="flex-start"
-						px={2}
-						py={1}
-						icon={<TrashIcon color="danger.50" size="sm" />}
-						bg="danger.500"
-						onPress={() => maybeDeleteColumn(item, index)}
-					/>
-				</HStack>
-			</Pressable>
-		);
-	};
-	return (
-		<ModalGuts
-			flex={1}
-			justifyContent="center"
-			alignItems="center"
-			borderRadius="lg"
-			style={{
-				maxHeight: maxHeight,
-				minWidth: minWidth
-			}}
-		>
-			<HStack style={widthStyle} pl={2} justifyContent="space-between" alignItems="center" space={3} bg="primary.500" borderTopRadius="lg">
-				<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
-				<HStack justifyContent="flex-end" space={1}>
-					<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
-					<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
-				</HStack>
-			</HStack>
-			<HStack style={widthStyle} alignItems="center" justifyContent="center" bg="main.800">
-				<DraggableFlatList
-					m={0}
-					w="full"
-					data={newColumns}
-					renderItem={renderItem}
-					keyExtractor={(item, index) => item.id + "-" + String(index)}
-					onDragEnd={(data) => reorderColumns(data)}
-					dragItemOverflow
-				/>
-			</HStack>
-			<HStack style={widthStyle} justifyContent="flex-end" bg="main.700" borderBottomRadius="lg">
-				<AddColumnButton />
-				<Button
-					startIcon={<SaveIcon color="tertiary.50" m={0} />}
-					bg="tertiary.500"
-					disabled={newColumns.length === 0}
-					onPress={() => maybeSaveColumns()}
-					_text={{color: "tertiary.50"}}
-					p={1}
-					m={2}
-				>DONE</Button>
-			</HStack>
-		</ModalGuts>
+				</BaseModal.Body>
+				<BaseModal.Footer>
+					<HStack justifyContent="flex-end" bg="main.700" borderBottomRadius="lg">
+						<Button
+							startIcon={<SaveIcon color="success.50" m={0} />}
+							bg="success.500"
+							onPress={() => {
+								setEditedColumn({
+									id: columnToEdit.id,
+									label: label === false ? columnToEdit.label : label,
+									size: size === false ? columnToEdit.size : size
+								});
+								setColumnToEdit(false);
+							}}
+							_text={{color: "success.50"}}
+							p={1}
+							m={2}
+						>SAVE COLUMN</Button>
+					</HStack>
+				</BaseModal.Footer>
+			</BaseModal.Content>
+		</BaseModal>
 	);
 };
 
@@ -345,8 +446,8 @@ const makeAlert = (title, description, continueFunc, continueText = "Continue") 
 			{
 				cancelable: true
 			}
-		);	
+		);
 	}
 };
 
-export default LexiconColumnEditorShell;
+export default LexiconColumnEditingShell;
