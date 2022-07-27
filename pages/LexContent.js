@@ -35,6 +35,7 @@ import {
 import doToast from '../components/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
+import LexiconColumnReorderingModal from './LexReorderColumnsModal';
 
 const Lex = () => {
 	//
@@ -304,7 +305,6 @@ const Lex = () => {
 						</Menu.OptionGroup>
 					</Menu>
 					<IconButton
-						mr={2}
 						onPress={() => dispatch(changeSortDir(!sortDir))}
 						icon={sortDir ? <SortUpIcon /> : <SortDownIcon />}
 						p={1}
@@ -313,6 +313,7 @@ const Lex = () => {
 						accessibilityLabel="Change sort direction."
 					/>
 					<LexiconColumnEditorModal />
+					<LexiconColumnReorderingModal />
 				</HStack>
 			</HStack>
 			<VStack flex={1} maxH={String(screenHeight - 40) + "px"}>
