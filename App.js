@@ -160,47 +160,46 @@ const AppRoutes = () => {
 	};
 	return (
 		<VStack
-		h="full"
-		alignItems="stretch"
-		justifyContent="space-between"
-		w="full"
-		position="absolute"
-		top={0}
-		bottom={0}
-	>
-		<AppHeader scrollToTop={scrollToTop} />
-		<ScrollView
-			flex={1}
-			ref={scrollRef}
+			h="full"
+			alignItems="stretch"
+			justifyContent="space-between"
+			w="full"
+			position="absolute"
+			top={0}
+			bottom={0}
 		>
-			<Routes> { /* 
-				<Route path="/wg/*" element={<WG />}>
-				</Route>
-				<Route path="/we/*"  element={<WE />}>
-				</Route> */ }
-				<Route path="/lex" element={<Lexicon />} />
-				<Route path="/ms/*" element={<MS />}>
-					<Route index element={<MSSettings />} />
-					<Route path=":msPage" element={<MSSection />} />
-				</Route> { /*
-				<Route path="/ph/*" element={<Lexicon />}>
-				</Route>
-				<Route path="/dc/*" element={<Lexicon />}>
-				</Route> */}
-				<Route path="/settings" element={<AppSettings />} />
-				<Route path="/wordlists" element={<WordLists  />} />
-				{ /* <Route path="/credits" element={<Credits />} />
-				<Route path="/about" element={<About />} /> */ }
-				<Route index element={<About scrollToTop={scrollToTop} />} />
+			<AppHeader scrollToTop={scrollToTop} />
+			<ScrollView
+				flex={1}
+				ref={scrollRef}
+			>
+				<Routes> { /* 
+					<Route path="/wg/*" element={<WG />}>
+					</Route>
+					<Route path="/we/*"  element={<WE />}>
+					</Route> */ }
+					<Route path="/lex" element={<Lexicon />} />
+					<Route path="/ms/*" element={<MS />}>
+						<Route index element={<MSSettings />} />
+						<Route path=":msPage" element={<MSSection />} />
+					</Route> { /*
+					<Route path="/ph/*" element={<Lexicon />}>
+					</Route>
+					<Route path="/dc/*" element={<Lexicon />}>
+					</Route> */}
+					<Route path="/settings" element={<AppSettings />} />
+					<Route path="/wordlists" element={<WordLists  />} />
+					{ /* <Route path="/credits" element={<Credits />} />
+					<Route path="/about" element={<About />} /> */ }
+					<Route index element={<About scrollToTop={scrollToTop} />} />
+				</Routes>
+			</ScrollView>
+			<Routes>
+				<Route path="/ms/*" element={<MSNavBar />} />
+				<Route path="/lex" element={<LexiconContent />} />
+				<Route path="/*" element={<></>} />
 			</Routes>
-		</ScrollView>
-		<Routes>
-			<Route path="/ms/*" element={<MSNavBar />} />
-			<Route path="/lex" element={<LexiconContent />} />
-			<Route path="/*" element={<></>} />
-		</Routes>
-	</VStack>
-
+		</VStack>
 	);
 };
 

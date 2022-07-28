@@ -66,7 +66,6 @@ const LexiconColumnReorderer = ({setReordering}) => {
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
 	const minWidth = Math.min(300, Math.floor(width * 0.8));
-	const ModalGuts = gestureHandlerRootHOC((props) => <VStack {...props} />);
 	const DraggableFlatList = Factory(DFL);
 
 	//
@@ -82,13 +81,14 @@ const LexiconColumnReorderer = ({setReordering}) => {
 		doClose();
 	};
 	const reorderColumns = (info) => {
-		let {from, to} = info;
-		let nCols = [...newColumns];
-		let moved = nCols[from];
-		nCols.splice(from, 1);
-		nCols.splice(to, 0, moved);
-		setNewColumns(nCols);
-		return nCols;
+		//let {from, to, data} = info;
+		//let nCols = [...newColumns];
+		//let moved = nCols[from];
+		//nCols.splice(from, 1);
+		//nCols.splice(to, 0, moved);
+		//setNewColumns(nCols);
+		//return nCols;
+		setNewColumns(info.data.map(d => { return {...d} }));
 	};
 	// Data for sortable flatlist
 	//TO-DO: limit to just the drag handle somehow?
@@ -117,7 +117,7 @@ const LexiconColumnReorderer = ({setReordering}) => {
 		);
 	};
 	return (
-		<ModalGuts
+		<VStack
 			flex={1}
 			justifyContent="center"
 			alignItems="center"
@@ -153,7 +153,7 @@ const LexiconColumnReorderer = ({setReordering}) => {
 					m={2}
 				>DONE</Button>
 			</HStack>
-		</ModalGuts>
+		</VStack>
 	);
 };
 
