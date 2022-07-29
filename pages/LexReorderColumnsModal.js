@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Input,
 	VStack,
@@ -62,11 +62,16 @@ const LexiconColumnReorderingShell = () => {
 const LexiconColumnReorderer = ({setReordering}) => {
 	const {columns} = useSelector((state) => state.lexicon, equalityCheck);
 	const dispatch = useDispatch();
-	const [newColumns, setNewColumns] = useState(columns.map(c => { return {...c} }));
+	const [newColumns, setNewColumns] = useState([]);
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
 	const minWidth = Math.min(300, Math.floor(width * 0.8));
 	const DraggableFlatList = Factory(DFL);
+
+	useEffect(() => {
+		// Load column info when mounted or when columns change.
+		setNewColumns(columns.map(c => { return {...c} }));
+	}, [columns]);
 
 	//
 	//

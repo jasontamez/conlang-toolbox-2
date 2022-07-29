@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Input,
 	VStack,
@@ -45,12 +45,15 @@ const LexiconColumnEditingShell = () => {
 const LexiconColumnEditor = ({editing, setEditing}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector(state => state.appState.disableConfirms);
-	const [newColumns, setNewColumns] = useState(columns.map(c => {return {...c}}));
+	const [newColumns, setNewColumns] = useState([]);
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
 	const dispatch = useDispatch();
+	useEffect(() => {
+		// Load column info when mounted or when columns change.
+		setNewColumns(columns.map(c => {return {...c}}));
+	}, [columns]);
 	const doClose = () => {
 		setColumnLabelsToBeDeleted([]);
-		setNewColumns(columns.map(c => {return {...c}}));
 		setEditing(false);
 	};
 	const AddColumnButton = () => {
