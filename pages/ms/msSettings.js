@@ -15,10 +15,18 @@ const Settings = () => {
 	const dispatch = useDispatch();
 	const StoredInfoButton = (props) => {
 		return (
-			<Pressable onPress={props.onPress} mx={4}>
-				<HStack bg={props.bg} space={3} p={2} alignItems="center">
+			<Pressable
+				onPress={props.onPress}
+				mx={4}
+			>
+				<HStack
+					bg={props.bg}
+					space={3}
+					p={2}
+					alignItems="center"
+				>
 					{props.icon}
-					<Text>{props.children}</Text>
+					<Text>{props.text}</Text>
 				</HStack>
 			</Pressable>
 		);
@@ -29,19 +37,51 @@ const Settings = () => {
 				placeholder="Usually the language name."
 				value={synTitle}
 				onChangeEnd={(v) => dispatch(setTitle(v))}
-			>MorphoSyntax Title:</TextSetting>
+				text="MorphoSyntax Title:"
+			/>
 			<TextAreaSetting
 				placeholder="A short description of this document."
 				value={synDescription}
 				onChangeEnd={(v) => dispatch(setDescription(v))}
-			>Description:</TextAreaSetting>
+				text="Description:"
+			/>
 			<VStack alignSelf="flex-end">
-				<StoredInfoButton bg="lighter" icon={<RemoveCircleIcon />} onPress={() => 2222}>Clear MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="darker" icon={<AddCircleIcon />} onPress={() => 2222}>Load MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="lighter" icon={<SaveIcon />} onPress={() => 2222}>Save MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="darker" icon={<SaveIcon />} onPress={() => 2222}>Save As</StoredInfoButton>
-				<StoredInfoButton bg="lighter" icon={<ExportIcon />} onPress={() => 2222}>Export MorphoSyntax Info</StoredInfoButton>
-				<StoredInfoButton bg="darker" icon={<TrashIcon />} onPress={() => 2222}>Delete Saved MorphoSyntax Info</StoredInfoButton>
+				<StoredInfoButton
+					bg="lighter"
+					icon={<RemoveCircleIcon />}
+					onPress={() => 2222}
+					text="Clear MorphoSyntax Info"
+				/>
+				<StoredInfoButton
+					bg="darker"
+					icon={<AddCircleIcon />}
+					onPress={() => 2222}
+					text="Load MorphoSyntax Info"
+				/>
+				<StoredInfoButton
+					bg="lighter"
+					icon={<SaveIcon />}
+					onPress={() => 2222}
+					text="Save MorphoSyntax Info"
+				/>
+				<StoredInfoButton
+					bg="darker"
+					icon={<SaveIcon />}
+					onPress={() => 2222}
+					text="Save As"
+				/>
+				<StoredInfoButton
+					bg="lighter"
+					icon={<ExportIcon />}
+					onPress={() => 2222}
+					text="Export MorphoSyntax Info"
+				/>
+				<StoredInfoButton
+					bg="darker"
+					icon={<TrashIcon />}
+					onPress={() => 2222}
+					text="Delete Saved MorphoSyntax Info"
+				/>
 			</VStack>
 		</VStack>
 	);

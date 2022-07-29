@@ -43,24 +43,31 @@ export const NavBar = (props) => {
 				horizontal
 				w="full"
 				ref={navRef}
-				onScroll={({nativeEvent}) => debounce(maybeUpdateScrollPos, [nativeEvent])}
+				onScroll={
+					({nativeEvent}) =>
+					debounce(maybeUpdateScrollPos, [nativeEvent])
+				}
 				scrollEventThrottle={16}
 				{...scrollProps}
 			>
-				<HStack w="full" space={4} justifyContent="space-between" {...otherProps} />
+				<HStack
+					w="full"
+					space={4}
+					justifyContent="space-between"
+					{...otherProps}/>
 			</ScrollView>
 		</Box>
 	);
 };
 
 export const TextAreaSetting = (props) => {
-	// <TextAreaSetting value="" placeholder="" rows={3} onChange={} onChangeEnd={}>Text Label</TextAreaSetting>
 	const boxProps = props.boxProps || {};
 	const labelProps = props.labelProps || {};
 	const inputProps = props.inputProps || {};
+	const text = props.text || props.children;
 	return (
 		<Box w="full" {...boxProps}>
-			<Text {...labelProps}>{props.children}</Text>
+			<Text {...labelProps}>{text}</Text>
 			<TextArea mt={2}
 				defaultValue={props.value}
 				placeholder={props.placeholder}
@@ -74,13 +81,13 @@ export const TextAreaSetting = (props) => {
 };
 
 export const TextSetting = (props) => {
-	// <TextSetting value="" placeholder="" onChange={} onChangeEnd={}>Text Label</TextSetting>
 	const boxProps = props.boxProps || {};
 	const labelProps = props.labelProps || {};
 	const inputProps = props.inputProps || {};
+	const text = props.text || props.children;
 	return (
 		<Box w="full" {...boxProps}>
-			<Text {...labelProps}>{props.children}</Text>
+			<Text {...labelProps}>{text}</Text>
 			<Input
 				defaultValue={props.value}
 				placeholder={props.placeholder}
@@ -108,19 +115,57 @@ export const SliderWithTicks = (props) => {
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
 	return (
-		<HStack d="flex" w="full" bg="darker" px={2} py={1} rounded="md" alignItems="center">
-			<Box mr={3} flexGrow={0} flexShrink={1} flexBasis={width}><Text textAlign="center" fontSize="sm">{beginLabel}</Text></Box>
-			<ZStack alignItems="center" justifyContent="center" flexGrow={1} flexShrink={2} flexBasis={width * 4} {...stackProps}>
-				<HStack alignItems="center" justifyContent="space-between" w="full" children={middleTicks}>
+		<HStack
+			d="flex"
+			w="full"
+			bg="darker"
+			px={2}
+			py={1}
+			rounded="md"
+			alignItems="center"
+		>
+			<Box
+				mr={3}
+				flexGrow={0}
+				flexShrink={1}
+				flexBasis={width}
+			>
+				<Text textAlign="center" fontSize="sm">{beginLabel}</Text>
+			</Box>
+			<ZStack
+				alignItems="center"
+				justifyContent="center"
+				flexGrow={1}
+				flexShrink={2}
+				flexBasis={width * 4}
+				{...stackProps}
+			>
+				<HStack
+					alignItems="center"
+					justifyContent="space-between"
+					w="full"
+					children={middleTicks}
+				>
 				</HStack>
-				<Slider size="sm" minValue={min} maxValue={max} step={1} {...sliderProps}>
+				<Slider
+					size="sm"
+					minValue={min}
+					maxValue={max}
+					step={1}
+					{...sliderProps}
+				>
 					<Slider.Track>
 						{props.notFilled ? <></> : <Slider.FilledTrack />}
 					</Slider.Track>
 					<Slider.Thumb />
 				</Slider>
 			</ZStack>
-			<Box ml={3} flexGrow={0} flexShrink={1} flexBasis={width}><Text textAlign="center" fontSize="sm">{endLabel}</Text></Box>
+			<Box
+				ml={3}
+				flexGrow={0}
+				flexShrink={1}
+				flexBasis={width}
+			><Text textAlign="center" fontSize="sm">{endLabel}</Text></Box>
 		</HStack>
 	);
 };

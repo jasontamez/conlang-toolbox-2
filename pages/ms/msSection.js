@@ -48,7 +48,16 @@ const ParseMSJSON = (props) => {
 	const getKey = (msg = "parsedJSON") => {
 		return msg + String(keyCounter++);
 	};
-	const Text = (props) => <Tx m={0} p={0} borderWidth={0} lineHeight="md" fontSize="md" {...props} />
+	const Text = (props) => (
+		<Tx
+			m={0}
+			p={0}
+			borderWidth={0}
+			lineHeight="md"
+			fontSize="md"
+			{...props}
+		/>
+	);
 	// Text formatting
 	const FormatText = (props) => {
 		const bit = props.content;
@@ -63,7 +72,14 @@ const ParseMSJSON = (props) => {
 					if(x === "") {
 						// Just skip.
 					} else if (toggle) {
-						temp2.push(<Text bold key={getKey("formattedText")}>{x}</Text>);
+						temp2.push(
+							<Text
+								bold
+								key={getKey("formattedText")}
+							>
+								{x}
+							</Text>
+						);
 					} else {
 						temp2.push(x);
 					}
@@ -84,7 +100,14 @@ const ParseMSJSON = (props) => {
 					if(x === "") {
 						// Just skip.
 					} else if (toggle) {
-						temp2.push(<Text italic key={getKey("formattedText")}>{x}</Text>);
+						temp2.push(
+							<Text
+								italic
+								key={getKey("formattedText")}
+							>
+								{x}
+							</Text>
+						);
 					} else {
 						temp2.push(x);
 					}
@@ -105,7 +128,14 @@ const ParseMSJSON = (props) => {
 					if(x === "") {
 						// Just skip.
 					} else if (toggle) {
-						temp2.push(<Text strikeThrough key={getKey("formattedText")}>{x}</Text>);
+						temp2.push(
+							<Text
+								strikeThrough
+								key={getKey("formattedText")}
+							>
+								{x}
+							</Text>
+						);
 					} else {
 						temp2.push(x);
 					}
@@ -121,14 +151,28 @@ const ParseMSJSON = (props) => {
 			const oneLine = temp2[0];
 			let final;
 			if(typeof oneLine === "string") {
-				final = <Text bold={forceBold} key={getKey("formattedText")}>{oneLine}</Text>;
+				final = (
+					<Text
+						bold={forceBold}
+						key={getKey("formattedText")}
+					>
+						{oneLine}
+					</Text>
+				);
 			} else {
 				final = oneLine;
 			}
 			return final;
 		}
 		// Multi-lined texts
-		return <Text bold={forceBold} key={getKey("formattedText")}>{temp2}</Text>;
+		return (
+			<Text
+				bold={forceBold}
+				key={getKey("formattedText")}
+			>
+				{temp2}
+			</Text>
+		);
 	};
 	const content = doc.map((bit) => {
 		const tag = (bit.tag || "");
@@ -137,8 +181,16 @@ const ParseMSJSON = (props) => {
 		switch(tag) {
 			case "Header":
 				return (
-					<Box my={margins[bit.level || 0]} key={getKey("header")}>
-						<Text bold fontSize={headings[bit.level || 0]}>{bit.content}</Text>
+					<Box
+						my={margins[bit.level || 0]}
+						key={getKey("header")}
+					>
+						<Text
+							bold
+							fontSize={headings[bit.level || 0]}
+						>
+							{bit.content}
+						</Text>
 					</Box>
 				);
 			case "Range":
@@ -146,19 +198,21 @@ const ParseMSJSON = (props) => {
 				const doSetNum = (prop, value) => {
 					dispatch(setNum({prop, value}));
 				};
-				return <SliderWithTicks
-					key={getKey("range")}
-					beginLabel={bit.start}
-					endLabel={bit.end}
-					notFilled={bit.notFilled}
-					min={0} max={bit.max || 4}
-					width={width}
-					sliderProps={{
-						defaultValue: (synNum[what] || 0),
-						accessibilityLabel: bit.label,
-						onChangeEnd: (v) => doSetNum(what, v)
-					}}
-				/>;
+				return (
+					<SliderWithTicks
+						key={getKey("range")}
+						beginLabel={bit.start}
+						endLabel={bit.end}
+						notFilled={bit.notFilled}
+						min={0} max={bit.max || 4}
+						width={width}
+						sliderProps={{
+							defaultValue: (synNum[what] || 0),
+							accessibilityLabel: bit.label,
+							onChangeEnd: (v) => doSetNum(what, v)
+						}}
+					/>
+				);
 			case "Text":
 				const doSetText = (prop, value) => {
 					dispatch(setText({prop, value}));
@@ -169,9 +223,15 @@ const ParseMSJSON = (props) => {
 						key={getKey("Fragment")}
 						rows={bit.rows}
 						placeholder={bit.placeholder}
-						onChangeEnd={(e) => doSetText(prop, e.currentTarget.value || "")}
+						onChangeEnd={
+							(e) => doSetText(
+								prop, e.currentTarget.value || ""
+							)
+						}
 						defaultValue={synText[prop] || ""}
-					>{bit.content || ""}</TextAreaSetting>
+					>
+						{bit.content || ""}
+					</TextAreaSetting>
 				);
 			case "Modal":
 				const screenWidth = { maxWidth: width };
@@ -181,7 +241,11 @@ const ParseMSJSON = (props) => {
 				const ModalContent = (props) => {
 					const content = props.content;
 					if(!Array.isArray(content)) {
-						return <Text key={getKey()}>Missing Content Array</Text>;
+						return (
+							<Text key={getKey()}>
+								Missing Content Array
+							</Text>
+						);
 					}
 					const regularMargin = 2;
 					const noMargin = 0;
@@ -228,8 +292,22 @@ const ParseMSJSON = (props) => {
 						} else if (typeof bit === "string") {
 							// Make a simple text
 							output.push(
-								<HStack space={0} m={0} mt={margin} p={0} ml={indent * 4} alignItems="flex-start" justifyContent="flex-start" key={getKey(id)}>
-									{prefix ? <DotIcon m={0} p={0} mt={1.5} mr={1} /> : <></>}
+								<HStack
+									space={0}
+									m={0}
+									mt={margin}
+									p={0}
+									ml={indent * 4}
+									alignItems="flex-start"
+									justifyContent="flex-start"
+									key={getKey(id)}
+								>
+									{
+										prefix ?
+											<DotIcon m={0} p={0} mt={1.5} mr={1} />
+										:
+											<></>
+										}
 									<FormatText content={bit} />
 								</HStack>
 							);
@@ -254,20 +332,41 @@ const ParseMSJSON = (props) => {
 							// Make a vertical stack of all row elements
 							const makeLine = (rows) => {
 								return (
-									<VStack m={2} alignItems="center" justifyContent="space-between" key={getKey(id)}>
+									<VStack
+										m={2}
+										alignItems="center"
+										justifyContent="space-between"
+										key={getKey(id)}
+									>
 										{rows.map((r) => {
-											return <FormatText key={getKey(id + "InnerRow")} content={r} />;
+											return (
+												<FormatText
+													key={getKey(id + "InnerRow")}
+													content={r}
+												/>
+											);
 										})}
 									</VStack>
 								);
 							};
-							output.push(  // String(indent * 2)+"rem" isn't valid for some reason??
-								<ScrollView horizontal mt={margin} ml={indent * 4} key={getKey(id)} variant="tabular">
+							output.push(
+								<ScrollView
+									horizontal
+									mt={margin}
+									ml={indent * 4}
+									key={getKey(id)}
+									variant="tabular"
+								>
 									<VStack>
 										<HStack>
 											{newRows.map((line) => makeLine(line.slice()))}
 										</HStack>
-										{bit.final ? <FormatText content={bit.final} /> : <React.Fragment></React.Fragment>}
+										{
+											bit.final ?
+												<FormatText content={bit.final} />
+											:
+												<React.Fragment></React.Fragment>
+										}
 									</VStack>
 								</ScrollView>
 							);
@@ -305,34 +404,80 @@ const ParseMSJSON = (props) => {
 					//
 					// END WHILE LOOP
 					//
-					return <VStack space={0} key={getKey("MainModal")} mx={4}>{output}</VStack>;
+					return (
+						<VStack
+							space={0}
+							key={getKey("MainModal")}
+							mx={4}
+						>
+							{output}
+						</VStack>
+					);
 				};
 				//
 				// END MODAL CONTENT DECLARATION
 				//
 				return (
-					<HStack justifyContent="flex-start" key={getKey("ModalButton")} safeArea>
-						<Modal bg="main.800" m={0} isOpen={modalState === id} style={screenWidth} onClose={() => setModal('')} safeArea>
+					<HStack
+						justifyContent="flex-start"
+						key={getKey("ModalButton")}
+						safeArea
+					>
+						<Modal
+							bg="main.800"
+							m={0}
+							isOpen={modalState === id}
+							style={screenWidth}
+							onClose={() => setModal('')}
+							safeArea
+						>
 							<Modal.CloseButton />
-							<Modal.Header w="full"><Center><Text>{bit.title}</Text></Center></Modal.Header>
-							<Modal.Body style={screenWidth} safeArea mx="auto">
+							<Modal.Header w="full">
+								<Center>
+									<Text>{bit.title}</Text>
+								</Center>
+							</Modal.Header>
+							<Modal.Body
+								style={screenWidth}
+								safeArea
+								mx="auto"
+							>
 								<ModalContent content={bit.content} />
 							</Modal.Body>
 							<Modal.Footer w="full" p={2}>
-								<Button m={0} startIcon={<OkIcon />} onPress={() => setModal('')}>Done</Button>
+								<Button
+									m={0}
+									startIcon={<OkIcon />}
+									onPress={() => setModal('')}
+								>
+									Done
+								</Button>
 							</Modal.Footer>
 						</Modal>
-						<Button py={1} px={2} ml={4} colorScheme="primary" size="sm" startIcon={<InfoIcon />} onPress={() => setModal(id)}>{(bit.label || "Read About It").toUpperCase()}</Button>
+						<Button
+							py={1}
+							px={2}
+							ml={4}
+							colorScheme="primary"
+							size="sm"
+							startIcon={<InfoIcon />}
+							onPress={() => setModal(id)}
+						>
+							{(bit.label || "Read About It").toUpperCase()}
+						</Button>
 					</HStack>
 				);
 			case "Checkboxes":
-				//return <Box><Text bold>CHECKBOX HERE</Text></Box>;
 				const doSetBool = (prop, value) => {
 					dispatch(setBool({prop, value}));
 				};
 				const disp = bit.display;
 				if(!disp) {
-					return <Box key={getKey()}><Text bold>CHECKBOX DISPLAY ERROR</Text></Box>;
+					return (
+						<Box key={getKey()}>
+							<Text bold>CHECKBOX DISPLAY ERROR</Text>
+						</Box>
+					);
 				}
 				const boxes = (bit.boxes || []).slice();
 				const rowDescriptions = (disp.rowDescriptions || []);
@@ -354,8 +499,24 @@ const ParseMSJSON = (props) => {
 						let row = [];
 						while(counter < perRow) {
 							const id = boxes.shift();
-							const label = accessibilityLabels.shift() || "MISSING LABEL";
-							row.push(id ? <Checkbox mx="auto" value={id} onChange={() => doSetBool(id, !synBool[id])} defaultIsChecked={synBool[id] || false} accessibilityLabel={label} key={getKey(id+"CheckBox")} /> : <Text key={getKey(id+"Missing")}>MISSING CHECKBOX</Text>);
+							const label = (
+								accessibilityLabels.shift() || "MISSING LABEL"
+							);
+							row.push(
+								id ?
+									<Checkbox
+										mx="auto"
+										value={id}
+										onChange={() => doSetBool(id, !synBool[id])}
+										defaultIsChecked={synBool[id] || false}
+										accessibilityLabel={label}
+										key={getKey(id+"CheckBox")}
+									/>
+								:
+									<Text key={getKey(id+"Missing")}>
+										MISSING CHECKBOX
+									</Text>
+							);
 							counter++;
 						}
 						rows.push(row);
@@ -363,20 +524,39 @@ const ParseMSJSON = (props) => {
 				} else {
 					boxes.forEach((box) => {
 						const label = labels.shift() || "MISSING LABEL";
-						rows.push([<Checkbox value={box} onChange={() => doSetBool(box, !synBool[id])} defaultIsChecked={synBool[box] || false} key={getKey(id + "CheckBox")}><FormatText content={label} /></Checkbox>]);
+						rows.push([
+							<Checkbox
+								value={box}
+								onChange={() => doSetBool(box, !synBool[id])}
+								defaultIsChecked={synBool[box] || false}
+								key={getKey(id + "CheckBox")}
+							>
+								<FormatText content={label} />
+							</Checkbox>
+						]);
 					});
 				}
 				// Add rowDescriptions as a new column, if they exist
 				rowDescriptions.length && rows.forEach((row, i) => {
 					const rDesc = rowDescriptions[i] || "MISSING INFO";
-					row.push(<FormatText key={getKey("FormattedText")} content={rDesc} />);
+					row.push(
+						<FormatText
+							key={getKey("FormattedText")}
+							content={rDesc}
+						/>
+					);
 				});
 				// Add inlineheaders, if any, to the tops of the existing columns
 				if(inlineHeaders) {
-					//rows.unshift(inlineHeaders.map((ih) => <FormatText key={getKey("InlineHeader")} content={ih} forceBold />));
 					let row = [];
 					inlineHeaders.forEach((ih) => {
-						row.push(<FormatText key={getKey("InlineHeader")} content={ih} forceBold />);
+						row.push(
+							<FormatText
+								key={getKey("InlineHeader")}
+								content={ih}
+								forceBold
+							/>
+						);
 					});
 					rows.unshift(row);
 				}
@@ -389,18 +569,53 @@ const ParseMSJSON = (props) => {
 				};
 				// Put it all together
 				return (
-					<Box m={0} key={getKey("CheckboxesContainer")}>
-						<VStack bg="darker" m={0} mr="auto" minWidth="300px">
-							{header ? <Box p={2}><FormatText content={header} forceBold /></Box> : <React.Fragment></React.Fragment>}
+					<Box
+						m={0}
+						key={getKey("CheckboxesContainer")}
+					>
+						<VStack
+							bg="darker"
+							m={0}
+							mr="auto"
+							minWidth="300px"
+						>
+							{
+								header ?
+									<Box p={2}>
+										<FormatText
+											content={header}
+											forceBold
+										/>
+									</Box>
+								:
+									<React.Fragment></React.Fragment>
+							}
 							{rows.map((row, i) => {
 								// Stripe odd-numbered rows
-								let stripedRow = isStripedTable && (i % 2) ? {bg: "darker"} : {};
+								let stripedRow = (
+									isStripedTable && (i % 2) ?
+										{bg: "darker"}
+									:
+										{}
+								);
 								const maxWidth = fractions[row.length] || "1/6";
 								return (
-									<HStack key={getKey(id+"Row")} {...stripedRow}>
+									<HStack
+										key={getKey(id+"Row")}
+										{...stripedRow}
+									>
 										{row.map((col, i) => {
 											const alignment = isCentered[i] ? {textAlign: "center"} : {};
-											return <Box p={2} key={getKey(id+"Col")} w={maxWidth} {...alignment}>{col}</Box>;
+											return (
+												<Box
+													p={2}
+													key={getKey(id+"Col")}
+													w={maxWidth}
+													{...alignment}
+												>
+													{col}
+												</Box>
+											);
 										})}
 									</HStack>
 								);
@@ -414,7 +629,13 @@ const ParseMSJSON = (props) => {
 		}
 	});
 	return (
-		<VStack space={4} key={getKey("Content")} mb={4}>{content}</VStack>
+		<VStack
+			space={4}
+			key={getKey("Content")}
+			mb={4}
+		>
+			{content}
+		</VStack>
 	);
 
 };

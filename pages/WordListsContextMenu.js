@@ -29,7 +29,12 @@ const WordListsContextMenu = () => {
 				closeOnSelect={false}
 				w="full"
 				trigger={(triggerProps) => (
-					<Pressable m="auto" w={6} accessibilityLabel="More options menu" {...triggerProps}>
+					<Pressable
+						m="auto"
+						w={6}
+						accessibilityLabel="More options menu"
+						{...triggerProps}
+					>
 						<DotsIcon />
 					</Pressable>
 				)}
@@ -38,10 +43,23 @@ const WordListsContextMenu = () => {
 				onClose={() => doMenuClose()}
 				isOpen={menuOpen}
 			>
-				<Menu.OptionGroup defaultValue={centerMenuOption} value={centerMenuOption} type="checkbox" onChange={(v) => handleCenterText(v)}>
-					<Menu.ItemOption value="center">Center-Justify Text</Menu.ItemOption>
+				<Menu.OptionGroup
+					defaultValue={centerMenuOption}
+					value={centerMenuOption}
+					type="checkbox"
+					onChange={(v) => handleCenterText(v)}
+				>
+					<Menu.ItemOption value="center" >
+						Center-Justify Text
+					</Menu.ItemOption>
 				</Menu.OptionGroup>
-				<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
+				<Divider
+					my={2}
+					mx="auto"
+					w="90%"
+					bg="main.50"
+					opacity={25}
+				/>
 				<Menu.Item>
 					<SaveIcon m={2} ml={0} />
 					<Text>Save All to Lexicon</Text>
@@ -50,20 +68,50 @@ const WordListsContextMenu = () => {
 					<SaveIcon m={2} ml={0} />
 					<Text>Choose what to save</Text>
 				</Menu.Item>
-				<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
-				<Menu.Item onPress={() => showInfo()}>
+				<Divider
+					my={2}
+					mx="auto"
+					w="90%"
+					bg="main.50"
+					opacity={25}/>
+				<Menu.Item
+					onPress={() => showInfo()}
+				>
 					<HelpIcon size="sm" m={2} ml={0} />
 					<Text>Info About the Lists</Text>
 				</Menu.Item>
 			</Menu>
-			<Modal isOpen={infoModalOpen} h="full">
-				<Modal.Content w="full" maxWidth="full" minHeight="full" p={0} m={0} borderTopRadius={0}>
-					<Modal.Header bg="primary.500" borderBottomWidth={0}>
+			<Modal
+				isOpen={infoModalOpen}
+				h="full"
+			>
+				<Modal.Content
+					w="full"
+					maxWidth="full"
+					minHeight="full"
+					p={0}
+					m={0}
+					borderTopRadius={0}
+				>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+					>
 						<Text color="primaryContrast" fontSize="md">About the Lists</Text>
 					</Modal.Header>
-					<Modal.CloseButton _icon={{color: "primaryContrast"}} onPress={() => setInfoModalOpen(false)} />
-					<Modal.Body h="full" maxWidth="full" minHeight="full">
-						<VStack space={4} justifyContent="space-between">
+					<Modal.CloseButton
+						_icon={{color: "primaryContrast"}}
+						onPress={() => setInfoModalOpen(false)}
+					/>
+					<Modal.Body
+						h="full"
+						maxWidth="full"
+						minHeight="full"
+					>
+						<VStack
+							space={4}
+							justifyContent="space-between"
+						>
 							<Text px={5} fontSize="sm">
 								{'\t'}Presented here are a number of lists of English words representing basic concepts
 								for the purposes of historical-comparative linguistics. These may serve as a good
@@ -104,7 +152,12 @@ const WordListsContextMenu = () => {
 							</Text>
 						</VStack>
 					</Modal.Body>
-					<Modal.Footer borderTopWidth={0} h={0} m={0} p={0} />
+					<Modal.Footer
+						borderTopWidth={0}
+						h={0}
+						m={0}
+						p={0}
+					/>
 				</Modal.Content>
 			</Modal>
 		</>

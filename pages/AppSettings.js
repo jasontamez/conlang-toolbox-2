@@ -5,17 +5,41 @@ import { setTheme, setDisableConfirms } from '../store/appStateSlice';
 
 const AppSettings = () => {
 	const dispatch = useDispatch();
-	const {disableConfirms, theme} = useSelector((state) => state.appState, shallowEqual);
+	const {
+		disableConfirms,
+		theme
+	} = useSelector((state) => state.appState, shallowEqual);
 	return (
 		<VStack>
-			<HStack w="full" justifyContent="space-between" alignItems="center" p={2} borderBottomWidth={1} borderBottomColor="main.900">
-				<VStack flexGrow={1} flexShrink={2} mr={2}>
+			<HStack
+				w="full"
+				justifyContent="space-between"
+				alignItems="center"
+				p={2}
+				borderBottomWidth={1}
+				borderBottomColor="main.900"
+			>
+				<VStack 
+					flexGrow={1}
+					flexShrink={2}
+					mr={2}
+				>
 					<Text fontSize="md">Disable Confirmation Prompts</Text>
 					<Text fontSize="xs" color="main.500">Eliminates yes/no prompts when deleting or overwriting data.</Text>
 				</VStack>
-				<Switch defaultIsChecked={disableConfirms} onValueChange={(value) => dispatch(setDisableConfirms(value))} />
+				<Switch
+					defaultIsChecked={disableConfirms}
+					onValueChange={(value) => dispatch(setDisableConfirms(value))}
+				/>
 			</HStack>
-			<HStack w="full" justifyContent="space-between" alignItems="center" p={2} borderBottomWidth={1} borderBottomColor="main.900">
+			<HStack
+				w="full"
+				justifyContent="space-between"
+				alignItems="center"
+				p={2}
+				borderBottomWidth={1}
+				borderBottomColor="main.900"
+			>
 				<VStack>
 					<Text fontSize="md">Change Theme</Text>
 				</VStack>

@@ -92,12 +92,33 @@ const MenuModal = ({ scrollToTop }) => {
 					bg="main.800"
 				>
 					<ZStack>
-						<HStack height={10} w="full" {...bgOptions} opacity={20} />
-						<HStack height={10} alignItems="center" w="full" justifyContent="flex-start">
-							<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
+						<HStack
+							height={10}
+							w="full"
+							{...bgOptions}
+							opacity={20}
+						/>
+						<HStack
+							height={10}
+							alignItems="center"
+							w="full"
+							justifyContent="flex-start"
+						>
+							<VStack
+								alignItems="center"
+								justifyContent="center"
+								m={2}
+								minW={6}
+							>
 								{icon ? Icons[icon](textOptions) : <></>}
 							</VStack>
-							<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} textAlign="right">
+							<VStack
+								alignItems="flex-start"
+								justifyContent="center"
+								flex={1}
+								m={2}
+								textAlign="right"
+							>
 								<Text {...textOptions}>{menuTitle || title}</Text>
 							</VStack>
 							<ReAnimatedView 
@@ -108,7 +129,9 @@ const MenuModal = ({ scrollToTop }) => {
 								 m={2}
 								 ml={0}
 			 				>
-								<Icons.CaretIcon {...textOptions} />
+								<Icons.CaretIcon
+									{...textOptions}
+								/>
 							</ReAnimatedView>
 						</HStack>
 					</ZStack>
@@ -130,15 +153,36 @@ const MenuModal = ({ scrollToTop }) => {
 					w="full"
 					bg="main.800"
 				>
-					<Pressable onPress={() => navigate(url)} bg="darker" h={9}>
+					<Pressable
+						onPress={() => navigate(url)}
+						bg="darker"
+						h={9}
+					>
 						<ZStack>
 							<HStack height={9} w="full" {...bgOptions} opacity={10} />
-							<HStack w="full" height={9} alignItems="center" justifyContent="flex-end">
-								<VStack alignItems="flex-end" justifyContent="center" flex={1} m={2} ml={4}>
+							<HStack
+								w="full"
+								height={9}
+								alignItems="center"
+								justifyContent="flex-end"
+							>
+								<VStack
+									alignItems="flex-end"
+									justifyContent="center"
+									flex={1}
+									m={2}
+									ml={4}
+								>
 									<Text textAlign="right" fontSize="xs" {...textOptions}>{menuTitle || title}</Text>
 								</VStack>
-								<VStack alignItems="center" justifyContent="center" m={2} minW={4} ml={0}>
-									<Icons.DotIcon {...dotOptions} />
+								<VStack
+									alignItems="center"
+									justifyContent="center"
+									m={2}
+									minW={4}
+									ml={0}
+								>
+									<Icons.DotIcon {...dotOptions}/>
 								</VStack>
 							</HStack>
 						</ZStack>
@@ -165,11 +209,28 @@ const MenuModal = ({ scrollToTop }) => {
 			>
 				<ZStack>
 					<HStack height={10} w="full" {...bgOptions} opacity={20} />
-					<HStack w="full" height={10} alignItems="center" justifyContent="flex-start" {...boxOptions}>
-					<VStack alignItems="center" justifyContent="center" m={2} minW={6}>
+					<HStack
+						w="full"
+						height={10}
+						alignItems="center"
+						justifyContent="flex-start"
+						{...boxOptions}
+					>
+					<VStack
+						alignItems="center"
+						justifyContent="center"
+						m={2}
+						minW={6}
+					>
 						{icon ? Icons[icon](textOptions) : <></>}
 					</VStack>
-					<VStack alignItems="flex-start" justifyContent="center" flex={1} m={2} {...alignOptions}>
+					<VStack
+						alignItems="flex-start"
+						justifyContent="center"
+						flex={1}
+						m={2}
+						{...alignOptions}
+					>
 						<Text {...textOptions}>{menuTitle || title}</Text>
 					</VStack>
 				</HStack>
@@ -179,15 +240,48 @@ const MenuModal = ({ scrollToTop }) => {
 	};
 	return (
 		<>
-			<Modal h="full" isOpen={menuOpen} onClose={() => closeMenu()} animationPreset="slide" _slide={{delay: 0, placement: "left"}}>
-				<Modal.Content borderRadius={0} alignItems="flex-start" justifyContent="flex-start" style={{shadowOpacity: 0}} w="full" maxWidth="full" minHeight="full">
-					<Modal.Header borderBottomWidth={0} h={0} m={0} p={0} />
-					<Modal.Body h="full" minHeight="full" maxHeight="full" p={0} m={0}>
-						<VStack mb={3} p={2} w="full" mr={5}>
-							<Heading size="md">Conlang Toolbox</Heading>
+			<Modal
+				h="full"
+				isOpen={menuOpen}
+				onClose={() => closeMenu()}
+				animationPreset="slide"
+				_slide={{delay: 0, placement: "left"}}
+			>
+				<Modal.Content
+					borderRadius={0}
+					alignItems="flex-start"
+					justifyContent="flex-start"
+					style={{shadowOpacity: 0}}
+					w="full"
+					maxWidth="full"
+					minHeight="full"
+				>
+					<Modal.Header
+						borderBottomWidth={0}
+						h={0}
+						m={0}
+						p={0}
+					/>
+					<Modal.Body
+						h="full"
+						minHeight="full"
+						maxHeight="full"
+						p={0}
+						m={0}
+					>
+						<VStack
+							mb={3}
+							p={2}
+							w="full"
+							mr={5}
+						>
+							<Heading size="md" >Conlang Toolbox</Heading>
 							<Text fontSize="sm" color="primary.200">tools for language invention</Text>
 						</VStack>
-						<VStack m={0} p={0}>
+						<VStack
+							m={0}
+							p={0}
+						>
 							{
 								appMenuPages
 									.filter(page => !page.isChildOf || page.isChildOf === openId)
@@ -195,10 +289,19 @@ const MenuModal = ({ scrollToTop }) => {
 							}
 						</VStack>
 					</Modal.Body>
-					<Modal.Footer borderTopWidth={0} h={0} m={0} p={0} />
+					<Modal.Footer
+						borderTopWidth={0}
+						h={0}
+						m={0}
+						p={0}
+					/>
 				</Modal.Content>
 			</Modal>
-			<IconButton variant="ghost" icon={<Icons.MenuIcon color="text.50" />} onPress={() => setMenuOpen(true)} />
+			<IconButton
+				variant="ghost"
+				icon={<Icons.MenuIcon color="text.50" />}
+				onPress={() => setMenuOpen(true)}
+			/>
 		</>
 	);
 };

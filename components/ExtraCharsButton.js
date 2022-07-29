@@ -6,7 +6,14 @@ const openExtraChars = () => {
 }
 const ExtraChars = (props) => {
 	const { iconProps, buttonProps } = {iconProps: {}, buttonProps: {}, ...props};
-	return <IconButton variant="ghost" icon={<ExtraCharactersIcon color="text.50" {...iconProps} />} onPress={() => openExtraChars()} {...buttonProps} />;
+	return (
+		<IconButton
+			variant="ghost"
+			icon={<ExtraCharactersIcon color="text.50" {...iconProps} />}
+			onPress={() => openExtraChars()}
+			{...buttonProps}
+		/>
+	);
 };
 
 export default ExtraChars;

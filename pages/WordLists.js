@@ -84,8 +84,20 @@ const WordLists = () => {
 	const alignment = centerTheDisplayedWords.length > 0 ? { textAlign: "center" } : {};
 	return (
 		<>
-			<HStack flexWrap="wrap" justifyContent="center" alignItems="center" p={2}>
-				<Box m={0} py={1} mr={1} alignSelf="flex-start"><Text>Display:</Text></Box>
+			<HStack
+				flexWrap="wrap"
+				justifyContent="center"
+				alignItems="center"
+				p={2}
+			>
+				<Box
+					m={0}
+					py={1}
+					mr={1}
+					alignSelf="flex-start"
+				>
+					<Text>Display:</Text>
+				</Box>
 				{WL.sources.map((list) => {
 					const displayProps = listsDisplayed[list] ? {
 						variant: "solid",
@@ -96,7 +108,16 @@ const WordLists = () => {
 						variant: "outline"
 					};
 					return (
-						<Button colorScheme="primary" key={list} size="xs" borderRadius="full" py={1} m={1} onPress={() => toggleList(list)} {...displayProps}>
+						<Button
+							colorScheme="primary"
+							key={list}
+							size="xs"
+							borderRadius="full"
+							py={1}
+							m={1}
+							onPress={() => toggleList(list)}
+							{...displayProps}
+						>
 							<Text fontSize="xs">{list}</Text>
 						</Button>
 					);
@@ -107,7 +128,15 @@ const WordLists = () => {
 					const background = stripeFlag ? {bg: "darker"} : {};
 					stripeFlag = !stripeFlag;
 					return (
-						<Box key={word} w="full" p={2} py={1} {...background}><Text {...alignment}>{word}</Text></Box>
+						<Box
+							key={word}
+							w="full"
+							p={2}
+							py={1}
+							{...background}
+						>
+							<Text {...alignment}>{word}</Text>
+						</Box>
 					);
 				})}
 			</VStack>

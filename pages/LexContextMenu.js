@@ -37,7 +37,11 @@ const LexiconContextMenu = () => {
 				closeOnSelect={false}
 				w="full"
 				trigger={(triggerProps) => (
-					<Pressable m="auto" w={6} accessibilityLabel="More options menu" {...triggerProps}>
+					<Pressable
+						m="auto"
+						w={6}
+						accessibilityLabel="More options menu"
+						{...triggerProps}>
 						<DotsIcon />
 					</Pressable>
 				)}
@@ -46,9 +50,19 @@ const LexiconContextMenu = () => {
 				onClose={() => doMenuClose()}
 				isOpen={menuOpen}
 			>
-				<Menu.OptionGroup title="Options" defaultValue={disableBlanks} value={disableBlanks} type="checkbox" onChange={(v) => handleBlankConfirms(v)}>
+				<Menu.OptionGroup
+					title="Options"
+					defaultValue={disableBlanks}
+					value={disableBlanks}
+					type="checkbox"
+					onChange={(v) => handleBlankConfirms(v)}
+				>
 					<Menu.ItemOption value="disable">
-						<HStack flexWrap="wrap" space={1} justifyContent="flex-end">
+						<HStack
+							flexWrap="wrap"
+							space={1}
+							justifyContent="flex-end"
+						>
 							<Text>Disable</Text>
 							<Text>Blank</Text>
 							<Text>Lexicon</Text>
@@ -59,11 +73,23 @@ const LexiconContextMenu = () => {
 				<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
 				<Menu.Group title="Advanced">
 					<Menu.Item onPress={() => showColumnsRange()}>
-						<HStack w="full" maxW="full" flexWrap="wrap" justifyContent="flex-end" alignItems="center">
+						<HStack
+							w="full"
+							maxW="full"
+							flexWrap="wrap"
+							justifyContent="flex-end"
+							alignItems="center"
+						>
 							<Box p={2}>
 								<Text>Column Maximum:</Text>
 							</Box>
-							<Box borderColor="text.50" borderWidth={1} py={1} px={2} ml={2}>
+							<Box
+								borderColor="text.50"
+								borderWidth={1}
+								py={1}
+								px={2}
+								ml={2}
+							>
 								<Text bold>{String(maxColumns)}</Text>
 							</Box>
 						</HStack>
@@ -72,7 +98,10 @@ const LexiconContextMenu = () => {
 			</Menu>
 			<Modal isOpen={columnsRangeOpen}>
 				<Modal.Content>
-					<Modal.Header bg="primary.500" borderBottomWidth={0}>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+					>
 						<Text color="primaryContrast" fontSize="md">Set Max Columns</Text>
 					</Modal.Header>
 					<Modal.CloseButton _icon={{color: "primaryContrast"}} onPress={() => setColumnsRangeOpen(false)} />
@@ -95,8 +124,15 @@ const LexiconContextMenu = () => {
 							</Slider>
 						</VStack>
 					</Modal.Body>
-					<Modal.Footer m={0} p={0} borderTopWidth={0}>
-						<HStack justifyContent="space-between" w="full">
+					<Modal.Footer
+						m={0}
+						p={0}
+						borderTopWidth={0}
+					>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+						>
 							<Button
 								bg="lighter"
 								_text={{color: "text.50"}}

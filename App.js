@@ -142,13 +142,23 @@ const Layout = () => {
 	});
 	const theme = useSelector((state) => state.appState.theme);
 	return (
-		<NativeBaseProvider theme={getTheme(theme)} safeArea bg="main.500">
-			{!fontsloaded ? <Box bg="main.900" safeArea><Text color="danger.500">Waiting for fonts...</Text></Box> :
+		<NativeBaseProvider
+			theme={getTheme(theme)}
+			safeArea
+			bg="main.500"
+		>
+			{
+				!fontsloaded ?
+					<Box bg="main.900" safeArea>
+						<Text color="danger.500">Waiting for fonts...</Text>
+					</Box>
+				:
 			<Box h="full" w="full" safeArea bg="main.800">
 				<NativeRouter>
 					<AppRoutes />
 				</NativeRouter>
-			</Box>}
+					</Box>
+			}
 		</NativeBaseProvider>
 	);
 };

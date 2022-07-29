@@ -248,11 +248,20 @@ const Lex = () => {
 					}
 				]}
 			/>
-			<HStack mx={3} justifyContent="space-between" alignItems="flex-end">
+			<HStack
+				mx={3}
+				justifyContent="space-between"
+				alignItems="flex-end"
+			>
 				<Box minW="110px">
 					<Text fontSize="2xl">{String(lexicon.length)} Word{lexicon.length === 1 ? "" : "s"}</Text>
 				</Box>
-				<HStack mx={3} justifyContent="flex-end" alignItems="flex-end" flex={1}>
+				<HStack
+					mx={3}
+					justifyContent="flex-end"
+					alignItems="flex-end"
+					flex={1}
+				>
 					<Menu
 						placement="top left"
 						closeOnSelect={true}
@@ -317,11 +326,21 @@ const Lex = () => {
 				</HStack>
 			</HStack>
 			<VStack flex={1} maxH={String(screenHeight - 40) + "px"}>
-				<HStack alignItems="flex-end" pt={3.5} mx={2} flexGrow={1} flexShrink={1} flexBasis={40}>
+				<HStack alignItems="flex-end" pt={3.5}
+					mx={2}
+					flexGrow={1}
+					flexShrink={1}
+					flexBasis={40}
+				>
 					{columns.map((col, i) => <Box px={0.5} key={col.id + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					<Box size="lexXs"></Box>
 				</HStack>
-				<HStack alignItems="center" mx={1.5} mb={1} flexGrow={1} flexShrink={1} flexBasis={40}>
+				<HStack alignItems="center" mx={1.5}
+					mb={1}
+					flexGrow={1}
+					flexShrink={1}
+					flexBasis={40}
+				>
 					{columns.map((col, i) => (
 						<Box px={0.5} mx={0} size={col.size} key={col.id + "-Input"}>
 							<Input w="full" p={0.5} ref={newLexiconRefs[i]} defaultValue={newLexiconItemColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
