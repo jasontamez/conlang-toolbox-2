@@ -14,7 +14,7 @@ const Headers = {
 	LexiconContextMenu: <LexiconContextMenu key="header2" />
 };
 
-const AppHeader = ({ scrollToTop }) => {
+const AppHeader = () => {
 	const location = useLocation();
 	const here = location.pathname;
 	const currentPage = allMainPages.find(page => here.startsWith(page.url)) || {};
@@ -42,7 +42,7 @@ const AppHeader = ({ scrollToTop }) => {
 			safeArea
 			{...boxProps}
 		>
-			<MenuModal scrollToTop={scrollToTop} />
+			<MenuModal />
 			<Box flexGrow={1} flexShrink={0}>
 				<Text
 					isTruncated

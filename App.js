@@ -1,9 +1,8 @@
-import { useRef } from 'react';
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { Provider, useSelector } from 'react-redux';
 //import { PersistGate } from 'redux-persist/integration/react';
-import { NativeBaseProvider, Box, VStack, ScrollView, Text } from 'native-base';
+import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
 
 import { useFonts } from 'expo-font';
 import {
@@ -147,42 +146,34 @@ const Layout = () => {
 			safeArea
 			bg="main.500"
 		>
-			{
-				!fontsloaded ?
-					<Box bg="main.900" safeArea>
-						<Text color="danger.500">Waiting for fonts...</Text>
-					</Box>
-				:
-			<Box h="full" w="full" safeArea bg="main.800">
-				<NativeRouter>
-					<AppRoutes />
-				</NativeRouter>
-					</Box>
-			}
+			{fontsloaded ? <AppRoutes /> : <Fontless />}
 		</NativeBaseProvider>
 	);
 };
 
-const AppRoutes = () => {
-	const scrollRef = useRef(null);
-	const scrollToTop = () => {
-		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
-	};
+const Fontless = () => {
 	return (
-		<VStack
-			h="full"
-			alignItems="stretch"
-			justifyContent="space-between"
-			w="full"
-			position="absolute"
-			top={0}
-			bottom={0}
-		>
-			<AppHeader scrollToTop={scrollToTop} />
-			<ScrollView
-				flex={1}
-				ref={scrollRef}
+		<Box bg="main.900" safeArea>
+			<Text color="danger.500">Waiting for fonts...</Text>
+		</Box>
+
+	);
+};
+
+const AppRoutes = () => {
+	return (
+		<NativeRouter>
+			<VStack
+				h="full"
+				alignItems="stretch"
+				justifyContent="space-between"
+				w="full"
+				position="absolute"
+				top={0}
+				bottom={0}
+				bg="main.800"
 			>
+				<AppHeader />
 				<Routes> { /* 
 					<Route path="/wg/*" element={<WG />}>
 					</Route>
@@ -201,15 +192,15 @@ const AppRoutes = () => {
 					<Route path="/wordlists" element={<WordLists  />} />
 					{ /* <Route path="/credits" element={<Credits />} />
 					<Route path="/about" element={<About />} /> */ }
-					<Route index element={<About scrollToTop={scrollToTop} />} />
+					<Route index element={<About />} />
 				</Routes>
-			</ScrollView>
-			<Routes>
-				<Route path="/ms/*" element={<MSNavBar />} />
-				<Route path="/lex" element={<LexiconContent />} />
-				<Route path="/*" element={<></>} />
-			</Routes>
-		</VStack>
+				<Routes>
+					<Route path="/ms/*" element={<MSNavBar />} />
+					<Route path="/lex" element={<LexiconContent />} />
+					<Route path="/*" element={<></>} />
+				</Routes>
+			</VStack>
+		</NativeRouter>
 	);
 };
 

@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import {
 	Input,
+	ScrollView,
 	Text,
 	TextArea,
 	VStack
@@ -30,7 +31,7 @@ const Lex = () => {
 	//
 	//
 	return (
-		<VStack flex={1}>
+		<ScrollView flex={1}>
 			<VStack m={3} mb={0}>
 				<Text fontSize="sm">Lexicon Title:</Text>
 				<Input
@@ -49,7 +50,7 @@ const Lex = () => {
 					onChangeText={(v) => debounce(() => dispatch(setDesc(v)))}
 				/>
 			</VStack>
-		</VStack>
+		</ScrollView>
 	);
 };
  

@@ -1,8 +1,25 @@
-import { Box, Heading, HStack, VStack, Link, Pressable as Press, Text } from 'native-base';
+import {
+	Box,
+	Heading,
+	HStack,
+	VStack,
+	Link,
+	Pressable as Press,
+	Text,
+	ScrollView
+ } from 'native-base';
 import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
 
-import { DotIcon, ExtraCharactersIcon, LexiconIcon, MorphoSyntaxIcon, WordEvolveIcon, WordGenIcon, WordListsIcon } from '../components/icons';
+import {
+	DotIcon,
+	ExtraCharactersIcon,
+	LexiconIcon,
+	MorphoSyntaxIcon,
+	WordEvolveIcon,
+	WordGenIcon,
+	WordListsIcon
+} from '../components/icons';
 
 const Indented = (props) => (
 	<HStack
@@ -34,6 +51,7 @@ const Pressable = (props) => (
 		bg="main.800"
 		shadow={3}
 		onPress={props.onPress}
+		mt={props.firstElement ? 0 : 8}
 	>
 		<VStack p={4} pt={0}>{props.children}</VStack>
 	</Press>
@@ -50,19 +68,17 @@ const SectionHeader = ({SectionIcon, text}) => (
 	</Heading>
 );
 
-const About = ({ scrollToTop }) => {
+const About = () => {
 	let navigate = useNavigate();
 	const doNav = (where) => {
 		navigate(where);
-		scrollToTop();
 	};
 	return (
-		<VStack
-			space={8}
+		<ScrollView
 			p={2}
 			bg="darker"
 		>
-			<Pressable onPress={() => {doNav("/ms")}}>
+			<Pressable onPress={() => {doNav("/ms")}} firstElement>
 				<SectionHeader SectionIcon={MorphoSyntaxIcon} text="MorphoSyntax" />
 				<Highlight>This tool is for designing the basic structure of your language.</Highlight>
 				<Indented>Covers large-scale structures and small</Indented>
@@ -79,7 +95,9 @@ const About = ({ scrollToTop }) => {
 			</Pressable>
 			<Pressable>
 				<SectionHeader SectionIcon={WordEvolveIcon} text="WordEvolve" />
-				<Highlight>This tool is for modifying words according to rules you set up, mimicking the evolution of natural languages.</Highlight>
+				<Highlight>
+					This tool is for modifying words according to rules you set up, mimicking
+					the evolution of natural languages.</Highlight>
 				<Indented>Start with words from a language (natural or otherwise)</Indented>
 				<Indented>Use standard rules to determine how they evolve</Indented>
 				<Indented>Tweak the output through transformations</Indented>
@@ -103,13 +121,14 @@ const About = ({ scrollToTop }) => {
 			<Pressable>
 				<SectionHeader SectionIcon={ExtraCharactersIcon} text="Extra Characters" />
 				<Highlight>On many pages, you'll see the Extra Characters icon at the top of the page.</Highlight>
-				<Indented>Contains hundreds of characters that may not appear on your mobile keyboard, organized according to groups such as Latin, Cyrillic, Arabic and Katakana</Indented>
+				<Indented>Contains hundreds of characters that may not appear on your mobile keyboard,
+					organized according to groups such as Latin, Cyrillic, Arabic and Katakana</Indented>
 				<Indented>All IPA (International Phonetic Alphabet) characters grouped together</Indented>
 				<Indented>Tap characters and add them to the clipboard</Indented>
 				<Indented>Save your often-used characters to the Favorites bar for easy access</Indented>
 			</Pressable>
 			<VStack
-				mt={10}
+				mt={20}
 				shadow={3}
 				bg="main.800"
 				p={4}
@@ -124,7 +143,7 @@ const About = ({ scrollToTop }) => {
 					<Text>Contact: <Link href="mailto:jasontankapps@gmail.com">jasontankapps@gmail.com</Link></Text>
 				</HStack>
 			</VStack>
-		</VStack>
+		</ScrollView>
 	);
 };
 

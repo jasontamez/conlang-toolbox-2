@@ -1,5 +1,5 @@
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import { HStack, Menu, Switch, Text, VStack } from 'native-base';
+import { HStack, Menu, ScrollView, Switch, Text, VStack } from 'native-base';
 import { setTheme, setDisableConfirms } from '../store/appStateSlice';
 
 
@@ -10,7 +10,7 @@ const AppSettings = () => {
 		theme
 	} = useSelector((state) => state.appState, shallowEqual);
 	return (
-		<VStack>
+		<ScrollView>
 			<HStack
 				w="full"
 				justifyContent="space-between"
@@ -61,7 +61,7 @@ const AppSettings = () => {
 					</Menu.OptionGroup>
 				</Menu>
 			</HStack>
-		</VStack>
+		</ScrollView>
 	);
 };
  

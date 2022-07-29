@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import WL from '../components/wordLists';
 import { v4 as uuidv4 } from 'uuid';
-import { useState } from 'react';
-import { HStack, VStack, Text, Button, Box } from 'native-base';
+//import { useState } from 'react';
+import { HStack, VStack, Text, Button, Box, ScrollView } from 'native-base';
 import { addList, removeList } from '../store/wordListsSlice';
 
 const WordLists = () => {
@@ -29,7 +29,7 @@ const WordLists = () => {
 	};
 	//const [modalState, wordListsState, waitingToAdd] = useSelector((state) => [state.modalState, state.wordListsState, state.lexicon.waitingToAdd], shallowEqual);
 	const {centerTheDisplayedWords, listsDisplayed} = useSelector((state) => state.wordLists, equalityCheck);
-	const [waitingToAdd, setWaitingToAdd] = useState([]);
+	//const [waitingToAdd, setWaitingToAdd] = useState([]);
 	const dispatch = useDispatch();
 	const shown = [];
 	WL.words.forEach(({word, lists}) => {
@@ -83,7 +83,7 @@ const WordLists = () => {
 	};
 	const alignment = centerTheDisplayedWords.length > 0 ? { textAlign: "center" } : {};
 	return (
-		<>
+		<ScrollView>
 			<HStack
 				flexWrap="wrap"
 				justifyContent="center"
@@ -140,7 +140,7 @@ const WordLists = () => {
 					);
 				})}
 			</VStack>
-		</>
+		</ScrollView>
 	);
 
 	/*return (

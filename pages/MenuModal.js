@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from "react-router-dom";
-import ReAnimated, { CurvedTransition, SlideInLeft, SlideOutLeft, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import ReAnimated, {
+	CurvedTransition,
+	SlideInLeft,
+	SlideOutLeft,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated';
 import {
 	Factory,
 	Heading,
@@ -21,7 +27,7 @@ import { appMenuPages } from '../appLayoutInfo';
 
 const ReAnimatedView = Factory(ReAnimated.View);
 
-const MenuModal = ({ scrollToTop }) => {
+const MenuModal = () => {
 	const menuToggleName = useSelector((state) => state.appState.menuToggleName, shallowEqual);
 	let [menuOpen, setMenuOpen] = useState(false);
 	let [openId, setOpenId] = useState(menuToggleName || '');
@@ -50,8 +56,6 @@ const MenuModal = ({ scrollToTop }) => {
 		closeMenu();
 		// Go to page
 		navigator(url);
-		// Scroll the page to the top
-		scrollToTop();
 	};
 	const closeMenu = () => {
 		// Close menu
