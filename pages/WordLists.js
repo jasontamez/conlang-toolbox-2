@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import WL from '../components/wordLists';
 import { v4 as uuidv4 } from 'uuid';
 //import { useState } from 'react';
-import { HStack, VStack, Text, Button, Box, ScrollView } from 'native-base';
+import { HStack, Text, Button, Box, ScrollView } from 'native-base';
 import { addList, removeList } from '../store/wordListsSlice';
 
 const WordLists = () => {
@@ -83,12 +83,14 @@ const WordLists = () => {
 	};
 	const alignment = centerTheDisplayedWords.length > 0 ? { textAlign: "center" } : {};
 	return (
-		<ScrollView>
+		<>
 			<HStack
 				flexWrap="wrap"
 				justifyContent="center"
-				alignItems="center"
+				alignItems="flex-start"
 				p={2}
+				flexGrow={0}
+				flexShrink={0}
 			>
 				<Box
 					m={0}
@@ -123,7 +125,12 @@ const WordLists = () => {
 					);
 				})}
 			</HStack>
-			<VStack m={2}>
+			<ScrollView
+				m={2}
+				flexGrow={1}
+				flexShrink={1}
+				justifySelf="flex-start"
+			>
 				{shown.map((word) => {
 					const background = stripeFlag ? {bg: "darker"} : {};
 					stripeFlag = !stripeFlag;
@@ -139,8 +146,8 @@ const WordLists = () => {
 						</Box>
 					);
 				})}
-			</VStack>
-		</ScrollView>
+			</ScrollView>
+		</>
 	);
 
 	/*return (

@@ -71,14 +71,16 @@ const LexiconColumnEditor = ({editing, setEditing}) => {
 	const addNewColumnFunc = () => {
 		// Adds a new column.
 		let id = "";
+		const nCols = [...newColumns];
 		do {
 			id = uuidv4();
 		} while(newColumns.some(c => c.id === id));
-		setNewColumns([...newColumns, {
+		nCols.push({
 			id,
 			label: "",
 			size: "lexMd"
-		}]);
+		});
+		setNewColumns(nCols);
 	};
 	const maybeDeleteColumn = (item, index) => {
 		// Check if we need to make a yes/no prompt
@@ -269,7 +271,7 @@ const LexiconColumnEditor = ({editing, setEditing}) => {
 				</Modal.Header>
 				<Modal.Body m={0} p={0}>
 					<VStack m={0} alignItems="center" justifyContent="center" bg="main.800">
-						{columns.map((col, i) => renderItem(col, i))}
+						{newColumns.map((col, i) => renderItem(col, i))}
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer

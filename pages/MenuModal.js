@@ -9,7 +9,6 @@ import ReAnimated, {
 	useSharedValue
 } from 'react-native-reanimated';
 import {
-	Factory,
 	Heading,
 	HStack,
 	VStack,
@@ -24,8 +23,6 @@ import {
 import * as Icons from '../components/icons';
 import { setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
-
-const ReAnimatedView = Factory(ReAnimated.View);
 
 const MenuModal = () => {
 	const menuToggleName = useSelector((state) => state.appState.menuToggleName, shallowEqual);
@@ -125,18 +122,20 @@ const MenuModal = () => {
 							>
 								<Text {...textOptions}>{menuTitle || title}</Text>
 							</VStack>
-							<ReAnimatedView 
-								 style={caretAnimationStyle}
-								 d="flex"
-								 alignItems="center"
-								 justifyContent="center"
-								 m={2}
-								 ml={0}
+							<ReAnimated.View 
+								 style={{
+									...caretAnimationStyle,
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									margin: 8, // Same as {2}
+									marginLeft: 0
+								}}
 			 				>
 								<Icons.CaretIcon
 									{...textOptions}
 								/>
-							</ReAnimatedView>
+							</ReAnimated.View>
 						</HStack>
 					</ZStack>
 				</Pressable>
@@ -147,20 +146,20 @@ const MenuModal = () => {
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			return (
-				<ReAnimatedView
+				<ReAnimated.View
 					entering={SlideInLeft}
 					exiting={SlideOutLeft}
 					layout={CurvedTransition}
-					zIndex={decrementingZIndex}
-					key={id}
-					h={9}
-					w="full"
-					bg="main.800"
+					style={{
+						zIndex: decrementingZIndex,
+						height: 36,
+						flex: 1
+					}}
 				>
 					<Pressable
 						onPress={() => navigate(url)}
 						bg="darker"
-						h={9}
+						h={9 /* 36px */}
 					>
 						<ZStack>
 							<HStack height={9} w="full" {...bgOptions} opacity={10} />
@@ -191,7 +190,7 @@ const MenuModal = () => {
 							</HStack>
 						</ZStack>
 					</Pressable>
-				</ReAnimatedView>
+				</ReAnimated.View>
 			);
 		}
 		// App Section (standalone)
@@ -288,7 +287,7 @@ const MenuModal = () => {
 						>
 							{
 								appMenuPages
-									.filter(page => !page.isChildOf || page.isChildOf === openId)
+									.filter(({isChildOf}) => !isChildOf || isChildOf === openId)
 									.map((page) => renderItem(page))
 							}
 						</VStack>

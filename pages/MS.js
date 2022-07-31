@@ -8,6 +8,7 @@ const MS = () => {
 	const location = useLocation();
 	const scrollRef = useRef(null);
 	useEffect(() => {
+		// Scrolls to top of page when we navigate
 		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
 	}, [location]);
 	return (

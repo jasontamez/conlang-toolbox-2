@@ -7,10 +7,9 @@ import {
 	Button,
 	Heading,
 	Pressable,
-	Factory,
 	Center
 } from 'native-base';
-import DFL, { ShadowDecorator } from 'react-native-draggable-flatlist';
+import DraggableFlatList, { ShadowDecorator } from 'react-native-draggable-flatlist';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { Modal as ReactNativeModal, useWindowDimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,10 +23,9 @@ import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 
 const LexiconColumnReorderingShell = () => {
 	const [reordering, setReordering] = useState(false);
-	const BaseModal = Factory(ReactNativeModal);
 	return (
 		<>
-			<BaseModal
+			<ReactNativeModal
 				animationType="fade"
 				onRequestClose={() => setReordering(false)}
 				visible={reordering}
@@ -38,7 +36,7 @@ const LexiconColumnReorderingShell = () => {
 						setReordering={setReordering}
 					/>
 				</Center>
-			</BaseModal>
+			</ReactNativeModal>
 			<IconButton
 				p={1}
 				icon={<DragHandleIcon color="tertiary.50" />}
@@ -66,7 +64,6 @@ const LexiconColumnReorderer = ({setReordering}) => {
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
 	const minWidth = Math.min(300, Math.floor(width * 0.8));
-	const DraggableFlatList = Factory(DFL);
 
 	useEffect(() => {
 		// Load column info when mounted or when columns change.
@@ -138,13 +135,15 @@ const LexiconColumnReorderer = ({setReordering}) => {
 			</HStack>
 			<HStack style={{minWidth: minWidth}} alignItems="center" justifyContent="center" bg="main.800">
 				<DraggableFlatList
-					m={0}
-					w="full"
 					data={newColumns}
 					renderItem={renderItem}
 					keyExtractor={(item, index) => item.id + "-" + String(index)}
 					onDragEnd={(data) => reorderColumns(data)}
 					dragItemOverflow
+					style={{
+						flex: 1,
+						margin: 0
+					}}
 				/>
 			</HStack>
 			<HStack style={{minWidth: minWidth}} justifyContent="flex-end" bg="main.700" borderBottomRadius="lg">

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWindowDimensions  } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -53,12 +53,7 @@ const Lex = () => {
 		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector((state) => state.appState.disableConfirms);
-	const extraData = [wrap, ...columns];
-	const blankLexiconItemColumns = [];
-	const labels = columns.map(c => {
-		blankLexiconItemColumns.push("");
-		return c.label;
-	});
+	const extraData = [wrap, columns];
 	const isTruncated = !wrap;
 	const {absoluteMaxColumns} = consts;
 	//
@@ -68,7 +63,9 @@ const Lex = () => {
 	//
 	const [editingItemID, setEditingItemID] = useState(null);
 	const [editingItemColumns, setEditingItemColumns] = useState([]);
-	const [newLexiconItemColumns, setNewLexiconItemColumns] = useState([...blankLexiconItemColumns]);
+	const [newLexiconItemColumns, setNewLexiconItemColumns] = useState([]);
+	const [blankLexiconItemColumns, setBlankLexiconItemColumns] = useState();
+	const [labels, setLabels] = useState([]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
@@ -78,6 +75,21 @@ const Lex = () => {
 	for(let i=1; i <= absoluteMaxColumns; i++) {
 		newLexiconRefs.push(useRef(null));
 	}
+	//
+	//
+	// USE EFFECT
+	//
+	//
+	useEffect(() => {
+		const blankCols = [];
+		const labs = columns.map(c => {
+			blankCols.push("");
+			return c.label;
+		});
+		setLabels(labs);
+		setNewLexiconItemColumns([...blankCols]);
+		setBlankLexiconItemColumns(blankCols);
+	}, [columns]);
 	//
 	//
 	// SORTING ROUTINES
@@ -108,7 +120,7 @@ const Lex = () => {
 		setEditingItemColumns([]);
 	};
 	const deleteEditingItemFunc = () => {
-		disableConfirms ? doDeleteItem() : setAlertOpen("deleteLexiconItem");
+		disableConfirms ? doDeleteItem() : setAlertOpen("willDeleteLexiconItem");
 	};
 	const doDeleteItem = () => {
 		dispatch(deleteLexiconItem(editingItemID));
@@ -234,7 +246,7 @@ const Lex = () => {
 						}
 					},
 					{
-						id: "deleteLexiconItem",
+						id: "willDeleteLexiconItem",
 						properties: {
 							continueFunc: doDeleteItem,
 							continueText: "Yes",
