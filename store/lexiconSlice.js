@@ -239,6 +239,13 @@ const deleteLexiconItemFunc = (state, action) => {
 	state.lexicon = state.lexicon.filter(item => item.id !== id);
 	return state;
 };
+const deleteMultipleLexiconItemsFunc = (state, action) => {
+	const {payload} = action;
+	let tester = {};
+	payload.forEach(id => tester[id] = true);
+	state.lexicon = state.lexicon.filter(item => !tester[item.id]);
+	return state;
+};
 const addLexiconColumnFunc = (state, action) => {
 	const {col, toEnd, dummy} = action.payload;
 	const attach = toEnd ? "push" : "unshift";
@@ -404,6 +411,7 @@ const lexiconSlice = createSlice({
 		deleteLexiconItem: deleteLexiconItemFunc,
 		addLexiconColumn: addLexiconColumnFunc,
 		deleteLexiconColumn: deleteLexiconColumnFunc,
+		deleteMultipleLexiconItems: deleteMultipleLexiconItemsFunc,
 		modifyLexiconColumns: modifyLexiconColumnsFunc,
 		reorderLexiconColumns: reorderLexiconColumnsFunc,
 		changeSortOrder: changeSortOrderFunc,
@@ -421,6 +429,7 @@ export const {
 	addLexiconItem,
 	editLexiconItem,
 	deleteLexiconItem,
+	deleteMultipleLexiconItems,
 	modifyLexiconColumns,
 	reorganizeLexiconItems,
 	changeSortOrder,

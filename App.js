@@ -75,7 +75,6 @@ import MS from './pages/MS';
 import MSSection from './pages/ms/msSection';
 import MSSettings from './pages/ms/msSettings';
 import Lexicon from './pages/Lex';
-import LexiconContent from './pages/LexContent';
 import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
@@ -196,7 +195,6 @@ const AppRoutes = () => {
 				</Routes>
 				<Routes>
 					<Route path="/ms/*" element={<MSNavBar />} />
-					<Route path="/lex" element={<LexiconContent />} />
 					<Route path="/*" element={<></>} />
 				</Routes>
 			</VStack>

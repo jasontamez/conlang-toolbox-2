@@ -21,13 +21,16 @@ import {
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 
-const LexiconColumnReorderingShell = () => {
+const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	const [reordering, setReordering] = useState(false);
+	useEffect(() => {
+		setReordering(triggerOpen);
+	}, [triggerOpen]);
 	return (
 		<>
 			<ReactNativeModal
 				animationType="fade"
-				onRequestClose={() => setReordering(false)}
+				onRequestClose={() => clearTrigger()}
 				visible={reordering}
 				transparent
 			>
@@ -37,12 +40,6 @@ const LexiconColumnReorderingShell = () => {
 					/>
 				</Center>
 			</ReactNativeModal>
-			<IconButton
-				p={1}
-				icon={<DragHandleIcon color="tertiary.50" />}
-				bg="tertiary.500"
-				onPress={() => setReordering(true)}
-			/>
 		</>
 	);
 };

@@ -18,33 +18,14 @@ import {
 	CloseCircleIcon,
 	SaveIcon,
 	AddCircleIcon,
-	TrashIcon,
-	SettingsIcon
+	TrashIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 
-const LexiconColumnEditingShell = () => {
-	const [editing, setEditing] = useState(false);
-	return (
-		<>
-			<LexiconColumnEditor
-				editing={editing}
-				setEditing={setEditing}
-			/>
-			<IconButton
-				p={1}
-				mx={2}
-				icon={<SettingsIcon color="tertiary.50" name="settings" />}
-				bg="tertiary.500"
-				onPress={() => setEditing(true)}
-			/>
-		</>
-	);
-};
-
-const LexiconColumnEditor = ({editing, setEditing}) => {
+const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector(state => state.appState.disableConfirms);
+	const [editing, setEditing] = useState(false);
 	const [newColumns, setNewColumns] = useState([]);
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
 	const dispatch = useDispatch();
@@ -52,9 +33,12 @@ const LexiconColumnEditor = ({editing, setEditing}) => {
 		// Load column info when mounted or when columns change.
 		setNewColumns(columns.map(c => {return {...c}}));
 	}, [columns]);
+	useEffect(() => {
+		setEditing(triggerOpen);
+	}, [triggerOpen]);
 	const doClose = () => {
 		setColumnLabelsToBeDeleted([]);
-		setEditing(false);
+		clearTrigger();
 	};
 	const AddColumnButton = () => {
 		return newColumns.length === maxColumns ? <></> : (
@@ -162,7 +146,7 @@ const LexiconColumnEditor = ({editing, setEditing}) => {
 	const doSaveColumns = () => {
 		dispatch(modifyLexiconColumns(newColumns));
 		setColumnLabelsToBeDeleted([]);
-		setEditing(false);
+		clearTrigger();
 	};
 	const fixColumnMismatch = () => {
 		return columns.map(col => { return {...col} });
@@ -299,6 +283,7 @@ const LexiconColumnEditor = ({editing, setEditing}) => {
 	);
 };
 
+// TO-DO: DUMP THIS, go back to AlertDialog
 const makeAlert = (title, description, continueFunc, continueText = "Continue") => {
 	if(Platform.OS === "web") {
 		if(confirm(title + ": " + description)) {
@@ -325,4 +310,4 @@ const makeAlert = (title, description, continueFunc, continueText = "Continue") 
 	}
 };
 
-export default LexiconColumnEditingShell;
+export default LexiconColumnEditor;

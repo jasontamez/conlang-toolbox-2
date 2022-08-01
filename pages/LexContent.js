@@ -20,12 +20,15 @@ import {
 	DoubleCaretIcon,
 	SortDownIcon,
 	SortUpIcon,
-	AddIcon
+	AddIcon,
+	SettingsIcon,
+	TrashIcon
 } from '../components/icons';
 import { MultiAlert } from '../components/StandardAlert';
 import {
 	addLexiconItem,
 	deleteLexiconItem,
+	deleteMultipleLexiconItems,
 	changeSortOrder,
 	changeSortDir,
 	equalityCheck,
@@ -64,9 +67,13 @@ const Lex = () => {
 	const [editingItemID, setEditingItemID] = useState(null);
 	const [editingItemColumns, setEditingItemColumns] = useState([]);
 	const [newLexiconItemColumns, setNewLexiconItemColumns] = useState([]);
-	const [blankLexiconItemColumns, setBlankLexiconItemColumns] = useState();
+	const [blankLexiconItemColumns, setBlankLexiconItemColumns] = useState([]);
 	const [labels, setLabels] = useState([]);
+	const [deletingMode, setDeletingMode] = useState(false);
+	const [itemsToDelete, setItemsToDelete] = useState([]);
 	const [alertOpen, setAlertOpen] = useState(false);
+	const [modalOpen, setModalOpen] = useState('');
+	const [modalMenuOpen, setModalMenuOpen] = useState(false);
 	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
 	// 10 seems like a decent amount that would strain even a wide-screen
@@ -75,6 +82,7 @@ const Lex = () => {
 	for(let i=1; i <= absoluteMaxColumns; i++) {
 		newLexiconRefs.push(useRef(null));
 	}
+	const toast = useToast();
 	//
 	//
 	// USE EFFECT
@@ -139,7 +147,6 @@ const Lex = () => {
 	// ADD ITEM TO LEXICON
 	//
 	//
-	const toast = useToast();
 	const addToLexicon = () => {
 		// Check for blank columns
 		if(disableBlankConfirms || newLexiconItemColumns.every((col) => col)) {
@@ -165,39 +172,151 @@ const Lex = () => {
 			setNewLexiconItemColumns(newCols)			;
 		}, [], 250, String(i));
 	};
-	// TO-DO: DELETING AN ITEM
-	//   Need context menu option to turn on mass-delete mode
+	//
+	//
+	// MASS DELETE
+	//
+	//
+	const toggleDeletingMode = () => {
+		if(deletingMode && itemsToDelete.length > 0) {
+			// TO-DO: Ask if they want to delete the marked ones before they go
+		}
+		// Toggle the mode
+		setItemsToDelete([]);
+		setDeletingMode(!deletingMode);
+	};
+	const maybeMassDelete = () => {
+		if(itemsToDelete.length === 0) {
+			// TO-DO: Nothing to delete message
+			return;
+		} else if (!disableConfirms) {
+			// TO-DO: Yes/no prompt
+			return;
+		}
+		// We're ok to go
+		doMassDelete();
+	};
+	const doMassDelete = () => {
+		// Delete from lexicon
+		dispatch(deleteMultipleLexiconItems([...itemsToDelete]));
+		// Reset everything else
+		setItemsToDelete([]);
+		setDeletingMode(false);
+		// TO-DO: Make a toast message confirming the deletion
+	};
+	const toggleMarkedForDeletion = (id) => {
+		// Remove the ID from the list, if it's there.
+		const newItemsToDelete = itemsToDelete.filter(item => item !== id);
+		if(itemsToDelete.length === newItemsToDelete.length) {
+			// The ID was not in the list already, so add it.
+			newItemsToDelete.push(id);
+		}
+		// Save to state
+		setItemsToDelete(newItemsToDelete);
+	};
+	const EditDeleteReorderLexMenuButtons = () => {
+		const MainButton = () => (
+			<IconButton
+				p={1}
+				px={1.5}
+				ml={2}
+				icon={<SettingsIcon color="tertiary.50" name="settings" />}
+				bg="tertiary.500"
+				onPress={() => setModalMenuOpen(true)}
+			/>
+		);
+		const ConfirmDeleteButton = () => (
+			<IconButton
+				p={1}
+				px={1.5}
+				ml={2}
+				icon={<TrashIcon color="danger.50" />}
+				bg="danger.500"
+				onPress={() => maybeMassDelete()}
+			/>
+		);
+		return deletingMode ?
+			<><ConfirmDeleteButton /><MainButton /></>
+		:
+			<MainButton />;
+	};
+	const EditDeleteReorderLexMenu = () => {
+		// TO-DO: Figure out why this doesn't render by the button!!!
+		return (
+			<Menu
+				placement="bottom right"
+				closeOnSelect={true}
+				trigger={EditDeleteReorderLexMenuButtons}
+				isOpen={modalMenuOpen}
+				onClose={() => setModalMenuOpen(false)}
+			>
+				<Menu.Group title="Columns">
+					<Menu.Item
+						onPress={() => setModalOpen('edit')}
+					>
+						Edit Column Info
+					</Menu.Item>
+					<Menu.Item
+						onPress={() => setModalOpen('reorder')}
+					>
+						Reorder Columns
+					</Menu.Item>
+				</Menu.Group>
+				<Menu.OptionGroup
+					title="Lexicon Entries"
+					type="checkbox"
+					value={deletingMode ? ["mass delete"] : []}
+				>
+					<Menu.ItemOption
+						onPress={() => toggleDeletingMode()}
+						value="mass delete"
+					>
+						Mass Delete Mode
+					</Menu.ItemOption>
+				</Menu.OptionGroup>
+			</Menu>
+		);
+	};
 	//
 	//
 	// RENDER
 	//
 	//
-	const xsButtonProps = {
-		p: 1,
-		m: 0.5
-	};
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const renderList = ({item, index}) => {
 		const id = item.id;
 		const cols = item.columns;
 		const bg = index % 2 ? "lighter" : "darker";
+		const buttonProps =
+			deletingMode ?
+				{
+					icon: <TrashIcon size="xs" color="danger.50" />,
+					accessibilityLabel: "Mark for Deletion",
+					bg: "danger." + (itemsToDelete.findIndex(itd => itd === id) >= 0 ? "400" : "700"),
+					onPress: () => toggleMarkedForDeletion(id),
+					p: 1,
+					m: 0.5
+				}
+			:
+				{
+					icon: <EditIcon size="xs" color="primary.400" />,
+					accessibilityLabel: "Edit",
+					bg: "transparent",
+					onPress: () => startEditingFunc(item),
+					p: 1,
+					m: 0.5
+				};
 		return (
 			<HStack key={id} py={3.5} px={1.5} bg={bg}>
 				{cols.map(
 					(text, i) =>
-						<Box px={1} size={columns[i].size} key={id + "-" + String(i)}>
+						<Box px={1} size={columns[i].size} key={id + "-Column-" + String(i)}>
 							<Text isTruncated={isTruncated}>{text}</Text>
 						</Box>
 					)
 				}
 				<Box size="lexXs">
-					<IconButton
-						icon={<EditIcon size="xs" color="primary.400" />}
-						accessibilityLabel="Edit"
-						bg="bg.400"
-						onPress={() => startEditingFunc(item)}
-						{...xsButtonProps}
-					/>
+					<IconButton {...buttonProps} />
 				</Box>
 			</HStack>
 		);
@@ -211,6 +330,8 @@ const Lex = () => {
 	return (
 		<VStack
 			flex={3}
+			justifyContent="flex-start"
+			alignItems="stretch"
 			style={{
 				shadowColor: "#000",
 				shadowOffset: {
@@ -261,18 +382,23 @@ const Lex = () => {
 				]}
 			/>
 			<HStack
-				mx={3}
+				ml={3}
 				justifyContent="space-between"
 				alignItems="flex-end"
 			>
-				<Box minW="110px">
+				<Box
+					flexGrow={1}
+					flexShrink={0}
+					style={{minWidth: 110}}
+				>
 					<Text fontSize="2xl">{String(lexicon.length)} Word{lexicon.length === 1 ? "" : "s"}</Text>
 				</Box>
 				<HStack
 					mx={3}
 					justifyContent="flex-end"
 					alignItems="flex-end"
-					flex={1}
+					flexGrow={0}
+					flexShrink={0}
 				>
 					<Menu
 						placement="top left"
@@ -333,25 +459,35 @@ const Lex = () => {
 						bg="secondary.500"
 						accessibilityLabel="Change sort direction."
 					/>
-					<LexiconColumnEditorModal />
-					<LexiconColumnReorderingModal />
+					<LexiconColumnEditorModal
+						triggerOpen={modalOpen === 'edit'}
+						clearTrigger={() => setModalOpen('')}
+					/>
+					<LexiconColumnReorderingModal
+						triggerOpen={modalOpen === 'reorder'}
+						clearTrigger={() => setModalOpen('')}
+					/>
+					<EditDeleteReorderLexMenu />
 				</HStack>
 			</HStack>
-			<VStack flex={1} maxH={String(screenHeight - 40) + "px"}>
+			<VStack
+				flex={1}
+				style={{maxHeight: screenHeight - 40}}
+				alignItems="stretch"
+				justifyContent="flex-start"
+			>
 				<HStack alignItems="flex-end" pt={3.5}
 					mx={2}
-					flexGrow={1}
-					flexShrink={1}
-					flexBasis={40}
+					flexGrow={0}
+					flexShrink={0}
 				>
 					{columns.map((col, i) => <Box px={0.5} key={col.id + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
 					<Box size="lexXs"></Box>
 				</HStack>
 				<HStack alignItems="center" mx={1.5}
 					mb={1}
-					flexGrow={1}
-					flexShrink={1}
-					flexBasis={40}
+					flexGrow={0}
+					flexShrink={0}
 				>
 					{columns.map((col, i) => (
 						<Box px={0.5} mx={0} size={col.size} key={col.id + "-Input"}>
@@ -360,11 +496,12 @@ const Lex = () => {
 					))}
 					<Box size="lexXs" ml={0.5}>
 						<IconButton
+							p={1}
+							m={0.5}
 							icon={<AddIcon size="xs" color="success.50" />}
 							accessibilityLabel="Add to Lexicon"
 							bg="success.500"
 							onPress={() => addToLexicon()}
-							{...xsButtonProps}
 						/>
 					</Box>
 				</HStack>
@@ -376,6 +513,10 @@ const Lex = () => {
 					ListEmptyComponent={ListEmpty}
 					extraData={extraData}
 					renderItem={renderList}
+					style={{
+						flexGrow: 1,
+						flexShrink: 0,
+					}}
 				/>
 			</VStack>
 		</VStack>

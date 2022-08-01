@@ -46,14 +46,14 @@ const Highlight = (props) => (
 	</Box>
 );
 
-const Pressable = (props) => (
+const Pressable = ({onPress, firstElement, children}) => (
 	<Press
 		bg="main.800"
 		shadow={3}
-		onPress={props.onPress}
-		mt={props.firstElement ? 0 : 8}
+		onPress={onPress}
+		mt={firstElement ? 0 : 8}
 	>
-		<VStack p={4} pt={0}>{props.children}</VStack>
+		<VStack p={4} pt={0}>{children}</VStack>
 	</Press>
 );
 
