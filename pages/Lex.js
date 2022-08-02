@@ -79,7 +79,6 @@ const Lex = () => {
 	const [itemsToDelete, setItemsToDelete] = useState([]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState('');
-	const [modalMenuOpen, setModalMenuOpen] = useState(false);
 	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
 	// 10 seems like a decent amount that would strain even a wide-screen
@@ -235,69 +234,6 @@ const Lex = () => {
 		}
 		// Save to state
 		setItemsToDelete(newItemsToDelete);
-	};
-	const EditDeleteReorderLexMenuButtons = () => {
-		const MainButton = () => (
-			<IconButton
-				p={1}
-				px={1.5}
-				ml={2}
-				icon={<SettingsIcon color="tertiary.50" name="settings" />}
-				bg="tertiary.500"
-				onPress={() => setModalMenuOpen(true)}
-			/>
-		);
-		const ConfirmDeleteButton = () => (
-			<IconButton
-				p={1}
-				px={1.5}
-				ml={2}
-				icon={<TrashIcon color="danger.50" />}
-				bg="danger.500"
-				onPress={() => maybeMassDelete()}
-			/>
-		);
-		return deletingMode ?
-			<><ConfirmDeleteButton /><MainButton /></>
-		:
-			<MainButton />;
-	};
-	const EditDeleteReorderLexMenu = () => {
-		// TO-DO: Figure out why this doesn't render by the button!!!
-		return (
-			<Menu
-				placement="bottom right"
-				closeOnSelect={true}
-				trigger={EditDeleteReorderLexMenuButtons}
-				isOpen={modalMenuOpen}
-				onClose={() => setModalMenuOpen(false)}
-			>
-				<Menu.Group title="Columns">
-					<Menu.Item
-						onPress={() => setModalOpen('edit')}
-					>
-						Edit Column Info
-					</Menu.Item>
-					<Menu.Item
-						onPress={() => setModalOpen('reorder')}
-					>
-						Reorder Columns
-					</Menu.Item>
-				</Menu.Group>
-				<Menu.OptionGroup
-					title="Lexicon Entries"
-					type="checkbox"
-					value={deletingMode ? ["mass delete"] : []}
-				>
-					<Menu.ItemOption
-						onPress={() => toggleDeletingMode()}
-						value="mass delete"
-					>
-						Mass Delete Mode
-					</Menu.ItemOption>
-				</Menu.OptionGroup>
-			</Menu>
-		);
 	};
 	//
 	//
@@ -489,7 +425,7 @@ const Lex = () => {
 						flexShrink={0}
 					>
 						<Menu
-							placement="top left"
+							placement="top right"
 							closeOnSelect={true}
 							trigger={
 								(props) => (
@@ -564,7 +500,57 @@ const Lex = () => {
 							triggerOpen={modalOpen === 'reorder'}
 							clearTrigger={() => setModalOpen('')}
 						/>
-						<EditDeleteReorderLexMenu />
+						{deletingMode ?
+							<IconButton
+								p={1}
+								px={1.5}
+								ml={2}
+								icon={<TrashIcon color="danger.50" />}
+								bg="danger.500"
+								onPress={() => maybeMassDelete()}
+							/>
+						:
+							<></>
+						}
+						<Menu
+							placement="bottom right"
+							closeOnSelect={true}
+							trigger={(props) => (
+								<IconButton
+									p={1}
+									px={1.5}
+									ml={2}
+									icon={<SettingsIcon color="tertiary.50" name="settings" />}
+									bg="tertiary.500"
+									{...props}
+								/>
+							)}
+						>
+							<Menu.Group title="Columns">
+								<Menu.Item
+									onPress={() => setModalOpen('edit')}
+								>
+									Edit Column Info
+								</Menu.Item>
+								<Menu.Item
+									onPress={() => setModalOpen('reorder')}
+								>
+									Reorder Columns
+								</Menu.Item>
+							</Menu.Group>
+							<Menu.OptionGroup
+								title="Lexicon Entries"
+								type="checkbox"
+								value={deletingMode ? ["mass delete"] : []}
+							>
+								<Menu.ItemOption
+									onPress={() => toggleDeletingMode()}
+									value="mass delete"
+								>
+									Mass Delete Mode
+								</Menu.ItemOption>
+							</Menu.OptionGroup>
+						</Menu>
 					</HStack>
 				</HStack>
 				<VStack
