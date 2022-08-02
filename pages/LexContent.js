@@ -181,9 +181,10 @@ const Lex = () => {
 	// MASS DELETE
 	//
 	//
-	const toggleDeletingMode = () => {
-		if(deletingMode && itemsToDelete.length > 0) {
-			// TO-DO: Ask if they want to delete the marked ones before they go
+	const toggleDeletingMode = (force = false) => {
+		if(!force && deletingMode && itemsToDelete.length > 0) {
+			// Ask if they want to delete the marked ones before they go
+			return setAlertOpen('pendingDeleteQueue');
 		}
 		// Toggle the mode
 		setItemsToDelete([]);
@@ -191,22 +192,33 @@ const Lex = () => {
 	};
 	const maybeMassDelete = () => {
 		if(itemsToDelete.length === 0) {
-			// TO-DO: Nothing to delete message
-			return;
+			return doToast({
+				toast,
+				placement: "top",
+				bg: "info.500",
+				color: "info.50",
+				msg: "You haven't marked anything for deletion yet."
+			});
 		} else if (!disableConfirms) {
-			// TO-DO: Yes/no prompt
-			return;
+			return setAlertOpen('willMassDelete');
 		}
 		// We're ok to go
 		doMassDelete();
 	};
 	const doMassDelete = () => {
+		const amount = itemsToDelete.length;
 		// Delete from lexicon
 		dispatch(deleteMultipleLexiconItems([...itemsToDelete]));
 		// Reset everything else
 		setItemsToDelete([]);
 		setDeletingMode(false);
-		// TO-DO: Make a toast message confirming the deletion
+		doToast({
+			toast,
+			placement: "top",
+			bg: "danger.500",
+			color: "danger.50",
+			msg: String(amount) + " item" + maybePlural(amount) + " deleted"
+		});
 	};
 	const toggleMarkedForDeletion = (id) => {
 		// Remove the ID from the list, if it's there.
@@ -375,6 +387,12 @@ const Lex = () => {
 						properties: {
 							continueFunc: doDeleteItem,
 							continueText: "Yes",
+							continueProps: {
+								bg: "danger.500",
+								_text: {
+									color: "danger.50"
+								}
+							},
 							bodyContent: (
 								<VStack space={5} px={2} py={3}>
 									<Text bold>{editingItemColumns.join(" / ")}</Text>
@@ -382,7 +400,46 @@ const Lex = () => {
 								</VStack>
 							)
 						}
-					}
+					},
+					{
+						id: "pendingDeleteQueue",
+						properties: {
+							continueText: "No, Don't Delete",
+							continueFunc: () => toggleDeletingMode(true),
+							continueProps: {
+								bg: "success.500",
+								_text: {
+									color: "success.50"
+								}
+							},
+							cancelText: "Yes, Delete Them",
+							cancelFunc: doMassDelete,
+							cancelProps: {
+								bg: "danger.500",
+								_text: {
+									color: "danger.50"
+								}
+							},
+							bodyContent: "You have marked " + String(itemsToDelete.length) + " item" + maybePlural(itemsToDelete.length) + " for deletion. Do you want to delete them?"
+						}
+					},
+					{
+						id: "willMassDelete",
+						properties: {
+							continueText: "Yes",
+							continueFunc: doMassDelete,
+							continueProps: {
+								bg: "danger.500",
+								_text: {
+									color: "danger.50"
+								}
+							},
+							bodyContent: (
+								<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure you want to do this? This cannot be undone.</Text>
+							)
+						}
+					},
+					{}
 				]}
 			/>
 			<HStack
