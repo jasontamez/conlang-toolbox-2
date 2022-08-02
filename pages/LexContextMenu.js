@@ -149,7 +149,10 @@ const LexiconContextMenu = () => {
 								onPress={() => {
 									setColumnsRangeOpen(false);
 									newColumnsChosenFunc(cols);
-									doToast(toast, "Saved: " + String(cols) + " columns");
+									doToast({
+										toast,
+										msg: "Saved: " + String(cols) + " columns"
+									});
 								}}
 							>SAVE</Button>
 						</HStack>

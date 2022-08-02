@@ -161,7 +161,10 @@ const Lex = () => {
 		// Does the actual work of adding to the Lexicon
 		dispatch(addLexiconItem([...newLexiconItemColumns]));
 		setNewLexiconItemColumns([...blankLexiconItemColumns]);
-		doToast(toast, "Word Added");
+		doToast({
+			toast,
+			msg: "Word Added"
+		});
 		newLexiconRefs.forEach(ref => {
 			ref && ref.current && ref.current.clear();
 		});
