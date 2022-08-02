@@ -90,8 +90,6 @@ const LexiconColumnReorderer = ({setReordering}) => {
 		setNewColumns(info.data.map(d => { return {...d} }));
 	};
 	// Data for sortable flatlist
-	//TO-DO: limit to just the drag handle somehow?
-	//         or just omit the drag handle?
 	const renderItem = ({item, index, drag, isActive}) => {
 		return (
 			<Pressable onPressIn={drag}>

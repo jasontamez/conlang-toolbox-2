@@ -79,8 +79,6 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
-// TO-DO: merge MSNavBar back into MS and kill the second <Routes> object
-import MSNavBar from './pages/ms/msNavBar';
 import 'react-native-gesture-handler';
 
 const App = () => {
@@ -199,10 +197,6 @@ const AppRoutes = () => {
 					{ /* <Route path="/credits" element={<Credits />} />
 					<Route path="/about" element={<About />} /> */ }
 					<Route index element={<About />} />
-				</Routes>
-				<Routes>
-					<Route path="/ms/*" element={<MSNavBar />} />
-					<Route path="/*" element={<></>} />
 				</Routes>
 			</VStack>
 		</NativeRouter>

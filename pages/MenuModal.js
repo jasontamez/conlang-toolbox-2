@@ -147,6 +147,7 @@ const MenuModal = () => {
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			return (
 				<ReAnimated.View
+					key={id}
 					entering={SlideInLeft}
 					exiting={SlideOutLeft}
 					layout={CurvedTransition}
