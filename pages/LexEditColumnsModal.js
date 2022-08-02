@@ -9,7 +9,6 @@ import {
 	Radio,
 	Modal
 } from 'native-base';
-import { Alert, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,6 +20,7 @@ import {
 	TrashIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
+import { MultiAlert } from '../components/StandardAlert';
 
 const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
@@ -28,6 +28,8 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const [editing, setEditing] = useState(false);
 	const [newColumns, setNewColumns] = useState([]);
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
+	const [alertOpen, setAlertOpen] = useState('');
+	const [savedIndex, setSavedIndex] = useState(null);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		// Load column info when mounted or when columns change.
@@ -76,16 +78,13 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			// We are not bothering with destructuve yes/no prompts
 			return doDeleteColumn(index);
 		}
+		// Store index for the alert confirmation.
+		setSavedIndex(index);
 		// Ask.
-		makeAlert(
-			"Warning",
-			"Deleting a column will destroy all data in the Lexicon associated with that column. Are you sure you want to do this?",
-			() => doDeleteColumn(index),
-			"Yes"
-		);
+		setAlertOpen('deleteColumn');
 	};
 	const doDeleteColumn = (index, addToDeleteReminder = true) => {
-		// Save this deleted column
+		// Save this deleted column's label
 		addToDeleteReminder && setColumnLabelsToBeDeleted([...columnLabelsToBeDeleted, newColumns[index].label]);
 		// Reset the stored info
 		// Actually do the deleting
@@ -96,50 +95,14 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const maybeSaveColumns = () => {
 		// detect columns without labels
 		if(!disableBlankConfirms && newColumns.some(nc => !nc.label)) {
-			return makeAlert(
-				"Warning",
-				"One or more of the column labels are blank. This may make it harder for you to read your Lexicon or sort it.",
-				maybeSaveColumns2
-			);
+			return setAlertOpen('blankColumnLabel');
 		}
 		maybeSaveColumns2();
 	};
 	const maybeSaveColumns2 = () => {
 		// see if we're deleting columns
 		if(!disableConfirms && columnLabelsToBeDeleted.length > 0) {
-			return makeAlert(
-				"Final Warning",
-				"Remember, you will be deleting all data associated with the column" +
-					((columnLabelsToBeDeleted.length > 1)
-						?
-							 "s "
-						:
-							" ") +
-					(
-						columnLabelsToBeDeleted.length === 1
-							?
-								"\"" + columnLabelsToBeDeleted[0] + "\""
-							: (
-								columnLabelsToBeDeleted.length === 2
-									?
-										"\"" + columnLabelsToBeDeleted.join("\" and \"") + "\""
-									: (
-										columnLabelsToBeDeleted.map((dc, i) => {
-											const test = i + 1;
-											if(i === 0) {
-												return "\"" + dc + "\"";
-											} else if (test === columnLabelsToBeDeleted.length) {
-												return ", and \"" + dc + "\"";
-											}
-											return ", \"" + dc + "\"";
-										}).join('')
-									)
-							)
-					) +
-					". Are you sure you want to do this?",
-				doSaveColumns,
-				"Yes, I am sure"
-			);
+			return setAlertOpen('finalDeleteColumn');
 		}
 		doSaveColumns();
 	};
@@ -242,72 +205,119 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 		);
 	};
 	return (
-		<Modal isOpen={editing}>
-			<Modal.Content>
-				<Modal.Header p={0} m={0}>
-					<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
-						<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
-							<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+		<>
+			<Modal isOpen={editing}>
+				<Modal.Content>
+					<Modal.Header p={0} m={0}>
+						<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
+							<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+							<HStack justifyContent="flex-end" space={2}>
+								<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
+								<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+							</HStack>
 						</HStack>
-					</HStack>
-				</Modal.Header>
-				<Modal.Body m={0} p={0}>
-					<VStack m={0} alignItems="center" justifyContent="center" bg="main.800">
-						{newColumns.map((col, i) => renderItem(col, i))}
-					</VStack>
-				</Modal.Body>
-				<Modal.Footer
-					m={0}
-					p={0}
-					display="flex"
-					justifyContent="flex-end"
-					flexWrap="wrap"
-					bg="main.700"
-				>
-					<AddColumnButton />
-					<Button
-						startIcon={<SaveIcon color="success.50" m={0} />}
-						bg="success.500"
-						onPress={() => {
-							maybeSaveColumns()
-						}}
-						_text={{color: "success.50"}}
-						p={1}
-						m={2}
-					>SAVE</Button>
-				</Modal.Footer>
-			</Modal.Content>
-		</Modal>
+					</Modal.Header>
+					<Modal.Body m={0} p={0}>
+						<VStack m={0} alignItems="center" justifyContent="center" bg="main.800">
+							{newColumns.map((col, i) => renderItem(col, i))}
+						</VStack>
+					</Modal.Body>
+					<Modal.Footer
+						m={0}
+						p={0}
+						display="flex"
+						justifyContent="flex-end"
+						flexWrap="wrap"
+						bg="main.700"
+					>
+						<AddColumnButton />
+						<Button
+							startIcon={<SaveIcon color="success.50" m={0} />}
+							bg="success.500"
+							onPress={() => {
+								maybeSaveColumns()
+							}}
+							_text={{color: "success.50"}}
+							p={1}
+							m={2}
+						>SAVE</Button>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+			<MultiAlert
+				alertOpen={alertOpen}
+				setAlertOpen={setAlertOpen}
+				sharedProps={{
+					cancelProps: {bg: "darker"}
+				}}
+				passedProps={[
+					{
+						id: "deleteColumn",
+						properties: {
+							continueText: "Yes",
+							continueFunc: () => doDeleteColumn(savedIndex),
+							continueProps: {
+								bg: "danger.500",
+								_text: {
+									color: "danger.50"
+								}
+							},
+							bodyContent: "Deleting a column will destroy all data in the Lexicon associated with that column. Are you sure you want to do this?"
+						}
+					},
+					{
+						id: "blankColumnLabel",
+						properties: {
+							continueFunc: maybeSaveColumns2,
+							bodyContent: "One or more of the column labels are blank. This may make it harder for you to read your Lexicon or sort it."
+						}
+					},
+					{
+						id: "finalDeleteColumn",
+						properties: {
+							headerContent: "Final Warning",
+							continueFunc: doSaveColumns,
+							continueText: "Yes, I am sure",
+							continueProps: {
+								bg: "danger.500",
+								_text: {
+									color: "danger.50"
+								}
+							},
+							bodyContent: "Remember, you will be deleting all data associated with the column" +
+								((columnLabelsToBeDeleted.length > 1)
+									?
+										 "s "
+									:
+										" ") +
+								(
+									columnLabelsToBeDeleted.length === 1
+										?
+											"\"" + columnLabelsToBeDeleted[0] + "\""
+										: (
+											columnLabelsToBeDeleted.length === 2
+												?
+													"\"" + columnLabelsToBeDeleted.join("\" and \"") + "\""
+												: (
+													columnLabelsToBeDeleted.map((dc, i) => {
+														const test = i + 1;
+														if(i === 0) {
+															return "\"" + dc + "\"";
+														} else if (test === columnLabelsToBeDeleted.length) {
+															return ", and \"" + dc + "\"";
+														}
+														return ", \"" + dc + "\"";
+													}).join('')
+												)
+										)
+								) +
+								". Are you sure you want to do this?"
+						}
+					}
+				]}
+			/>
+		</>
 	);
-};
-
-// TO-DO: DUMP THIS, go back to AlertDialog
-const makeAlert = (title, description, continueFunc, continueText = "Continue") => {
-	if(Platform.OS === "web") {
-		if(confirm(title + ": " + description)) {
-			continueFunc();
-		}
-	} else {
-		// Android
-		Alert.alert(
-			title,
-			description,
-			[ // Button array
-				{
-					text: "Cancel"
-				},
-				{
-					text: continueText,
-					onPress: () => continueFunc()
-				}
-			],
-			{
-				cancelable: true
-			}
-		);
-	}
 };
 
 export default LexiconColumnEditor;
