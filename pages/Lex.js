@@ -58,4 +58,6 @@ const Lex = () => {
 	);
 };
  
+// TO-DO: Merge this back with LexContent
+
 export default Lex;

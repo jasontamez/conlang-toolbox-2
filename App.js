@@ -1,6 +1,7 @@
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { Provider, useSelector } from 'react-redux';
+import { useWindowDimensions } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
 
@@ -78,6 +79,7 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
+// TO-DO: merge MSNavBar back into MS and kill the second <Routes> object
 import MSNavBar from './pages/ms/msNavBar';
 import 'react-native-gesture-handler';
 
@@ -160,6 +162,7 @@ const Fontless = () => {
 };
 
 const AppRoutes = () => {
+	const {width, height} = useWindowDimensions();
 	return (
 		<NativeRouter>
 			<VStack
@@ -171,6 +174,10 @@ const AppRoutes = () => {
 				top={0}
 				bottom={0}
 				bg="main.800"
+				style={{
+					maxWidth: width,
+					maxHeight: height
+				}}
 			>
 				<AppHeader />
 				<Routes> { /* 

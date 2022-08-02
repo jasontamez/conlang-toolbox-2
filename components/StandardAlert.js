@@ -112,7 +112,15 @@ export const MultiAlert = (props) => {
 	//   passedProps can override sharedProps, alertOpen, and setAlertOpen
 	const {alertOpen, setAlertOpen, sharedProps, passedProps} = props;
 	return passedProps.map(({id, properties}) => {
-		return <StandardAlert key={id + "-MultiAlert"} alertOpen={alertOpen === id} setAlertOpen={setAlertOpen} {...sharedProps} {...properties} />;
+		return (
+			<StandardAlert
+				key={id + "-MultiAlert"}
+				alertOpen={alertOpen === id}
+				setAlertOpen={setAlertOpen}
+				{...sharedProps}
+				{...properties}
+			/>
+		);
 	});
 };
 

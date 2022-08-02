@@ -83,6 +83,7 @@ const Lex = () => {
 		newLexiconRefs.push(useRef(null));
 	}
 	const toast = useToast();
+	const maybePlural = (x, singular="", plural="s") => x === 1 ? singular : plural;
 	//
 	//
 	// USE EFFECT
@@ -391,7 +392,7 @@ const Lex = () => {
 					flexShrink={0}
 					style={{minWidth: 110}}
 				>
-					<Text fontSize="2xl">{String(lexicon.length)} Word{lexicon.length === 1 ? "" : "s"}</Text>
+					<Text fontSize="2xl">{String(lexicon.length)} Word{maybePlural(lexicon.length)}</Text>
 				</Box>
 				<HStack
 					mx={3}
@@ -448,7 +449,16 @@ const Lex = () => {
 							type="radio"
 							onChange={(v) => doSortBy(v)}
 						>
-							{columns.map((item, i) => <Menu.ItemOption key={item.id + "-Sorting"} value={i+1}>{item.label}</Menu.ItemOption>)}
+							{
+								columns.map((item, i) => (
+									<Menu.ItemOption
+										key={item.id + "-Sorting"}
+										value={i+1}
+									>
+										{item.label}
+									</Menu.ItemOption>
+								))
+							}
 						</Menu.OptionGroup>
 					</Menu>
 					<IconButton
@@ -476,12 +486,24 @@ const Lex = () => {
 				alignItems="stretch"
 				justifyContent="flex-start"
 			>
-				<HStack alignItems="flex-end" pt={3.5}
+				<HStack
+					alignItems="flex-end"
+					pt={1.5}
 					mx={2}
 					flexGrow={0}
 					flexShrink={0}
 				>
-					{columns.map((col, i) => <Box px={0.5} key={col.id + "-Col"} size={col.size}><Text bold isTruncated={isTruncated}>{col.label}</Text></Box>)}
+					{
+						columns.map((col, i) => (
+							<Box
+								px={0.5}
+								key={col.id + "-ColumnLabel"}
+								size={col.size}
+							>
+								<Text bold isTruncated={isTruncated}>{col.label}</Text>
+							</Box>
+						))
+					}
 					<Box size="lexXs"></Box>
 				</HStack>
 				<HStack alignItems="center" mx={1.5}
@@ -490,8 +512,19 @@ const Lex = () => {
 					flexShrink={0}
 				>
 					{columns.map((col, i) => (
-						<Box px={0.5} mx={0} size={col.size} key={col.id + "-Input"}>
-							<Input w="full" p={0.5} ref={newLexiconRefs[i]} defaultValue={newLexiconItemColumns[i]} onChangeText={(v) => maybeUpdateText(v, i)} />
+						<Box
+							px={0.5}
+							mx={0}
+							size={col.size}
+							key={col.id + "-Input"}
+						>
+							<Input
+								w="full"
+								p={0.5}
+								ref={newLexiconRefs[i]}
+								defaultValue={newLexiconItemColumns[i]}
+								onChangeText={(v) => maybeUpdateText(v, i)}
+							/>
 						</Box>
 					))}
 					<Box size="lexXs" ml={0.5}>
@@ -513,10 +546,6 @@ const Lex = () => {
 					ListEmptyComponent={ListEmpty}
 					extraData={extraData}
 					renderItem={renderList}
-					style={{
-						flexGrow: 1,
-						flexShrink: 0,
-					}}
 				/>
 			</VStack>
 		</VStack>

@@ -275,7 +275,7 @@
 			"tag": "Range",
 			"prop": "headDepMarked",
 			"start": "Head Marked",
-			"end": "Dependant Marked",
+			"end": "De\u00ADpen\u00ADdant Marked",
 			"label": "Degree of marking, from totally head-marked to totally dependant-marked",
 			"notFilled": true,
 			"max": 4
