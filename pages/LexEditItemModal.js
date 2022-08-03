@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Input,
 	Text,
@@ -16,6 +16,7 @@ import {
 	TrashIcon,
 	SaveIcon
 } from '../components/icons';
+import StandardAlert from '../components/StandardAlert';
 
 
 const ModalLexiconEditingItem = ({
@@ -24,6 +25,7 @@ const ModalLexiconEditingItem = ({
 	labels,
 	saveItemFunc,
 	deleteEditingItemFunc,
+	disableConfirms,
 	endEditingFunc
 }) => {
 	//
@@ -33,12 +35,27 @@ const ModalLexiconEditingItem = ({
 	//
 	// (has to be separate to keep State updates from flickering this all the time)
 	const [newFields, setNewFields] = useState([]);
-	const [active, setActive] = useState(false);
+	const [alertOpen, setAlertOpen] = useState(false);
 	const firstFieldRef = useRef(null);
 	const doClose = () => {
-		setActive(false);
 		setNewFields([]);
 		endEditingFunc();
+	};
+	useEffect(() => {
+		setNewFields([...columns]);
+	}, [columns]);
+	const alertProperties = {
+		alertOpen,
+		setAlertOpen,
+		bodyContent: "Are you sure you want to delete this Lexicon entry? This cannot be undone.",
+		continueText: "Yes",
+		continueFunc: deleteEditingItemFunc,
+		continueProps: {
+			bg: "danger.500",
+			_text: {
+				color: "danger.50"
+			}
+		}
 	};
 	return (
 		<Modal
@@ -46,6 +63,7 @@ const ModalLexiconEditingItem = ({
 			closeOnOverlayClick={false}
 			initialFocusRef={firstFieldRef}
 		>
+			<StandardAlert {...alertProperties}	/>
 			<Modal.Content>
 				<Modal.Header m={0} p={0}>
 					<HStack
@@ -92,11 +110,6 @@ const ModalLexiconEditingItem = ({
 										ref={i ? null : firstFieldRef}
 										onChangeText={(value) => {
 											let fields = [...newFields];
-											if(!active) {
-												// We need to set everything up
-												fields = [...columns];
-												setActive(true);
-											}
 											fields.splice(i, 1, value);
 											setNewFields([...fields]);
 										}}
@@ -111,11 +124,7 @@ const ModalLexiconEditingItem = ({
 						<Button
 							startIcon={<TrashIcon color="danger.50" m={0} />}
 							bg="danger.500"
-							onPress={() => {
-								// TO-DO yes/no prompt
-								setActive(false);
-								deleteEditingItemFunc();
-							}}
+							onPress={() => (disableConfirms ? deleteEditingItemFunc() : setAlertOpen(true))}
 							_text={{color: "danger.50"}}
 							p={1}
 							m={2}
@@ -123,10 +132,7 @@ const ModalLexiconEditingItem = ({
 						<Button
 							startIcon={<SaveIcon color="tertiary.50" m={0} />}
 							bg="tertiary.500"
-							onPress={() => {
-								setActive(false);
-								saveItemFunc([...newFields]);
-							}}
+							onPress={() => saveItemFunc([...newFields])}
 							_text={{color: "tertiary.50"}}
 							p={1}
 							m={2}

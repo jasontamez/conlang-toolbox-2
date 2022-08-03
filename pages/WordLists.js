@@ -1,7 +1,7 @@
+//import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import WL from '../components/wordLists';
-import { v4 as uuidv4 } from 'uuid';
-//import { useState } from 'react';
+//import { v4 as uuidv4 } from 'uuid';
 import { HStack, Text, Button, Box, ScrollView } from 'native-base';
 import { addList, removeList } from '../store/wordListsSlice';
 
@@ -9,7 +9,10 @@ const WordLists = () => {
 	const equalityCheck = (stateA, stateB) => {
 		if (stateA === stateB) {
 			return true;
-		} else if (String(stateA.centerTheDisplayedWords) !== String(stateB.centerTheDisplayedWords)) {
+		} else if (
+			String(stateA.centerTheDisplayedWords)
+				!== String(stateB.centerTheDisplayedWords)
+		) {
 			return false;
 		}
 		try {
@@ -20,7 +23,10 @@ const WordLists = () => {
 			}
 			const keysA = Object.keys(listA);
 			const keysB = Object.keys(listB);
-			return (keysA.length === keysB.length && String(keysA.sort()) === String(keysB.sort()));
+			return (
+				keysA.length === keysB.length
+					&& String(keysA.sort()) === String(keysB.sort())
+			);
 		} catch (error) {
 			console.log(error);
 			// Assume false
@@ -28,7 +34,10 @@ const WordLists = () => {
 		}
 	};
 	//const [modalState, wordListsState, waitingToAdd] = useSelector((state) => [state.modalState, state.wordListsState, state.lexicon.waitingToAdd], shallowEqual);
-	const {centerTheDisplayedWords, listsDisplayed} = useSelector((state) => state.wordLists, equalityCheck);
+	const {
+		centerTheDisplayedWords,
+		listsDisplayed
+	 } = useSelector((state) => state.wordLists, equalityCheck);
 	//const [waitingToAdd, setWaitingToAdd] = useState([]);
 	const dispatch = useDispatch();
 	const shown = [];
@@ -81,7 +90,12 @@ const WordLists = () => {
 			dispatch(addList(list))
 		}
 	};
-	const alignment = centerTheDisplayedWords.length > 0 ? { textAlign: "center" } : {};
+	const alignment =
+		centerTheDisplayedWords.length > 0 ?
+			{ textAlign: "center" }
+		:
+			{}
+	;
 	return (
 		<>
 			<HStack

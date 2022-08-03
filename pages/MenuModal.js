@@ -25,7 +25,10 @@ import { setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
 
 const MenuModal = () => {
-	const menuToggleName = useSelector((state) => state.appState.menuToggleName, shallowEqual);
+	const menuToggleName = useSelector(
+		(state) => state.appState.menuToggleName,
+		shallowEqual
+	);
 	let [menuOpen, setMenuOpen] = useState(false);
 	let [openId, setOpenId] = useState(menuToggleName || '');
 	const location = useLocation();
@@ -62,10 +65,28 @@ const MenuModal = () => {
 	};
 	let decrementingZIndex = 1001;
 	const renderItem = (item) => {
-		const {icon, id, title, menuTitle, url, kids, divider, isChildOf} = item;
+		const {
+			icon,
+			id,
+			title,
+			menuTitle,
+			url,
+			kids,
+			divider,
+			isChildOf
+		} = item;
 		decrementingZIndex -= 1;
 		if(divider) {
-			return <Divider zIndex={decrementingZIndex} key={id} my={2} mx="auto" w="90%" bg="text.50" opacity={25} />
+			return (
+				<Divider
+					zIndex={decrementingZIndex}
+					key={id}
+					my={2}
+					mx="auto"
+					w="5/6"
+					bg="text.50"
+					opacity={25}
+				/>);
 		} else if (kids) {
 			// App Section w/subpages
 			const isSelected = location.pathname.startsWith(url);
@@ -142,7 +163,12 @@ const MenuModal = () => {
 			);
 		} else if (isChildOf) {
 			const isSelected = location.pathname === url;
-			const dotOptions = isSelected ? { color: "primary.500" } : { color: "transparent" };
+			const dotOptions =
+				isSelected ?
+					{ color: "primary.500" }
+				:
+					{ color: "transparent" }
+			;
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			return (
@@ -163,7 +189,12 @@ const MenuModal = () => {
 						h={9 /* 36px */}
 					>
 						<ZStack>
-							<HStack height={9} w="full" {...bgOptions} opacity={10} />
+							<HStack
+								height={9}
+								w="full"
+								{...bgOptions}
+								opacity={10}
+							/>
 							<HStack
 								w="full"
 								height={9}
@@ -200,8 +231,18 @@ const MenuModal = () => {
 		const alignOptions = item.alignOptions || {};
 		const isSelected = location.pathname === url;
 		const bgOptions = isSelected ? { bg: "primary.500" } : {};
-		const boxOptions = isSelected ? { color: "primary.500", ...styleOptions } : { color: "transparent", ...styleOptions };
-		const textOptions = isSelected ? { color: "primary.500", fontOptions } : fontOptions;
+		const boxOptions =
+			isSelected ?
+				{ color: "primary.500", ...styleOptions }
+			:
+				{ color: "transparent", ...styleOptions }
+		;
+		const textOptions =
+			isSelected ?
+				{ color: "primary.500", fontOptions }
+			:
+				fontOptions
+		;
 		return (
 			<Pressable
 				onPress={() => navigate(url)}
@@ -212,7 +253,12 @@ const MenuModal = () => {
 				bg="main.800"
 			>
 				<ZStack>
-					<HStack height={10} w="full" {...bgOptions} opacity={20} />
+					<HStack
+						height={10}
+						w="full"
+						{...bgOptions}
+						opacity={20}
+					/>
 					<HStack
 						w="full"
 						height={10}
@@ -279,7 +325,7 @@ const MenuModal = () => {
 							w="full"
 							mr={5}
 						>
-							<Heading size="md" >Conlang Toolbox</Heading>
+							<Heading size="md">Conlang Toolbox</Heading>
 							<Text fontSize="sm" color="primary.200">tools for language invention</Text>
 						</VStack>
 						<VStack
@@ -288,7 +334,10 @@ const MenuModal = () => {
 						>
 							{
 								appMenuPages
-									.filter(({isChildOf}) => !isChildOf || isChildOf === openId)
+									.filter(
+										({isChildOf}) =>
+											!isChildOf || isChildOf === openId
+									)
 									.map((page) => renderItem(page))
 							}
 						</VStack>

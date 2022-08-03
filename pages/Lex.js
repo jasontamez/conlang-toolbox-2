@@ -134,9 +134,6 @@ const Lex = () => {
 		setEditingItemColumns([]);
 	};
 	const deleteEditingItemFunc = () => {
-		disableConfirms ? doDeleteItem() : setAlertOpen("willDeleteLexiconItem");
-	};
-	const doDeleteItem = () => {
 		dispatch(deleteLexiconItem(editingItemID));
 		endEditingFunc();
 	};
@@ -324,18 +321,19 @@ const Lex = () => {
 			>
 				<ModalLexiconEditingItem
 					isEditing={editingItemID !== null}
-					saveItemFunc={saveItemFunc}
-					deleteEditingItemFunc={deleteEditingItemFunc}
-					endEditingFunc={endEditingFunc}
 					columns={editingItemColumns}
-					labels={labels}
+					{...{
+						saveItemFunc,
+						deleteEditingItemFunc,
+						disableConfirms,
+						endEditingFunc,
+						labels
+					}}
 				/>
 				<MultiAlert
 					alertOpen={alertOpen}
 					setAlertOpen={setAlertOpen}
-					sharedProps={{
-						cancelProps: {bg: "darker"}
-					}}
+					sharedProps={{}}
 					passedProps={[
 						{
 							id: "hasBlankColumns",
@@ -346,35 +344,11 @@ const Lex = () => {
 							}
 						},
 						{
-							id: "willDeleteLexiconItem",
-							properties: {
-								continueFunc: doDeleteItem,
-								continueText: "Yes",
-								continueProps: {
-									bg: "danger.500",
-									_text: {
-										color: "danger.50"
-									}
-								},
-								bodyContent: (
-									<VStack space={5} px={2} py={3}>
-										<Text bold>{editingItemColumns.join(" / ")}</Text>
-										<Text>Are you sure you want to delete this? This cannot be undone.</Text>
-									</VStack>
-								)
-							}
-						},
-						{
 							id: "pendingDeleteQueue",
 							properties: {
 								continueText: "No, Don't Delete",
 								continueFunc: () => toggleDeletingMode(true),
-								continueProps: {
-									bg: "success.500",
-									_text: {
-										color: "success.50"
-									}
-								},
+								leastDestructiveContinue: true,
 								cancelText: "Yes, Delete Them",
 								cancelFunc: doMassDelete,
 								cancelProps: {
@@ -398,7 +372,7 @@ const Lex = () => {
 									}
 								},
 								bodyContent: (
-									<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure you want to do this? This cannot be undone.</Text>
+									<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>
 								)
 							}
 						},

@@ -1,10 +1,9 @@
-import { Button, Text, VStack, Pressable, HStack } from "native-base";
+import { Text, VStack, Pressable, HStack } from "native-base";
 //import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
 import { TextAreaSetting, TextSetting } from '../../components/layoutTags';
 import { setTitle, setDescription } from "../../store/morphoSyntaxSlice";
-import { useNavigate } from "react-router-native";
 import { AddCircleIcon, ExportIcon, RemoveCircleIcon, SaveIcon, TrashIcon } from "../../components/icons";
 
 const Settings = () => {

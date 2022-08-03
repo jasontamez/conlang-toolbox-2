@@ -193,7 +193,7 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 const loadNewLexiconFunc = (state, action) => {
 	//
 	//
-	// TO-DO
+	// TO-DO:
 	//
 	//
 };
@@ -343,7 +343,7 @@ const modifyLexiconColumnsFunc = (state, action) => {
 	// Save everything to state
 	//
 	//
-	// TO-DO test deleting columns
+	// TO-DO: test deleting columns
 	//console.log("colStillExists:");
 	//console.log({...colStillExists});
 	//console.log(["newToOld", ...newToOld]);

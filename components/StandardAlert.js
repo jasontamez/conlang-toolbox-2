@@ -8,7 +8,9 @@ const StandardAlert = ({
 	bodyProps, bodyContent,
 	footerProps,
 	cancelProps, cancelText, cancelFunc,
-	continueProps, continueText, continueFunc
+	continueProps, continueText, continueFunc,
+	leastDestructiveContinue,
+	detatchButtons
 }) => {
 	// Makes an AlertDialog box
 	//
@@ -31,7 +33,9 @@ const StandardAlert = ({
 	// continueText: same as above
 	//    Defaults to "Continue"
 	// continueFunc: same as above
-	const cancelRef = useRef(null);
+	// leastDestructiveContinue: boolean: Continue is less destructive than Cancel
+	// detatchButtons: boolean, buttons should not appear attached
+	const buttonRef = useRef(null);
 	const doCancel = () => {
 		setAlertOpen(false);
 		cancelFunc && cancelFunc();
@@ -43,7 +47,7 @@ const StandardAlert = ({
 	return (
 		<AlertDialog
 			zIndex={100}
-			leastDestructiveRef={cancelRef}
+			leastDestructiveRef={buttonRef}
 			isOpen={alertOpen}
 			onClose={() => doCancel()}
 			closeOnOverlayClick={false}
@@ -68,10 +72,10 @@ const StandardAlert = ({
 					borderTopWidth={0}
 					{...(footerProps || {})}
 				>
-					<Button.Group isAttached>
+					<Button.Group isAttached={!detatchButtons}>
 						<Button
-							variant="unstyled"
-							ref={cancelRef}
+							bg="darker"
+							ref={leastDestructiveContinue ? undefined : buttonRef}
 							_text={{color: "text.50"}}
 							{...(cancelProps || {})}
 							onPress={() => doCancel()}
@@ -80,6 +84,7 @@ const StandardAlert = ({
 						</Button>
 						<Button
 							bg="success.500"
+							ref={leastDestructiveContinue ? buttonRef : undefined}
 							_text={{color: "success.50"}}
 							{...(continueProps || {})}
 							onPress={() => doContinue()}

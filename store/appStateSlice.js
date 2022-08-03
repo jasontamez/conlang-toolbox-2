@@ -13,7 +13,9 @@ const setMenuToggleNameFunc = (state, action) => {
 };
 
 const setThemeFunc = (state, action) => {
-	state.theme = availableThemes.find((theme) => theme === action.payload) || "Default";
+	state.theme = availableThemes.find(
+		(theme) => theme === action.payload
+	) || "Default";
 	return state;
 };
 

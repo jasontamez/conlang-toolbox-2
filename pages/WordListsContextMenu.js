@@ -5,10 +5,12 @@ import { DotsIcon, SaveIcon, HelpIcon } from '../components/icons';
 import { setCenterTheDisplayedWords } from '../store/wordListsSlice';
 
 const WordListsContextMenu = () => {
-	const centerTheDisplayedWords = useSelector((state) => state.wordLists.centerTheDisplayedWords);
+	const centerTheDisplayedWords =
+		useSelector((state) => state.wordLists.centerTheDisplayedWords);
 	const dispatch = useDispatch();
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [centerMenuOption, setCenterMenuOption] = useState(centerTheDisplayedWords);
+	const [centerMenuOption, setCenterMenuOption] =
+		useState(centerTheDisplayedWords);
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const handleCenterText = (checkboxes) => {
 		setCenterMenuOption(checkboxes);

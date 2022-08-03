@@ -9,8 +9,7 @@ import {
 	Pressable,
 	Center
 } from 'native-base';
-import DraggableFlatList, { ShadowDecorator } from 'react-native-draggable-flatlist';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import { Modal as ReactNativeModal, useWindowDimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -247,9 +247,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			<MultiAlert
 				alertOpen={alertOpen}
 				setAlertOpen={setAlertOpen}
-				sharedProps={{
-					cancelProps: {bg: "darker"}
-				}}
+				sharedProps={{}}
 				passedProps={[
 					{
 						id: "deleteColumn",

@@ -6,41 +6,41 @@ import { useWindowDimensions } from 'react-native';
 import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
 
 import { useFonts } from 'expo-font';
-import {
-	Arimo_400Regular,
-	Arimo_400Regular_Italic,
-	Arimo_700Bold,
-	Arimo_700Bold_Italic
-} from '@expo-google-fonts/arimo';
+//import {
+//	Arimo_400Regular,
+//	Arimo_400Regular_Italic,
+//	Arimo_700Bold,
+//	Arimo_700Bold_Italic
+//} from '@expo-google-fonts/arimo';
 import { 
 	NotoSans_400Regular,
 	NotoSans_400Regular_Italic,
 	NotoSans_700Bold,
 	NotoSans_700Bold_Italic
 } from '@expo-google-fonts/noto-sans';
-import { 
-	NotoSansJP_100Thin,
-	NotoSansJP_300Light,
-	NotoSansJP_400Regular,
-	NotoSansJP_500Medium,
-	NotoSansJP_700Bold,
-	NotoSansJP_900Black
-} from '@expo-google-fonts/noto-sans-jp';
+//import { 
+//	NotoSansJP_100Thin,
+//	NotoSansJP_300Light,
+//	NotoSansJP_400Regular,
+//	NotoSansJP_500Medium,
+//	NotoSansJP_700Bold,
+//	NotoSansJP_900Black
+//} from '@expo-google-fonts/noto-sans-jp';
 import { 
 	NotoSerif_400Regular,
 	NotoSerif_400Regular_Italic,
 	NotoSerif_700Bold,
 	NotoSerif_700Bold_Italic
 } from '@expo-google-fonts/noto-serif';
-import { 
-	NotoSerifJP_200ExtraLight,
-	NotoSerifJP_300Light,
-	NotoSerifJP_400Regular,
-	NotoSerifJP_500Medium,
-	NotoSerifJP_600SemiBold,
-	NotoSerifJP_700Bold,
-	NotoSerifJP_900Black
-} from '@expo-google-fonts/noto-serif-jp';
+//import { 
+//	NotoSerifJP_200ExtraLight,
+//	NotoSerifJP_300Light,
+//	NotoSerifJP_400Regular,
+//	NotoSerifJP_500Medium,
+//	NotoSerifJP_600SemiBold,
+//	NotoSerifJP_700Bold,
+//	NotoSerifJP_900Black
+//} from '@expo-google-fonts/noto-serif-jp';
 import { 
 	SourceCodePro_200ExtraLight,
 	SourceCodePro_300Light,
@@ -59,13 +59,13 @@ import {
 	SourceCodePro_800ExtraBold_Italic,
 	SourceCodePro_900Black_Italic
 } from '@expo-google-fonts/source-code-pro';
-import { 
-	Scheherazade_400Regular,
-	Scheherazade_700Bold
-} from '@expo-google-fonts/scheherazade';
-import { 
-	Sriracha_400Regular
-} from '@expo-google-fonts/sriracha'
+//import { 
+//	Scheherazade_400Regular,
+//	Scheherazade_700Bold
+//} from '@expo-google-fonts/scheherazade';
+//import { 
+//	Sriracha_400Regular
+//} from '@expo-google-fonts/sriracha'
 
 import getTheme from './components/theme';
 

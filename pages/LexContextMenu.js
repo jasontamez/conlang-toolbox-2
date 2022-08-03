@@ -1,17 +1,40 @@
 import { useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { Menu, Pressable, HStack, Text, Divider, Modal, VStack, Box, Slider, Button, useToast } from 'native-base';
+import {
+	Menu,
+	Pressable,
+	HStack,
+	Text,
+	Divider,
+	Modal,
+	VStack,
+	Box,
+	Slider,
+	Button,
+	useToast
+} from 'native-base';
 
 import { DotsIcon, SaveIcon } from '../components/icons';
-import { setDisableBlankSetting, setMaxColumns, consts } from "../store/lexiconSlice";
+import {
+	setDisableBlankSetting,
+	setMaxColumns,
+	consts
+} from "../store/lexiconSlice";
 import doToast from '../components/toast';
 
 const LexiconContextMenu = () => {
-	const { sortPattern, disableBlankConfirms, maxColumns } = useSelector((state) => state.lexicon, shallowEqual);
+	const {
+		sortPattern,
+		disableBlankConfirms,
+		maxColumns
+	} = useSelector((state) => state.lexicon, shallowEqual);
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [disableBlanks, setDisableBlanks] = useState(disableBlankConfirms ? ["disable"] : []);
+	const [
+		disableBlanks,
+		setDisableBlanks
+	] = useState(disableBlankConfirms ? ["disable"] : []);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
 	const [cols, setCols] = useState(maxColumns);
 	const handleBlankConfirms = (checkboxes) => {
@@ -104,7 +127,10 @@ const LexiconContextMenu = () => {
 					>
 						<Text color="primaryContrast" fontSize="md">Set Max Columns</Text>
 					</Modal.Header>
-					<Modal.CloseButton _icon={{color: "primaryContrast"}} onPress={() => setColumnsRangeOpen(false)} />
+					<Modal.CloseButton
+						_icon={{color: "primaryContrast"}}
+						onPress={() => setColumnsRangeOpen(false)}
+					/>
 					<Modal.Body>
 						<VStack>
 							<Box><Text>Maximum columns: {cols}</Text></Box>

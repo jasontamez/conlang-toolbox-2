@@ -20,7 +20,12 @@ const MS = () => {
 		const { isCurrent, icon, link, label } = props;
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "text.50";
-		const textOptions = isCurrent ? {bold: true, color: colorString} : {color: colorString}
+		const textOptions =
+			isCurrent ?
+				{bold: true, color: colorString}
+			:
+				{color: colorString}
+		;
 		if(icon) {
 			return (
 				<IconButton
@@ -59,7 +64,13 @@ const MS = () => {
 				flex={1}
 				mb={8}
 			>
-				<Box flexGrow={2} flexShrink={2} flexBasis="85%" mt={0} mx={4}>
+				<Box
+					flexGrow={2}
+					flexShrink={2}
+					flexBasis="85%"
+					mt={0}
+					mx={4}
+				>
 					<ScrollView ref={scrollRef} h="full">
 						<Outlet />
 					</ScrollView>
