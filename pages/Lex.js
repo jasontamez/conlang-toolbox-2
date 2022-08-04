@@ -175,7 +175,7 @@ const Lex = () => {
 			let newCols = [...newLexiconItemColumns];
 			newCols[i] = text;
 			setNewLexiconItemColumns(newCols)			;
-		}, [], 250, String(i));
+		}, {namespace: String(i)});
 	};
 	//
 	//
@@ -290,7 +290,10 @@ const Lex = () => {
 						mt={2}
 						defaultValue={title}
 						placeholder="Usually the language name."
-						onChangeText={(v) => debounce(() => dispatch(setTitle(v)))}
+						onChangeText={(v) => debounce(
+							() => dispatch(setTitle(v)),
+							{ namespace: "LexTitle" }
+						)}
 					/>
 				</VStack>
 				<VStack m={3} mt={2}>
@@ -299,7 +302,10 @@ const Lex = () => {
 						defaultValue={description}
 						placeholder="A short description of this lexicon."
 						totalLines={3}
-						onChangeText={(v) => debounce(() => dispatch(setDesc(v)))}
+						onChangeText={(v) => debounce(
+							() => dispatch(setDesc(v)),
+							{ namespace: "LexDesc" }
+						)}
 					/>
 				</VStack>
 			</ScrollView>

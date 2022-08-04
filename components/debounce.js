@@ -1,15 +1,17 @@
 let bouncing = {};
 
-const debounce = (func, args = [], amount = 250, namespace = "bouncing") => {
-	if(bouncing[namespace]) {
-		clearTimeout(bouncing[namespace]);
+//const debounce = (func, {args = [], amount = 250, namespace = "bouncing"}) => {
+const debounce = (func, {args, amount, namespace}) => {
+	const ns = namespace || 'bouncing';
+	if(bouncing[ns]) {
+		clearTimeout(bouncing[ns]);
 	}
-	bouncing[namespace] = setTimeout(
+	bouncing[ns] = setTimeout(
 		() => {
-			delete bouncing[namespace];
-			func.call(null, ...args);
+			delete bouncing[ns];
+			func.call(null, ...(args || []));
 		},
-	amount);
+	amount || 250);
 }
 
 export default debounce;

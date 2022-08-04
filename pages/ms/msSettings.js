@@ -2,9 +2,16 @@ import { Text, VStack, Pressable, HStack } from "native-base";
 //import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
+import debounce from '../../components/debounce';
 import { TextAreaSetting, TextSetting } from '../../components/layoutTags';
 import { setTitle, setDescription } from "../../store/morphoSyntaxSlice";
-import { AddCircleIcon, ExportIcon, RemoveCircleIcon, SaveIcon, TrashIcon } from "../../components/icons";
+import {
+	AddCircleIcon,
+	ExportIcon,
+	RemoveCircleIcon,
+	SaveIcon,
+	TrashIcon
+} from "../../components/icons";
 
 const Settings = () => {
 	//const { msPage } = useParams();
@@ -35,13 +42,19 @@ const Settings = () => {
 			<TextSetting
 				placeholder="Usually the language name."
 				value={synTitle}
-				onChangeEnd={(v) => dispatch(setTitle(v))}
+				onChangeText={(v) => debounce(
+					() => dispatch(setTitle(v)),
+					{ namespace: "msName" }
+				)}
 				text="MorphoSyntax Title:"
 			/>
 			<TextAreaSetting
 				placeholder="A short description of this document."
 				value={synDescription}
-				onChangeEnd={(v) => dispatch(setDescription(v))}
+				onChangeText={(v) => debounce(
+					() => dispatch(setDescription(v)),
+					{ namespace: "msDesc" }
+				)}
 				text="Description:"
 			/>
 			<VStack alignSelf="flex-end">

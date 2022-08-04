@@ -45,7 +45,13 @@ export const NavBar = (props) => {
 				ref={navRef}
 				onScroll={
 					({nativeEvent}) =>
-					debounce(maybeUpdateScrollPos, [nativeEvent])
+						debounce(
+							maybeUpdateScrollPos,
+							{
+								args: [nativeEvent],
+								namespace: "navBar"
+							}
+						)
 				}
 				scrollEventThrottle={16}
 				{...scrollProps}
@@ -72,8 +78,7 @@ export const TextAreaSetting = (props) => {
 				defaultValue={props.value}
 				placeholder={props.placeholder}
 				totalLines={props.rows || 3}
-				onChange={props.onChange}
-				onChangeEnd={props.onChangeEnd}
+				onChangeText={props.onChangeText}
 				{...inputProps}
 			/>
 		</Box>
@@ -91,8 +96,7 @@ export const TextSetting = (props) => {
 			<Input
 				defaultValue={props.value}
 				placeholder={props.placeholder}
-				onChange={props.onChange}
-				onChangeEnd={props.onChangeEnd}
+				onChangeText={props.onChangeText}
 				{...inputProps}
 			/>
 		</Box>
