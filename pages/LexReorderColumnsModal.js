@@ -43,16 +43,6 @@ const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	);
 };
 
-// TO-DO:
-// LATEST ERROR:
-// index.js:1 Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-//at DraggableFlatListInner (http://localhost:19006/static/js/bundle.js:124775:37)
-//at RefProvider (http://localhost:19006/static/js/bundle.js:126507:21)
-//at AnimatedValueProvider (http://localhost:19006/static/js/bundle.js:125936:21)
-//at PropsProvider (http://localhost:19006/static/js/bundle.js:126399:21)
-//at DraggableFlatList
-//at http://localhost:19006/static/js/bundle.js:95988:22
-
 const LexiconColumnReorderer = ({setReordering}) => {
 	const {columns} = useSelector((state) => state.lexicon, equalityCheck);
 	const dispatch = useDispatch();

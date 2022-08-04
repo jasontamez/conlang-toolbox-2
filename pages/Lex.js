@@ -34,7 +34,7 @@ import {
 	deleteLexiconItem,
 	deleteMultipleLexiconItems,
 	changeSortOrder,
-	changeSortDir,
+	toggleSortDir,
 	equalityCheck,
 	editLexiconItem,
 	consts
@@ -55,15 +55,14 @@ const Lex = () => {
 		title,
 		description,
 		lexicon,
-		wrap,
+		truncateColumns,
 		columns,
 		sortDir,
 		sortPattern,
 		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector((state) => state.appState.disableConfirms);
-	const extraData = [wrap, columns];
-	const isTruncated = !wrap;
+	const extraData = [truncateColumns, columns];
 	const {absoluteMaxColumns} = consts;
 	//
 	//
@@ -103,7 +102,7 @@ const Lex = () => {
 		setLabels(labs);
 		setNewLexiconItemColumns([...blankCols]);
 		setBlankLexiconItemColumns(blankCols);
-	}, [columns]);
+	}, extraData);
 	//
 	//
 	// SORTING ROUTINES
@@ -266,7 +265,7 @@ const Lex = () => {
 				{cols.map(
 					(text, i) =>
 						<Box px={1} size={columns[i].size} key={id + "-Column-" + String(i)}>
-							<Text isTruncated={isTruncated}>{text}</Text>
+							<Text isTruncated={truncateColumns}>{text}</Text>
 						</Box>
 					)
 				}
@@ -459,7 +458,7 @@ const Lex = () => {
 							</Menu.OptionGroup>
 						</Menu>
 						<IconButton
-							onPress={() => dispatch(changeSortDir(!sortDir))}
+							onPress={() => dispatch(toggleSortDir())}
 							icon={sortDir ? <SortUpIcon /> : <SortDownIcon />}
 							p={1}
 							_icon={{color: "secondary.50"}}
@@ -547,7 +546,7 @@ const Lex = () => {
 									key={col.id + "-ColumnLabel"}
 									size={col.size}
 								>
-									<Text bold isTruncated={isTruncated}>{col.label}</Text>
+									<Text bold isTruncated={truncateColumns}>{col.label}</Text>
 								</Box>
 							))
 						}

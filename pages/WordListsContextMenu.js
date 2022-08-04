@@ -58,7 +58,7 @@ const WordListsContextMenu = () => {
 				<Divider
 					my={2}
 					mx="auto"
-					w="90%"
+					w="5/6"
 					bg="main.50"
 					opacity={25}
 				/>
@@ -73,7 +73,7 @@ const WordListsContextMenu = () => {
 				<Divider
 					my={2}
 					mx="auto"
-					w="90%"
+					w="5/6"
 					bg="main.50"
 					opacity={25}/>
 				<Menu.Item

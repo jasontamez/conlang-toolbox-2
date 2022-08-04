@@ -6,7 +6,7 @@ const initialState = {
 	lastSave: 0,
 	title: "",
 	description: "Hi, this is a description.",
-	wrap: false,
+	truncateColumns: true,
 	sortDir: false,
 	sortPattern: [0, 1, 2],
 	columns: [
@@ -193,7 +193,7 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 const loadNewLexiconFunc = (state, action) => {
 	//
 	//
-	// TO-DO:
+	// TO-DO: add code for saving/loading lexicons
 	//
 	//
 };
@@ -240,44 +240,18 @@ const deleteLexiconItemFunc = (state, action) => {
 	return state;
 };
 const deleteMultipleLexiconItemsFunc = (state, action) => {
+	//deleteMultipleLexiconItems([items])
 	const {payload} = action;
 	let tester = {};
 	payload.forEach(id => tester[id] = true);
 	state.lexicon = state.lexicon.filter(item => !tester[item.id]);
 	return state;
 };
-const addLexiconColumnFunc = (state, action) => {
-	const {col, toEnd, dummy} = action.payload;
-	const attach = toEnd ? "push" : "unshift";
-	state.columns[attach](col);
-	state.lexicon = state.lexicon.map((item) => {
-		item.columns[attach](dummy);
-		return item;
-	});
-	// Adding a column should not change the sort order, since everything is getting the same new info in the same place.
-	return state;
-};
-const deleteLexiconColumnFunc = (state, action) => {
-	const toDelete = action.payload;
-	const pattern = state.sortPattern;
-	let lexicon = state.lexicon;
-	// Delete the column.
-	state.columns.splice(toDelete, 1);
-	// Delete the column from the sortPattern
-	state.sortPattern =
-		pattern.filter(p => p !== toDelete)
-		// Adjust any columns after the deleted column
-		.map(p => p > toDelete ? p - 1 : p);
-	// Delete the column from each lexicon item
-	lexicon.forEach(item => item.columns.splice(toDelete, 1));
-	// Sort the lexcicon
-	state.lexicon = sortLexicon([...lexicon], pattern, state.sortDir);
-	return state;
-};
 const modifyLexiconColumnsFunc = (state, action) => {
+	//modifyLexiconColumns([newColumns])
 	// Columns have been changed
-	const oldCols = [...state.columns];
 	const newCols = action.payload;
+	const oldCols = [...state.columns];
 	const sortPattern = [...state.sortPattern];
 	const lexicon = [...state.lexicon];
 	//
@@ -343,59 +317,41 @@ const modifyLexiconColumnsFunc = (state, action) => {
 	// Save everything to state
 	//
 	//
-	// TO-DO: test deleting columns
-	//console.log("colStillExists:");
-	//console.log({...colStillExists});
-	//console.log(["newToOld", ...newToOld]);
-	//console.log(["oldPattern", ...state.sortPattern]);
-	//console.log(["newPattern", ...newPattern]);
-	//console.log(["oldLexicon", ...state.lexicon]);
-	//console.log(["newLexicon", ...newLexicon]);
-	//console.log(["oldCols", ...state.columns]);
-	//console.log(["newCols", ...newCols]);
 	state.sortPattern = newPattern;
 	// Sort lexicon before we save
 	state.lexicon = sortLexicon(newLexicon, newPattern, state.sortDir);
 	state.columns = newCols;
 	return state;
 };
-const reorderLexiconColumnsFunc = (state, action) => {
-	const newOrder = action.payload;
-	const columns = state.columns;
-	const pattern = state.sortPattern;
-	state.columns = newOrder.map(o => columns[o]);
-	state.sortPattern = newOrder.map(o => pattern[o]);
-	state.lexicon.forEach(item => {
-		const columns = item.columns;
-		item.columns = newOrder.map(o => columns[o]);
-	});
-	return state;
-};
 const changeSortOrderFunc = (state, action) => {
+	//changeSortOrder([newOrder])
 	const { payload } = action;
 	state.sortPattern = payload;
 	state.lexicon = sortLexicon([...state.lexicon], payload, state.sortDir);
 	return state;
 };
-const changeSortDirFunc = (state, action) => {
-	state.sortDir = action.payload;
+const toggleSortDirFunc = (state) => {
+	//toggleSortDir()
+	state.sortDir = !state.sortDir;
 	// Changing the direction should just reverse everything.
 	state.lexicon.reverse();
 	return state;
 };
-const changeLexiconWrapFunc = (state, action) => {
-	state.wrap = action.payload;
+const setTruncateFunc = (state, action) => {
+	//setTruncate(boolean)
+	state.truncateColumns = action.payload;
 	return state;
 };
-const setDisableBlankSettingFunc = (state, action) => {
+const setDisableBlankConfirmsFunc = (state, action) => {
+	//setDisableBlankConfirms(boolean)
 	state.disableBlankConfirms = action.payload;
 	return state;
 };
 const setMaxColumnsFunc = (state, action) => {
+	//setMaxColumns(number)
 	state.maxColumns = action.payload;
 	return state;
 };
-//const setTitleFunc = (state, action) => {};
 //const setTitleFunc = (state, action) => {};
 
 
@@ -409,15 +365,12 @@ const lexiconSlice = createSlice({
 		addLexiconItem: addLexiconItemFunc,
 		editLexiconItem: editLexiconItemFunc,
 		deleteLexiconItem: deleteLexiconItemFunc,
-		addLexiconColumn: addLexiconColumnFunc,
-		deleteLexiconColumn: deleteLexiconColumnFunc,
 		deleteMultipleLexiconItems: deleteMultipleLexiconItemsFunc,
 		modifyLexiconColumns: modifyLexiconColumnsFunc,
-		reorderLexiconColumns: reorderLexiconColumnsFunc,
 		changeSortOrder: changeSortOrderFunc,
-		changeSortDir: changeSortDirFunc,
-		changeLexiconWrap: changeLexiconWrapFunc,
-		setDisableBlankSetting: setDisableBlankSettingFunc,
+		toggleSortDir: toggleSortDirFunc,
+		setTruncate: setTruncateFunc,
+		setDisableBlankConfirms: setDisableBlankConfirmsFunc,
 		setMaxColumns: setMaxColumnsFunc
 	}
 });
@@ -433,9 +386,9 @@ export const {
 	modifyLexiconColumns,
 	reorganizeLexiconItems,
 	changeSortOrder,
-	changeSortDir,
-	changeLexiconWrap,
-	setDisableBlankSetting,
+	toggleSortDir,
+	setTruncate,
+	setDisableBlankConfirms,
 	setMaxColumns
 } = lexiconSlice.actions;
 
@@ -455,7 +408,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const titleA = stateA.title;
 	const descriptionA = stateA.description;
 	const lexiconA = stateA.lexicon;
-	const wrapA = stateA.wrap;
+	const truncateColumnsA = stateA.truncateColumns;
 	const columnsA = stateA.columns;
 	const sortDirA = stateA.sortDir;
 	const sortPatternA = stateA.sortPattern;
@@ -465,7 +418,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const titleB = stateB.title;
 	const descriptionB = stateB.description;
 	const lexiconB = stateB.lexicon;
-	const wrapB = stateB.wrap;
+	const truncateColumnsB = stateB.truncateColumns;
 	const columnsB = stateB.columns;
 	const sortDirB = stateB.sortDir;
 	const sortPatternB = stateB.sortPattern;
@@ -477,7 +430,7 @@ export const equalityCheck = (stateA, stateB) => {
 	if (
 		titleA !== titleB
 		|| descriptionA !== descriptionB
-		|| wrapA !== wrapB
+		|| truncateColumnsA !== truncateColumnsB
 		|| sortDirA !== sortDirB
 		|| disableBlankConfirmsA !== disableBlankConfirmsB
 		|| maxColumnsA !== maxColumnsB
@@ -485,15 +438,15 @@ export const equalityCheck = (stateA, stateB) => {
 	) {
 		return false;
 	} else if(lexiconA === lexiconB) {
+		if(columnsA === columnsB) {
+			return true;
+		}
 		lex = true;
 	}
 	if(columnsA === columnsB) {
 		col = true;
-	}
-	if(lex && col) {
-		return true;
-	} else if (!col) {
-		// Cols bad
+	} else {
+		// Cols bad?
 		col = columnsA.every((col, i) => {
 			const otherCol = columnsB[i];
 			return col === otherCol ||
@@ -507,6 +460,7 @@ export const equalityCheck = (stateA, stateB) => {
 			return false;
 		}
 	}
+	// Cols are good.
 	// Lex bad?
 	return lex || lexiconA.every((lex, i) => {
 		const otherLex = lexiconB[i];

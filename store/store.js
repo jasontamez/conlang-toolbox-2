@@ -145,7 +145,7 @@ export const blankAppState = {/*
 		lastSave: 0,
 		title: "",
 		description: "Hi, this is a description.",
-		wrap: false,
+		truncateColumns: true,
 		sortDir: false,
 		sortPattern: [0, 1, 2],
 		columns: [

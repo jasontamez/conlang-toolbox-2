@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import {
 	Menu,
@@ -16,8 +16,9 @@ import {
 
 import { DotsIcon, SaveIcon } from '../components/icons';
 import {
-	setDisableBlankSetting,
+	setDisableBlankConfirms,
 	setMaxColumns,
+	setTruncate,
 	consts
 } from "../store/lexiconSlice";
 import doToast from '../components/toast';
@@ -26,20 +27,28 @@ const LexiconContextMenu = () => {
 	const {
 		sortPattern,
 		disableBlankConfirms,
+		truncateColumns,
 		maxColumns
 	} = useSelector((state) => state.lexicon, shallowEqual);
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [
-		disableBlanks,
-		setDisableBlanks
-	] = useState(disableBlankConfirms ? ["disable"] : []);
+	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
 	const [cols, setCols] = useState(maxColumns);
-	const handleBlankConfirms = (checkboxes) => {
-		setDisableBlanks(checkboxes);
-		dispatch(setDisableBlankSetting(checkboxes.length === 1));
+	useEffect(() => {
+		setCheckboxOptions([
+			...(truncateColumns ? ["truncateColumns"] : []),
+			...(disableBlankConfirms ? ["disableBlankConfirms"] : [])
+		]);
+	}, [menuOpen, truncateColumns, disableBlankConfirms]);
+	const handleLexiconOptions = (checkboxes) => {
+		let options = {};
+		checkboxes.forEach(opt => options[opt] = true);
+		const {disableBlankConfirms, truncateColumns} = options;
+		dispatch(setDisableBlankConfirms(!!disableBlankConfirms));
+		dispatch(setTruncate(!!truncateColumns));
+		setCheckboxOptions(checkboxes);
 	};
 	const doMenuClose = () => {
 		// close menu
@@ -75,12 +84,11 @@ const LexiconContextMenu = () => {
 			>
 				<Menu.OptionGroup
 					title="Options"
-					defaultValue={disableBlanks}
-					value={disableBlanks}
+					defaultValue={checkboxOptions}
 					type="checkbox"
-					onChange={(v) => handleBlankConfirms(v)}
+					onChange={(v) => handleLexiconOptions(v)}
 				>
-					<Menu.ItemOption value="disable">
+					<Menu.ItemOption value="disableBlankConfirms">
 						<HStack
 							flexWrap="wrap"
 							space={1}
@@ -92,8 +100,19 @@ const LexiconContextMenu = () => {
 							<Text>Confirmations</Text>
 						</HStack>
 					</Menu.ItemOption>
+					<Menu.ItemOption value="truncateColumns">
+						<HStack
+							flexWrap="wrap"
+							space={1}
+							justifyContent="flex-end"
+						>
+							<Text>Truncate</Text>
+							<Text>Long</Text>
+							<Text>Lines</Text>
+						</HStack>
+					</Menu.ItemOption>
 				</Menu.OptionGroup>
-				<Divider my={2} mx="auto" w="90%" bg="main.50" opacity={25} />
+				<Divider my={2} mx="auto" w="5/6" bg="main.50" opacity={25} />
 				<Menu.Group title="Advanced">
 					<Menu.Item onPress={() => showColumnsRange()}>
 						<HStack
