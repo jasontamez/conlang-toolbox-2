@@ -60,21 +60,6 @@ const WordListsContextMenu = () => {
 					mx="auto"
 					w="5/6"
 					bg="main.50"
-					opacity={25}
-				/>
-				<Menu.Item>
-					<SaveIcon m={2} ml={0} />
-					<Text>Save All to Lexicon</Text>
-				</Menu.Item>
-				<Menu.Item>
-					<SaveIcon m={2} ml={0} />
-					<Text>Choose what to save</Text>
-				</Menu.Item>
-				<Divider
-					my={2}
-					mx="auto"
-					w="5/6"
-					bg="main.50"
 					opacity={25}/>
 				<Menu.Item
 					onPress={() => showInfo()}

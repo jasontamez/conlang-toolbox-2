@@ -138,7 +138,9 @@ export const blankAppState = {/*
 	},
 	wordLists: {
 		centerTheDisplayedWords: [],
-		listsDisplayed: {}
+		listsDisplayed: {},
+		pickAndSaveForLexicon: false,
+		savingForLexicon: {}
 	},
 	lexicon: {
 		key: "",
