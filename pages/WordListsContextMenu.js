@@ -115,15 +115,16 @@ const WordListsContextMenu = () => {
 								Sign List</Text> was assembled by James Woodward to take into account the ways
 								sign languages use words and concepts.
 							</Text>
-							<Text fontSize="md">Dogolposky List</Text>
+							<Text fontSize="md">Dolgopolsky List</Text>
 							<Text px={5} fontSize="sm">
 								{'\t'}Compiled by Aharon Dolgopolsky in 1964, this lists the 15 lexical items that are
 								the least likely to be replaced by other words as a language evolves. It was based
-								on a study of 140 languages from across Eurasia.
+								on a study of 140 languages from across Eurasia. (Note: Who? and What? are lumped
+								together as one item in the list, but separated into two in this tool.)
 							</Text>
 							<Text fontSize="md">Leipzig-Jakarta List</Text>
 							<Text px={5} fontSize="sm">
-								{'\t'}Similar to the Dogolposky list, this is a list of words judged to be the most
+								{'\t'}Similar to the Dolgopolsky list, this is a list of words judged to be the most
 								resistant to borrowing. Experts on 41 languages from across the world were given a
 								uniform vocabulary list and asked to provide the words for each item in the language
 								on which they were an expert, as well as information on how strong the evidence that

@@ -3,7 +3,7 @@ const WordListSources = [
 	"Swadesh 207",
 	"Swadesh-Yakhontov",
 	"Swadesh-Woodward",
-	"Dogolposky",
+	"Dolgopolsky",
 	"Leipzig-Jakarta",
 	"ASJP"
 ];
@@ -24,7 +24,7 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -40,7 +40,7 @@ const WordList = [
 			"Swadesh-Yakhontov",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -338,7 +338,7 @@ const WordList = [
 	{
 		word: "dead",
 		lists: [
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
@@ -455,7 +455,7 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -510,7 +510,7 @@ const WordList = [
 		word: "fingernail",
 		lists: [
 			"Swadesh 207",
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
@@ -721,7 +721,7 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
@@ -925,7 +925,7 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -985,7 +985,7 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -1044,7 +1044,7 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
@@ -1495,7 +1495,7 @@ const WordList = [
 	{
 		word: "tear/teardrop",
 		lists: [
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
@@ -1572,7 +1572,7 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -1583,7 +1583,7 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -1608,7 +1608,7 @@ const WordList = [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
 			"Swadesh 207",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -1647,7 +1647,7 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"Dogolposky",
+			"Dolgopolsky",
 			"ASJP"
 		]
 	},
@@ -1666,7 +1666,7 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
@@ -1699,7 +1699,7 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"Dogolposky"
+			"Dolgopolsky"
 		]
 	},
 	{
