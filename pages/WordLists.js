@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import WL from '../components/wordLists';
 //import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +12,8 @@ import {
 	Modal,
 	VStack,
 	Radio,
-	useToast
+	useToast,
+	IconButton
 } from 'native-base';
 import {
 	toggleDisplayedList,
@@ -21,9 +22,10 @@ import {
 	setSavingForLexicon,
 	equalityCheck
 } from '../store/wordListsSlice';
-import { CloseCircleIcon, SaveIcon } from "../components/icons";
+import { CloseCircleIcon, CloseIcon, SaveIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../components/toast';
+import { useNavigate } from 'react-router-native';
 
 const WordLists = () => {
 	const {
@@ -34,6 +36,8 @@ const WordLists = () => {
 	} = useSelector((state) => state.wordLists, equalityCheck);
 	const columns = useSelector((state) => state.lexicon.columns);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const toast = useToast();
 	const [addToLexicon, setAddToLexicon] = useState([]);
 	const [columnID, setColumnID] = useState(columns[0].id);
 	const shown = [];
@@ -47,11 +51,36 @@ const WordLists = () => {
 	};
 	const beginSaveSome = () => {
 		dispatch(togglePickAndSaveForLexicon());
+		doToast({
+			toast,
+			override: (
+				<Box
+					borderRadius="sm"
+					maxW={56}
+					bg="tertiary.500"
+					p={3}
+				>
+					<Text textAlign="center" color="tertiary.50">Tap on rows to select them. Tap <Text bold>Save</Text> below to save them to the Lexicon.</Text>
+				</Box>
+			),
+			placement: "bottom-right",
+			duration: 4000
+		});
 	};
 	const saveSomeFunc = () => {
-		setAddToLexicon(Object.keys(savingForLexicon));
+		const keys = Object.keys(savingForLexicon);
+		if(keys.length === 0) {
+			return doToast({
+				toast,
+				msg: "You haven't selected any words to add!",
+				placement: "bottom",
+				scheme: "error"
+			});
+		}
+		setAddToLexicon(keys);
 	};
 	const cancelSaveSome = () => {
+		toast.closeAll();
 		dispatch(togglePickAndSaveForLexicon());
 		dispatch(setSavingForLexicon({}));
 	};
@@ -99,7 +128,7 @@ const WordLists = () => {
 				_text={{color: "tertiary.50"}}
 				startIcon={<SaveIcon color="tertiary.50" />}
 				onPress={saveSomeFunc}
-			>SAVE CHOSEN TO LEXICON</Button>
+			>SAVE</Button>
 		);
 		const buttons = [];
 		if(pickAndSaveForLexicon) {
@@ -125,6 +154,66 @@ const WordLists = () => {
 				{buttons}
 			</HStack>
 		);
+	};
+	const doAddToLexicon = () => {
+		// Save # of items
+		const length = String(addToLexicon.length);
+		// change global state
+		dispatch(addMultipleItemsAsColumn({
+			words: addToLexicon,
+			column: columnID
+		}));
+		// close modal
+		setAddToLexicon([]);
+		// reset saving-for-lexicon, if needed
+		if(pickAndSaveForLexicon) {
+			dispatch(togglePickAndSaveForLexicon());
+			dispatch(setSavingForLexicon({}));							
+		}
+		// send toast message
+		doToast({
+			toast,
+			override: (
+				<VStack
+					alignItems="center"
+					borderRadius="sm"
+					bg="success.500"
+					maxW={56}
+					p={0}
+					m={0}
+				>
+					<IconButton
+						alignSelf="flex-end"
+						onPress={() => toast.closeAll()}
+						bg="transparent"
+						icon={<CloseIcon color="success.50" />}
+						p={1}
+						m={0}
+					/>
+					<Box
+						mb={2}
+						mt={0}
+						p={0}
+						px={3}
+					>
+						<Text textAlign="center" color="success.50">Added <Text bold>{length}</Text> words to the Lexicon.</Text>
+					</Box>
+					<Button
+						bg="darker"
+						px={2}
+						py={1}
+						mb={1}
+						_text={{color: "success.50"}}
+						onPress={() => {
+							navigate("/lex");
+							toast.closeAll();
+						}}
+					>Go to Lexicon</Button>
+				</VStack>
+			),
+			placement: "top",
+			duration: 5000
+		});
 	};
 	const alignment =
 		centerTheDisplayedWords.length > 0 ?
@@ -155,7 +244,6 @@ const WordLists = () => {
 			)
 		: box;
 	};
-	const toast = useToast();
 	return (
 		<>
 			<HStack
@@ -220,6 +308,7 @@ const WordLists = () => {
 				<Modal.Content>
 					<Modal.Header
 						bg="primary.500"
+						borderBottomWidth={0}
 					>
 						<Text color="primaryContrast" fontSize="md">Add to Lexicon</Text>
 					</Modal.Header>
@@ -236,15 +325,17 @@ const WordLists = () => {
 							<Radio.Group
 								onChange={(value) => setColumnID(value)}
 								accessibilityLabel="Lexicon columns"
-								bg="lighter"
 								alignItems="stretch"
+								shadow={3}
 							>
 								{columns.map((col, index) => (
 									<Radio
 										value={col.id}
 										key={col.id}
 										_stack={{
-											bg: index % 2 ? "darker" : "transparent",
+											bg: index % 2
+												? "lighter"
+												: "darker",
 											p: 2,
 											pr: 4
 										}}
@@ -255,42 +346,30 @@ const WordLists = () => {
 							</Radio.Group>
 						</VStack>
 					</Modal.Body>
-					<Modal.Footer>
+					<Modal.Footer
+						m={0}
+						p={0}
+						borderTopWidth={0}
+					>
 						<HStack
 							justifyContent="space-between"
 							w="full"
-							mx={2}
-							my={1}
-							p={0}
 						>
 							<Button
 								bg="lighter"
+								_text={{color: "text.50"}}
 								onPress={() => setAddToLexicon([])}
 								px={2}
 								py={1}
+								m={2}
 							>Cancel</Button>
 							<Button
-								bg="secondary.500"
-								_text={{color: "secondary.50"}}
+								bg="success.500"
+								_text={{color: "success.50"}}
 								px={2}
 								py={1}
-								onPress={() => {
-									const length = String(addToLexicon.length);
-									dispatch(addMultipleItemsAsColumn({
-										words: addToLexicon,
-										column: columnID
-									}));
-									setAddToLexicon([]);
-									if(pickAndSaveForLexicon) {
-										dispatch(togglePickAndSaveForLexicon());
-										dispatch(setSavingForLexicon({}));							
-									}
-									doToast({
-										toast,
-										msg: <Text>Added <Text bold>{length}</Text> words to the Lexicon.</Text>,
-										placement: "top"
-									});
-								}}
+								m={2}
+								onPress={() => doAddToLexicon()}
 							>Save</Button>
 						</HStack>
 					</Modal.Footer>

@@ -1,8 +1,15 @@
 import { Box, Text } from "native-base";
 
-const doToast = ({toast, msg, bg, color, placement}) => {
+const doToast = ({toast, msg, override, bg, color, scheme, placement, duration}) => {
+	if(duration === undefined) {
+		duration = 2500;
+	}
+	if(scheme) {
+		bg = scheme + ".500";
+		color = scheme + ".50";
+	}
 	toast.show({
-		render: () => (
+		render: () => override || (
 			<Box
 				bg={bg || "success.500"}
 				borderRadius="sm"
@@ -14,7 +21,7 @@ const doToast = ({toast, msg, bg, color, placement}) => {
 				</Text>
 			</Box>
 		),
-		duration: 2500,
+		duration,
 		placement
 	});
 };

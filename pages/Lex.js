@@ -196,8 +196,7 @@ const Lex = () => {
 			return doToast({
 				toast,
 				placement: "top",
-				bg: "info.500",
-				color: "info.50",
+				scheme: "info",
 				msg: "You haven't marked anything for deletion yet."
 			});
 		} else if (!disableConfirms) {
@@ -216,8 +215,7 @@ const Lex = () => {
 		doToast({
 			toast,
 			placement: "top",
-			bg: "danger.500",
-			color: "danger.50",
+			scheme: "danger",
 			msg: String(amount) + " item" + maybePlural(amount) + " deleted"
 		});
 	};
