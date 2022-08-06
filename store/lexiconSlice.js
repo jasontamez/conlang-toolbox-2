@@ -205,24 +205,62 @@ const setDescFunc = (state, action) => {
 	state.description = action.payload;
 	return state;
 };
+const allIDs = (lexicon) => {
+	// Works for any array of objects with "id" props.
+	let ids = {};
+	lexicon.forEach((word) => (ids[word.id] = true));
+	return ids;
+};
+const newID = (ids) => {
+	// Make a unique ID given an object of other IDs
+	let id;
+	do {
+		id = uuidv4();
+	} while(ids[id]);
+	return id;
+};
 const addLexiconItemFunc = (state, action) => {
 	//addLexiconItem([columns])
 	const lex = state.lexicon;
 	const columns = [...action.payload];
 	// Get unique ID
-	let ids = {};
-	lex.forEach((word) => (ids[word.id] = true));
-	let id;
-	do {
-		id = uuidv4();
-	} while(ids[id]);
+	let ids = allIDs(lex);
+	const id = newID(ids);
 	// Construct new item
 	const item = {
 		id,
 		columns
 	};
 	// add it in (and sort)
-	state.lexicon = sortLexicon([item, ...state.lexicon], state.sortPattern, state.sortDir);
+	state.lexicon = sortLexicon([item, ...lex], state.sortPattern, state.sortDir);
+	return state;
+};
+const addMultipleItemsAsColumnFunc = (state, action) => {
+	//addMultipleItemsAsColumn({words: [array], column: "id"})
+	const {words, column} = action.payload;
+	const pre = [];
+	const post = [];
+	const {lexicon, columns, sortPattern, sortDir} = state;
+	// Make blanks for the other columns.
+	let found = false;
+	columns.forEach(col => {
+		if(col.id === column) {
+			found = true;
+		} else if (found) {
+			post.push("");
+		} else {
+			pre.push("");
+		}
+	});
+	// Construct objects for each word and add them in
+	let ids = allIDs(lexicon);
+	words.forEach(word => {
+		const id = newID(ids);
+		lexicon.push({id, columns: [...pre, word, ...post]});
+		ids[id] = true;
+	});
+	// Sort the lexicon
+	state.lexicon = sortLexicon(lexicon, sortPattern, sortDir);
 	return state;
 };
 const editLexiconItemFunc = (state, action) => {
@@ -363,6 +401,7 @@ const lexiconSlice = createSlice({
 		setTitle: setTitleFunc,
 		setDesc: setDescFunc,
 		addLexiconItem: addLexiconItemFunc,
+		addMultipleItemsAsColumn: addMultipleItemsAsColumnFunc,
 		editLexiconItem: editLexiconItemFunc,
 		deleteLexiconItem: deleteLexiconItemFunc,
 		deleteMultipleLexiconItems: deleteMultipleLexiconItemsFunc,
@@ -380,6 +419,7 @@ export const {
 	setTitle,
 	setDesc,
 	addLexiconItem,
+	addMultipleItemsAsColumn,
 	editLexiconItem,
 	deleteLexiconItem,
 	deleteMultipleLexiconItems,

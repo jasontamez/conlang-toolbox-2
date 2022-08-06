@@ -8,7 +8,11 @@ import {
 	Button,
 	Box,
 	Pressable,
-	FlatList
+	FlatList,
+	Modal,
+	VStack,
+	Radio,
+	useToast
 } from 'native-base';
 import {
 	toggleDisplayedList,
@@ -18,6 +22,8 @@ import {
 	equalityCheck
 } from '../store/wordListsSlice';
 import { CloseCircleIcon, SaveIcon } from "../components/icons";
+import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
+import doToast from '../components/toast';
 
 const WordLists = () => {
 	const {
@@ -26,24 +32,25 @@ const WordLists = () => {
 		pickAndSaveForLexicon,
 		savingForLexicon
 	} = useSelector((state) => state.wordLists, equalityCheck);
+	const columns = useSelector((state) => state.lexicon.columns);
 	const dispatch = useDispatch();
+	const [addToLexicon, setAddToLexicon] = useState([]);
+	const [columnID, setColumnID] = useState(columns[0].id);
 	const shown = [];
 	WL.words.forEach(({word, lists}) => {
 		if(lists.some((list) => listsDisplayed[list])) {
 			shown.push(word);
 		}
 	});
-	const alignment =
-		centerTheDisplayedWords.length > 0 ?
-			{ textAlign: "center" }
-		:
-			{}
-	;
-	const saveAllFunc = () => {};
+	const saveAllFunc = () => {
+		setAddToLexicon([...shown]);
+	};
 	const beginSaveSome = () => {
 		dispatch(togglePickAndSaveForLexicon());
 	};
-	const saveSomeFunc = () => {};
+	const saveSomeFunc = () => {
+		setAddToLexicon(Object.keys(savingForLexicon));
+	};
 	const cancelSaveSome = () => {
 		dispatch(togglePickAndSaveForLexicon());
 		dispatch(setSavingForLexicon({}));
@@ -119,6 +126,12 @@ const WordLists = () => {
 			</HStack>
 		);
 	};
+	const alignment =
+		centerTheDisplayedWords.length > 0 ?
+			{ textAlign: "center" }
+		:
+			{}
+	;
 	const renderItem = ({item, index}) => {
 		const background = index % 2 ? {bg: "darker"} : {};
 		const box = (
@@ -142,6 +155,7 @@ const WordLists = () => {
 			)
 		: box;
 	};
+	const toast = useToast();
 	return (
 		<>
 			<HStack
@@ -202,6 +216,86 @@ const WordLists = () => {
 				]}
 			/>
 			<SaveBar />
+			<Modal isOpen={addToLexicon.length > 0}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+					>
+						<Text color="primaryContrast" fontSize="md">Add to Lexicon</Text>
+					</Modal.Header>
+					<Modal.CloseButton
+						_icon={{color: "primaryContrast"}}
+						onPress={() => setAddToLexicon([])}
+					/>
+					<Modal.Body>
+						<VStack
+							alignItems="center"
+							justifyContent="flex-start"
+						>
+							<Text alignSelf="flex-start" mb={4}>Choose which Lexicon column to put the words in.</Text>
+							<Radio.Group
+								onChange={(value) => setColumnID(value)}
+								accessibilityLabel="Lexicon columns"
+								bg="lighter"
+								alignItems="stretch"
+							>
+								{columns.map((col, index) => (
+									<Radio
+										value={col.id}
+										key={col.id}
+										_stack={{
+											bg: index % 2 ? "darker" : "transparent",
+											p: 2,
+											pr: 4
+										}}
+									>
+										{col.label}
+									</Radio>
+								))}
+							</Radio.Group>
+						</VStack>
+					</Modal.Body>
+					<Modal.Footer>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+							mx={2}
+							my={1}
+							p={0}
+						>
+							<Button
+								bg="lighter"
+								onPress={() => setAddToLexicon([])}
+								px={2}
+								py={1}
+							>Cancel</Button>
+							<Button
+								bg="secondary.500"
+								_text={{color: "secondary.50"}}
+								px={2}
+								py={1}
+								onPress={() => {
+									const length = String(addToLexicon.length);
+									dispatch(addMultipleItemsAsColumn({
+										words: addToLexicon,
+										column: columnID
+									}));
+									setAddToLexicon([]);
+									if(pickAndSaveForLexicon) {
+										dispatch(togglePickAndSaveForLexicon());
+										dispatch(setSavingForLexicon({}));							
+									}
+									doToast({
+										toast,
+										msg: <Text>Added <Text bold>{length}</Text> words to the Lexicon.</Text>,
+										placement: "top"
+									});
+								}}
+							>Save</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
 		</>
 	);
 };
