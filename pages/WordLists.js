@@ -327,6 +327,7 @@ const WordLists = () => {
 								accessibilityLabel="Lexicon columns"
 								alignItems="stretch"
 								shadow={3}
+								defaultValue={columns[0].id}
 							>
 								{columns.map((col, index) => (
 									<Radio
