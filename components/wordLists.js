@@ -5,7 +5,8 @@ const WordListSources = [
 	"Swadesh-Woodward",
 	"Dolgopolsky",
 	"Leipzig-Jakarta",
-	"ASJP"
+	"ASJP",
+	"Landau 200"
 ];
 
 const WordList = [
@@ -58,6 +59,18 @@ const WordList = [
 		]
 	},
 	{
+		word: "afraid",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "air",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "all (of a number)",
 		lists: [
 			"Swadesh 100",
@@ -69,6 +82,12 @@ const WordList = [
 		word: "and",
 		lists: [
 			"Swadesh 207"
+		]
+	},
+	{
+		word: "angry",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -87,7 +106,8 @@ const WordList = [
 	{
 		word: "arm",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -99,23 +119,37 @@ const WordList = [
 		]
 	},
 	{
+		word: "ask (a question)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "at",
 		lists: [
 			"Swadesh 207"
 		]
 	},
 	{
-		word: "back",
+		word: "baby",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "back (of object/building)",
 		lists: [
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "bad",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -144,7 +178,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -161,7 +196,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -176,7 +212,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -187,14 +224,22 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "blow (verb)",
+		word: "blow (breathe out)",
 		lists: [
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
+		]
+	},
+	{
+		word: "body",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -205,6 +250,30 @@ const WordList = [
 			"Swadesh 207",
 			"Leipzig-Jakarta",
 			"ASJP"
+		]
+	},
+	{
+		word: "bottom (of object/mountain)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "boy (male child)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "boy (young man)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "break/shatter (verb)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -219,7 +288,8 @@ const WordList = [
 	{
 		word: "breathe (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -229,11 +299,18 @@ const WordList = [
 		]
 	},
 	{
-		word: "burn (verb)",
+		word: "build (construct)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "burn (something)",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -249,16 +326,18 @@ const WordList = [
 		]
 	},
 	{
-		word: "child",
+		word: "child (reciprocal of parent)",
 		lists: [
-			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
-		word: "child (kin term)",
+		word: "child (young human)",
 		lists: [
-			"Leipzig-Jakarta"
+			"Swadesh 207",
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -268,17 +347,43 @@ const WordList = [
 		]
 	},
 	{
+		word: "climb (a mountain, hill)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "climb (a tree)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "close (one's eyes)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "clothes",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "cloud (not fog)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
 		word: "cold",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -287,7 +392,14 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
+		]
+	},
+	{
+		word: "cook (verb)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -313,26 +425,42 @@ const WordList = [
 	{
 		word: "cry/weep (verb)",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "cut (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
-		word: "dance",
+		word: "dance (verb)",
 		lists: [
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
-		word: "day",
+		word: "daughter (of a father)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "daughter (of a mother)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "day/daytime",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -342,19 +470,27 @@ const WordList = [
 		]
 	},
 	{
+		word: "deep (vertically)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "die (verb)",
 		lists: [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
 		word: "dig (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -387,7 +523,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -395,7 +532,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -409,7 +547,8 @@ const WordList = [
 		word: "dust",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -419,15 +558,17 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "earth (soil)",
+		word: "earth (ground, dirt)",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -435,7 +576,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -445,7 +587,14 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
+		]
+	},
+	{
+		word: "evening",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -456,14 +605,22 @@ const WordList = [
 			"Swadesh 207",
 			"Leipzig-Jakarta",
 			"Dolgopolsky",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
+		]
+	},
+	{
+		word: "face",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
 		word: "fall (verb)",
 		lists: [
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -474,10 +631,17 @@ const WordList = [
 		]
 	},
 	{
+		word: "fast",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "father",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -495,6 +659,12 @@ const WordList = [
 		]
 	},
 	{
+		word: "feel (through touch)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "few",
 		lists: [
 			"Swadesh 207"
@@ -503,14 +673,22 @@ const WordList = [
 	{
 		word: "fight (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
+		]
+	},
+	{
+		word: "finger",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
 		word: "fingernail",
 		lists: [
 			"Swadesh 207",
-			"Dolgopolsky"
+			"Dolgopolsky",
+			"Landau 200"
 		]
 	},
 	{
@@ -521,11 +699,12 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "fish (noun)",
+		word: "fish (animal)",
 		lists: [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
@@ -559,14 +738,16 @@ const WordList = [
 	{
 		word: "flow (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
 		word: "flower",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -574,7 +755,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -584,10 +766,17 @@ const WordList = [
 		]
 	},
 	{
-		word: "foot (not leg)",
+		word: "food",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "foot (part of body; not leg)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -603,15 +792,29 @@ const WordList = [
 		]
 	},
 	{
-		word: "freeze (verb)",
+		word: "freeze (something)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
+		]
+	},
+	{
+		word: "friend",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "front (of object/building)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
 		word: "fruit",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -625,18 +828,32 @@ const WordList = [
 		]
 	},
 	{
+		word: "girl (female child)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "girl (young woman)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "give (verb)",
 		lists: [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
-		word: "go (verb)",
+		word: "go (on foot)",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -645,7 +862,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -672,17 +890,24 @@ const WordList = [
 		]
 	},
 	{
+		word: "grow (intransitive verb)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "guts",
 		lists: [
 			"Swadesh 207"
 		]
 	},
 	{
-		word: "hair (on head of humans)",
+		word: "hair (mass on head of humans)",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -691,20 +916,29 @@ const WordList = [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
 			"Swadesh 207",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
+		]
+	},
+	{
+		word: "happy",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
 		word: "hard",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "head (anatomic)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -713,7 +947,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -721,7 +956,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Dolgopolsky"
+			"Dolgopolsky",
+			"Landau 200"
 		]
 	},
 	{
@@ -729,7 +965,8 @@ const WordList = [
 		lists: [
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -742,6 +979,12 @@ const WordList = [
 		word: "hide (verb)",
 		lists: [
 			"Leipzig-Jakarta"
+		]
+	},
+	{
+		word: "high (in altitude)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -770,13 +1013,15 @@ const WordList = [
 	{
 		word: "hot",
 		lists: [
-			"Swadesh 100"
+			"Swadesh 100",
+			"Landau 200"
 		]
 	},
 	{
-		word: "house",
+		word: "house (noun)",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -794,6 +1039,12 @@ const WordList = [
 		]
 	},
 	{
+		word: "hurt/injure (verb)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "husband",
 		lists: [
 			"Swadesh 207",
@@ -804,7 +1055,8 @@ const WordList = [
 		word: "ice",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -822,6 +1074,12 @@ const WordList = [
 		]
 	},
 	{
+		word: "kick (verb)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "kill (verb)",
 		lists: [
 			"Swadesh 100",
@@ -830,27 +1088,42 @@ const WordList = [
 		]
 	},
 	{
+		word: "kill/murder",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "knee",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "know (verb)",
+		word: "know (a person)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "know (information)",
 		lists: [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "lake",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -858,23 +1131,32 @@ const WordList = [
 		lists: [
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
-		word: "leaf (botanics)",
+		word: "leaf (fallen off)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "leaf (on plant)",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
 		word: "left (not right)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -882,6 +1164,12 @@ const WordList = [
 		lists: [
 			"Swadesh 207",
 			"Leipzig-Jakarta"
+		]
+	},
+	{
+		word: "lie (on back)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -893,10 +1181,23 @@ const WordList = [
 		]
 	},
 	{
+		word: "life (experience of living)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "light (natural)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "live (verb)",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -914,7 +1215,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -930,11 +1232,30 @@ const WordList = [
 		]
 	},
 	{
+		word: "love (as a friend)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "love (romantically)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "low (in altitude)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "man (adult male)",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -945,19 +1266,51 @@ const WordList = [
 		]
 	},
 	{
+		word: "meat",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "meet (for the first time)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "mind (center of thoughts and emotions)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "moon",
 		lists: [
 			"Swadesh-Yakhontov",
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
+		]
+	},
+	{
+		word: "morning (early morning)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "morning (late morning)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
 		word: "mother",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -966,7 +1319,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -974,7 +1328,14 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
+		]
+	},
+	{
+		word: "music",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1013,7 +1374,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1024,17 +1386,19 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "night (dark time)",
+		word: "night/nighttime",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -1054,15 +1418,41 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "old",
+		word: "old (not new)",
 		lists: [
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
+		]
+	},
+	{
+		word: "older brother (of a brother)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "older brother (of a sister)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "older sister (of a brother)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "older sister (of a sister)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1073,6 +1463,12 @@ const WordList = [
 			"Swadesh 207",
 			"Leipzig-Jakarta",
 			"ASJP"
+		]
+	},
+	{
+		word: "open (one's eyes)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1096,7 +1492,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -1106,22 +1503,31 @@ const WordList = [
 		]
 	},
 	{
-		word: "play (verb)",
+		word: "plant",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "play (a game)",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
 		word: "pull (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
 		word: "push (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1130,7 +1536,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1145,7 +1552,8 @@ const WordList = [
 	{
 		word: "right (not left)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1153,6 +1561,18 @@ const WordList = [
 		lists: [
 			"Swadesh 207",
 			"Swadesh-Woodward"
+		]
+	},
+	{
+		word: "river (flowing into another river)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "river (flowing into the sea)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1178,10 +1598,17 @@ const WordList = [
 		]
 	},
 	{
-		word: "round",
+		word: "rough (of surface)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "round (spherical)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1193,7 +1620,14 @@ const WordList = [
 	{
 		word: "run (verb)",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
+		]
+	},
+	{
+		word: "sad",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1206,11 +1640,18 @@ const WordList = [
 		]
 	},
 	{
+		word: "salt (in sea)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "sand",
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1218,7 +1659,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1228,10 +1670,11 @@ const WordList = [
 		]
 	},
 	{
-		word: "sea",
+		word: "sea/ocean",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -1240,14 +1683,22 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "seed (noun)",
+		word: "seed (in fruit)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
+		]
+	},
+	{
+		word: "seed (to be planted)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1270,17 +1721,24 @@ const WordList = [
 		]
 	},
 	{
-		word: "short",
+		word: "short (height)",
 		lists: [
 			"Swadesh 207",
 			"Swadesh-Woodward"
 		]
 	},
 	{
+		word: "short (length)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "sing (verb)",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -1294,7 +1752,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -1303,20 +1762,29 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
 		word: "sky",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
 		word: "sleep (verb)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
+		]
+	},
+	{
+		word: "slow",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1324,7 +1792,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1342,10 +1811,11 @@ const WordList = [
 		]
 	},
 	{
-		word: "smooth",
+		word: "smooth (adjective)",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -1363,15 +1833,40 @@ const WordList = [
 		]
 	},
 	{
+		word: "soft",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
 		word: "soil",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "some",
 		lists: [
 			"Swadesh 207"
+		]
+	},
+	{
+		word: "son (of a father)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "son (of a mother)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "speak/talk (verb)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1404,7 +1899,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1414,13 +1910,15 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
 		word: "stick",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1431,13 +1929,15 @@ const WordList = [
 			"Swadesh 207",
 			"Swadesh-Woodward",
 			"Leipzig-Jakarta",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
 		word: "straight",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1454,7 +1954,8 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -1473,7 +1974,8 @@ const WordList = [
 		word: "swim (verb)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1487,15 +1989,23 @@ const WordList = [
 		]
 	},
 	{
-		word: "take (verb)",
+		word: "take (pick up and carry)",
 		lists: [
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "tear/teardrop",
 		lists: [
-			"Dolgopolsky"
+			"Dolgopolsky",
+			"Landau 200"
+		]
+	},
+	{
+		word: "thank",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1515,7 +2025,8 @@ const WordList = [
 		word: "thick",
 		lists: [
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1528,13 +2039,15 @@ const WordList = [
 		word: "thin",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
 		word: "think (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1555,7 +2068,8 @@ const WordList = [
 	{
 		word: "throw (verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1573,7 +2087,8 @@ const WordList = [
 			"Swadesh 207",
 			"Leipzig-Jakarta",
 			"Dolgopolsky",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
@@ -1584,7 +2099,20 @@ const WordList = [
 			"Swadesh 207",
 			"Leipzig-Jakarta",
 			"Dolgopolsky",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
+		]
+	},
+	{
+		word: "top (of object/mountain)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "touch (verb)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1593,13 +2121,15 @@ const WordList = [
 			"Swadesh 100",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"ASJP"
+			"ASJP",
+			"Landau 200"
 		]
 	},
 	{
-		word: "turn (intransitive) (verb)",
+		word: "turn (intransitive verb)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
@@ -1623,20 +2153,59 @@ const WordList = [
 		word: "walk (verb)",
 		lists: [
 			"Swadesh 100",
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
 		]
 	},
 	{
 		word: "warm",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
-		word: "wash (verb)",
+		word: "wash (body parts)",
 		lists: [
-			"Swadesh 207"
+			"Swadesh 207",
+			"Landau 200"
+		]
+	},
+	{
+		word: "water (as drink or for cooking, cold)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "water (as drink or for cooking, hot)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "water (cold, moving)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "water (cold, not moving)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "water (hot, moving)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "water (hot, not moving)",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1655,7 +2224,8 @@ const WordList = [
 		word: "wet",
 		lists: [
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -1688,7 +2258,8 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
@@ -1707,7 +2278,8 @@ const WordList = [
 		lists: [
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1718,19 +2290,21 @@ const WordList = [
 		]
 	},
 	{
-		word: "wind",
+		word: "wind (noun)",
 		lists: [
 			"Swadesh-Yakhontov",
 			"Swadesh 207",
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
-		word: "wing",
+		word: "wing (anatomic)",
 		lists: [
 			"Swadesh 207",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
@@ -1751,20 +2325,28 @@ const WordList = [
 		lists: [
 			"Swadesh 100",
 			"Swadesh 207",
-			"Swadesh-Woodward"
+			"Swadesh-Woodward",
+			"Landau 200"
 		]
 	},
 	{
 		word: "wood",
 		lists: [
 			"Swadesh-Woodward",
-			"Leipzig-Jakarta"
+			"Leipzig-Jakarta",
+			"Landau 200"
 		]
 	},
 	{
 		word: "work",
 		lists: [
 			"Swadesh-Woodward"
+		]
+	},
+	{
+		word: "world",
+		lists: [
+			"Landau 200"
 		]
 	},
 	{
@@ -1794,6 +2376,30 @@ const WordList = [
 		word: "yesterday",
 		lists: [
 			"Leipzig-Jakarta"
+		]
+	},
+	{
+		word: "younger brother (of a brother)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "younger brother (of a sister)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "younger sister (of a brother)",
+		lists: [
+			"Landau 200"
+		]
+	},
+	{
+		word: "younger sister (of a sister)",
+		lists: [
+			"Landau 200"
 		]
 	}
 ];

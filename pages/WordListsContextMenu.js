@@ -49,6 +49,7 @@ const WordListsContextMenu = () => {
 					defaultValue={centerMenuOption}
 					value={centerMenuOption}
 					type="checkbox"
+					title="Options"
 					onChange={(v) => handleCenterText(v)}
 				>
 					<Menu.ItemOption value="center" >
@@ -137,6 +138,15 @@ const WordListsContextMenu = () => {
 								applying computational approaches to comparative linguistics using a database of word
 								lists. It uses a 40-word list to evaluate the similarity of words with the same
 								meaning from different languages.
+							</Text>
+							<Text fontSize="md">Landau 200</Text>
+							<Text px={5} fontSize="sm">
+								{'\t'}The <Text bold>Landau 200</Text> is a subset of the Landau Core Vocabulary (LCV)
+								developed by James Landau (Khemehekis/Savegraduation). Because of the disambiguating
+								nature of the LCV, it makes many semantic distinctions that are not made in English
+								(e.g "leaf (on plant)" vs. "leaf (fallen off)"), and some that are not made in few, if
+								any, Eurocentric languages (e.g. "river (flowing into the sea)" vs. "river (flowing
+								into another river)").
 							</Text>
 						</VStack>
 					</Modal.Body>
