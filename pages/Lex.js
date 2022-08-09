@@ -274,6 +274,7 @@ const Lex = () => {
 		);
 	}
 	const screenHeight = useWindowDimensions().height;
+	const screenWidth = useWindowDimensions().width;
 	//
 	//
 	// RETURN JSX
@@ -396,10 +397,7 @@ const Lex = () => {
 					</Box>
 					<HStack
 						mx={3}
-						justifyContent="flex-end"
-						alignItems="flex-end"
-						flexGrow={0}
-						flexShrink={0}
+						style={{maxWidth: screenWidth - 110 - 36}}
 					>
 						<Menu
 							placement="top right"
@@ -413,17 +411,6 @@ const Lex = () => {
 										bg="secondary.500"
 										flexGrow={1}
 										flexShrink={2}
-										flexBasis={0}
-										_text={{
-											color: "secondary.50",
-											w: "full",
-											isTruncated: true,
-											textAlign: "left",
-											noOfLines: 1,
-											style: {
-												overflow: "hidden"
-											}
-										}}
 										_stack={{
 											justifyContent: "space-between",
 											alignItems: "center",
@@ -435,10 +422,16 @@ const Lex = () => {
 												overflow: "hidden"
 											}
 										}}
-										startIcon={<DoubleCaretIcon mr={1} color="secondary.50" />}
+										startIcon={<DoubleCaretIcon mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
 										{...props}
 									>
-										{columns[sortPattern[0]].label}
+										<Box
+											overflow="hidden"
+											flexGrow={1}
+											flexShrink={0}
+										>
+											<Text color="secondary.50" isTruncated textAlign="left" noOfLines={1}>{columns[sortPattern[0]].label}</Text>
+										</Box>
 									</Button>
 								)
 							}
@@ -468,6 +461,8 @@ const Lex = () => {
 							_icon={{color: "secondary.50"}}
 							bg="secondary.500"
 							accessibilityLabel="Change sort direction."
+							flexGrow={0}
+							flexShrink={0}
 						/>
 						<LexiconColumnEditorModal
 							triggerOpen={modalOpen === 'edit'}
@@ -485,6 +480,8 @@ const Lex = () => {
 								icon={<TrashIcon color="danger.50" />}
 								bg="danger.500"
 								onPress={() => maybeMassDelete()}
+								flexGrow={0}
+								flexShrink={0}
 							/>
 						:
 							<></>
@@ -546,7 +543,7 @@ const Lex = () => {
 						{
 							columns.map((col, i) => (
 								<Box
-									px={0.5}
+									pr={1}
 									key={col.id + "-ColumnLabel"}
 									size={col.size}
 								>

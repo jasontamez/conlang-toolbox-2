@@ -19,6 +19,7 @@ import {
 	DragHandleIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	const [reordering, setReordering] = useState(false);
@@ -86,9 +87,8 @@ const LexiconColumnReorderer = ({setReordering}) => {
 					alignItems="center"
 					justifyContent="space-between"
 					p={1}
-					borderTopWidth={1}
-					borderTopColor={index ? "lighter" : "transparent"}
 					bg={isActive ? "main.700" : "main.800"}
+					h={12}
 				>
 					<DragHandleIcon />
 					<Input
@@ -102,6 +102,24 @@ const LexiconColumnReorderer = ({setReordering}) => {
 			</Pressable>
 		);
 	};
+	// The actual flatlist
+	const TheDrag = gestureHandlerRootHOC(() => (
+		<DraggableFlatList
+			data={newColumns}
+			renderItem={renderItem}
+			keyExtractor={(item, index) => item.id + "-" + String(index)}
+			onDragEnd={(data) => reorderColumns(data)}
+			dragItemOverflow
+			style={{
+				flex: 1,
+				margin: 0,
+				marginTop: 5,
+				marginBottom: 5,
+				width: minWidth,
+				maxHeight: 480, // size 12 is 48px, so ten rows is 480
+			}}
+		/>
+	));
 	return (
 		<VStack
 			flex={1}
@@ -110,35 +128,27 @@ const LexiconColumnReorderer = ({setReordering}) => {
 			borderRadius="lg"
 			style={{
 				maxHeight: maxHeight,
-				minWidth: minWidth
+				minWidth: minWidth,
+				maxHeight: 562, // {12}*10 + {10} + {8} + 10px margin = 562
 			}}
 		>
-			<HStack style={{minWidth: minWidth}} pl={2} justifyContent="space-between" alignItems="center" space={3} bg="primary.500" borderTopRadius="lg">
+			<HStack h={8} style={{width: minWidth}} pl={2} justifyContent="space-between" alignItems="center" space={3} bg="primary.500" borderTopRadius="lg">
 				<Heading color="primaryContrast" size="md">Reorder Columns</Heading>
 				<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
 			</HStack>
-			<HStack style={{minWidth: minWidth}} alignItems="center" justifyContent="center" bg="main.800">
-				<DraggableFlatList
-					data={newColumns}
-					renderItem={renderItem}
-					keyExtractor={(item, index) => item.id + "-" + String(index)}
-					onDragEnd={(data) => reorderColumns(data)}
-					dragItemOverflow
-					style={{
-						flex: 1,
-						margin: 0
-					}}
-				/>
-			</HStack>
-			<HStack style={{minWidth: minWidth}} justifyContent="flex-end" bg="main.700" borderBottomRadius="lg">
+			<VStack alignItems="center" bg="main.800" style={{height: Math.min(490, (newColumns.length * 48) + 10)}}>
+				<TheDrag />
+			</VStack>
+			<HStack h={10} style={{width: minWidth}} justifyContent="flex-end" bg="main.700" borderBottomRadius="lg">
 				<Button
 					startIcon={<SaveIcon color="success.50" m={0} />}
 					bg="success.500"
 					disabled={newColumns.length === 0}
 					onPress={() => doSaveColumns()}
 					_text={{color: "success.50"}}
-					p={1}
-					m={2}
+					px={1}
+					py={0.5}
+					m={1}
 				>DONE</Button>
 			</HStack>
 		</VStack>

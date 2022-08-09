@@ -57,16 +57,16 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const addNewColumnFunc = () => {
 		// Adds a new column.
 		let id = "";
-		const nCols = [...newColumns];
+		const newCols = [...newColumns];
 		do {
 			id = uuidv4();
 		} while(newColumns.some(c => c.id === id));
-		nCols.push({
+		newCols.push({
 			id,
 			label: "",
 			size: "lexMd"
 		});
-		setNewColumns(nCols);
+		setNewColumns(newCols);
 	};
 	const maybeDeleteColumn = (item, index) => {
 		// Check if we need to make a yes/no prompt
@@ -114,6 +114,34 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const fixColumnMismatch = () => {
 		return columns.map(col => { return {...col} });
 	};
+	const ColButton = (props) => {
+		const {size, value, i} = props;
+		const variation = size === value ? {
+			bg: "primary.600"
+		} : {
+			borderColor: "primary.600",
+			borderWidth: 1,
+			bg: "transparent"
+		};
+		return (
+			<Button
+				onPress={() => {
+					let newCols = [...newColumns];
+					const item = {
+						...newCols[i],
+						size: value
+					};
+					newCols[i] = item;
+					setNewColumns(newCols);
+				}}
+				px={2}
+				py={1}
+				mx={3}
+				_text={{color: "primary.50"}}
+				{...variation}
+			>{props.children}</Button>
+		);
+	};
 	const renderItem = (col, i) => {
 		const {id, label, size} = col;
 		return (
@@ -148,47 +176,11 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							setNewColumns(newCols);
 						}}
 					/>
-					<Radio.Group
-						colorScheme="primary"
-						defaultValue={size}
-						onChange={(value) => {
-							let newCols;
-							if(newColumns[i].id !== id) {
-								// Rendering mismatch?
-								newCols = fixColumnMismatch();
-							} else {
-								newCols = [...newColumns];
-							}
-							const item = {
-								id,
-								label,
-								size: value
-							};
-							newCols[i] = item;
-							setNewColumns(newCols);
-						}}
-						d="flex"
-						m={2}
-						flexDirection="row"
-						flexWrap="wrap"
-						accessibilityLabel="Column Size"
-						_stack={{
-							justifyContent: "space-between",
-							alignItems: "flex-start"
-						}}
-						_radio={{
-								_stack: {
-								flexDirection: "column",
-								alignItems: "center",
-								justifyContent: "flex-start",
-								m: 1
-							}
-						}}
-					>
-						<Radio size="sm" value="lexSm">Small</Radio>
-						<Radio size="sm" value="lexMd">Med</Radio>
-						<Radio size="sm" value="lexLg">Large</Radio>
-					</Radio.Group>
+					<HStack justifyContent="space-between" alignItems="flex-start" my={2}>
+						<ColButton size={size} value="lexSm" i={i}>Small</ColButton>
+						<ColButton size={size} value="lexMd" i={i}>Med</ColButton>
+						<ColButton size={size} value="lexLg" i={i}>Large</ColButton>
+					</HStack>
 				</VStack>
 				<VStack justifyContent="space-between" alignItems="center">
 					<IconButton
