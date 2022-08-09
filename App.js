@@ -1,7 +1,7 @@
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { Provider, useSelector } from 'react-redux';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, StatusBar } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
 
@@ -138,13 +138,18 @@ const Layout = () => {
 		//'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
 	});
-	const theme = useSelector((state) => state.appState.theme);
+	const themeName = useSelector((state) => state.appState.theme);
+	const theme = getTheme(themeName)
 	return (
 		<NativeBaseProvider
-			theme={getTheme(theme)}
+			theme={theme}
 			safeArea
 			bg="main.500"
 		>
+			<StatusBar
+				backgroundColor={theme.colors.main["900"]}
+				barStyle={themeName.indexOf("Light") === -1 ? "light-content" : "dark-content"}
+			/>
 			{fontsloaded ? <AppRoutes /> : <Fontless />}
 		</NativeBaseProvider>
 	);
