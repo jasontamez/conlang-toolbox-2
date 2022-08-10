@@ -6,7 +6,6 @@ import {
 	IconButton,
 	Button,
 	Heading,
-	Radio,
 	Modal
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';

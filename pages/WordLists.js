@@ -8,7 +8,7 @@ import {
 	Button,
 	Box,
 	Pressable,
-	FlatList,
+	ScrollView,
 	Modal,
 	VStack,
 	Radio,
@@ -221,28 +221,34 @@ const WordLists = () => {
 		:
 			{}
 	;
-	const renderItem = ({item, index}) => {
-		const background = index % 2 ? {bg: "darker"} : {};
-		const box = (
-			<Box
-				w="full"
-				p={2}
-				py={1}
-				{...background}
+	const renderItem = (item, index) => {
+		const background = index % 2 ? {} : {bg: "darker"};
+		return (
+			<Pressable
+				onPress={() => {
+					pickAndSaveForLexicon ?
+						dispatch(toggleSavedForLexicon(item))
+					:
+						0
+				}}
+				key={item}
+				bg={
+					savingForLexicon[item] ?
+						"secondary.500"
+					:
+						"transparent"
+				}
 			>
-				<Text {...alignment}>{item}</Text>
-			</Box>
-		);
-		return pickAndSaveForLexicon ?
-			(
-				<Pressable
-					onPress={() => dispatch(toggleSavedForLexicon(item))}
-					bg={savingForLexicon[item] ? "secondary.500" : "transparent"}
+				<Box
+					w="full"
+					p={2}
+					py={1}
+					{...background}
 				>
-					{box}
-				</Pressable>
-			)
-		: box;
+					<Text {...alignment}>{item}</Text>
+				</Box>
+			</Pressable>
+		);
 	};
 	return (
 		<>
@@ -287,22 +293,18 @@ const WordLists = () => {
 					);
 				})}
 			</HStack>
-			<FlatList
+			<Box
 				m={2}
 				flexGrow={1}
 				flexShrink={1}
 				justifySelf="flex-start"
-				shadow={shown.length ? 4 : undefined}
-				borderWidth={shown.length ? 0.5 : 0}
+				borderWidth={shown.length ? 2 : 0}
 				borderColor="lighter"
-				renderItem={renderItem}
-				data={shown}
-				keyExtractor={(word) => word}
-				extraData={[
-					pickAndSaveForLexicon,
-					savingForLexicon
-				]}
-			/>
+			>
+				<ScrollView>
+					{shown.map((item, index) => renderItem(item, index))}
+				</ScrollView>
+			</Box>
 			<SaveBar />
 			<Modal isOpen={addToLexicon.length > 0}>
 				<Modal.Content>

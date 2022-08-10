@@ -36,13 +36,12 @@ const Indented = (props) => (
 const Highlight = (props) => (
 	<Box
 		alignSelf="center"
-		textAlign="center"
 		w="full"
 		bg="lighter"
 		p={2}
 		mb={3}
 	>
-		<Text>{props.children}</Text>
+		<Text textAlign="center">{props.children}</Text>
 	</Box>
 );
 
@@ -51,21 +50,27 @@ const Pressable = ({onPress, firstElement, children}) => (
 		bg="main.800"
 		shadow={3}
 		onPress={onPress}
-		mt={firstElement ? 0 : 8}
+		mt={firstElement ? 4 : 6}
 	>
 		<VStack p={4} pt={0}>{children}</VStack>
 	</Press>
 );
 
 const SectionHeader = ({SectionIcon, text}) => (
-	<Heading
-		color="primary.500"
+	<HStack
 		p={4}
-		fontSize="xl"
-		alignSelf="center"
+		alignItems="center"
+		justifyContent="center"
+		space={3}
 	>
-		<SectionIcon color="primary.500" mr={3} />{text}
-	</Heading>
+		<SectionIcon color="primary.500" />
+		<Heading
+			color="primary.500"
+			fontSize="xl"
+		>
+			{text}
+		</Heading>
+	</HStack>
 );
 
 const About = () => {
@@ -75,7 +80,7 @@ const About = () => {
 	};
 	return (
 		<ScrollView
-			p={2}
+			p={3}
 			bg="darker"
 		>
 			<Pressable onPress={() => {doNav("/ms")}} firstElement>
@@ -136,11 +141,12 @@ const About = () => {
 				alignItems="center"
 			>
 				<Heading color="primary.500" p={4} fontSize="xl">App Info</Heading>
-				<HStack m={1} mx={4}>
+				<HStack mx={4}>
 					<Text>v.{packageJson.version}</Text>
 				</HStack>
-				<HStack m={1} mx={4}>
-					<Text>Contact: <Link href="mailto:jasontankapps@gmail.com">jasontankapps@gmail.com</Link></Text>
+				<HStack my={3} mx={4} space={2} alignItems="center">
+					<Text fontSize="md">Contact:</Text>
+					<Link fontSize="md" href="mailto:jasontankapps@gmail.com">jasontankapps@gmail.com</Link>
 				</HStack>
 			</VStack>
 		</ScrollView>
