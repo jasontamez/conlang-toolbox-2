@@ -66,7 +66,7 @@ export const blankAppState = {/*
 		theme: "Default",
 		disableConfirms: false
 	},
-	wordgenCategories: {
+	wordgenCharacters: {
 		map: [],
 		editing: null
 	},
@@ -79,7 +79,7 @@ export const blankAppState = {/*
 			wordFinal: { components: [] }
 		}
 	},
-	wordgenRewriteRules: {
+	wordgenTransforms: {
 		list: [],
 		editing: null
 	},
@@ -105,7 +105,7 @@ export const blankAppState = {/*
 		wordlistMultiColumn: true,
 		wordsPerWordlist: 250
 	},
-	wordevolveCategories: {
+	wordevolveCharacters: {
 		map: [],
 		editing: null
 	},
@@ -315,8 +315,8 @@ export const blankAppState = {/*
 		AppTheme: false,
 		AddCategory: false,
 		EditCategory: false,
-		AddRewriteRule: false,
-		EditRewriteRule: false,
+		AddTransform: false,
+		EditTransform: false,
 		PresetPopup: false,
 		WGOutputOptions: false,
 		ManageCustomInfo: false,
@@ -349,8 +349,8 @@ export const blankAppState = {/*
 		ExportMS: false
 	},
 	viewState: {
-		wg: 'categories',
-		we: 'categories',
+		wg: 'characters',
+		we: 'characters',
 		wl: 'home',
 		ms: 'syntax',
 		ph: 'home',
@@ -371,7 +371,7 @@ export const blankAppState = {/*
 
 export const initialAppState = {
 	...blankAppState,/*
-	wordgenCategories: {
+	wordgenCharacters: {
 		map: [
 			["C", {
 				title: "Consonants",
@@ -397,7 +397,7 @@ export const initialAppState = {
 			wordFinal: { components: [] }
 		}
 	},
-	wordgenRewriteRules: {
+	wordgenTransforms: {
 		list: [
 			{
 				key: "0",

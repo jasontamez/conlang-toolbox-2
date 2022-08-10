@@ -60,8 +60,33 @@ export const NavBar = (props) => {
 					w="full"
 					space={4}
 					justifyContent="space-between"
-					{...otherProps}/>
+					{...otherProps}
+				/>
 			</ScrollView>
+		</Box>
+	);
+};
+
+export const TabBar = (props) => {
+	const boxProps = props.boxProps || {};
+	const otherProps = {...props};
+	delete otherProps.boxProps;
+	return (
+		<Box
+			w="full"
+			position="absolute"
+			left={0}
+			bottom={0}
+			right={0}
+			bg="main.800"
+			{...boxProps}
+		>
+			<HStack
+				w="full"
+				justifyContent="space-evenly"
+				alignItems="center"
+				{...otherProps}
+			/>
 		</Box>
 	);
 };

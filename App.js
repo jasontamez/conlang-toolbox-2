@@ -4,6 +4,7 @@ import { Provider, useSelector } from 'react-redux';
 import { useWindowDimensions, StatusBar } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
+import 'react-native-gesture-handler';
 
 import { useFonts } from 'expo-font';
 //import {
@@ -79,7 +80,14 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
-import 'react-native-gesture-handler';
+
+import WG from './pages/WG';
+import WGSettings from './pages/wg/WGSettings';
+
+const WGCharacters = () => <WGSettings />;
+const WGSyllables = () => <WGSettings />;
+const WGTransforms = () => <WGSettings />;
+const WGOutput = () => <WGSettings />;
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -183,9 +191,14 @@ const AppRoutes = () => {
 				}}
 			>
 				<AppHeader />
-				<Routes> { /* 
+				<Routes> { 
 					<Route path="/wg/*" element={<WG />}>
-					</Route>
+						<Route index element={<WGSettings />} />
+						<Route path="characters" element={<WGCharacters />} />
+						<Route path="syllables" element={<WGSyllables />} />
+						<Route path="transforms" element={<WGTransforms />} />
+						<Route path="output" element={<WGOutput/>} />
+					</Route> /*
 					<Route path="/we/*"  element={<WE />}>
 					</Route> */ }
 					<Route path="/lex" element={<Lexicon />} />

@@ -90,7 +90,7 @@ const About = () => {
 				<Indented>Grouped into ten sections</Indented>
 				<Indented>Use as many or as few of the prompts as you like</Indented>
 			</Pressable>
-			<Pressable>
+			<Pressable onPress={() => {doNav("/wg")}}>
 				<SectionHeader SectionIcon={WordGenIcon} text="WordGen" />
 				<Highlight>This tool is for creating words according to rules you set up.</Highlight>
 				<Indented>Organize your language's sounds into groups</Indented>

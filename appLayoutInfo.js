@@ -74,9 +74,9 @@ const MS = {
 };
 
 
-const wgCategories = {
+const wgCharacters = {
 	title: "Character Groups",
-	url: "/wg/categories",
+	url: "/wg/characters",
 	isChildOf: "WG",
 	id: "WGcat"
 };
@@ -86,9 +86,9 @@ const wgSyllables = {
 	isChildOf: "WG",
 	id: "WGsyl"
 };
-const wgRewriterules = {
+const wgTransforms = {
 	title: "Transformations",
-	url: "/wg/rewriterules",
+	url: "/wg/transforms",
 	isChildOf: "WG",
 	id: "WGrew"
 };
@@ -100,7 +100,7 @@ const wgOutput = {
 };
 const wgSettings = {
 	title: "Settings",
-	url: "/wg/settings",
+	url: "/wg",
 	isChildOf: "WG",
 	id: "WGset"
 };
@@ -111,9 +111,9 @@ const WG = {
 	sectionId: "apps",
 	id: "WG",
 	kids: [
-		wgCategories,
+		wgCharacters,
 		wgSyllables,
-		wgRewriterules,
+		wgTransforms,
 		wgOutput,
 		wgSettings
 	]
@@ -126,9 +126,9 @@ const weInput = {
 	isChildOf: "WE",
 	id: "WEinp"
 };
-const weCategories = {
+const weCharacters = {
 	title: "Character Groups",
-	url: "/we/categories",
+	url: "/we/characters",
 	isChildOf: "WE",
 	id: "WEcat"
 };
@@ -158,7 +158,7 @@ const WE = {
 	sectionId: "apps",
 	kids: [
 		weInput,
-		weCategories,
+		weCharacters,
 		weTransformations,
 		weSoundchanges,
 		weOutput
