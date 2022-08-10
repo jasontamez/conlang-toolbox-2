@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
 import { Menu, Pressable, VStack, Text, Divider, Modal } from 'native-base';
-import { DotsIcon, SaveIcon, HelpIcon } from '../components/icons';
-import { setCenterTheDisplayedWords } from '../store/wordListsSlice';
+import { DotsIcon, SaveIcon, HelpIcon } from '../../components/icons';
+import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
 
 const WordListsContextMenu = () => {
 	const centerTheDisplayedWords =

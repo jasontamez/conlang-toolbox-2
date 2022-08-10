@@ -14,14 +14,14 @@ import {
 	useToast
 } from 'native-base';
 
-import { DotsIcon, SaveIcon } from '../components/icons';
+import { DotsIcon, SaveIcon } from '../../components/icons';
 import {
 	setDisableBlankConfirms,
 	setMaxColumns,
 	setTruncate,
 	consts
-} from "../store/lexiconSlice";
-import doToast from '../components/toast';
+} from "../../store/lexiconSlice";
+import doToast from '../../components/toast';
 
 const LexiconContextMenu = () => {
 	const {

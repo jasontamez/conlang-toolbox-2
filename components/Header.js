@@ -5,9 +5,9 @@ import { useLocation } from "react-router-dom";
 //import { openModal } from '../store/dFuncs';
 import MenuModal from "../pages/MenuModal";
 import { allMainPages } from '../appLayoutInfo';
-import WordListsContextMenu from '../pages/WordListsContextMenu';
 import ExtraChars from './ExtraCharsButton';
-import LexiconContextMenu from "../pages/LexContextMenu";
+import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
+import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
