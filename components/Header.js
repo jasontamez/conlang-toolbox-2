@@ -8,10 +8,12 @@ import { allMainPages } from '../appLayoutInfo';
 import ExtraChars from './ExtraCharsButton';
 import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
+import WGContextMenu from '../pages/contextMenus/WGContextMenu';
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
-	LexiconContextMenu: <LexiconContextMenu key="header2" />
+	LexiconContextMenu: <LexiconContextMenu key="header2" />,
+	WGContextMenu: <WGContextMenu key="header3" />
 };
 
 const AppHeader = () => {

@@ -122,7 +122,7 @@ export const blankAppState = {/*
 		output: "outputOnly"
 	},
 	morphoSyntaxModalState: {},*/
-	wordgenSettings: {
+	wg: {
 		//...simple.wordgenSettings,
 		monosyllablesRate: 20,
 		maxSyllablesPerWord: 6,

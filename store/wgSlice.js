@@ -99,7 +99,7 @@ const setWordsPerWordlistFunc = (state, action) => {
 
 
 const wgSlice = createSlice({
-	name: 'lexicon',
+	name: 'wg',
 	initialState,
 	reducers: {
 		setMonosyllablesRate: setMonosyllablesRateFunc,

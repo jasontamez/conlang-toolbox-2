@@ -1,10 +1,24 @@
 import { Text, VStack, Pressable, HStack } from "native-base";
-//import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
 import debounce from '../../components/debounce';
-import { TextAreaSetting, TextSetting } from '../../components/layoutTags';
-import { setTitle, setDescription } from "../../store/morphoSyntaxSlice";
+import {
+	TextSetting,
+	SliderWithTicks
+} from '../../components/layoutTags';
+import {
+	setMonosyllablesRate,
+	setMaxSyllablesPerWord,
+	setCategoryRunDropoff,
+	setSyllableBoxDropoff,
+	setCapitalizeSentences,
+	setDeclarativeSentencePre,
+	setDeclarativeSentencePost,
+	setInterrogativeSentencePre,
+	setInterrogativeSentencePost,
+	setExclamatorySentencePre,
+	setExclamatorySentencePost
+} from  "../../store/wgSlice";
 import {
 	AddCircleIcon,
 	ExportIcon,
@@ -14,29 +28,20 @@ import {
 } from "../../components/icons";
 
 const WGSettings = () => {
-	//const { msPage } = useParams();
-	//const pageName = "s" + msPage.slice(-2);
-	const synTitle = useSelector((state) => state.morphoSyntax.title);
-	const synDescription = useSelector((state) => state.morphoSyntax.description);
+	const {
+		monosyllablesRate,
+		maxSyllablesPerWord,
+		categoryRunDropoff,
+		syllableBoxDropoff,
+		capitalizeSentences,
+		declarativeSentencePre,
+		declarativeSentencePost,
+		interrogativeSentencePre,
+		interrogativeSentencePost,
+		exclamatorySentencePre,
+		exclamatorySentencePost
+	} = useSelector(state => state.wg)
 	const dispatch = useDispatch();
-	const StoredInfoButton = (props) => {
-		return (
-			<Pressable
-				onPress={props.onPress}
-				mx={4}
-			>
-				<HStack
-					bg={props.bg}
-					space={3}
-					p={2}
-					alignItems="center"
-				>
-					{props.icon}
-					<Text>{props.text}</Text>
-				</HStack>
-			</Pressable>
-		);
-	};
 	return (
 		<VStack space={4} mt={3}>
 			<TextSetting
@@ -48,55 +53,9 @@ const WGSettings = () => {
 				)}
 				text="MorphoSyntax Title:"
 			/>
-			<TextAreaSetting
-				placeholder="A short description of this document."
-				value={synDescription}
-				onChangeText={(v) => debounce(
-					() => dispatch(setDescription(v)),
-					{ namespace: "msDesc" }
-				)}
-				text="Description:"
-			/>
-			<VStack alignSelf="flex-end">
-				<StoredInfoButton
-					bg="lighter"
-					icon={<RemoveCircleIcon />}
-					onPress={() => 2222}
-					text="Clear MorphoSyntax Info"
-				/>
-				<StoredInfoButton
-					bg="darker"
-					icon={<AddCircleIcon />}
-					onPress={() => 2222}
-					text="Load MorphoSyntax Info"
-				/>
-				<StoredInfoButton
-					bg="lighter"
-					icon={<SaveIcon />}
-					onPress={() => 2222}
-					text="Save MorphoSyntax Info"
-				/>
-				<StoredInfoButton
-					bg="darker"
-					icon={<SaveIcon />}
-					onPress={() => 2222}
-					text="Save As"
-				/>
-				<StoredInfoButton
-					bg="lighter"
-					icon={<ExportIcon />}
-					onPress={() => 2222}
-					text="Export MorphoSyntax Info"
-				/>
-				<StoredInfoButton
-					bg="darker"
-					icon={<TrashIcon />}
-					onPress={() => 2222}
-					text="Delete Saved MorphoSyntax Info"
-				/>
-			</VStack>
 		</VStack>
 	);
+	// Consider changing the above to mimic AppSettings
 };
 
 export default WGSettings;
