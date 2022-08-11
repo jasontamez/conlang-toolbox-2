@@ -82,7 +82,7 @@ import AppHeader from './components/Header.js';
 import AppSettings from './pages/AppSettings';
 
 import WG from './pages/WG';
-import WGSettings from './pages/wg/WGSettings';
+import WGSettings from './pages/wg/wgSettings';
 
 const WGCharacters = () => <WGSettings />;
 const WGSyllables = () => <WGSettings />;

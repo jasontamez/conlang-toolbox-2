@@ -40,7 +40,7 @@ const WGSettings = () => {
 		interrogativeSentencePost,
 		exclamatorySentencePre,
 		exclamatorySentencePost
-	} = useSelector(state => state.wg)
+	} = useSelector(state => state.wg);
 	const dispatch = useDispatch();
 	return (
 		<VStack space={4} mt={3}>
