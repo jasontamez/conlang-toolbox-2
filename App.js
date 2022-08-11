@@ -86,7 +86,7 @@ import WGSettings from './pages/wg/WGSettings';
 
 const WGCharacters = () => <WGSettings />;
 const WGSyllables = () => <WGSettings />;
-const WGTransforms = () => <WGSettings />;
+const WGTransformations = () => <WGSettings />;
 const WGOutput = () => <WGSettings />;
 
 const App = () => {
@@ -196,7 +196,7 @@ const AppRoutes = () => {
 						<Route index element={<WGSettings />} />
 						<Route path="characters" element={<WGCharacters />} />
 						<Route path="syllables" element={<WGSyllables />} />
-						<Route path="transforms" element={<WGTransforms />} />
+						<Route path="transformations" element={<WGTransformations />} />
 						<Route path="output" element={<WGOutput/>} />
 					</Route> /*
 					<Route path="/we/*"  element={<WE />}>

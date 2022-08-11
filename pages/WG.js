@@ -4,7 +4,7 @@ import { useWindowDimensions } from 'react-native';
 import { VStack, Box, Text, Pressable, Divider } from 'native-base';
 
 import { TabBar } from '../components/layoutTags';
-import { WGCharactersIcon, WGOutputIcon, WGTransformsIcon, WGSettingsIcon, WGSyllablesIcon } from '../components/icons';
+import { WGCharactersIcon, WGOutputIcon, WGTransformationsIcon, WGSettingsIcon, WGSyllablesIcon } from '../components/icons';
 
 const WG = () => {
 	const location = useLocation();
@@ -90,9 +90,9 @@ const WG = () => {
 					label="Syllables"
 				/>
 				<NavTab
-					isCurrent={pathname === "/wg/transforms"}
-					TabIcon={(props) => <WGTransformsIcon {...props} />}
-					link="/wg/transforms"
+					isCurrent={pathname === "/wg/transformations"}
+					TabIcon={(props) => <WGTransformationsIcon {...props} />}
+					link="/wg/transformations"
 					label="Transforms"
 				/>
 				<NavTab

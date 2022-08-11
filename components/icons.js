@@ -45,7 +45,7 @@ export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={
 export const WGSettingsIcon = (props) => <ICON size="md" as={Ionicons} name="options-outline" {...props} />;
 export const WGCharactersIcon = (props) => <ICON size="md" as={Entypo} name="language" {...props} />;
 export const WGSyllablesIcon = (props) => <ICON size="md" as={MCI} name="text" {...props} />;
-export const WGTransformsIcon = (props) => <ICON size="md" as={MaterialIcons} name="transform" {...props} />;
+export const WGTransformationsIcon = (props) => <ICON size="md" as={MaterialIcons} name="transform" {...props} />;
 export const WGOutputIcon = (props) => <ICON size="md" as={Ionicons} name="document-text-outline" {...props} />;
 
 

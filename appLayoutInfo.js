@@ -78,7 +78,7 @@ const wgCharacters = {
 	title: "Character Groups",
 	url: "/wg/characters",
 	isChildOf: "WG",
-	id: "WGcat"
+	id: "WGcha"
 };
 const wgSyllables = {
 	title: "Syllables",
@@ -86,11 +86,11 @@ const wgSyllables = {
 	isChildOf: "WG",
 	id: "WGsyl"
 };
-const wgTransforms = {
+const wgTransformations = {
 	title: "Transformations",
-	url: "/wg/transforms",
+	url: "/wg/transformations",
 	isChildOf: "WG",
-	id: "WGrew"
+	id: "WGtns"
 };
 const wgOutput = {
 	title: "Output",
@@ -110,10 +110,11 @@ const WG = {
 	icon: "WordGenIcon",
 	sectionId: "apps",
 	id: "WG",
+	rightHeader: ["WGContextMenu"],
 	kids: [
 		wgCharacters,
 		wgSyllables,
-		wgTransforms,
+		wgTransformations,
 		wgOutput,
 		wgSettings
 	]
@@ -130,7 +131,7 @@ const weCharacters = {
 	title: "Character Groups",
 	url: "/we/characters",
 	isChildOf: "WE",
-	id: "WEcat"
+	id: "WEcha"
 };
 const weTransformations = {
 	title: "Transformations",

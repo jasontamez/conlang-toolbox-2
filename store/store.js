@@ -79,7 +79,7 @@ export const blankAppState = {/*
 			wordFinal: { components: [] }
 		}
 	},
-	wordgenTransforms: {
+	wordgenTransformations: {
 		list: [],
 		editing: null
 	},
@@ -109,7 +109,7 @@ export const blankAppState = {/*
 		map: [],
 		editing: null
 	},
-	wordevolveTransforms: {
+	wordevolveTransformations: {
 		list: [],
 		editing: null
 	},
@@ -122,6 +122,28 @@ export const blankAppState = {/*
 		output: "outputOnly"
 	},
 	morphoSyntaxModalState: {},*/
+	wordgenSettings: {
+		//...simple.wordgenSettings,
+		monosyllablesRate: 20,
+		maxSyllablesPerWord: 6,
+		categoryRunDropoff: 25,
+		syllableBoxDropoff: 20,
+		capitalizeSentences: true,
+		declarativeSentencePre: "",
+		declarativeSentencePost: ".",
+		interrogativeSentencePre: "",
+		interrogativeSentencePost: "?",
+		exclamatorySentencePre: "",
+		exclamatorySentencePost: "!",
+		//...end simple.wordgenSettings
+		output: "text",
+		showSyllableBreaks: false,
+		sentencesPerText: 30,
+		capitalizeWords: false,
+		sortWordlist: true,
+		wordlistMultiColumn: true,
+		wordsPerWordlist: 250
+	},
 	morphoSyntax: {
 		key: "",
 		lastSave: 0,
@@ -130,17 +152,6 @@ export const blankAppState = {/*
 		bool: {},
 		num: {},
 		text: {}
-	},
-	appState: {
-		menuToggleName: '',
-		theme: 'Default',
-		disableConfirms: false
-	},
-	wordLists: {
-		centerTheDisplayedWords: [],
-		listsDisplayed: {},
-		pickAndSaveForLexicon: false,
-		savingForLexicon: {}
 	},
 	lexicon: {
 		key: "",
@@ -292,6 +303,17 @@ export const blankAppState = {/*
 		disableBlankConfirms: false,
 		maxColumns: 10
 	},
+	wordLists: {
+		centerTheDisplayedWords: [],
+		listsDisplayed: {},
+		pickAndSaveForLexicon: false,
+		savingForLexicon: {}
+	},
+	appState: {
+		menuToggleName: '',
+		theme: 'Default',
+		disableConfirms: false
+	},
 	/* lexicon: {
 		key: "",
 		lastSave: 0,
@@ -397,7 +419,7 @@ export const initialAppState = {
 			wordFinal: { components: [] }
 		}
 	},
-	wordgenTransforms: {
+	wordgenTransformations: {
 		list: [
 			{
 				key: "0",
