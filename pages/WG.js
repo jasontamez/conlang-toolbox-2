@@ -50,8 +50,7 @@ const WG = () => {
 					flexGrow={2}
 					flexShrink={2}
 					flexBasis="85%"
-					mt={0}
-					mx={4}
+					m={0}
 				>
 					<Outlet />
 				</Box>

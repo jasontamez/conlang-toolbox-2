@@ -24,6 +24,7 @@ import { /*
 } from '../../store/morphoSyntaxSlice';
 import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, TextAreaSetting } from "../../components/layoutTags";
+import debounce from "../../components/debounce";
 
 
 const ParseMSJSON = (props) => {
@@ -177,60 +178,73 @@ const ParseMSJSON = (props) => {
 	const content = doc.map((bit) => {
 		const tag = (bit.tag || "");
 		const dispatch = useDispatch();
-		const id = bit.id;
+		const {
+			display,
+			prop,
+			id,
+			rows,
+			placeholder,
+			content,
+			level,
+			title
+		} = bit;
 		switch(tag) {
 			case "Header":
 				return (
 					<Box
-						my={margins[bit.level || 0]}
+						my={margins[level || 0]}
 						key={getKey("header")}
 					>
 						<Text
 							bold
-							fontSize={headings[bit.level || 0]}
+							fontSize={headings[level || 0]}
 						>
-							{bit.content}
+							{content}
 						</Text>
 					</Box>
 				);
 			case "Range":
-				const what = bit.prop;
 				const doSetNum = (prop, value) => {
 					dispatch(setNum({prop, value}));
 				};
+				const {
+					start,
+					end,
+					notFilled,
+					max,
+					label
+				} = bit;
 				return (
 					<SliderWithTicks
 						key={getKey("range")}
-						beginLabel={bit.start}
-						endLabel={bit.end}
-						notFilled={bit.notFilled}
-						min={0} max={bit.max || 4}
+						beginLabel={start}
+						endLabel={end}
+						notFilled={notFilled}
+						min={0}
+						max={max}
 						width={width}
+						value={synNum[prop] || 0}
 						sliderProps={{
-							defaultValue: (synNum[what] || 0),
-							accessibilityLabel: bit.label,
-							onChangeEnd: (v) => doSetNum(what, v)
+							accessibilityLabel: label,
+							onChangeEnd: (v) => doSetNum(prop, v)
 						}}
 					/>
 				);
 			case "Text":
-				const doSetText = (prop, value) => {
-					dispatch(setText({prop, value}));
-				};
-				const prop = bit.prop;
 				return (
 					<TextAreaSetting
 						key={getKey("Fragment")}
-						rows={bit.rows}
-						placeholder={bit.placeholder}
-						onChangeEnd={
-							(e) => doSetText(
-								prop, e.currentTarget.value || ""
+						rows={rows}
+						placeholder={placeholder}
+						onChangeText={
+							(value) => debounce(
+								() => dispatch(setText({prop, value})),
+								{ namespace: "textarea"+prop }
 							)
 						}
-						defaultValue={synText[prop] || ""}
+						value={synText[prop] || ""}
 					>
-						{bit.content || ""}
+						{content || ""}
 					</TextAreaSetting>
 				);
 			case "Modal":
@@ -434,7 +448,7 @@ const ParseMSJSON = (props) => {
 							<Modal.CloseButton />
 							<Modal.Header w="full">
 								<Center>
-									<Text>{bit.title}</Text>
+									<Text>{title}</Text>
 								</Center>
 							</Modal.Header>
 							<Modal.Body
@@ -442,7 +456,7 @@ const ParseMSJSON = (props) => {
 								safeArea
 								mx="auto"
 							>
-								<ModalContent content={bit.content} />
+								<ModalContent content={content} />
 							</Modal.Body>
 							<Modal.Footer w="full" p={2}>
 								<Button
@@ -463,41 +477,42 @@ const ParseMSJSON = (props) => {
 							startIcon={<InfoIcon />}
 							onPress={() => setModal(id)}
 						>
-							{(bit.label || "Read About It").toUpperCase()}
+							{(label || "Read About It").toUpperCase()}
 						</Button>
 					</HStack>
 				);
 			case "Checkboxes":
-				const doSetBool = (prop, value) => {
-					dispatch(setBool({prop, value}));
-				};
-				const disp = bit.display;
-				if(!disp) {
+				if(!display) {
 					return (
 						<Box key={getKey()}>
 							<Text bold>CHECKBOX DISPLAY ERROR</Text>
 						</Box>
 					);
 				}
+				const doSetBool = (prop, value) => {
+					dispatch(setBool({prop, value}));
+				};
+				const {
+					multiBoxes,
+					header,
+					inlineHeaders,
+					striped
+				} = display;
 				const boxes = (bit.boxes || []).slice();
-				const rowDescriptions = (disp.rowDescriptions || []);
-				const perRow = disp.multiBoxes;
-				const labels = (disp.labels || []).slice();
-				const header = disp.header;
-				const inlineHeaders = disp.inlineHeaders;
-				const accessibilityLabels = (disp.accessibilityLabels || []).slice();
-				const isStripedTable = disp.striped;
-				const isCentered = (disp.centering || []);
+				const rowDescriptions = (display.rowDescriptions || []);
+				const labels = (display.labels || []).slice();
+				const accessibilityLabels = (display.accessibilityLabels || []).slice();
+				const isCentered = (display.centering || []);
 				// Assemble tabular section
 				//
-				let rows = [];
+				let boxRows = [];
 				// See if we have multiple boxes per row
-				if(perRow) {
+				if(multiBoxes) {
 					// Iterate over the boxes until none remain
 					while(boxes.length > 0) {
 						let counter = 0;
 						let row = [];
-						while(counter < perRow) {
+						while(counter < multiBoxes) {
 							const id = boxes.shift();
 							const label = (
 								accessibilityLabels.shift() || "MISSING LABEL"
@@ -519,12 +534,12 @@ const ParseMSJSON = (props) => {
 							);
 							counter++;
 						}
-						rows.push(row);
+						boxRows.push(row);
 					}
 				} else {
 					boxes.forEach((box) => {
 						const label = labels.shift() || "MISSING LABEL";
-						rows.push([
+						boxRows.push([
 							<Checkbox
 								value={box}
 								onChange={() => doSetBool(box, !synBool[id])}
@@ -537,7 +552,7 @@ const ParseMSJSON = (props) => {
 					});
 				}
 				// Add rowDescriptions as a new column, if they exist
-				rowDescriptions.length && rows.forEach((row, i) => {
+				rowDescriptions.length && boxRows.forEach((row, i) => {
 					const rDesc = rowDescriptions[i] || "MISSING INFO";
 					row.push(
 						<FormatText
@@ -558,7 +573,7 @@ const ParseMSJSON = (props) => {
 							/>
 						);
 					});
-					rows.unshift(row);
+					boxRows.unshift(row);
 				}
 				const fractions = {
 					1: "full",
@@ -590,10 +605,10 @@ const ParseMSJSON = (props) => {
 								:
 									<React.Fragment></React.Fragment>
 							}
-							{rows.map((row, i) => {
+							{boxRows.map((row, i) => {
 								// Stripe odd-numbered rows
 								let stripedRow = (
-									isStripedTable && (i % 2) ?
+									striped && (i % 2) ?
 										{bg: "darker"}
 									:
 										{}

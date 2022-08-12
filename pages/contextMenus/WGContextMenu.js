@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
 import { Menu, Pressable, VStack, Text, Divider, Modal } from 'native-base';
+import { useLocation } from "react-router-native";
+
 import { DotsIcon, SaveIcon, HelpIcon } from '../../components/icons';
 
 const WGContextMenu = () => {

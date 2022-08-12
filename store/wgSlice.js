@@ -5,7 +5,7 @@ const initialState = {
 	//...simple.wordgenSettings,
 	monosyllablesRate: 20,
 	maxSyllablesPerWord: 6,
-	categoryRunDropoff: 25,
+	characterGroupDropoff: 25,
 	syllableBoxDropoff: 20,
 	capitalizeSentences: true,
 	declarativeSentencePre: "",
@@ -31,8 +31,8 @@ const setMaxSyllablesPerWordFunc = (state, action) => {
 	state.maxSyllablesPerWord = action.payload;
 	return state;
 };
-const setCategoryRunDropoffFunc = (state, action) => {
-	state.categoryRunDropoff = action.payload;
+const setCharacterGroupDropoffFunc = (state, action) => {
+	state.characterGroupDropoff = action.payload;
 	return state;
 };
 const setSyllableBoxDropoffFunc = (state, action) => {
@@ -104,7 +104,7 @@ const wgSlice = createSlice({
 	reducers: {
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
-		setCategoryRunDropoff: setCategoryRunDropoffFunc,
+		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
 		setSyllableBoxDropoff: setSyllableBoxDropoffFunc,
 		setCapitalizeSentences: setCapitalizeSentencesFunc,
 		setDeclarativeSentencePre: setDeclarativeSentencePreFunc,
@@ -126,7 +126,7 @@ const wgSlice = createSlice({
 export const {
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
-	setCategoryRunDropoff,
+	setCharacterGroupDropoff,
 	setSyllableBoxDropoff,
 	setCapitalizeSentences,
 	setDeclarativeSentencePre,
@@ -145,82 +145,3 @@ export const {
 } = wgSlice.actions;
 
 export default wgSlice.reducer;
-
-// Constants are not changeable.
-export const consts = {
-	absoluteMaxColumns: 30
-};
-
-// An equality-check function
-export const equalityCheck = (stateA, stateB) => {
-	if (stateA === stateB) {
-		return true;
-	}
-	// stateA
-	const titleA = stateA.title;
-	const descriptionA = stateA.description;
-	const lexiconA = stateA.lexicon;
-	const truncateColumnsA = stateA.truncateColumns;
-	const columnsA = stateA.columns;
-	const sortDirA = stateA.sortDir;
-	const sortPatternA = stateA.sortPattern;
-	const disableBlankConfirmsA = stateA.disableBlankConfirms;
-	const maxColumnsA = stateA.maxColumns;
-	// stateB
-	const titleB = stateB.title;
-	const descriptionB = stateB.description;
-	const lexiconB = stateB.lexicon;
-	const truncateColumnsB = stateB.truncateColumns;
-	const columnsB = stateB.columns;
-	const sortDirB = stateB.sortDir;
-	const sortPatternB = stateB.sortPattern;
-	const disableBlankConfirmsB = stateB.disableBlankConfirms;
-	const maxColumnsB = stateB.maxColumns;
-	// flags
-	let lex = false;
-	let col = false;
-	if (
-		titleA !== titleB
-		|| descriptionA !== descriptionB
-		|| truncateColumnsA !== truncateColumnsB
-		|| sortDirA !== sortDirB
-		|| disableBlankConfirmsA !== disableBlankConfirmsB
-		|| maxColumnsA !== maxColumnsB
-		|| String(sortPatternA) !== String(sortPatternB)
-	) {
-		return false;
-	} else if(lexiconA === lexiconB) {
-		if(columnsA === columnsB) {
-			return true;
-		}
-		lex = true;
-	}
-	if(columnsA === columnsB) {
-		col = true;
-	} else {
-		// Cols bad?
-		col = columnsA.every((col, i) => {
-			const otherCol = columnsB[i];
-			return col === otherCol ||
-				(
-					col.label === otherCol.label
-					&& col.size === otherCol.size
-				);
-		});
-		if(!col) {
-			// if still bad, we're unequal
-			return false;
-		}
-	}
-	// Cols are good.
-	// Lex bad?
-	return lex || lexiconA.every((lex, i) => {
-		const otherLex = lexiconB[i];
-		return lex === otherLex ||
-			(
-				lex.id === otherLex.id
-				&& String(lex.columns) === String(otherLex.columns)
-			);
-	});
-};
-

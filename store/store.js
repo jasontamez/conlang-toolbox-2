@@ -13,6 +13,7 @@ import morphoSyntaxSlice from './morphoSyntaxSlice';
 import wordListsSlice from './wordListsSlice';
 import appStateSlice from './appStateSlice';
 import lexiconSlice from './lexiconSlice';
+import wgSlice from './wgSlice';
 
 //const reconcile = async (incoming, original, reduced) => {
 //	// Nothing for now.
@@ -22,6 +23,7 @@ import lexiconSlice from './lexiconSlice';
 export default () => {
 	const reducer = {
 		// SLICES here
+		wg: wgSlice,
 		morphoSyntax: morphoSyntaxSlice,
 		appState: appStateSlice,
 		wordLists: wordListsSlice,
@@ -87,7 +89,7 @@ export const blankAppState = {/*
 		//...simple.wordgenSettings,
 		monosyllablesRate: 20,
 		maxSyllablesPerWord: 6,
-		categoryRunDropoff: 25,
+		characterGroupDropoff: 25,
 		syllableBoxDropoff: 20,
 		capitalizeSentences: true,
 		declarativeSentencePre: "",
@@ -126,7 +128,7 @@ export const blankAppState = {/*
 		//...simple.wordgenSettings,
 		monosyllablesRate: 20,
 		maxSyllablesPerWord: 6,
-		categoryRunDropoff: 25,
+		characterGroupDropoff: 25,
 		syllableBoxDropoff: 20,
 		capitalizeSentences: true,
 		declarativeSentencePre: "",

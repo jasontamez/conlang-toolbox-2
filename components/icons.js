@@ -1,4 +1,5 @@
 import { Icon as ICON } from 'native-base';
+import { Polygon } from 'react-native-svg';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FAFive from '@expo/vector-icons/FontAwesome5';
 import MCI from '@expo/vector-icons/MaterialCommunityIcons';
@@ -63,3 +64,26 @@ export const DragHandleIcon = (props) => <Icon as={MaterialIcons} name="drag-han
 export const InfoIcon = (props) => <Icon as={Ionicons} name="information-circle-sharp" {...props} />;
 export const OkIcon = (props) => <Icon as={Ionicons} name="checkmark-circle-outline" {...props} />;
 export const HelpIcon = (props) => <Icon as={Ionicons} name="help-circle-outline" {...props} />;
+
+export const SharpDropoffIcon = (props) => (
+	<Icon viewBox="0 0 256 256" {...props}>
+		<Polygon
+			points="24,232 232,232 24,64"
+			stroke="currentColor"
+			strokeWidth={8}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		/>
+	</Icon>
+);
+export const EquiprobableIcon = (props) => (
+	<Icon viewBox="0 0 256 256" {...props}>
+		<Polygon
+			points="24,232 232,232 24,232"
+			stroke="currentColor"
+			strokeWidth={8}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		/>
+	</Icon>
+);
