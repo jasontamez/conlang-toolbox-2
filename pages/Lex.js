@@ -13,7 +13,8 @@ import {
 	IconButton,
 	Menu,
 	Button,
-	useToast
+	useToast,
+	useBreakpointValue
 } from 'native-base';
 
 import debounce from '../components/debounce';
@@ -43,6 +44,7 @@ import doToast from '../components/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
+import { sizes } from '../store/appStateSlice';
 
 const Lex = () => {
 	//
@@ -275,6 +277,8 @@ const Lex = () => {
 	}
 	const screenHeight = useWindowDimensions().height;
 	const screenWidth = useWindowDimensions().width;
+	const textSize = useBreakpointValue(sizes.md);
+	const bigTextSize = useBreakpointValue(sizes.x2);
 	//
 	//
 	// RETURN JSX
@@ -284,7 +288,7 @@ const Lex = () => {
 		<>
 			<ScrollView flex={1}>
 				<VStack m={3} mb={0}>
-					<Text fontSize="sm">Lexicon Title:</Text>
+					<Text fontSize={textSize}>Lexicon Title:</Text>
 					<Input
 						mt={2}
 						defaultValue={title}
@@ -296,7 +300,7 @@ const Lex = () => {
 					/>
 				</VStack>
 				<VStack m={3} mt={2}>
-					<Text fontSize="sm">Description:</Text>
+					<Text fontSize={textSize}>Description:</Text>
 					<TextArea mt={2}
 						defaultValue={description}
 						placeholder="A short description of this lexicon."
@@ -393,7 +397,7 @@ const Lex = () => {
 						flexShrink={0}
 						style={{minWidth: 110}}
 					>
-						<Text fontSize="2xl">{String(lexicon.length)} Word{maybePlural(lexicon.length)}</Text>
+						<Text fontSize={bigTextSize}>{String(lexicon.length)} Word{maybePlural(lexicon.length)}</Text>
 					</Box>
 					<HStack
 						mx={3}

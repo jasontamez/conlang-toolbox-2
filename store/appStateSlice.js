@@ -41,3 +41,38 @@ export const {
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;
+
+// Sizes are not changeable.
+export const sizes = {
+	xs: {
+		base: "xs",
+		lg: "sm",
+		xl: "md"
+	},
+	sm: {
+		base: "sm",
+		lg: "md",
+		xl: "lg"
+	},
+	md: {
+		base: "md",
+		lg: "lg",
+		xl: "xl"
+	},
+	lg: {
+		base: "lg",
+		lg: "xl",
+		xl: "2xl"
+	},
+	xl: {
+		base: "xl",
+		lg: "2xl",
+		xl: "3xl"
+	},
+	x2: {
+		base: "2xl",
+		lg: "3xl",
+		xl: "4xl"
+	}
+};
+

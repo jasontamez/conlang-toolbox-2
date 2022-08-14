@@ -7,7 +7,8 @@ import {
 	IconButton,
 	Button,
 	Modal,
-	Heading
+	Heading,
+	useBreakpointValue
 } from 'native-base';
 
 import ExtraChars from '../components/ExtraCharsButton';
@@ -17,6 +18,7 @@ import {
 	SaveIcon
 } from '../components/icons';
 import StandardAlert from '../components/StandardAlert';
+import { sizes } from '../store/appStateSlice';
 
 
 const ModalLexiconEditingItem = ({
@@ -37,6 +39,8 @@ const ModalLexiconEditingItem = ({
 	const [newFields, setNewFields] = useState([]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const firstFieldRef = useRef(null);
+	const textSize = useBreakpointValue(sizes.sm);
+	const headerSize = useBreakpointValue(sizes.md);
 	const doClose = () => {
 		setNewFields([]);
 		endEditingFunc();
@@ -76,7 +80,7 @@ const ModalLexiconEditingItem = ({
 					>
 						<Heading
 							color="primaryContrast"
-							size="md"
+							size={headerSize}
 						>
 							Edit Lexicon Item
 						</Heading>
@@ -103,7 +107,7 @@ const ModalLexiconEditingItem = ({
 						{columns.map((info, i) => {
 							return (
 								<VStack key={info + "-" + String(i)} >
-									<Text fontSize="sm">{labels[i]}</Text>
+									<Text fontSize={textSize}>{labels[i]}</Text>
 									<Input
 										defaultValue={info}
 										size="md"

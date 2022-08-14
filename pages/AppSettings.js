@@ -1,6 +1,6 @@
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { HStack, Menu, ScrollView, Switch, Text, VStack } from 'native-base';
-import { setTheme, setDisableConfirms } from '../store/appStateSlice';
+import { setTheme, setDisableConfirms, sizes } from '../store/appStateSlice';
 
 
 const AppSettings = () => {
@@ -9,6 +9,8 @@ const AppSettings = () => {
 		disableConfirms,
 		theme
 	} = useSelector((state) => state.appState, shallowEqual);
+	const titleSize = useBreakpointValue(sizes.md);
+	const textSize = useBreakpointValue(sizes.xs);
 	return (
 		<ScrollView>
 			<HStack
@@ -24,8 +26,8 @@ const AppSettings = () => {
 					flexShrink={2}
 					mr={2}
 				>
-					<Text fontSize="md">Disable Confirmation Prompts</Text>
-					<Text fontSize="xs" color="main.500">Eliminates yes/no prompts when deleting or overwriting data.</Text>
+					<Text fontSize={titleSize}>Disable Confirmation Prompts</Text>
+					<Text fontSize={textSize} color="main.500">Eliminates yes/no prompts when deleting or overwriting data.</Text>
 				</VStack>
 				<Switch
 					defaultIsChecked={disableConfirms}
@@ -41,7 +43,7 @@ const AppSettings = () => {
 				borderBottomColor="main.900"
 			>
 				<VStack>
-					<Text fontSize="md">Change Theme</Text>
+					<Text fontSize={titleSize}>Change Theme</Text>
 				</VStack>
 				<Menu
 					placement="bottom right"

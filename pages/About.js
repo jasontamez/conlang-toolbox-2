@@ -6,7 +6,8 @@ import {
 	Link,
 	Pressable as Press,
 	Text,
-	ScrollView
+	ScrollView,
+	useBreakpointValue
  } from 'native-base';
 import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
@@ -20,6 +21,7 @@ import {
 	WordGenIcon,
 	WordListsIcon
 } from '../components/icons';
+import { sizes } from '../store/appStateSlice';
 
 const Indented = (props) => (
 	<HStack
@@ -56,28 +58,36 @@ const Pressable = ({onPress, firstElement, children}) => (
 	</Press>
 );
 
-const SectionHeader = ({SectionIcon, text}) => (
-	<HStack
-		p={4}
-		alignItems="center"
-		justifyContent="center"
-		space={3}
-	>
-		<SectionIcon color="primary.500" />
-		<Heading
-			color="primary.500"
-			fontSize="xl"
+const SectionHeader = ({SectionIcon, text}) => {
+	const textSize = useBreakpointValue({
+		base: "xl",
+		xl: "2xl"
+	});
+	return (
+		<HStack
+			p={4}
+			alignItems="center"
+			justifyContent="center"
+			space={3}
 		>
-			{text}
-		</Heading>
-	</HStack>
-);
+			<SectionIcon color="primary.500" />
+			<Heading
+				color="primary.500"
+				fontSize={textSize}
+			>
+				{text}
+			</Heading>
+		</HStack>
+	)
+};
 
 const About = () => {
 	let navigate = useNavigate();
 	const doNav = (where) => {
 		navigate(where);
 	};
+	const headerSize = useBreakpointValue(sizes.xl);
+	const textSize = useBreakpointValue(sizes.md);
 	return (
 		<ScrollView
 			p={3}
@@ -140,13 +150,13 @@ const About = () => {
 				pt={0}
 				alignItems="center"
 			>
-				<Heading color="primary.500" p={4} fontSize="xl">App Info</Heading>
+				<Heading color="primary.500" p={4} fontSize={headerSize}>App Info</Heading>
 				<HStack mx={4}>
 					<Text>v.{packageJson.version}</Text>
 				</HStack>
 				<HStack my={3} mx={4} space={2} alignItems="center">
-					<Text fontSize="md">Contact:</Text>
-					<Link fontSize="md" href="mailto:jasontankapps@gmail.com">jasontankapps@gmail.com</Link>
+					<Text fontSize={textSize}>Contact:</Text>
+					<Link fontSize={textSize} href="mailto:jasontankapps@gmail.com">jasontankapps@gmail.com</Link>
 				</HStack>
 			</VStack>
 		</ScrollView>

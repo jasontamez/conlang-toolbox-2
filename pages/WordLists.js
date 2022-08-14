@@ -13,7 +13,8 @@ import {
 	VStack,
 	Radio,
 	useToast,
-	IconButton
+	IconButton,
+	useBreakpointValue
 } from 'native-base';
 import {
 	toggleDisplayedList,
@@ -26,6 +27,7 @@ import { CloseCircleIcon, CloseIcon, SaveIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../components/toast';
 import { useNavigate } from 'react-router-native';
+import { sizes } from '../store/appStateSlice';
 
 const WordLists = () => {
 	const {
@@ -38,6 +40,8 @@ const WordLists = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const toast = useToast();
+	const headerSize = useBreakpointValue(sizes.md);
+	const buttonTextSize = useBreakpointValue(sizes.xs);
 	const [addToLexicon, setAddToLexicon] = useState([]);
 	const [columnID, setColumnID] = useState(columns[0].id);
 	const shown = [];
@@ -288,7 +292,7 @@ const WordLists = () => {
 							onPress={() => dispatch(toggleDisplayedList(list))}
 							{...displayProps}
 						>
-							<Text fontSize="xs">{list}</Text>
+							<Text fontSize={buttonTextSize}>{list}</Text>
 						</Button>
 					);
 				})}
@@ -312,7 +316,7 @@ const WordLists = () => {
 						bg="primary.500"
 						borderBottomWidth={0}
 					>
-						<Text color="primaryContrast" fontSize="md">Add to Lexicon</Text>
+						<Text color="primaryContrast" fontSize={headerSize}>Add to Lexicon</Text>
 					</Modal.Header>
 					<Modal.CloseButton
 						_icon={{color: "primaryContrast"}}

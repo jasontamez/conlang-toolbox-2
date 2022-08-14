@@ -1,25 +1,41 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
-import { useWindowDimensions } from 'react-native';
-import { VStack, Box, Text, Pressable, Divider } from 'native-base';
+import {
+	VStack,
+	Box,
+	Text,
+	Pressable,
+	Divider,
+	useBreakpointValue
+} from 'native-base';
 
 import { TabBar } from '../components/layoutTags';
-import { WGCharactersIcon, WGOutputIcon, WGTransformationsIcon, WGSettingsIcon, WGSyllablesIcon } from '../components/icons';
+import {
+	WGCharactersIcon,
+	WGOutputIcon,
+	WGTransformationsIcon,
+	WGSettingsIcon,
+	WGSyllablesIcon
+} from '../components/icons';
+import { sizes } from '../store/appStateSlice';
 
 const WG = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const buttonTextSize = useBreakpointValue(sizes.xs);
 	const pathname = location.pathname;
-	const { width } = useWindowDimensions();
+	const w = useBreakpointValue({
+		base: 12,
+		sm: 20
+	});
+	const ButtonLabel = useBreakpointValue({
+		base: () => <></>,
+		sm: ({color, label}) => <Text fontSize={buttonTextSize} color={color}>{label}</Text>
+	});
 	const NavTab = (props) => {
 		const { isCurrent, TabIcon, link, label } = props;
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "main.600";
-		const buttonLabel = width > 390 ?
-			<Text fontSize="xs" color={colorString}>{label}</Text>
-		:
-			<></>
-		;
 		return (
 			<Pressable onPress={() => navigate(link)}>
 				<VStack
@@ -27,10 +43,10 @@ const WG = () => {
 					justifyContent="center"
 					h={12}
 					bg={bg}
-					w={width > 390 ? 20 : 12}
+					w={w}
 				>
 					<TabIcon color={colorString} />
-					{buttonLabel}
+					<ButtonLabel color={colorString} label={label} />
 				</VStack>
 			</Pressable>
 		);
@@ -81,30 +97,35 @@ const WG = () => {
 					TabIcon={(props) => <WGCharactersIcon {...props} />}
 					link="/wg/characters"
 					label="Characters"
+					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg/syllables"}
 					TabIcon={(props) => <WGSyllablesIcon {...props} />}
 					link="/wg/syllables"
 					label="Syllables"
+					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg/transformations"}
 					TabIcon={(props) => <WGTransformationsIcon {...props} />}
 					link="/wg/transformations"
 					label="Transforms"
+					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg/output"}
 					TabIcon={(props) => <WGOutputIcon {...props} />}
 					link="/wg/output"
 					label="Output"
+					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg"}
 					TabIcon={(props) => <WGSettingsIcon {...props} />}
 					link="/wg"
 					label="Settings"
+					w={w}
 				/>
 			</TabBar>
 		</>

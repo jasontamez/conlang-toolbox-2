@@ -8,7 +8,8 @@ import {
 	Heading,
 	Pressable,
 	Center,
-	Box
+	Box,
+	useBreakpointValue
 } from 'native-base';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { Modal, useWindowDimensions } from 'react-native';
@@ -21,6 +22,7 @@ import {
 	DragHandleIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
+import { sizes } from '../store/appStateSlice';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	return (
@@ -44,6 +46,7 @@ const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 const LexiconColumnReorderer = ({doClose}) => {
 	const {columns} = useSelector((state) => state.lexicon, equalityCheck);
 	const dispatch = useDispatch();
+	const textSize = useBreakpointValue(sizes.md);
 	const [newColumns, setNewColumns] = useState([]);
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
@@ -80,7 +83,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 						bg="lighter"
 						style={{width: Math.round(minWidth * 0.8)}}
 					>
-						<Text color="text.50" fontSize="md" isTruncated={true}>{item.label}</Text>
+						<Text color="text.50" fontSize={textSize} isTruncated={true}>{item.label}</Text>
 					</Box>
 				</HStack>
 			</Pressable>
@@ -108,7 +111,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 				bg="primary.500"
 				borderTopRadius="lg"
 			>
-				<Heading color="primaryContrast" size="md">Reorder Columns</Heading>
+				<Heading color="primaryContrast" size={textSize}>Reorder Columns</Heading>
 				<IconButton
 					icon={<CloseCircleIcon color="primaryContrast" />}
 					p={1}

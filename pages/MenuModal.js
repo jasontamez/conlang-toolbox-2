@@ -17,11 +17,12 @@ import {
 	Modal,
 	Divider,
 	IconButton,
-	ZStack
+	ZStack,
+	useBreakpointValue
 } from 'native-base';
 
 import * as Icons from '../components/icons';
-import { setMenuToggleName } from '../store/appStateSlice';
+import { setMenuToggleName, sizes } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
 
 const MenuModal = () => {
@@ -34,6 +35,9 @@ const MenuModal = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigator = useNavigate();
+	const subHeaderSize = useBreakpointValue(sizes.sm);
+	const subMenuSize = useBreakpointValue(sizes.xs);
+	const headerSize = useBreakpointValue(sizes.md);
 	let allAnimationValues = {};
 	const toggleSection = (parentId) => {
 		const target = allAnimationValues[parentId];
@@ -208,7 +212,7 @@ const MenuModal = () => {
 									m={2}
 									ml={4}
 								>
-									<Text textAlign="right" fontSize="xs" {...textOptions}>{menuTitle || title}</Text>
+									<Text textAlign="right" fontSize={subMenuSize} {...textOptions}>{menuTitle || title}</Text>
 								</VStack>
 								<VStack
 									alignItems="center"
@@ -325,8 +329,8 @@ const MenuModal = () => {
 							w="full"
 							mr={5}
 						>
-							<Heading size="md">Conlang Toolbox</Heading>
-							<Text fontSize="sm" color="primary.200">tools for language invention</Text>
+							<Heading size={headerSize}>Conlang Toolbox</Heading>
+							<Text fontSize={subHeaderSize} color="primary.200">tools for language invention</Text>
 						</VStack>
 						<VStack
 							m={0}

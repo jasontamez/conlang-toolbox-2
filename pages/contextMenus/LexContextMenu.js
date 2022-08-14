@@ -11,7 +11,8 @@ import {
 	Box,
 	Slider,
 	Button,
-	useToast
+	useToast,
+	useBreakpointValue
 } from 'native-base';
 
 import { DotsIcon, SaveIcon } from '../../components/icons';
@@ -22,6 +23,7 @@ import {
 	consts
 } from "../../store/lexiconSlice";
 import doToast from '../../components/toast';
+import { sizes } from '../../store/appStateSlice';
 
 const LexiconContextMenu = () => {
 	const {
@@ -32,6 +34,7 @@ const LexiconContextMenu = () => {
 	} = useSelector((state) => state.lexicon, shallowEqual);
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
+	const textSize = useBreakpointValue(sizes.md);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
@@ -144,7 +147,7 @@ const LexiconContextMenu = () => {
 						bg="primary.500"
 						borderBottomWidth={0}
 					>
-						<Text color="primaryContrast" fontSize="md">Set Max Columns</Text>
+						<Text color="primaryContrast" fontSize={textSize}>Set Max Columns</Text>
 					</Modal.Header>
 					<Modal.CloseButton
 						_icon={{color: "primaryContrast"}}

@@ -1,13 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
-import { Menu, Pressable, VStack, Text, Divider, Modal } from 'native-base';
+import { Menu, Pressable, VStack, Text, Divider, Modal, useBreakpointValue } from 'native-base';
 import { useLocation } from "react-router-native";
 
 import { DotsIcon, SaveIcon, HelpIcon } from '../../components/icons';
+import { sizes } from "../../store/appStateSlice";
 
 const WGContextMenu = () => {
 	const { pathname } = useLocation();
 	const dispatch = useDispatch();
+	const textSize = useBreakpointValue(sizes.sm);
+	const headerSize = useBreakpointValue(sizes.md);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const doMenuClose = () => {
@@ -53,7 +56,7 @@ const WGContextMenu = () => {
 						bg="primary.500"
 						borderBottomWidth={0}
 					>
-						<Text color="primaryContrast" fontSize="md">TITLE</Text>
+						<Text color="primaryContrast" fontSize={headerSize}>TITLE</Text>
 					</Modal.Header>
 					<Modal.CloseButton
 						_icon={{color: "primaryContrast"}}
@@ -68,7 +71,7 @@ const WGContextMenu = () => {
 							space={4}
 							justifyContent="space-between"
 						>
-							<Text px={5} fontSize="sm">
+							<Text px={5} fontSize={textSize}>
 								{'\t'}Sample text. This should depend on navigator location.
 							</Text>
 						</VStack>

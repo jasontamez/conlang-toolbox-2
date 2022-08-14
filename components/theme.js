@@ -1,6 +1,13 @@
 //import React from "react";
 import { extendTheme } from "native-base";
 
+const breakpoints = {
+	sm: 390,
+	md: 600,
+	lg: 992,
+	xl: 1280
+}
+
 const fontConfig = {
 	Arimo: {
 		400: {
@@ -471,10 +478,10 @@ const components = {
 	},
 	Switch: {
 		defaultProps: {
-			onTrackColor: "primary.900",
+			onTrackColor: "lighter",
 			onThumbColor: "primary.500",
 			offTrackColor: "darker",
-			offThumbColor: "text.50"
+			offThumbColor: "text.900"
 		}
 	},
 	Menu: {
@@ -1134,6 +1141,7 @@ themeNames.forEach((themeName) => {
 	// Apply font defaults to the theme
 	workingTheme.fontConfig = fontConfig;
 	workingTheme.fonts = fonts;
+	workingTheme.breakpoints = breakpoints;
 });
 
 const getTheme = (themeName) => {

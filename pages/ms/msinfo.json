@@ -87,6 +87,7 @@
 			"end": "Po\u00ADly\u00ADsyn\u00ADthe\u00ADtic",
 			"label": "Degree of synthesis, from Iso\u00ADlating to Poly\u00ADsynthetic",
 			"notFilled": true,
+			"uncapped": true,
 			"max": 10
 		},
 		{
@@ -101,6 +102,7 @@
 			"end": "Fu\u00ADsion\u00ADal",
 			"label": "Degree of fusion, from Agglutinative to Fusional",
 			"notFilled": true,
+			"uncapped": true,
 			"max": 10
 		},
 		{

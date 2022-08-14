@@ -1,11 +1,16 @@
-import { Text, VStack, Pressable, HStack, Heading, Box } from "native-base";
+import {
+	Text,
+	HStack,
+	Box,
+	Switch,
+	ScrollView,
+	useBreakpointValue
+} from "native-base";
 import { useDispatch, useSelector } from "react-redux";
-import { useWindowDimensions } from "react-native";
 
 import debounce from '../../components/debounce';
 import {
 	TextSetting,
-	SliderWithTicks,
 	SliderWithLabels,
 	SliderWithTicksAndLabels
 } from '../../components/layoutTags';
@@ -23,14 +28,10 @@ import {
 	setExclamatorySentencePost
 } from  "../../store/wgSlice";
 import {
-	AddCircleIcon,
 	EquiprobableIcon,
-	ExportIcon,
-	RemoveCircleIcon,
-	SaveIcon,
-	SharpDropoffIcon,
-	TrashIcon
+	SharpDropoffIcon
 } from "../../components/icons";
+import { sizes } from "../../store/appStateSlice";
 
 const WGSettings = () => {
 	const {
@@ -47,7 +48,6 @@ const WGSettings = () => {
 		exclamatorySentencePost
 	} = useSelector(state => state.wg);
 	const dispatch = useDispatch();
-	const { width } = useWindowDimensions();
 	const stackProps = {
 		justifyContent: "flex-start",
 		borderBottomWidth: 0.5,
@@ -56,6 +56,7 @@ const WGSettings = () => {
 		px: 2,
 		space: 1.5
 	};
+	const textSize = useBreakpointValue(sizes.sm);
 	const SectionHeader = (props) => {
 		return (
 			<Box
@@ -67,8 +68,8 @@ const WGSettings = () => {
 			>
 				<Text
 					opacity={80}
-					fontSize="sm"
-					letterSpacing={0.5}
+					fontSize={textSize}
+					letterSpacing="lg"
 					color="main.600"
 				>{props.children}</Text>
 			</Box>
@@ -76,14 +77,14 @@ const WGSettings = () => {
 	};
 	const Label = ({pre, post, value}) =>
 		<Text
-			fontSize="sm"
+			fontSize={textSize}
 		>{pre || ""}<Text
 				color="primary.500"
 				px={1.5}
 				bg="lighter"
 			>{value}{post || ""}</Text></Text>;
 	return (
-		<VStack>
+		<ScrollView>
 			{/*
 				<SectionHeader>Presets and Stored Info</SectionHeader>
 				Load Preset button
@@ -95,7 +96,6 @@ const WGSettings = () => {
 				max={100}
 				beginLabel="Never"
 				endLabel="Always"
-				width={width}
 				value={monosyllablesRate}
 				sliderProps={{
 					accessibilityLabel: "Monosyllable Rate",
@@ -109,7 +109,6 @@ const WGSettings = () => {
 				max={15}
 				beginLabel="2"
 				endLabel="15"
-				width={width}
 				value={maxSyllablesPerWord}
 				sliderProps={{
 					accessibilityLabel: "Maximum Syllables per Word",
@@ -122,7 +121,6 @@ const WGSettings = () => {
 				max={50}
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
-				width={width}
 				value={characterGroupDropoff}
 				sliderProps={{
 					accessibilityLabel: "Character Group dropoff",
@@ -135,7 +133,6 @@ const WGSettings = () => {
 				max={50}
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
-				width={width}
 				value={syllableBoxDropoff}
 				sliderProps={{
 					accessibilityLabel: "Syllable box dropoff",
@@ -145,15 +142,87 @@ const WGSettings = () => {
 				stackProps={stackProps}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>
+			<HStack
+				w="full"
+				alignItems="center"
+				{...stackProps}
+				justifyContent="space-between"
+			>
+				<Text fontSize={textSize}>Capitalize sentences</Text>
+				<Switch
+					defaultIsChecked={capitalizeSentences}
+					onValueChange={(value) => dispatch(setCapitalizeSentences(value))}
+				/>
+			</HStack>
 			{/*
-				Capitalize sentences (switch)
 				Declarative sentence beginning, ending
 				Interrogative sentence beginning, ending
 				Exclamatory sentence beginning, ending
 			*/}
-		</VStack>
+			<TextSetting
+				text="Declarative sentence beginning"
+				value={declarativeSentencePre}
+				onChangeText={(text) => debounce(
+					() => dispatch(setDeclarativeSentencePre(text)),
+					{ namespace: "declrPre" }
+				)}
+				boxProps={stackProps}
+			/>
+			<TextSetting
+				text="Declarative sentence ending"
+				value={declarativeSentencePost}
+				onChangeText={(text) => debounce(
+					() => dispatch(setDeclarativeSentencePost(text)),
+					{ namespace: "declrPost" }
+				)}
+				boxProps={stackProps}
+			/>
+			<TextSetting
+				text="Interrogative sentence beginning"
+				value={interrogativeSentencePre}
+				onChangeText={(text) => debounce(
+					() => dispatch(setInterrogativeSentencePre(text)),
+					{ namespace: "interrPre" }
+				)}
+				boxProps={stackProps}
+			/>
+			<TextSetting
+				text="Interrogative sentence ending"
+				value={interrogativeSentencePost}
+				onChangeText={(text) => debounce(
+					() => dispatch(setInterrogativeSentencePost(text)),
+					{ namespace: "interrPost" }
+				)}
+				boxProps={stackProps}
+			/>
+			<TextSetting
+				text="Exclamatory sentence beginning"
+				value={exclamatorySentencePre}
+				onChangeText={(text) => debounce(
+					() => dispatch(setExclamatorySentencePre(text)),
+					{ namespace: "exclmPre" }
+				)}
+				boxProps={stackProps}
+			/>
+			<TextSetting
+				text="Exclamatory sentence ending"
+				value={exclamatorySentencePost}
+				onChangeText={(text) => debounce(
+					() => dispatch(setExclamatorySentencePost(text)),
+					{ namespace: "exclmPost" }
+				)}
+				boxProps={stackProps}
+			/>
+		</ScrollView>
 	);
-	// Consider changing the above to mimic AppSettings
+	// <TextSetting
+	//    boxProps={props for outer Box}
+	//    labelProps={props for Text}
+	//    text={optional, goes into Text; if missing, uses children instead}
+	//    value={Input defaultValue}
+	//    placeholder={Input placeholder}
+	//    onChangeText={Input onChangeText}
+	//    inputProps={other props for Input} />
 };
 
 export default WGSettings;

@@ -11,7 +11,8 @@ import {
 	ScrollView,
 	Text as Tx,
 	VStack,
-	Center
+	Center,
+	useBreakpointValue
 } from 'native-base';
 
 import ms from './msinfo.json';
@@ -23,8 +24,9 @@ import { /*
 	setText
 } from '../../store/morphoSyntaxSlice';
 import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
-import { SliderWithTicks, TextAreaSetting } from "../../components/layoutTags";
+import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../components/debounce";
+import { sizes } from "../../store/appStateSlice";
 
 
 const ParseMSJSON = (props) => {
@@ -33,6 +35,8 @@ const ParseMSJSON = (props) => {
 	const synNum = useSelector((state) => state.morphoSyntax.num);
 	const synText = useSelector((state) => state.morphoSyntax.text);
 	const { width } = useWindowDimensions();
+	const textSize = useBreakpointValue(sizes.md);
+	const headerSize = useBreakpointValue(sizes.lg);
 	const { page } = props;
 	const doc = ms[page];
 	const headings = {
@@ -54,8 +58,8 @@ const ParseMSJSON = (props) => {
 			m={0}
 			p={0}
 			borderWidth={0}
-			lineHeight="md"
-			fontSize="md"
+			lineHeight={textSize}
+			fontSize={textSize}
 			{...props}
 		/>
 	);
@@ -212,17 +216,22 @@ const ParseMSJSON = (props) => {
 					end,
 					notFilled,
 					max,
-					label
+					label,
+					uncapped
 				} = bit;
+				const Element = uncapped ?
+					(props) => <SliderWithTicksNoCaps {...props} />
+				:
+					(props) => <SliderWithTicks {...props} />
+				;
 				return (
-					<SliderWithTicks
+					<Element
 						key={getKey("range")}
 						beginLabel={start}
 						endLabel={end}
 						notFilled={notFilled}
 						min={0}
 						max={max}
-						width={width}
 						value={synNum[prop] || 0}
 						sliderProps={{
 							accessibilityLabel: label,
@@ -448,7 +457,7 @@ const ParseMSJSON = (props) => {
 							<Modal.CloseButton />
 							<Modal.Header w="full">
 								<Center>
-									<Text>{title}</Text>
+									<Text fontSize={headerSize}>{title}</Text>
 								</Center>
 							</Modal.Header>
 							<Modal.Body

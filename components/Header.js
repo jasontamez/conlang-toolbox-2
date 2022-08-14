@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, HStack, Box } from "native-base";
+import { Text, HStack, Box, useBreakpointValue } from "native-base";
 import { useLocation } from "react-router-dom";
 
 //import { openModal } from '../store/dFuncs';
@@ -9,6 +9,7 @@ import ExtraChars from './ExtraCharsButton';
 import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
+import { sizes } from "../store/appStateSlice";
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
@@ -34,6 +35,7 @@ const AppHeader = () => {
 		extraChars,
 		rightHeader
 	} = {...defaultProps, ...currentPage};
+	const textSize = useBreakpointValue(sizes.lg);
 	return (
 		<HStack
 			w="full"
@@ -48,7 +50,7 @@ const AppHeader = () => {
 			<Box flexGrow={1} flexShrink={0}>
 				<Text
 					isTruncated
-					fontSize="lg"
+					fontSize={textSize}
 					textAlign="center"
 					{...textProps}
 				>

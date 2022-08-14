@@ -9,16 +9,26 @@ import {
 	ScrollView,
 	Text,
 	TextArea,
-	VStack
+	VStack,
+	useBreakpointValue
  } from "native-base";
 
 import { Bar } from "./icons";
 import debounce from './debounce';
+import { sizes } from '../store/appStateSlice';
 
 // v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
 const v = (given, base) => given === undefined ? base : given;
-
+// Breakpoint object for Sliders
+const sliderCapWidths = {
+	base: 65,
+	sm: 100,
+	md: 164,
+	lg: 213,
+	xl: 350
+};
+const textSizeBreaks = sizes.sm;
 
 export const NavBar = (props) => {
 	// <NavBar
@@ -187,23 +197,22 @@ export const SliderWithTicks = (props) => {
 		tickProps,
 		stackProps,
 		sliderProps,
-		width,
 		notFilled,
 		value
 	} = props;
 	const minVal = v(min, 0);
 	const maxVal = v(max, 4);
 	const defaultValue = v(value, minVal);
-	const labelW = Math.floor(v(width, 1000) / 6);
+	const labelW = useBreakpointValue(sliderCapWidths);
 	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...v(tickProps, {})} {...props} />;
 	let middleTicks = [<Tick key="FirstTick" color="transparent" size="2xs" />];
 	for (let c = minVal + 1; c < maxVal; c++) {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
+	const textSize = useBreakpointValue(textSizeBreaks);
 	return (
 		<HStack
-			d="flex"
 			w="full"
 			bg="darker"
 			px={2}
@@ -217,13 +226,13 @@ export const SliderWithTicks = (props) => {
 				flexShrink={1}
 				flexBasis={labelW}
 			>
-				<Text textAlign="center" fontSize="sm">{v(beginLabel, "MISSING LABEL")}</Text>
+				<Text textAlign="center" fontSize={textSize}>{v(beginLabel, "MISSING LABEL")}</Text>
 			</Box>
 			<ZStack
 				alignItems="center"
 				justifyContent="center"
 				flexGrow={1}
-				flexShrink={2}
+				flexShrink={1}
 				flexBasis={labelW * 4}
 				{...v(stackProps, {})}
 			>
@@ -232,8 +241,7 @@ export const SliderWithTicks = (props) => {
 					justifyContent="space-between"
 					w="full"
 					children={middleTicks}
-				>
-				</HStack>
+				/>
 				<Slider
 					size="sm"
 					minValue={minVal}
@@ -254,7 +262,7 @@ export const SliderWithTicks = (props) => {
 				flexShrink={1}
 				flexBasis={labelW}
 			>
-				<Text textAlign="center" fontSize="sm">{v(endLabel, "MISSING LABEL")}</Text>
+				<Text textAlign="center" fontSize={textSize}>{v(endLabel, "MISSING LABEL")}</Text>
 			</Box>
 		</HStack>
 	);
@@ -340,7 +348,6 @@ export const SliderWithLabels = (props) => {
 		beginLabel,
 		endLabel,
 		sliderProps,
-		width,
 		value,
 		notFilled,
 		Label,
@@ -348,13 +355,13 @@ export const SliderWithLabels = (props) => {
 	} = props;
 	const minVal = v(min, 0);
 	const defaultValue = v(value, minVal);
-	const labelW = Math.floor(v(width, 1000) / 6);
+	const labelW = useBreakpointValue(sliderCapWidths);
+	const textSize = useBreakpointValue(textSizeBreaks);
 	const [currentValue, setCurrentValue] = useState(defaultValue);
 	return (
 		<VStack {...v(stackProps, {})}>
 			<Label value={currentValue} />
 			<HStack
-				d="flex"
 				w="full"
 				bg="darker"
 				px={2}
@@ -369,7 +376,7 @@ export const SliderWithLabels = (props) => {
 					flexShrink={1}
 					flexBasis={labelW}
 				>
-					<Text textAlign="center" fontSize="sm">{v(beginLabel, "MISSING LABEL")}</Text>
+					<Text textAlign="center" fontSize={textSize}>{v(beginLabel, "MISSING LABEL")}</Text>
 				</Box>
 				<Slider
 					size="sm"
@@ -378,7 +385,7 @@ export const SliderWithLabels = (props) => {
 					step={1}
 					defaultValue={defaultValue}
 					flexGrow={1}
-					flexShrink={2}
+					flexShrink={1}
 					flexBasis={labelW * 4}
 						onChange={(v) => setCurrentValue(v)}
 					{...v(sliderProps, {})}
@@ -394,9 +401,86 @@ export const SliderWithLabels = (props) => {
 					flexShrink={1}
 					flexBasis={labelW}
 				>
-					<Text textAlign="center" fontSize="sm">{v(endLabel, "MISSING LABEL")}</Text>
+					<Text textAlign="center" fontSize={textSize}>{v(endLabel, "MISSING LABEL")}</Text>
 				</Box>
 			</HStack>
+		</VStack>
+	);
+};
+
+export const SliderWithTicksNoCaps = (props) => {
+	// <SliderWithTicksNoCaps
+	//    min={default 0}
+	//    max={default 4}
+	//    notFilled={if true, the slider does not fill}
+	//    beginLabel={left of Slider}
+	//    endLabel={right of Slider}
+	//    tickProps={props for the background tick bar}
+	//    stackProps={props for the inner ZStack}
+	//    sliderProps={props for the Slider}
+	//    value={default value for the slider (defaults to `min`)
+	//  />
+	const {
+		min,
+		max,
+		beginLabel,
+		endLabel,
+		tickProps,
+		stackProps,
+		sliderProps,
+		notFilled,
+		value
+	} = props;
+	const minVal = v(min, 0);
+	const maxVal = v(max, 4);
+	const defaultValue = v(value, minVal);
+	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...v(tickProps, {})} {...props} />;
+	let middleTicks = [<Tick key="FirstTick" color="transparent" size="2xs" />];
+	for (let c = minVal + 1; c < maxVal; c++) {
+		middleTicks.push(<Tick key={"Tick" + String(c)} />);
+	}
+	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
+	const textSize = useBreakpointValue(textSizeBreaks);
+	return (
+		<VStack
+			w="full"
+			bg="darker"
+			px={2}
+			py={1}
+			rounded="md"
+			alignItems="center"
+		>
+			<HStack justifyContent="space-between" w="full">
+				<Text textAlign="left" fontSize={textSize}>{v(beginLabel, "MISSING LABEL")}</Text>
+				<Text textAlign="right" fontSize={textSize}>{v(endLabel, "MISSING LABEL")}</Text>
+			</HStack>
+			<ZStack
+				w="5/6"
+				m={3}
+				alignItems="center"
+				justifyContent="center"
+				{...v(stackProps, {})}
+			>
+				<HStack
+					alignItems="center"
+					justifyContent="space-between"
+					w="full"
+					children={middleTicks}
+				/>
+				<Slider
+					size="sm"
+					minValue={minVal}
+					maxValue={maxVal}
+					step={1}
+					defaultValue={defaultValue}
+					{...v(sliderProps, {})}
+				>
+					<Slider.Track>
+						{notFilled ? <></> : <Slider.FilledTrack />}
+					</Slider.Track>
+					<Slider.Thumb />
+				</Slider>
+			</ZStack>
 		</VStack>
 	);
 };

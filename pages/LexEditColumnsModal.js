@@ -6,7 +6,8 @@ import {
 	IconButton,
 	Button,
 	Heading,
-	Modal
+	Modal,
+	useBreakpointValue
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,10 +21,12 @@ import {
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 import { MultiAlert } from '../components/StandardAlert';
+import { sizes } from '../store/appStateSlice';
 
 const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
 	const disableConfirms = useSelector(state => state.appState.disableConfirms);
+	const headerSize = useBreakpointValue(sizes.md);
 	const [editing, setEditing] = useState(false);
 	const [newColumns, setNewColumns] = useState([]);
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
@@ -201,7 +204,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				<Modal.Content>
 					<Modal.Header p={0} m={0}>
 						<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
-							<Heading color="primaryContrast" size="md">Edit Lexicon Columns</Heading>
+							<Heading color="primaryContrast" size={headerSize}>Edit Lexicon Columns</Heading>
 							<HStack justifyContent="flex-end" space={2}>
 								<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
 								<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
