@@ -9,7 +9,8 @@ import {
 	Pressable,
 	Center,
 	Box,
-	useBreakpointValue
+	useBreakpointValue,
+	useContrastText
 } from 'native-base';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { Modal, useWindowDimensions } from 'react-native';
@@ -89,6 +90,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 			</Pressable>
 		);
 	};
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<VStack
 			flex={1}
@@ -111,9 +113,9 @@ const LexiconColumnReorderer = ({doClose}) => {
 				bg="primary.500"
 				borderTopRadius="lg"
 			>
-				<Heading color="primaryContrast" size={textSize}>Reorder Columns</Heading>
+				<Heading color={primaryContrast} size={textSize}>Reorder Columns</Heading>
 				<IconButton
-					icon={<CloseCircleIcon color="primaryContrast" />}
+					icon={<CloseCircleIcon color={primaryContrast} />}
 					p={1}
 					m={0}
 					variant="ghost"

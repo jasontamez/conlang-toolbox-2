@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
-import { Menu, Pressable, VStack, Text, Divider, Modal, useBreakpointValue } from 'native-base';
+import { Menu, Pressable, VStack, Text, Divider, Modal, useBreakpointValue, useContrastText } from 'native-base';
 import { useLocation } from "react-router-native";
 
 import { DotsIcon, SaveIcon, HelpIcon } from '../../components/icons';
@@ -17,6 +17,7 @@ const WGContextMenu = () => {
 		// close menu
 		setMenuOpen(false);
 	};
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<Menu
@@ -55,11 +56,12 @@ const WGContextMenu = () => {
 					<Modal.Header
 						bg="primary.500"
 						borderBottomWidth={0}
+						px={3}
 					>
-						<Text color="primaryContrast" fontSize={headerSize}>TITLE</Text>
+						<Text color={primaryContrast} fontSize={headerSize}>TITLE</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: "primaryContrast"}}
+						_icon={{color: primaryContrast}}
 						onPress={() => setInfoModalOpen(false)}
 					/>
 					<Modal.Body
@@ -79,8 +81,6 @@ const WGContextMenu = () => {
 					<Modal.Footer
 						borderTopWidth={0}
 						h={0}
-						m={0}
-						p={0}
 					/>
 				</Modal.Content>
 			</Modal>

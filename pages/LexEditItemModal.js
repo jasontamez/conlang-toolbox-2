@@ -8,7 +8,8 @@ import {
 	Button,
 	Modal,
 	Heading,
-	useBreakpointValue
+	useBreakpointValue,
+	useContrastText
 } from 'native-base';
 
 import ExtraChars from '../components/ExtraCharsButton';
@@ -61,6 +62,7 @@ const ModalLexiconEditingItem = ({
 			}
 		}
 	};
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<Modal
 			isOpen={isEditing}
@@ -69,7 +71,7 @@ const ModalLexiconEditingItem = ({
 		>
 			<StandardAlert {...alertProperties}	/>
 			<Modal.Content>
-				<Modal.Header m={0} p={0}>
+				<Modal.Header>
 					<HStack
 						pl={2}
 						w="full"
@@ -79,7 +81,7 @@ const ModalLexiconEditingItem = ({
 						bg="primary.500"
 					>
 						<Heading
-							color="primaryContrast"
+							color={primaryContrast}
 							size={headerSize}
 						>
 							Edit Lexicon Item
@@ -87,13 +89,13 @@ const ModalLexiconEditingItem = ({
 						<HStack justifyContent="flex-end" space={2}>
 							<ExtraChars
 								iconProps={{
-									color: "primaryContrast",
+									color: primaryContrast,
 									size: "sm"
 								}}
 								buttonProps={{p: 1, m: 0}}
 							/>
 							<IconButton
-								icon={<CloseCircleIcon color="primaryContrast" />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								p={1}
 								m={0}
 								variant="ghost"
@@ -123,7 +125,7 @@ const ModalLexiconEditingItem = ({
 						})}
 					</VStack>
 				</Modal.Body>
-				<Modal.Footer m={0} p={0} borderTopWidth={0}>
+				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full">
 						<Button
 							startIcon={<TrashIcon color="danger.50" m={0} />}

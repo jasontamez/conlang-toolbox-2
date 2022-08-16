@@ -55,6 +55,7 @@ const StandardAlert = ({
 		>
 			<AlertDialog.Content {...(contentProps || {})}>
 				<AlertDialog.Header
+					p={3}
 					bg="warning.500"
 					_text={{color: "warning.50"}}
 					borderBottomWidth={0}
@@ -69,6 +70,7 @@ const StandardAlert = ({
 					{bodyContent || "Are you sure?"}
 				</AlertDialog.Body>
 				<AlertDialog.Footer
+					p={3}
 					borderTopWidth={0}
 					{...(footerProps || {})}
 				>

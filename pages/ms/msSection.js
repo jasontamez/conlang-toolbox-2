@@ -455,7 +455,7 @@ const ParseMSJSON = (props) => {
 							safeArea
 						>
 							<Modal.CloseButton />
-							<Modal.Header w="full">
+							<Modal.Header w="full" p={3}>
 								<Center>
 									<Text fontSize={headerSize}>{title}</Text>
 								</Center>

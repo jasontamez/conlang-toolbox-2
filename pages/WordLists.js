@@ -14,7 +14,8 @@ import {
 	Radio,
 	useToast,
 	IconButton,
-	useBreakpointValue
+	useBreakpointValue,
+	useContrastText
 } from 'native-base';
 import {
 	toggleDisplayedList,
@@ -254,6 +255,7 @@ const WordLists = () => {
 			</Pressable>
 		);
 	};
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<HStack
@@ -315,11 +317,12 @@ const WordLists = () => {
 					<Modal.Header
 						bg="primary.500"
 						borderBottomWidth={0}
+						px={3}
 					>
-						<Text color="primaryContrast" fontSize={headerSize}>Add to Lexicon</Text>
+						<Text color={primaryContrast} fontSize={headerSize}>Add to Lexicon</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: "primaryContrast"}}
+						_icon={{color: primaryContrast}}
 						onPress={() => setAddToLexicon([])}
 					/>
 					<Modal.Body>
@@ -354,8 +357,6 @@ const WordLists = () => {
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer
-						m={0}
-						p={0}
 						borderTopWidth={0}
 					>
 						<HStack

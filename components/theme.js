@@ -158,10 +158,10 @@ const mainButton = {
 	defaultProps: {
 		colorScheme: "success",
 		_icon: {
-			color: "primaryContrast"
+			color: "success.50"
 		},
 		_text: {
-			color: "primaryContrast",
+			color: "success.50",
 			fontFamily: "body",
 			fontWeight: 400,
 			fontStyle: "normal"
@@ -270,7 +270,9 @@ const mainModalHeader = {
 		shadowOpacity: 0.34,
 		shadowRadius: 6.27,
 		elevation: 10,
-		borderColor: "main.500"
+		borderColor: "main.500",
+		p: 0,
+		m: 0
 	}
 };
 const mainModalFooter = {
@@ -284,7 +286,9 @@ const mainModalFooter = {
 		shadowOpacity: 0.34,
 		shadowRadius: 6.27,
 		elevation: 10,
-		borderColor: "main.500"
+		borderColor: "main.500",
+		p: 0,
+		m: 0
 	}
 };
 const mainModalCloseButton = {
@@ -301,13 +305,23 @@ const components = {
 	Modal: {...modalProps},
 	ModalContent: {...mainBG},
 	ModalHeader: {...mainModalHeader},
-	ModalBody: {...mainBG},
+	ModalBody: {
+		defaultProps: {
+			p: 3,
+			...mainBG.defaultProps
+		}
+	},
 	ModalFooter: {...mainModalFooter},
 	ModalCloseButton: {...mainModalCloseButton},
 	AlertDialog: {...modalProps},
 	AlertDialogContent: {...mainBG},
 	AlertDialogHeader: {...mainModalHeader},
-	AlertDialogBody: {...mainBG},
+	AlertDialogBody: {
+		defaultProps: {
+			p: 3,
+			...mainBG.defaultProps
+		}
+	},
 	AlertDialogFooter: {...mainModalFooter},
 	AlertDialogCloseButton: {...mainModalCloseButton},
 	ScrollView: {

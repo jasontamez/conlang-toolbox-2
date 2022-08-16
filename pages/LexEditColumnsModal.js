@@ -7,7 +7,8 @@ import {
 	Button,
 	Heading,
 	Modal,
-	useBreakpointValue
+	useBreakpointValue,
+	useContrastText
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -198,16 +199,17 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			</HStack>
 		);
 	};
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<Modal isOpen={editing}>
 				<Modal.Content>
-					<Modal.Header p={0} m={0}>
+					<Modal.Header>
 						<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
-							<Heading color="primaryContrast" size={headerSize}>Edit Lexicon Columns</Heading>
+							<Heading color={primaryContrast} size={headerSize}>Edit Lexicon Columns</Heading>
 							<HStack justifyContent="flex-end" space={2}>
-								<ExtraChars iconProps={{color: "primaryContrast", size: "sm"}} buttonProps={{p: 1, m: 0}} />
-								<IconButton icon={<CloseCircleIcon color="primaryContrast" />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+								<ExtraChars iconProps={{color: primaryContrast, size: "sm"}} buttonProps={{p: 1, m: 0}} />
+								<IconButton icon={<CloseCircleIcon color={primaryContrast} />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
 							</HStack>
 						</HStack>
 					</Modal.Header>

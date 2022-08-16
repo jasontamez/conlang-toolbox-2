@@ -313,8 +313,6 @@ const MenuModal = () => {
 					<Modal.Header
 						borderBottomWidth={0}
 						h={0}
-						m={0}
-						p={0}
 					/>
 					<Modal.Body
 						h="full"
@@ -349,8 +347,6 @@ const MenuModal = () => {
 					<Modal.Footer
 						borderTopWidth={0}
 						h={0}
-						m={0}
-						p={0}
 					/>
 				</Modal.Content>
 			</Modal>

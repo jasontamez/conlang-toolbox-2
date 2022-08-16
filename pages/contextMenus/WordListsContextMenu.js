@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
-import { Menu, Pressable, VStack, Text, Divider, Modal, useBreakpointValue } from 'native-base';
+import { Menu, Pressable, VStack, Text, Divider, Modal, useBreakpointValue, useContrastText } from 'native-base';
 import { DotsIcon, SaveIcon, HelpIcon } from '../../components/icons';
 import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
 import { sizes } from "../../store/appStateSlice";
@@ -27,6 +27,7 @@ const WordListsContextMenu = () => {
 		doMenuClose();
 		setInfoModalOpen(true);
 	};
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<Menu
@@ -87,11 +88,12 @@ const WordListsContextMenu = () => {
 					<Modal.Header
 						bg="primary.500"
 						borderBottomWidth={0}
+						p={3}
 					>
-						<Text color="primaryContrast" fontSize={headerSize}>About the Lists</Text>
+						<Text color={primaryContrast} fontSize={headerSize}>About the Lists</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: "primaryContrast"}}
+						_icon={{color: primaryContrast}}
 						onPress={() => setInfoModalOpen(false)}
 					/>
 					<Modal.Body
@@ -156,8 +158,6 @@ const WordListsContextMenu = () => {
 					<Modal.Footer
 						borderTopWidth={0}
 						h={0}
-						m={0}
-						p={0}
 					/>
 				</Modal.Content>
 			</Modal>

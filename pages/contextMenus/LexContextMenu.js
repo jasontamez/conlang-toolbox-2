@@ -12,7 +12,8 @@ import {
 	Slider,
 	Button,
 	useToast,
-	useBreakpointValue
+	useBreakpointValue,
+	useContrastText
 } from 'native-base';
 
 import { DotsIcon, SaveIcon } from '../../components/icons';
@@ -65,6 +66,7 @@ const LexiconContextMenu = () => {
 		dispatch(setMaxColumns(cols));
 	}
 	const toast = useToast();
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<Menu
@@ -146,11 +148,12 @@ const LexiconContextMenu = () => {
 					<Modal.Header
 						bg="primary.500"
 						borderBottomWidth={0}
+						px={3}
 					>
-						<Text color="primaryContrast" fontSize={textSize}>Set Max Columns</Text>
+						<Text color={primaryContrast} fontSize={textSize}>Set Max Columns</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: "primaryContrast"}}
+						_icon={{color: primaryContrast}}
 						onPress={() => setColumnsRangeOpen(false)}
 					/>
 					<Modal.Body>
@@ -173,8 +176,6 @@ const LexiconContextMenu = () => {
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer
-						m={0}
-						p={0}
 						borderTopWidth={0}
 					>
 						<HStack
