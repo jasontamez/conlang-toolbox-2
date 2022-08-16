@@ -2,6 +2,18 @@ import { createSlice } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid';
 
 const initialState = {
+	// GROUPS
+	characterGroups: [],
+	// SYLLABLES
+	oneTypeOnly: false,
+	dropoffOverride: {},
+	singleWord: [],
+	wordInitial: [],
+	wordMiddle: [],
+	wordFinal: [],
+	// TRANSFORMS
+	transforms: [],
+	// SETTINGS
 	//...simple.wordgenSettings,
 	monosyllablesRate: 20,
 	maxSyllablesPerWord: 6,
@@ -23,6 +35,13 @@ const initialState = {
 	wordlistMultiColumn: true,
 	wordsPerWordlist: 250
 };
+// GROUPS
+const addCharacterGroupFunc = (state, action) => {};
+const deleteCharacterGroupFunc = (state, action) => {};
+
+//const Func = (state, action) => {};
+
+// SETTINGS
 const setMonosyllablesRateFunc = (state, action) => {
 	state.monosyllablesRate = action.payload;
 	return state;
@@ -95,13 +114,14 @@ const setWordsPerWordlistFunc = (state, action) => {
 	state.wordsPerWordlist = action.payload;
 	return state;
 };
-//const Func = (state, action) => {};
 
 
 const wgSlice = createSlice({
 	name: 'wg',
 	initialState,
 	reducers: {
+		addCharacterGroup: addCharacterGroupFunc,
+		deleteCharacterGroup: deleteCharacterGroupFunc,
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
 		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
@@ -124,6 +144,8 @@ const wgSlice = createSlice({
 });
 
 export const {
+	addCharacterGroup,
+	deleteCharacterGroup,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,

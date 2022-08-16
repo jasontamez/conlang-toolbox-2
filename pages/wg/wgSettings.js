@@ -35,10 +35,10 @@ import { sizes } from "../../store/appStateSlice";
 
 const WGSettings = () => {
 	const {
-		monosyllablesRate,   //0-100
-		maxSyllablesPerWord, //2-15
-		characterGroupDropoff,  //0-50
-		syllableBoxDropoff,  //0-50
+		monosyllablesRate,
+		maxSyllablesPerWord,
+		characterGroupDropoff,
+		syllableBoxDropoff,
 		capitalizeSentences,
 		declarativeSentencePre,
 		declarativeSentencePost,
@@ -83,6 +83,17 @@ const WGSettings = () => {
 				px={1.5}
 				bg="lighter"
 			>{value}{post || ""}</Text></Text>;
+	const TextField = ({text, value, setter}) => (
+		<TextSetting
+			text={text}
+			value={value}
+			onChangeText={(text) => debounce(
+				() => dispatch(setter(text)),
+				{ namespace: text }
+			)}
+			boxProps={stackProps}
+		/>
+	);
 	return (
 		<ScrollView>
 			{/*
@@ -154,75 +165,38 @@ const WGSettings = () => {
 					onValueChange={(value) => dispatch(setCapitalizeSentences(value))}
 				/>
 			</HStack>
-			{/*
-				Declarative sentence beginning, ending
-				Interrogative sentence beginning, ending
-				Exclamatory sentence beginning, ending
-			*/}
-			<TextSetting
+			<TextField
 				text="Declarative sentence beginning"
 				value={declarativeSentencePre}
-				onChangeText={(text) => debounce(
-					() => dispatch(setDeclarativeSentencePre(text)),
-					{ namespace: "declrPre" }
-				)}
-				boxProps={stackProps}
+				setter={setDeclarativeSentencePre}
 			/>
-			<TextSetting
+			<TextField
 				text="Declarative sentence ending"
 				value={declarativeSentencePost}
-				onChangeText={(text) => debounce(
-					() => dispatch(setDeclarativeSentencePost(text)),
-					{ namespace: "declrPost" }
-				)}
-				boxProps={stackProps}
+				setter={setDeclarativeSentencePost}
 			/>
-			<TextSetting
+			<TextField
 				text="Interrogative sentence beginning"
 				value={interrogativeSentencePre}
-				onChangeText={(text) => debounce(
-					() => dispatch(setInterrogativeSentencePre(text)),
-					{ namespace: "interrPre" }
-				)}
-				boxProps={stackProps}
+				setter={setInterrogativeSentencePre}
 			/>
-			<TextSetting
+			<TextField
 				text="Interrogative sentence ending"
 				value={interrogativeSentencePost}
-				onChangeText={(text) => debounce(
-					() => dispatch(setInterrogativeSentencePost(text)),
-					{ namespace: "interrPost" }
-				)}
-				boxProps={stackProps}
+				setter={setInterrogativeSentencePost}
 			/>
-			<TextSetting
+			<TextField
 				text="Exclamatory sentence beginning"
 				value={exclamatorySentencePre}
-				onChangeText={(text) => debounce(
-					() => dispatch(setExclamatorySentencePre(text)),
-					{ namespace: "exclmPre" }
-				)}
-				boxProps={stackProps}
+				setter={setExclamatorySentencePre}
 			/>
-			<TextSetting
+			<TextField
 				text="Exclamatory sentence ending"
 				value={exclamatorySentencePost}
-				onChangeText={(text) => debounce(
-					() => dispatch(setExclamatorySentencePost(text)),
-					{ namespace: "exclmPost" }
-				)}
-				boxProps={stackProps}
+				setter={setExclamatorySentencePost}
 			/>
 		</ScrollView>
 	);
-	// <TextSetting
-	//    boxProps={props for outer Box}
-	//    labelProps={props for Text}
-	//    text={optional, goes into Text; if missing, uses children instead}
-	//    value={Input defaultValue}
-	//    placeholder={Input placeholder}
-	//    onChangeText={Input onChangeText}
-	//    inputProps={other props for Input} />
 };
 
 export default WGSettings;

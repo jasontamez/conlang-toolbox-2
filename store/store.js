@@ -125,6 +125,18 @@ export const blankAppState = {/*
 	},
 	morphoSyntaxModalState: {},*/
 	wg: {
+		// GROUPS
+		characterGroups: [],
+		// SYLLABLES
+		oneTypeOnly: false,
+		dropoffOverride: {},
+		singleWord: [],
+		wordInitial: [],
+		wordMiddle: [],
+		wordFinal: [],
+		// TRANSFORMS
+		transforms: [],
+		// SETTINGS
 		//...simple.wordgenSettings,
 		monosyllablesRate: 20,
 		maxSyllablesPerWord: 6,
