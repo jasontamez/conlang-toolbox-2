@@ -190,9 +190,6 @@ const WGChar = () => {
 				continueText="Yes, Delete It"
 				continueProps={{
 					bg: "danger.500",
-					_text: {
-						color: "danger.50"
-					}
 				}}
 				continueFunc={() => doDeleteGroup(group)}
 			/>

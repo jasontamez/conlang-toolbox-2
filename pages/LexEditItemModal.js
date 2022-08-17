@@ -49,19 +49,6 @@ const ModalLexiconEditingItem = ({
 	useEffect(() => {
 		setNewFields([...columns]);
 	}, [columns]);
-	const alertProperties = {
-		alertOpen,
-		setAlertOpen,
-		bodyContent: "Are you sure you want to delete this Lexicon entry? This cannot be undone.",
-		continueText: "Yes",
-		continueFunc: deleteEditingItemFunc,
-		continueProps: {
-			bg: "danger.500",
-			_text: {
-				color: "danger.50"
-			}
-		}
-	};
 	const primaryContrast = useContrastText('primary.500');
 	return (
 		<Modal
@@ -69,7 +56,16 @@ const ModalLexiconEditingItem = ({
 			closeOnOverlayClick={false}
 			initialFocusRef={firstFieldRef}
 		>
-			<StandardAlert {...alertProperties}	/>
+			<StandardAlert
+				alertOpen={alertOpen}
+				setAlertOpen={setAlertOpen}
+				bodyContent="Are you sure you want to delete this Lexicon entry? This cannot be undone."
+				continueText="Yes"
+				continueFunc={deleteEditingItemFunc}
+				continueProps={{
+					bg: "danger.500"
+				}}
+			/>
 			<Modal.Content>
 				<Modal.Header>
 					<HStack

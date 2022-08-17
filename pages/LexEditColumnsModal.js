@@ -251,10 +251,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							continueText: "Yes",
 							continueFunc: () => doDeleteColumn(savedIndex),
 							continueProps: {
-								bg: "danger.500",
-								_text: {
-									color: "danger.50"
-								}
+								bg: "danger.500"
 							},
 							bodyContent: "Deleting a column will destroy all data in the Lexicon associated with that column. Are you sure you want to do this?"
 						}
@@ -273,10 +270,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							continueFunc: doSaveColumns,
 							continueText: "Yes, I am sure",
 							continueProps: {
-								bg: "danger.500",
-								_text: {
-									color: "danger.50"
-								}
+								bg: "danger.500"
 							},
 							bodyContent: "Remember, you will be deleting all data associated with the column" +
 								((columnLabelsToBeDeleted.length > 1)

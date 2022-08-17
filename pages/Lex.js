@@ -360,10 +360,7 @@ const Lex = () => {
 								cancelText: "Yes, Delete Them",
 								cancelFunc: doMassDelete,
 								cancelProps: {
-									bg: "danger.500",
-									_text: {
-										color: "danger.50"
-									}
+									bg: "danger.500"
 								},
 								bodyContent: "You have marked " + String(itemsToDelete.length) + " item" + maybePlural(itemsToDelete.length) + " for deletion. Do you want to delete them?"
 							}
@@ -374,10 +371,7 @@ const Lex = () => {
 								continueText: "Yes",
 								continueFunc: doMassDelete,
 								continueProps: {
-									bg: "danger.500",
-									_text: {
-										color: "danger.50"
-									}
+									bg: "danger.500"
 								},
 								bodyContent: (
 									<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>

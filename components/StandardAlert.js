@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { AlertDialog, Button } from "native-base";
+import { AlertDialog, Button, useContrastText } from "native-base";
 
 const StandardAlert = ({
 	alertOpen, setAlertOpen,
@@ -57,7 +57,7 @@ const StandardAlert = ({
 				<AlertDialog.Header
 					p={3}
 					bg="warning.500"
-					_text={{color: "warning.50"}}
+					_text={{color: useContrastText((headerProps && headerProps.bg) || "warning.500")}}
 					borderBottomWidth={0}
 					{...(headerProps || {})}
 				>
