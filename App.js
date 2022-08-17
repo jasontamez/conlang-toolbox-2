@@ -83,8 +83,8 @@ import AppSettings from './pages/AppSettings';
 
 import WG from './pages/WG';
 import WGSettings from './pages/wg/wgSettings';
+import WGCharacters from './pages/wg/wgCharacterGroups';
 
-const WGCharacters = () => <WGSettings />;
 const WGSyllables = () => <WGSettings />;
 const WGTransformations = () => <WGSettings />;
 const WGOutput = () => <WGSettings />;

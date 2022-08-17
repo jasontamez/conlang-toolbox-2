@@ -65,6 +65,8 @@ export const InfoIcon = (props) => <Icon as={Ionicons} name="information-circle-
 export const OkIcon = (props) => <Icon as={Ionicons} name="checkmark-circle-outline" {...props} />;
 export const HelpIcon = (props) => <Icon as={Ionicons} name="help-circle-outline" {...props} />;
 
+export const ChevronLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" {...props} />;
+
 export const SharpDropoffIcon = (props) => (
 	<Icon viewBox="0 0 256 256" {...props}>
 		<Polygon

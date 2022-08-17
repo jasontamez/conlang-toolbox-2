@@ -36,8 +36,16 @@ const initialState = {
 	wordsPerWordlist: 250
 };
 // GROUPS
-const addCharacterGroupFunc = (state, action) => {};
-const deleteCharacterGroupFunc = (state, action) => {};
+const addCharacterGroupFunc = (state, action) => {
+	// {label, description, run, ?dropoff}
+	state.characterGroups.push(action.payload);
+	return state;
+};
+const deleteCharacterGroupFunc = (state, action) => {
+	const label = action.payload;
+	state.characterGroups = state.characterGroups.filter(group => group.label !== label);
+	return state;
+};
 
 //const Func = (state, action) => {};
 
