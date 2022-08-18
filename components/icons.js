@@ -61,7 +61,7 @@ export const CloseIcon = (props) => <ICON as={Ionicons} name="close-outline" siz
 export const DragHandleIcon = (props) => <Icon as={MaterialIcons} name="drag-handle" {...props} />;
 
 
-export const InfoIcon = (props) => <Icon as={Ionicons} name="information-circle-sharp" {...props} />;
+export const InfoIcon = (props) => <Icon as={MCI} name="information" {...props} />;
 export const OkIcon = (props) => <Icon as={Ionicons} name="checkmark-circle-outline" {...props} />;
 export const HelpIcon = (props) => <Icon as={Ionicons} name="help-circle-outline" {...props} />;
 
