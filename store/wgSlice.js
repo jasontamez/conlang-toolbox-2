@@ -42,8 +42,18 @@ const addCharacterGroupFunc = (state, action) => {
 	return state;
 };
 const deleteCharacterGroupFunc = (state, action) => {
-	const label = action.payload;
+	const { label } = action.payload;
 	state.characterGroups = state.characterGroups.filter(group => group.label !== label);
+	return state;
+};
+const editCharacterGroupFunc = (state, action) => {
+	const {old, edited} = action.payload;
+	state.characterGroups = state.characterGroups.map(group => {
+		if(group.label !== old.label) {
+			return group;
+		}
+		return edited;
+	});
 	return state;
 };
 
@@ -130,6 +140,7 @@ const wgSlice = createSlice({
 	reducers: {
 		addCharacterGroup: addCharacterGroupFunc,
 		deleteCharacterGroup: deleteCharacterGroupFunc,
+		editCharacterGroup: editCharacterGroupFunc,
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
 		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
@@ -154,6 +165,7 @@ const wgSlice = createSlice({
 export const {
 	addCharacterGroup,
 	deleteCharacterGroup,
+	editCharacterGroup,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,

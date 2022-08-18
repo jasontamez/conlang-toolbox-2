@@ -24,6 +24,7 @@ import {
 	CloseCircleIcon,
 	EditIcon,
 	EquiprobableIcon,
+	SaveIcon,
 	SharpDropoffIcon,
 	TrashIcon
 } from "../../components/icons";
@@ -33,6 +34,7 @@ import { sizes } from "../../store/appStateSlice";
 import {
 	addCharacterGroup,
 	deleteCharacterGroup,
+	editCharacterGroup,
 	setCharacterGroupDropoff
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
@@ -46,7 +48,8 @@ const WGChar = () => {
 	const addDescRef = useRef(null);
 	const addLabelRef = useRef(null);
 	const addRunRef = useRef(null);
-	const [alertOpen, setAlertOpen] = useState(false);
+	const [alertOpenError, setAlertOpenError] = useState(false);
+	const [saveGroupError, setSaveGroupError] = useState('');
 	const [deletingGroup, setDeletingGroup] = useState(false);
 	const [editingGroup, setEditingGroup] = useState(false);
 	const [modifiedDesc, setModifiedDesc] = useState("");
@@ -56,8 +59,9 @@ const WGChar = () => {
 	const [editOverrideValue, setEditOverrideValue] = useState(20);
 	const [addGroupOpen, setAddGroupOpen] = useState(false);
 	const [addOverrideSwitch, setAddOverrideSwitch] = useState(false);
-	const [addOverrideValue, setAddOverrideValue] = useState(20);
+	const [addOverrideValue, setAddOverrideValue] = useState(characterGroupDropoff);
 	const toast = useToast();
+	const primaryContrast = useContrastText("primary.500");
 	// add group
 	const addNewGroup = (closeAfterAdd) => {
 		// attempts to add the modal info as a new group
@@ -69,27 +73,18 @@ const WGChar = () => {
 		if(!label) {
 			msg.push("Label not provided");
 		} else if(characterGroups.some(group => group.label === label)) {
-			msg.push("Label \"" + label + "\" is already in use")
+			msg.push("Label \"" + label + "\" is already in use");
 		}
 		if (!description) {
 			msg.push("Title not provided");
 		}
 		if (!run) {
-			msg.push("No characters assigned to the group")
+			msg.push("No characters assigned to the group");
 		}
 		if(msg.length > 0) {
-			// If we have errors, abort with a toast
-			doToast({
-				toast,
-				scheme: "error",
-				duration: 3500,
-				placement: "top",
-				boxProps: {
-					maxWidth: "3/4"
-				},
-				center: true,
-				msg: "ERROR: " + msg.join(", ") + "."
-			});
+			// If we have errors, abort with an alert
+			setSaveGroupError(msg.join(", ") + ".");
+			setAlertOpenError(true);
 			return;
 		}
 		dispatch(addCharacterGroup({description, label, run, dropoff}));
@@ -108,6 +103,38 @@ const WGChar = () => {
 		addOverrideSwitch && setAddOverrideSwitch(false);
 		setAddGroupOpen(false);
 	};
+	const suggestLabel = () => {
+		const v = addDescRef.current.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+		let labels = {};
+		characterGroups.forEach(group => labels[group.label] = true);
+		let length = v.length;
+		let pos = 0;
+		let label = null;
+		while(!label && pos < length) {
+			const test = v.charAt(pos);
+			if(!labels[test]) {
+				label = test;
+			}
+			pos++;
+		}
+		if(!label) {
+			// No suitable label found
+			doToast({
+				toast,
+				placement: "bottom",
+				duration: 4000,
+				msg: "Unable to suggest a unique label from the given descrption.",
+				bg: "error.500",
+				center: true,
+				boxProps: {
+					maxW: "2/3"
+				}
+			});
+		} else {
+			// Suitable label found
+			addLabelRef.current.value = label;
+		}
+	};
 	// edit group
 	const startEditGroup = (group) => {
 		// Opens the editing modal and populates it
@@ -118,19 +145,67 @@ const WGChar = () => {
 		if(dropoff !== undefined) {
 			setEditOverrideSwitch(true);
 			setEditOverrideValue(dropoff);
+		} else {
+			setEditOverrideSwitch(false);
+			setEditOverrideValue(characterGroupDropoff);
 		}
 		setEditingGroup(group);
+	};
+	const maybeSaveEditedGroup = () => {
+		const msg = [];
+		if(!modifiedLabel) {
+			msg.push("Label not provided");
+		} else if(characterGroups.some(group => 
+			group.label !== editingGroup.label && group.label === modifiedLabel
+		)) {
+			msg.push("Label \"" + modifiedLabel + "\" is already in use");
+		}
+		if (!modifiedDesc) {
+			msg.push("Title not provided");
+		}
+		if (!modifiedRun) {
+			msg.push("No characters assigned to the group");
+		}
+		if(msg.length > 0) {
+			// If we have errors, abort with an alert
+			setSaveGroupError(msg.join(", ") + ".");
+			setAlertOpenError(true);
+			return;
+		}
+		dispatch(editCharacterGroup({
+			old: editingGroup,
+			edited: {
+				description: modifiedDesc,
+				label: modifiedLabel,
+				run: modifiedRun,
+				dropoff: editOverrideSwitch ? editOverrideValue : undefined
+			}
+		}));
+		doToast({
+			toast,
+			placement: "top",
+			msg: "Character Group edited!"
+		});
+		setEditingGroup(false);
 	};
 	// delete group
 	const maybeDeleteGroup = (group) => {
 		if(disableConfirms) {
 			return doDeleteGroup(group);
 		}
+		// open the delete alert
 		setDeletingGroup(group);
 	};
 	const doDeleteGroup = (group = deletingGroup) => {
 		dispatch(deleteCharacterGroup(group));
-		// TO-DO: toast confirm?
+		doToast({
+			toast,
+			placement: "bottom",
+			msg: "Deleted",
+			bg: "warning.500"
+		});
+		setEditingGroup(false);
+		setDeletingGroup(false);
 	};
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
@@ -158,7 +233,7 @@ const WGChar = () => {
 					{dropoff === undefined ?
 						<></>
 					:
-						<Text bg="lighter" px={1.5} m={0.5} fontSize={descSize} italic>{dropoff}</Text>
+						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={descSize} fontSize={descSize} italic>{dropoff}</Text>
 					}
 					<IconButton
 						icon={<EditIcon size={textSize} color="primary.400" />}
@@ -180,23 +255,37 @@ const WGChar = () => {
 			</HStack>
 		);
 	};
-	const primaryContrast = useContrastText("primary.500");
 	return (
 		<VStack h="full">
 			<StandardAlert
-				alertOpen={alertOpen}
-				setAlertOpen={setAlertOpen}
+				alertOpen={deletingGroup}
+				setAlertOpen={setDeletingGroup}
 				bodyContent={<Text fontSize={textSize}>Are you sure you want to delete the character group <Text bold>{deletingGroup.label}</Text>? This cannot be undone.</Text>}
 				continueText="Yes, Delete It"
 				continueProps={{
 					bg: "danger.500",
 				}}
-				continueFunc={() => doDeleteGroup(group)}
+				continueFunc={() => doDeleteGroup(deletingGroup)}
+			/>
+			<StandardAlert
+				alertOpen={alertOpenError}
+				setAlertOpen={setAlertOpenError}
+				headerContent="Cannot Save Group"
+				headerProps={{
+					bg: "error.500"
+				}}
+				bodyContent={saveGroupError}
+				overrideButtons={[
+					({leastDestructiveRef}) => <Button
+						onPress={() => setAlertOpenError(false)}
+						ref={leastDestructiveRef}
+					>Ok</Button>
+				]}
 			/>
 			<Modal isOpen={editingGroup}>
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
-						<HStack justifyContent="flex-end" w="full">
+						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} justifySelf="flex-start">Edit Character Group</Text>
 							<ExtraChars color={primaryContrast} buttonProps={{size: textSize}} />
 							<IconButton
@@ -205,8 +294,99 @@ const WGChar = () => {
 							/>
 						</HStack>
 					</Modal.Header>
-					<Modal.Body></Modal.Body>
-					<Modal.Footer></Modal.Footer>
+					<Modal.Body>
+						<VStack>
+							<TextSetting
+								text="Title/Description"
+								placeholder="Type description here"
+								inputProps={{ mt: 1 }}
+								boxProps={{ pb: 2 }}
+								value={modifiedDesc}
+								onChangeText={(v) => setModifiedDesc(v)}
+							/>
+							<HStack
+								py={2}
+								justifyContent="flex-start"
+								alignItems="center"
+								w="full"
+							>
+								<Text>Short Label:</Text>
+								<Input
+									w={8}
+									py={1}
+									px={0}
+									textAlign="center"
+									mx={2}
+									value={modifiedLabel}
+									onChangeText={(v) => setModifiedLabel(v)}
+								/>
+							</HStack>
+							<TextSetting
+								text="Letters/Characters"
+								placeholder="Enter characters in group here"
+								boxProps={{ py: 2 }}
+								inputProps={{ mt: 1 }}
+								value={modifiedRun}
+								onChangeText={(v) => setModifiedRun(v)}
+							/>
+							<HStack
+								w="full"
+								alignItems="center"
+								justifyContent="space-between"
+								py={2}
+							>
+								<Text fontSize={textSize}>Use separate dropoff rate</Text>
+								<Switch
+									isChecked={editOverrideSwitch}
+									onToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
+								/>
+							</HStack>
+							{editOverrideSwitch ?
+								<SliderWithLabels
+									max={50}
+									beginLabel={<EquiprobableIcon color="text.50" />}
+									endLabel={<SharpDropoffIcon color="text.50" />}
+									value={editOverrideValue}
+									sliderProps={{
+										accessibilityLabel: "Dropoff rate",
+										onChangeEnd: (v) => setEditOverrideValue(v)
+									}}
+									Label={({value}) => (
+										<Center>
+											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
+										</Center>
+									)}
+									stackProps={{
+										p: 2,
+										mt: 3,
+										space: 1,
+										borderWidth: 1,
+										borderColor: "primary.600"
+									}}
+								/>
+							:
+								<></>
+							}
+						</VStack>
+					</Modal.Body>
+					<Modal.Footer>
+						<HStack justifyContent="space-between" p={1}>
+							<Button
+								startIcon={<TrashIcon size={descSize} color="danger.50" />}
+								bg="danger.500"
+								px={2}
+								py={1}
+								mx={1}
+								onPress={() => maybeDeleteGroup(editingGroup)}
+							>DELETE GROUP</Button>
+							<Button
+								startIcon={<SaveIcon size={descSize} />}
+								px={2}
+								py={1}
+								onPress={() => maybeSaveEditedGroup(true)}
+							>SAVE GROUP</Button>
+						</HStack>
+					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
 			<Modal isOpen={addGroupOpen}>
@@ -261,6 +441,7 @@ const WGChar = () => {
 									bg="primary.500"
 									_text={{ fontSize: descSize }}
 									_stack={{ space: 0.5 }}
+									onPress={suggestLabel}
 								>SUGGEST</Button>
 							</HStack>
 							<TextSetting
@@ -280,8 +461,8 @@ const WGChar = () => {
 							>
 								<Text fontSize={textSize}>Use separate dropoff rate</Text>
 								<Switch
-									defaultIsChecked={addOverrideSwitch}
-									onValueChange={(v) => setAddOverrideSwitch(v)}
+									isChecked={addOverrideSwitch}
+									onToggle={() => setAddOverrideSwitch(!addOverrideSwitch)}
 								/>
 							</HStack>
 							{addOverrideSwitch ?

@@ -20,7 +20,6 @@ const doToast = ({
 		color = scheme + ".50";
 	}
 	const Wrap = (props) => ( center ? <Center w="full" {...props} /> : <Box w="full" {...props} /> );
-	console.log("toasty!");
 	toast.show({
 		render: () => override || (
 			<Wrap>

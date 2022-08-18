@@ -10,6 +10,7 @@ const StandardAlert = ({
 	cancelProps, cancelText, cancelFunc,
 	continueProps, continueText, continueFunc,
 	leastDestructiveContinue,
+	overrideButtons,
 	detatchButtons
 }) => {
 	// Makes an AlertDialog box
@@ -34,6 +35,9 @@ const StandardAlert = ({
 	//    Defaults to "Continue"
 	// continueFunc: same as above
 	// leastDestructiveContinue: boolean: Continue is less destructive than Cancel
+	// overrideButtons: an array of elements to replace the two buttons
+	//    Each button will be given a leastDestructiveRef - it should be
+	//      used by only ONE of them.
 	// detatchButtons: boolean, buttons should not appear attached
 	const buttonRef = useRef(null);
 	const doCancel = () => {
@@ -75,24 +79,30 @@ const StandardAlert = ({
 					{...(footerProps || {})}
 				>
 					<Button.Group isAttached={!detatchButtons}>
-						<Button
-							bg="darker"
-							ref={leastDestructiveContinue ? undefined : buttonRef}
-							_text={{color: "text.50"}}
-							{...(cancelProps || {})}
-							onPress={() => doCancel()}
-						>
-							{cancelText || "Cancel"}
-						</Button>
-						<Button
-							bg="success.500"
-							ref={leastDestructiveContinue ? buttonRef : undefined}
-							_text={{color: "success.50"}}
-							{...(continueProps || {})}
-							onPress={() => doContinue()}
-						>
-							{continueText || "Continue"}
-						</Button>
+						{overrideButtons ?
+							overrideButtons.map((B, i) => <B key={`Button ${i}`} leastDestructiveRef={buttonRef} />)
+						:
+							<>
+								<Button
+									bg="darker"
+									ref={leastDestructiveContinue ? undefined : buttonRef}
+									_text={{color: "text.50"}}
+									{...(cancelProps || {})}
+									onPress={() => doCancel()}
+								>
+									{cancelText || "Cancel"}
+								</Button>
+								<Button
+									bg="success.500"
+									ref={leastDestructiveContinue ? buttonRef : undefined}
+									_text={{color: useContrastText((continueProps && continueProps.bg) || "success.50")}}
+									{...(continueProps || {})}
+									onPress={() => doContinue()}
+								>
+									{continueText || "Continue"}
+								</Button>
+							</>
+						}
 					</Button.Group>
 				</AlertDialog.Footer>
 			</AlertDialog.Content>

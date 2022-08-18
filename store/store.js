@@ -126,7 +126,19 @@ export const blankAppState = {/*
 	morphoSyntaxModalState: {},*/
 	wg: {
 		// GROUPS
-		characterGroups: [],
+		characterGroups: [
+			{
+				label: "X",
+				description: "Sample group X",
+				run: "ptk"
+			},
+			{
+				label: "Y",
+				description: "Sample group Y",
+				run: "sz",
+				dropoff: 15
+			}
+		],
 		// SYLLABLES
 		oneTypeOnly: false,
 		dropoffOverride: {},

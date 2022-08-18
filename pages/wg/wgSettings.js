@@ -161,8 +161,8 @@ const WGSettings = () => {
 			>
 				<Text fontSize={textSize}>Capitalize sentences</Text>
 				<Switch
-					defaultIsChecked={capitalizeSentences}
-					onValueChange={(value) => dispatch(setCapitalizeSentences(value))}
+					isChecked={capitalizeSentences}
+					onToggle={() => dispatch(setCapitalizeSentences(!capitalizeSentences))}
 				/>
 			</HStack>
 			<TextField
