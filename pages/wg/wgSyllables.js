@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import {
 	useBreakpointValue,
 	Text,
@@ -6,10 +7,16 @@ import {
 	ScrollView,
 	VStack,
 	useContrastText,
-	Button
+	Button,
+	Switch,
+	Center
 } from "native-base";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ReAnimated, {
+	CurvedTransition,
+	FadeInUp,
+	FadeOutUp
+} from 'react-native-reanimated';
 
 import {
 	EquiprobableIcon,
@@ -30,11 +37,11 @@ import {
 import debounce from "../../components/debounce";
 
 
-const WGChar = () => {
+const WGSyllables = () => {
 	const {
 		syllableBoxDropoff,
 		oneTypeOnly,
-		syllableDropoffOverride,
+		syllableDropoffOverrides,
 		singleWord,
 		wordInitial,
 		wordMiddle,
@@ -54,9 +61,158 @@ const WGChar = () => {
 	const [editingWordInitialOverrideValue, setEditingWordInitialOverrideValue] = useState(false);
 	const [editingWordMiddleOverrideValue, setEditingWordMiddleOverrideValue] = useState(false);
 	const [editingWordFinalOverrideValue, setEditingWordFinalOverrideValue] = useState(false);
+	const singleRef = useRef(null);
+	const initialRef = useRef(null);
+	const middleRef = useRef(null);
+	const finalRef = useRef(null);
+	useEffect(
+		() => {
+			const {singleWord, wordInitial, wordMiddle, wordFinal} = syllableDropoffOverrides;
+			setEditingSingleWordOverride(singleWord !== null);
+			setEditingSingleWordOverrideValue(singleWord === null ? syllableBoxDropoff : singleWord);
+			setEditingWordInitialOverride(wordInitial !== null);
+			setEditingWordInitialOverrideValue(wordInitial === null ? syllableBoxDropoff : wordInitial);
+			setEditingWordMiddleOverride(wordMiddle !== null);
+			setEditingWordMiddleOverrideValue(wordMiddle === null ? syllableBoxDropoff : wordMiddle);
+			setEditingWordFinalOverride(wordFinal !== null);
+			setEditingWordFinalOverrideValue(wordFinal === null ? syllableBoxDropoff : wordFinal);
+		},
+		[syllableBoxDropoff, syllableDropoffOverrides]
+	);
 	const primaryContrast = useContrastText("primary.500");
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
+	const boxes = [
+		{
+			title: "Syllables",
+			inputRef: singleRef,
+			syllablesValue: singleWord,
+			setValue: setSingleWord,
+			editingFlag: editingSingleWord,
+			setFlag: setEditingSingleWord,
+			overrideFlag: editingSingleWordOverride,
+			setOFlag: setEditingSingleWordOverride,
+			overrideValue: editingSingleWordOverrideValue,
+			setOValue: setEditingSingleWordOverrideValue,
+			overridePropName: "singleWord"
+		}
+	];
+	const SyllableBox = ({
+		title,
+		inputRef,
+		syllablesValue,
+		setValue,
+		editingFlag,
+		setFlag,
+		overrideFlag,
+		setOFlag,
+		overrideValue,
+		setOValue,
+		overridePropName
+	}) => {
+		const maybeDoSave = () => {
+			// Are we editing? Have we edited?
+			if(editingFlag) {
+				// Save current value to property
+				dispatch(setValue(inputRef.current.value));
+				// Are we overriding?
+				if(overrideFlag) {
+					// Save that, too
+					dispatch(setSyllableOverride({
+						override: overridePropName,
+						value: overrideValue
+					}));
+				}
+			}
+		};
+		return (
+			<>
+				<HStack w="full" alignItems="flex-start" justifyContent="flex-start">
+					<Text flexGrow={0} mt={2}>{title /* TO-DO: Make this stuff look prettier, and add an override value if needed (VSTACK) */}</Text>
+					<TextAreaSetting
+						rows={Math.min(3, singleWord.length)}
+						value={syllablesValue}
+						text={null}
+						boxProps={{
+							flex: 1,
+							maxW: 64
+						}}
+						inputProps={{
+							disabled: !editingFlag,
+							ref: inputRef
+						}}
+					/>
+					<Button
+						flexShrink={0}
+						alignSelf="center"
+						onPress={() => {
+							maybeDoSave();
+							setFlag(!editingFlag);
+						}}
+						w={6}
+						mx={4}
+					>TO-DO: Edit/done icons</Button>
+				</HStack>
+				{editingFlag ?
+					<ReAnimated.View
+						entering={FadeInUp}
+						exiting={FadeOutUp}
+						layout={CurvedTransition}
+					>
+						<HStack
+							w="full"
+							alignItems="center"
+							justifyContent="space-between"
+							py={2}
+						>
+							<Text fontSize={textSize}>Use separate dropoff rate</Text>
+							<Switch
+								isChecked={overrideFlag}
+								onToggle={() => {
+									maybeDoSave();
+									setOFlag(!overrideFlag);
+								}}
+							/>
+						</HStack>
+						{overrideFlag ?
+							<ReAnimated.View
+								entering={FadeInUp}
+								exiting={FadeOutUp}
+								layout={CurvedTransition}
+							>
+								<SliderWithLabels
+									max={50}
+									beginLabel={<EquiprobableIcon color="text.50" />}
+									endLabel={<SharpDropoffIcon color="text.50" />}
+									value={overrideValue}
+									sliderProps={{
+										accessibilityLabel: "Dropoff rate",
+										onChangeEnd: (v) => setOValue(v)
+									}}
+									Label={({value}) => (
+										<Center>
+											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
+										</Center>
+									)}
+									stackProps={{
+										p: 2,
+										mt: 3,
+										space: 1,
+										borderWidth: 1,
+										borderColor: "primary.600"
+									}}
+								/>
+							</ReAnimated.View>
+						:
+							<></>
+						}
+					</ReAnimated.View>
+				:
+					<></>
+				}
+			</>
+		);
+	};
 	return (
 		<VStack h="full">
 			<ScrollView>
@@ -90,41 +246,10 @@ const WGChar = () => {
 						bg: "main.800"
 					}}
 				/>
-				<Text>TO-DO: Use multiple syllable types</Text>
-				<HStack w="full" alignItems="center" justifyContent="space-between">
-					<Text alignSelf="flex-start" flexGrow={0}>Syllables</Text>
-					<Text flexGrow={3}>Textarea</Text>
-					<TextAreaSetting
-						rows={Math.min(3, singleWord.length)}
-						value={singleWord}
-						text={null}
-						boxProps={{
-							flexGrow: 3
-						}}
-						inputProps={{
-							disabled: !editingSingleWord
-							// TO-DO: determine if this takes array values or if we need to convert
-						}}
-						onChangeText={
-							(v) => debounce(
-								() => dispatch(setSingleWord(v)),
-								{
-									namespace: "singleWord",
-									amount: 500
-								}
-							)
-						}
-					/>
-					<Button
-						flexGrow={0}
-						flexShrink={0}
-						onPress={() => setEditingSingleWord(!editingSingleWord)}
-					>TO-DO: Edit/done icons</Button>
-				</HStack>
-				<Text>TO-DO: add a dropoff slider here; animate it to pop in and out</Text>
+				{boxes.map(box => <SyllableBox key={box.title} {...box} />)}
 			</ScrollView>
 		</VStack>
 	);
 };
 
-export default WGChar;
+export default WGSyllables;

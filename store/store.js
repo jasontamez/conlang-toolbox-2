@@ -141,17 +141,17 @@ export const blankAppState = {/*
 		],
 		// SYLLABLES
 		oneTypeOnly: false,
-		singleWord: [],
-		wordInitial: [],
-		wordMiddle: [],
-		wordFinal: [],
+		singleWord: "",
+		wordInitial: "",
+		wordMiddle: "",
+		wordFinal: "",
 		syllableDropoffOverrides: {
 			singleWord: null,
 			wordInitial: null,
 			wordMiddle: null,
 			wordFinal: null
 		},
-			// TRANSFORMS
+		// TRANSFORMS
 		transforms: [],
 		// SETTINGS
 		//...simple.wordgenSettings,

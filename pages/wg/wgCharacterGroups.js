@@ -17,6 +17,11 @@ import {
 } from "native-base";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ReAnimated, {
+	CurvedTransition,
+	FadeInUp,
+	FadeOutUp
+} from 'react-native-reanimated';
 
 import {
 	AddIcon,
@@ -343,28 +348,34 @@ const WGChar = () => {
 								/>
 							</HStack>
 							{editOverrideSwitch ? // TO-DO: Make this smoothly animate in and out
-								<SliderWithLabels
-									max={50}
-									beginLabel={<EquiprobableIcon color="text.50" />}
-									endLabel={<SharpDropoffIcon color="text.50" />}
-									value={editOverrideValue}
-									sliderProps={{
-										accessibilityLabel: "Dropoff rate",
-										onChangeEnd: (v) => setEditOverrideValue(v)
-									}}
-									Label={({value}) => (
-										<Center>
-											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
-										</Center>
-									)}
-									stackProps={{
-										p: 2,
-										mt: 3,
-										space: 1,
-										borderWidth: 1,
-										borderColor: "primary.600"
-									}}
-								/>
+								<ReAnimated.View
+									entering={FadeInUp}
+									exiting={FadeOutUp}
+									layout={CurvedTransition}
+								>
+									<SliderWithLabels
+										max={50}
+										beginLabel={<EquiprobableIcon color="text.50" />}
+										endLabel={<SharpDropoffIcon color="text.50" />}
+										value={editOverrideValue}
+										sliderProps={{
+											accessibilityLabel: "Dropoff rate",
+											onChangeEnd: (v) => setEditOverrideValue(v)
+										}}
+										Label={({value}) => (
+											<Center>
+												<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
+											</Center>
+										)}
+										stackProps={{
+											p: 2,
+											mt: 3,
+											space: 1,
+											borderWidth: 1,
+											borderColor: "primary.600"
+										}}
+									/>
+								</ReAnimated.View>
 							:
 								<></>
 							}

@@ -6,10 +6,10 @@ const initialState = {
 	characterGroups: [],
 	// SYLLABLES
 	oneTypeOnly: false,
-	singleWord: [],
-	wordInitial: [],
-	wordMiddle: [],
-	wordFinal: [],
+	singleWord: "",
+	wordInitial: "",
+	wordMiddle: "",
+	wordFinal: "",
 	syllableDropoffOverrides: {
 		singleWord: null,
 		wordInitial: null,
@@ -293,6 +293,10 @@ export const equalityCheck = (stateA, stateB) => {
 	// Test simple values
 	if (
 		oneTypeOnlyA !== oneTypeOnlyB
+		|| singleWordA !== singleWordB
+		|| wordInitialA !== wordInitialB
+		|| wordMiddleA !== wordMiddleB
+		|| wordFinalA !== wordFinalB
 		|| monosyllablesRateA !== monosyllablesRateB
 		|| maxSyllablesPerWordA !== maxSyllablesPerWordB
 		|| characterGroupDropoffA !== characterGroupDropoffB
@@ -317,20 +321,10 @@ export const equalityCheck = (stateA, stateB) => {
 	// Test arrays
 	const A = [
 		characterGroupsA,
-		oneTypeOnlyA,
-		singleWordA,
-		wordInitialA,
-		wordMiddleA,
-		wordFinalA,
 		transformsA
 	];
 	const B = [
 		characterGroupsB,
-		oneTypeOnlyB,
-		singleWordB,
-		wordInitialB,
-		wordMiddleB,
-		wordFinalB,
 		transformsB
 	];
 	if(A.some((array, i) => {
