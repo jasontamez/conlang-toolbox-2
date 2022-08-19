@@ -6,11 +6,16 @@ const initialState = {
 	characterGroups: [],
 	// SYLLABLES
 	oneTypeOnly: false,
-	dropoffOverride: {},
 	singleWord: [],
 	wordInitial: [],
 	wordMiddle: [],
 	wordFinal: [],
+	syllableDropoffOverrides: {
+		singleWord: null,
+		wordInitial: null,
+		wordMiddle: null,
+		wordFinal: null
+	},
 	// TRANSFORMS
 	transforms: [],
 	// SETTINGS
@@ -54,6 +59,33 @@ const editCharacterGroupFunc = (state, action) => {
 		}
 		return edited;
 	});
+	return state;
+};
+
+// SYLLABLES
+const setOneTypeOnlyFunc = (state, action) => {
+	state.oneTypeOnly = action.payload;
+	return state;
+};
+const setSingleWordFunc = (state, action) => {
+	state.singleWord = action.payload;
+	return state;
+};
+const setWordInitialFunc = (state, action) => {
+	state.wordInitial = action.payload;
+	return state;
+};
+const setWordMiddleFunc = (state, action) => {
+	state.wordMiddle = action.payload;
+	return state;
+};
+const setWordFinalFunc = (state, action) => {
+	state.wordFinal = action.payload;
+	return state;
+};
+const setSyllableOverrideFunc = (state, action) => {
+	const { override, value } = action.payload;
+	state.syllableDropoffOverrides[override] = value;
 	return state;
 };
 
@@ -141,6 +173,12 @@ const wgSlice = createSlice({
 		addCharacterGroup: addCharacterGroupFunc,
 		deleteCharacterGroup: deleteCharacterGroupFunc,
 		editCharacterGroup: editCharacterGroupFunc,
+		setOneTypeOnly: setOneTypeOnlyFunc,
+		setSingleWord: setSingleWordFunc,
+		setWordInitial: setWordInitialFunc,
+		setWordMiddle: setWordMiddleFunc,
+		setWordFinal: setWordFinalFunc,
+		setSyllableOverride: setSyllableOverrideFunc,
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
 		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
@@ -166,6 +204,12 @@ export const {
 	addCharacterGroup,
 	deleteCharacterGroup,
 	editCharacterGroup,
+	setOneTypeOnly,
+	setSingleWord,
+	setWordInitial,
+	setWordMiddle,
+	setWordFinal,
+	setSyllableOverride,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,
@@ -187,3 +231,123 @@ export const {
 } = wgSlice.actions;
 
 export default wgSlice.reducer;
+
+// An equality-check function
+export const equalityCheck = (stateA, stateB) => {
+	if (stateA === stateB) {
+		return true;
+	}
+	const characterGroupsA = stateA.characterGroups;
+	const oneTypeOnlyA = stateA.oneTypeOnly;
+	const singleWordA = stateA.singleWord;
+	const wordInitialA = stateA.wordInitial;
+	const wordMiddleA = stateA.wordMiddle;
+	const wordFinalA = stateA.wordFinal;
+	const syllableDropoffOverridesA = stateA.syllableDropoffOverrides;
+	const transformsA = stateA.transforms;
+	const monosyllablesRateA = stateA.monosyllablesRate;
+	const maxSyllablesPerWordA = stateA.maxSyllablesPerWord;
+	const characterGroupDropoffA = stateA.characterGroupDropoff;
+	const syllableBoxDropoffA = stateA.syllableBoxDropoff;
+	const capitalizeSentencesA = stateA.capitalizeSentences;
+	const declarativeSentencePreA = stateA.declarativeSentencePre;
+	const declarativeSentencePostA = stateA.declarativeSentencePost;
+	const interrogativeSentencePreA = stateA.interrogativeSentencePre;
+	const interrogativeSentencePostA = stateA.interrogativeSentencePost;
+	const exclamatorySentencePreA = stateA.exclamatorySentencePre;
+	const exclamatorySentencePostA = stateA.exclamatorySentencePost;
+	const outputA = stateA.output;
+	const showSyllableBreaksA = stateA.showSyllableBreaks;
+	const sentencesPerTextA = stateA.sentencesPerText;
+	const capitalizeWordsA = stateA.capitalizeWords;
+	const sortWordlistA = stateA.sortWordlist;
+	const wordlistMultiColumnA = stateA.wordlistMultiColumn;
+	const wordsPerWordlistA = stateA.wordsPerWordlist;
+	// stateB
+	const characterGroupsB = stateB.characterGroups;
+	const oneTypeOnlyB = stateB.oneTypeOnly;
+	const singleWordB = stateB.singleWord;
+	const wordInitialB = stateB.wordInitial;
+	const wordMiddleB = stateB.wordMiddle;
+	const wordFinalB = stateB.wordFinal;
+	const syllableDropoffOverridesB = stateB.syllableDropoffOverrides;
+	const transformsB = stateB.transforms;
+	const monosyllablesRateB = stateB.monosyllablesRate;
+	const maxSyllablesPerWordB = stateB.maxSyllablesPerWord;
+	const characterGroupDropoffB = stateB.characterGroupDropoff;
+	const syllableBoxDropoffB = stateB.syllableBoxDropoff;
+	const capitalizeSentencesB = stateB.capitalizeSentences;
+	const declarativeSentencePreB = stateB.declarativeSentencePre;
+	const declarativeSentencePostB = stateB.declarativeSentencePost;
+	const interrogativeSentencePreB = stateB.interrogativeSentencePre;
+	const interrogativeSentencePostB = stateB.interrogativeSentencePost;
+	const exclamatorySentencePreB = stateB.exclamatorySentencePre;
+	const exclamatorySentencePostB = stateB.exclamatorySentencePost;
+	const outputB = stateB.output;
+	const showSyllableBreaksB = stateB.showSyllableBreaks;
+	const sentencesPerTextB = stateB.sentencesPerText;
+	const capitalizeWordsB = stateB.capitalizeWords;
+	const sortWordlistB = stateB.sortWordlist;
+	const wordlistMultiColumnB = stateB.wordlistMultiColumn;
+	const wordsPerWordlistB = stateB.wordsPerWordlist;
+	// Test simple values
+	if (
+		oneTypeOnlyA !== oneTypeOnlyB
+		|| monosyllablesRateA !== monosyllablesRateB
+		|| maxSyllablesPerWordA !== maxSyllablesPerWordB
+		|| characterGroupDropoffA !== characterGroupDropoffB
+		|| syllableBoxDropoffA !== syllableBoxDropoffB
+		|| capitalizeSentencesA !== capitalizeSentencesB
+		|| declarativeSentencePreA !== declarativeSentencePreB
+		|| declarativeSentencePostA !== declarativeSentencePostB
+		|| interrogativeSentencePreA !== interrogativeSentencePreB
+		|| interrogativeSentencePostA !== interrogativeSentencePostB
+		|| exclamatorySentencePreA !== exclamatorySentencePreB
+		|| exclamatorySentencePostA !== exclamatorySentencePostB
+		|| outputA !== outputB
+		|| showSyllableBreaksA !== showSyllableBreaksB
+		|| sentencesPerTextA !== sentencesPerTextB
+		|| capitalizeWordsA !== capitalizeWordsB
+		|| sortWordlistA !== sortWordlistB
+		|| wordlistMultiColumnA !== wordlistMultiColumnB
+		|| wordsPerWordlistA !== wordsPerWordlistB
+	) {
+		return false;
+	}
+	// Test arrays
+	const A = [
+		characterGroupsA,
+		oneTypeOnlyA,
+		singleWordA,
+		wordInitialA,
+		wordMiddleA,
+		wordFinalA,
+		transformsA
+	];
+	const B = [
+		characterGroupsB,
+		oneTypeOnlyB,
+		singleWordB,
+		wordInitialB,
+		wordMiddleB,
+		wordFinalB,
+		transformsB
+	];
+	if(A.some((array, i) => {
+		return (array !== B[i]) && String(array) !== String(array);
+	})) {
+		// At least one array was unequal
+		return false;
+	}
+	// Test objects
+	// (only one object right now)
+	return (
+		syllableDropoffOverridesA === syllableDropoffOverridesB
+		|| (
+			syllableDropoffOverridesA.singleWord === syllableDropoffOverridesB.singleWord
+			&& syllableDropoffOverridesA.wordInitial === syllableDropoffOverridesB.wordInitial
+			&& syllableDropoffOverridesA.wordMiddle === syllableDropoffOverridesB.wordMiddle
+			&& syllableDropoffOverridesA.wordFinal === syllableDropoffOverridesB.wordFinal
+		)
+	);
+};

@@ -35,14 +35,15 @@ import {
 	addCharacterGroup,
 	deleteCharacterGroup,
 	editCharacterGroup,
-	setCharacterGroupDropoff
+	setCharacterGroupDropoff,
+	equalityCheck
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../components/toast";
 
 
 const WGChar = () => {
-	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg);
+	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg, equalityCheck);
 	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const addDescRef = useRef(null);
@@ -341,7 +342,7 @@ const WGChar = () => {
 									onToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
 								/>
 							</HStack>
-							{editOverrideSwitch ?
+							{editOverrideSwitch ? // TO-DO: Make this smoothly animate in and out
 								<SliderWithLabels
 									max={50}
 									beginLabel={<EquiprobableIcon color="text.50" />}

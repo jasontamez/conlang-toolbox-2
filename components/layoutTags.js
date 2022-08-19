@@ -112,7 +112,7 @@ export const TextAreaSetting = (props) => {
 	// <TextAreaSetting
 	//    boxProps={props for outer Box}
 	//    labelProps={props for Text}
-	//    text={optional, goes into Text; if missing, uses children instead}
+	//    text={goes into Text; if missing, uses children instead; if null, not shown}
 	//    value={TextArea defaultValue}
 	//    placeholder={TextArea placeholder}
 	//    rows={TextArea totalLines}
@@ -131,7 +131,7 @@ export const TextAreaSetting = (props) => {
 	} = props;
 	return (
 		<Box w="full" {...v(boxProps, {})}>
-			<Text {...v(labelProps, {})}>{v(text, children)}</Text>
+			{text === null ? <></> : <Text {...v(labelProps, {})}>{v(text, children)}</Text>}
 			<TextArea
 				mt={2}
 				defaultValue={value}
