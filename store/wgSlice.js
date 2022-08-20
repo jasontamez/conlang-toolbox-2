@@ -5,7 +5,7 @@ const initialState = {
 	// GROUPS
 	characterGroups: [],
 	// SYLLABLES
-	oneTypeOnly: false,
+	multipleSyllableTypes: false,
 	singleWord: "",
 	wordInitial: "",
 	wordMiddle: "",
@@ -63,8 +63,8 @@ const editCharacterGroupFunc = (state, action) => {
 };
 
 // SYLLABLES
-const setOneTypeOnlyFunc = (state, action) => {
-	state.oneTypeOnly = action.payload;
+const setMultipleSyllableTypesFunc = (state, action) => {
+	state.multipleSyllableTypes = action.payload;
 	return state;
 };
 const setSingleWordFunc = (state, action) => {
@@ -173,7 +173,7 @@ const wgSlice = createSlice({
 		addCharacterGroup: addCharacterGroupFunc,
 		deleteCharacterGroup: deleteCharacterGroupFunc,
 		editCharacterGroup: editCharacterGroupFunc,
-		setOneTypeOnly: setOneTypeOnlyFunc,
+		setMultipleSyllableTypes: setMultipleSyllableTypesFunc,
 		setSingleWord: setSingleWordFunc,
 		setWordInitial: setWordInitialFunc,
 		setWordMiddle: setWordMiddleFunc,
@@ -204,7 +204,7 @@ export const {
 	addCharacterGroup,
 	deleteCharacterGroup,
 	editCharacterGroup,
-	setOneTypeOnly,
+	setMultipleSyllableTypes,
 	setSingleWord,
 	setWordInitial,
 	setWordMiddle,
@@ -238,7 +238,7 @@ export const equalityCheck = (stateA, stateB) => {
 		return true;
 	}
 	const characterGroupsA = stateA.characterGroups;
-	const oneTypeOnlyA = stateA.oneTypeOnly;
+	const multipleSyllableTypesA = stateA.multipleSyllableTypes;
 	const singleWordA = stateA.singleWord;
 	const wordInitialA = stateA.wordInitial;
 	const wordMiddleA = stateA.wordMiddle;
@@ -265,7 +265,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const wordsPerWordlistA = stateA.wordsPerWordlist;
 	// stateB
 	const characterGroupsB = stateB.characterGroups;
-	const oneTypeOnlyB = stateB.oneTypeOnly;
+	const multipleSyllableTypesB = stateB.multipleSyllableTypes;
 	const singleWordB = stateB.singleWord;
 	const wordInitialB = stateB.wordInitial;
 	const wordMiddleB = stateB.wordMiddle;
@@ -292,7 +292,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const wordsPerWordlistB = stateB.wordsPerWordlist;
 	// Test simple values
 	if (
-		oneTypeOnlyA !== oneTypeOnlyB
+		multipleSyllableTypesA !== multipleSyllableTypesB
 		|| singleWordA !== singleWordB
 		|| wordInitialA !== wordInitialB
 		|| wordMiddleA !== wordMiddleB
@@ -318,17 +318,29 @@ export const equalityCheck = (stateA, stateB) => {
 	) {
 		return false;
 	}
-	// Test arrays
+	// Test character groups
+	if(characterGroupsA !== characterGroupsB &&
+		(
+			characterGroupsA.length !== characterGroupsB.length ||
+			characterGroupsA.some((a, i) => {
+				const props = ["description", "label", "run", "dropoff"];
+				const b = characterGroupsB[i];
+				return(a !== b) && props.some(p => a[p] !== b[p]);
+			})
+		)
+	) {
+		// At least one group was unequal
+		return false;
+	}
+	// Test transforms
 	const A = [
-		characterGroupsA,
-		transformsA
+		transformsA // TO-DO: Code for comparing actual transforms
 	];
 	const B = [
-		characterGroupsB,
 		transformsB
 	];
 	if(A.some((array, i) => {
-		return (array !== B[i]) && String(array) !== String(array);
+		return (array !== B[i]) && String(array) !== String(B[i]);
 	})) {
 		// At least one array was unequal
 		return false;

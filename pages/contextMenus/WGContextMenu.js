@@ -20,6 +20,7 @@ const WGContextMenu = () => {
 	const { pathname } = useLocation();
 	const textSize = useBreakpointValue(sizes.sm);
 	const headerSize = useBreakpointValue(sizes.md);
+	const iconSize = useBreakpointValue(sizes.xs);
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');
@@ -286,15 +287,15 @@ const WGContextMenu = () => {
 						<P>These options apply to word generation.</P>
 						<P>
 							{'\t'}<B>Rate of monosyllable words</B> determines how often a one-syllable
-							word is created. It's a percentage from 0 (never) to 100 (always).
+							word is created. It's a percentage from 0% (never) to 100% (always).
 						</P>
 						<P>
 							{'\t'}<B>Maximum number of syllables per word</B> sets an upper limit on how long
-							your words can grow. If the <B>Rate</B> above is set to 100, this setting is ignored.
+							your words can grow. If the <B>Rate</B> above is set to 100%, this setting is ignored.
 						</P>
 						<P>
 							{'\t'}<B>Character Group run dropoff</B> and <B>Syllable run dropoff</B> can range
-							from 0 to 50. At zero (flat), group and syllable choices are all equiprobable.
+							from 0% to 50%. At zero (flat), group and syllable choices are all equiprobable.
 							Otherwise, the number becomes a percentage. The higher the number, the more likely it
 							is that the first syllables or group characters are used. (This mimics natural
 							languages, which tend to prefer certain sounds and patterns.) This is how it works:

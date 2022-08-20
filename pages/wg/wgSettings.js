@@ -96,7 +96,7 @@ const WGSettings = () => {
 	);
 	return (
 		<ScrollView>
-			{/*
+			{/* TO-DO: presets/stored info buttons
 				<SectionHeader>Presets and Stored Info</SectionHeader>
 				Load Preset button
 				Clear All Fields button
@@ -137,7 +137,7 @@ const WGSettings = () => {
 					accessibilityLabel: "Character Group dropoff",
 					onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
 				}}
-				Label={({value}) => <Label pre="Character Group dropoff: " value={value} />}
+				Label={({value}) => <Label pre="Character Group dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
 			<SliderWithLabels
@@ -149,7 +149,7 @@ const WGSettings = () => {
 					accessibilityLabel: "Syllable box dropoff",
 					onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
 				}}
-				Label={({value}) => <Label pre="Syllable box dropoff: " value={value} />}
+				Label={({value}) => <Label pre="Syllable box dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>

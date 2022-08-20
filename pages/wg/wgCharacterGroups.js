@@ -239,7 +239,7 @@ const WGChar = () => {
 					{dropoff === undefined ?
 						<></>
 					:
-						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={descSize} fontSize={descSize} italic>{dropoff}</Text>
+						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={descSize} fontSize={descSize} italic>{dropoff}%</Text>
 					}
 					<IconButton
 						icon={<EditIcon size={textSize} color="primary.400" />}
@@ -347,7 +347,7 @@ const WGChar = () => {
 									onToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
 								/>
 							</HStack>
-							{editOverrideSwitch ? // TO-DO: Make this smoothly animate in and out
+							{editOverrideSwitch ?
 								<ReAnimated.View
 									entering={FadeInUp}
 									exiting={FadeOutUp}
@@ -364,7 +364,7 @@ const WGChar = () => {
 										}}
 										Label={({value}) => (
 											<Center>
-												<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
+												<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text></Text>
 											</Center>
 										)}
 										stackProps={{
@@ -550,7 +550,7 @@ const WGChar = () => {
 								pb={1}
 							>
 								<Text bold fontSize={textSize}>Dropoff Rate</Text>
-								<Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text>
+								<Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text>
 							</HStack>
 							<Text fontSize={descSize}>Characters at the beginning of a group tend to be picked more often than characters at the end of the group. This slider controls this tendency. A rate of zero is flat, making all characters equiprobable.</Text>
 						</Box>

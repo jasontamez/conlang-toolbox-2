@@ -140,13 +140,13 @@ export const blankAppState = {/*
 			}
 		],
 		// SYLLABLES
-		oneTypeOnly: false,
+		multipleSyllableTypes: false,
 		singleWord: "",
 		wordInitial: "",
 		wordMiddle: "",
 		wordFinal: "",
 		syllableDropoffOverrides: {
-			singleWord: null,
+			singleWord: 5,
 			wordInitial: null,
 			wordMiddle: null,
 			wordFinal: null

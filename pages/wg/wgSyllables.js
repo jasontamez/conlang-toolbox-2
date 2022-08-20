@@ -7,9 +7,9 @@ import {
 	ScrollView,
 	VStack,
 	useContrastText,
-	Button,
 	Switch,
-	Center
+	Center,
+	IconButton
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
@@ -19,7 +19,9 @@ import ReAnimated, {
 } from 'react-native-reanimated';
 
 import {
+	EditIcon,
 	EquiprobableIcon,
+	SaveIcon,
 	SharpDropoffIcon
 } from "../../components/icons";
 import { SliderWithLabels, TextAreaSetting } from "../../components/layoutTags";
@@ -31,23 +33,21 @@ import {
 	setWordInitial,
 	setWordMiddle,
 	setWordFinal,
-	setOneTypeOnly,
+	setMultipleSyllableTypes,
 	setSyllableOverride
 } from "../../store/wgSlice";
-import debounce from "../../components/debounce";
 
 
 const WGSyllables = () => {
 	const {
 		syllableBoxDropoff,
-		oneTypeOnly,
+		multipleSyllableTypes,
 		syllableDropoffOverrides,
 		singleWord,
 		wordInitial,
 		wordMiddle,
 		wordFinal
 	} = useSelector(state => state.wg, equalityCheck);
-	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [editingSingleWord, setEditingSingleWord] = useState(false);
 	const [editingWordInitial, setEditingWordInitial] = useState(false);
@@ -79,10 +79,9 @@ const WGSyllables = () => {
 		},
 		[syllableBoxDropoff, syllableDropoffOverrides]
 	);
-	const primaryContrast = useContrastText("primary.500");
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
-	const boxes = [
+	const oneBox = [
 		{
 			title: "Syllables",
 			inputRef: singleRef,
@@ -97,61 +96,140 @@ const WGSyllables = () => {
 			overridePropName: "singleWord"
 		}
 	];
+	const allBoxes = [
+		{
+			...oneBox[0],
+			title: "Single-Word Syllables"
+		},
+		{
+			title: "Word-Initial Syllables",
+			inputRef: initialRef,
+			syllablesValue: wordInitial,
+			setValue: setWordInitial,
+			editingFlag: editingWordInitial,
+			setFlag: setEditingWordInitial,
+			overrideFlag: editingWordInitialOverride,
+			setOFlag: setEditingWordInitialOverride,
+			overrideValue: editingWordInitialOverrideValue,
+			setOValue: setEditingWordInitialOverrideValue,
+			overridePropName: "wordInitial"
+		},
+		{
+			title: "Word-Middle Syllables",
+			inputRef: middleRef,
+			syllablesValue: wordMiddle,
+			setValue: setWordMiddle,
+			editingFlag: editingWordMiddle,
+			setFlag: setEditingWordMiddle,
+			overrideFlag: editingWordMiddleOverride,
+			setOFlag: setEditingWordMiddleOverride,
+			overrideValue: editingWordMiddleOverrideValue,
+			setOValue: setEditingWordMiddleOverrideValue,
+			overridePropName: "wordMiddle"
+		},
+		{
+			title: "Word-Final Syllables",
+			inputRef: finalRef,
+			syllablesValue: wordFinal,
+			setValue: setWordFinal,
+			editingFlag: editingWordFinal,
+			setFlag: setEditingWordFinal,
+			overrideFlag: editingWordFinalOverride,
+			setOFlag: setEditingWordFinalOverride,
+			overrideValue: editingWordFinalOverrideValue,
+			setOValue: setEditingWordFinalOverrideValue,
+			overridePropName: "wordFinal"
+		}
+	];
+	const boxes = multipleSyllableTypes ? allBoxes : oneBox;
+	const maybeDoSave = () => {
+		// Are we editing? Have we edited?
+		boxes.forEach(box => {
+			if(box.editingFlag) {
+				// Save current value to property
+				dispatch(box.setValue(box.inputRef.current.value));
+				// Are we overriding?
+				if(box.overrideFlag) {
+					// Save that, too
+					dispatch(setSyllableOverride({
+						override: box.overridePropName,
+						value: box.overrideValue
+					}));
+				}
+			}
+		});
+	};
 	const SyllableBox = ({
 		title,
 		inputRef,
 		syllablesValue,
-		setValue,
 		editingFlag,
 		setFlag,
 		overrideFlag,
 		setOFlag,
 		overrideValue,
-		setOValue,
-		overridePropName
+		setOValue
 	}) => {
-		const maybeDoSave = () => {
-			// Are we editing? Have we edited?
-			if(editingFlag) {
-				// Save current value to property
-				dispatch(setValue(inputRef.current.value));
-				// Are we overriding?
-				if(overrideFlag) {
-					// Save that, too
-					dispatch(setSyllableOverride({
-						override: overridePropName,
-						value: overrideValue
-					}));
-				}
-			}
-		};
 		return (
-			<>
-				<HStack w="full" alignItems="flex-start" justifyContent="flex-start">
-					<Text flexGrow={0} mt={2}>{title /* TO-DO: Make this stuff look prettier, and add an override value if needed (VSTACK) */}</Text>
+			<VStack
+				py={2.5}
+				px={2}
+				space={2}
+			>
+				<HStack
+					w="full"
+					alignItems="flex-start"
+					justifyContent="flex-start"
+					space={2.5}
+				>
+					<VStack
+						h="full"
+						justifyContent="flex-start"
+						alignItems="flex-end"
+						flexGrow={0}
+						mt={2}
+					>
+						{title.split(" ").map((t, i) => (
+							<Text fontSize={textSize} bold key={title + t + String(i)}>{t}</Text>
+						))}
+						{overrideFlag && !editingFlag ?
+							<Box bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
+								<Text lineHeight={descSize} fontSize={descSize} italic>{overrideValue}%</Text>
+							</Box>
+						:
+							<></>
+						}
+					</VStack>
 					<TextAreaSetting
 						rows={Math.min(3, singleWord.length)}
 						value={syllablesValue}
 						text={null}
 						boxProps={{
 							flex: 1,
-							maxW: 64
+							maxW: 64,
+							minW: 32
 						}}
 						inputProps={{
 							disabled: !editingFlag,
 							ref: inputRef
 						}}
 					/>
-					<Button
+					<IconButton
 						flexShrink={0}
 						alignSelf="center"
 						onPress={() => {
 							maybeDoSave();
 							setFlag(!editingFlag);
 						}}
-						w={6}
-						mx={4}
-					>TO-DO: Edit/done icons</Button>
+						p={1}
+						bg={editingFlag ? "success.500" : "transparent"}
+						icon={
+							editingFlag ?
+								<SaveIcon size={textSize} color={useContrastText("success.500")}/>
+							:
+								<EditIcon size={textSize} color="primary.400" />
+						}
+					/>
 				</HStack>
 				{editingFlag ?
 					<ReAnimated.View
@@ -162,7 +240,8 @@ const WGSyllables = () => {
 						<HStack
 							w="full"
 							alignItems="center"
-							justifyContent="space-between"
+							justifyContent="flex-start"
+							space={2.5}
 							py={2}
 						>
 							<Text fontSize={textSize}>Use separate dropoff rate</Text>
@@ -191,7 +270,7 @@ const WGSyllables = () => {
 									}}
 									Label={({value}) => (
 										<Center>
-											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
+											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text></Text>
 										</Center>
 									)}
 									stackProps={{
@@ -210,7 +289,7 @@ const WGSyllables = () => {
 				:
 					<></>
 				}
-			</>
+			</VStack>
 		);
 	};
 	return (
@@ -233,7 +312,7 @@ const WGSyllables = () => {
 								pb={1}
 							>
 								<Text bold fontSize={textSize}>Dropoff Rate</Text>
-								<Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text>
+								<Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text>
 							</HStack>
 							<Text fontSize={descSize}>Syllables at the top of a box tend to be picked more often than syllables at the bottom of the box. This slider controls this tendency. A rate of zero is flat, making all syllables equiprobable.</Text>
 						</Box>
@@ -246,7 +325,31 @@ const WGSyllables = () => {
 						bg: "main.800"
 					}}
 				/>
-				{boxes.map(box => <SyllableBox key={box.title} {...box} />)}
+				<HStack
+					w="full"
+					alignItems="center"
+					justifyContent="space-between"
+					borderBottomWidth={0.5}
+					borderColor="main.700"
+					py={2.5}
+					px={2}
+				>
+					<Text fontSize={textSize}>Use multiple syllable types</Text>
+					<Switch
+						isChecked={multipleSyllableTypes}
+						onToggle={() => {
+							maybeDoSave();
+							dispatch(setMultipleSyllableTypes(!multipleSyllableTypes));
+						}}
+					/>
+				</HStack>
+				<ReAnimated.View
+					entering={FadeInUp}
+					exiting={FadeOutUp}
+					layout={CurvedTransition}
+				>
+					{boxes.map(box => <SyllableBox key={box.title} {...box} />)}
+				</ReAnimated.View>
 			</ScrollView>
 		</VStack>
 	);
