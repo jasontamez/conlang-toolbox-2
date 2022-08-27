@@ -1,14 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import blankAppState from './blankAppState';
 
-const initialState = {
-		key: "",
-		lastSave: 0,
-		title: "",
-		description: "",
-		bool: {},
-		num: {},
-		text: {}
-};
+const initialState = { blankAppState };
 
 const setKeyFunc = (state, action) => {
 	state.key = action.payload;

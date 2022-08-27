@@ -14,6 +14,7 @@ import wordListsSlice from './wordListsSlice';
 import appStateSlice from './appStateSlice';
 import lexiconSlice from './lexiconSlice';
 import wgSlice from './wgSlice';
+import blankAppState from './blankAppState';
 
 //const reconcile = async (incoming, original, reduced) => {
 //	// Nothing for now.
@@ -61,413 +62,176 @@ export default () => {
 //	return { store, persistor };
 //};
 
-
-export const blankAppState = {/*
-	currentVersion: packageJson.version,
-	appSettings: {
-		theme: "Default",
-		disableConfirms: false
-	},
-	wordgenCharacters: {
-		map: [],
-		editing: null
-	},
-	wordgenSyllables: {
-		toggle: false,
-		objects: {
-			singleWord: { components: [] },
-			wordInitial: { components: [] },
-			wordMiddle: { components: [] },
-			wordFinal: { components: [] }
-		}
-	},
-	wordgenTransformations: {
-		list: [],
-		editing: null
-	},
-	wordgenSettings: {
-		//...simple.wordgenSettings,
-		monosyllablesRate: 20,
-		maxSyllablesPerWord: 6,
-		characterGroupDropoff: 25,
-		syllableBoxDropoff: 20,
-		capitalizeSentences: true,
-		declarativeSentencePre: "",
-		declarativeSentencePost: ".",
-		interrogativeSentencePre: "",
-		interrogativeSentencePost: "?",
-		exclamatorySentencePre: "",
-		exclamatorySentencePost: "!",
-		//...end simple.wordgenSettings
-		output: "text",
-		showSyllableBreaks: false,
-		sentencesPerText: 30,
-		capitalizeWords: false,
-		sortWordlist: true,
-		wordlistMultiColumn: true,
-		wordsPerWordlist: 250
-	},
-	wordevolveCharacters: {
-		map: [],
-		editing: null
-	},
-	wordevolveTransformations: {
-		list: [],
-		editing: null
-	},
-	wordevolveSoundChanges: {
-		list: [],
-		editing: null
-	},
-	wordevolveInput: [],
-	wordevolveSettings: {
-		output: "outputOnly"
-	},
-	morphoSyntaxModalState: {},*/
-	wg: {
-		// GROUPS
-		characterGroups: [
-			{
-				label: "X",
-				description: "Sample group X",
-				run: "ptk"
-			},
-			{
-				label: "Y",
-				description: "Sample group Y",
-				run: "sz",
-				dropoff: 15
-			}
-		],
-		// SYLLABLES
-		multipleSyllableTypes: false,
-		singleWord: "",
-		wordInitial: "",
-		wordMiddle: "",
-		wordFinal: "",
-		syllableDropoffOverrides: {
-			singleWord: 5,
-			wordInitial: null,
-			wordMiddle: null,
-			wordFinal: null
+// USE THIS to put in temporary changes for testing.
+let initialAppState = {...blankAppState};
+initialAppState.wg = {
+	...initialAppState.wg,
+	characterGroups: [
+		{
+			label: "X",
+			description: "Sample group X",
+			run: "ptk"
 		},
-		// TRANSFORMS
-		transforms: [],
-		// SETTINGS
-		//...simple.wordgenSettings,
-		monosyllablesRate: 20,
-		maxSyllablesPerWord: 6,
-		characterGroupDropoff: 25,
-		syllableBoxDropoff: 20,
-		capitalizeSentences: true,
-		declarativeSentencePre: "",
-		declarativeSentencePost: ".",
-		interrogativeSentencePre: "",
-		interrogativeSentencePost: "?",
-		exclamatorySentencePre: "",
-		exclamatorySentencePost: "!",
-		//...end simple.wordgenSettings
-		output: "text",
-		showSyllableBreaks: false,
-		sentencesPerText: 30,
-		capitalizeWords: false,
-		sortWordlist: true,
-		wordlistMultiColumn: true,
-		wordsPerWordlist: 250
-	},
-	morphoSyntax: {
-		key: "",
-		lastSave: 0,
-		title: "",
-		description: "",
-		bool: {},
-		num: {},
-		text: {}
-	},
-	lexicon: {
-		key: "",
-		lastSave: 0,
-		title: "",
-		description: "Hi, this is a description.",
-		truncateColumns: true,
-		sortDir: false,
-		sortPattern: [0, 1, 2],
-		columns: [
-			{
-				id: "00",
-				label: "Word",
-				size: "lexMd"
-			},
-			{
-				id: "11",
-				label: "Part of Speech",
-				size: "lexSm"
-			},
-			{
-				id: "22",
-				label: "Definition",
-				size: "lexLg"
-			}
-		],
-		lexicon: [
-			{
-				id: "0",
-				columns: [
-					"fleeb",
-					"n",
-					"a thing you know and love"
-				]
-			},
-			{
-				id: "1",
-				columns: [
-					"boof",
-					"v",
-					"vocalize in a dog way"
-				]
-			},
-			{
-				id: "2",
-				columns: [
-					"akorn",
-					"adj",
-					"damp and musty"
-				]
-			},
-			{
-				id: "10",
-				columns: [
-					"marr",
-					"n",
-					"a movie featuring a black dog and a brown cat"
-				]
-			},
-			{
-				id: "11",
-				columns: [
-					"treff",
-					"v",
-					"mispronounce words on purpose"
-				]
-			},
-			{
-				id: "12",
-				columns: [
-					"plo",
-					"adj",
-					"scary but heartwarming"
-				]
-			},
-			{
-				id: "20",
-				columns: [
-					"quog",
-					"n",
-					"a tower of cans"
-				]
-			},
-			{
-				id: "21",
-				columns: [
-					"ickthioraptorimino",
-					"v",
-					"imitating a potato"
-				]
-			},
-			{
-				id: "22",
-				columns: [
-					"rhyk",
-					"adj",
-					"juvenile and intelligent"
-				]
-			},
-			{
-				id: "30",
-				columns: [
-					"ulululu",
-					"n",
-					"a doorbell that doesn't work"
-				]
-			},
-			{
-				id: "31",
-				columns: [
-					"dru",
-					"v",
-					"mixing with broth"
-				]
-			},
-			{
-				id: "32",
-				columns: [
-					"fargu",
-					"adj",
-					"toothy"
-				]
-			},
-			{
-				id: "40",
-				columns: [
-					"tirg",
-					"n",
-					"a staircase to nowhere"
-				]
-			},
-			{
-				id: "41",
-				columns: [
-					"mimm",
-					"v",
-					"charming a snake or other reptile"
-				]
-			},
-			{
-				id: "42",
-				columns: [
-					"bilo",
-					"adj",
-					"dead for at least twenty years"
-				]
-			},
-		],
-		disableBlankConfirms: false,
-		maxColumns: 10
-	},
-	wordLists: {
-		centerTheDisplayedWords: [],
-		listsDisplayed: {},
-		pickAndSaveForLexicon: false,
-		savingForLexicon: {}
-	},
-	appState: {
-		menuToggleName: '',
-		theme: 'Default',
-		disableConfirms: false
-	},
-	/* lexicon: {
-		key: "",
-		lastSave: 0,
-		title: "",
-		description: "",
-		columns: 3,
-		columnOrder: [0,1,2],
-		columnTitles: ["Word", "Part of Speech", "Definition"],
-		columnSizes: ["m", "s", "l"],
-		sort: [0, 0],
-		sorted : true,
-		lexicon: [],
-		waitingToAdd: [],
-		editing: undefined,
-		colEdit: undefined,
-		lexiconWrap: false
-	},
-	modalState: {
-		loadingPage: false,
-		menuToggle: false,
-		AppTheme: false,
-		AddCategory: false,
-		EditCategory: false,
-		AddTransform: false,
-		EditTransform: false,
-		PresetPopup: false,
-		WGOutputOptions: false,
-		ManageCustomInfo: false,
-		AddCategoryWE: false,
-		EditCategoryWE: false,
-		AddTransform: false,
-		EditTransform: false,
-		AddSoundChange: false,
-		EditSoundChange: false,
-		LexiconEllipsis: undefined,
-		EditLexiconItem: false,
-		EditLexiconOrder: false,
-		LoadLexicon: false,
-		DeleteLexicon: false,
-		WGSaveToLexicon: undefined,
-		PickAndSaveWG: false,
-		WEPresetPopup: false,
-		WEOutputOptions: false,
-		PickAndSaveWE: false,
-		ManageCustomInfoWE: false,
-		WESaveToLexicon: undefined,
-		InfoModal: false,
-		ExtraCharacters: false,
-		ExtraCharactersEllipsis: undefined,
-		ExportLexicon: false,
-		WordListsEllipsis: undefined,
-		PickAndSaveWL: false,
-		LoadMS: false,
-		DeleteMS: false,
-		ExportMS: false
-	},
-	viewState: {
-		wg: 'characters',
-		we: 'characters',
-		wl: 'home',
-		ms: 'syntax',
-		ph: 'home',
-		lastSection: ''
-	},
-	extraCharactersState: {
-		display: null,
-		saved: [],
-		copyImmediately: false,
-		copyLater: "",
-		adding: false,
-		deleting: false,
-		showNames: false,
-		showHelp: false
-	},
-	temporaryInfo: undefined*/
-};
-
-export const initialAppState = {
-	...blankAppState,/*
-	wordgenCharacters: {
-		map: [
-			["C", {
-				title: "Consonants",
-				run: "ptkbdg"
-			}],
-			["V", {
-				title: "Vowels",
-				run: "ieaou"
-			}],
-			["L", {
-				title: "Liquids",
-				run: "rl"
-			}]
-		],
-		editing: null
-	},
-	wordgenSyllables: {
-		toggle: false,
-		objects: {
-			singleWord: { components: ["CV","V","CLV"] },
-			wordInitial: { components: [] },
-			wordMiddle: { components: [] },
-			wordFinal: { components: [] }
+		{
+			label: "Y",
+			description: "Sample group Y",
+			run: "sz",
+			dropoff: 15
 		}
+	],
+	singleWord: "XY\nX\nXYY",
+	syllableDropoffOverrides: {
+		singleWord: 5,
+		wordInitial: null,
+		wordMiddle: null,
+		wordFinal: null
 	},
-	wordgenTransformations: {
-		list: [
-			{
-				key: "0",
-				seek: "ki",
-				replace: "ci",
-				description: ""
-
-			},
-			{
-				key: "1",
-				seek: "(.)\\1+",
-				replace: "$1$1",
-				description: ""
-			}
-		],
-		editing: null
-	}*/
+	// TRANSFORMS
+	//transforms: []
+};
+initialAppState.lexicon = {
+	...initialAppState.lexicon,
+	description: "Hi, this is a description.",
+	sortPattern: [0, 1, 2],
+	columns: [
+		{
+			id: "00",
+			label: "Word",
+			size: "lexMd"
+		},
+		{
+			id: "11",
+			label: "Part of Speech",
+			size: "lexSm"
+		},
+		{
+			id: "22",
+			label: "Definition",
+			size: "lexLg"
+		}
+	],
+	lexicon: [
+		{
+			id: "0",
+			columns: [
+				"fleeb",
+				"n",
+				"a thing you know and love"
+			]
+		},
+		{
+			id: "1",
+			columns: [
+				"boof",
+				"v",
+				"vocalize in a dog way"
+			]
+		},
+		{
+			id: "2",
+			columns: [
+				"akorn",
+				"adj",
+				"damp and musty"
+			]
+		},
+		{
+			id: "10",
+			columns: [
+				"marr",
+				"n",
+				"a movie featuring a black dog and a brown cat"
+			]
+		},
+		{
+			id: "11",
+			columns: [
+				"treff",
+				"v",
+				"mispronounce words on purpose"
+			]
+		},
+		{
+			id: "12",
+			columns: [
+				"plo",
+				"adj",
+				"scary but heartwarming"
+			]
+		},
+		{
+			id: "20",
+			columns: [
+				"quog",
+				"n",
+				"a tower of cans"
+			]
+		},
+		{
+			id: "21",
+			columns: [
+				"ickthioraptorimino",
+				"v",
+				"imitating a potato"
+			]
+		},
+		{
+			id: "22",
+			columns: [
+				"rhyk",
+				"adj",
+				"juvenile and intelligent"
+			]
+		},
+		{
+			id: "30",
+			columns: [
+				"ulululu",
+				"n",
+				"a doorbell that doesn't work"
+			]
+		},
+		{
+			id: "31",
+			columns: [
+				"dru",
+				"v",
+				"mixing with broth"
+			]
+		},
+		{
+			id: "32",
+			columns: [
+				"fargu",
+				"adj",
+				"toothy"
+			]
+		},
+		{
+			id: "40",
+			columns: [
+				"tirg",
+				"n",
+				"a staircase to nowhere"
+			]
+		},
+		{
+			id: "41",
+			columns: [
+				"mimm",
+				"v",
+				"charming a snake or other reptile"
+			]
+		},
+		{
+			id: "42",
+			columns: [
+				"bilo",
+				"adj",
+				"dead for at least twenty years"
+			]
+		},
+	]
 };
 
 const reconcileOld = async (incoming, original, reduced) => {

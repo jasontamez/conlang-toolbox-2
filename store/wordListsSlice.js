@@ -1,12 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import WL from '../components/wordLists';
+import blankAppState from './blankAppState';
 
-const initialState = {
-	centerTheDisplayedWords: [],
-	listsDisplayed: {},
-	pickAndSaveForLexicon: false,
-	savingForLexicon: {}
-};
+const initialState = { blankAppState };
 
 const setCenterTheDisplayedWordsFunc = (state, action) => {
 	state.centerTheDisplayedWords = action.payload;

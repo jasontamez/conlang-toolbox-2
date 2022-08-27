@@ -1,11 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { availableThemes } from '../components/theme';
+import blankAppState from './blankAppState';
 
-const initialState = {
-	menuToggleName: '',
-	theme: 'Default',
-	disableConfirms: false
-};
+const initialState = { blankAppState };
 
 const setMenuToggleNameFunc = (state, action) => {
 	state.menuToggleName = action.payload;

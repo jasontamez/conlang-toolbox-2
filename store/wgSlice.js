@@ -1,45 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid';
+import blankAppState from './blankAppState';
 
-const initialState = {
-	// GROUPS
-	characterGroups: [],
-	// SYLLABLES
-	multipleSyllableTypes: false,
-	singleWord: "",
-	wordInitial: "",
-	wordMiddle: "",
-	wordFinal: "",
-	syllableDropoffOverrides: {
-		singleWord: null,
-		wordInitial: null,
-		wordMiddle: null,
-		wordFinal: null
-	},
-	// TRANSFORMS
-	transforms: [],
-	// SETTINGS
-	//...simple.wordgenSettings,
-	monosyllablesRate: 20,
-	maxSyllablesPerWord: 6,
-	characterGroupDropoff: 25,
-	syllableBoxDropoff: 20,
-	capitalizeSentences: true,
-	declarativeSentencePre: "",
-	declarativeSentencePost: ".",
-	interrogativeSentencePre: "",
-	interrogativeSentencePost: "?",
-	exclamatorySentencePre: "",
-	exclamatorySentencePost: "!",
-	//...end simple.wordgenSettings
-	output: "text",
-	showSyllableBreaks: false,
-	sentencesPerText: 30,
-	capitalizeWords: false,
-	sortWordlist: true,
-	wordlistMultiColumn: true,
-	wordsPerWordlist: 250
-};
+const initialState = { blankAppState };
+
 // GROUPS
 const addCharacterGroupFunc = (state, action) => {
 	// {label, description, run, ?dropoff}
