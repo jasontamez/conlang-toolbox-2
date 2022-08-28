@@ -87,7 +87,7 @@ initialAppState.wg = {
 		wordFinal: null
 	},
 	// TRANSFORMS
-	//transforms: []
+	transforms: []
 };
 initialAppState.lexicon = {
 	...initialAppState.lexicon,
