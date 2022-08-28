@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid';
 import blankAppState from './blankAppState';
 
-const initialState = { blankAppState };
+const initialState = blankAppState.lexicon;
 
 const sortLexicon = (lexicon, sortPattern, sortDir) => {
 	const maxCol = sortPattern.length;

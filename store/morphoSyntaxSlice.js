@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blankAppState from './blankAppState';
 
-const initialState = { blankAppState };
+const initialState = blankAppState.morphoSyntax;
 
 const setKeyFunc = (state, action) => {
 	state.key = action.payload;

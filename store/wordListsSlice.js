@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import WL from '../components/wordLists';
 import blankAppState from './blankAppState';
 
-const initialState = { blankAppState };
+const initialState = blankAppState.wordLists;
 
 const setCenterTheDisplayedWordsFunc = (state, action) => {
 	state.centerTheDisplayedWords = action.payload;

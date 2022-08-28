@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { availableThemes } from '../components/theme';
 import blankAppState from './blankAppState';
 
-const initialState = { blankAppState };
+const initialState = blankAppState.appState;
 
 const setMenuToggleNameFunc = (state, action) => {
 	state.menuToggleName = action.payload;

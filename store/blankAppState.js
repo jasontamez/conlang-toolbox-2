@@ -19,8 +19,7 @@ const blankAppState = {/*
 	wordevolveInput: [],
 	wordevolveSettings: {
 		output: "outputOnly"
-	},
-	morphoSyntaxModalState: {},*/
+	}*/
 	wg: {
 		// GROUPS
 		characterGroups: [],
