@@ -19,10 +19,12 @@ import { v4 as uuidv4 } from 'uuid';
 import {
 	AddIcon,
 	CloseCircleIcon,
+	DownIcon,
 	EditIcon,
 	ReorderIcon,
 	StopIcon,
-	TrashIcon
+	TrashIcon,
+	UpIcon
 } from "../../components/icons";
 import { TextSetting } from "../../components/layoutTags";
 import StandardAlert from "../../components/StandardAlert";
@@ -30,7 +32,8 @@ import { sizes } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	addTransform,
-	deleteTransform
+	deleteTransform,
+	rearrangeTransforms
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../components/toast";
@@ -38,6 +41,7 @@ import ModalTransformEditingItem from "./wgModalTransformEditor";
 
 const WGTransformations = () => {
 	const { transforms } = useSelector(state => state.wg, equalityCheck);
+	const lastTransform = transforms.length - 1;
 	const disableConfirms = useSelector(state => state.appState.disableConfirms);
 	const dispatch = useDispatch();
 	const toast = useToast();
@@ -107,6 +111,24 @@ const WGTransformations = () => {
 			msg: "Transform added!"
 		});
 		closeModal && setAddTransformOpen(false);
+	};
+	const moveUpInList = (item, i) => {
+		if(i === 0) {
+			return;
+		}
+		const pre = transforms.slice(0, i);
+		const post = transforms.slice(i + 1);
+		const moved = pre.pop();
+		dispatch(rearrangeTransforms([...pre, item, moved, ...post]));
+	};
+	const moveDownInList = (item, i) => {
+		if(i === lastTransform) {
+			return;
+		}
+		const pre = transforms.slice(0, i);
+		const post = transforms.slice(i + 1);
+		const moved = post.shift();
+		dispatch(rearrangeTransforms([...pre, moved, item, ...post]));
 	};
 	const Unit = (props) => (
 		<Box
@@ -274,7 +296,7 @@ const WGTransformations = () => {
 				placement="bottom-left"
 			/>
 			<ScrollView bg="main.900">
-				{transforms.map(item => (
+				{transforms.map((item, index) => (
 					<HStack
 						key={item.id}
 						alignItems="center"
@@ -286,29 +308,44 @@ const WGTransformations = () => {
 						bg="main.800"
 						w="full"
 					>
-						{reordering ? // Reorder up ONLY (no HStack)
-							<HStack
-								key={item.id + "-Reordering-Buttons"}
+						{reordering ?
+							<IconButton
+								key={item.id + "-reorder-up"}
+								icon={<UpIcon size={textSize} color={index === 0 ? "transparent" : "primary.400"} />}
+								accessibilityLabel="Move Up in List"
+								bg={index === 0 ? "transparent" : "darker"}
+								p={1}
+								my={0.5}
 								mr={2}
-								space={2}
-							>
-								<Text>UP</Text>
-								<Text>DN</Text>
-							</HStack>							
+								flexGrow={0}
+								flexShrink={0}
+								onPress={() => moveUpInList(item, index)}
+							/>
 						:
-							<React.Fragment key={item.id + "-No-Reordering-Buttons"}></React.Fragment>
+							<React.Fragment key={item.id + "-No-Reordering-Button"}></React.Fragment>
 						}
 						<Item
 							item={item}
-							key={item.id + "-The-Item"}
+							key={item.id + "-The-Transform"}
 							stackProps={{
 								flexGrow: 1,
 								flexShrink: 1,
 								overflow: "hidden"
 							}}
 						/>
-						{reordering ? // Reorder Down
-							<React.Fragment key={item.id + "-No-Editing-Buttons"}></React.Fragment>
+						{reordering ?
+							<IconButton
+								key={item.id + "-reorder-down"}
+								icon={<DownIcon size={textSize} color={index === lastTransform ? "transparent" : "primary.400"} />}
+								accessibilityLabel="Move Down in List"
+								bg={index === lastTransform ? "transparent" : "darker"}
+								p={1}
+								my={0.5}
+								ml={2}
+								flexGrow={0}
+								flexShrink={0}
+								onPress={() => moveDownInList(item, index)}
+							/>
 						:
 							<React.Fragment key={item.id + "-Editing-Buttons"}>
 								<IconButton
@@ -336,7 +373,7 @@ const WGTransformations = () => {
 					</HStack>
 				))}
 				<Box h={20} bg="main.900" />
-			</ScrollView>	
+			</ScrollView>
 		</VStack>
 	);
 };

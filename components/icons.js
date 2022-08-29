@@ -51,6 +51,8 @@ export const SuggestLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" 
 // Reordering controls
 export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
 export const StopIcon = (props) => <Icon as={MCI} name="stop" {...props} />;
+export const UpIcon = (props) => <Icon as={Entypo} name="arrow-bold-up" {...props} />;
+export const DownIcon = (props) => <Icon as={Entypo} name="arrow-bold-down" {...props} />;
 
 // Add/Delete/Edit controls
 export const AddIcon = (props) => <Icon as={Ionicons} name="add" {...props} />;

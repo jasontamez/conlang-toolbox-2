@@ -106,69 +106,14 @@ initialAppState.wg = {
 			replace: "$1"
 		},
 		{
-			id: "222",
-			search: "z+k+",
-			replace: "sk",
-			description: "change zk to sk"
-		},
-		{
-			id: "323",
-			search: "(%X)%X+",
-			replace: "$1"
-		},
-		{
-			id: "223",
-			search: "z+k+",
-			replace: "sk",
-			description: "change zk to sk"
-		},
-		{
-			id: "333",
-			search: "(%X)%X+",
-			replace: "$1"
-		},
-		{
-			id: "242",
-			search: "z+k+",
-			replace: "sk",
-			description: "change zk to sk"
-		},
-		{
-			id: "343",
-			search: "(%X)%X+",
-			replace: "$1"
-		},
-		{
-			id: "522",
-			search: "z+k+",
-			replace: "sk",
-			description: "change zk to sk"
-		},
-		{
-			id: "353",
-			search: "(%X)%X+",
-			replace: "$1"
-		},
-		{
-			id: "262",
-			search: "z+k+",
-			replace: "sk",
-			description: "change zk to sk"
-		},
-		{
-			id: "363",
-			search: "(%X)%X+",
-			replace: "$1"
-		},
-		{
 			id: "444",
 			search: "bark",
-			replace: "$1"
+			replace: ""
 		},
 		{
 			id: "555",
 			search: "boof",
-			replace: "$1"
+			replace: "bark"
 		}
 	]
 };
