@@ -71,9 +71,9 @@ const WGChar = () => {
 	// add group
 	const addNewGroup = (closeAfterAdd) => {
 		// attempts to add the modal info as a new group
-		const description = addDescRef.current.value;
-		const label = addLabelRef.current.value;
-		const run = addRunRef.current.value;
+		const description = addDescRef.current.value.trim();
+		const label = addLabelRef.current.value.trim();
+		const run = addRunRef.current.value.trim();
 		const dropoff = addOverrideSwitch ? addOverrideValue : undefined;
 		let msg = [];
 		if(!label) {
@@ -159,17 +159,20 @@ const WGChar = () => {
 	};
 	const maybeSaveEditedGroup = () => {
 		const msg = [];
-		if(!modifiedLabel) {
+		const modLabel = (modifiedLabel.trim());
+		const modDesc = (modifiedDesc.trim());
+		const modRun = (modifiedRun.trim());
+		if(!modLabel) {
 			msg.push("Label not provided");
 		} else if(characterGroups.some(group => 
-			group.label !== editingGroup.label && group.label === modifiedLabel
+			group.label !== editingGroup.label && group.label === modLabel
 		)) {
-			msg.push("Label \"" + modifiedLabel + "\" is already in use");
+			msg.push("Label \"" + modLabel + "\" is already in use");
 		}
-		if (!modifiedDesc) {
+		if (!modDesc) {
 			msg.push("Title not provided");
 		}
-		if (!modifiedRun) {
+		if (!modRun) {
 			msg.push("No characters assigned to the group");
 		}
 		if(msg.length > 0) {
@@ -181,9 +184,9 @@ const WGChar = () => {
 		dispatch(editCharacterGroup({
 			old: editingGroup,
 			edited: {
-				description: modifiedDesc,
-				label: modifiedLabel,
-				run: modifiedRun,
+				description: modDesc,
+				label: modLabel,
+				run: modRun,
 				dropoff: editOverrideSwitch ? editOverrideValue : undefined
 			}
 		}));
@@ -395,7 +398,7 @@ const WGChar = () => {
 								startIcon={<SaveIcon size={descSize} />}
 								px={2}
 								py={1}
-								onPress={() => maybeSaveEditedGroup(true)}
+								onPress={() => maybeSaveEditedGroup()}
 							>SAVE GROUP</Button>
 						</HStack>
 					</Modal.Footer>

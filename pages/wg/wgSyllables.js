@@ -201,7 +201,7 @@ const WGSyllables = () => {
 						}
 					</VStack>
 					<TextAreaSetting
-						rows={Math.min(3, singleWord.length)}
+						rows={Math.max(3, syllablesValue.split(/\n/).length)}
 						value={syllablesValue}
 						text={null}
 						boxProps={{

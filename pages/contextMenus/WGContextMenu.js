@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Pressable,
 	VStack,
@@ -9,7 +9,8 @@ import {
 	HStack,
 	IconButton,
 	Divider,
-	Box
+	Box,
+	Button
 } from 'native-base';
 import { useLocation } from "react-router-native";
 
@@ -24,6 +25,7 @@ const WGContextMenu = () => {
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');
+	const modalRef = useRef(null);
 	const primaryContrast = useContrastText('primary.500');
 	const P = (props) => <Text fontSize={textSize} {...props} />;
 	const I = (props) => <P bg="darker" px={0.5} >/{props.children}/</P>;
@@ -34,7 +36,7 @@ const WGContextMenu = () => {
 	const C = (props) => <B textAlign="center" {...props} />;
 	const HWrap = (props) => <HStack space={1} alignItems="center" flexWrap="wrap" {...props} />;
 	const ModalBody = (props) => (
-		<Modal.Body>
+		<Modal.Body _scrollview={{ref: modalRef}}>
 			<VStack
 				space={4}
 				justifyContent="space-between"
@@ -43,6 +45,12 @@ const WGContextMenu = () => {
 		</Modal.Body>
 	);
 	useEffect(() => {
+		// Since modalRef isn't working, use this hack to
+		//   make it scroll to the top.
+		if(!infoModalOpen) {
+			return;
+		}
+		// END OF HACK (remove infoModalOpen from [list] at end, too)
 		switch (pathname) {
 			case "/wg/characters":
 				setModalTitle("Character Groups");
@@ -342,14 +350,17 @@ const WGContextMenu = () => {
 				setModalTitle("TITLE");
 				setModalBody(<Text>Display Error</Text>);
 		}
-	}, [pathname]);
+	}, [pathname, infoModalOpen]);
 	return (
 		<>
 			<Pressable
 				m="auto"
 				w={6}
 				accessibilityLabel="Information"
-				onPress={() => setInfoModalOpen(true)}
+				onPress={() => {
+					//modalRef.current.scrollTo({x: 0, y: 0, animated: false});
+					setInfoModalOpen(true);
+				}}
 			>
 				<InfoIcon size="md" />
 			</Pressable>
@@ -371,10 +382,14 @@ const WGContextMenu = () => {
 						</HStack>
 					</Modal.Header>
 					{modalBody}
-					<Modal.Footer
-						borderTopWidth={0}
-						h={0}
-					/>
+					<Modal.Footer p={2}>
+						<Button
+							onPress={() => setInfoModalOpen(false)}
+							py={1}
+							px={2}
+							colorScheme="info"
+						>OK</Button>
+					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
 		</>

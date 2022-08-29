@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { v4 as uuidv4 } from 'uuid';
 import blankAppState from './blankAppState';
 
 const initialState = blankAppState.wg;
@@ -17,12 +16,8 @@ const deleteCharacterGroupFunc = (state, action) => {
 };
 const editCharacterGroupFunc = (state, action) => {
 	const {old, edited} = action.payload;
-	state.characterGroups = state.characterGroups.map(group => {
-		if(group.label !== old.label) {
-			return group;
-		}
-		return edited;
-	});
+	const { label } = old;
+	state.characterGroups = state.characterGroups.map(group => group.label === label ? edited : group);
 	return state;
 };
 
@@ -53,7 +48,27 @@ const setSyllableOverrideFunc = (state, action) => {
 	return state;
 };
 
-//const Func = (state, action) => {};
+// TRANSFORMS
+const addTransformFunc = (state, action) => {
+	// { id, search, replace, ?description }
+	state.transforms.push(action.payload);
+	return state;
+};
+const deleteTransformFunc = (state, action) => {
+	const id = action.payload;
+	state.transforms = state.transforms.filter(t => t.id !== id);
+	return state;
+};
+const editTransformFunc = (state, action) => {
+	const item = action.payload;
+	const { id } = item;
+	state.transforms = state.transforms.map(t => t.id === id ? item : t);
+	return state;
+};
+const rearrangeTransformsFunc = (state, action) => {
+	state.transforms = action.payload;
+	return state;
+};
 
 // SETTINGS
 const setMonosyllablesRateFunc = (state, action) => {
@@ -143,6 +158,10 @@ const wgSlice = createSlice({
 		setWordMiddle: setWordMiddleFunc,
 		setWordFinal: setWordFinalFunc,
 		setSyllableOverride: setSyllableOverrideFunc,
+		addTransform: addTransformFunc,
+		deleteTransform: deleteTransformFunc,
+		editTransform: editTransformFunc,
+		rearrangeTransforms: rearrangeTransformsFunc,
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
 		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
@@ -174,6 +193,10 @@ export const {
 	setWordMiddle,
 	setWordFinal,
 	setSyllableOverride,
+	addTransform,
+	deleteTransform,
+	editTransform,
+	rearrangeTransforms,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,
@@ -283,41 +306,35 @@ export const equalityCheck = (stateA, stateB) => {
 		return false;
 	}
 	// Test character groups
-	if(characterGroupsA !== characterGroupsB &&
-		(
-			characterGroupsA.length !== characterGroupsB.length ||
-			characterGroupsA.some((a, i) => {
-				const props = ["description", "label", "run", "dropoff"];
-				const b = characterGroupsB[i];
-				return(a !== b) && props.some(p => a[p] !== b[p]);
-			})
-		)
-	) {
+	if(testIfArrayOfObjectsAreUnequal(
+		characterGroupsA,
+		characterGroupsB,
+		["description", "label", "run", "dropoff"]
+	)) {
 		// At least one group was unequal
 		return false;
 	}
 	// Test transforms
-	const A = [
-		transformsA // TO-DO: Code for comparing actual transforms
-	];
-	const B = [
-		transformsB
-	];
-	if(A.some((array, i) => {
-		return (array !== B[i]) && String(array) !== String(B[i]);
-	})) {
-		// At least one array was unequal
+	if(testIfArrayOfObjectsAreUnequal(
+		transformsA,
+		transformsB,
+		["id", "search", "replace", "description"])
+	) {
+		// At least one transform was unequal
 		return false;
 	}
-	// Test objects
-	// (only one object right now)
-	return (
-		syllableDropoffOverridesA === syllableDropoffOverridesB
-		|| (
-			syllableDropoffOverridesA.singleWord === syllableDropoffOverridesB.singleWord
-			&& syllableDropoffOverridesA.wordInitial === syllableDropoffOverridesB.wordInitial
-			&& syllableDropoffOverridesA.wordMiddle === syllableDropoffOverridesB.wordMiddle
-			&& syllableDropoffOverridesA.wordFinal === syllableDropoffOverridesB.wordFinal
-		)
+	// Test syllableDropoffOverrides
+	return !testIfArrayOfObjectsAreUnequal(
+		[syllableDropoffOverridesA],
+		[syllableDropoffOverridesB],
+		["singleWord", "wordInitial", "wordMiddle", "wordFinal"]
 	);
+};
+
+const testIfArrayOfObjectsAreUnequal = (A, B, props) => {
+	return A.length !== B.length
+		|| A.some((a, i) => {
+			const b = B[i];
+			return (a !== b) && props.some(p => a[p] !== b[p]);
+		});
 };

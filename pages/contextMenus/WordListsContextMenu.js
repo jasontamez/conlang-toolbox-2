@@ -155,10 +155,14 @@ const WordListsContextMenu = () => {
 							</Text>
 						</VStack>
 					</Modal.Body>
-					<Modal.Footer
-						borderTopWidth={0}
-						h={0}
-					/>
+					<Modal.Footer p={2}>
+						<Button
+							onPress={() => setInfoModalOpen(false)}
+							py={1}
+							px={2}
+							colorScheme="info"
+						>OK</Button>
+					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
 		</>

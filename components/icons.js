@@ -48,7 +48,8 @@ export const WGCharactersIcon = (props) => <ICON size="md" as={Entypo} name="lan
 export const WGSyllablesIcon = (props) => <ICON size="md" as={MCI} name="text" {...props} />;
 export const WGTransformationsIcon = (props) => <ICON size="md" as={MaterialIcons} name="transform" {...props} />;
 export const WGOutputIcon = (props) => <ICON size="md" as={Ionicons} name="document-text-outline" {...props} />;
-
+export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
+export const StopIcon = (props) => <Icon as={MCI} name="stop" {...props} />;
 
 export const AddIcon = (props) => <Icon as={Ionicons} name="add" {...props} />;
 export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-outline" {...props} />;
