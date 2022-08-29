@@ -20,7 +20,7 @@ import {
 import debounce from '../components/debounce';
 import {
 	EditIcon,
-	DoubleCaretIcon,
+	SortEitherIcon,
 	SortDownIcon,
 	SortUpIcon,
 	AddIcon,
@@ -420,7 +420,7 @@ const Lex = () => {
 												overflow: "hidden"
 											}
 										}}
-										startIcon={<DoubleCaretIcon mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
+										startIcon={<SortEitherIcon mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
 										{...props}
 									>
 										<Box

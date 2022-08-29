@@ -25,7 +25,7 @@ import ReAnimated, {
 
 import {
 	AddIcon,
-	ChevronLeftIcon,
+	SuggestLeftIcon,
 	CloseCircleIcon,
 	EditIcon,
 	EquiprobableIcon,
@@ -446,7 +446,7 @@ const WGChar = () => {
 								</HStack>
 								<Button
 									startIcon={
-										<ChevronLeftIcon
+										<SuggestLeftIcon
 											size={descSize}
 											color={primaryContrast}
 										/>

@@ -28,7 +28,6 @@ export const SettingsIcon = (props) => <Icon as={Ionicons} name="settings-sharp"
 export const MenuIcon = (props) => <Icon as={Entypo} name="menu" {...props} />;
 export const DotsIcon = (props) => <Icon as={Ionicons} name="ellipsis-vertical" {...props} />
 export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" {...props} />;
-// as={Entypo} name="language"
 
 // MS and About pages
 export const DotIcon = (props) => <ICON as={FontAwesome} name="circle" size="xs" {...props} />;
@@ -36,8 +35,7 @@ export const DotIcon = (props) => <ICON as={FontAwesome} name="circle" size="xs"
 // Lexicon page
 export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />;
 export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />;
-export const DoubleCaretIcon = (props) => <ICON as={FAFive} name="sort" size="xs" {...props} />;
-export const EditIcon = (props) => <ICON as={MaterialIcons} name="edit" size="xs" {...props} />;
+export const SortEitherIcon = (props) => <ICON as={FAFive} name="sort" size="xs" {...props} />;
 
 // MS pages
 export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />;
@@ -48,11 +46,16 @@ export const WGCharactersIcon = (props) => <ICON size="md" as={Entypo} name="lan
 export const WGSyllablesIcon = (props) => <ICON size="md" as={MCI} name="text" {...props} />;
 export const WGTransformationsIcon = (props) => <ICON size="md" as={MaterialIcons} name="transform" {...props} />;
 export const WGOutputIcon = (props) => <ICON size="md" as={Ionicons} name="document-text-outline" {...props} />;
+export const SuggestLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" {...props} />;
+
+// Reordering controls
 export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
 export const StopIcon = (props) => <Icon as={MCI} name="stop" {...props} />;
 
+// Add/Delete/Edit controls
 export const AddIcon = (props) => <Icon as={Ionicons} name="add" {...props} />;
 export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-outline" {...props} />;
+export const EditIcon = (props) => <ICON as={MaterialIcons} name="edit" size="xs" {...props} />;
 export const RemoveCircleIcon = (props) => <Icon as={Ionicons} name="remove-circle-outline" {...props} />;
 export const SaveIcon = (props) => <Icon as={Ionicons} name="save-outline" {...props} />;
 export const ExportIcon = (props) => <Icon as={Fontisto} name="export"  {...props} />;
@@ -61,13 +64,12 @@ export const CloseCircleIcon = (props) => <Icon as={Ionicons} name="close-circle
 export const CloseIcon = (props) => <ICON as={Ionicons} name="close-outline" size="xs" {...props} />;
 export const DragHandleIcon = (props) => <Icon as={MaterialIcons} name="drag-handle" {...props} />;
 
-
+// Info controls
 export const InfoIcon = (props) => <Icon as={MCI} name="information" {...props} />;
 export const OkIcon = (props) => <Icon as={Ionicons} name="checkmark-circle-outline" {...props} />;
 export const HelpIcon = (props) => <Icon as={Ionicons} name="help-circle-outline" {...props} />;
 
-export const ChevronLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" {...props} />;
-
+// Slider controls
 export const SharpDropoffIcon = (props) => (
 	<Icon viewBox="0 0 256 256" {...props}>
 		<Polygon
