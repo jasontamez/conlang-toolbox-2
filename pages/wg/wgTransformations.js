@@ -15,6 +15,11 @@ import {
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
+import ReAnimated, {
+	CurvedTransition,
+	StretchInY,
+	StretchOutY
+} from "react-native-reanimated";
 
 import {
 	AddIcon,
@@ -297,82 +302,88 @@ const WGTransformations = () => {
 				placement="bottom-left"
 			/>
 			<ScrollView bg="main.900">
-				{transforms.map((item, index) => (
-					<HStack
-						key={item.id}
-						alignItems="center"
-						justifyContent="flex-start"
-						borderBottomWidth={0.5}
-						borderColor="main.700"
-						py={2.5}
-						px={2}
-						bg="main.800"
-						w="full"
-					>
-						{reordering ?
-							<IconButton
-								key={item.id + "-reorder-up"}
-								icon={<UpIcon size={textSize} color={index === 0 ? "transparent" : "primary.400"} />}
-								accessibilityLabel="Move Up in List"
-								bg={index === 0 ? "transparent" : "darker"}
-								p={1}
-								my={0.5}
-								mr={2}
-								flexGrow={0}
-								flexShrink={0}
-								onPress={() => moveUpInList(item, index)}
-							/>
-						:
-							<React.Fragment key={item.id + "-No-Reordering-Button"}></React.Fragment>
-						}
-						<Item
-							item={item}
-							key={item.id + "-The-Transform"}
-							stackProps={{
-								flexGrow: 1,
-								flexShrink: 1,
-								overflow: "hidden"
-							}}
-						/>
-						{reordering ?
-							<IconButton
-								key={item.id + "-reorder-down"}
-								icon={<DownIcon size={textSize} color={index === lastTransform ? "transparent" : "primary.400"} />}
-								accessibilityLabel="Move Down in List"
-								bg={index === lastTransform ? "transparent" : "darker"}
-								p={1}
-								my={0.5}
-								ml={2}
-								flexGrow={0}
-								flexShrink={0}
-								onPress={() => moveDownInList(item, index)}
-							/>
-						:
-							<React.Fragment key={item.id + "-Editing-Buttons"}>
+				<ReAnimated.View
+					entering={StretchInY}
+					exiting={StretchOutY}
+					layout={CurvedTransition}
+				>
+					{transforms.map((item, index) => (
+						<HStack
+							key={item.id}
+							alignItems="center"
+							justifyContent="flex-start"
+							borderBottomWidth={0.5}
+							borderColor="main.700"
+							py={2.5}
+							px={2}
+							bg="main.800"
+							w="full"
+						>
+							{reordering ?
 								<IconButton
-									icon={<EditIcon size={textSize} color="primary.400" />}
-									accessibilityLabel="Edit"
-									bg="transparent"
+									key={item.id + "-reorder-up"}
+									icon={<UpIcon size={textSize} color={index === 0 ? "transparent" : "primary.400"} />}
+									accessibilityLabel="Move Up in List"
+									bg={index === 0 ? "transparent" : "darker"}
 									p={1}
-									m={0.5}
+									my={0.5}
+									mr={2}
 									flexGrow={0}
 									flexShrink={0}
-									onPress={() => setEditingTransform(item)}
+									onPress={() => moveUpInList(item, index)}
 								/>
+							:
+								<React.Fragment key={item.id + "-No-Reordering-Button"}></React.Fragment>
+							}
+							<Item
+								item={item}
+								key={item.id + "-The-Transform"}
+								stackProps={{
+									flexGrow: 1,
+									flexShrink: 1,
+									overflow: "hidden"
+								}}
+							/>
+							{reordering ?
 								<IconButton
-									icon={<TrashIcon size={textSize} color="danger.400" />}
-									accessibilityLabel="Delete"
-									bg="transparent"
+									key={item.id + "-reorder-down"}
+									icon={<DownIcon size={textSize} color={index === lastTransform ? "transparent" : "primary.400"} />}
+									accessibilityLabel="Move Down in List"
+									bg={index === lastTransform ? "transparent" : "darker"}
 									p={1}
-									m={0.5}
+									my={0.5}
+									ml={2}
 									flexGrow={0}
 									flexShrink={0}
-									onPress={() => maybeDeleteTransform(item)}
+									onPress={() => moveDownInList(item, index)}
 								/>
-							</React.Fragment>
-						}
-					</HStack>
-				))}
+							:
+								<React.Fragment key={item.id + "-Editing-Buttons"}>
+									<IconButton
+										icon={<EditIcon size={textSize} color="primary.400" />}
+										accessibilityLabel="Edit"
+										bg="transparent"
+										p={1}
+										m={0.5}
+										flexGrow={0}
+										flexShrink={0}
+										onPress={() => setEditingTransform(item)}
+									/>
+									<IconButton
+										icon={<TrashIcon size={textSize} color="danger.400" />}
+										accessibilityLabel="Delete"
+										bg="transparent"
+										p={1}
+										m={0.5}
+										flexGrow={0}
+										flexShrink={0}
+										onPress={() => maybeDeleteTransform(item)}
+									/>
+								</React.Fragment>
+							}
+						</HStack>
+					))}
+				</ReAnimated.View>
 				<Box h={20} bg="main.900" />
 			</ScrollView>
 		</VStack>
