@@ -21,7 +21,7 @@ const AppSettings = () => {
 				borderBottomWidth={1}
 				borderBottomColor="main.900"
 			>
-				<VStack 
+				<VStack
 					flexGrow={1}
 					flexShrink={2}
 					mr={2}
@@ -66,5 +66,5 @@ const AppSettings = () => {
 		</ScrollView>
 	);
 };
- 
+
 export default AppSettings;

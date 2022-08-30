@@ -173,7 +173,7 @@ const WordLists = () => {
 		// reset saving-for-lexicon, if needed
 		if(pickAndSaveForLexicon) {
 			dispatch(togglePickAndSaveForLexicon());
-			dispatch(setSavingForLexicon({}));							
+			dispatch(setSavingForLexicon({}));
 		}
 		// send toast message
 		doToast({

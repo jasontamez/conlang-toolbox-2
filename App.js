@@ -13,13 +13,13 @@ import { useFonts } from 'expo-font';
 //	Arimo_700Bold,
 //	Arimo_700Bold_Italic
 //} from '@expo-google-fonts/arimo';
-import { 
+import {
 	NotoSans_400Regular,
 	NotoSans_400Regular_Italic,
 	NotoSans_700Bold,
 	NotoSans_700Bold_Italic
 } from '@expo-google-fonts/noto-sans';
-//import { 
+//import {
 //	NotoSansJP_100Thin,
 //	NotoSansJP_300Light,
 //	NotoSansJP_400Regular,
@@ -27,13 +27,13 @@ import {
 //	NotoSansJP_700Bold,
 //	NotoSansJP_900Black
 //} from '@expo-google-fonts/noto-sans-jp';
-import { 
+import {
 	NotoSerif_400Regular,
 	NotoSerif_400Regular_Italic,
 	NotoSerif_700Bold,
 	NotoSerif_700Bold_Italic
 } from '@expo-google-fonts/noto-serif';
-//import { 
+//import {
 //	NotoSerifJP_200ExtraLight,
 //	NotoSerifJP_300Light,
 //	NotoSerifJP_400Regular,
@@ -42,7 +42,7 @@ import {
 //	NotoSerifJP_700Bold,
 //	NotoSerifJP_900Black
 //} from '@expo-google-fonts/noto-serif-jp';
-import { 
+import {
 	SourceCodePro_200ExtraLight,
 	SourceCodePro_300Light,
 	SourceCodePro_400Regular,
@@ -60,11 +60,11 @@ import {
 	SourceCodePro_800ExtraBold_Italic,
 	SourceCodePro_900Black_Italic
 } from '@expo-google-fonts/source-code-pro';
-//import { 
+//import {
 //	Scheherazade_400Regular,
 //	Scheherazade_700Bold
 //} from '@expo-google-fonts/scheherazade';
-//import { 
+//import {
 //	Sriracha_400Regular
 //} from '@expo-google-fonts/sriracha'
 
@@ -191,7 +191,7 @@ const AppRoutes = () => {
 				}}
 			>
 				<AppHeader />
-				<Routes> { 
+				<Routes> {
 					<Route path="/wg/*" element={<WG />}>
 						<Route index element={<WGSettings />} />
 						<Route path="characters" element={<WGCharacters />} />

@@ -147,7 +147,7 @@ const MenuModal = () => {
 							>
 								<Text {...textOptions}>{menuTitle || title}</Text>
 							</VStack>
-							<ReAnimated.View 
+							<ReAnimated.View
 								 style={{
 									...caretAnimationStyle,
 									display: "flex",

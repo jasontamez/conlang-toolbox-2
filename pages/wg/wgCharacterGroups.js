@@ -165,7 +165,7 @@ const WGChar = () => {
 		const modRun = (modifiedRun.trim());
 		if(!modLabel) {
 			msg.push("Label not provided");
-		} else if(characterGroups.some(group => 
+		} else if(characterGroups.some(group =>
 			group.label !== editingGroup.label && group.label === modLabel
 		)) {
 			msg.push("Label \"" + modLabel + "\" is already in use");

@@ -119,7 +119,7 @@ const WGOutput = () => {
 			OUTPUT.append($d("You have no syllables defined."));
 			endEarly = true;
 		}
-		if (multipleSyllableTypes && 
+		if (multipleSyllableTypes &&
 			(
 				(monosyllablesRate > 0 && singleWord === "")
 				|| wordInitial === ""
@@ -148,8 +148,8 @@ const WGOutput = () => {
 		// columnar stuff takes a bit to process, so delay a bit
 		dispatch(setLoadingPage(false));
 	};
-	
-	
+
+
 	// // //
 	// Generate a psuedo-text
 	// // //
@@ -203,7 +203,7 @@ const WGOutput = () => {
 		}
 		where.append(final);
 	};
-	
+
 	// // //
 	// Generate Syllables
 	// // //
@@ -253,7 +253,7 @@ const WGOutput = () => {
 		}
 		return OUTPUT;
 	};
-	
+
 	// // //
 	// Generate One Word
 	// // //
@@ -307,8 +307,8 @@ const WGOutput = () => {
 		}
 		return OUTPUT;
 	};
-	
-	
+
+
 	// // //
 	// Apply Rewrite Rules
 	// // //
@@ -318,7 +318,7 @@ const WGOutput = () => {
 		});
 		return word;
 	};
-	
+
 	// // //
 	// Generate Every Possible Syllable
 	// // //
@@ -380,7 +380,7 @@ const WGOutput = () => {
 			next: next
 		}
 	};
-	
+
 	// // //
 	// Wordlist
 	// // //
@@ -435,7 +435,7 @@ const calculateCategoryReferenceRegex = (rule, mapObj) => {
 				reformed += "[^" + escapeRegexp(charGroup.run) + "]" + bit.slice(1);
 			} else {
 				// If charGroup is not found, it gets ignored.
-				reformed = "!%" + bit;				
+				reformed = "!%" + bit;
 			}
 		}
 		// Now check for categories
@@ -454,7 +454,7 @@ const calculateCategoryReferenceRegex = (rule, mapObj) => {
 				reformed += "[" + escapeRegexp(charGroup.run) + "]" + bit.slice(1);
 			} else {
 				// If charGroup is not found, it gets ignored.
-				reformed = "%" + bit;				
+				reformed = "%" + bit;
 			}
 		}
 		// Save reformed for later!

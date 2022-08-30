@@ -1071,15 +1071,15 @@ const themes = {
 };
 const mappings = {
 	"Default": {
-		main: "emerald", 
-		text: "green", 
-		error: "red", 
-		danger: "red", 
-		success: "lime", 
-		warning: "yellow", 
-		primary: "teal", 
-		info: "teal", 
-		secondary: "purple", 
+		main: "emerald",
+		text: "green",
+		error: "red",
+		danger: "red",
+		success: "lime",
+		warning: "yellow",
+		primary: "teal",
+		info: "teal",
+		secondary: "purple",
 		tertiary: "blue"
 	},
 	"Solarized Light": {
@@ -1095,15 +1095,15 @@ const mappings = {
 		text: "cyan"
 	},
 	"Solarized Dark": {
-		main: "lightBlue", 
-		text: "yellow", 
-		error: "red", 
-		danger: "red", 
-		success: "lime", 
-		warning: "amber", 
-		info: "orange", 
-		primary: "orange", 
-		secondary: "indigo", 
+		main: "lightBlue",
+		text: "yellow",
+		error: "red",
+		danger: "red",
+		success: "lime",
+		warning: "amber",
+		info: "orange",
+		primary: "orange",
+		secondary: "indigo",
 		tertiary: "cyan"
 	},
 	"Light": {
@@ -1119,15 +1119,15 @@ const mappings = {
 		danger: "red"
 	},
 	"Dark": {
-		main: "gray", 
-		text: "trueGray", 
-		error: "pink", 
-		danger: "pink", 
-		success: "green", 
-		warning: "amber", 
-		info: "fuchsia", 
-		primary: "fuchsia", 
-		secondary: "blue", 
+		main: "gray",
+		text: "trueGray",
+		error: "pink",
+		danger: "pink",
+		success: "green",
+		warning: "amber",
+		info: "fuchsia",
+		primary: "fuchsia",
+		secondary: "blue",
 		tertiary: "teal"
 	}
 };
