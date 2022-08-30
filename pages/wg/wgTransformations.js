@@ -53,6 +53,7 @@ const WGTransformations = () => {
 	const addDescriptionRef = useRef(null);
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [deletingTransform, setDeletingTransform] = useState(false);
+	const [transformDeleteString, setTransformDeleteString] = useState("");
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
 	const primaryContrast = useContrastText("primary.500");
@@ -60,6 +61,16 @@ const WGTransformations = () => {
 		if(disableConfirms) {
 			return doDeleteTransform(transform);
 		}
+		setTransformDeleteString(
+			transform.description ?
+				"\""
+				+ transform.description
+				+ "\""
+			:
+			transform.search
+				+ " ⟶ "
+				+ transform.replace
+		);
 		setDeletingTransform(transform);
 	};
 	const doDeleteTransform = (transform = deletingTransform) => {
@@ -169,16 +180,7 @@ const WGTransformations = () => {
 				alertOpen={deletingTransform}
 				setAlertOpen={setDeletingTransform}
 				bodyContent={
-					<Text fontSize={textSize}>Are you sure you want to delete the transform <Text bold>{
-						deletingTransform.description ?
-							"\""
-							+ deletingTransform.description
-							+ "\""
-						:
-							deletingTransform.search
-							+ " ⟶ "
-							+ deletingTransform.replace
-					}</Text>? This cannot be undone.</Text>
+					<Text fontSize={textSize}>Are you sure you want to delete the transform <Text bold>{transformDeleteString}</Text>? This cannot be undone.</Text>
 				}
 				continueText="Yes, Delete It"
 				continueProps={{
@@ -234,12 +236,11 @@ const WGTransformations = () => {
 							<TextSetting
 								text="Replacement Expression"
 								placeholder="(what to replace with)"
-								boxProps={{ py: 2 }}
 								inputProps={{
 									ref: addReplaceRef,
 									mt: 1
 								}}
-								onChangeText={(v) => setModifiedReplace(v)}
+								boxProps={{ py: 2 }}
 							/>
 							<TextSetting
 								text="Transformation Description"
@@ -261,7 +262,7 @@ const WGTransformations = () => {
 								py={1}
 								mx={1}
 								onPress={() => addNewTransform(false)}
-							>ADD TRANSFORM</Button>
+							>ADD</Button>
 							<Button
 								startIcon={<AddIcon size={descSize} />}
 								px={2}

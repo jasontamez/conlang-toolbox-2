@@ -77,8 +77,8 @@ const WGSettings = () => {
 		doToast({
 			toast,
 			msg: "Info has been cleared.",
-			scheme: "success",
-			placement: "top"
+			scheme: "danger",
+			placement: "bottom"
 		})
 	};
 	const maybeLoadInfo = () => {};

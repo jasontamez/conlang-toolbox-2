@@ -57,6 +57,7 @@ const WGChar = () => {
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [saveGroupError, setSaveGroupError] = useState('');
 	const [deletingGroup, setDeletingGroup] = useState(false);
+	const [groupDeletingString, setGroupDeletingString] = useState("");
 	const [editingGroup, setEditingGroup] = useState(false);
 	const [modifiedDesc, setModifiedDesc] = useState("");
 	const [modifiedLabel, setModifiedLabel] = useState("");
@@ -203,6 +204,7 @@ const WGChar = () => {
 			return doDeleteGroup(group);
 		}
 		// open the delete alert
+		setGroupDeletingString(group.label);
 		setDeletingGroup(group);
 	};
 	const doDeleteGroup = (group = deletingGroup) => {
@@ -269,7 +271,7 @@ const WGChar = () => {
 			<StandardAlert
 				alertOpen={deletingGroup}
 				setAlertOpen={setDeletingGroup}
-				bodyContent={<Text fontSize={textSize}>Are you sure you want to delete the character group <Text bold>{deletingGroup.label}</Text>? This cannot be undone.</Text>}
+				bodyContent={<Text fontSize={textSize}>Are you sure you want to delete the character group <Text bold>{groupDeletingString}</Text>? This cannot be undone.</Text>}
 				continueText="Yes, Delete It"
 				continueProps={{
 					bg: "danger.500",
@@ -517,7 +519,7 @@ const WGChar = () => {
 								py={1}
 								mx={1}
 								onPress={() => addNewGroup(false)}
-							>ADD GROUP</Button>
+							>ADD</Button>
 							<Button
 								startIcon={<AddIcon size={descSize} />}
 								px={2}
