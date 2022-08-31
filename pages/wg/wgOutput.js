@@ -19,6 +19,8 @@ import { sizes } from "../../store/appStateSlice";
 import {
 	equalityCheck
 } from "../../store/wgSlice";
+import StandardAlert from "../../components/StandardAlert";
+import { useWindowDimensions } from "react-native";
 
 const WGOutput = () => {
 	const {
@@ -52,7 +54,13 @@ const WGOutput = () => {
 	} = useSelector(state => state.wg, equalityCheck);
 	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
+	const [alertOpen, setAlertOpen] = useState(false);
+	const [alertMsg, setAlertMsg] = useState("");
+	const [displayedWords, setDisplayedWords] = useState([]);
+	const [displayedColumns, setDisplayedColumns] = useState(1);
+	const [displayedText, setDisplayedText] = useState("");
 	const textSize = useBreakpointValue(sizes.sm);
+	const getRandomPercentage = (max = 100) => Math.random() * max;
 
 	// // //
 	// Convenience Variables
@@ -104,20 +112,14 @@ const WGOutput = () => {
 	// // //
 	// Generate Output!
 	// // //
-	const generateOutput = async (OUTPUT = outputPane) => {
-		let endEarly = false;
-		// Clear any previous output.
-		while(OUTPUT.firstChild !== null) {
-			OUTPUT.removeChild(OUTPUT.firstChild);
-		}
-		// Sanity check - TO-DO: change to StandardAlerts
+	const generateOutput = async () => {
+		// Sanity check
+		let errors = [];
 		if(characterGroups.length === 0) {
-			OUTPUT.append($d("You have no character groups defined."));
-			endEarly = true;
+			errors.push("You have no character groups defined.");
 		}
 		if (!multipleSyllableTypes && singleWord === "") {
-			OUTPUT.append($d("You have no syllables defined."));
-			endEarly = true;
+			errors.push("You have no syllables defined.");
 		}
 		if (multipleSyllableTypes &&
 			(
@@ -127,149 +129,146 @@ const WGOutput = () => {
 				|| wordFinal === ""
 			)
 		) {
-			OUTPUT.append($d("You are missing one or more types of syllables."));
-			endEarly = true;
+			errors.push("You are missing one or more types of syllables.");
 		}
-		if(endEarly) {
+		// Load an alert if needed
+		if(errors.length > 0) {
+			setAlertMsg(errors.join(" "));
+			setAlertOpen(true);
 			return;
 		}
+		// Set up loading screen, clear any old info, etc
+		// TO-DO: loading screen
+		setDisplayedText("");
+		setDisplayedWords([]);
 		// Determine what we're making.
-		if(output === "text") {
-			// pseudotext
-			OUTPUT.style.columnWidth = "auto";
-			return generatePseudoText(OUTPUT);
+		if (output === "text") {
+			return generatePseudoText();
+		} else if (output === "syllables") {
+			return generateEverySyllable(capitalizeWords);
 		}
-		// Every syllable, or a wordlist
-		dispatch(setLoadingPage("generatingWords"));
-		const resolveFunc = (output === "syllables") ? getEverySyllable : makeWordlist;
-		let result = await resolveFunc(capitalizeWords);
-		OUTPUT.style.columnWidth = wordlistMultiColumn ? getWidestWord(result) : "auto";
-		result.forEach((bit) => OUTPUT.append($t(bit, "div")));
-		// columnar stuff takes a bit to process, so delay a bit
-		dispatch(setLoadingPage(false));
+		return generateWordList(capitalizeWords);
 	};
 
 
 	// // //
 	// Generate a psuedo-text
 	// // //
-	const generatePseudoText = async (where) => {
+	const generatePseudoText = async () => {
 		let text = [];
-		let final = $d();
-		let sentenceNumber = 0;
-		while(sentenceNumber < sentencesPerText) {
-			sentenceNumber++;
-			let sentence = [];
-			let staging = [];
-			let wordNumber = 0;
+		for(
+			let sentenceNumber = 0;
+			sentenceNumber < sentencesPerText;
+			sentenceNumber++
+		) {
+			let sentence = "";
 			let maxWords = 3;
 			for(maxWords = 3; true; maxWords = Math.max((maxWords + 1) % 15, 3)) {
-				// The 'true' in there means this loop never ends on its own.
-				if ((Math.random() * 100) < (maxWords < 5 ? 35 : (maxWords < 9 ? 50 : 25))) {
+				// The 'true' in this for loop means it never ends on its own.
+				const maxChance = (
+					maxWords < 5 ?
+						35
+					: (maxWords < 9 ? 50 : 25)
+				);
+				// 35% chance of 3-4 word sentence
+				// 50% chance of 5-8 word sentence
+				// 25% chance of 9-15 word sentence
+				if (getRandomPercentage() < maxChance) {
 					break;
 				}
 			}
-			while(wordNumber < maxWords) {
-				wordNumber++;
-				sentence.push($t(makeOneWord(wordNumber < 2 && capitalizeSentences)));
+			sentence = makeOneWord(capitalizeSentences);
+			for(let n = 2; n <= maxWords; n++) {
+				sentence = sentence + " " + makeOneWord(false);
 			}
-			let full = text.join(" ");
-			staging.push(sentence.shift());
-			while (sentence.length > 1) {
-				staging.push(" ", sentence.shift());
-			}
-			let type = Math.random() * 12;
-			if(type < 9) {
+			const sentenceType = getRandomPercentage(12);
+			let PRE = exclamatorySentencePre;
+			let POST = exclamatorySentencePost;
+			if(sentenceType < 9) {
 				// Declarative three-fourths the time
-				full = declarativeSentencePre + full + declarativeSentencePost;
-				declarativeSentencePre && staging.unshift(declarativeSentencePre);
-				declarativeSentencePost && staging.push(declarativeSentencePost);
-			} else if (type < 11) {
+				PRE = declarativeSentencePre;
+				POST = declarativeSentencePost;
+			} else if (sentenceType < 11) {
 				// Interrogative one-sixth the time
-				full = interrogativeSentencePre + full + interrogativeSentencePost;
-				interrogativeSentencePre && staging.unshift(interrogativeSentencePre);
-				interrogativeSentencePost && staging.push(interrogativeSentencePost);
+				PRE = interrogativeSentencePre;
+				POST = interrogativeSentencePost;
 			} else {
 				// Exclamatory one-twelfth the time
-				full = exclamatorySentencePre + full + exclamatorySentencePost;
-				exclamatorySentencePre && staging.unshift(exclamatorySentencePre);
-				exclamatorySentencePost && staging.push(exclamatorySentencePost);
 			}
-			text.push(staging);
+			text.push(`${PRE || ""}${sentence}${POST || ""}`);
 		}
-		text.length > 0 && final.append(...text.shift());
-		while(text.length > 0) {
-			final.append(" ", ...text.shift())
-		}
-		where.append(final);
+		// TO-DO: remove loading screen?
+		setDisplayedText(text.join(" "));
 	};
 
 	// // //
 	// Generate Syllables
 	// // //
 	const makeSyllable = (syllList, overrideRate) => {
+		// Chooses a syllable from the given list
+		const max = syllList.length;
 		let chosen;
-		let max = syllList.length;
-		const rate = overrideRate === undefined ? syllableBoxDropoff : overrideRate;
+		let rate = overrideRate === undefined ? syllableBoxDropoff : overrideRate;
 		if(rate <= 0) {
-			return translateSyllable(syllList[Math.floor(Math.random() * max)]);
+			return translateSyllable(syllList[Math.floor(getRandomPercentage(max))]);
 		}
-		rate = rate + 5;
-		let toPick = 0;
-		for(toPick = 0; true; toPick = (toPick + 1) % max) {
-			// The 'true' in there means this loop never ends on its own.
-			if ((Math.random() * 100) < rate) {
+		for(let toPick = 0, counter = 0; true; toPick = (toPick + 1) % max) {
+			// The 'true' in this for loop means it never ends on its own.
+			if (getRandomPercentage() < rate) {
 				chosen = syllList[toPick];
 				break;
+			}
+			// Every 50 loops, increase the rate, just in case we need it
+			if(++counter >= 50) {
+				counter = 0;
+				rate++;
 			}
 		}
 		return translateSyllable(chosen);
 	};
 	const translateSyllable = (syll) => {
-		let chars = syll.split("");
-		let OUTPUT = "";
-		while(chars.length > 0) {
-			let current = chars.shift();
-			let charGroup = charGroupMap[current];
+		// change "CV" to "ka" or "su" or whatever
+		const chars = syll.split("");
+		let result = "";
+		chars.forEach(current => {
+			const charGroup = charGroupMap[current];
 			if(charGroup === undefined) {
-				OUTPUT += current;
+				result += current;
 			} else {
-				let thisRate = (charGroup.dropoffOverride === undefined ? characterGroupDropoff : charGroup.dropoffOverride) + 5;
-				let choices = charGroup.run;
-				let max = choices.length;
+				const thisRate = (charGroup.dropoffOverride === undefined ? characterGroupDropoff : charGroup.dropoffOverride) + 5;
+				const choices = charGroup.run;
+				const max = choices.length;
 				if(thisRate === 0) {
-					OUTPUT += choices[Math.floor(Math.random() * max)];
+					result += choices[Math.floor(getRandomPercentage(max))];
 				} else {
-					let toPick = 0;
-					for(toPick = 0; true; toPick = (toPick + 1) % max) {
-						// The 'true' in there means this loop never ends on its own.
-						if ((Math.random() * 100) < thisRate) {
-							OUTPUT += choices[toPick];
+					for(let toPick = 0; true; toPick = (toPick + 1) % max) {
+						// The 'true' in this for loop means it never ends on its own.
+						if (getRandomPercentage() < thisRate) {
+							result += choices[toPick];
 							break;
 						}
 					}
 				}
 			}
-		}
-		return OUTPUT;
+		});
+		return result;
 	};
 
 	// // //
 	// Generate One Word
 	// // //
-	const makeOneWord = (capitalize) => {
+	const makeOneWord = (capitalizeThis) => {
 		let numberOfSyllables = 1;
 		let word = [];
-		let OUTPUT;
+		let result;
 		// Determine number of syllables
-		if((Math.random() * 100) >= monosyllablesRate) {
+		if(getRandomPercentage() >= monosyllablesRate) {
 			// More than 1. Add syllables, favoring a lower number of syllables.
 			let max = maxSyllablesPerWord - 2;
-			let toAdd = 0;
 			numberOfSyllables = 2;
-			for(toAdd = 0; true; toAdd = (toAdd + 1) % max) {
-				// The 'true' in there means this loop never ends on its own.
-				if ((Math.random() * 100) < 50) {
+			for(let toAdd = 0; true; toAdd = (toAdd + 1) % max) {
+				// The 'true' in this for loop means it never ends on its own.
+				if (getRandomPercentage() < 50) {
 					numberOfSyllables += toAdd;
 					break;
 				}
@@ -282,30 +281,34 @@ const WGOutput = () => {
 		} else {
 			// Polysyllabic
 			if(!multipleSyllableTypes) {
+				// Just use the one type
 				for(let current = 1; current < numberOfSyllables; current++) {
 					word.push( makeSyllable(singleWordArray, syllableDropoffOverrides.singleWord) );
 				}
 			} else {
+				// Add word-initial syllable
 				word.push( makeSyllable(wordInitialArray, syllableDropoffOverrides.wordInitial) );
 				for(let current = 2; current < numberOfSyllables; current++) {
+					// Add mid-word syllable
 					word.push( makeSyllable(wordMiddleArray, syllableDropoffOverrides.wordMiddle) );
 				}
+				// Add word-final syllable
 				word.push( makeSyllable(wordFinalArray, syllableDropoffOverrides.wordFinal) );
 			}
 		}
 		// Check for syllable break insertion
 		if(showSyllableBreaks) {
-			OUTPUT = word.join("\u00b7");
+			result = word.join("\u00b7");
 		} else {
-			OUTPUT = word.join("");
+			result = word.join("");
 		}
 		// Apply rewrite rules
-		OUTPUT = doRewrite(OUTPUT);
+		result = doRewrite(result);
 		// Capitalize if needed
-		if(capitalize) {
-			OUTPUT = OUTPUT.charAt(0).toUpperCase() + OUTPUT.slice(1);
+		if(capitalizeThis) {
+			result = result.charAt(0).toUpperCase() + result.slice(1);
 		}
-		return OUTPUT;
+		return result;
 	};
 
 
@@ -322,19 +325,21 @@ const WGOutput = () => {
 	// // //
 	// Generate Every Possible Syllable
 	// // //
-	const getEverySyllable = async (capitalize = false) => {
-		let OUTPUT = [];
-		let syllables = singleWordArray;
-		if(multipleSyllableTypes) {
-			syllables = syllables.concat(
-				wordInitialArray,
-				wordMiddleArray,
-				wordFinalArray
-			);
-		}
-		syllables = syllables.map((syll) => ["", syll]);
+	const generateEverySyllable = async (capitalize = false) => {
+		let everySyllable = [];
+		let noDupes = {};
+		let syllables = (
+			multipleSyllableTypes ?
+				singleWordArray
+			:
+				singleWordArray.concat(
+					wordInitialArray,
+					wordMiddleArray,
+					wordFinalArray
+				)
+		).map(syll => ["", syll]);
 		while(syllables.length > 0) {
-			let [current, toGo] = syllables.shift();
+			const [current, toGo] = syllables.shift();
 			let res = recurseSyllables(current, toGo);
 			let newOutput = [];
 			res.then((res) => {
@@ -348,61 +353,116 @@ const WGOutput = () => {
 				}
 			});
 			await res;
-			OUTPUT.push(...newOutput);
+			// Check for duplicates
+			newOutput.forEach(word => {
+				if(!noDupes[word]) {
+					noDupes[word] = true;
+					// Capitalize if needed
+					everySyllable.push(
+						capitalize ?
+							word.charAt(0).toUpperCase() + word.slice(1)
+						:
+							word
+					);
+				}
+			});
 		}
-		// Capitalize if needed
-		if(capitalize) {
-			OUTPUT = OUTPUT.map(word => (word.charAt(0).toUpperCase() + word.slice(1)));
-		}
-		// Remove duplicates
-		let noDupes = new Set(OUTPUT);
-		OUTPUT = [];
-		noDupes.forEach(t => OUTPUT.push(t));
 		// Sort if needed
 		if(sortWordlist) {
-			OUTPUT.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
+			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 		}
-		return OUTPUT;
+		// TO-DO: remove loading screen?
+		setColumnNumber(everySyllable);
+		setDisplayedWords(everySyllable);
 	};
 	const recurseSyllables = async (previous, toGo) => {
-		let current = toGo.charAt(0);
-		let next = toGo.slice(1);
-		let charGroup = charGroupMap[current];
+		const current = toGo.charAt(0);
+		const next = toGo.slice(1);
+		const charGroup = charGroupMap[current];
 		if(charGroup === undefined) {
 			// Category not found - save as written
 			return {
 				results: [previous + current],
-				next: next
+				next
 			};
 		}
 		return {
 			results: charGroup.run.split("").map(char => previous + char),
-			next: next
+			next
 		}
 	};
 
 	// // //
 	// Wordlist
 	// // //
-	const makeWordlist = async (capitalize) => {
-		let n = 0;
+	const generateWordList = async (capitalize) => {
 		let words = [];
-		for (n = 0;n < wordsPerWordlist; n++) {
+		for (let n = 0; n < wordsPerWordlist; n++) {
 			words.push(makeOneWord(capitalize));
 		}
 		// Sort if needed
 		if(sortWordlist) {
 			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 		}
-		return words;
+		// TO-DO: remove loading screen?
+		setColumnNumber(words);
+		setDisplayedWords(words);
+		//return words;
+	};
+
+	// // //
+	// Determine number of columns from given array of words
+	// // //
+	const setColumnNumber = (words) => {
+		if (!wordlistMultiColumn) {
+			setDisplayedColumns(1);
+			return;
+		}
+		const { width } = useWindowDimensions();
+		const viewport = width - 0 // TO-DO: replace 0 with PADDING
+		const longestWord = Math.max(...words.map(w => w.length)) + 2;
+		const emSize = {
+			xs: 12,
+			sm: 14,
+			md: 16,
+			lg: 18,
+			xl: 20,
+			'2xl': 24
+		}[textSize] || 12;
+		const longestWordLength = (emSize * longestWord) + 0; // TO-DO: replace 0 with column PADDING
+		setDisplayedColumns(Math.max(1, Math.floor(viewport / longestWordLength)));
 	};
 
 
 	// // //
 	// JSX
 	// // //
+	// TO-DO: further plans
+	// displayedColumns is used with FlatList, as is displayedWords
+	// displayedText is in its own ScrollView
+	// loading screen (?) should have its own container
+	// These need to be ReAnimated Views in a larger ReAnimated View
+	// container: layout transition only
+	// loading: BounceIn, BounceOut
+	// text: StretchInY? ZoomInEasyUp? SlideInLeft?
+	// words: FadeInLeft, FadeOutLeft
 	return (
 		<VStack h="full">
+			<StandardAlert
+				alertOpen={alertOpen}
+				setAlertOpen={setAlertOpen}
+				headerContent="Cannot Generate"
+				headerProps={{
+					bg: "error.500"
+				}}
+				bodyContent={alertMsg}
+				overrideButtons={[
+					({leastDestructiveRef}) => <Button
+						onPress={() => setAlertOpen(false)}
+						ref={leastDestructiveRef}
+					>Ok</Button>
+				]}
+			/>
 			<ScrollView bg="main.900">
 			</ScrollView>
 		</VStack>
@@ -411,7 +471,7 @@ const WGOutput = () => {
 
 export default WGOutput;
 
-
+// TO-DO: put this in its own component for WE to use when needed
 const calculateCategoryReferenceRegex = (rule, mapObj) => {
 	// Check rewrite rules for %Category references
 	// %% condenses to %, so split on those to begin with.
