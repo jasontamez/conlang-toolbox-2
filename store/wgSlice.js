@@ -27,19 +27,19 @@ const setMultipleSyllableTypesFunc = (state, action) => {
 	return state;
 };
 const setSingleWordFunc = (state, action) => {
-	state.singleWord = action.payload;
+	state.singleWord = action.payload.replace(/(?:\r?\n)+/g, "\n");
 	return state;
 };
 const setWordInitialFunc = (state, action) => {
-	state.wordInitial = action.payload;
+	state.wordInitial = action.payload.replace(/(?:\r?\n)+/g, "\n");
 	return state;
 };
 const setWordMiddleFunc = (state, action) => {
-	state.wordMiddle = action.payload;
+	state.wordMiddle = action.payload.replace(/(?:\r?\n)+/g, "\n");
 	return state;
 };
 const setWordFinalFunc = (state, action) => {
-	state.wordFinal = action.payload;
+	state.wordFinal = action.payload.replace(/(?:\r?\n)+/g, "\n");
 	return state;
 };
 const setSyllableOverrideFunc = (state, action) => {

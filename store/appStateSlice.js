@@ -72,4 +72,11 @@ export const sizes = {
 		xl: "4xl"
 	}
 };
-
+export const fontSizesInPx = {
+	xs: 12,
+	sm: 14,
+	md: 16,
+	lg: 18,
+	xl: 20,
+	'2xl': 24
+};

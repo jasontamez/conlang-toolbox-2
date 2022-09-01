@@ -68,52 +68,241 @@ initialAppState.wg = {
 	...initialAppState.wg,
 	characterGroups: [
 		{
-			label: "X",
-			description: "Sample group X",
-			run: "ptk"
+			label: "C",
+			description: "Consonants",
+			run: "tnsrdlSmTqwfgWypbCcvhPBkjxqz"
 		},
 		{
-			label: "Y",
-			description: "Sample group Y",
-			run: "sz",
-			dropoff: 15
+			label: "V",
+			description: "Vowels",
+			run: "eaoeaoiuOIiEAUuy"
+		},
+		{
+			label: "P",
+			description: "Plosives",
+			run: "tpkc"
+		},
+		{
+			label: "L",
+			description: "Liquids",
+			run: "rl"
+		},
+		{
+			label: "N",
+			description: "Nasals",
+			run: "nmN"
+		},
+		{
+			label: "F",
+			description: "Post-nasal or -liquid Final Consonants",
+			run: "TS"
 		}
 	],
-	singleWord: "XY\nX\nXYY",
-	syllableDropoffOverrides: {
-		singleWord: 5,
-		wordInitial: null,
-		wordMiddle: null,
-		wordFinal: null
-	},
+	singleWord: "CV\nCVC\nVC\nV\nPLVC\nPLV",
+	wordInitial: "CVC\nCV\nVC\nPLV\nsPLV\nV",
+	wordMiddle: "CV\nCV\nCV\nVC\nV",
+	wordFinal: "CV\nCVC\nCVLF\nCVNF\nCVgh\nVC\nV\nVgh",
+	multipleSyllableTypes: true,
+	maxSyllablesPerWord: 5,
 	// TRANSFORMS
 	transforms: [
 		{
+			id: "15",
+			search: "([^g])h",
+			replace: "$1k",
+			description: "change non-initial h to k if not preceeded by a g"
+		},
+		{
+			id: "0",
+			search: "s*T+s*",
+			replace: "th",
+			description: ""
+		},
+		{
+			id: "1",
+			search: "s*S+s*",
+			replace: "sh",
+			description: ""
+		},
+		{
+			id: "2",
+			search: "C+",
+			replace: "ch",
+			description: ""
+		},
+		{
+			id: "5",
+			search: "[nm]*N+[nm]*",
+			replace: "ng",
+			description: ""
+		},
+		{
+			id: "6",
+			search: "w*W+(%V)",
+			replace: "wh$1",
+			description: "W-vowel becomes wh-vowel"
+		},
+		{
+			id: "6.1",
+			search: "[wW]+",
+			replace: "w",
+			description: "remaining Ws become w"
+		},
+		{
+			id: "7",
+			search: "(%V)ch",
+			replace: "$1tch",
+			description: "vowel-ch becomes vowel-tch"
+		},
+		{
+			id: "8",
+			search: "P+",
+			replace: "ph",
+			description: ""
+		},
+		{
+			id: "9",
+			search: "(%V)B(\\b|!%V)",
+			replace: "$1ble$2",
+			description: "vowel-ble-nonvowel"
+		},
+		{
+			id: "9.1",
+			search: "(%V)B",
+			replace: "$1bl",
+			description: "vowel-bl"
+		},
+		{
+			id: "9.2",
+			search: "B",
+			replace: "",
+			description: "eliminate remaining Bs"
+		},
+		{
+			id: "10",
+			search: "%V*O+%V*",
+			replace: "oo",
+			description: ""
+		},
+		{
 			id: "11",
-			search: "(%X%Y)%Y",
+			search: "%V*U+%V*",
+			replace: "ou",
+			description: ""
+		},
+		{
+			id: "12",
+			search: "%V*I+%V*",
+			replace: "oi",
+			description: ""
+		},
+		{
+			id: "13",
+			search: "%V*A+%V*",
+			replace: "au",
+			description: ""
+		},
+		{
+			id: "13.1",
+			search: "%V*E+%V*",
+			replace: "ei",
+			description: ""
+		},
+		{
+			id: "13.2",
+			search: "([^c])ei",
+			replace: "$1ie",
+			description: "i before e except after c"
+		},
+		{
+			id: "14",
+			search: "([^aeiou])(o|au)\\b",
+			replace: "$1ow",
+			description: "change word-final o or au to ow"
+		},
+		{
+			id: "14.1",
+			search: "([^aeiou])(ou|ei)\\b",
+			replace: "$1$2gh",
+			description: "change word-final ou to ough, ei to eigh"
+		},
+		{
+			id: "16",
+			search: "y+",
+			replace: "y",
+			description: "eliminate duplicate ys"
+		},
+		{
+			id: "17",
+			search: "(\\b|[^aeiou])tl",
+			replace: "$1t",
+			description: "reduce tl cluster to t after non-vowel"
+		},
+		{
+			id: "17.1",
+			search: "tl(\\b|%C)",
+			replace: "t$1",
+			description: "reduce tl cluster to t before consonant or word-end"
+		},
+		{
+			id: "18",
+			search: "(.)\\1{2,}",
+			replace: "$1$1",
+			description: "reduce triple-letter clusters to two"
+		},
+		{
+			id: "18.1",
+			search: "[aeiou]*([aeiou])[aeiou]*\\1[aeiou]*",
+			replace: "$1$1",
+			description: "reduce multiple vowels in a row, where any two vowels match, to the matching vowels"
+		},
+		{
+			id: "3",
+			search: "q+",
+			replace: "qu",
+			description: "q is always followed by u"
+		},
+		{
+			id: "4",
+			search: "qu\\b",
+			replace: "que",
+			description: "qu at word-end becomes que"
+		},
+		{
+			id: "4.1",
+			search: "qu([aeiou])[aeiou]+",
+			replace: "qu$1",
+			description: "eliminate triple+ vowels after q"
+		},
+		{
+			id: "19",
+			search: "c\\b",
+			replace: "ck",
+			description: "word-final c becomes ck"
+		},
+		{
+			id: "20",
+			search: "([aiu])\\1",
 			replace: "$1",
-			description: "remove double Y after X"
+			description: "change double a/i/u to single"
 		},
 		{
-			id: "22",
-			search: "z+k+",
-			replace: "sk",
-			description: "change zk to sk"
+			id: "21",
+			search: "m[kt]\\b",
+			replace: "mp",
+			description: "word-final mk or mt becomes mp"
 		},
 		{
-			id: "33",
-			search: "(%X)%X+",
-			replace: "$1"
+			id: "21.1",
+			search: "n[kp]\\b",
+			replace: "nt",
+			description: "word-final nk or np becomes nt"
 		},
 		{
-			id: "444",
-			search: "bark",
-			replace: ""
-		},
-		{
-			id: "555",
-			search: "boof",
-			replace: "bark"
+			id: "21.2",
+			search: "ng[kt]",
+			replace: "nk",
+			description: "ngk and ngt become nk"
 		}
 	]
 };

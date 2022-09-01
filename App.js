@@ -86,8 +86,7 @@ import WGSettings from './pages/wg/wgSettings';
 import WGCharacters from './pages/wg/wgCharacterGroups';
 import WGSyllables from './pages/wg/wgSyllables';
 import WGTransformations from './pages/wg/wgTransformations';
-
-const WGOutput = () => <WGSettings />;
+import WGOutput from './pages/wg/wgOutput';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();

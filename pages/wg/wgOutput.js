@@ -1,21 +1,31 @@
 import {
 	useBreakpointValue,
 	ScrollView,
-	VStack
+	VStack,
+	Text,
+	HStack,
+	Spinner,
+	Button,
+	Box,
+	Factory
 } from "native-base";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
-	CurvedTransition,
-	FadeInUp,
-	FadeOutUp
+	BounceIn,
+	BounceOut,
+	FadeInLeft,
+	FadeOutLeft,
+	ZoomInEasyUp,
+	ZoomOutEasyUp
 } from 'react-native-reanimated';
 import escapeRegexp from 'escape-string-regexp';
+import { FlatGrid } from 'react-native-super-grid';
 
 import {
 	AddIcon
 } from "../../components/icons";
-import { sizes } from "../../store/appStateSlice";
+import { sizes, fontSizesInPx } from "../../store/appStateSlice";
 import {
 	equalityCheck
 } from "../../store/wgSlice";
@@ -57,58 +67,53 @@ const WGOutput = () => {
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
 	const [displayedWords, setDisplayedWords] = useState([]);
-	const [displayedColumns, setDisplayedColumns] = useState(1);
+	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
 	const [displayedText, setDisplayedText] = useState("");
+	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+	const [charGroupMap, setCharGroupMap] = useState({});
+	const [transformsWithRegExps, setTransformsWithRegExps] = useState([]);
 	const textSize = useBreakpointValue(sizes.sm);
+	const emSize = fontSizesInPx[textSize] || 12;
 	const getRandomPercentage = (max = 100) => Math.random() * max;
+	const { width } = useWindowDimensions();
+	const FlatGridNB = Factory(FlatGrid);
 
 	// // //
 	// Convenience Variables
 	// // //
-	// Set up an easy-to-search map of character groups
-	let charGroupMap = {};
-	// Create a new array of transforms, with RegExps included
-	let transformsWithRegExps = [];
-	// Create new arrays for syllables
-	let singleWordArray = [];
-	let wordInitialArray = [];
-	let wordMiddleArray = [];
-	let wordFinalArray = [];
 	useEffect(() => {
 		// Clear objects
-		charGroupMap = {};
-		transformsWithRegExps = [];
+		let newMap = {};
+		let newTransforms = [];
 
-		// Save character groups by label
-		characterGroups.forEach(group => (charGroupMap[group.label] = group));
+		// Set up an easy-to-search map of character groups
+		characterGroups.forEach(group => (newMap[group.label] = group));
+		setCharGroupMap(newMap);
 
+		// Create a new array of transforms, with RegExps included
 		// Check transforms for %Category references and save as RegExp objects
 		transforms.forEach((rule) => {
 			const search = rule.search;
 			let regex;
 			if(search.indexOf("%") !== -1) {
 				// Found a possibility.
-				regex = calculateCategoryReferenceRegex(search, charGroupMap);
+				regex = calculateCategoryReferenceRegex(search, newMap);
 			} else {
 				regex = new RegExp(search, "g");
 			}
-			transformsWithRegExps.push({
+			newTransforms.push({
 				...rule,
 				regex
 			})
 		});
+		setTransformsWithRegExps(newTransforms);
+	}, [characterGroups, transforms]);
+	// Create new arrays for syllables
+	const singleWordArray = singleWord.split(/\n/);
+	const wordInitialArray = wordInitial.split(/\n/);
+	const wordMiddleArray = wordMiddle.split(/\n/);
+	const wordFinalArray = wordFinal.split(/\n/);
 
-		// Change all syllable info into Arrays
-		singleWordArray = singleWord.split(/(\r?\n)+/);
-		wordInitialArray = wordInitial.split(/(\r?\n)+/);
-		wordMiddleArray = wordMiddle.split(/(\r?\n)+/);
-		wordFinalArray = wordFinal.split(/(\r?\n)+/);
-	}, [characterGroups, transforms, singleWord, wordInitial, wordMiddle, wordFinal]);
-
-	// TO-DO: This function will need to be updated the most
-	// $d made a simple <div>
-	// $t outputted an element representing a single word,
-	//   with events and classes attached
 	// // //
 	// Generate Output!
 	// // //
@@ -138,9 +143,9 @@ const WGOutput = () => {
 			return;
 		}
 		// Set up loading screen, clear any old info, etc
-		// TO-DO: loading screen
 		setDisplayedText("");
 		setDisplayedWords([]);
+		setShowLoadingScreen(true);
 		// Determine what we're making.
 		if (output === "text") {
 			return generatePseudoText();
@@ -163,8 +168,11 @@ const WGOutput = () => {
 		) {
 			let sentence = "";
 			let maxWords = 3;
-			for(maxWords = 3; true; maxWords = Math.max((maxWords + 1) % 15, 3)) {
-				// The 'true' in this for loop means it never ends on its own.
+			for(
+				maxWords = 3;
+				true; // it never ends on its own
+				maxWords = Math.max((maxWords + 1) % 15, 3
+			)) {
 				const maxChance = (
 					maxWords < 5 ?
 						35
@@ -197,20 +205,22 @@ const WGOutput = () => {
 			}
 			text.push(`${PRE || ""}${sentence}${POST || ""}`);
 		}
-		// TO-DO: remove loading screen?
+		setShowLoadingScreen(false);
 		setDisplayedText(text.join(" "));
 	};
 
 	// // //
 	// Generate Syllables
 	// // //
-	const makeSyllable = (syllList, overrideRate) => {
+	const makeSyllable = (syllList, specialOverrideRate) => {
 		// Chooses a syllable from the given list
 		const max = syllList.length;
 		let chosen;
-		let rate = overrideRate === undefined ? syllableBoxDropoff : overrideRate;
+		let rate = specialOverrideRate === null ? syllableBoxDropoff : specialOverrideRate;
 		if(rate <= 0) {
-			return translateSyllable(syllList[Math.floor(getRandomPercentage(max))]);
+			// Equiprobable: Just pick a random syllable.
+			chosen = syllList[Math.floor(getRandomPercentage(max))];
+			return translateSyllable(chosen);
 		}
 		for(let toPick = 0, counter = 0; true; toPick = (toPick + 1) % max) {
 			// The 'true' in this for loop means it never ends on its own.
@@ -371,8 +381,8 @@ const WGOutput = () => {
 		if(sortWordlist) {
 			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 		}
-		// TO-DO: remove loading screen?
-		setColumnNumber(everySyllable);
+		setShowLoadingScreen(false);
+		determineColumnSize(everySyllable);
 		setDisplayedWords(everySyllable);
 	};
 	const recurseSyllables = async (previous, toGo) => {
@@ -397,15 +407,28 @@ const WGOutput = () => {
 	// // //
 	const generateWordList = async (capitalize) => {
 		let words = [];
+		let record = {};
+		let maxattempts = 1000;
 		for (let n = 0; n < wordsPerWordlist; n++) {
-			words.push(makeOneWord(capitalize));
+			if(--maxattempts < 0) {
+				// We've tried too many times. Give up.
+				break;
+			}
+			const candidate = makeOneWord(capitalize);
+			if(record[candidate]) {
+				// Duplicate. Ignore.
+				n--;
+				continue;
+			}
+			record[candidate] = true;
+			words.push(candidate);
 		}
 		// Sort if needed
 		if(sortWordlist) {
 			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 		}
-		// TO-DO: remove loading screen?
-		setColumnNumber(words);
+		setShowLoadingScreen(false);
+		determineColumnSize(words);
 		setDisplayedWords(words);
 		//return words;
 	};
@@ -413,41 +436,85 @@ const WGOutput = () => {
 	// // //
 	// Determine number of columns from given array of words
 	// // //
-	const setColumnNumber = (words) => {
+	const determineColumnSize = (words) => {
+		const viewport = width - 0 // TO-DO: replace 0 with PADDING
 		if (!wordlistMultiColumn) {
-			setDisplayedColumns(1);
+			//setDisplayedColumns(viewport);
+			setLongestWordSizeEstimate(viewport);
 			return;
 		}
-		const { width } = useWindowDimensions();
-		const viewport = width - 0 // TO-DO: replace 0 with PADDING
-		const longestWord = Math.max(...words.map(w => w.length)) + 2;
-		const emSize = {
-			xs: 12,
-			sm: 14,
-			md: 16,
-			lg: 18,
-			xl: 20,
-			'2xl': 24
-		}[textSize] || 12;
-		const longestWordLength = (emSize * longestWord) + 0; // TO-DO: replace 0 with column PADDING
-		setDisplayedColumns(Math.max(1, Math.floor(viewport / longestWordLength)));
+		// Find length of longest word
+		// (this will not be entirely correct if the word has two-character glyphs, but that's ok)
+		const longestWord = Math.max(...words.map(w => w.length));
+		// Estimate size of the longest word, erring on the larger size
+		const longestWordLength = (emSize * longestWord) + 0; // TO-DO: replace 0 with column spacing? If needed?
+		setLongestWordSizeEstimate(longestWordLength);
+		//setDisplayedColumns(Math.max(1, Math.floor(viewport / longestWordLength)));
 	};
 
 
 	// // //
 	// JSX
 	// // //
-	// TO-DO: further plans
-	// displayedColumns is used with FlatList, as is displayedWords
-	// displayedText is in its own ScrollView
-	// loading screen (?) should have its own container
-	// These need to be ReAnimated Views in a larger ReAnimated View
-	// container: layout transition only
-	// loading: BounceIn, BounceOut
-	// text: StretchInY? ZoomInEasyUp? SlideInLeft?
-	// words: FadeInLeft, FadeOutLeft
+	const WordList = () => (
+		<ReAnimated.View
+			entering={FadeInLeft}
+			exiting={FadeOutLeft}
+			style={{flex: 1}}
+		>
+			<FlatGridNB
+				renderItem={({item}) => <Text fontSize={textSize}>{item}</Text>}
+				data={displayedWords}
+				itemDimension={longestWordSizeEstimate}
+				fixed
+				keyExtractor={(item, i) => `${item}-Grid-${i}`}
+				style={{
+					margin: 0,
+					padding: 0,
+					flex: 1,
+				}}
+				spacing={displayedWords.length ? emSize : 0}
+				m={0}
+				p={0}
+				maxH="full"
+			/>
+		</ReAnimated.View>
+	);
+	const LoadingScreen = () => {
+		const loadingSize = useBreakpointValue(sizes.x2);
+		return (
+			<ReAnimated.View
+				entering={BounceIn}
+				exiting={BounceOut}
+				style={{flex: 1}}
+			>
+				<HStack
+					flexWrap="wrap"
+					alignItems="center"
+					justifyContent="center"
+					space={10}
+					py={4}
+				>
+					<Text fontSize={loadingSize}>Generating...</Text>
+					<Spinner size="lg" color="primary.500" />
+				</HStack>
+			</ReAnimated.View>
+		);
+	}
+	const PseudoText = () => (
+		<ReAnimated.View
+			entering={ZoomInEasyUp}
+			exiting={ZoomOutEasyUp}
+			style={{flex: 1}}
+		>
+			<ScrollView w="full">
+				<Text fontSize={textSize}>{displayedText}</Text>
+			</ScrollView>
+		</ReAnimated.View>
+	);
+
 	return (
-		<VStack h="full">
+		<VStack h="full" alignContent="flex-start" bg="main.900">
 			<StandardAlert
 				alertOpen={alertOpen}
 				setAlertOpen={setAlertOpen}
@@ -463,8 +530,32 @@ const WGOutput = () => {
 					>Ok</Button>
 				]}
 			/>
-			<ScrollView bg="main.900">
-			</ScrollView>
+			<HStack>
+				<Button onPress={() => setShowLoadingScreen(true)}>Loading</Button>
+				<Button onPress={() => generateWordList()}>Words</Button>
+				<Button onPress={() => generatePseudoText()}>Text</Button>
+				<Button onPress={() => generateEverySyllable()}>Syllables</Button>
+				<Button onPress={() => {
+					setShowLoadingScreen(false);
+					setDisplayedText("");
+					setDisplayedWords([]);
+				}}>Clear</Button>
+			</HStack>
+			{(showLoadingScreen ?
+				[<LoadingScreen key="loadingScreen" />]
+			:
+				[]
+			)}
+			{(displayedWords.length > 0 ?
+				[<WordList key="wordList" />]
+			:
+				[]
+			)}
+			{(displayedText ?
+				[<PseudoText key="pseudoText" />]
+			:
+				[]
+			)}
 		</VStack>
 	);
 };
