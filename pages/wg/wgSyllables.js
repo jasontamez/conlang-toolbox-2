@@ -169,8 +169,11 @@ const WGSyllables = () => {
 		setOFlag,
 		overrideValue,
 		setOValue
-	}) => {
-		return (
+	}) => (
+		<ReAnimated.View
+			entering={FadeInUp}
+			exiting={FadeOutUp}
+		>
 			<VStack
 				py={2.5}
 				px={2}
@@ -257,7 +260,6 @@ const WGSyllables = () => {
 							<ReAnimated.View
 								entering={FadeInUp}
 								exiting={FadeOutUp}
-								layout={CurvedTransition}
 							>
 								<SliderWithLabels
 									max={50}
@@ -290,8 +292,8 @@ const WGSyllables = () => {
 					<></>
 				}
 			</VStack>
-		);
-	};
+		</ReAnimated.View>
+	);
 	return (
 		<VStack h="full">
 			<ScrollView>
@@ -344,8 +346,6 @@ const WGSyllables = () => {
 					/>
 				</HStack>
 				<ReAnimated.View
-					entering={FadeInUp}
-					exiting={FadeOutUp}
 					layout={CurvedTransition}
 				>
 					{boxes.map(box => <SyllableBox key={box.title} {...box} />)}

@@ -269,7 +269,7 @@ const WGChar = () => {
 	return (
 		<VStack h="full">
 			<StandardAlert
-				alertOpen={deletingGroup}
+				alertOpen={!!deletingGroup}
 				setAlertOpen={setDeletingGroup}
 				bodyContent={<Text fontSize={textSize}>Are you sure you want to delete the character group <Text bold>{groupDeletingString}</Text>? This cannot be undone.</Text>}
 				continueText="Yes, Delete It"
@@ -293,7 +293,7 @@ const WGChar = () => {
 					>Ok</Button>
 				]}
 			/>
-			<Modal isOpen={editingGroup}>
+			<Modal isOpen={!!editingGroup}>
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
@@ -356,7 +356,6 @@ const WGChar = () => {
 								<ReAnimated.View
 									entering={FadeInUp}
 									exiting={FadeOutUp}
-									layout={CurvedTransition}
 								>
 									<SliderWithLabels
 										max={50}
@@ -395,13 +394,13 @@ const WGChar = () => {
 								py={1}
 								mx={1}
 								onPress={() => maybeDeleteGroup(editingGroup)}
-							>DELETE GROUP</Button>
+							>DELETE</Button>
 							<Button
 								startIcon={<SaveIcon size={descSize} />}
 								px={2}
 								py={1}
 								onPress={() => maybeSaveEditedGroup()}
-							>SAVE GROUP</Button>
+							>SAVE</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>

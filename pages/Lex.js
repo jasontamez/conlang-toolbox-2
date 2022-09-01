@@ -168,6 +168,7 @@ const Lex = () => {
 			toast,
 			msg: "Word Added"
 		});
+		// TO-DO: Test that these refs work on mobile
 		newLexiconRefs.forEach(ref => {
 			ref && ref.current && ref.current.clear();
 		});

@@ -6,18 +6,17 @@ import {
 	HStack,
 	Spinner,
 	Button,
-	Box,
 	Factory
 } from "native-base";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
-	BounceIn,
-	BounceOut,
 	FadeInLeft,
 	FadeOutLeft,
-	ZoomInEasyUp,
-	ZoomOutEasyUp
+	ZoomInEasyDown,
+	ZoomInRight,
+	ZoomOutEasyDown,
+	ZoomOutRight
 } from 'react-native-reanimated';
 import escapeRegexp from 'escape-string-regexp';
 import { FlatGrid } from 'react-native-super-grid';
@@ -378,9 +377,10 @@ const WGOutput = () => {
 			});
 		}
 		// Sort if needed
-		if(sortWordlist) {
-			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
-		}
+		//TO-DO: Find replacement for Intl.Collator
+//		if(sortWordlist) {
+//			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
+//		}
 		setShowLoadingScreen(false);
 		determineColumnSize(everySyllable);
 		setDisplayedWords(everySyllable);
@@ -424,9 +424,10 @@ const WGOutput = () => {
 			words.push(candidate);
 		}
 		// Sort if needed
-		if(sortWordlist) {
-			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
-		}
+		//TO-DO: Find replacement for Intl.Collator
+//		if(sortWordlist) {
+//			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
+//		}
 		setShowLoadingScreen(false);
 		determineColumnSize(words);
 		setDisplayedWords(words);
@@ -484,8 +485,8 @@ const WGOutput = () => {
 		const loadingSize = useBreakpointValue(sizes.x2);
 		return (
 			<ReAnimated.View
-				entering={BounceIn}
-				exiting={BounceOut}
+				entering={ZoomInEasyDown}
+				exiting={ZoomOutEasyDown}
 				style={{flex: 1}}
 			>
 				<HStack
@@ -503,8 +504,8 @@ const WGOutput = () => {
 	}
 	const PseudoText = () => (
 		<ReAnimated.View
-			entering={ZoomInEasyUp}
-			exiting={ZoomOutEasyUp}
+			entering={ZoomInRight}
+			exiting={ZoomOutRight}
 			style={{flex: 1}}
 		>
 			<ScrollView w="full">

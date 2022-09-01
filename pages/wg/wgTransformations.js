@@ -182,7 +182,7 @@ const WGTransformations = () => {
 	return (
 		<VStack h="full">
 			<StandardAlert
-				alertOpen={deletingTransform}
+				alertOpen={!!deletingTransform}
 				setAlertOpen={setDeletingTransform}
 				bodyContent={
 					<Text fontSize={textSize}>Are you sure you want to delete the transform <Text bold>{transformDeleteString}</Text>? This cannot be undone.</Text>

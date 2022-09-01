@@ -84,7 +84,7 @@ const ModalTransformEditingItem = ({
 		endEditingFunc();
 	};
 	return (
-		<Modal isOpen={transform}>
+		<Modal isOpen={!!transform}>
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
@@ -133,13 +133,13 @@ const ModalTransformEditingItem = ({
 							py={1}
 							mx={1}
 							onPress={() => maybeDeleteTransform()}
-						>DELETE TRANSFORM</Button>
+						>DELETE</Button>
 						<Button
 							startIcon={<SaveIcon size={iconSize} />}
 							px={2}
 							py={1}
 							onPress={() => maybeSaveEditedTransform(true)}
-						>SAVE TRANSFORM</Button>
+						>SAVE</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>
