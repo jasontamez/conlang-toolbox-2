@@ -2,7 +2,7 @@ import { Text, VStack, Pressable, HStack } from "native-base";
 //import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
-import debounce from '../../components/debounce';
+import debounce from '../../helpers/debounce';
 import { TextAreaSetting, TextSetting } from '../../components/layoutTags';
 import { setTitle, setDescription } from "../../store/morphoSyntaxSlice";
 import {

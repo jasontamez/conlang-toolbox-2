@@ -11,7 +11,7 @@ import {
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 
-import debounce from '../../components/debounce';
+import debounce from '../../helpers/debounce';
 import {
 	TextSetting,
 	SliderWithLabels,
@@ -36,7 +36,7 @@ import {
 	SharpDropoffIcon
 } from "../../components/icons";
 import { sizes } from "../../store/appStateSlice";
-import doToast from "../../components/toast";
+import doToast from "../../helpers/toast";
 import StandardAlert from "../../components/StandardAlert";
 
 const WGSettings = () => {

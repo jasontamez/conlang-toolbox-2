@@ -44,7 +44,7 @@ import {
 	equalityCheck
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
-import doToast from "../../components/toast";
+import doToast from "../../helpers/toast";
 
 const WGChar = () => {
 	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg, equalityCheck);

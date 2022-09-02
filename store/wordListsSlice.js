@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import WL from '../components/wordLists';
+import WL from '../helpers/wordLists';
 import blankAppState from './blankAppState';
 
 const initialState = blankAppState.wordLists;

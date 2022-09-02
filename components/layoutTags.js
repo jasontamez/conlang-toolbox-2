@@ -14,7 +14,7 @@ import {
  } from "native-base";
 
 import { Bar } from "./icons";
-import debounce from './debounce';
+import debounce from '../helpers/debounce';
 import { sizes } from '../store/appStateSlice';
 
 // $v(unknown property, default value)

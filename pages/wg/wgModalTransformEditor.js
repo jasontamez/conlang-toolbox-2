@@ -21,7 +21,7 @@ import {
 import { sizes } from '../../store/appStateSlice';
 import { editTransform } from '../../store/wgSlice';
 import { TextSetting } from '../../components/layoutTags';
-import doToast from '../../components/toast';
+import doToast from '../../helpers/toast';
 
 const ModalTransformEditingItem = ({
 	transform,

@@ -17,7 +17,7 @@ import {
 	useBreakpointValue
 } from 'native-base';
 
-import debounce from '../components/debounce';
+import debounce from '../helpers/debounce';
 import {
 	EditIcon,
 	SortEitherIcon,
@@ -40,7 +40,7 @@ import {
 	editLexiconItem,
 	consts
 } from '../store/lexiconSlice';
-import doToast from '../components/toast';
+import doToast from '../helpers/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import WL from '../components/wordLists';
+import WL from '../helpers/wordLists';
 //import { v4 as uuidv4 } from 'uuid';
 import {
 	HStack,
@@ -26,7 +26,7 @@ import {
 } from '../store/wordListsSlice';
 import { CloseCircleIcon, CloseIcon, SaveIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
-import doToast from '../components/toast';
+import doToast from '../helpers/toast';
 import { useNavigate } from 'react-router-native';
 import { sizes } from '../store/appStateSlice';
 

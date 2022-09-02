@@ -5,7 +5,7 @@ import { NativeBaseProvider, VStack, HStack, Spinner, Heading, Container, Text }
 import { Provider, useSelector } from 'react-redux';
 import getStoreInfo from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';
-import getTheme from './components/theme';
+import getTheme from './helpers/theme';
 
 
 import Menu from './components/menu';

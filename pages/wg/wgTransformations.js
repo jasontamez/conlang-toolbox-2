@@ -41,7 +41,7 @@ import {
 	rearrangeTransforms
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
-import doToast from "../../components/toast";
+import doToast from "../../helpers/toast";
 import ModalTransformEditingItem from "./wgModalTransformEditor";
 
 const WGTransformations = () => {

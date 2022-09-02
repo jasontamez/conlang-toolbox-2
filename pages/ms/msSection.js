@@ -25,7 +25,7 @@ import { /*
 } from '../../store/morphoSyntaxSlice';
 import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
-import debounce from "../../components/debounce";
+import debounce from "../../helpers/debounce";
 import { sizes } from "../../store/appStateSlice";
 
 

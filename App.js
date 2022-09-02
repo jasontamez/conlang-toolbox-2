@@ -68,7 +68,7 @@ import {
 //	Sriracha_400Regular
 //} from '@expo-google-fonts/sriracha'
 
-import getTheme from './components/theme';
+import getTheme from './helpers/theme';
 
 import getStoreInfo from './store/store';
 

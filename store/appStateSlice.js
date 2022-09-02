@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { availableThemes } from '../components/theme';
+import { availableThemes } from '../helpers/theme';
 import blankAppState from './blankAppState';
 
 const initialState = blankAppState.appState;

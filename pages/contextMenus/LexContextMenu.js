@@ -23,7 +23,7 @@ import {
 	setTruncate,
 	consts
 } from "../../store/lexiconSlice";
-import doToast from '../../components/toast';
+import doToast from '../../helpers/toast';
 import { sizes } from '../../store/appStateSlice';
 
 const LexiconContextMenu = () => {
