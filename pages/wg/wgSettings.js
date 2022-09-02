@@ -113,7 +113,7 @@ const WGSettings = () => {
 	const TextField = ({text, value, setter}) => (
 		<TextSetting
 			text={text}
-			value={value}
+			defaultValue={value}
 			onChangeText={(text) => debounce(
 				() => dispatch(setter(text)),
 				{ namespace: text }

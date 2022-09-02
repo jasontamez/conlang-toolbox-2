@@ -45,6 +45,7 @@ import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
 import { sizes } from '../store/appStateSlice';
+import { TextAreaSetting, TextSetting } from '../components/layoutTags';
 
 const Lex = () => {
 	//
@@ -289,27 +290,30 @@ const Lex = () => {
 		<>
 			<ScrollView flex={1}>
 				<VStack m={3} mb={0}>
-					<Text fontSize={textSize}>Lexicon Title:</Text>
-					<Input
-						mt={2}
+					<TextSetting
+						text="Lexicon Title:"
 						defaultValue={title}
-						placeholder="Usually the language name."
 						onChangeText={(v) => debounce(
 							() => dispatch(setTitle(v)),
 							{ namespace: "LexTitle" }
 						)}
+						labelProps={{fontSize: textSize}}
+						inputProps={{mt: 2}}
+						placeholder="Usually the language name."
 					/>
 				</VStack>
 				<VStack m={3} mt={2}>
-					<Text fontSize={textSize}>Description:</Text>
-					<TextArea mt={2}
+					<TextAreaSetting
+						text="Description:"
 						defaultValue={description}
-						placeholder="A short description of this lexicon."
-						totalLines={3}
 						onChangeText={(v) => debounce(
 							() => dispatch(setDesc(v)),
 							{ namespace: "LexDesc" }
 						)}
+						labelProps={{fontSize: textSize}}
+						inputProps={{mt: 2}}
+						rows={3}
+						placeholder="A short description of this lexicon."
 					/>
 				</VStack>
 			</ScrollView>

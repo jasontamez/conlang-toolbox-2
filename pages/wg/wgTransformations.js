@@ -53,9 +53,9 @@ const WGTransformations = () => {
 	const [reordering, setReordering] = useState(false);
 	const [editingTransform, setEditingTransform] = useState(false);
 	const [addTransformOpen, setAddTransformOpen] = useState(false);
-	const addSearchRef = useRef(null);
-	const addReplaceRef = useRef(null);
-	const addDescriptionRef = useRef(null);
+	const [addSearch, setAddSearch] = useState("");
+	const [addReplace, setAddReplace] = useState("");
+	const [addDescription, setAddDescription] = useState("");
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [deletingTransform, setDeletingTransform] = useState(false);
 	const [transformDeleteString, setTransformDeleteString] = useState("");
@@ -90,9 +90,9 @@ const WGTransformations = () => {
 		setDeletingTransform(false);
 	};
 	const clearAddTransformModal = () => {
-		addSearchRef.current.value = "";
-		addReplaceRef.current.value = "";
-		addDescriptionRef.current.value = "";
+		setAddSearch("");
+		setAddReplace("");
+		setAddDescription("");
 	};
 	const closeAddTransform = () => {
 		clearAddTransformModal();
@@ -100,9 +100,9 @@ const WGTransformations = () => {
 	};
 	const addNewTransform = (closeModal) => {
 		let id;
-		const search = addSearchRef.current.value.trim();
-		const replace = addReplaceRef.current.value.trim();
-		const description = addDescriptionRef.current.value.trim();
+		const search = addSearch.trim();
+		const replace = addReplace.trim();
+		const description = addDescription.trim();
 		if(!search) {
 			// If we have errors, abort with an alert
 			setAlertOpenError(true);
@@ -219,7 +219,7 @@ const WGTransformations = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} justifySelf="flex-start">Add Character Group</Text>
+							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} justifySelf="flex-start">Add Transform</Text>
 							<ExtraChars color={primaryContrast} buttonProps={{size: textSize}} />
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
@@ -232,29 +232,26 @@ const WGTransformations = () => {
 							<TextSetting
 								text="Search Expression"
 								placeholder="(what to replace)"
-								inputProps={{
-									ref: addSearchRef,
-									mt: 1
-								}}
+								inputProps={{ mt: 1 }}
 								boxProps={{ pb: 2 }}
+								value={addSearch}
+								onChangeText={v => setAddSearch(v)}
 							/>
 							<TextSetting
 								text="Replacement Expression"
 								placeholder="(what to replace with)"
-								inputProps={{
-									ref: addReplaceRef,
-									mt: 1
-								}}
+								inputProps={{ mt: 1 }}
 								boxProps={{ py: 2 }}
+								value={addReplace}
+								onChangeText={v => setAddReplace(v)}
 							/>
 							<TextSetting
 								text="Transformation Description"
 								placeholder="(optional)"
-								inputProps={{
-									ref: addDescriptionRef,
-									mt: 1
-								}}
+								inputProps={{ mt: 1 }}
 								boxProps={{ pb: 2 }}
+								value={addDescription}
+								onChangeText={v => setAddDescription(v)}
 							/>
 						</VStack>
 					</Modal.Body>

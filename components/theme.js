@@ -162,7 +162,7 @@ const mainButton = {
 		},
 		_text: {
 			color: "success.50",
-			fontFamily: "body",
+//			fontFamily: "body",
 			fontWeight: 400,
 			fontStyle: "normal"
 		}
@@ -176,7 +176,7 @@ const mainBG = {
 const mainFG = {
 	defaultProps: {
 		color: "text.50",
-		fontFamily: "body",
+//		fontFamily: "body",
 		fontWeight: 400,
 		fontStyle: "normal"
 	}
@@ -184,7 +184,7 @@ const mainFG = {
 const mainHeading = {
 	defaultProps: {
 		color: "text.50",
-		fontFamily: "heading",
+//		fontFamily: "heading",
 		fontWeight: 700,
 		fontStyle: "normal"
 	}
@@ -202,7 +202,7 @@ const mainInput = {
 			bg: "lighter",
 			borderRadius: 0
 		},
-		fontFamily: "body",
+//		fontFamily: "body",
 		fontWeight: 400,
 		fontStyle: "normal"
 	}
@@ -212,7 +212,7 @@ const mainCheckboxesDefaultProps = {
 	borderColor: "text.100",
 	_text: {
 		color: "primaryContrast",
-		fontFamily: "body",
+//		fontFamily: "body",
 		fontWeight: 400,
 		fontStyle: "normal"
 	},
@@ -337,7 +337,7 @@ const components = {
 	Text: {...mainFG},
 	Link: {
 		defaultProps: {
-			fontFamily: "body",
+//			fontFamily: "body",
 			fontWeight: 400,
 			fontStyle: "normal"
 		}
@@ -354,7 +354,7 @@ const components = {
 			...mainCheckboxesDefaultProps,
 			_text: {
 				color: "primary.50",
-				fontFamily: "body",
+//				fontFamily: "body",
 				fontWeight: 400,
 				fontStyle: "normal"
 			},

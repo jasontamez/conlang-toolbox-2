@@ -245,13 +245,13 @@ const ParseMSJSON = (props) => {
 						key={getKey("Fragment")}
 						rows={rows}
 						placeholder={placeholder}
+						defaultValue={synText[prop] || ""}
 						onChangeText={
 							(value) => debounce(
 								() => dispatch(setText({prop, value})),
 								{ namespace: "textarea"+prop }
 							)
 						}
-						value={synText[prop] || ""}
 					>
 						{content || ""}
 					</TextAreaSetting>

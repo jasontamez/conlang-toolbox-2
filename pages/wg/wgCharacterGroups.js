@@ -15,7 +15,7 @@ import {
 	Input,
 	useToast
 } from "native-base";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
 	CurvedTransition,
@@ -46,14 +46,10 @@ import {
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../components/toast";
 
-
 const WGChar = () => {
 	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg, equalityCheck);
 	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
-	const addDescRef = useRef(null);
-	const addLabelRef = useRef(null);
-	const addRunRef = useRef(null);
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [saveGroupError, setSaveGroupError] = useState('');
 	const [deletingGroup, setDeletingGroup] = useState(false);
@@ -65,6 +61,9 @@ const WGChar = () => {
 	const [editOverrideSwitch, setEditOverrideSwitch] = useState(false);
 	const [editOverrideValue, setEditOverrideValue] = useState(20);
 	const [addGroupOpen, setAddGroupOpen] = useState(false);
+	const [addDesc, setAddDesc] = useState("");
+	const [addLabel, setAddLabel] = useState("");
+	const [addRun, setAddRun] = useState("");
 	const [addOverrideSwitch, setAddOverrideSwitch] = useState(false);
 	const [addOverrideValue, setAddOverrideValue] = useState(characterGroupDropoff);
 	const toast = useToast();
@@ -72,9 +71,9 @@ const WGChar = () => {
 	// add group
 	const addNewGroup = (closeAfterAdd) => {
 		// attempts to add the modal info as a new group
-		const description = addDescRef.current.value.trim();
-		const label = addLabelRef.current.value.trim();
-		const run = addRunRef.current.value.trim();
+		const description = addDesc.trim();
+		const label = addLabel.trim();
+		const run = addRun.trim();
 		const dropoff = addOverrideSwitch ? addOverrideValue : undefined;
 		let msg = [];
 		if(!label) {
@@ -104,14 +103,14 @@ const WGChar = () => {
 	};
 	const closeAddGroup = () => {
 		// closes the adding modal
-		addDescRef.current.value = "";
-		addLabelRef.current.value = "";
-		addRunRef.current.value = "";
+		setAddDesc("");
+		setAddLabel("");
+		setAddRun("");
 		addOverrideSwitch && setAddOverrideSwitch(false);
 		setAddGroupOpen(false);
 	};
 	const suggestLabel = () => {
-		const v = addDescRef.current.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+		const v = addDesc.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
 		let labels = {};
 		characterGroups.forEach(group => labels[group.label] = true);
 		let length = v.length;
@@ -139,7 +138,7 @@ const WGChar = () => {
 			});
 		} else {
 			// Suitable label found
-			addLabelRef.current.value = label;
+			setAddLabel(label);
 		}
 	};
 	// edit group
@@ -422,11 +421,10 @@ const WGChar = () => {
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{
-									ref: addDescRef,
-									mt: 1
-								}}
+								inputProps={{ mt: 1 }}
 								boxProps={{ pb: 2 }}
+								value={addDesc}
+								onChangeText={v => setAddDesc(v)}
 							/>
 							<HStack
 								py={2}
@@ -437,12 +435,13 @@ const WGChar = () => {
 								<HStack alignItems="center">
 									<Text>Short Label:</Text>
 									<Input
-										ref={addLabelRef}
 										w={8}
 										py={1}
 										px={0}
 										textAlign="center"
 										mx={2}
+										value={addLabel}
+										onChangeText={v => setAddLabel(v)}
 									/>
 								</HStack>
 								<Button
@@ -464,10 +463,9 @@ const WGChar = () => {
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{
-									ref: addRunRef,
-									mt: 1
-								}}
+								inputProps={{ mt: 1 }}
+								value={addRun}
+								onChangeText={v => setAddRun(v)}
 							/>
 							<HStack
 								w="full"

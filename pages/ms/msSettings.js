@@ -41,7 +41,7 @@ const Settings = () => {
 		<VStack space={4} mt={3}>
 			<TextSetting
 				placeholder="Usually the language name."
-				value={synTitle}
+				defaultValue={synTitle}
 				onChangeText={(v) => debounce(
 					() => dispatch(setTitle(v)),
 					{ namespace: "msName" }
@@ -50,7 +50,7 @@ const Settings = () => {
 			/>
 			<TextAreaSetting
 				placeholder="A short description of this document."
-				value={synDescription}
+				defaultValue={synDescription}
 				onChangeText={(v) => debounce(
 					() => dispatch(setDescription(v)),
 					{ namespace: "msDesc" }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
 	useBreakpointValue,
 	Text,
@@ -9,7 +9,9 @@ import {
 	useContrastText,
 	Switch,
 	Center,
-	IconButton
+	IconButton,
+	Modal,
+	Button
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
@@ -19,6 +21,7 @@ import ReAnimated, {
 } from 'react-native-reanimated';
 
 import {
+	CloseCircleIcon,
 	EditIcon,
 	EquiprobableIcon,
 	SaveIcon,
@@ -29,13 +32,11 @@ import { sizes } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	setSyllableBoxDropoff,
-	setSingleWord,
-	setWordInitial,
-	setWordMiddle,
-	setWordFinal,
 	setMultipleSyllableTypes,
-	setSyllableOverride
+	setSyllableOverride,
+	setSyllables
 } from "../../store/wgSlice";
+import ExtraChars from "../../components/ExtraCharsButton";
 
 
 const WGSyllables = () => {
@@ -49,51 +50,22 @@ const WGSyllables = () => {
 		wordFinal
 	} = useSelector(state => state.wg, equalityCheck);
 	const dispatch = useDispatch();
-	const [editingSingleWord, setEditingSingleWord] = useState(false);
-	const [editingWordInitial, setEditingWordInitial] = useState(false);
-	const [editingWordMiddle, setEditingWordMiddle] = useState(false);
-	const [editingWordFinal, setEditingWordFinal] = useState(false);
-	const [editingSingleWordOverride, setEditingSingleWordOverride] = useState(false);
-	const [editingWordInitialOverride, setEditingWordInitialOverride] = useState(false);
-	const [editingWordMiddleOverride, setEditingWordMiddleOverride] = useState(false);
-	const [editingWordFinalOverride, setEditingWordFinalOverride] = useState(false);
-	const [editingSingleWordOverrideValue, setEditingSingleWordOverrideValue] = useState(false);
-	const [editingWordInitialOverrideValue, setEditingWordInitialOverrideValue] = useState(false);
-	const [editingWordMiddleOverrideValue, setEditingWordMiddleOverrideValue] = useState(false);
-	const [editingWordFinalOverrideValue, setEditingWordFinalOverrideValue] = useState(false);
-	const singleRef = useRef(null);
-	const initialRef = useRef(null);
-	const middleRef = useRef(null);
-	const finalRef = useRef(null);
-	useEffect(
-		() => {
-			const {singleWord, wordInitial, wordMiddle, wordFinal} = syllableDropoffOverrides;
-			setEditingSingleWordOverride(singleWord !== null);
-			setEditingSingleWordOverrideValue(singleWord === null ? syllableBoxDropoff : singleWord);
-			setEditingWordInitialOverride(wordInitial !== null);
-			setEditingWordInitialOverrideValue(wordInitial === null ? syllableBoxDropoff : wordInitial);
-			setEditingWordMiddleOverride(wordMiddle !== null);
-			setEditingWordMiddleOverrideValue(wordMiddle === null ? syllableBoxDropoff : wordMiddle);
-			setEditingWordFinalOverride(wordFinal !== null);
-			setEditingWordFinalOverrideValue(wordFinal === null ? syllableBoxDropoff : wordFinal);
-		},
-		[syllableBoxDropoff, syllableDropoffOverrides]
-	);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [modalTitle, setModalTitle] = useState("");
+	const [modalSyllables, setModalSyllables] = useState("");
+	const [modalPropName, setModalPropName] = useState("");
+	const [modalOverrideFlag, setModalOverrideFlag] = useState(false);
+	const [modalOverrideValue, setModalOverrideValue] = useState(0);
+	const [modalTempInfo, setModalTempInfo] = useState("");
+	const primaryContrast = useContrastText('primary.500');
+	const headerSize = useBreakpointValue(sizes.md);
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
 	const oneBox = [
 		{
 			title: "Syllables",
-			inputRef: singleRef,
 			syllablesValue: singleWord,
-			setValue: setSingleWord,
-			editingFlag: editingSingleWord,
-			setFlag: setEditingSingleWord,
-			overrideFlag: editingSingleWordOverride,
-			setOFlag: setEditingSingleWordOverride,
-			overrideValue: editingSingleWordOverrideValue,
-			setOValue: setEditingSingleWordOverrideValue,
-			overridePropName: "singleWord"
+			propName: "singleWord"
 		}
 	];
 	const allBoxes = [
@@ -103,42 +75,18 @@ const WGSyllables = () => {
 		},
 		{
 			title: "Word-Initial Syllables",
-			inputRef: initialRef,
 			syllablesValue: wordInitial,
-			setValue: setWordInitial,
-			editingFlag: editingWordInitial,
-			setFlag: setEditingWordInitial,
-			overrideFlag: editingWordInitialOverride,
-			setOFlag: setEditingWordInitialOverride,
-			overrideValue: editingWordInitialOverrideValue,
-			setOValue: setEditingWordInitialOverrideValue,
-			overridePropName: "wordInitial"
+			propName: "wordInitial"
 		},
 		{
 			title: "Word-Middle Syllables",
-			inputRef: middleRef,
 			syllablesValue: wordMiddle,
-			setValue: setWordMiddle,
-			editingFlag: editingWordMiddle,
-			setFlag: setEditingWordMiddle,
-			overrideFlag: editingWordMiddleOverride,
-			setOFlag: setEditingWordMiddleOverride,
-			overrideValue: editingWordMiddleOverrideValue,
-			setOValue: setEditingWordMiddleOverrideValue,
-			overridePropName: "wordMiddle"
+			propName: "wordMiddle"
 		},
 		{
 			title: "Word-Final Syllables",
-			inputRef: finalRef,
 			syllablesValue: wordFinal,
-			setValue: setWordFinal,
-			editingFlag: editingWordFinal,
-			setFlag: setEditingWordFinal,
-			overrideFlag: editingWordFinalOverride,
-			setOFlag: setEditingWordFinalOverride,
-			overrideValue: editingWordFinalOverrideValue,
-			setOValue: setEditingWordFinalOverrideValue,
-			overridePropName: "wordFinal"
+			propName: "wordFinal"
 		}
 	];
 	const boxes = multipleSyllableTypes ? allBoxes : oneBox;
@@ -147,12 +95,12 @@ const WGSyllables = () => {
 		boxes.forEach(box => {
 			if(box.editingFlag) {
 				// Save current value to property
-				dispatch(box.setValue(box.inputRef.current.value));
+				dispatch(box.setValue(box.tempValue.trim()));
 				// Are we overriding?
 				if(box.overrideFlag) {
 					// Save that, too
 					dispatch(setSyllableOverride({
-						override: box.overridePropName,
+						override: box.propName,
 						value: box.overrideValue
 					}));
 				}
@@ -161,14 +109,8 @@ const WGSyllables = () => {
 	};
 	const SyllableBox = ({
 		title,
-		inputRef,
 		syllablesValue,
-		editingFlag,
-		setFlag,
-		overrideFlag,
-		setOFlag,
-		overrideValue,
-		setOValue
+		propName
 	}) => (
 		<ReAnimated.View
 			entering={FadeInUp}
@@ -195,107 +137,153 @@ const WGSyllables = () => {
 						{title.split(" ").map((t, i) => (
 							<Text fontSize={textSize} bold key={title + t + String(i)}>{t}</Text>
 						))}
-						{overrideFlag && !editingFlag ?
-							<Box bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
-								<Text lineHeight={descSize} fontSize={descSize} italic>{overrideValue}%</Text>
+						{syllableDropoffOverrides[propName] !== null ?
+							<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
+								<Text lineHeight={descSize} fontSize={descSize} italic>{syllableDropoffOverrides[propName]}%</Text>
 							</Box>
 						:
-							<></>
+							<React.Fragment key={`${title}-noOverride`} />
 						}
 					</VStack>
-					<TextAreaSetting
-						rows={Math.max(3, syllablesValue.split(/\n/).length)}
-						value={syllablesValue}
-						text={null}
-						boxProps={{
-							flex: 1,
-							maxW: 64,
-							minW: 32
-						}}
-						inputProps={{
-							disabled: !editingFlag,
-							ref: inputRef
-						}}
-					/>
+					<Box
+						key={`${title}-Inactive`}
+						bg="lighter"
+						py={2}
+						px={3}
+						minW={32}
+					>
+						<Text fontSize={descSize}>{syllablesValue}</Text>
+					</Box>
 					<IconButton
 						flexShrink={0}
 						alignSelf="center"
 						onPress={() => {
-							maybeDoSave();
-							setFlag(!editingFlag);
+							setModalTitle(title);
+							setModalSyllables(syllablesValue);
+							setModalTempInfo(syllablesValue);
+							setModalPropName(propName);
+							const override = syllableDropoffOverrides[propName];
+							if(override === null) {
+								setModalOverrideFlag(false);
+								setModalOverrideValue(syllableBoxDropoff);
+							} else {
+								setModalOverrideFlag(true);
+								setModalOverrideValue(override);
+							}
+							setModalOpen(true);
 						}}
 						p={1}
-						bg={editingFlag ? "success.500" : "transparent"}
-						icon={
-							editingFlag ?
-								<SaveIcon size={textSize} color={useContrastText("success.500")}/>
-							:
-								<EditIcon size={textSize} color="primary.400" />
-						}
+						bg="transparent"
+						icon={<EditIcon size={textSize} color="primary.400" />}
 					/>
 				</HStack>
-				{editingFlag ?
-					<ReAnimated.View
-						entering={FadeInUp}
-						exiting={FadeOutUp}
-						layout={CurvedTransition}
-					>
-						<HStack
-							w="full"
-							alignItems="center"
-							justifyContent="flex-start"
-							space={2.5}
-							py={2}
-						>
-							<Text fontSize={textSize}>Use separate dropoff rate</Text>
-							<Switch
-								isChecked={overrideFlag}
-								onToggle={() => {
-									maybeDoSave();
-									setOFlag(!overrideFlag);
-								}}
-							/>
-						</HStack>
-						{overrideFlag ?
-							<ReAnimated.View
-								entering={FadeInUp}
-								exiting={FadeOutUp}
-							>
-								<SliderWithLabels
-									max={50}
-									beginLabel={<EquiprobableIcon color="text.50" />}
-									endLabel={<SharpDropoffIcon color="text.50" />}
-									value={overrideValue}
-									sliderProps={{
-										accessibilityLabel: "Dropoff rate",
-										onChangeEnd: (v) => setOValue(v)
-									}}
-									Label={({value}) => (
-										<Center>
-											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text></Text>
-										</Center>
-									)}
-									stackProps={{
-										p: 2,
-										mt: 3,
-										space: 1,
-										borderWidth: 1,
-										borderColor: "primary.600"
-									}}
-								/>
-							</ReAnimated.View>
-						:
-							<></>
-						}
-					</ReAnimated.View>
-				:
-					<></>
-				}
 			</VStack>
 		</ReAnimated.View>
 	);
 	return (
 		<VStack h="full">
+			<Modal isOpen={modalOpen}>
+				<Modal.Content>
+					<Modal.Header bg="primary.500">
+						<HStack justifyContent="flex-end" alignItems="center" w="full">
+							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} justifySelf="flex-start" isTruncated>{modalTitle}</Text>
+							<ExtraChars color={primaryContrast} buttonProps={{size: textSize}} />
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setModalOpen(false)}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						{/* The following abomination is because 1) Refs don't work, 2) State makes your cursor jump and skip in a controlled textarea */}
+						{boxes.filter(box => box.propName === modalPropName).map(box => (
+							<Box key={`${box.propName}-editor`}>
+								<TextAreaSetting
+									rows={Math.max(3, modalSyllables.split(/\n/).length)}
+									defaultValue={modalSyllables}
+									onChangeText={(text) => setModalTempInfo(text)}
+									text={null}
+									boxProps={{
+										w: "full",
+										alignItems: "center"
+									}}
+									inputProps={{
+										maxW: 64,
+										minW: 32
+									}}
+								/>
+								<HStack
+									w="full"
+									alignItems="center"
+									justifyContent="center"
+									space={2.5}
+									py={2}
+								>
+									<Text fontSize={textSize}>Use separate dropoff rate</Text>
+									<Switch
+										isChecked={modalOverrideFlag}
+										onToggle={() =>  setModalOverrideFlag(!modalOverrideFlag)}
+									/>
+								</HStack>
+								{modalOverrideFlag ?
+									<ReAnimated.View
+										entering={FadeInUp}
+										exiting={FadeOutUp}
+										key="modalSlider"
+									>
+										<SliderWithLabels
+											max={50}
+											beginLabel={<EquiprobableIcon color="text.50" />}
+											endLabel={<SharpDropoffIcon color="text.50" />}
+											value={modalOverrideValue}
+											sliderProps={{
+												accessibilityLabel: "Dropoff rate",
+												onChangeEnd: (v) => setModalOverrideValue(v)
+											}}
+											Label={({value}) => (
+												<Center>
+													<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text></Text>
+												</Center>
+											)}
+											stackProps={{
+												p: 2,
+												mt: 3,
+												space: 1,
+												borderWidth: 1,
+												borderColor: "primary.600",
+												w: "full"
+											}}
+										/>
+									</ReAnimated.View>
+								:
+									<React.Fragment key="noModalSlider" />
+								}
+							</Box>
+						))}
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							colorScheme="success"
+							startIcon={<SaveIcon size={descSize} color="success.50" />}
+							px={2}
+							py={1}
+							mx={2}
+							my={1.5}
+							onPress={() => {
+								dispatch(setSyllables({
+									syllables: modalPropName,
+									value: modalTempInfo
+								}));
+								dispatch(setSyllableOverride({
+									override: modalPropName,
+									value: modalOverrideFlag ? modalOverrideValue : null
+								}));
+								setModalOpen(false);
+							}}
+						>SAVE</Button>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
 			<ScrollView>
 				<SliderWithLabels
 					max={50}

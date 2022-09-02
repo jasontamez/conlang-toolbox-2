@@ -26,20 +26,9 @@ const setMultipleSyllableTypesFunc = (state, action) => {
 	state.multipleSyllableTypes = action.payload;
 	return state;
 };
-const setSingleWordFunc = (state, action) => {
-	state.singleWord = action.payload.replace(/(?:\r?\n)+/g, "\n");
-	return state;
-};
-const setWordInitialFunc = (state, action) => {
-	state.wordInitial = action.payload.replace(/(?:\r?\n)+/g, "\n");
-	return state;
-};
-const setWordMiddleFunc = (state, action) => {
-	state.wordMiddle = action.payload.replace(/(?:\r?\n)+/g, "\n");
-	return state;
-};
-const setWordFinalFunc = (state, action) => {
-	state.wordFinal = action.payload.replace(/(?:\r?\n)+/g, "\n");
+const setSyllablesFunc = (state, action) => {
+	const { syllables, value } = action.payload;
+	state[syllables] = value.replace(/(?:\r?\n)+/g, "\n");
 	return state;
 };
 const setSyllableOverrideFunc = (state, action) => {
@@ -171,10 +160,7 @@ const wgSlice = createSlice({
 		deleteCharacterGroup: deleteCharacterGroupFunc,
 		editCharacterGroup: editCharacterGroupFunc,
 		setMultipleSyllableTypes: setMultipleSyllableTypesFunc,
-		setSingleWord: setSingleWordFunc,
-		setWordInitial: setWordInitialFunc,
-		setWordMiddle: setWordMiddleFunc,
-		setWordFinal: setWordFinalFunc,
+		setSyllables: setSyllablesFunc,
 		setSyllableOverride: setSyllableOverrideFunc,
 		addTransform: addTransformFunc,
 		deleteTransform: deleteTransformFunc,
@@ -207,10 +193,7 @@ export const {
 	deleteCharacterGroup,
 	editCharacterGroup,
 	setMultipleSyllableTypes,
-	setSingleWord,
-	setWordInitial,
-	setWordMiddle,
-	setWordFinal,
+	setSyllables,
 	setSyllableOverride,
 	addTransform,
 	deleteTransform,
