@@ -92,7 +92,6 @@ const WordLists = () => {
 	const SaveBar = () => {
 		const SaveAll = () => (
 			<Button
-				justifySelf="flex-start"
 				bg="secondary.500"
 				m={1.5}
 				py={1}
@@ -152,8 +151,9 @@ const WordLists = () => {
 				borderTopColor="darker"
 				borderTopWidth={1.5}
 				bg="main.700"
-				justifyContent="flex-end"
+				justifyContent={pickAndSaveForLexicon ? "flex-end" : "space-between"}
 				alignItems="flex-end"
+				alignContent="center"
 				flexWrap="wrap"
 			>
 				{buttons}
@@ -303,7 +303,6 @@ const WordLists = () => {
 				m={2}
 				flexGrow={1}
 				flexShrink={1}
-				justifySelf="flex-start"
 				borderWidth={shown.length ? 2 : 0}
 				borderColor="lighter"
 			>

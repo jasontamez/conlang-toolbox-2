@@ -219,11 +219,13 @@ const WGTransformations = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} justifySelf="flex-start">Add Transform</Text>
-							<ExtraChars color={primaryContrast} buttonProps={{size: textSize}} />
+							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Add Transform</Text>
+							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex: 0, mx: 1}} />
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => closeAddTransform()}
+								mx={1}
+								flex={0}
 							/>
 						</HStack>
 					</Modal.Header>

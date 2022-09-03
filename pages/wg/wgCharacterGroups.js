@@ -296,9 +296,10 @@ const WGChar = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} justifySelf="flex-start">Edit Character Group</Text>
-							<ExtraChars color={primaryContrast} buttonProps={{size: textSize}} />
+							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Character Group</Text>
+							<ExtraChars flex={0} color={primaryContrast} buttonProps={{size: textSize}} />
 							<IconButton
+								flex={0}
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => setEditingGroup(false)}
 							/>
@@ -408,11 +409,13 @@ const WGChar = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} justifySelf="flex-start">Add Character Group</Text>
-							<ExtraChars color={primaryContrast} buttonProps={{size: textSize}} />
+							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Character Group</Text>
+							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex: 0, mx: 1}} />
 							<IconButton
+								flex={0}
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => closeAddGroup()}
+								mx={1}
 							/>
 						</HStack>
 					</Modal.Header>
@@ -451,7 +454,6 @@ const WGChar = () => {
 											color={primaryContrast}
 										/>
 									}
-									justifySelf="flex-end"
 									py={1}
 									bg="primary.500"
 									_text={{ fontSize: descSize }}
