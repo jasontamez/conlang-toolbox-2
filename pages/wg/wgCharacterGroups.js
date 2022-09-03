@@ -15,10 +15,9 @@ import {
 	Input,
 	useToast
 } from "native-base";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
-	CurvedTransition,
 	FadeInUp,
 	FadeOutUp
 } from 'react-native-reanimated';
@@ -45,6 +44,7 @@ import {
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
+import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 
 const WGChar = () => {
 	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg, equalityCheck);
@@ -64,6 +64,8 @@ const WGChar = () => {
 	const [addDesc, setAddDesc] = useState("");
 	const [addLabel, setAddLabel] = useState("");
 	const [addRun, setAddRun] = useState("");
+	const refAddDesc = useRef(null);
+	const refAddRun = useRef(null);
 	const [addOverrideSwitch, setAddOverrideSwitch] = useState(false);
 	const [addOverrideValue, setAddOverrideValue] = useState(characterGroupDropoff);
 	const toast = useToast();
@@ -71,6 +73,7 @@ const WGChar = () => {
 	// add group
 	const addNewGroup = (closeAfterAdd) => {
 		// attempts to add the modal info as a new group
+		ensureEnd([refAddDesc, refAddRun]);
 		const description = addDesc.trim();
 		const label = addLabel.trim();
 		const run = addRun.trim();
@@ -99,14 +102,25 @@ const WGChar = () => {
 			placement: "top",
 			msg: "Character Group added!"
 		});
-		closeAfterAdd && closeAddGroup();
+		if (closeAfterAdd) {
+			closeAddGroup();
+		} else {
+			clearAddModal();
+			refAddDesc.current && refAddDesc.current.focus && refAddDesc.current.focus();
+		}
 	};
-	const closeAddGroup = () => {
-		// closes the adding modal
+	const clearAddModal = () => {
+		// clears the form info
+		refAddDesc.current && refAddDesc.current.clear && refAddDesc.current.clear();
+		refAddRun.current && refAddRun.current.clear && refAddRun.current.clear();
 		setAddDesc("");
 		setAddLabel("");
 		setAddRun("");
 		addOverrideSwitch && setAddOverrideSwitch(false);
+	};
+	const closeAddGroup = () => {
+		// closes the adding modal
+		clearAddModal();
 		setAddGroupOpen(false);
 	};
 	const suggestLabel = () => {
@@ -424,10 +438,8 @@ const WGChar = () => {
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{ mt: 1 }}
+								inputProps={{ mt: 1, ref: refAddDesc, ...saveOnEnd(setAddDesc) }}
 								boxProps={{ pb: 2 }}
-								value={addDesc}
-								onChangeText={v => setAddDesc(v)}
 							/>
 							<HStack
 								py={2}
@@ -465,9 +477,7 @@ const WGChar = () => {
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1 }}
-								value={addRun}
-								onChangeText={v => setAddRun(v)}
+								inputProps={{ mt: 1, ref: refAddRun, ...saveOnEnd(setAddRun) }}
 							/>
 							<HStack
 								w="full"

@@ -1,7 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
-import { Menu, Pressable, VStack, Text, Divider, Modal, useBreakpointValue, useContrastText } from 'native-base';
-import { DotsIcon, SaveIcon, HelpIcon } from '../../components/icons';
+import {
+	Menu,
+	Pressable,
+	VStack,
+	Text,
+	Divider,
+	Modal,
+	Button,
+	useBreakpointValue,
+	useContrastText
+} from 'native-base';
+import { DotsIcon, HelpIcon } from '../../components/icons';
 import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
 import { sizes } from "../../store/appStateSlice";
 

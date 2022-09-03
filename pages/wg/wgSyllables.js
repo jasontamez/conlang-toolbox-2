@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
 	useBreakpointValue,
 	Text,
@@ -152,7 +152,7 @@ const WGSyllables = () => {
 						px={3}
 						minW={32}
 					>
-						<Text fontSize={descSize}>{syllablesValue}</Text>
+						<Text fontSize={descSize} italic={syllablesValue === ""}>{syllablesValue || "(empty)"}</Text>
 					</Box>
 					<IconButton
 						flexShrink={0}

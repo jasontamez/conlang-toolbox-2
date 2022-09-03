@@ -43,6 +43,7 @@ import {
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
 import ModalTransformEditingItem from "./wgModalTransformEditor";
+import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 
 const WGTransformations = () => {
 	const { transforms } = useSelector(state => state.wg, equalityCheck);
@@ -56,6 +57,9 @@ const WGTransformations = () => {
 	const [addSearch, setAddSearch] = useState("");
 	const [addReplace, setAddReplace] = useState("");
 	const [addDescription, setAddDescription] = useState("");
+	const refSearch = useRef(null);
+	const refReplace = useRef(null);
+	const refDescription = useRef(null);
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [deletingTransform, setDeletingTransform] = useState(false);
 	const [transformDeleteString, setTransformDeleteString] = useState("");
@@ -90,6 +94,9 @@ const WGTransformations = () => {
 		setDeletingTransform(false);
 	};
 	const clearAddTransformModal = () => {
+		refSearch.current && refSearch.current.clear && refSearch.current.clear();
+		refReplace.current && refReplace.current.clear && refReplace.current.clear();
+		refDescription.current && refDescription.current.clear && refDescription.current.clear();
 		setAddSearch("");
 		setAddReplace("");
 		setAddDescription("");
@@ -100,6 +107,7 @@ const WGTransformations = () => {
 	};
 	const addNewTransform = (closeModal) => {
 		let id;
+		ensureEnd([refSearch, refReplace, refDescription]);
 		const search = addSearch.trim();
 		const replace = addReplace.trim();
 		const description = addDescription.trim();
@@ -126,7 +134,12 @@ const WGTransformations = () => {
 			placement: "top",
 			msg: "Transform added!"
 		});
-		closeModal && setAddTransformOpen(false);
+		if(closeModal) {
+			closeAddTransform();
+		} else {
+			clearAddTransformModal();
+			refSearch.current && refSearch.current.focus && refSearch.current.focus();
+		}
 	};
 	const moveUpInList = (item, i) => {
 		if(i === 0) {
@@ -234,26 +247,20 @@ const WGTransformations = () => {
 							<TextSetting
 								text="Search Expression"
 								placeholder="(what to replace)"
-								inputProps={{ mt: 1 }}
+								inputProps={{ mt: 1, ref: refSearch, ...saveOnEnd(setAddSearch) }}
 								boxProps={{ pb: 2 }}
-								value={addSearch}
-								onChangeText={v => setAddSearch(v)}
 							/>
 							<TextSetting
 								text="Replacement Expression"
 								placeholder="(what to replace with)"
-								inputProps={{ mt: 1 }}
+								inputProps={{ mt: 1, ref: refReplace, ...saveOnEnd(setAddReplace) }}
 								boxProps={{ py: 2 }}
-								value={addReplace}
-								onChangeText={v => setAddReplace(v)}
 							/>
 							<TextSetting
 								text="Transformation Description"
 								placeholder="(optional)"
-								inputProps={{ mt: 1 }}
+								inputProps={{ mt: 1, ref: refDescription, ...saveOnEnd(setAddDescription) }}
 								boxProps={{ pb: 2 }}
-								value={addDescription}
-								onChangeText={v => setAddDescription(v)}
 							/>
 						</VStack>
 					</Modal.Body>
