@@ -73,10 +73,10 @@ export const sizes = {
 	}
 };
 export const fontSizesInPx = {
-	xs: 12,
-	sm: 14,
-	md: 16,
-	lg: 18,
-	xl: 20,
-	'2xl': 24
+	xs: 12 * 0.75,
+	sm: 14 * 0.75,
+	md: 16 * 0.75,
+	lg: 18 * 0.75,
+	xl: 20 * 0.75,
+	'2xl': 24 * 0.75
 };

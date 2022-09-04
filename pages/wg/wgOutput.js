@@ -6,9 +6,10 @@ import {
 	HStack,
 	Spinner,
 	Button,
-	Factory
+	IconButton,
+	Pressable
 } from "native-base";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
 	FadeInLeft,
@@ -22,7 +23,10 @@ import escapeRegexp from 'escape-string-regexp';
 import { FlatGrid } from 'react-native-super-grid';
 
 import {
-	AddIcon
+	CopyIcon,
+	GearIcon,
+	GenerateIcon,
+	SaveIcon
 } from "../../components/icons";
 import { sizes, fontSizesInPx } from "../../store/appStateSlice";
 import {
@@ -61,21 +65,21 @@ const WGOutput = () => {
 		wordlistMultiColumn,// true
 		wordsPerWordlist	// 250
 	} = useSelector(state => state.wg, equalityCheck);
-	const { disableConfirms } = useSelector(state => state.appState);
+	//const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
 	const [displayedWords, setDisplayedWords] = useState([]);
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
-	const [displayedText, setDisplayedText] = useState("");
+	const [displayedText, setDisplayedText] = useState([]);
 	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 	const [charGroupMap, setCharGroupMap] = useState({});
 	const [transformsWithRegExps, setTransformsWithRegExps] = useState([]);
 	const textSize = useBreakpointValue(sizes.sm);
-	const emSize = fontSizesInPx[textSize] || 12;
+	const generateSize = useBreakpointValue(sizes.lg);
+	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
-	const FlatGridNB = Factory(FlatGrid);
 
 	// // //
 	// Convenience Variables
@@ -142,7 +146,7 @@ const WGOutput = () => {
 			return;
 		}
 		// Set up loading screen, clear any old info, etc
-		setDisplayedText("");
+		setDisplayedText([]);
 		setDisplayedWords([]);
 		setShowLoadingScreen(true);
 		// Determine what we're making.
@@ -202,10 +206,11 @@ const WGOutput = () => {
 			} else {
 				// Exclamatory one-twelfth the time
 			}
-			text.push(`${PRE || ""}${sentence}${POST || ""}`);
+			// TO-DO: FIX THIS, add Pressables
+			text.push(...`${PRE || ""}${sentence}${POST || ""}`.split(/\s+/));
 		}
 		setShowLoadingScreen(false);
-		setDisplayedText(text.join(" "));
+		setDisplayedText(text);
 	};
 
 	// // //
@@ -378,9 +383,10 @@ const WGOutput = () => {
 		}
 		// Sort if needed
 		//TO-DO: Find replacement for Intl.Collator
-//		if(sortWordlist) {
+		if(sortWordlist) {
 //			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
-//		}
+			everySyllable.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "variant" }));
+		}
 		setShowLoadingScreen(false);
 		determineColumnSize(everySyllable);
 		setDisplayedWords(everySyllable);
@@ -425,9 +431,10 @@ const WGOutput = () => {
 		}
 		// Sort if needed
 		//TO-DO: Find replacement for Intl.Collator
-//		if(sortWordlist) {
+		if(sortWordlist) {
 //			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
-//		}
+			words.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "variant" }));
+		}
 		setShowLoadingScreen(false);
 		determineColumnSize(words);
 		setDisplayedWords(words);
@@ -463,21 +470,19 @@ const WGOutput = () => {
 			exiting={FadeOutLeft}
 			style={{flex: 1}}
 		>
-			<FlatGridNB
+			<FlatGrid
 				renderItem={({item}) => <Text fontSize={textSize}>{item}</Text>}
 				data={displayedWords}
 				itemDimension={longestWordSizeEstimate}
-				fixed
 				keyExtractor={(item, i) => `${item}-Grid-${i}`}
 				style={{
 					margin: 0,
 					padding: 0,
 					flex: 1,
+					maxHeight: "100%",
+					maxWidth: "100%"
 				}}
 				spacing={displayedWords.length ? emSize : 0}
-				m={0}
-				p={0}
-				maxH="full"
 			/>
 		</ReAnimated.View>
 	);
@@ -487,7 +492,7 @@ const WGOutput = () => {
 			<ReAnimated.View
 				entering={ZoomInEasyDown}
 				exiting={ZoomOutEasyDown}
-				style={{flex: 1}}
+				style={{flex: 1, width: "100%"}}
 			>
 				<HStack
 					flexWrap="wrap"
@@ -495,6 +500,8 @@ const WGOutput = () => {
 					justifyContent="center"
 					space={10}
 					py={4}
+					w="full"
+					bg="lighter"
 				>
 					<Text fontSize={loadingSize}>Generating...</Text>
 					<Spinner size="lg" color="primary.500" />
@@ -502,17 +509,39 @@ const WGOutput = () => {
 			</ReAnimated.View>
 		);
 	}
-	const PseudoText = () => (
-		<ReAnimated.View
-			entering={ZoomInRight}
-			exiting={ZoomOutRight}
-			style={{flex: 1}}
-		>
-			<ScrollView w="full">
-				<Text fontSize={textSize}>{displayedText}</Text>
-			</ScrollView>
-		</ReAnimated.View>
-	);
+	const PseudoText = () => {
+		const Inner = ({text}) => {
+			// TO-DO: Move this whole thing elsewhere...
+			//   Add a Pressable element earlier in the chain, before
+			//     punctuation gets added? Disabled could be tied
+			//     to a state element.
+			//   PLUS figure out WHY it keeps breaking lines!!
+			if(true) {
+				return (
+					<Text fontSize={textSize} lineHeight={generateSize}><Pressable disabled bg="lighter"><Text>{text}</Text></Pressable> </Text>
+				);
+			}
+			return (
+				<>
+					<Text>{text}</Text>
+					<Text> </Text>
+				</>
+			);
+		};
+		return (
+			<ReAnimated.View
+				entering={ZoomInRight}
+				exiting={ZoomOutRight}
+				style={{flex: 1}}
+			>
+				<ScrollView>
+					<HStack flexWrap="wrap">
+						{displayedText.map((t, i) => <Inner key={`${t} : ${i}`} text={t} />)}
+					</HStack>
+				</ScrollView>
+			</ReAnimated.View>
+		)
+	};
 
 	return (
 		<VStack h="full" alignContent="flex-start" bg="main.900">
@@ -538,22 +567,72 @@ const WGOutput = () => {
 				<Button onPress={() => generateEverySyllable()}>Syllables</Button>
 				<Button onPress={() => {
 					setShowLoadingScreen(false);
-					setDisplayedText("");
+					setDisplayedText([]);
 					setDisplayedWords([]);
 				}}>Clear</Button>
 			</HStack>
-			{(showLoadingScreen ?
-				[<LoadingScreen key="loadingScreen" />]
-			:
-				[]
-			)}
+			<HStack
+				justifyContent="space-between"
+				alignItems="flex-start"
+				maxW="full"
+				maxH="full"
+				pt={8}
+				px={6}
+				space={2}
+			>
+				<VStack
+					space={4}
+					flex={1}
+					alignItems="flex-start"
+					justifyContent="flex-start"
+				>
+					<Button
+						_text={{
+							fontSize: generateSize,
+							letterSpacing: 1.5
+						}}
+						pl={5}
+						pr={4}
+						py={1.5}
+						endIcon={<GenerateIcon size={generateSize} ml={1} />}
+					>GENERATE</Button>
+					{(showLoadingScreen ?
+						[<LoadingScreen key="loadingScreen" />]
+					:
+						[]
+					)}
+					{(displayedText.length > 0 ?
+						[<PseudoText key="pseudoText" />]
+					:
+						[]
+					)}
+				</VStack>
+				<VStack space={2}>
+					<IconButton
+						colorScheme="secondary"
+						variant="solid"
+						icon={/* To-Do: Settings Modal */ <GearIcon size={generateSize} />}
+						px={3.5}
+						py={1}
+					/>
+					<IconButton
+						colorScheme="secondary"
+						variant="solid"
+						icon={/* To-Do: Copy code */ <CopyIcon size={generateSize} />}
+						px={3.5}
+						py={1}
+					/>
+					<IconButton
+						colorScheme="secondary"
+						variant="solid"
+						icon={/* To-Do: MENU */ <SaveIcon size={generateSize} />}
+						px={3.5}
+						py={1}
+					/>
+				</VStack>
+			</HStack>
 			{(displayedWords.length > 0 ?
 				[<WordList key="wordList" />]
-			:
-				[]
-			)}
-			{(displayedText ?
-				[<PseudoText key="pseudoText" />]
 			:
 				[]
 			)}

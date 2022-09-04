@@ -47,6 +47,9 @@ export const WGSyllablesIcon = (props) => <ICON size="md" as={MCI} name="text" {
 export const WGTransformationsIcon = (props) => <ICON size="md" as={MaterialIcons} name="transform" {...props} />;
 export const WGOutputIcon = (props) => <ICON size="md" as={Ionicons} name="document-text-outline" {...props} />;
 export const SuggestLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" {...props} />;
+export const GenerateIcon = (props) => <Icon as={MCI} name="play-circle-outline" {...props} />;
+export const GearIcon = (props) => <Icon as={Ionicons} name="settings-outline" {...props} />;
+export const CopyIcon = (props) => <Icon as={MaterialIcons} name="content-copy" {...props} />;
 
 // Reordering controls
 export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
