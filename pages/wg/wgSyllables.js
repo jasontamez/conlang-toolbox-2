@@ -15,7 +15,6 @@ import {
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import ReAnimated, {
-	CurvedTransition,
 	FadeInUp,
 	FadeOutUp
 } from 'react-native-reanimated';
@@ -62,123 +61,81 @@ const WGSyllables = () => {
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
 	const oneBox = [
-		{
-			title: "Syllables",
-			syllablesValue: singleWord,
-			propName: "singleWord"
-		}
+		"singleWord"
 	];
 	const allBoxes = [
-		{
-			...oneBox[0],
-			title: "Single-Word Syllables"
-		},
-		{
-			title: "Word-Initial Syllables",
-			syllablesValue: wordInitial,
-			propName: "wordInitial"
-		},
-		{
-			title: "Word-Middle Syllables",
-			syllablesValue: wordMiddle,
-			propName: "wordMiddle"
-		},
-		{
-			title: "Word-Final Syllables",
-			syllablesValue: wordFinal,
-			propName: "wordFinal"
-		}
+		"singleWord",
+		"wordInitial",
+		"wordMiddle",
+		"wordFinal"
 	];
-	const boxes = multipleSyllableTypes ? allBoxes : oneBox;
-	const maybeDoSave = () => {
-		// Are we editing? Have we edited?
-		boxes.forEach(box => {
-			if(box.editingFlag) {
-				// Save current value to property
-				dispatch(box.setValue(box.tempValue.trim()));
-				// Are we overriding?
-				if(box.overrideFlag) {
-					// Save that, too
-					dispatch(setSyllableOverride({
-						override: box.propName,
-						value: box.overrideValue
-					}));
-				}
-			}
-		});
-	};
 	const SyllableBox = ({
 		title,
 		syllablesValue,
 		propName
 	}) => (
-		<ReAnimated.View
-			entering={FadeInUp}
-			exiting={FadeOutUp}
+		<VStack
+			py={2.5}
+			px={2}
+			space={2}
 		>
-			<VStack
-				py={2.5}
-				px={2}
-				space={2}
+			<HStack
+				w="full"
+				alignItems="flex-start"
+				justifyContent="flex-start"
+				space={2.5}
 			>
-				<HStack
-					w="full"
-					alignItems="flex-start"
+				<VStack
+					h="full"
 					justifyContent="flex-start"
-					space={2.5}
+					alignItems="flex-end"
+					flexGrow={0}
+					mt={2}
 				>
-					<VStack
-						h="full"
-						justifyContent="flex-start"
-						alignItems="flex-end"
-						flexGrow={0}
-						mt={2}
-					>
-						{title.split(" ").map((t, i) => (
-							<Text fontSize={textSize} bold key={title + t + String(i)}>{t}</Text>
-						))}
-						{syllableDropoffOverrides[propName] !== null ?
-							<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
-								<Text lineHeight={descSize} fontSize={descSize} italic>{syllableDropoffOverrides[propName]}%</Text>
-							</Box>
-						:
-							<React.Fragment key={`${title}-noOverride`} />
+					{title.split(" ").map((t, i) => (
+						<Text fontSize={textSize} bold key={title + t + String(i)}>{t}</Text>
+					))}
+					{syllableDropoffOverrides[propName] !== null ?
+						<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
+							<Text lineHeight={descSize} fontSize={descSize} italic>{syllableDropoffOverrides[propName]}%</Text>
+						</Box>
+					:
+						<React.Fragment key={`${title}-noOverride`} />
+					}
+				</VStack>
+				<Box
+					key={`${title}-Inactive`}
+					bg="lighter"
+					py={2}
+					px={3}
+					minW={32}
+				>
+					<Text fontSize={descSize} italic={syllablesValue === ""}>{syllablesValue || "(empty)"}</Text>
+				</Box>
+				<IconButton
+					flexShrink={0}
+					alignSelf="center"
+					onPress={() => {
+						setModalTitle(title);
+						setModalSyllables(syllablesValue);
+						setModalTempInfo(syllablesValue);
+						setModalPropName(propName);
+						const override = syllableDropoffOverrides[propName];
+						if(override === null) {
+							setModalOverrideFlag(false);
+							setModalOverrideValue(syllableBoxDropoff);
+						} else {
+							setModalOverrideFlag(true);
+							setModalOverrideValue(override);
 						}
-					</VStack>
-					<Box
-						key={`${title}-Inactive`}
-						bg="lighter"
-						py={2}
-						px={3}
-						minW={32}
-					>
-						<Text fontSize={descSize} italic={syllablesValue === ""}>{syllablesValue || "(empty)"}</Text>
-					</Box>
-					<IconButton
-						flexShrink={0}
-						alignSelf="center"
-						onPress={() => {
-							setModalTitle(title);
-							setModalSyllables(syllablesValue);
-							setModalTempInfo(syllablesValue);
-							setModalPropName(propName);
-							const override = syllableDropoffOverrides[propName];
-							if(override === null) {
-								setModalOverrideFlag(false);
-								setModalOverrideValue(syllableBoxDropoff);
-							} else {
-								setModalOverrideFlag(true);
-								setModalOverrideValue(override);
-							}
-							setModalOpen(true);
-						}}
-						p={1}
-						bg="transparent"
-						icon={<EditIcon size={textSize} color="primary.400" />}
-					/>
-				</HStack>
-			</VStack>
-		</ReAnimated.View>
+						setModalOpen(true);
+					}}
+					p={1}
+					bg="transparent"
+					icon={<EditIcon size={textSize} color="primary.400" />}
+				/>
+			</HStack>
+		</VStack>
 	);
 	return (
 		<VStack h="full">
@@ -197,9 +154,9 @@ const WGSyllables = () => {
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
-						{/* The following abomination is because 1) Refs don't work, 2) State makes your cursor jump and skip in a controlled textarea */}
-						{boxes.filter(box => box.propName === modalPropName).map(box => (
-							<Box key={`${box.propName}-editor`}>
+						{// The following abomination is because 1) Refs don't work, 2) State makes your cursor jump and skip in a controlled textarea
+						(multipleSyllableTypes ? allBoxes : oneBox).filter(box => box === modalPropName).map(box => (
+							<Box key={`${box}-editor`}>
 								<TextAreaSetting
 									rows={Math.max(3, modalSyllables.split(/\n/).length)}
 									defaultValue={modalSyllables}
@@ -330,16 +287,39 @@ const WGSyllables = () => {
 					<Switch
 						isChecked={multipleSyllableTypes}
 						onToggle={() => {
-							maybeDoSave();
 							dispatch(setMultipleSyllableTypes(!multipleSyllableTypes));
 						}}
 					/>
 				</HStack>
-				<ReAnimated.View
-					layout={CurvedTransition}
-				>
-					{boxes.map(box => <SyllableBox key={box.title} {...box} />)}
-				</ReAnimated.View>
+				<SyllableBox
+					title={multipleSyllableTypes ? "Single-Word Syllables" : "Syllables"}
+					propName="singleWord"
+					syllablesValue={singleWord}
+				/>
+				{multipleSyllableTypes ?
+					<ReAnimated.View
+						entering={FadeInUp}
+						exiting={FadeOutUp}
+					>
+						<SyllableBox
+							title="Word-Initial Syllables"
+							propName="wordInitial"
+							syllablesValue={wordInitial}
+						/>
+						<SyllableBox
+							title="Word-Middle Syllables"
+							propName="wordMiddle"
+							syllablesValue={wordMiddle}
+						/>
+						<SyllableBox
+							title="Word-Final Syllables"
+							propName="wordFinal"
+							syllablesValue={wordFinal}
+						/>
+					</ReAnimated.View>
+				:
+					<></>
+				}
 			</ScrollView>
 		</VStack>
 	);
