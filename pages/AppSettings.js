@@ -1,6 +1,7 @@
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import { HStack, Menu, ScrollView, Switch, Text, VStack } from 'native-base';
+import { HStack, Menu, ScrollView, Switch, Text, useBreakpointValue, VStack } from 'native-base';
 import { setTheme, setDisableConfirms, sizes } from '../store/appStateSlice';
+import { ToggleSwitch } from "../components/layoutTags";
 
 
 const AppSettings = () => {
@@ -13,27 +14,20 @@ const AppSettings = () => {
 	const textSize = useBreakpointValue(sizes.xs);
 	return (
 		<ScrollView>
-			<HStack
-				w="full"
-				justifyContent="space-between"
-				alignItems="center"
-				p={2}
-				borderBottomWidth={1}
-				borderBottomColor="main.900"
-			>
-				<VStack
-					flexGrow={1}
-					flexShrink={2}
-					mr={2}
-				>
-					<Text fontSize={titleSize}>Disable Confirmation Prompts</Text>
-					<Text fontSize={textSize} color="main.500">Eliminates yes/no prompts when deleting or overwriting data.</Text>
-				</VStack>
-				<Switch
-					defaultIsChecked={disableConfirms}
-					onValueChange={(value) => dispatch(setDisableConfirms(value))}
-				/>
-			</HStack>
+			<ToggleSwitch
+				hProps={{
+					p: 2,
+					borderBottomWidth: 1,
+					borderBottomColor: "main.900"
+				}}
+				label="Disable Confirmation Prompts"
+				labelSize={titleSize}
+				desc="Eliminates yes/no prompts when deleting or overwriting data."
+				descSize={textSize}
+				descProps={{ color: "main.500" }}
+				switchState={disableConfirms}
+				switchToggle={() => dispatch(setDisableConfirms(!disableConfirms))}
+			/>
 			<HStack
 				w="full"
 				justifyContent="space-between"

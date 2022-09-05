@@ -10,7 +10,8 @@ import {
 	Text,
 	TextArea,
 	VStack,
-	useBreakpointValue
+	useBreakpointValue,
+	Switch
  } from "native-base";
 
 import { Bar } from "./icons";
@@ -191,7 +192,6 @@ export const SliderWithTicks = (props) => {
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
-	//    width={desired width of entire element including labels}
 	//    tickProps={props for the background tick bar}
 	//    stackProps={props for the inner ZStack}
 	//    sliderProps={props for the Slider}
@@ -277,20 +277,18 @@ export const SliderWithTicks = (props) => {
 };
 
 export const SliderWithTicksAndLabels = (props) => {
-	// <SliderWithLabels
+	// <SliderWithTicksAndLabels
 	//    min={default 0}
 	//    max={default 4}
 	//    value={starting value of the slider, defaults to `min`}
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
-	//    width={desired width of entire element including labels}
 	//    sliderProps={props for the Slider}
 	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
 	//    zStackProps={props for the ZStack}
 	//    tickProps={props for the background tick bar}
-	//    valueProps={props for the Text element surrounding `value`}
 	//    Label={element that goes above the slider, gets given a
 	//       `value` property}
 	// />
@@ -301,7 +299,6 @@ export const SliderWithTicksAndLabels = (props) => {
 		endLabel,
 		sliderProps,
 		tickProps,
-		width,
 		value,
 		notFilled,
 		Label,
@@ -324,7 +321,6 @@ export const SliderWithTicksAndLabels = (props) => {
 					beginLabel,
 					tickProps,
 					endLabel,
-					width,
 					notFilled,
 					value
 				}}
@@ -342,11 +338,9 @@ export const SliderWithLabels = (props) => {
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
-	//    width={desired width of entire element including labels}
 	//    sliderProps={props for the Slider}
 	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
-	//    valueProps={props for the Text element surrounding `value`}
 	//    Label={element that goes above the slider, gets given a
 	//       `value` property}
 	// />
@@ -395,7 +389,7 @@ export const SliderWithLabels = (props) => {
 					flexGrow={1}
 					flexShrink={1}
 					flexBasis={labelW * 4}
-						onChange={(v) => setCurrentValue(v)}
+					onChange={(v) => setCurrentValue(v)}
 					{...$v(sliderProps, {})}
 				>
 					<Slider.Track>
@@ -491,4 +485,56 @@ export const SliderWithTicksNoCaps = (props) => {
 			</ZStack>
 		</VStack>
 	);
+};
+
+export const ToggleSwitch = (props) => {
+	// <ToggleSwitch
+	//    hProps={props for the outer HStack}
+	//    vProps={props for the inner VStack}
+	//    label={String, main text of the toggle}
+	//    labelSize={font size of the label, defaults to 'sm'}
+	//    labelProps={props for the label's Text}
+	//    desc={optional; String with additional text}
+	//    descSize={font size of the desc text, defaults to 'xs'}
+	//    descProps={props for the desc's Text}
+	//    switchState={default Boolean state of the toggle}
+	//    switchToggle={Function that will be called when toggle changes}
+	//    switchProps={props for the Switch}
+	//  />
+	const {
+		hProps,
+		vProps,
+		label,
+		labelSize,
+		labelProps,
+		desc,
+		descSize,
+		descProps,
+		switchState,
+		switchToggle,
+		switchProps
+	} = props;
+	return (
+		<HStack
+			w="full"
+			justifyContent="space-between"
+			alignItems="center"
+			{...(hProps || {})}
+		>
+			<VStack
+				flexGrow={1}
+				flexShrink={2}
+				mr={2}
+				{...(vProps || {})}
+			>
+				<Text fontSize={labelSize || 'sm'} {...(labelProps || {})}>{label}</Text>
+				{desc ? <Text fontSize={descSize || 'xs'} {...(descProps || {})}>{desc}</Text> : <></>}
+			</VStack>
+			<Switch
+				isChecked={switchState}
+				onToggle={switchToggle}
+				{...(switchProps || {})}
+			/>
+		</HStack>
+);
 };

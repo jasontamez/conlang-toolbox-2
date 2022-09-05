@@ -7,7 +7,6 @@ import {
 	ScrollView,
 	VStack,
 	useContrastText,
-	Switch,
 	Center,
 	IconButton,
 	Modal,
@@ -26,7 +25,7 @@ import {
 	SaveIcon,
 	SharpDropoffIcon
 } from "../../components/icons";
-import { SliderWithLabels, TextAreaSetting } from "../../components/layoutTags";
+import { SliderWithLabels, TextAreaSetting, ToggleSwitch } from "../../components/layoutTags";
 import { sizes } from "../../store/appStateSlice";
 import {
 	equalityCheck,
@@ -171,19 +170,22 @@ const WGSyllables = () => {
 										minW: 32
 									}}
 								/>
-								<HStack
-									w="full"
-									alignItems="center"
-									justifyContent="center"
-									space={2.5}
-									py={2}
-								>
-									<Text fontSize={textSize}>Use separate dropoff rate</Text>
-									<Switch
-										isChecked={modalOverrideFlag}
-										onToggle={() =>  setModalOverrideFlag(!modalOverrideFlag)}
-									/>
-								</HStack>
+								<ToggleSwitch
+									hProps={{
+										space: 2.5,
+										py: 2,
+										justifyContent: "center"
+									}}
+									vProps={{
+										flexGrow: undefined,
+										flexShrink: undefined,
+										mr: 0
+									}}
+									label="Use separate dropoff rate"
+									labelSize={textSize}
+									switchState={modalOverrideFlag}
+									switchToggle={() =>  setModalOverrideFlag(!modalOverrideFlag)}
+								/>
 								{modalOverrideFlag ?
 									<ReAnimated.View
 										entering={FadeInUp}
@@ -274,23 +276,18 @@ const WGSyllables = () => {
 						bg: "main.800"
 					}}
 				/>
-				<HStack
-					w="full"
-					alignItems="center"
-					justifyContent="space-between"
-					borderBottomWidth={0.5}
-					borderColor="main.700"
-					py={2.5}
-					px={2}
-				>
-					<Text fontSize={textSize}>Use multiple syllable types</Text>
-					<Switch
-						isChecked={multipleSyllableTypes}
-						onToggle={() => {
-							dispatch(setMultipleSyllableTypes(!multipleSyllableTypes));
-						}}
-					/>
-				</HStack>
+				<ToggleSwitch
+					hProps={{
+						px: 2,
+						py: 2.5,
+						borderBottomWidth: 0.5,
+						borderColor: "main.700"
+					}}
+					label="Use multiple syllable types"
+					labelSize={textSize}
+					switchState={multipleSyllableTypes}
+					switchToggle={() =>  dispatch(setMultipleSyllableTypes(!multipleSyllableTypes))}
+				/>
 				<SyllableBox
 					title={multipleSyllableTypes ? "Single-Word Syllables" : "Syllables"}
 					propName="singleWord"

@@ -32,7 +32,7 @@ import {
 	SharpDropoffIcon,
 	TrashIcon
 } from "../../components/icons";
-import { SliderWithLabels, TextSetting } from "../../components/layoutTags";
+import { SliderWithLabels, TextSetting, ToggleSwitch } from "../../components/layoutTags";
 import StandardAlert from "../../components/StandardAlert";
 import { sizes } from "../../store/appStateSlice";
 import {
@@ -354,18 +354,13 @@ const WGChar = () => {
 								value={modifiedRun}
 								onChangeText={(v) => setModifiedRun(v)}
 							/>
-							<HStack
-								w="full"
-								alignItems="center"
-								justifyContent="space-between"
-								py={2}
-							>
-								<Text fontSize={textSize}>Use separate dropoff rate</Text>
-								<Switch
-									isChecked={editOverrideSwitch}
-									onToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
-								/>
-							</HStack>
+							<ToggleSwitch
+								hProps={{ py: 2 }}
+								label="Use separate dropoff rate"
+								labelSize={textSize}
+								switchState={editOverrideSwitch}
+								switchToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
+							/>
 							{editOverrideSwitch ?
 								<ReAnimated.View
 									entering={FadeInUp}
@@ -479,18 +474,13 @@ const WGChar = () => {
 								boxProps={{ py: 2 }}
 								inputProps={{ mt: 1, ref: refAddRun, ...saveOnEnd(setAddRun) }}
 							/>
-							<HStack
-								w="full"
-								alignItems="center"
-								justifyContent="space-between"
-								py={2}
-							>
-								<Text fontSize={textSize}>Use separate dropoff rate</Text>
-								<Switch
-									isChecked={addOverrideSwitch}
-									onToggle={() => setAddOverrideSwitch(!addOverrideSwitch)}
-								/>
-							</HStack>
+							<ToggleSwitch
+								hProps={{ py: 2 }}
+								label="Use separate dropoff rate"
+								labelSize={textSize}
+								switchState={addOverrideSwitch}
+								switchToggle={() => setAddOverrideSwitch(!addOverrideSwitch)}
+							/>
 							{addOverrideSwitch ?
 								<SliderWithLabels
 									max={50}

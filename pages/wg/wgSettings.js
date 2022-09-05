@@ -3,7 +3,6 @@ import {
 	Text,
 	HStack,
 	Box,
-	Switch,
 	ScrollView,
 	useBreakpointValue,
 	Button,
@@ -15,7 +14,8 @@ import debounce from '../../helpers/debounce';
 import {
 	TextSetting,
 	SliderWithLabels,
-	SliderWithTicksAndLabels
+	SliderWithTicksAndLabels,
+	ToggleSwitch
 } from '../../components/layoutTags';
 import {
 	clearWG,
@@ -225,18 +225,13 @@ const WGSettings = () => {
 				stackProps={stackProps}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>
-			<HStack
-				w="full"
-				alignItems="center"
-				{...stackProps}
-				justifyContent="space-between"
-			>
-				<Text fontSize={textSize}>Capitalize sentences</Text>
-				<Switch
-					isChecked={capitalizeSentences}
-					onToggle={() => dispatch(setCapitalizeSentences(!capitalizeSentences))}
-				/>
-			</HStack>
+			<ToggleSwitch
+				hProps={{...stackProps, justifyContent: "space-between"}}
+				label="Capitalize sentences"
+				labelSize={textSize}
+				switchState={capitalizeSentences}
+				switchToggle={() => dispatch(setCapitalizeSentences(!capitalizeSentences))}
+			/>
 			<TextField
 				text="Declarative sentence beginning"
 				value={declarativeSentencePre}
