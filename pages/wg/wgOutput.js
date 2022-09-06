@@ -10,10 +10,14 @@ import {
 	Pressable,
 	useContrastText,
 	Modal,
-	Box
+	Box,
+	Menu,
+	useToast
 } from "native-base";
 import React, { useEffect, useState } from "react";
+import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import ReAnimated, {
 	FadeInLeft,
 	FadeOutLeft,
@@ -27,11 +31,13 @@ import { FlatGrid } from 'react-native-super-grid';
 
 import {
 	CloseCircleIcon,
+	CloseIcon,
 	CopyIcon,
 	GearIcon,
 	GenerateIcon,
 	OkIcon,
-	SaveIcon
+	SaveIcon,
+	SortEitherIcon
 } from "../../components/icons";
 import { sizes, fontSizesInPx } from "../../store/appStateSlice";
 import {
@@ -44,8 +50,9 @@ import {
 	setWordsPerWordlist
 } from "../../store/wgSlice";
 import StandardAlert from "../../components/StandardAlert";
-import { useWindowDimensions } from "react-native";
 import { SliderWithLabels, ToggleSwitch } from "../../components/layoutTags";
+import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
+import doToast from "../../helpers/toast";
 
 const WGOutput = () => {
 	const {
@@ -68,27 +75,35 @@ const WGOutput = () => {
 		interrogativeSentencePost,
 		exclamatorySentencePre,
 		exclamatorySentencePost,
-		// TO-DO: add the following settings to this page
-		output,				// "text" (..."wordlist", etc?)
-		showSyllableBreaks,	// false
-		sentencesPerText,	// 30
-		capitalizeWords,	// false
-		sortWordlist,		// true
-		wordlistMultiColumn,// true
-		wordsPerWordlist	// 250
+		showSyllableBreaks,
+		sentencesPerText,
+		capitalizeWords,
+		sortWordlist,
+		wordlistMultiColumn,
+		wordsPerWordlist
 	} = useSelector(state => state.wg, equalityCheck);
+	const columns = useSelector(state => state.lexicon.columns);
 	//const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
-	const [alertOpen, setAlertOpen] = useState(false);
+	const [alertCannotGenerate, setAlertCannotGenerate] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
+
 	const [displayedWords, setDisplayedWords] = useState([]);
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
 	const [displayedText, setDisplayedText] = useState(false);
 	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
-	const [charGroupMap, setCharGroupMap] = useState({});
-	const [transformsWithRegExps, setTransformsWithRegExps] = useState([]);
+	const [rawWords, setRawWords] = useState([]);
+	const [output, setOutput] = useState("text");
+
 	const [savingToLexicon, setSavingToLexicon] = useState(false);
 	const [wordsToSave, setWordsToSave] = useState({});
+	const [chooseWhereToSaveInLex, setChooseWhereToSaveInLex] = useState(false);
+	const [whereToSaveInLex, setWhereToSaveInLex] = useState(columns.length > 0 ? columns[0] : {label: "No columns"});
+	const [alertNothingToSave, setAlertNothingToSave] = useState(false);
+
+	const [charGroupMap, setCharGroupMap] = useState({});
+	const [transformsWithRegExps, setTransformsWithRegExps] = useState([]);
+
 	const [openSettings, setOpenSettings] = useState(false);
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
@@ -97,6 +112,8 @@ const WGOutput = () => {
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
+	const toast = useToast();
+	const navigate = useNavigate();
 	const primaryContrast = useContrastText("primary.500");
 
 
@@ -141,7 +158,7 @@ const WGOutput = () => {
 	// Display functions
 	// // //
 	const doCap = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-	const toggleForSavingToLexicon = (rawWord) => {
+	const toggleWordSavedForLexicon = (rawWord) => {
 		let newSave = {...wordsToSave}
 		if(wordsToSave[rawWord]) {
 			delete newSave[rawWord];
@@ -151,10 +168,11 @@ const WGOutput = () => {
 		setWordsToSave(newSave);
 	};
 	const OneWordElement = ({rawWord, text}) => {
+		// TO-DO: Change this into a Pure component? Or class component?
 		return (
 			<Pressable
 				disabled={!savingToLexicon}
-				onPress={() => savingToLexicon && toggleForSavingToLexicon(rawWord)}
+				onPress={() => savingToLexicon && toggleWordSavedForLexicon(rawWord)}
 			><Text {...wordStyle(rawWord)}>{text}</Text></Pressable>
 		);
 	};
@@ -195,7 +213,7 @@ const WGOutput = () => {
 		// Load an alert if needed
 		if(errors.length > 0) {
 			setAlertMsg(errors.join(" "));
-			setAlertOpen(true);
+			setAlertCannotGenerate(true);
 			return;
 		}
 		// Set up loading screen, clear any old info, etc
@@ -217,6 +235,8 @@ const WGOutput = () => {
 	// // //
 	const generatePseudoText = async () => {
 		let text = [];
+		let rawWords = [];
+		let rawWordRecord = {};
 		for(
 			let sentenceNumber = 1;
 			sentenceNumber <= sentencesPerText;
@@ -242,8 +262,18 @@ const WGOutput = () => {
 				}
 			}
 			const [firstWord, raw] = makeOneWord();
+			if(!rawWordRecord[raw]) {
+				rawWordRecord[raw] = true;
+				rawWords.push(raw);
+			}
 			for(let n = 2; n <= maxWords; n++) {
-				sentence.push(makeOneWord());
+				let duo = makeOneWord();
+				let raw = duo[1];
+				if(!rawWordRecord[raw]) {
+					rawWordRecord[raw] = true;
+					rawWords.push(raw);
+				}
+				sentence.push(duo);
 			}
 			const sentenceType = getRandomPercentage(12);
 			let PRE = exclamatorySentencePre;
@@ -277,6 +307,7 @@ const WGOutput = () => {
 		}
 		setShowLoadingScreen(false);
 		setDisplayedText(text);
+		setRawWords(rawWords);
 	};
 
 	// // //
@@ -379,19 +410,18 @@ const WGOutput = () => {
 		// Check for syllable break insertion
 		const joined = word.join("");
 		if(showSyllableBreaks) {
-			result = word.join("\u00b7");
-		} else {
-			result = joined;
+			result = doTransformation(word.join("\u00b7"));
+			return [result, result.replace(/\u00b7/g, "")]
 		}
-		// Apply rewrite rules
-		return [doRewrite(result), joined];
+		result = doTransformation(word.join(""));
+		return [result, result];
 	};
 
 
 	// // //
-	// Apply Rewrite Rules
+	// Apply Transformations
 	// // //
-	const doRewrite = (word) => {
+	const doTransformation = (word) => {
 		transformsWithRegExps.forEach(({replace, regex}) => {
 			word = word.replace(regex, replace);
 		});
@@ -421,8 +451,8 @@ const WGOutput = () => {
 			res.then((res) => {
 				const {results, next} = res;
 				if(next === "") {
-					// This one is done - run through rewrite rules
-					newOutput.push(...results.map((word) => doRewrite(word)));
+					// This one is done - run through transformations
+					newOutput.push(...results.map((word) => doTransformation(word)));
 				} else {
 					// Add to syllables being recursed
 					syllables.push(...results.map((word) => [word, next]));
@@ -444,7 +474,7 @@ const WGOutput = () => {
 			});
 		}
 		// Sort if needed
-		//TO-DO: Find replacement for Intl.Collator
+		//TO-DO: Find replacement for Intl.Collator?
 		if(sortWordlist) {
 //			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 			everySyllable.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "variant" }));
@@ -452,6 +482,7 @@ const WGOutput = () => {
 		setShowLoadingScreen(false);
 		determineColumnSize(everySyllable);
 		setDisplayedWords(everySyllable.map(syl => [syl, syl]));
+		setRawWords(everySyllable);
 	};
 	const recurseSyllables = async (previous, toGo) => {
 		const current = toGo.charAt(0);
@@ -471,6 +502,7 @@ const WGOutput = () => {
 	// // //
 	const generateWordList = async () => {
 		let words = [];
+		let raws = [];
 		let record = {};
 		let maxattempts = 1000;
 		for (let n = 0; n < wordsPerWordlist; n++) {
@@ -486,9 +518,10 @@ const WGOutput = () => {
 			}
 			record[raw] = true;
 			words.push([capitalizeWords ? doCap(candidate) : candidate, raw]);
+			raws.push(raw);
 		}
 		// Sort if needed
-		//TO-DO: Find replacement for Intl.Collator
+		//TO-DO: Find replacement for Intl.Collator?
 		if(sortWordlist) {
 //			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 			words.sort((a, b) => a[1].localeCompare(b[1], "en", { sensitivity: "variant" }));
@@ -496,6 +529,7 @@ const WGOutput = () => {
 		setShowLoadingScreen(false);
 		determineColumnSize(words.map(w => w[0]));
 		setDisplayedWords(words);
+		setRawWords(raws);
 		//return words;
 	};
 
@@ -503,7 +537,7 @@ const WGOutput = () => {
 	// Determine number of columns from given array of words
 	// // //
 	const determineColumnSize = (words) => {
-		const viewport = width - 0 // TO-DO: replace 0 with PADDING
+		const viewport = width - 32 // Horizontal padding for FlatGrid container
 		if (!wordlistMultiColumn) {
 			//setDisplayedColumns(viewport);
 			setLongestWordSizeEstimate(viewport);
@@ -513,44 +547,138 @@ const WGOutput = () => {
 		// (this will not be entirely correct if the word has two-character glyphs, but that's ok)
 		const longestWord = Math.max(...words.map(w => w.length));
 		// Estimate size of the longest word, erring on the larger size
-		const longestWordLength = (emSize * longestWord) + 0; // TO-DO: replace 0 with column spacing? If needed?
+		const longestWordLength = (emSize * longestWord);
 		setLongestWordSizeEstimate(longestWordLength);
 		//setDisplayedColumns(Math.max(1, Math.floor(viewport / longestWordLength)));
 	};
 
 
 	// // //
+	// Save to Lexicon
+	// // //
+	const toggleSaveSomeToLex = () => {
+		let scheme = "success";
+		let msg = "Tap on a word to mark it for saving. Click the giant Save button when you're done.";
+		let duration = 5000;
+		if(savingToLexicon) {
+			// set toast options differently
+			msg = "No longer saving.";
+			scheme = "warning";
+			duration = undefined;
+		}
+		setSavingToLexicon(!savingToLexicon);
+		setWordsToSave({});
+		doToast({
+			toast,
+			scheme,
+			msg,
+			placement: "top-right",
+			duration,
+			boxProps: {
+				maxWidth: (width * 2 / 5)
+			}
+		});
+	};
+	const findWordsToSave = () => {
+		// use rawWords or saved words
+		if(savingToLexicon) {
+			return Object.keys(wordsToSave);
+		}
+		return rawWords;
+	};
+	const doSaveToLex = () => {
+		const words = findWordsToSave();
+		// Save to Lexicon
+		dispatch(addMultipleItemsAsColumn({
+			words,
+			column: whereToSaveInLex.id
+		}));
+		doToast({
+			toast,
+			override: (
+				<VStack
+					alignItems="center"
+					borderRadius="sm"
+					bg="success.500"
+					maxW={56}
+					p={0}
+					m={0}
+				>
+					<IconButton
+						alignSelf="flex-end"
+						onPress={() => toast.closeAll()}
+						bg="transparent"
+						icon={<CloseIcon color="success.50" />}
+						p={1}
+						m={0}
+					/>
+					<Box
+						mb={2}
+						mt={0}
+						p={0}
+						px={3}
+					>
+						<Text textAlign="center" color="success.50">Added <Text bold>{words.length}</Text> words to the Lexicon.</Text>
+					</Box>
+					<Button
+						bg="darker"
+						px={2}
+						py={1}
+						mb={1}
+						_text={{color: "success.50"}}
+						onPress={() => {
+							navigate("/lex");
+							toast.closeAll();
+						}}
+					>Go to Lexicon</Button>
+				</VStack>
+			),
+			placement: "top",
+			duration: 5000
+		});
+		setWordsToSave({});
+		setChooseWhereToSaveInLex(false);
+	};
+
+
+	// // //
 	// JSX
 	// // //
-	const WordList = () => (
-		<ReAnimated.View
-			entering={FadeInLeft}
-			exiting={FadeOutLeft}
-			style={{flex: 1}}
-		>
-			<FlatGrid
-				renderItem={({item}) => {
-					const [text, rawWord] = item;
-					return (
-						<Text
-							fontSize={textSize}
-						><OneWordElement text={text} rawWord={rawWord} /></Text>
-					);
-				}}
-				data={displayedWords}
-				itemDimension={longestWordSizeEstimate}
-				keyExtractor={(item, i) => `${item[1]}-Grid-${i}`}
-				style={{
-					margin: 0,
-					padding: 0,
-					flex: 1,
-					maxHeight: "100%",
-					maxWidth: "100%"
-				}}
-				spacing={displayedWords.length ? emSize : 0}
-			/>
-		</ReAnimated.View>
-	);
+	const WordList = () => {
+		// TO-DO: Change this into a Pure component?
+		const renderItem = ({item}) => {
+			const [text, rawWord] = item;
+			return (
+				<Text
+					fontSize={textSize}
+				><OneWordElement text={text} rawWord={rawWord} /></Text>
+			);
+		};
+		const keyExtractor = (item, i) => `${item[1]}-Grid-${i}`;
+		const spacing = displayedWords.length ? emSize : 0;
+		return (
+			<ReAnimated.View
+				entering={FadeInLeft}
+				exiting={FadeOutLeft}
+				style={{flex: 1, paddingHorizontal: 16}}
+			>
+				<FlatGrid
+					renderItem={renderItem}
+					data={displayedWords}
+					itemDimension={longestWordSizeEstimate}
+					keyExtractor={keyExtractor}
+					style={{
+						margin: 0,
+						padding: 0,
+						flex: 1,
+						maxHeight: "100%",
+						maxWidth: "100%"
+					}}
+					spacing={spacing}
+				/>
+			</ReAnimated.View>
+		)
+	};
 	const LoadingScreen = () => {
 		const loadingSize = useBreakpointValue(sizes.x2);
 		return (
@@ -591,8 +719,8 @@ const WGOutput = () => {
 	return (
 		<VStack h="full" alignContent="flex-start" bg="main.900">
 			<StandardAlert
-				alertOpen={alertOpen}
-				setAlertOpen={setAlertOpen}
+				alertOpen={alertCannotGenerate}
+				setAlertOpen={setAlertCannotGenerate}
 				headerContent="Cannot Generate"
 				headerProps={{
 					bg: "error.500"
@@ -600,10 +728,32 @@ const WGOutput = () => {
 				bodyContent={alertMsg}
 				overrideButtons={[
 					({leastDestructiveRef}) => <Button
-						onPress={() => setAlertOpen(false)}
+						onPress={() => setAlertCannotGenerate(false)}
 						ref={leastDestructiveRef}
 					>Ok</Button>
 				]}
+			/>
+			<StandardAlert
+				alertOpen={alertNothingToSave}
+				setAlertOpen={setAlertNothingToSave}
+				headerContent="Cannot Save to Lexicon"
+				headerProps={{
+					bg: "error.500"
+				}}
+				bodyContent="There is nothing to save."
+				continueProps={{
+					bg: "danger.500",
+					_text: {
+						color: "danger.50"
+					}
+				}}
+				continueFunc={() => {
+					setSavingToLexicon(false);
+					setAlertNothingToSave(false);
+				}}
+				continueText="Stop Saving"
+				cancelText="Cancel"
+				cancelFunc={() => setAlertNothingToSave(false)}
 			/>
 			<Modal isOpen={openSettings}>
 				<Modal.Content>
@@ -618,14 +768,7 @@ const WGOutput = () => {
 							/>
 						</HStack>
 					</Modal.Header>
-					<Modal.Body >
-						{/* output,				// "text" (..."wordlist", etc?)
-						showSyllableBreaks,	// false
-						sentencesPerText,	// 30
-						capitalizeWords,	// false
-						sortWordlist,		// true
-						wordlistMultiColumn,// true
-						wordsPerWordlist	// 250*/}
+					<Modal.Body>
 						<Box
 							bg="darker"
 							px={2}
@@ -636,14 +779,10 @@ const WGOutput = () => {
 								fontSize={headerSize}
 								letterSpacing={largeSize}
 								color="main.600"
-							>Pseudo-Text Controls</Text>
+							>General Controls</Text>
 						</Box>
 						<ToggleSwitch
-							hProps={{
-								borderBottomWidth: 1,
-								borderColor: "main.900",
-								p: 2
-							}}
+							hProps={{ p: 2 }}
 							label="Show syllable breaks"
 							labelSize={textSize}
 							desc="Note: this may cause Transforms to stop working"
@@ -652,6 +791,19 @@ const WGOutput = () => {
 							switchState={showSyllableBreaks}
 							switchToggle={() => dispatch(setShowSyllableBreaks(!showSyllableBreaks))}
 						/>
+						<Box
+							bg="darker"
+							px={2}
+							py={1}
+							mt={2}
+						>
+							<Text
+								opacity={80}
+								fontSize={headerSize}
+								letterSpacing={largeSize}
+								color="main.600"
+							>Pseudo-Text Controls</Text>
+						</Box>
 						<SliderWithLabels
 							min={1}
 							max={100}
@@ -749,17 +901,105 @@ const WGOutput = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<HStack>
-				<Button onPress={() => setShowLoadingScreen(true)}>Loading</Button>
-				<Button onPress={() => generateWordList()}>Words</Button>
-				<Button onPress={() => generatePseudoText()}>Text</Button>
-				<Button onPress={() => generateEverySyllable()}>Syllables</Button>
-				<Button onPress={() => {
-					setShowLoadingScreen(false);
-					setDisplayedText(false);
-					setDisplayedWords([]);
-				}}>Clear</Button>
-			</HStack>
+			<Modal isOpen={chooseWhereToSaveInLex}>
+				<Modal.Content>
+					<Modal.Header bg="primary.500">
+						<HStack justifyContent="flex-end" alignItems="center">
+							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Save to Lexicon</Text>
+							<IconButton
+								flex={0}
+								mr={3}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setChooseWhereToSaveInLex(false)}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						<VStack alignItems="center" justifyContent="center" space={2}>
+							<Text textAlign="center">Choose which Lexicon column to save the words to:</Text>
+							<Menu
+								placement="bottom left"
+								closeOnSelect={true}
+								trigger={
+									(props) => {
+										if(columns.length <= 0) {
+											return (
+												<Box
+													bg="error.800"
+													borderColor="error.500"
+													borderWidth={2}
+													px={4}
+													py={2}
+												>
+													<Text color="error.50" textAlign="center">There are no columns in the Lexicon. You must have at least one column in order to save anything.</Text>
+												</Box>
+											);
+										}
+										return (
+											<Button
+												p={3}
+												pl={2}
+												bg="secondary.500"
+												flex={0}
+												_stack={{
+													justifyContent: "space-between",
+													alignItems: "center",
+													style: {
+														overflow: "hidden"
+													}
+												}}
+												startIcon={<SortEitherIcon mx={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
+												{...props}
+											>
+												<Text color="secondary.50" isTruncated textAlign="center" noOfLines={1}>{whereToSaveInLex.label}</Text>
+											</Button>
+										)
+									}
+								}
+							>
+								<Menu.OptionGroup
+									title="Choose a column:"
+									defaultValue={whereToSaveInLex}
+									type="radio"
+									onChange={(v) => setWhereToSaveInLex(v)}
+								>
+									{
+										columns.map((item) => {
+											const {id, label} = item;
+											return (
+												<Menu.ItemOption
+													key={id + "-LexColumn"}
+													value={item}
+												>
+													{label}
+												</Menu.ItemOption>
+											);
+										})
+									}
+								</Menu.OptionGroup>
+							</Menu>
+						</VStack>
+					</Modal.Body>
+					<Modal.Footer>
+						<HStack justifyContent="space-between" w="full" p={1}>
+							<Button
+								startIcon={<CloseCircleIcon size={textSize} color="text.50" />}
+								bg="darker"
+								_text={{ color: "text.50" }}
+								px={2}
+								py={1}
+								onPress={() => setChooseWhereToSaveInLex(false)}
+							>Cancel</Button>
+							<Button
+								startIcon={<SaveIcon size={textSize} />}
+								px={2}
+								py={1}
+								onPress={() => doSaveToLex()}
+							>Save</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
 			<HStack
 				justifyContent="space-between"
 				alignItems="flex-start"
@@ -769,16 +1009,104 @@ const WGOutput = () => {
 				space={2}
 				bg="main.800"
 			>
-				<Button
-					_text={{
-						fontSize: largeSize,
-						letterSpacing: 1.5
-					}}
-					pl={5}
-					pr={4}
-					py={1.5}
-					endIcon={<GenerateIcon size={largeSize} ml={1} />}
-				>GENERATE</Button>
+				<VStack
+					alignItems="flex-start"
+					justifyContent="flex-start"
+					space={4}
+				>
+					<Menu
+						placement="bottom left"
+						closeOnSelect={true}
+						trigger={
+							(props) => (
+								<Button
+									py={1}
+									pl={2}
+									pr={3}
+									bg="tertiary.500"
+									flexGrow={1}
+									flexShrink={2}
+									_stack={{
+										justifyContent: "space-between",
+										alignItems: "center",
+										flexGrow: 1,
+										flexShrink: 1,
+										flexBasis: 0,
+										space: 0,
+										style: {
+											overflow: "hidden"
+										}
+									}}
+									startIcon={<SortEitherIcon mx={1} color="tertiary.50" flexGrow={0} flexShrink={0} />}
+									{...props}
+								>
+									<Box
+										overflow="hidden"
+										flexGrow={1}
+										flexShrink={0}
+									>
+										<Text color="tertiary.50" isTruncated textAlign="left" noOfLines={1}>{
+											output === "text" ?
+												"Pseudo-Text"
+											: (
+												output === "syllables" ?
+													"Every possible syllable"
+												:
+													"List of Words"
+											)
+										}</Text>
+									</Box>
+								</Button>
+							)
+						}
+					>
+						<Menu.OptionGroup
+							title="Display:"
+							defaultValue={output}
+							type="radio"
+							onChange={(v) => setOutput(v)}
+						>
+							<Menu.ItemOption value="text">
+								Pseudo-Text
+							</Menu.ItemOption>
+							<Menu.ItemOption value="wordlist">
+								List of Words
+							</Menu.ItemOption>
+							<Menu.ItemOption value="syllables">
+								Every possible syllable
+							</Menu.ItemOption>
+						</Menu.OptionGroup>
+					</Menu>
+					<Button
+						_text={{
+							fontSize: largeSize,
+							letterSpacing: 1.5
+						}}
+						pl={5}
+						pr={4}
+						py={1.5}
+						endIcon={savingToLexicon ?
+							<SaveIcon size={largeSize} ml={1} />
+						:	
+							<GenerateIcon size={largeSize} ml={1} />
+						}
+						onPress={() => {
+							if(savingToLexicon) {
+								const words = findWordsToSave();
+								if(words.length > 0) {
+									// Open modal to choose where to save.
+									setChooseWhereToSaveInLex(true)
+								} else {
+									// Open an Alert
+									setAlertNothingToSave(true)
+								}
+							} else {
+								// Generate!
+								generateOutput()
+							}
+						}}
+					>{savingToLexicon ? "SAVE" : "GENERATE"}</Button>
+				</VStack>
 				<HStack space={2}>
 					<IconButton
 						colorScheme="secondary"
@@ -795,13 +1123,28 @@ const WGOutput = () => {
 						px={3.5}
 						py={1}
 					/>
-					<IconButton
-						colorScheme="secondary"
-						variant="solid"
-						icon={/* TO-DO: MENU */ <SaveIcon size={largeSize} />}
-						px={3.5}
-						py={1}
-					/>
+					<Menu
+						placement="bottom right"
+						trigger={(props) => (rawWords.length > 0 ?
+							<IconButton
+								colorScheme="secondary"
+								variant="solid"
+								icon={<SaveIcon size={largeSize} />}
+								px={3.5}
+								py={1}
+								{...props}
+							/> // TO-DO: Wrap this in a ReAnimated component
+						:
+							<></> // Only show this button when there are words to save.
+						)}
+					>
+						<Menu.Item
+							onPress={() => setChooseWhereToSaveInLex(true)}
+						>Save All to Lexicon</Menu.Item>
+						<Menu.Item
+							onPress={() => toggleSaveSomeToLex()}
+						>Choose What to Save</Menu.Item>
+					</Menu>
 				</HStack>
 			</HStack>
 			{(showLoadingScreen ?
@@ -826,10 +1169,10 @@ const WGOutput = () => {
 export default WGOutput;
 
 // TO-DO: put this in its own component for WE to use when needed
-const calculateCategoryReferenceRegex = (rule, mapObj) => {
-	// Check rewrite rules for %Category references
+const calculateCategoryReferenceRegex = (transformer, mapObj) => {
+	// Check transformations for %Category references
 	// %% condenses to %, so split on those to begin with.
-	let broken = rule.split("%%");
+	let broken = transformer.split("%%");
 	// Create a variable to hold the pieces as they are handled
 	let final = [];
 	while(broken.length > 0) {
