@@ -14,7 +14,7 @@ import {
 	Menu,
 	useToast
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment, useCallback, memo } from "react";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -158,34 +158,49 @@ const WGOutput = () => {
 	// Display functions
 	// // //
 	const doCap = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-	const toggleWordSavedForLexicon = (rawWord) => {
-		let newSave = {...wordsToSave}
-		if(wordsToSave[rawWord]) {
-			delete newSave[rawWord];
-		} else {
-			newSave[rawWord] = true;
-		}
-		setWordsToSave(newSave);
-	};
-	const OneWordElement = ({rawWord, text}) => {
-		// TO-DO: Change this into a Pure component? Or class component?
-		return (
-			<Pressable
-				disabled={!savingToLexicon}
-				onPress={() => savingToLexicon && toggleWordSavedForLexicon(rawWord)}
-			><Text {...wordStyle(rawWord)}>{text}</Text></Pressable>
-		);
-	};
-	const wordStyle = (word) => {
+	const Simple = memo((props) => <Text {...props} />);
+	const makeKey = useCallback((item, i) => `${item.rawWord}/${item.text}/${i}`, []);
+	const renderItem = useCallback(({item}) => {
+		const {text, rawWord} = item;
 		if(savingToLexicon) {
-			return wordsToSave[word] ?
-				{ bg: "primary.500", color: primaryContrast }
-			:
-				{ bg: "lighter" }
-			;
+			return <SaveableElement text={text} rawWord={rawWord} wordsToSave={wordsToSave} />;
 		}
-		return {};
-	};
+		return <Simple fontSize={textSize}>{text}</Simple>;
+	}, [savingToLexicon, wordsToSave]);
+	// TO-DO: Fix this below so it works better with the <PseudoText>
+	const OneWordElement = useCallback(({ text, rawWord }) => {
+		if(savingToLexicon) {
+			return <SaveableElement text={text} rawWord={rawWord} wordsToSave={wordsToSave} />;
+		}
+		return <Text fontSize={textSize}>{text}</Text>;
+	}, [savingToLexicon, wordsToSave]);
+	const SaveableElement = memo(({text, rawWord, wordsToSave}) => {
+		const saved = wordsToSave[rawWord];
+		const onPressWord = useCallback(() => {
+			let newSave = {...wordsToSave}
+			newSave[rawWord] = !wordsToSave[rawWord];
+			setWordsToSave(newSave);
+		}, [rawWord, wordsToSave]);
+		const Item = memo(({text, raw, saved, onPress}) => {
+			let bg = "lighter",
+				color = undefined;
+			if(saved) {
+				bg = "primary.500";
+				color = primaryContrast;
+			}
+			return (
+				<Pressable
+					onPress={onPress}
+					key={`Pressable${raw}/${text}`}
+				><Text
+					fontSize={textSize}
+					bg={bg}
+					color={color}
+				>{text}</Text></Pressable>
+			);
+		});
+		return <Item text={text} raw={rawWord} onPress={onPressWord} saved={saved} />;
+	});
 
 
 	// // //
@@ -221,12 +236,15 @@ const WGOutput = () => {
 		setDisplayedWords([]);
 		setShowLoadingScreen(true);
 		// Determine what we're making.
-		if (output === "text") {
-			return generatePseudoText();
-		} else if (output === "syllables") {
-			return generateEverySyllable();
-		}
-		return generateWordList();
+		setTimeout(() => {
+			if (output === "text") {
+				generatePseudoText();
+			} else if (output === "syllables") {
+				generateEverySyllable();
+			} else {
+				generateWordList();
+			}
+		}, 250);
 	};
 
 
@@ -289,21 +307,12 @@ const WGOutput = () => {
 			} else {
 				// Exclamatory one-twelfth the time
 			}
-			text.push(
-				<Text
-					key={`PsuedoTextSentence-${sentenceNumber}`}
-				>{PRE || ""}<OneWordElement
-					text={capitalizeSentences ? doCap(firstWord) : firstWord}
-					rawWord={raw}
-				/>{sentence.map((duo, i) => {
-					const [word, raw] = duo;
-					return (
-						<Text
-							key={`PseudoText-${sentenceNumber}.${i+2}`}
-						> <OneWordElement rawWord={raw} text={word} /></Text>
-					);
-				})}{POST || ""} </Text>
-			);
+			text.push([
+				PRE || "",
+				[capitalizeSentences ? doCap(firstWord) : firstWord, raw],
+				...sentence,
+				POST || ""
+			]);
 		}
 		setShowLoadingScreen(false);
 		setDisplayedText(text);
@@ -408,7 +417,6 @@ const WGOutput = () => {
 			}
 		}
 		// Check for syllable break insertion
-		const joined = word.join("");
 		if(showSyllableBreaks) {
 			result = doTransformation(word.join("\u00b7"));
 			return [result, result.replace(/\u00b7/g, "")]
@@ -481,7 +489,12 @@ const WGOutput = () => {
 		}
 		setShowLoadingScreen(false);
 		determineColumnSize(everySyllable);
-		setDisplayedWords(everySyllable.map(syl => [syl, syl]));
+		setDisplayedWords(everySyllable.map(syl => {
+			return {
+				text: syl,
+				rawWord: syl
+			};
+		}));
 		setRawWords(everySyllable);
 	};
 	const recurseSyllables = async (previous, toGo) => {
@@ -517,17 +530,20 @@ const WGOutput = () => {
 				continue;
 			}
 			record[raw] = true;
-			words.push([capitalizeWords ? doCap(candidate) : candidate, raw]);
+			words.push({
+				text: capitalizeWords ? doCap(candidate) : candidate,
+				rawWord: raw
+			});
 			raws.push(raw);
 		}
 		// Sort if needed
 		//TO-DO: Find replacement for Intl.Collator?
 		if(sortWordlist) {
 //			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
-			words.sort((a, b) => a[1].localeCompare(b[1], "en", { sensitivity: "variant" }));
+			words.sort((a, b) => a.rawWord.localeCompare(b.rawWord, "en", { sensitivity: "variant" }));
 		}
 		setShowLoadingScreen(false);
-		determineColumnSize(words.map(w => w[0]));
+		determineColumnSize(words.map(w => w.text));
 		setDisplayedWords(words);
 		setRawWords(raws);
 		//return words;
@@ -565,9 +581,14 @@ const WGOutput = () => {
 			msg = "No longer saving.";
 			scheme = "warning";
 			duration = undefined;
+			setWordsToSave({});
+		} else {
+			// we're beginning to save, so set up wordsToSave
+			let rawObj = {};
+			rawWords.forEach(word => rawObj[word] = false);
+			setWordsToSave(rawObj);
 		}
 		setSavingToLexicon(!savingToLexicon);
-		setWordsToSave({});
 		doToast({
 			toast,
 			scheme,
@@ -576,14 +597,16 @@ const WGOutput = () => {
 			duration,
 			boxProps: {
 				maxWidth: (width * 2 / 5)
-			}
+			},
+			center: true
 		});
 	};
 	const findWordsToSave = () => {
-		// use rawWords or saved words
 		if(savingToLexicon) {
-			return Object.keys(wordsToSave);
+			// Return only chosen values
+			return rawWords.filter(word => wordsToSave[word]);
 		}
+		// Return all values
 		return rawWords;
 	};
 	const doSaveToLex = () => {
@@ -638,47 +661,14 @@ const WGOutput = () => {
 		});
 		setWordsToSave({});
 		setChooseWhereToSaveInLex(false);
+		setSavingToLexicon(false);
 	};
 
 
 	// // //
 	// JSX
 	// // //
-	const WordList = () => {
-		// TO-DO: Change this into a Pure component?
-		const renderItem = ({item}) => {
-			const [text, rawWord] = item;
-			return (
-				<Text
-					fontSize={textSize}
-				><OneWordElement text={text} rawWord={rawWord} /></Text>
-			);
-		};
-		const keyExtractor = (item, i) => `${item[1]}-Grid-${i}`;
-		const spacing = displayedWords.length ? emSize : 0;
-		return (
-			<ReAnimated.View
-				entering={FadeInLeft}
-				exiting={FadeOutLeft}
-				style={{flex: 1, paddingHorizontal: 16}}
-			>
-				<FlatGrid
-					renderItem={renderItem}
-					data={displayedWords}
-					itemDimension={longestWordSizeEstimate}
-					keyExtractor={keyExtractor}
-					style={{
-						margin: 0,
-						padding: 0,
-						flex: 1,
-						maxHeight: "100%",
-						maxWidth: "100%"
-					}}
-					spacing={spacing}
-				/>
-			</ReAnimated.View>
-		)
-	};
+	// TO-DO: Memoize this?
 	const LoadingScreen = () => {
 		const loadingSize = useBreakpointValue(sizes.x2);
 		return (
@@ -702,6 +692,7 @@ const WGOutput = () => {
 			</ReAnimated.View>
 		);
 	}
+	// TO-DO: Memoize this! Give it the FlatGrid treatment!
 	const PseudoText = () => {
 		return (
 			<ReAnimated.View
@@ -710,7 +701,19 @@ const WGOutput = () => {
 				style={{flex: 1, width: "100%", height: "100%"}}
 			>
 				<ScrollView flex={1} p={4}>
-					<Text fontSize={textSize}>{displayedText}</Text>
+					<Text fontSize={textSize}>{
+						displayedText.map((sentence, i) => {
+							const [PRE, first, ...etc] = sentence;
+							const POST = etc.pop();
+							return (
+								<Text key={`Sentence${i}-Text`}>{PRE}<OneWordElement rawWord={first[1]} text={first[0]} />{
+									etc.map((word, wi) => (
+										<Fragment key={`Sentence${i}-Word${wi + 2}`}>{" "}<OneWordElement rawWord={word[1]} text={word[0]} /></Fragment>
+									))
+								}{POST}{" "}</Text>
+							);
+						})
+					}</Text>
 				</ScrollView>
 			</ReAnimated.View>
 		)
@@ -749,6 +752,7 @@ const WGOutput = () => {
 				}}
 				continueFunc={() => {
 					setSavingToLexicon(false);
+					setWordsToSave({});
 					setAlertNothingToSave(false);
 				}}
 				continueText="Stop Saving"
@@ -990,6 +994,7 @@ const WGOutput = () => {
 								py={1}
 								onPress={() => setChooseWhereToSaveInLex(false)}
 							>Cancel</Button>
+							{/* TO-DO: A third button to stop the saving and quit */}
 							<Button
 								startIcon={<SaveIcon size={textSize} />}
 								px={2}
@@ -1090,6 +1095,7 @@ const WGOutput = () => {
 						:	
 							<GenerateIcon size={largeSize} ml={1} />
 						}
+						colorScheme={savingToLexicon ? "success" : "primary"}
 						onPress={() => {
 							if(savingToLexicon) {
 								const words = findWordsToSave();
@@ -1158,9 +1164,28 @@ const WGOutput = () => {
 				[]
 			)}
 			{(displayedWords.length > 0 ?
-				[<WordList key="wordList" />]
+				<ReAnimated.View
+					entering={FadeInLeft}
+					exiting={FadeOutLeft}
+				>
+					<FlatGrid
+						renderItem={renderItem}
+						data={displayedWords}
+						itemDimension={longestWordSizeEstimate}
+						keyExtractor={makeKey}
+						style={{
+							margin: 0,
+							paddingVertical: 0,
+							paddingHorizontal: 16,
+							flex: 1,
+							maxHeight: "100%",
+							maxWidth: "100%"
+						}}
+						spacing={emSize}
+					/>
+				</ReAnimated.View>
 			:
-				[]
+				<></>
 			)}
 		</VStack>
 	);
