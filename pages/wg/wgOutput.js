@@ -120,12 +120,15 @@ const WGOutput = () => {
 	const descSize = useBreakpointValue(sizes.xs);
 	const headerSize = useBreakpointValue(sizes.md);
 	const largeSize = useBreakpointValue(sizes.lg);
+	const giantSize = useBreakpointValue(sizes.x2);
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
 	const toast = useToast();
 	const navigate = useNavigate();
 	const primaryContrast = useContrastText("primary.500");
+	const secondaryContrast = useContrastText("secondary.500");
+	const tertiaryContrast = useContrastText("tertiary.500");
 	const saveToLexRef = useRef(null);
 
 
@@ -210,9 +213,8 @@ const WGOutput = () => {
 			setWordsToSave(newSave);
 		}, [rawWord, wordsToSave]);
 		const Item = memo(({text, raw, saved, onPress}) => {
-			// TO-DO: Look for a better bg color; primary.800?
-			let bg = "lighter",
-				color = "text.50";
+			let bg = "secondary.500",
+				color = secondaryContrast;
 			if(saved) {
 				bg = "primary.500";
 				color = primaryContrast;
@@ -699,9 +701,7 @@ const WGOutput = () => {
 	// // //
 	// JSX
 	// // //
-	// TO-DO: Memoize this?
-	const LoadingScreen = () => {
-		const loadingSize = useBreakpointValue(sizes.x2);
+	const LoadingScreen = memo(({size}) => {
 		return (
 			<ReAnimated.View
 				entering={ZoomInEasyDown}
@@ -717,12 +717,12 @@ const WGOutput = () => {
 					w="full"
 					bg="lighter"
 				>
-					<Text fontSize={loadingSize}>Generating...</Text>
+					<Text fontSize={size}>Generating...</Text>
 					<Spinner size="lg" color="primary.500" />
 				</HStack>
 			</ReAnimated.View>
 		);
-	}
+	});
 
 	return (
 		<VStack h="full" alignContent="flex-start" bg="main.900" mb={16}>
@@ -957,10 +957,10 @@ const WGOutput = () => {
 														overflow: "hidden"
 													}
 												}}
-												startIcon={<SortEitherIcon mx={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
+												startIcon={<SortEitherIcon mx={1} color={secondaryContrast} flexGrow={0} flexShrink={0} />}
 												{...props}
 											>
-												<Text color="secondary.50" isTruncated textAlign="center" noOfLines={1}>{whereToSaveInLex.label}</Text>
+												<Text color={secondaryContrast} isTruncated textAlign="center" noOfLines={1}>{whereToSaveInLex.label}</Text>
 											</Button>
 										)
 									}
@@ -1065,7 +1065,7 @@ const WGOutput = () => {
 											overflow: "hidden"
 										}
 									}}
-									startIcon={<SortEitherIcon mx={1} color="tertiary.50" flexGrow={0} flexShrink={0} />}
+									startIcon={<SortEitherIcon mx={1} color={tertiaryContrast} flexGrow={0} flexShrink={0} />}
 									{...props}
 								>
 									<Box
@@ -1073,7 +1073,7 @@ const WGOutput = () => {
 										flexGrow={1}
 										flexShrink={0}
 									>
-										<Text color="tertiary.50" isTruncated textAlign="left" noOfLines={1}>{
+										<Text color={tertiaryContrast} isTruncated textAlign="left" noOfLines={1}>{
 											output === "text" ?
 												"Pseudo-Text"
 											: (
@@ -1190,7 +1190,7 @@ const WGOutput = () => {
 				</ReAnimated.View>
 			</HStack>
 			{(showLoadingScreen ?
-				[<LoadingScreen key="loadingScreen" />]
+				<LoadingScreen key="loadingScreen" size={giantSize} />
 			:
 				[]
 			)}
