@@ -207,7 +207,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 						<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
 							<Heading color={primaryContrast} size={headerSize}>Edit Lexicon Columns</Heading>
 							<HStack justifyContent="flex-end" space={2}>
-								<ExtraChars iconProps={{color: primaryContrast, size: "sm"}} buttonProps={{p: 1, m: 0}} />
+								<ExtraChars color={primaryColor} size={headerSize} buttonProps={{p: 1, m: 0}} />
 								<IconButton icon={<CloseCircleIcon color={primaryContrast} />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
 							</HStack>
 						</HStack>

@@ -5,12 +5,13 @@ const openExtraChars = () => {
 	//() => dispatch(openModal("ExtraCharacters"))
 }
 const ExtraChars = (props) => {
-	const { iconProps, buttonProps } = {iconProps: {}, buttonProps: {}, ...props};
+	const { iconProps, buttonProps, color, size } = {iconProps: {}, buttonProps: {}, ...props};
 	return (
 		<IconButton
 			variant="ghost"
-			icon={<ExtraCharactersIcon color="text.50" {...iconProps} />}
+			icon={<ExtraCharactersIcon color={color || "text.50"} size={size} {...iconProps} />}
 			onPress={() => openExtraChars()}
+			size={size}
 			{...buttonProps}
 		/>
 	);

@@ -143,7 +143,7 @@ const WGSyllables = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center" w="full">
 							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{modalTitle}</Text>
-							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, mx: 1, flex: 0}} />
+							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{mx: 1, flex: 0}} />
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => setModalOpen(false)}

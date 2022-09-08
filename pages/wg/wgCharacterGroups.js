@@ -310,10 +310,10 @@ const WGChar = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Character Group</Text>
-							<ExtraChars flex={0} color={primaryContrast} buttonProps={{size: textSize}} />
+							<ExtraChars flex={0} color={primaryContrast} size={textSize} />
 							<IconButton
 								flex={0}
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize}  />}
 								onPress={() => setEditingGroup(false)}
 							/>
 						</HStack>
@@ -418,7 +418,7 @@ const WGChar = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Character Group</Text>
-							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex: 0, mx: 1}} />
+							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flex: 0, mx: 1}} />
 							<IconButton
 								flex={0}
 								icon={<CloseCircleIcon color={primaryContrast} />}

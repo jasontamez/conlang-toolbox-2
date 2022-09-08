@@ -85,10 +85,8 @@ const ModalLexiconEditingItem = ({
 						</Heading>
 						<HStack justifyContent="flex-end" space={2}>
 							<ExtraChars
-								iconProps={{
-									color: primaryContrast,
-									size: "sm"
-								}}
+								color={primaryContrast}
+								size={headerSize}
 								buttonProps={{p: 1, m: 0}}
 							/>
 							<IconButton

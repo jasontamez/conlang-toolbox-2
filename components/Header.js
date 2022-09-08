@@ -58,7 +58,7 @@ const AppHeader = () => {
 					{title}
 				</Text>
 			</Box>
-			{extraChars ? <ExtraChars /> : <></>}
+			{extraChars ? <ExtraChars size={textSize} /> : <></>}
 			{rightHeader.map(header => (
 				<React.Fragment key={"Header-" + header}>
 					{Headers[header]}

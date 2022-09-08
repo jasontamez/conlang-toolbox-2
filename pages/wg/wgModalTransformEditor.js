@@ -88,7 +88,7 @@ const ModalTransformEditingItem = ({
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
-						<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex:0, mx: 1}} />
+						<ExtraChars size={textSize} color={primaryContrast} buttonProps={{flex:0, mx: 1}} />
 						<IconButton
 							icon={<CloseCircleIcon color={primaryContrast} />}
 							onPress={() => endEditingFunc()}
