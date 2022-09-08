@@ -335,6 +335,7 @@ const components = {
 	},
 	Heading: {...mainHeading},
 	Text: {...mainFG},
+	Pressable: {...mainFG},
 	Link: {
 		defaultProps: {
 //			fontFamily: "body",
