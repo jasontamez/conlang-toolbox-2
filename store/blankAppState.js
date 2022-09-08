@@ -106,7 +106,40 @@ const blankAppState = {/*
 	appState: {
 		menuToggleName: '',
 		theme: 'Default',
-		disableConfirms: false
+		disableConfirms: false,
+		sizeName: "md",
+		sizes: {
+			xs: {
+				base: "sm",
+				lg: "md",
+				xl: "lg"
+			},
+			sm: {
+				base: "md",
+				lg: "lg",
+				xl: "xl"
+			},
+			md: {
+				base: "lg",
+				lg: "xl",
+				xl: "2xl"
+			},
+			lg: {
+				base: "xl",
+				lg: "2xl",
+				xl: "3xl"
+			},
+			xl: {
+				base: "2xl",
+				lg: "3xl",
+				xl: "4xl"
+			},
+			x2: {
+				base: "3xl",
+				lg: "4xl",
+				xl: "5xl"
+			}
+		}
 	},
 	/*
 	modalState: {

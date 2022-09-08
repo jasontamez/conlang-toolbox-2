@@ -13,11 +13,11 @@ import {
 } from 'native-base';
 import { DotsIcon, HelpIcon } from '../../components/icons';
 import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
-import { sizes } from "../../store/appStateSlice";
 
 const WordListsContextMenu = () => {
 	const centerTheDisplayedWords =
 		useSelector((state) => state.wordLists.centerTheDisplayedWords);
+	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.sm);
 	const headerSize = useBreakpointValue(sizes.md);

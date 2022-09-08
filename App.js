@@ -198,7 +198,7 @@ const AppRoutes = () => {
 						<Route path="transformations" element={<WGTransformations />} />
 						<Route path="output" element={<WGOutput/>} />
 					</Route> /*
-					<Route path="/we/*"  element={<WE />}>
+					<Route path="/we/*" element={<WE />}>
 					</Route> */ }
 					<Route path="/lex" element={<Lexicon />} />
 					<Route path="/ms/*" element={<MS />}>
@@ -210,7 +210,7 @@ const AppRoutes = () => {
 					<Route path="/dc/*" element={<Lexicon />}>
 					</Route> */}
 					<Route path="/settings" element={<AppSettings />} />
-					<Route path="/wordlists" element={<WordLists  />} />
+					<Route path="/wordlists" element={<WordLists />} />
 					{ /* <Route path="/credits" element={<Credits />} />
 					<Route path="/about" element={<About />} /> */ }
 					<Route index element={<About />} />

@@ -14,7 +14,14 @@ import {
 	Menu,
 	useToast
 } from "native-base";
-import React, { useEffect, useState, Fragment, useCallback, memo, useRef } from "react";
+import React, {
+	useEffect,
+	useState,
+	Fragment,
+	useCallback,
+	memo,
+	useRef
+} from "react";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -43,7 +50,7 @@ import {
 	SaveIcon,
 	SortEitherIcon
 } from "../../components/icons";
-import { sizes, fontSizesInPx } from "../../store/appStateSlice";
+import { fontSizesInPx } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	setCapitalizeWords,
@@ -87,7 +94,7 @@ const WGOutput = () => {
 		wordsPerWordlist
 	} = useSelector(state => state.wg, equalityCheck);
 	const columns = useSelector(state => state.lexicon.columns);
-	//const { disableConfirms } = useSelector(state => state.appState);
+	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const [alertCannotGenerate, setAlertCannotGenerate] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
@@ -765,7 +772,7 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => setOpenSettings(false)}
 							/>
 						</HStack>
@@ -894,7 +901,7 @@ const WGOutput = () => {
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" w="full" p={1}>
 							<Button
-								startIcon={<OkIcon size={textSize} />}
+								startIcon={<OkIcon />}
 								px={2}
 								py={1}
 								onPress={() => setOpenSettings(false)}
@@ -911,7 +918,7 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => setChooseWhereToSaveInLex(false)}
 							/>
 						</HStack>
@@ -991,7 +998,7 @@ const WGOutput = () => {
 							alignContent="center"
 						>
 							<Button
-								startIcon={<CancelIcon size={textSize} />}
+								startIcon={<CancelIcon />}
 								px={2}
 								py={1}
 								colorScheme="danger"
@@ -1003,7 +1010,7 @@ const WGOutput = () => {
 								}}
 							>Quit Saving</Button>
 							<Button
-								startIcon={<CloseCircleIcon size={textSize} color="text.50" />}
+								startIcon={<CloseCircleIcon color="text.50" />}
 								bg="darker"
 								_text={{ color: "text.50" }}
 								px={2}
@@ -1012,7 +1019,7 @@ const WGOutput = () => {
 								ref={saveToLexRef}
 							>Go Back</Button>
 							<Button
-								startIcon={<SaveIcon size={textSize} />}
+								startIcon={<SaveIcon />}
 								px={2}
 								py={1}
 								onPress={() => doSaveToLex()}
@@ -1107,9 +1114,9 @@ const WGOutput = () => {
 						pr={4}
 						py={1.5}
 						endIcon={savingToLexicon ?
-							<SaveIcon size={largeSize} ml={1} />
+							<SaveIcon ml={1} />
 						:	
-							<GenerateIcon size={largeSize} ml={1} />
+							<GenerateIcon ml={1} />
 						}
 						colorScheme={savingToLexicon ? "success" : "primary"}
 						onPress={() => {
@@ -1139,7 +1146,7 @@ const WGOutput = () => {
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
-						icon={<GearIcon size={largeSize} />}
+						icon={<GearIcon />}
 						px={3.5}
 						py={1}
 						mr={2}
@@ -1148,7 +1155,7 @@ const WGOutput = () => {
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
-						icon={/* TO-DO: Copy code */ <CopyIcon size={largeSize} />}
+						icon={/* TO-DO: Copy code */ <CopyIcon />}
 						px={3.5}
 						py={1}
 						mr={2}
@@ -1163,7 +1170,7 @@ const WGOutput = () => {
 								<IconButton
 									colorScheme="secondary"
 									variant="solid"
-									icon={<SaveIcon size={largeSize} />}
+									icon={<SaveIcon />}
 									px={3.5}
 									py={1}
 									{...props}

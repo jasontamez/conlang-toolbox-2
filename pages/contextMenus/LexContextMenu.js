@@ -24,7 +24,6 @@ import {
 	consts
 } from "../../store/lexiconSlice";
 import doToast from '../../helpers/toast';
-import { sizes } from '../../store/appStateSlice';
 
 const LexiconContextMenu = () => {
 	const {
@@ -33,6 +32,7 @@ const LexiconContextMenu = () => {
 		truncateColumns,
 		maxColumns
 	} = useSelector((state) => state.lexicon, shallowEqual);
+	const sizes = useSelector(state => state.appState.sizes);
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.md);

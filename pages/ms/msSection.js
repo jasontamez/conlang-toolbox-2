@@ -26,7 +26,6 @@ import { /*
 import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../helpers/debounce";
-import { sizes } from "../../store/appStateSlice";
 
 
 const ParseMSJSON = (props) => {
@@ -34,6 +33,7 @@ const ParseMSJSON = (props) => {
 	const synBool = useSelector((state) => state.morphoSyntax.bool);
 	const synNum = useSelector((state) => state.morphoSyntax.num);
 	const synText = useSelector((state) => state.morphoSyntax.text);
+	const sizes = useSelector(state => state.appState.sizes);
 	const { width } = useWindowDimensions();
 	const textSize = useBreakpointValue(sizes.md);
 	const headerSize = useBreakpointValue(sizes.lg);

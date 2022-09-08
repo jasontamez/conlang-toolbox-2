@@ -26,7 +26,6 @@ import {
 	SharpDropoffIcon
 } from "../../components/icons";
 import { SliderWithLabels, TextAreaSetting, ToggleSwitch } from "../../components/layoutTags";
-import { sizes } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	setSyllableBoxDropoff,
@@ -47,6 +46,7 @@ const WGSyllables = () => {
 		wordMiddle,
 		wordFinal
 	} = useSelector(state => state.wg, equalityCheck);
+	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("");
@@ -131,7 +131,7 @@ const WGSyllables = () => {
 					}}
 					p={1}
 					bg="transparent"
-					icon={<EditIcon size={textSize} color="primary.400" />}
+					icon={<EditIcon color="primary.400" />}
 				/>
 			</HStack>
 		</VStack>
@@ -145,7 +145,7 @@ const WGSyllables = () => {
 							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{modalTitle}</Text>
 							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, mx: 1, flex: 0}} />
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => setModalOpen(false)}
 								flex={0}
 								mx={1}
@@ -225,7 +225,7 @@ const WGSyllables = () => {
 					<Modal.Footer>
 						<Button
 							colorScheme="success"
-							startIcon={<SaveIcon size={descSize} color="success.50" />}
+							startIcon={<SaveIcon color="success.50" />}
 							px={2}
 							py={1}
 							mx={2}

@@ -33,7 +33,6 @@ import {
 } from "../../components/icons";
 import { TextSetting } from "../../components/layoutTags";
 import StandardAlert from "../../components/StandardAlert";
-import { sizes } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	addTransform,
@@ -48,7 +47,7 @@ import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 const WGTransformations = () => {
 	const { transforms } = useSelector(state => state.wg, equalityCheck);
 	const lastTransform = transforms.length - 1;
-	const disableConfirms = useSelector(state => state.appState.disableConfirms);
+	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const [reordering, setReordering] = useState(false);
@@ -226,7 +225,6 @@ const WGTransformations = () => {
 				alertOpener={() => setAlertOpenError(true)}
 				endEditingFunc={() => setEditingTransform(false)}
 				maybeDeleteTransform={() => maybeDeleteTransform()}
-				iconSize={descSize}
 			/>
 			<Modal isOpen={addTransformOpen}>
 				<Modal.Content>
@@ -235,7 +233,7 @@ const WGTransformations = () => {
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Add Transform</Text>
 							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex: 0, mx: 1}} />
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => closeAddTransform()}
 								mx={1}
 								flex={0}
@@ -267,7 +265,7 @@ const WGTransformations = () => {
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1}>
 							<Button
-								startIcon={<AddIcon size={descSize} color="secondary.50" />}
+								startIcon={<AddIcon color="secondary.50" />}
 								bg="secondary.500"
 								px={2}
 								py={1}
@@ -275,7 +273,7 @@ const WGTransformations = () => {
 								onPress={() => addNewTransform(false)}
 							>ADD</Button>
 							<Button
-								startIcon={<AddIcon size={descSize} />}
+								startIcon={<AddIcon />}
 								px={2}
 								py={1}
 								onPress={() => addNewTransform(true)}
@@ -287,7 +285,7 @@ const WGTransformations = () => {
 			<Fab
 				bg="tertiary.500"
 				renderInPortal={false}
-				icon={<AddIcon size={textSize} color="tertiary.50" />}
+				icon={<AddIcon color="tertiary.50" />}
 				accessibilityLabel="Add Transform"
 				onPress={() => setAddTransformOpen(true)}
 			/>
@@ -295,9 +293,9 @@ const WGTransformations = () => {
 				bg="secondary.500"
 				renderInPortal={false}
 				icon={reordering ?
-					<StopIcon size={useBreakpointValue(sizes.md)} color="secondary.50" />
+					<StopIcon size="md" color="secondary.50" />
 				:
-					<ReorderIcon size={useBreakpointValue(sizes.md)} color="secondary.50" />
+					<ReorderIcon size="md" color="secondary.50" />
 				}
 				accessibilityLabel={reordering ?
 					"Stop Reordering"
@@ -328,7 +326,7 @@ const WGTransformations = () => {
 							{reordering ?
 								<IconButton
 									key={item.id + "-reorder-up"}
-									icon={<UpIcon size={textSize} color={index === 0 ? "transparent" : "primary.400"} />}
+									icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} />}
 									accessibilityLabel="Move Up in List"
 									bg={index === 0 ? "transparent" : "darker"}
 									p={1}
@@ -353,7 +351,7 @@ const WGTransformations = () => {
 							{reordering ?
 								<IconButton
 									key={item.id + "-reorder-down"}
-									icon={<DownIcon size={textSize} color={index === lastTransform ? "transparent" : "primary.400"} />}
+									icon={<DownIcon color={index === lastTransform ? "transparent" : "primary.400"} />}
 									accessibilityLabel="Move Down in List"
 									bg={index === lastTransform ? "transparent" : "darker"}
 									p={1}
@@ -366,7 +364,7 @@ const WGTransformations = () => {
 							:
 								<React.Fragment key={item.id + "-Editing-Buttons"}>
 									<IconButton
-										icon={<EditIcon size={textSize} color="primary.400" />}
+										icon={<EditIcon color="primary.400" />}
 										accessibilityLabel="Edit"
 										bg="transparent"
 										p={1}
@@ -376,7 +374,7 @@ const WGTransformations = () => {
 										onPress={() => setEditingTransform(item)}
 									/>
 									<IconButton
-										icon={<TrashIcon size={textSize} color="danger.400" />}
+										icon={<TrashIcon color="danger.400" />}
 										accessibilityLabel="Delete"
 										bg="transparent"
 										p={1}

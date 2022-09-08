@@ -34,7 +34,6 @@ import {
 } from "../../components/icons";
 import { SliderWithLabels, TextSetting, ToggleSwitch } from "../../components/layoutTags";
 import StandardAlert from "../../components/StandardAlert";
-import { sizes } from "../../store/appStateSlice";
 import {
 	addCharacterGroup,
 	deleteCharacterGroup,
@@ -48,7 +47,7 @@ import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 
 const WGChar = () => {
 	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg, equalityCheck);
-	const { disableConfirms } = useSelector(state => state.appState);
+	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [saveGroupError, setSaveGroupError] = useState('');
@@ -260,7 +259,7 @@ const WGChar = () => {
 						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={descSize} fontSize={descSize} italic>{dropoff}%</Text>
 					}
 					<IconButton
-						icon={<EditIcon size={textSize} color="primary.400" />}
+						icon={<EditIcon color="primary.400" />}
 						accessibilityLabel="Edit"
 						bg="transparent"
 						p={1}
@@ -268,7 +267,7 @@ const WGChar = () => {
 						onPress={() => startEditGroup(group)}
 					/>
 					<IconButton
-						icon={<TrashIcon size={textSize} color="danger.400" />}
+						icon={<TrashIcon color="danger.400" />}
 						accessibilityLabel="Delete"
 						bg="transparent"
 						p={1}
@@ -314,7 +313,7 @@ const WGChar = () => {
 							<ExtraChars flex={0} color={primaryContrast} buttonProps={{size: textSize}} />
 							<IconButton
 								flex={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => setEditingGroup(false)}
 							/>
 						</HStack>
@@ -397,7 +396,7 @@ const WGChar = () => {
 					<Modal.Footer>
 						<HStack justifyContent="space-between" p={1}>
 							<Button
-								startIcon={<TrashIcon size={descSize} color="danger.50" />}
+								startIcon={<TrashIcon color="danger.50" />}
 								bg="danger.500"
 								px={2}
 								py={1}
@@ -405,7 +404,7 @@ const WGChar = () => {
 								onPress={() => maybeDeleteGroup(editingGroup)}
 							>DELETE</Button>
 							<Button
-								startIcon={<SaveIcon size={descSize} />}
+								startIcon={<SaveIcon />}
 								px={2}
 								py={1}
 								onPress={() => maybeSaveEditedGroup()}
@@ -422,7 +421,7 @@ const WGChar = () => {
 							<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex: 0, mx: 1}} />
 							<IconButton
 								flex={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} />}
 								onPress={() => closeAddGroup()}
 								mx={1}
 							/>
@@ -512,7 +511,7 @@ const WGChar = () => {
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1}>
 							<Button
-								startIcon={<AddIcon size={descSize} color="secondary.50" />}
+								startIcon={<AddIcon color="secondary.50" />}
 								bg="secondary.500"
 								px={2}
 								py={1}
@@ -520,7 +519,7 @@ const WGChar = () => {
 								onPress={() => addNewGroup(false)}
 							>ADD</Button>
 							<Button
-								startIcon={<AddIcon size={descSize} />}
+								startIcon={<AddIcon />}
 								px={2}
 								py={1}
 								onPress={() => addNewGroup(true)}
@@ -532,7 +531,7 @@ const WGChar = () => {
 			<Fab
 				bg="secondary.500"
 				renderInPortal={false}
-				icon={<AddIcon size={textSize} color="secondary.50" />}
+				icon={<AddIcon color="secondary.50" />}
 				accessibilityLabel="Add Group"
 				onPress={() => setAddGroupOpen(true)}
 			/>

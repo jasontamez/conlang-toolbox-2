@@ -44,7 +44,6 @@ import doToast from '../helpers/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
-import { sizes } from '../store/appStateSlice';
 import { TextAreaSetting, TextSetting } from '../components/layoutTags';
 
 const Lex = () => {
@@ -64,7 +63,7 @@ const Lex = () => {
 		sortPattern,
 		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, equalityCheck);
-	const disableConfirms = useSelector((state) => state.appState.disableConfirms);
+	const { sizes, disableConfirms } = useSelector((state) => state.appState);
 	const extraData = [truncateColumns, columns];
 	const {absoluteMaxColumns} = consts;
 	//

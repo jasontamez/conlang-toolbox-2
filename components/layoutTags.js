@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
 	Box,
 	HStack,
@@ -16,7 +17,6 @@ import {
 
 import { Bar } from "./icons";
 import debounce from '../helpers/debounce';
-import { sizes } from '../store/appStateSlice';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -29,7 +29,6 @@ const sliderCapWidths = {
 	lg: 213,
 	xl: 350
 };
-const textSizeBreaks = sizes.sm;
 
 export const NavBar = (props) => {
 	// <NavBar
@@ -208,6 +207,7 @@ export const SliderWithTicks = (props) => {
 		notFilled,
 		value
 	} = props;
+	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
 	const maxVal = $v(max, 4);
 	const defaultValue = $v(value, minVal);
@@ -218,7 +218,7 @@ export const SliderWithTicks = (props) => {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
-	const textSize = useBreakpointValue(textSizeBreaks);
+	const textSize = useBreakpointValue(sizes.sm);
 	return (
 		<HStack
 			w="full"
@@ -355,10 +355,11 @@ export const SliderWithLabels = (props) => {
 		Label,
 		stackProps
 	} = props;
+	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
 	const defaultValue = $v(value, minVal);
 	const labelW = useBreakpointValue(sliderCapWidths);
-	const textSize = useBreakpointValue(textSizeBreaks);
+	const textSize = useBreakpointValue(sizes.sm);
 	const [currentValue, setCurrentValue] = useState(defaultValue);
 	return (
 		<VStack {...$v(stackProps, {})}>
@@ -433,6 +434,7 @@ export const SliderWithTicksNoCaps = (props) => {
 		notFilled,
 		value
 	} = props;
+	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
 	const maxVal = $v(max, 4);
 	const defaultValue = $v(value, minVal);
@@ -442,7 +444,7 @@ export const SliderWithTicksNoCaps = (props) => {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
-	const textSize = useBreakpointValue(textSizeBreaks);
+	const textSize = useBreakpointValue(sizes.sm);
 	return (
 		<VStack
 			w="full"

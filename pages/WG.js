@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
+import { useSelector } from 'react-redux';
 import {
 	VStack,
 	Box,
@@ -17,11 +18,11 @@ import {
 	WGSettingsIcon,
 	WGSyllablesIcon
 } from '../components/icons';
-import { sizes } from '../store/appStateSlice';
 
 const WG = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const sizes = useSelector(state => state.appState.sizes);
 	const buttonTextSize = useBreakpointValue(sizes.xs);
 	const pathname = location.pathname;
 	const w = useBreakpointValue({

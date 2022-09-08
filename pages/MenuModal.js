@@ -22,12 +22,12 @@ import {
 } from 'native-base';
 
 import * as Icons from '../components/icons';
-import { setMenuToggleName, sizes } from '../store/appStateSlice';
+import { setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
 
 const MenuModal = () => {
-	const menuToggleName = useSelector(
-		(state) => state.appState.menuToggleName,
+	const { sizes, menuToggleName } = useSelector(
+		(state) => state.appState,
 		shallowEqual
 	);
 	let [menuOpen, setMenuOpen] = useState(false);

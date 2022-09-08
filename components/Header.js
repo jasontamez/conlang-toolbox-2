@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, HStack, Box, useBreakpointValue } from "native-base";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 //import { openModal } from '../store/dFuncs';
 import MenuModal from "../pages/MenuModal";
@@ -9,7 +10,6 @@ import ExtraChars from './ExtraCharsButton';
 import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
-import { sizes } from "../store/appStateSlice";
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
@@ -18,6 +18,7 @@ const Headers = {
 };
 
 const AppHeader = () => {
+	const sizes = useSelector(state => state.appState.sizes);
 	const location = useLocation();
 	const here = location.pathname;
 	const currentPage = allMainPages.find(page => here.startsWith(page.url)) || {};

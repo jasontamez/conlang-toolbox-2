@@ -21,62 +21,96 @@ const setDisableConfirmsFunc = (state, action) => {
 	return state;
 };
 
+const setBaseTextSizeFunc = (state, action) => {
+	// action.payload = string from the first line
+	//     of the following array
+	const sizeArray = [
+		"2xs", "xs", "sm", "md", "lg", "xl", "2xl",
+		"3xl", "4xl", "5xl", "6xl", "7xl", "8xl", "9xl"
+	];
+	const appSizes = ["xs", "sm", "md", "lg", "xl", "x2"];
+	const size = action.payload;
+	const pos = sizeArray.findIndex((sz) => sz === size);
+	// pos cannot be smaller than 0 (2xs) or
+	//    larger than 6 (2xl)
+	const max = pos + 6;
+	let sizeObj = {};
+	for(let x = pos, y = 0; x < max; x++, y++) {
+		sizeObj[appSizes[y]] = {
+			base: sizeArray[x],
+			lg: sizeArray[x+1],
+			xl: sizeArray[x+2]
+		};
+	}
+	state.sizes = sizeObj;
+	state.sizeName = size;
+	return state;
+};
+
 const appStateSlice = createSlice({
 	name: 'appState',
 	initialState,
 	reducers: {
 		setMenuToggleName: setMenuToggleNameFunc,
 		setTheme: setThemeFunc,
-		setDisableConfirms: setDisableConfirmsFunc
+		setDisableConfirms: setDisableConfirmsFunc,
+		setBaseTextSize: setBaseTextSizeFunc
 	}
 });
 
 export const {
 	setMenuToggleName,
 	setTheme,
-	setDisableConfirms
+	setDisableConfirms,
+	setBaseTextSize
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;
 
 // Sizes are not changeable.
-export const sizes = {
+export const basicSizes = {
 	xs: {
-		base: "xs",
-		lg: "sm",
-		xl: "md"
-	},
-	sm: {
 		base: "sm",
 		lg: "md",
 		xl: "lg"
 	},
-	md: {
+	sm: {
 		base: "md",
 		lg: "lg",
 		xl: "xl"
 	},
-	lg: {
+	md: {
 		base: "lg",
 		lg: "xl",
 		xl: "2xl"
 	},
-	xl: {
+	lg: {
 		base: "xl",
 		lg: "2xl",
 		xl: "3xl"
 	},
-	x2: {
+	xl: {
 		base: "2xl",
 		lg: "3xl",
 		xl: "4xl"
+	},
+	x2: {
+		base: "3xl",
+		lg: "4xl",
+		xl: "5xl"
 	}
 };
 export const fontSizesInPx = {
+	'2xs': 10 * 0.75,
 	xs: 12 * 0.75,
 	sm: 14 * 0.75,
 	md: 16 * 0.75,
 	lg: 18 * 0.75,
 	xl: 20 * 0.75,
-	'2xl': 24 * 0.75
+	'2xl': 24 * 0.75,
+	'3xl': 30 * 0.75,
+	'4xl': 36 * 0.75,
+	'5xl': 48 * 0.75,
+	'6xl': 60 * 0.75,
+	'7xl': 72 * 0.75
 };

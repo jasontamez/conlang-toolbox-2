@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
 	Text,
 	VStack,
@@ -18,7 +18,6 @@ import {
 	TrashIcon,
 	SaveIcon
 } from '../../components/icons';
-import { sizes } from '../../store/appStateSlice';
 import { editTransform } from '../../store/wgSlice';
 import { TextSetting } from '../../components/layoutTags';
 import doToast from '../../helpers/toast';
@@ -28,7 +27,6 @@ const ModalTransformEditingItem = ({
 	alertOpener,
 	endEditingFunc,
 	maybeDeleteTransform,
-	iconSize
 }) => {
 	//
 	//
@@ -36,6 +34,7 @@ const ModalTransformEditingItem = ({
 	//
 	//
 	// (has to be separate to keep State updates from flickering this all the time)
+	const sizes = useSelector(state => state.appState.sizes);
 	const [modifiedSearch, setModifiedSearch] = useState("");
 	const [modifiedReplace, setModifiedReplace] = useState("");
 	const [modifiedDescription, setModifiedDescription] = useState("");
@@ -91,7 +90,7 @@ const ModalTransformEditingItem = ({
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
 						<ExtraChars color={primaryContrast} buttonProps={{size: textSize, flex:0, mx: 1}} />
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							icon={<CloseCircleIcon color={primaryContrast} />}
 							onPress={() => endEditingFunc()}
 							mx={1}
 							flex={0}
@@ -129,7 +128,7 @@ const ModalTransformEditingItem = ({
 				<Modal.Footer>
 					<HStack justifyContent="space-between" p={1}>
 						<Button
-							startIcon={<TrashIcon size={iconSize} color="danger.50" />}
+							startIcon={<TrashIcon color="danger.50" />}
 							bg="danger.500"
 							px={2}
 							py={1}
@@ -137,7 +136,7 @@ const ModalTransformEditingItem = ({
 							onPress={() => maybeDeleteTransform()}
 						>DELETE</Button>
 						<Button
-							startIcon={<SaveIcon size={iconSize} />}
+							startIcon={<SaveIcon />}
 							px={2}
 							py={1}
 							onPress={() => maybeSaveEditedTransform(true)}

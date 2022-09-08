@@ -23,7 +23,6 @@ import {
 	DragHandleIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
-import { sizes } from '../store/appStateSlice';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	return (
@@ -46,6 +45,7 @@ const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 
 const LexiconColumnReorderer = ({doClose}) => {
 	const {columns} = useSelector((state) => state.lexicon, equalityCheck);
+	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.md);
 	const [newColumns, setNewColumns] = useState([]);

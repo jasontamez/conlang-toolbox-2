@@ -1,6 +1,6 @@
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import { HStack, Menu, ScrollView, Switch, Text, useBreakpointValue, VStack } from 'native-base';
-import { setTheme, setDisableConfirms, sizes } from '../store/appStateSlice';
+import { HStack, Menu, ScrollView, Text, useBreakpointValue, VStack } from 'native-base';
+import { setTheme, setDisableConfirms, setBaseTextSize } from '../store/appStateSlice';
 import { ToggleSwitch } from "../components/layoutTags";
 
 
@@ -8,7 +8,9 @@ const AppSettings = () => {
 	const dispatch = useDispatch();
 	const {
 		disableConfirms,
-		theme
+		theme,
+		sizes,
+		sizeName
 	} = useSelector((state) => state.appState, shallowEqual);
 	const titleSize = useBreakpointValue(sizes.md);
 	const textSize = useBreakpointValue(sizes.xs);
@@ -37,6 +39,45 @@ const AppSettings = () => {
 				borderBottomColor="main.900"
 			>
 				<VStack>
+					<Text fontSize={titleSize}>Base Text Size</Text>
+				</VStack>
+				<Menu
+					placement="bottom right"
+					closeOnSelect={false}
+					trigger={(props) => <Text color="primary.500" {...props}>{
+						{
+							"xs": "Extra Small",
+							"sm": "Small",
+							"md": "Medium",
+							"lg": "Large",
+							"xl": "Extra Large",
+							"2xl": "Huge"
+						}[sizeName]
+					}</Text>}
+				>
+					<Menu.OptionGroup
+						defaultValue={sizeName}
+						type="radio"
+						onChange={(newSize) => dispatch(setBaseTextSize(newSize))}
+					>
+						<Menu.ItemOption value="xs">Extra Small</Menu.ItemOption>
+						<Menu.ItemOption value="sm">Small</Menu.ItemOption>
+						<Menu.ItemOption value="md">Medium</Menu.ItemOption>
+						<Menu.ItemOption value="lg">Large</Menu.ItemOption>
+						<Menu.ItemOption value="xl">Extra Large</Menu.ItemOption>
+						<Menu.ItemOption value="2xl">Huge</Menu.ItemOption>
+					</Menu.OptionGroup>
+				</Menu>
+			</HStack>
+			<HStack
+				w="full"
+				justifyContent="space-between"
+				alignItems="center"
+				p={2}
+				borderBottomWidth={1}
+				borderBottomColor="main.900"
+			>
+				<VStack>
 					<Text fontSize={titleSize}>Change Theme</Text>
 				</VStack>
 				<Menu
@@ -47,7 +88,7 @@ const AppSettings = () => {
 					<Menu.OptionGroup
 						defaultValue={theme}
 						type="radio"
-						onChange={(newTheme) => dispatch(setTheme(newTheme))}
+						onChange={(newTheme) => dispatch(setBaseTextSize(newTheme))}
 					>
 						<Menu.ItemOption value="Default">Default</Menu.ItemOption>
 						<Menu.ItemOption value="Light">Light</Menu.ItemOption>

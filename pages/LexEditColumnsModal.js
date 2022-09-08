@@ -22,11 +22,10 @@ import {
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 import { MultiAlert } from '../components/StandardAlert';
-import { sizes } from '../store/appStateSlice';
 
 const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
-	const disableConfirms = useSelector(state => state.appState.disableConfirms);
+	const {sizes, disableConfirms} = useSelector(state => state.appState);
 	const headerSize = useBreakpointValue(sizes.md);
 	const [editing, setEditing] = useState(false);
 	const [newColumns, setNewColumns] = useState([]);

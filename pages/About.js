@@ -11,6 +11,7 @@ import {
  } from 'native-base';
 import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
+import { useSelector } from 'react-redux';
 
 import {
 	DotIcon,
@@ -21,7 +22,6 @@ import {
 	WordGenIcon,
 	WordListsIcon
 } from '../components/icons';
-import { sizes } from '../store/appStateSlice';
 
 const Indented = (props) => (
 	<HStack
@@ -82,6 +82,7 @@ const SectionHeader = ({SectionIcon, text}) => {
 };
 
 const About = () => {
+	const sizes = useSelector(state => state.appState.sizes);
 	let navigate = useNavigate();
 	const doNav = (where) => {
 		navigate(where);

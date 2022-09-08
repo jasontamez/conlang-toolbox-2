@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-native';
 import WL from '../helpers/wordLists';
 //import { v4 as uuidv4 } from 'uuid';
 import {
@@ -17,6 +18,7 @@ import {
 	useBreakpointValue,
 	useContrastText
 } from 'native-base';
+
 import {
 	toggleDisplayedList,
 	togglePickAndSaveForLexicon,
@@ -27,8 +29,6 @@ import {
 import { CloseCircleIcon, CloseIcon, SaveIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
-import { useNavigate } from 'react-router-native';
-import { sizes } from '../store/appStateSlice';
 
 const WordLists = () => {
 	const {
@@ -38,6 +38,7 @@ const WordLists = () => {
 		savingForLexicon
 	} = useSelector((state) => state.wordLists, equalityCheck);
 	const columns = useSelector((state) => state.lexicon.columns);
+	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const toast = useToast();

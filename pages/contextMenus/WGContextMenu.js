@@ -13,15 +13,15 @@ import {
 	Button
 } from 'native-base';
 import { useLocation } from "react-router-native";
+import { useSelector } from 'react-redux';
 
 import { InfoIcon, CloseCircleIcon } from '../../components/icons';
-import { sizes } from "../../store/appStateSlice";
 
 const WGContextMenu = () => {
+	const sizes = useSelector(state => state.appState.sizes);
 	const { pathname } = useLocation();
 	const textSize = useBreakpointValue(sizes.sm);
 	const headerSize = useBreakpointValue(sizes.md);
-	const iconSize = useBreakpointValue(sizes.xs);
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');

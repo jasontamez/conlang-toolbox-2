@@ -64,7 +64,7 @@ export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-out
 export const EditIcon = (props) => <ICON as={MaterialIcons} name="edit" size="xs" {...props} />;
 export const RemoveCircleIcon = (props) => <Icon as={Ionicons} name="remove-circle-outline" {...props} />;
 export const SaveIcon = (props) => <Icon as={Ionicons} name="save-outline" {...props} />;
-export const ExportIcon = (props) => <Icon as={Fontisto} name="export"  {...props} />;
+export const ExportIcon = (props) => <Icon as={Fontisto} name="export" {...props} />;
 export const TrashIcon = (props) => <Icon as={Ionicons} name="trash-outline" {...props} />;
 export const CloseCircleIcon = (props) => <Icon as={Ionicons} name="close-circle-outline" {...props} />;
 export const CloseIcon = (props) => <ICON as={Ionicons} name="close-outline" size="xs" {...props} />;

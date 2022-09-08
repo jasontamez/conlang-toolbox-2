@@ -35,7 +35,6 @@ import {
 	EquiprobableIcon,
 	SharpDropoffIcon
 } from "../../components/icons";
-import { sizes } from "../../store/appStateSlice";
 import doToast from "../../helpers/toast";
 import StandardAlert from "../../components/StandardAlert";
 
@@ -53,7 +52,7 @@ const WGSettings = () => {
 		exclamatorySentencePre,
 		exclamatorySentencePost
 	} = useSelector(state => state.wg);
-	const { disableConfirms } = useSelector(state => state.appState);
+	const { disableConfirms, sizes } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
 	const toast = useToast();
