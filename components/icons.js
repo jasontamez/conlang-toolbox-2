@@ -50,6 +50,7 @@ export const SuggestLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" 
 export const GenerateIcon = (props) => <Icon as={MCI} name="play-circle-outline" {...props} />;
 export const GearIcon = (props) => <Icon as={Ionicons} name="settings-outline" {...props} />;
 export const CopyIcon = (props) => <Icon as={MaterialIcons} name="content-copy" {...props} />;
+export const CancelIcon = (props) => <Icon as={MCI} name="cancel" {...props} />;
 
 // Reordering controls
 export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
