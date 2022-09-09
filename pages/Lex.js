@@ -5,7 +5,6 @@ import {
 	Input,
 	ScrollView,
 	Text,
-	TextArea,
 	VStack,
 	FlatList,
 	HStack,
@@ -238,6 +237,11 @@ const Lex = () => {
 	//
 	//
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
+	const screenHeight = useWindowDimensions().height;
+	const screenWidth = useWindowDimensions().width;
+	const iconSize = useBreakpointValue(sizes.sm);
+	const textSize = useBreakpointValue(sizes.md);
+	const bigTextSize = useBreakpointValue(sizes.x2);
 	const renderList = ({item, index}) => {
 		const id = item.id;
 		const cols = item.columns;
@@ -245,41 +249,38 @@ const Lex = () => {
 		const buttonProps =
 			deletingMode ?
 				{
-					icon: <TrashIcon size="xs" color="danger.50" />,
+					icon: <TrashIcon size={iconSize} color="danger.50" />,
 					accessibilityLabel: "Mark for Deletion",
 					bg: "danger." + (itemsToDelete.findIndex(itd => itd === id) >= 0 ? "400" : "700"),
-					onPress: () => toggleMarkedForDeletion(id),
-					p: 1,
-					m: 0.5
+					onPress: () => toggleMarkedForDeletion(id)
 				}
 			:
 				{
-					icon: <EditIcon size="xs" color="primary.400" />,
+					icon: <EditIcon size={iconSize} color="primary.400" />,
 					accessibilityLabel: "Edit",
 					bg: "transparent",
-					onPress: () => startEditingFunc(item),
-					p: 1,
-					m: 0.5
+					onPress: () => startEditingFunc(item)
 				};
 		return (
 			<HStack key={id} py={3.5} px={1.5} bg={bg}>
 				{cols.map(
 					(text, i) =>
 						<Box px={1} size={columns[i].size} key={id + "-Column-" + String(i)}>
-							<Text isTruncated={truncateColumns}>{text}</Text>
+							<Text fontSize={iconSize} isTruncated={truncateColumns}>{text}</Text>
 						</Box>
 					)
 				}
 				<Box size="lexXs">
-					<IconButton {...buttonProps} />
+					<IconButton
+						py={1}
+						px={2}
+						m={0.5}
+						{...buttonProps}
+					/>
 				</Box>
 			</HStack>
 		);
 	}
-	const screenHeight = useWindowDimensions().height;
-	const screenWidth = useWindowDimensions().width;
-	const textSize = useBreakpointValue(sizes.md);
-	const bigTextSize = useBreakpointValue(sizes.x2);
 	//
 	//
 	// RETURN JSX
@@ -424,7 +425,7 @@ const Lex = () => {
 												overflow: "hidden"
 											}
 										}}
-										startIcon={<SortEitherIcon mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
+										startIcon={<SortEitherIcon size={iconSize} mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
 										{...props}
 									>
 										<Box
@@ -458,7 +459,7 @@ const Lex = () => {
 						</Menu>
 						<IconButton
 							onPress={() => dispatch(toggleSortDir())}
-							icon={sortDir ? <SortUpIcon /> : <SortDownIcon />}
+							icon={sortDir ? <SortUpIcon size={iconSize} /> : <SortDownIcon size={iconSize} />}
 							p={1}
 							_icon={{color: "secondary.50"}}
 							bg="secondary.500"
@@ -479,7 +480,7 @@ const Lex = () => {
 								p={1}
 								px={1.5}
 								ml={2}
-								icon={<TrashIcon color="danger.50" />}
+								icon={<TrashIcon color="danger.50" size={iconSize} />}
 								bg="danger.500"
 								onPress={() => maybeMassDelete()}
 								flexGrow={0}
@@ -496,7 +497,7 @@ const Lex = () => {
 									p={1}
 									px={1.5}
 									ml={2}
-									icon={<SettingsIcon color="tertiary.50" name="settings" />}
+									icon={<SettingsIcon color="tertiary.50" name="settings" size={iconSize} />}
 									bg="tertiary.500"
 									{...props}
 								/>
@@ -549,7 +550,7 @@ const Lex = () => {
 									key={col.id + "-ColumnLabel"}
 									size={col.size}
 								>
-									<Text bold isTruncated={truncateColumns}>{col.label}</Text>
+									<Text bold isTruncated={truncateColumns} fontSize={textSize}>{col.label}</Text>
 								</Box>
 							))
 						}
@@ -569,6 +570,7 @@ const Lex = () => {
 							>
 								<Input
 									w="full"
+									fontSize={textSize}
 									p={0.5}
 									ref={newLexiconRefs[i]}
 									defaultValue={newLexiconItemColumns[i]}
@@ -580,7 +582,7 @@ const Lex = () => {
 							<IconButton
 								p={1}
 								m={0.5}
-								icon={<AddIcon size="xs" color="success.50" />}
+								icon={<AddIcon size={iconSize} color="success.50" />}
 								accessibilityLabel="Add to Lexicon"
 								bg="success.500"
 								onPress={() => addToLexicon()}

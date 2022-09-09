@@ -33,6 +33,9 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const [alertOpen, setAlertOpen] = useState('');
 	const [savedIndex, setSavedIndex] = useState(null);
 	const dispatch = useDispatch();
+	const iconSize = useBreakpointValue(sizes.sm);
+	const textSize = useBreakpointValue(sizes.md);
+	const primaryContrast = useContrastText('primary.500');
 	useEffect(() => {
 		// Load column info when mounted or when columns change.
 		setNewColumns(columns.map(c => {return {...c}}));
@@ -47,10 +50,10 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const AddColumnButton = () => {
 		return newColumns.length === maxColumns ? <></> : (
 			<Button
-				startIcon={<AddCircleIcon color="tertiary.50" m={0} />}
+				startIcon={<AddCircleIcon color="tertiary.50" m={0} size={iconSize} />}
 				bg="tertiary.700"
 				onPress={() => addNewColumnFunc()}
-				_text={{color: "tertiary.50"}}
+				_text={{color: "tertiary.50", fontSize: textSize}}
 				p={1}
 				m={2}
 			>ADD</Button>
@@ -139,7 +142,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				px={2}
 				py={1}
 				mx={3}
-				_text={{color: "primary.50"}}
+				_text={{color: "primary.50", fontSize: textSize}}
 				{...variation}
 			>{props.children}</Button>
 		);
@@ -159,7 +162,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				<VStack px={4}>
 					<Input
 						defaultValue={label}
-						size="md"
+						size={textSize}
 						p={1}
 						onChangeText={(value) => {
 							let newCols;
@@ -186,11 +189,10 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				</VStack>
 				<VStack justifyContent="space-between" alignItems="center">
 					<IconButton
-						size="sm"
 						alignSelf="flex-start"
 						p={1}
 						mt={1}
-						icon={<TrashIcon color="danger.50" size="sm" />}
+						icon={<TrashIcon color="danger.50" size={iconSize} />}
 						bg="danger.500"
 						onPress={() => maybeDeleteColumn(col, i)}
 					/>
@@ -198,22 +200,46 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			</HStack>
 		);
 	};
-	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<Modal isOpen={editing}>
 				<Modal.Content>
 					<Modal.Header>
-						<HStack pl={2} w="full" justifyContent="space-between" space={5} alignItems="center" bg="primary.500">
-							<Heading color={primaryContrast} size={headerSize}>Edit Lexicon Columns</Heading>
+						<HStack
+							pl={2}
+							w="full"
+							justifyContent="space-between"
+							space={5}
+							alignItems="center"
+							bg="primary.500"
+						>
+							<Heading
+								color={primaryContrast}
+								size={headerSize}
+							>Edit Lexicon Columns</Heading>
 							<HStack justifyContent="flex-end" space={2}>
-								<ExtraChars color={primaryColor} size={headerSize} buttonProps={{p: 1, m: 0}} />
-								<IconButton icon={<CloseCircleIcon color={primaryContrast} />} p={1} m={0} variant="ghost" onPress={() => doClose()} />
+								<ExtraChars
+									color={primaryContrast}
+									size={headerSize}
+									buttonProps={{p: 1, m: 0}}
+								/>
+								<IconButton
+									icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+									p={1}
+									m={0}
+									variant="ghost"
+									onPress={() => doClose()}
+								/>
 							</HStack>
 						</HStack>
 					</Modal.Header>
 					<Modal.Body m={0} p={0}>
-						<VStack m={0} alignItems="center" justifyContent="center" bg="main.800">
+						<VStack
+							m={0}
+							alignItems="center"
+							justifyContent="center"
+							bg="main.800"
+						>
 							{newColumns.map((col, i) => renderItem(col, i))}
 						</VStack>
 					</Modal.Body>
@@ -227,12 +253,12 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 					>
 						<AddColumnButton />
 						<Button
-							startIcon={<SaveIcon color="success.50" m={0} />}
+							startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
 							bg="success.500"
 							onPress={() => {
 								maybeSaveColumns()
 							}}
-							_text={{color: "success.50"}}
+							_text={{color: "success.50", fontSize: textSize}}
 							p={1}
 							m={2}
 						>SAVE</Button>

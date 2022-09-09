@@ -1,4 +1,4 @@
-import { Icon as ICON } from 'native-base';
+import { Icon } from 'native-base';
 import { Polygon } from 'react-native-svg';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FAFive from '@expo/vector-icons/FontAwesome5';
@@ -9,8 +9,6 @@ import Foundation from '@expo/vector-icons/Foundation';
 import Octicons from '@expo/vector-icons/Octicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
-
-const Icon = (props) => <ICON size="sm" {...props} />;
 
 // Menu/About page icons
 export const CaretIcon = (props) => <Icon as={Ionicons} name="caret-forward-sharp" {...props} />
@@ -30,22 +28,22 @@ export const DotsIcon = (props) => <Icon as={Ionicons} name="ellipsis-vertical" 
 export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" {...props} />;
 
 // MS and About pages
-export const DotIcon = (props) => <ICON as={FontAwesome} name="circle" size="xs" {...props} />;
+export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" {...props} />;
 
 // Lexicon page
 export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />;
 export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />;
-export const SortEitherIcon = (props) => <ICON as={FAFive} name="sort" size="xs" {...props} />;
+export const SortEitherIcon = (props) => <Icon as={FAFive} name="sort" {...props} />;
 
 // MS pages
 export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />;
 
 // WG pages
-export const WGSettingsIcon = (props) => <ICON size="md" as={Ionicons} name="options-outline" {...props} />;
-export const WGCharactersIcon = (props) => <ICON size="md" as={Entypo} name="language" {...props} />;
-export const WGSyllablesIcon = (props) => <ICON size="md" as={MCI} name="text" {...props} />;
-export const WGTransformationsIcon = (props) => <ICON size="md" as={MaterialIcons} name="transform" {...props} />;
-export const WGOutputIcon = (props) => <ICON size="md" as={Ionicons} name="document-text-outline" {...props} />;
+export const WGSettingsIcon = (props) => <Icon as={Ionicons} name="options-outline" {...props} />;
+export const WGCharactersIcon = (props) => <Icon as={Entypo} name="language" {...props} />;
+export const WGSyllablesIcon = (props) => <Icon as={MCI} name="text" {...props} />;
+export const WGTransformationsIcon = (props) => <Icon as={MaterialIcons} name="transform" {...props} />;
+export const WGOutputIcon = (props) => <Icon as={Ionicons} name="document-text-outline" {...props} />;
 export const SuggestLeftIcon = (props) => <Icon as={Entypo} name="chevron-left" {...props} />;
 export const GenerateIcon = (props) => <Icon as={MCI} name="play-circle-outline" {...props} />;
 export const GearIcon = (props) => <Icon as={Ionicons} name="settings-outline" {...props} />;
@@ -61,13 +59,13 @@ export const DownIcon = (props) => <Icon as={Entypo} name="arrow-bold-down" {...
 // Add/Delete/Edit controls
 export const AddIcon = (props) => <Icon as={Ionicons} name="add" {...props} />;
 export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-outline" {...props} />;
-export const EditIcon = (props) => <ICON as={MaterialIcons} name="edit" size="xs" {...props} />;
+export const EditIcon = (props) => <Icon as={MaterialIcons} name="edit" {...props} />;
 export const RemoveCircleIcon = (props) => <Icon as={Ionicons} name="remove-circle-outline" {...props} />;
 export const SaveIcon = (props) => <Icon as={Ionicons} name="save-outline" {...props} />;
 export const ExportIcon = (props) => <Icon as={Fontisto} name="export" {...props} />;
 export const TrashIcon = (props) => <Icon as={Ionicons} name="trash-outline" {...props} />;
 export const CloseCircleIcon = (props) => <Icon as={Ionicons} name="close-circle-outline" {...props} />;
-export const CloseIcon = (props) => <ICON as={Ionicons} name="close-outline" size="xs" {...props} />;
+export const CloseIcon = (props) => <Icon as={Ionicons} name="close-outline" {...props} />;
 export const DragHandleIcon = (props) => <Icon as={MaterialIcons} name="drag-handle" {...props} />;
 
 // Info controls

@@ -11,7 +11,6 @@ const ExtraChars = (props) => {
 			variant="ghost"
 			icon={<ExtraCharactersIcon color={color || "text.50"} size={size} {...iconProps} />}
 			onPress={() => openExtraChars()}
-			size={size}
 			{...buttonProps}
 		/>
 	);

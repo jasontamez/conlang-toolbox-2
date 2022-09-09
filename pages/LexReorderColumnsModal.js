@@ -112,10 +112,11 @@ const LexiconColumnReorderer = ({doClose}) => {
 				space={3}
 				bg="primary.500"
 				borderTopRadius="lg"
+				flex={2}
 			>
 				<Heading color={primaryContrast} size={textSize}>Reorder Columns</Heading>
 				<IconButton
-					icon={<CloseCircleIcon color={primaryContrast} />}
+					icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 					p={1}
 					m={0}
 					variant="ghost"
@@ -125,6 +126,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 			<VStack
 				alignItems="center"
 				bg="main.800"
+				flex={5}
 				style={{
 					height: Math.min(490, (newColumns.length * 48) + 10)
 				}}
@@ -149,17 +151,19 @@ const LexiconColumnReorderer = ({doClose}) => {
 			</VStack>
 			<HStack
 				h={10}
+				flex={1}
 				style={{width: minWidth}}
 				justifyContent="flex-end"
+				alignItems="center"
 				bg="main.700"
 				borderBottomRadius="lg"
 			>
 				<Button
-					startIcon={<SaveIcon color="success.50" m={0} />}
+					startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
 					bg="success.500"
 					disabled={newColumns.length === 0}
 					onPress={() => doSaveColumns()}
-					_text={{color: "success.50"}}
+					_text={{color: "success.50", fontSize: textSize}}
 					px={1}
 					py={0.5}
 					m={1}

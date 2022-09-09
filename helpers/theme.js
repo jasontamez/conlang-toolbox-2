@@ -370,22 +370,22 @@ const components = {
 	Box: {
 		sizes: {
 			lexXs: {
-				flexGrow: 0,
-				flexShrink: 0,
+				flexGrow: 1,
+				flexShrink: 1,
 				flexBasis: 20
 			},
 			lexSm: {
-				flexGrow: 1,
+				flexGrow: 3,
 				flexShrink: 1,
 				flexBasis: 40
 			},
 			lexMd: {
-				flexGrow: 3,
+				flexGrow: 9,
 				flexShrink: 1,
 				flexBasis: 96
 			},
 			lexLg: {
-				flexGrow: 5,
+				flexGrow: 15,
 				flexShrink: 1,
 				flexBasis: 200
 			}

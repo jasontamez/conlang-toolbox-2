@@ -221,9 +221,9 @@ const Credits = {
 	sectionId: "settingsEtc",
 	id: "Credits",
 	extraChars: false,
+	fontAdjustment: "-1",
 	fontOptions: {
-		fontFamily: "mono",
-		fontSize: "xs"
+		fontFamily: "mono"
 	},
 	styleOptions: {
 		alignItems: "flex-end",

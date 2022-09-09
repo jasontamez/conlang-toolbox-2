@@ -9,7 +9,6 @@ import ReAnimated, {
 	useSharedValue
 } from 'react-native-reanimated';
 import {
-	Heading,
 	HStack,
 	VStack,
 	Pressable,
@@ -35,9 +34,13 @@ const MenuModal = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigator = useNavigate();
-	const subHeaderSize = useBreakpointValue(sizes.sm);
+	const menuSize = useBreakpointValue(sizes.sm);
 	const subMenuSize = useBreakpointValue(sizes.xs);
 	const headerSize = useBreakpointValue(sizes.md);
+	const fontSizeAdjustments = {
+		"-1": subMenuSize,
+		"+1": headerSize
+	};
 	let allAnimationValues = {};
 	const toggleSection = (parentId) => {
 		const target = allAnimationValues[parentId];
@@ -95,7 +98,11 @@ const MenuModal = () => {
 			// App Section w/subpages
 			const isSelected = location.pathname.startsWith(url);
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
-			const textOptions = isSelected ? { color: "primary.500" } : {};
+			const textOptions = isSelected ?
+				{ color: "primary.500", fontSize: menuSize }
+			:
+				{ fontSize: menuSize }
+			;
 			// Get new information for this section
 			const caretAnimationValue = useSharedValue(id === openId ? 2 : 0);
 			allAnimationValues[id] = caretAnimationValue;
@@ -231,6 +238,7 @@ const MenuModal = () => {
 		}
 		// App Section (standalone)
 		const fontOptions = item.fontOptions || {};
+		const fontSize = item.fontAdjustment ? fontSizeAdjustments[item.fontAdjustment] : menuSize;
 		const styleOptions = item.styleOptions || {};
 		const alignOptions = item.alignOptions || {};
 		const isSelected = location.pathname === url;
@@ -241,12 +249,15 @@ const MenuModal = () => {
 			:
 				{ color: "transparent", ...styleOptions }
 		;
-		const textOptions =
-			isSelected ?
-				{ color: "primary.500", fontOptions }
+		const textOptions = {
+			fontSize,
+			...(isSelected ?
+				{ color: "primary.500" }
 			:
-				fontOptions
-		;
+				{}
+			),
+			...fontOptions
+		};
 		return (
 			<Pressable
 				onPress={() => navigate(url)}
@@ -285,7 +296,7 @@ const MenuModal = () => {
 						m={2}
 						{...alignOptions}
 					>
-						<Text {...textOptions}>{menuTitle || title}</Text>
+						<Text fontSize={menuSize} {...textOptions}>{menuTitle || title}</Text>
 					</VStack>
 				</HStack>
 				</ZStack>
@@ -327,8 +338,8 @@ const MenuModal = () => {
 							w="full"
 							mr={5}
 						>
-							<Heading size={headerSize}>Conlang Toolbox</Heading>
-							<Text fontSize={subHeaderSize} color="primary.200">tools for language invention</Text>
+							<Text bold fontSize={headerSize}>Conlang Toolbox</Text>
+							<Text fontSize={menuSize} color="primary.200">tools for language invention</Text>
 						</VStack>
 						<VStack
 							m={0}
@@ -352,7 +363,7 @@ const MenuModal = () => {
 			</Modal>
 			<IconButton
 				variant="ghost"
-				icon={<Icons.MenuIcon color="text.50" />}
+				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}
 				onPress={() => setMenuOpen(true)}
 			/>
 		</>

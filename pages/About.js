@@ -23,64 +23,6 @@ import {
 	WordListsIcon
 } from '../components/icons';
 
-const Indented = (props) => (
-	<HStack
-		m={1}
-		mx={4}
-		justifyContent="flex-start"
-		alignItems="flex-start"
-	>
-		<DotIcon m={1} mt={1.5} />
-		<Text>{props.children}</Text>
-	</HStack>
-);
-
-const Highlight = (props) => (
-	<Box
-		alignSelf="center"
-		w="full"
-		bg="lighter"
-		p={2}
-		mb={3}
-	>
-		<Text textAlign="center">{props.children}</Text>
-	</Box>
-);
-
-const Pressable = ({onPress, firstElement, children}) => (
-	<Press
-		bg="main.800"
-		shadow={3}
-		onPress={onPress}
-		mt={firstElement ? 4 : 6}
-	>
-		<VStack p={4} pt={0}>{children}</VStack>
-	</Press>
-);
-
-const SectionHeader = ({SectionIcon, text}) => {
-	const textSize = useBreakpointValue({
-		base: "xl",
-		xl: "2xl"
-	});
-	return (
-		<HStack
-			p={4}
-			alignItems="center"
-			justifyContent="center"
-			space={3}
-		>
-			<SectionIcon color="primary.500" />
-			<Heading
-				color="primary.500"
-				fontSize={textSize}
-			>
-				{text}
-			</Heading>
-		</HStack>
-	)
-};
-
 const About = () => {
 	const sizes = useSelector(state => state.appState.sizes);
 	let navigate = useNavigate();
@@ -89,6 +31,71 @@ const About = () => {
 	};
 	const headerSize = useBreakpointValue(sizes.xl);
 	const textSize = useBreakpointValue(sizes.md);
+	const dotSize = useBreakpointValue(sizes.xs);
+	const indentMargin = useBreakpointValue({
+		base: 4,
+		sm: 8,
+		md: 12,
+		lg: 16,
+		xl: 18
+	})
+
+	const Pressable = ({onPress, firstElement, children}) => (
+		<Press
+			bg="main.800"
+			shadow={3}
+			onPress={onPress}
+			mt={firstElement ? 4 : 6}
+		>
+			<VStack p={4} pt={0}>{children}</VStack>
+		</Press>
+	);
+
+	const Highlight = (props) => (
+		<Box
+			alignSelf="center"
+			w="full"
+			bg="lighter"
+			p={2}
+			mb={3}
+		>
+			<Text fontSize={textSize} textAlign="center">{props.children}</Text>
+		</Box>
+	);
+
+	const Indented = (props) => {
+		return (
+			<HStack
+				m={1}
+				mx={indentMargin}
+				justifyContent="flex-start"
+				alignItems="flex-start"
+			>
+				<DotIcon m={1} size={dotSize} />
+				<Text fontSize={textSize}>{props.children}</Text>
+			</HStack>
+		)
+	};
+
+	const SectionHeader = ({SectionIcon, text}) => {
+		return (
+			<HStack
+				p={4}
+				alignItems="center"
+				justifyContent="center"
+				space={3}
+			>
+				<SectionIcon color="primary.500" size={textSize} />
+				<Text bold
+					color="primary.500"
+					fontSize={headerSize}
+				>
+					{text}
+				</Text>
+			</HStack>
+		)
+	};
+	
 	return (
 		<ScrollView
 			p={3}
