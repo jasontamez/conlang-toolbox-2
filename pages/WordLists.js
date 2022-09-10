@@ -320,12 +320,18 @@ const WordLists = () => {
 						borderBottomWidth={0}
 						px={3}
 					>
-						<Text color={primaryContrast} fontSize={headerSize}>Add to Lexicon</Text>
+						<HStack
+							justifyContent="space-between"
+							alignItems="center"
+						>
+							<Text color={primaryContrast} fontSize={headerSize}>Add to Lexicon</Text>
+							<IconButton
+								variant="ghost"
+								icon={<CloseCircleIcon size={headerSize} color={primaryContrast} />}
+								onPress={() => setAddToLexicon([])}
+							/>
+						</HStack>
 					</Modal.Header>
-					<Modal.CloseButton
-						_icon={{color: primaryContrast, size: headerSize}}
-						onPress={() => setAddToLexicon([])}
-					/>
 					<Modal.Body>
 						<VStack
 							alignItems="center"
@@ -343,7 +349,7 @@ const WordLists = () => {
 										fontSize: textSize
 									},
 									_icon: {
-										size: textSize
+										size: buttonTextSize
 									},
 									p: 2,
 									pr: 4

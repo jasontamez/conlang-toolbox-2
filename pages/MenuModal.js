@@ -365,6 +365,8 @@ const MenuModal = () => {
 				variant="ghost"
 				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}
 				onPress={() => setMenuOpen(true)}
+				flexGrow={0}
+				flexShrink={0}
 			/>
 		</>
 	);

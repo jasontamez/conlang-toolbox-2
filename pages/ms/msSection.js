@@ -11,8 +11,8 @@ import {
 	ScrollView,
 	Text as Tx,
 	VStack,
-	Center,
-	useBreakpointValue
+	useBreakpointValue,
+	IconButton
 } from 'native-base';
 
 import ms from './msinfo.json';
@@ -23,7 +23,7 @@ import { /*
 	setNum,
 	setText
 } from '../../store/morphoSyntaxSlice';
-import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
+import { CloseCircleIcon, DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../helpers/debounce";
 //TO-DO: Fix sizing of buttons, headers, text, close icon
@@ -454,11 +454,18 @@ const ParseMSJSON = (props) => {
 							onClose={() => setModal('')}
 							safeArea
 						>
-							<Modal.CloseButton />
 							<Modal.Header w="full" p={3}>
-								<Center>
-									<Text fontSize={headerSize}>{title}</Text>
-								</Center>
+								<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+									<Text textAlign="center" fontSize={headerSize} flexGrow={1} flexShrink={1}>{title}</Text>
+									<IconButton
+										icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+										onPress={() => setModal('')}
+										variant="ghost"
+										flexGrow={0}
+										flexShrink={0}
+										px={0}
+									/>
+								</HStack>
 							</Modal.Header>
 							<Modal.Body
 								style={screenWidth}

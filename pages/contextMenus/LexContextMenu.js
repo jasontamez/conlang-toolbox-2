@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import {
 	Menu,
-	Pressable,
 	HStack,
 	Text,
 	Divider,
@@ -13,10 +12,11 @@ import {
 	Button,
 	useToast,
 	useBreakpointValue,
-	useContrastText
+	useContrastText,
+	IconButton
 } from 'native-base';
 
-import { DotsIcon, SaveIcon } from '../../components/icons';
+import { CloseCircleIcon, DotsIcon, SaveIcon } from '../../components/icons';
 import {
 	setDisableBlankConfirms,
 	setMaxColumns,
@@ -75,13 +75,13 @@ const LexiconContextMenu = () => {
 				closeOnSelect={false}
 				w="full"
 				trigger={(triggerProps) => (
-					<Pressable
-						m="auto"
-						w={6}
+					<IconButton
 						accessibilityLabel="More options menu"
-						{...triggerProps}>
-						<DotsIcon size={dotSize} />
-					</Pressable>
+						flexGrow={0}
+						flexShrink={0}
+						icon={<DotsIcon size={dotSize} />}
+						{...triggerProps}
+					/>
 				)}
 				onOpen={() => setMenuOpen(true)}
 				onPress={() => setMenuOpen(true)}
@@ -151,15 +151,19 @@ const LexiconContextMenu = () => {
 						borderBottomWidth={0}
 						px={3}
 					>
-						<Text color={primaryContrast} fontSize={textSize}>Set Max Columns</Text>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={textSize}>Set Max Columns</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setColumnsRangeOpen(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
 					</Modal.Header>
-					<Modal.CloseButton
-						_icon={{color: primaryContrast, size: textSize}}
-						onPress={() => setColumnsRangeOpen(false)}
-					/>
 					<Modal.Body>
 						<VStack>
-							<Box><Text>Maximum columns: {cols}</Text></Box>
+							<Box><Text fontSize={textSize}>Maximum columns: {cols}</Text></Box>
 							<Slider
 								size="sm"
 								minValue={sortPattern.length || 1 /* Set by current amount of columns. */}
@@ -191,7 +195,7 @@ const LexiconContextMenu = () => {
 								onPress={() => setColumnsRangeOpen(false)}
 							>CANCEL</Button>
 							<Button
-								startIcon={<SaveIcon color="success.50" m={0} fontSize={textSize} />}
+								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
 								bg="success.500"
 								_text={{color: "success.50", fontSize: textSize}}
 								p={1}
@@ -201,6 +205,7 @@ const LexiconContextMenu = () => {
 									newColumnsChosenFunc(cols);
 									doToast({
 										toast,
+										fontSize: textSize,
 										msg: "Saved: " + String(cols) + " columns"
 									});
 								}}

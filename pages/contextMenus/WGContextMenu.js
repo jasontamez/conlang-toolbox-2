@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-	Pressable,
 	VStack,
 	Text,
 	Modal,
@@ -353,17 +352,16 @@ const WGContextMenu = () => {
 	}, [pathname, infoModalOpen]);
 	return (
 		<>
-			<Pressable
-				m="auto"
-				w={6}
+			<IconButton
 				accessibilityLabel="Information"
+				flexGrow={0}
+				flexShrink={0}
+				icon={<InfoIcon size={textSize} />}
 				onPress={() => {
 					//modalRef.current.scrollTo({x: 0, y: 0, animated: false});
 					setInfoModalOpen(true);
 				}}
-			>
-				<InfoIcon size={textSize} />
-			</Pressable>
+			/>
 			<Modal isOpen={infoModalOpen} closeOnOverlayClick={true}>
 				<Modal.Content>
 					<Modal.Header

@@ -2,16 +2,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
 import {
 	Menu,
-	Pressable,
+	IconButton,
 	VStack,
 	Text,
 	Divider,
 	Modal,
 	Button,
 	useBreakpointValue,
-	useContrastText
+	useContrastText,
+	HStack
 } from 'native-base';
-import { DotsIcon, HelpIcon } from '../../components/icons';
+import { CloseCircleIcon, DotsIcon, HelpIcon } from '../../components/icons';
 import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
 
 const WordListsContextMenu = () => {
@@ -19,6 +20,7 @@ const WordListsContextMenu = () => {
 		useSelector((state) => state.wordLists.centerTheDisplayedWords);
 	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
+	const menuSize = useBreakpointValue(sizes.xs);
 	const textSize = useBreakpointValue(sizes.sm);
 	const headerSize = useBreakpointValue(sizes.md);
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -38,22 +40,21 @@ const WordListsContextMenu = () => {
 		setInfoModalOpen(true);
 	};
 	const primaryContrast = useContrastText('primary.500');
-	return (	// TO-DO: Fix flex value of Ellipsis
+	return (
 		<>
 			<Menu
 				placement="bottom right"
 				closeOnSelect={false}
 				w="full"
 				trigger={(triggerProps) => (
-					<Pressable
+					<IconButton
 						m="auto"
-						w={6}
 						accessibilityLabel="More options menu"
+						icon={<DotsIcon size={headerSize} />}
 						{...triggerProps}
-						flex={1}
-					>
-						<DotsIcon size={headerSize} />
-					</Pressable>
+						flexGrow={0}
+						flexShrink={0}
+					/>
 				)}
 				onOpen={() => setMenuOpen(true)}
 				onPress={() => setMenuOpen(true)}
@@ -65,9 +66,13 @@ const WordListsContextMenu = () => {
 					value={centerMenuOption}
 					type="checkbox"
 					title="Options"
+					_title={{fontSize: textSize}}
 					onChange={(v) => handleCenterText(v)}
 				>
-					<Menu.ItemOption value="center" >
+					<Menu.ItemOption
+						value="center"
+						_text={{fontSize: menuSize}}
+					>
 						Center-Justify Text
 					</Menu.ItemOption>
 				</Menu.OptionGroup>
@@ -76,12 +81,13 @@ const WordListsContextMenu = () => {
 					mx="auto"
 					w="5/6"
 					bg="main.50"
-					opacity={25}/>
+					opacity={25}
+				/>
 				<Menu.Item
 					onPress={() => showInfo()}
 				>
-					<HelpIcon size={textSize} m={2} ml={0} />
-					<Text size={textSize}>Info About the Lists</Text>
+					<HelpIcon size={menuSize} m={2} ml={0} />
+					<Text fontSize={menuSize}>Info About the Lists</Text>
 				</Menu.Item>
 			</Menu>
 			<Modal
@@ -101,12 +107,16 @@ const WordListsContextMenu = () => {
 						borderBottomWidth={0}
 						p={3}
 					>
-						<Text color={primaryContrast} fontSize={headerSize}>About the Lists</Text>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={headerSize}>About the Lists</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								onPress={() => setInfoModalOpen(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>						
 					</Modal.Header>
-					<Modal.CloseButton
-						_icon={{color: primaryContrast, size: headerSize}}
-						onPress={() => setInfoModalOpen(false)}
-					/>
 					<Modal.Body
 						h="full"
 						maxWidth="full"

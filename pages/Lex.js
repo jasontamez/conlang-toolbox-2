@@ -44,7 +44,8 @@ import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
 import { TextAreaSetting, TextSetting } from '../components/layoutTags';
-// TO-DO: Figure out flex situation of ellipsis, fix text size of sort menu and of the textarea boxes
+import { fontSizesInPx } from '../store/appStateSlice';
+// TO-DO: Fix Menu sizes of sort menu/settings menu
 
 const Lex = () => {
 	//
@@ -168,7 +169,6 @@ const Lex = () => {
 			toast,
 			msg: "Word Added"
 		});
-		// TO-DO: Test that these refs work on mobile
 		newLexiconRefs.forEach(ref => {
 			ref && ref.current && ref.current.clear();
 		});
@@ -238,11 +238,26 @@ const Lex = () => {
 	//
 	//
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
-	const screenHeight = useWindowDimensions().height;
-	const screenWidth = useWindowDimensions().width;
-	const iconSize = useBreakpointValue(sizes.sm);
+	const { width, height } = useWindowDimensions();
+	const smallerSize = useBreakpointValue(sizes.sm);
 	const textSize = useBreakpointValue(sizes.md);
 	const bigTextSize = useBreakpointValue(sizes.x2);
+	const [] = useBreakpointValue({
+		base: [1, 3],
+	});
+	// Calculate dimensions of the upper area so they are readable
+	const calculateInfoHeight = () => {
+		// Base height is 1/4 the area
+		const base = (height - 40) / 4;
+		// Max height is 1/2 the area
+		const max = base * 2;
+		// fontSize is an estimate of the amount of space the font takes up
+		const fontSize = fontSizesInPx[textSize];
+		// return a value at least `base`, but modified by `fontSize`
+		//    to a point no greater than `max`
+		return Math.min(max, Math.max(base, fontSize * 10));
+	};
+	const infoHeight = calculateInfoHeight();
 	const renderList = ({item, index}) => {
 		const id = item.id;
 		const cols = item.columns;
@@ -250,14 +265,14 @@ const Lex = () => {
 		const buttonProps =
 			deletingMode ?
 				{
-					icon: <TrashIcon size={iconSize} color="danger.50" />,
+					icon: <TrashIcon size={smallerSize} color="danger.50" />,
 					accessibilityLabel: "Mark for Deletion",
 					bg: "danger." + (itemsToDelete.findIndex(itd => itd === id) >= 0 ? "400" : "700"),
 					onPress: () => toggleMarkedForDeletion(id)
 				}
 			:
 				{
-					icon: <EditIcon size={iconSize} color="primary.400" />,
+					icon: <EditIcon size={smallerSize} color="primary.400" />,
 					accessibilityLabel: "Edit",
 					bg: "transparent",
 					onPress: () => startEditingFunc(item)
@@ -267,7 +282,7 @@ const Lex = () => {
 				{cols.map(
 					(text, i) =>
 						<Box px={1} size={columns[i].size} key={id + "-Column-" + String(i)}>
-							<Text fontSize={iconSize} isTruncated={truncateColumns}>{text}</Text>
+							<Text fontSize={smallerSize} isTruncated={truncateColumns}>{text}</Text>
 						</Box>
 					)
 				}
@@ -289,7 +304,7 @@ const Lex = () => {
 	//
 	return (
 		<>
-			<ScrollView flex={1}>
+			<ScrollView height={infoHeight} flexGrow={0} flexShrink={0}>
 				<VStack m={3} mb={0}>
 					<TextSetting
 						text="Lexicon Title:"
@@ -299,7 +314,7 @@ const Lex = () => {
 							{ namespace: "LexTitle" }
 						)}
 						labelProps={{fontSize: textSize}}
-						inputProps={{mt: 2}}
+						inputProps={{mt: 2, fontSize: smallerSize}}
 						placeholder="Usually the language name."
 					/>
 				</VStack>
@@ -312,14 +327,14 @@ const Lex = () => {
 							{ namespace: "LexDesc" }
 						)}
 						labelProps={{fontSize: textSize}}
-						inputProps={{mt: 2}}
+						inputProps={{mt: 2, fontSize: smallerSize}}
 						rows={3}
 						placeholder="A short description of this lexicon."
 					/>
 				</VStack>
 			</ScrollView>
 			<VStack
-				flex={3}
+				flex={1}
 				justifyContent="flex-start"
 				alignItems="stretch"
 				style={{
@@ -390,18 +405,19 @@ const Lex = () => {
 				<HStack
 					ml={3}
 					justifyContent="space-between"
-					alignItems="flex-end"
+					alignItems="center"
 				>
 					<Box
 						flexGrow={1}
-						flexShrink={0}
+						flexShrink={1}
 						style={{minWidth: 110}}
 					>
-						<Text fontSize={bigTextSize}>{String(lexicon.length)} Word{maybePlural(lexicon.length)}</Text>
+						<Text fontSize={bigTextSize} isTruncated>{String(lexicon.length)} Word{maybePlural(lexicon.length)}</Text>
 					</Box>
 					<HStack
 						mx={3}
-						style={{maxWidth: screenWidth - 110 - 36}}
+						style={{maxWidth: width - 110 - 36}}
+						flexWrap="wrap"
 					>
 						<Menu
 							placement="top right"
@@ -415,6 +431,7 @@ const Lex = () => {
 										bg="secondary.500"
 										flexGrow={1}
 										flexShrink={2}
+										maxW={width / 2}
 										_stack={{
 											justifyContent: "space-between",
 											alignItems: "center",
@@ -426,15 +443,13 @@ const Lex = () => {
 												overflow: "hidden"
 											}
 										}}
-										startIcon={<SortEitherIcon size={iconSize} mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
+										startIcon={<SortEitherIcon size={smallerSize} mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
 										{...props}
 									>
 										<Box
 											overflow="hidden"
-											flexGrow={1}
-											flexShrink={0}
 										>
-											<Text color="secondary.50" isTruncated textAlign="left" noOfLines={1}>{columns[sortPattern[0]].label}</Text>
+											<Text fontSize={smallerSize} color="secondary.50" isTruncated textAlign="left" noOfLines={1}>{columns[sortPattern[0]].label}</Text>
 										</Box>
 									</Button>
 								)
@@ -460,7 +475,7 @@ const Lex = () => {
 						</Menu>
 						<IconButton
 							onPress={() => dispatch(toggleSortDir())}
-							icon={sortDir ? <SortUpIcon size={iconSize} /> : <SortDownIcon size={iconSize} />}
+							icon={sortDir ? <SortUpIcon size={smallerSize} /> : <SortDownIcon size={smallerSize} />}
 							p={1}
 							_icon={{color: "secondary.50"}}
 							bg="secondary.500"
@@ -481,7 +496,7 @@ const Lex = () => {
 								p={1}
 								px={1.5}
 								ml={2}
-								icon={<TrashIcon color="danger.50" size={iconSize} />}
+								icon={<TrashIcon color="danger.50" size={smallerSize} />}
 								bg="danger.500"
 								onPress={() => maybeMassDelete()}
 								flexGrow={0}
@@ -498,8 +513,10 @@ const Lex = () => {
 									p={1}
 									px={1.5}
 									ml={2}
-									icon={<SettingsIcon color="tertiary.50" name="settings" size={iconSize} />}
+									icon={<SettingsIcon color="tertiary.50" name="settings" size={smallerSize} />}
 									bg="tertiary.500"
+									flexGrow={0}
+									flexShrink={0}
 									{...props}
 								/>
 							)}
@@ -533,7 +550,7 @@ const Lex = () => {
 				</HStack>
 				<VStack
 					flex={1}
-					style={{maxHeight: screenHeight - 40}}
+					style={{maxHeight: height - 40}}
 					alignItems="stretch"
 					justifyContent="flex-start"
 				>
@@ -583,7 +600,7 @@ const Lex = () => {
 							<IconButton
 								p={1}
 								m={0.5}
-								icon={<AddIcon size={iconSize} color="success.50" />}
+								icon={<AddIcon size={smallerSize} color="success.50" />}
 								accessibilityLabel="Add to Lexicon"
 								bg="success.500"
 								onPress={() => addToLexicon()}

@@ -10,7 +10,8 @@ const doToast = ({
 	placement,
 	duration,
 	boxProps,
-	center
+	center,
+	fontSize
 }) => {
 	if(duration === undefined) {
 		duration = 2500;
@@ -30,7 +31,7 @@ const doToast = ({
 					py={1}
 					{...(boxProps || {})}
 				>
-					<Text color={color || "success.50"} textAlign={center ? "center" : undefined}>
+					<Text fontSize={fontSize} color={color || "success.50"} textAlign={center ? "center" : undefined}>
 						{msg}
 					</Text>
 				</Box>
