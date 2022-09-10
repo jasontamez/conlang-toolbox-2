@@ -22,8 +22,11 @@ import {
 	WordGenIcon,
 	WordListsIcon
 } from '../components/icons';
+import { setBaseTextSize } from '../store/appStateSlice';
+import {useDispatch} from 'react-redux';
 
 const About = () => {
+	const dispatch=useDispatch();
 	const sizes = useSelector(state => state.appState.sizes);
 	let navigate = useNavigate();
 	const doNav = (where) => {
@@ -101,6 +104,8 @@ const About = () => {
 			p={3}
 			bg="darker"
 		>
+			<Pressable onPress={() => dispatch(setBaseTextSize("2xl"))} firstElement p={4}><Text fontSize="xl">Embiggen</Text></Pressable>
+			<Pressable onPress={() => dispatch(setBaseTextSize("sm"))} firstElement p={6}><Text fontSize="sm">Ensmallen</Text></Pressable>
 			<Pressable onPress={() => {doNav("/ms")}} firstElement>
 				<SectionHeader SectionIcon={MorphoSyntaxIcon} text="MorphoSyntax" />
 				<Highlight>This tool is for designing the basic structure of your language.</Highlight>

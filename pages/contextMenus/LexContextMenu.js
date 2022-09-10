@@ -36,6 +36,7 @@ const LexiconContextMenu = () => {
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.md);
+	const dotSize = useBreakpointValue(sizes.sm);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
@@ -79,7 +80,7 @@ const LexiconContextMenu = () => {
 						w={6}
 						accessibilityLabel="More options menu"
 						{...triggerProps}>
-						<DotsIcon />
+						<DotsIcon size={dotSize} />
 					</Pressable>
 				)}
 				onOpen={() => setMenuOpen(true)}
@@ -153,7 +154,7 @@ const LexiconContextMenu = () => {
 						<Text color={primaryContrast} fontSize={textSize}>Set Max Columns</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: primaryContrast}}
+						_icon={{color: primaryContrast, size: textSize}}
 						onPress={() => setColumnsRangeOpen(false)}
 					/>
 					<Modal.Body>
@@ -184,15 +185,15 @@ const LexiconContextMenu = () => {
 						>
 							<Button
 								bg="lighter"
-								_text={{color: "text.50"}}
+								_text={{color: "text.50", fontSize: textSize}}
 								p={1}
 								m={2}
 								onPress={() => setColumnsRangeOpen(false)}
 							>CANCEL</Button>
 							<Button
-								startIcon={<SaveIcon color="success.50" m={0} />}
+								startIcon={<SaveIcon color="success.50" m={0} fontSize={textSize} />}
 								bg="success.500"
-								_text={{color: "success.50"}}
+								_text={{color: "success.50", fontSize: textSize}}
 								p={1}
 								m={2}
 								onPress={() => {

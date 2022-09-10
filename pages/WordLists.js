@@ -43,6 +43,7 @@ const WordLists = () => {
 	const navigate = useNavigate();
 	const toast = useToast();
 	const headerSize = useBreakpointValue(sizes.md);
+	const textSize= useBreakpointValue(sizes.sm);
 	const buttonTextSize = useBreakpointValue(sizes.xs);
 	const [addToLexicon, setAddToLexicon] = useState([]);
 	const [columnID, setColumnID] = useState(columns[0].id);
@@ -66,7 +67,7 @@ const WordLists = () => {
 					bg="tertiary.500"
 					p={3}
 				>
-					<Text textAlign="center" color="tertiary.50">Tap on rows to select them. Tap <Text bold>Save</Text> below to save them to the Lexicon.</Text>
+					<Text textAlign="center" fontSize={textSize} color="tertiary.50">Tap on rows to select them. Tap <Text bold>Save</Text> below to save them to the Lexicon.</Text>
 				</Box>
 			),
 			placement: "bottom-right",
@@ -98,7 +99,7 @@ const WordLists = () => {
 				py={1}
 				px={1.5}
 				_text={{color: "secondary.50"}}
-				startIcon={<SaveIcon color="secondary.50" />}
+				startIcon={<SaveIcon color="secondary.50" size={textSize} />}
 				onPress={saveAllFunc}
 			>SAVE ALL TO LEXICON</Button>
 		);
@@ -109,7 +110,7 @@ const WordLists = () => {
 				py={1}
 				px={1.5}
 				_text={{color: "tertiary.50"}}
-				startIcon={<SaveIcon color="tertiary.50" />}
+				startIcon={<SaveIcon color="tertiary.50" size={textSize} />}
 				onPress={beginSaveSome}
 			>SAVE SOME TO LEXICON</Button>
 		);
@@ -120,7 +121,7 @@ const WordLists = () => {
 				py={1}
 				px={1.5}
 				_text={{color: "danger.50"}}
-				startIcon={<CloseCircleIcon color="danger.50" />}
+				startIcon={<CloseCircleIcon color="danger.50" size={textSize} />}
 				onPress={cancelSaveSome}
 			>CANCEL</Button>
 		);
@@ -131,7 +132,7 @@ const WordLists = () => {
 				py={1}
 				px={1.5}
 				_text={{color: "tertiary.50"}}
-				startIcon={<SaveIcon color="tertiary.50" />}
+				startIcon={<SaveIcon color="tertiary.50" size={textSize} />}
 				onPress={saveSomeFunc}
 			>SAVE</Button>
 		);
@@ -192,7 +193,7 @@ const WordLists = () => {
 						alignSelf="flex-end"
 						onPress={() => toast.closeAll()}
 						bg="transparent"
-						icon={<CloseIcon color="success.50" />}
+						icon={<CloseIcon color="success.50" size={textSize} />}
 						p={1}
 						m={0}
 					/>
@@ -202,14 +203,14 @@ const WordLists = () => {
 						p={0}
 						px={3}
 					>
-						<Text textAlign="center" color="success.50">Added <Text bold>{length}</Text> words to the Lexicon.</Text>
+						<Text textAlign="center" color="success.50" fontSize={textSize}>Added <Text bold>{length}</Text> words to the Lexicon.</Text>
 					</Box>
 					<Button
 						bg="darker"
 						px={2}
 						py={1}
 						mb={1}
-						_text={{color: "success.50"}}
+						_text={{color: "success.50", fontSize: textSize}}
 						onPress={() => {
 							navigate("/lex");
 							toast.closeAll();
@@ -251,7 +252,7 @@ const WordLists = () => {
 					py={1}
 					{...background}
 				>
-					<Text {...alignment}>{item}</Text>
+					<Text {...alignment} fontSize={textSize}>{item}</Text>
 				</Box>
 			</Pressable>
 		);
@@ -273,7 +274,7 @@ const WordLists = () => {
 					mr={1}
 					alignSelf="flex-start"
 				>
-					<Text>Display:</Text>
+					<Text fontSize={textSize}>Display:</Text>
 				</Box>
 				{WL.sources.map((list) => {
 					const displayProps = listsDisplayed[list] ? {
@@ -322,7 +323,7 @@ const WordLists = () => {
 						<Text color={primaryContrast} fontSize={headerSize}>Add to Lexicon</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: primaryContrast}}
+						_icon={{color: primaryContrast, size: headerSize}}
 						onPress={() => setAddToLexicon([])}
 					/>
 					<Modal.Body>
@@ -330,13 +331,23 @@ const WordLists = () => {
 							alignItems="center"
 							justifyContent="flex-start"
 						>
-							<Text alignSelf="flex-start" mb={4}>Choose which Lexicon column to put the words in.</Text>
+							<Text alignSelf="flex-start" mb={4} fontSize={textSize}>Choose which Lexicon column to put the words in.</Text>
 							<Radio.Group
 								onChange={(value) => setColumnID(value)}
 								accessibilityLabel="Lexicon columns"
 								alignItems="stretch"
 								shadow={3}
 								defaultValue={columns[0].id}
+								_radio={{
+									_text: {
+										fontSize: textSize
+									},
+									_icon: {
+										size: textSize
+									},
+									p: 2,
+									pr: 4
+								}}
 							>
 								{columns.map((col, index) => (
 									<Radio
@@ -345,9 +356,7 @@ const WordLists = () => {
 										_stack={{
 											bg: index % 2
 												? "lighter"
-												: "darker",
-											p: 2,
-											pr: 4
+												: "darker"
 										}}
 									>
 										{col.label}
@@ -365,7 +374,7 @@ const WordLists = () => {
 						>
 							<Button
 								bg="lighter"
-								_text={{color: "text.50"}}
+								_text={{color: "text.50", fontSize: textSize}}
 								onPress={() => setAddToLexicon([])}
 								px={2}
 								py={1}
@@ -373,7 +382,7 @@ const WordLists = () => {
 							>Cancel</Button>
 							<Button
 								bg="success.500"
-								_text={{color: "success.50"}}
+								_text={{color: "success.50", fontSize: textSize}}
 								px={2}
 								py={1}
 								m={2}

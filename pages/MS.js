@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
-import { ScrollView, VStack, Box, Button, IconButton } from 'native-base';
+import { ScrollView, VStack, Box, Button, IconButton, useBreakpointValue } from 'native-base';
+import { useSelector } from 'react-redux';
 
 import { NavBar } from '../components/layoutTags';
 import { SettingsIcon } from '../components/icons';
@@ -18,14 +19,10 @@ const MS = () => {
 	}, [location]);
 	const NavTab = (props) => {
 		const { isCurrent, icon, link, label } = props;
+		const sizes = useSelector(state => state.appState.sizes);
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "text.50";
-		const textOptions =
-			isCurrent ?
-				{bold: true, color: colorString}
-			:
-				{color: colorString}
-		;
+		const textSize = useBreakpointValue(sizes.sm);
 		if(icon) {
 			return (
 				<IconButton
@@ -35,7 +32,7 @@ const MS = () => {
 					color={colorString}
 					onPress={() => navigate(link)}
 					icon={icon}
-					_icon={{size: "md", color: colorString}}
+					_icon={{color: colorString, size: textSize}}
 				/>
 			);
 		}
@@ -45,7 +42,7 @@ const MS = () => {
 				variant="ghost"
 				bg={bg}
 				color={colorString}
-				_text={textOptions}
+				_text={{bold: isCurrent, color: colorString, fontSize: textSize}}
 				onPress={() => navigate(link)}
 			>
 				{label}
@@ -53,7 +50,7 @@ const MS = () => {
 		);
 	};
 	const range = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
-	return (
+	return ( // TO-DO: Figure out why content is slipping behind the nav bar
 		<>
 			<VStack
 				alignItems="stretch"
@@ -87,7 +84,7 @@ const MS = () => {
 			>
 				<NavTab
 					isCurrent={pathname === "/ms"}
-					icon={<SettingsIcon size="2xs" />}
+					icon={<SettingsIcon />}
 					link="/ms"
 					key="NavTabSettings"
 				/>

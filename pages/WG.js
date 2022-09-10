@@ -19,11 +19,12 @@ import {
 	WGSyllablesIcon
 } from '../components/icons';
 
-const WG = () => {
+const WG = () => { //TO-DO: Fix flex of header, make sure nav bar stretches if needed
 	const location = useLocation();
 	const navigate = useNavigate();
 	const sizes = useSelector(state => state.appState.sizes);
 	const buttonTextSize = useBreakpointValue(sizes.xs);
+	const iconSize = useBreakpointValue(sizes.sm);
 	const pathname = location.pathname;
 	const w = useBreakpointValue({
 		base: 12,
@@ -33,8 +34,7 @@ const WG = () => {
 		base: () => <></>,
 		sm: ({color, label}) => <Text fontSize={buttonTextSize} color={color}>{label}</Text>
 	});
-	const NavTab = (props) => {
-		const { isCurrent, TabIcon, link, label } = props;
+	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "main.600";
 		return (
@@ -46,7 +46,7 @@ const WG = () => {
 					bg={bg}
 					w={w}
 				>
-					<TabIcon color={colorString} />
+					<TabIcon color={colorString} size={iconSize} />
 					<ButtonLabel color={colorString} label={label} />
 				</VStack>
 			</Pressable>
@@ -98,35 +98,30 @@ const WG = () => {
 					TabIcon={(props) => <WGCharactersIcon {...props} />}
 					link="/wg/characters"
 					label="Characters"
-					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg/syllables"}
 					TabIcon={(props) => <WGSyllablesIcon {...props} />}
 					link="/wg/syllables"
 					label="Syllables"
-					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg/transformations"}
 					TabIcon={(props) => <WGTransformationsIcon {...props} />}
 					link="/wg/transformations"
 					label="Transforms"
-					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg/output"}
 					TabIcon={(props) => <WGOutputIcon {...props} />}
 					link="/wg/output"
 					label="Output"
-					w={w}
 				/>
 				<NavTab
 					isCurrent={pathname === "/wg"}
 					TabIcon={(props) => <WGSettingsIcon {...props} />}
 					link="/wg"
 					label="Settings"
-					w={w}
 				/>
 			</TabBar>
 		</>

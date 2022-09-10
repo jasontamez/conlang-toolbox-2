@@ -259,7 +259,7 @@ const WGChar = () => {
 						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={descSize} fontSize={descSize} italic>{dropoff}%</Text>
 					}
 					<IconButton
-						icon={<EditIcon color="primary.400" />}
+						icon={<EditIcon color="primary.400" size={descSize} />}
 						accessibilityLabel="Edit"
 						bg="transparent"
 						p={1}
@@ -267,7 +267,7 @@ const WGChar = () => {
 						onPress={() => startEditGroup(group)}
 					/>
 					<IconButton
-						icon={<TrashIcon color="danger.400" />}
+						icon={<TrashIcon color="danger.400" size={descSize} />}
 						accessibilityLabel="Delete"
 						bg="transparent"
 						p={1}
@@ -302,7 +302,7 @@ const WGChar = () => {
 					({leastDestructiveRef}) => <Button
 						onPress={() => setAlertOpenError(false)}
 						ref={leastDestructiveRef}
-					>Ok</Button>
+					>Ok</Button> //TO-DO: Figure out how Short Label shrunk? also, fix header flex and size of both modals?
 				]}
 			/>
 			<Modal isOpen={!!editingGroup}>
@@ -323,9 +323,10 @@ const WGChar = () => {
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{ mt: 1 }}
+								inputProps={{ mt: 1, fontSize: descSize }}
 								boxProps={{ pb: 2 }}
 								value={modifiedDesc}
+								labelProps={{fontSize: textSize}}
 								onChangeText={(v) => setModifiedDesc(v)}
 							/>
 							<HStack
@@ -334,7 +335,7 @@ const WGChar = () => {
 								alignItems="center"
 								w="full"
 							>
-								<Text>Short Label:</Text>
+								<Text size={textSize}>Short Label:</Text>
 								<Input
 									w={8}
 									py={1}
@@ -343,14 +344,16 @@ const WGChar = () => {
 									mx={2}
 									value={modifiedLabel}
 									onChangeText={(v) => setModifiedLabel(v)}
+									fontSize={descSize}
 								/>
 							</HStack>
 							<TextSetting
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1 }}
+								inputProps={{ mt: 1, fontSize: descSize }}
 								value={modifiedRun}
+								labelProps={{fontSize: textSize}}
 								onChangeText={(v) => setModifiedRun(v)}
 							/>
 							<ToggleSwitch
@@ -367,8 +370,8 @@ const WGChar = () => {
 								>
 									<SliderWithLabels
 										max={50}
-										beginLabel={<EquiprobableIcon color="text.50" />}
-										endLabel={<SharpDropoffIcon color="text.50" />}
+										beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+										endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 										value={editOverrideValue}
 										sliderProps={{
 											accessibilityLabel: "Dropoff rate",
@@ -376,7 +379,7 @@ const WGChar = () => {
 										}}
 										Label={({value}) => (
 											<Center>
-												<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text></Text>
+												<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
 											</Center>
 										)}
 										stackProps={{
@@ -396,18 +399,20 @@ const WGChar = () => {
 					<Modal.Footer>
 						<HStack justifyContent="space-between" p={1}>
 							<Button
-								startIcon={<TrashIcon color="danger.50" />}
+								startIcon={<TrashIcon color="danger.50" size={textSize} />}
 								bg="danger.500"
 								px={2}
 								py={1}
 								mx={1}
 								onPress={() => maybeDeleteGroup(editingGroup)}
+								_text={{fontSize: textSize}}
 							>DELETE</Button>
 							<Button
-								startIcon={<SaveIcon />}
+								startIcon={<SaveIcon size={textSize} />}
 								px={2}
 								py={1}
 								onPress={() => maybeSaveEditedGroup()}
+								_text={{fontSize: textSize}}
 							>SAVE</Button>
 						</HStack>
 					</Modal.Footer>
@@ -421,7 +426,7 @@ const WGChar = () => {
 							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flex: 0, mx: 1}} />
 							<IconButton
 								flex={0}
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => closeAddGroup()}
 								mx={1}
 							/>
@@ -432,7 +437,8 @@ const WGChar = () => {
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{ mt: 1, ref: refAddDesc, ...saveOnEnd(setAddDesc) }}
+								inputProps={{ mt: 1, ref: refAddDesc, fontSize: descSize, ...saveOnEnd(setAddDesc) }}
+								labelProps={{fontSize: textSize}}
 								boxProps={{ pb: 2 }}
 							/>
 							<HStack
@@ -442,7 +448,7 @@ const WGChar = () => {
 								w="full"
 							>
 								<HStack alignItems="center">
-									<Text>Short Label:</Text>
+									<Text fontSize={textSize}>Short Label:</Text>
 									<Input
 										w={8}
 										py={1}
@@ -450,6 +456,7 @@ const WGChar = () => {
 										textAlign="center"
 										mx={2}
 										value={addLabel}
+										fontSize={descSize}
 										onChangeText={v => setAddLabel(v)}
 									/>
 								</HStack>
@@ -471,7 +478,8 @@ const WGChar = () => {
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddRun, ...saveOnEnd(setAddRun) }}
+								inputProps={{ mt: 1, ref: refAddRun, fontSize: descSize, ...saveOnEnd(setAddRun) }}
+								labelProps={{fontSize: textSize}}
 							/>
 							<ToggleSwitch
 								hProps={{ py: 2 }}
@@ -483,8 +491,8 @@ const WGChar = () => {
 							{addOverrideSwitch ?
 								<SliderWithLabels
 									max={50}
-									beginLabel={<EquiprobableIcon color="text.50" />}
-									endLabel={<SharpDropoffIcon color="text.50" />}
+									beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+									endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 									value={addOverrideValue}
 									sliderProps={{
 										accessibilityLabel: "Dropoff rate",
@@ -492,7 +500,7 @@ const WGChar = () => {
 									}}
 									Label={({value}) => (
 										<Center>
-											<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}</Text></Text>
+											<Text fontSize={fontSize}>Rate: <Text px={2.5} bg="lighter">{value}</Text></Text>
 										</Center>
 									)}
 									stackProps={{
@@ -511,18 +519,20 @@ const WGChar = () => {
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1}>
 							<Button
-								startIcon={<AddIcon color="secondary.50" />}
+								startIcon={<AddIcon color="secondary.50" size={textSize} />}
 								bg="secondary.500"
 								px={2}
 								py={1}
 								mx={1}
 								onPress={() => addNewGroup(false)}
+								_text={{fontSize: textSize}}
 							>ADD</Button>
 							<Button
-								startIcon={<AddIcon />}
+								startIcon={<AddIcon size={textSize} />}
 								px={2}
 								py={1}
 								onPress={() => addNewGroup(true)}
+								_text={{fontSize: textSize}}
 							>ADD AND CLOSE</Button>
 						</HStack>
 					</Modal.Footer>
@@ -531,15 +541,15 @@ const WGChar = () => {
 			<Fab
 				bg="secondary.500"
 				renderInPortal={false}
-				icon={<AddIcon color="secondary.50" />}
+				icon={<AddIcon color="secondary.50" size={textSize} />}
 				accessibilityLabel="Add Group"
 				onPress={() => setAddGroupOpen(true)}
 			/>
 			<ScrollView bg="main.900">
 				<SliderWithLabels
 					max={50}
-					beginLabel={<EquiprobableIcon color="text.50" />}
-					endLabel={<SharpDropoffIcon color="text.50" />}
+					beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+					endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 					value={characterGroupDropoff}
 					sliderProps={{
 						accessibilityLabel: "Dropoff rate",

@@ -147,7 +147,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			>{props.children}</Button>
 		);
 	};
-	const renderItem = (col, i) => {
+	const renderItem = (col, i) => { // TO-DO: Fix sizing of modal contents
 		const {id, label, size} = col;
 		return (
 			<HStack

@@ -39,6 +39,7 @@ const ModalTransformEditingItem = ({
 	const [modifiedReplace, setModifiedReplace] = useState("");
 	const [modifiedDescription, setModifiedDescription] = useState("");
 	const [editingID, setEditingID] = useState("");
+	const inputSize = useBreakpointValue(sizes.xs);
 	const textSize = useBreakpointValue(sizes.sm);
 	const headerSize = useBreakpointValue(sizes.md);
 	const dispatch = useDispatch();
@@ -82,15 +83,15 @@ const ModalTransformEditingItem = ({
 		});
 		endEditingFunc();
 	};
-	return (
+	return ( //TO-DO: Fix modal sizing
 		<Modal isOpen={!!transform}>
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
-						<ExtraChars size={textSize} color={primaryContrast} buttonProps={{flex:0, mx: 1}} />
+						<ExtraChars size={headerSize} color={primaryContrast} buttonProps={{flex:0, mx: 1}} />
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} />}
+							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 							onPress={() => endEditingFunc()}
 							mx={1}
 							flex={0}
@@ -102,7 +103,8 @@ const ModalTransformEditingItem = ({
 						<TextSetting
 							text="Search Expression"
 							placeholder="(what to replace)"
-							inputProps={{ mt: 1, ref: sRef }}
+							inputProps={{ mt: 1, ref: sRef, fontSize: inputSize }}
+							labelProps={{ fontSize: textSize }}
 							boxProps={{ pb: 2 }}
 							value={modifiedSearch}
 							onChangeText={(v) => setModifiedSearch(v)}
@@ -111,15 +113,17 @@ const ModalTransformEditingItem = ({
 							text="Replacement Expression"
 							placeholder="(what to replace with)"
 							boxProps={{ py: 2 }}
-							inputProps={{ mt: 1, ref: rRef }}
+							inputProps={{ mt: 1, ref: rRef, fontSize: inputSize }}
+							labelProps={{ fontSize: textSize }}
 							value={modifiedReplace}
 							onChangeText={(v) => setModifiedReplace(v)}
 						/>
 						<TextSetting
 							text="Transformation Description"
 							placeholder="(optional)"
-							inputProps={{ mt: 1, ref: dRef }}
+							inputProps={{ mt: 1, ref: dRef, fontSize: inputSize }}
 							boxProps={{ pb: 2 }}
+							labelProps={{ fontSize: textSize }}
 							value={modifiedDescription}
 							onChangeText={(v) => setModifiedDescription(v)}
 						/>
@@ -128,18 +132,20 @@ const ModalTransformEditingItem = ({
 				<Modal.Footer>
 					<HStack justifyContent="space-between" p={1}>
 						<Button
-							startIcon={<TrashIcon color="danger.50" />}
+							startIcon={<TrashIcon color="danger.50" size={textSize} />}
 							bg="danger.500"
 							px={2}
 							py={1}
 							mx={1}
 							onPress={() => maybeDeleteTransform()}
+							_text={{ fontSize: textSize }}
 						>DELETE</Button>
 						<Button
-							startIcon={<SaveIcon />}
+							startIcon={<SaveIcon size={textSize} />}
 							px={2}
 							py={1}
 							onPress={() => maybeSaveEditedTransform(true)}
+							_text={{ fontSize: textSize }}
 						>SAVE</Button>
 					</HStack>
 				</Modal.Footer>

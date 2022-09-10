@@ -51,7 +51,7 @@ const ModalLexiconEditingItem = ({
 		setNewFields([...columns]);
 	}, [columns]);
 	const primaryContrast = useContrastText('primary.500');
-	return (
+	return ( //TO-DO: Fix sizing of modal
 		<Modal
 			isOpen={isEditing}
 			closeOnOverlayClick={false}
@@ -90,7 +90,7 @@ const ModalLexiconEditingItem = ({
 								buttonProps={{p: 1, m: 0}}
 							/>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 								p={1}
 								m={0}
 								variant="ghost"
@@ -107,7 +107,7 @@ const ModalLexiconEditingItem = ({
 									<Text fontSize={textSize}>{labels[i]}</Text>
 									<Input
 										defaultValue={info}
-										size="md"
+										fontSize={textSize}
 										ref={i ? null : firstFieldRef}
 										onChangeText={(value) => {
 											let fields = [...newFields];
@@ -123,7 +123,7 @@ const ModalLexiconEditingItem = ({
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full">
 						<Button
-							startIcon={<TrashIcon color="danger.50" m={0} />}
+							startIcon={<TrashIcon color="danger.50" size={textSize} m={0} />}
 							bg="danger.500"
 							onPress={() => (disableConfirms ? deleteEditingItemFunc() : setAlertOpen(true))}
 							_text={{color: "danger.50"}}
@@ -131,7 +131,7 @@ const ModalLexiconEditingItem = ({
 							m={2}
 						>DELETE ITEM</Button>
 						<Button
-							startIcon={<SaveIcon color="tertiary.50" m={0} />}
+							startIcon={<SaveIcon color="tertiary.50" size={textSize} m={0} />}
 							bg="tertiary.500"
 							onPress={() => saveItemFunc([...newFields])}
 							_text={{color: "tertiary.50"}}

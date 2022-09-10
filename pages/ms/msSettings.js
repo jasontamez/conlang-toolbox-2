@@ -1,4 +1,4 @@
-import { Text, VStack, Pressable, HStack } from "native-base";
+import { Text, VStack, Pressable, HStack, useBreakpointValue } from "native-base";
 //import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
@@ -18,21 +18,24 @@ const Settings = () => {
 	//const pageName = "s" + msPage.slice(-2);
 	const synTitle = useSelector((state) => state.morphoSyntax.title);
 	const synDescription = useSelector((state) => state.morphoSyntax.description);
+	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
-	const StoredInfoButton = (props) => {
+	const textSize = useBreakpointValue(sizes.md);
+	const inputSize = useBreakpointValue(sizes.sm);
+	const StoredInfoButton = ({onPress, bg, icon, text}) => {
 		return (
 			<Pressable
-				onPress={props.onPress}
+				onPress={onPress}
 				mx={4}
 			>
 				<HStack
-					bg={props.bg}
+					bg={bg}
 					space={3}
 					p={2}
 					alignItems="center"
 				>
-					{props.icon}
-					<Text>{props.text}</Text>
+					{icon}
+					<Text fontSize={textSize}>{text}</Text>
 				</HStack>
 			</Pressable>
 		);
@@ -47,6 +50,8 @@ const Settings = () => {
 					{ namespace: "msName" }
 				)}
 				text="MorphoSyntax Title:"
+				labelProps={{fontSize: textSize}}
+				inputProps={{fontSize: inputSize}}
 			/>
 			<TextAreaSetting
 				placeholder="A short description of this document."
@@ -56,41 +61,43 @@ const Settings = () => {
 					{ namespace: "msDesc" }
 				)}
 				text="Description:"
+				labelProps={{fontSize: textSize}}
+				inputProps={{fontSize: inputSize}}
 			/>
 			<VStack alignSelf="flex-end">
 				<StoredInfoButton
 					bg="lighter"
-					icon={<RemoveCircleIcon />}
+					icon={<RemoveCircleIcon size={textSize} />}
 					onPress={() => 2222}
 					text="Clear MorphoSyntax Info"
 				/>
 				<StoredInfoButton
 					bg="darker"
-					icon={<AddCircleIcon />}
+					icon={<AddCircleIcon size={textSize} />}
 					onPress={() => 2222}
 					text="Load MorphoSyntax Info"
 				/>
 				<StoredInfoButton
 					bg="lighter"
-					icon={<SaveIcon />}
+					icon={<SaveIcon size={textSize} />}
 					onPress={() => 2222}
 					text="Save MorphoSyntax Info"
 				/>
 				<StoredInfoButton
 					bg="darker"
-					icon={<SaveIcon />}
+					icon={<SaveIcon size={textSize} />}
 					onPress={() => 2222}
 					text="Save As"
 				/>
 				<StoredInfoButton
 					bg="lighter"
-					icon={<ExportIcon />}
+					icon={<ExportIcon size={textSize} />}
 					onPress={() => 2222}
 					text="Export MorphoSyntax Info"
 				/>
 				<StoredInfoButton
 					bg="darker"
-					icon={<TrashIcon />}
+					icon={<TrashIcon size={textSize} />}
 					onPress={() => 2222}
 					text="Delete Saved MorphoSyntax Info"
 				/>

@@ -26,7 +26,7 @@ import { /*
 import { DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../helpers/debounce";
-
+//TO-DO: Fix sizing of buttons, headers, text, close icon
 
 const ParseMSJSON = (props) => {
 	const [modalState, setModal] = useState('');
@@ -327,7 +327,7 @@ const ParseMSJSON = (props) => {
 								>
 									{
 										prefix ?
-											<DotIcon m={0} p={0} mt={1.5} mr={1} />
+											<DotIcon m={0} p={0} mt={1.5} mr={1} size={textSize} />
 										:
 											<></>
 										}
@@ -470,7 +470,7 @@ const ParseMSJSON = (props) => {
 							<Modal.Footer w="full" p={2}>
 								<Button
 									m={0}
-									startIcon={<OkIcon />}
+									startIcon={<OkIcon size={textSize} />}
 									onPress={() => setModal('')}
 								>
 									Done
@@ -483,7 +483,7 @@ const ParseMSJSON = (props) => {
 							ml={4}
 							colorScheme="primary"
 							size="sm"
-							startIcon={<InfoIcon />}
+							startIcon={<InfoIcon size={textSize} />}
 							onPress={() => setModal(id)}
 						>
 							{(label || "Read About It").toUpperCase()}

@@ -25,7 +25,7 @@ import {
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
-	return (
+	return ( //TO-DO: Fix sizing of modal
 		<>
 			<Modal
 				animationType="fade"
@@ -77,7 +77,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 					bg={isActive ? "main.700" : "main.800"}
 					h={12}
 				>
-					<DragHandleIcon />
+					<DragHandleIcon fontSize={textSize} />
 					<Box
 						py={1}
 						px={2}

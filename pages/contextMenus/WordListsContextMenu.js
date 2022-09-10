@@ -38,7 +38,7 @@ const WordListsContextMenu = () => {
 		setInfoModalOpen(true);
 	};
 	const primaryContrast = useContrastText('primary.500');
-	return (
+	return (	// TO-DO: Fix flex value of Ellipsis
 		<>
 			<Menu
 				placement="bottom right"
@@ -50,8 +50,9 @@ const WordListsContextMenu = () => {
 						w={6}
 						accessibilityLabel="More options menu"
 						{...triggerProps}
+						flex={1}
 					>
-						<DotsIcon />
+						<DotsIcon size={headerSize} />
 					</Pressable>
 				)}
 				onOpen={() => setMenuOpen(true)}
@@ -79,8 +80,8 @@ const WordListsContextMenu = () => {
 				<Menu.Item
 					onPress={() => showInfo()}
 				>
-					<HelpIcon size="sm" m={2} ml={0} />
-					<Text>Info About the Lists</Text>
+					<HelpIcon size={textSize} m={2} ml={0} />
+					<Text size={textSize}>Info About the Lists</Text>
 				</Menu.Item>
 			</Menu>
 			<Modal
@@ -103,7 +104,7 @@ const WordListsContextMenu = () => {
 						<Text color={primaryContrast} fontSize={headerSize}>About the Lists</Text>
 					</Modal.Header>
 					<Modal.CloseButton
-						_icon={{color: primaryContrast}}
+						_icon={{color: primaryContrast, size: headerSize}}
 						onPress={() => setInfoModalOpen(false)}
 					/>
 					<Modal.Body
@@ -171,6 +172,7 @@ const WordListsContextMenu = () => {
 							py={1}
 							px={2}
 							colorScheme="info"
+							_text={{fontSize: textSize}}
 						>OK</Button>
 					</Modal.Footer>
 				</Modal.Content>

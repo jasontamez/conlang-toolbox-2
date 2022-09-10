@@ -362,7 +362,7 @@ const WGContextMenu = () => {
 					setInfoModalOpen(true);
 				}}
 			>
-				<InfoIcon size="md" />
+				<InfoIcon size={textSize} />
 			</Pressable>
 			<Modal isOpen={infoModalOpen} closeOnOverlayClick={true}>
 				<Modal.Content>
@@ -374,7 +374,7 @@ const WGContextMenu = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={headerSize}>{modalTitle}</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}
 								variant="ghost"
 								px={0}
@@ -388,6 +388,7 @@ const WGContextMenu = () => {
 							py={1}
 							px={2}
 							colorScheme="info"
+							_text={{fontSize: textSize}}
 						>OK</Button>
 					</Modal.Footer>
 				</Modal.Content>

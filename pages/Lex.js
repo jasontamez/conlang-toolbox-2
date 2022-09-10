@@ -44,6 +44,7 @@ import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
 import { TextAreaSetting, TextSetting } from '../components/layoutTags';
+// TO-DO: Figure out flex situation of ellipsis, fix text size of sort menu and of the textarea boxes
 
 const Lex = () => {
 	//
