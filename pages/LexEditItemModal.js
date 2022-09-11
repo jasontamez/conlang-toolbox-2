@@ -51,7 +51,7 @@ const ModalLexiconEditingItem = ({
 		setNewFields([...columns]);
 	}, [columns]);
 	const primaryContrast = useContrastText('primary.500');
-	return ( //TO-DO: Fix sizing of modal
+	return ( //TO-DO: Fix sizing of modal, test that StandardAlerts look ok
 		<Modal
 			isOpen={isEditing}
 			closeOnOverlayClick={false}

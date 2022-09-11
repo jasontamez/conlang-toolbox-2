@@ -6,67 +6,19 @@ import { useWindowDimensions, StatusBar } from 'react-native';
 import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
 import 'react-native-gesture-handler';
 
+
+// KILLSWITCH
 import { useFonts } from 'expo-font';
-//import {
-//	Arimo_400Regular,
-//	Arimo_400Regular_Italic,
-//	Arimo_700Bold,
-//	Arimo_700Bold_Italic
-//} from '@expo-google-fonts/arimo';
-import {
-	NotoSans_400Regular,
-	NotoSans_400Regular_Italic,
-	NotoSans_700Bold,
-	NotoSans_700Bold_Italic
-} from '@expo-google-fonts/noto-sans';
-//import {
-//	NotoSansJP_100Thin,
-//	NotoSansJP_300Light,
-//	NotoSansJP_400Regular,
-//	NotoSansJP_500Medium,
-//	NotoSansJP_700Bold,
-//	NotoSansJP_900Black
-//} from '@expo-google-fonts/noto-sans-jp';
-import {
-	NotoSerif_400Regular,
-	NotoSerif_400Regular_Italic,
-	NotoSerif_700Bold,
-	NotoSerif_700Bold_Italic
-} from '@expo-google-fonts/noto-serif';
-//import {
-//	NotoSerifJP_200ExtraLight,
-//	NotoSerifJP_300Light,
-//	NotoSerifJP_400Regular,
-//	NotoSerifJP_500Medium,
-//	NotoSerifJP_600SemiBold,
-//	NotoSerifJP_700Bold,
-//	NotoSerifJP_900Black
-//} from '@expo-google-fonts/noto-serif-jp';
-import {
-	SourceCodePro_200ExtraLight,
-	SourceCodePro_300Light,
-	SourceCodePro_400Regular,
-	SourceCodePro_500Medium,
-	SourceCodePro_600SemiBold,
-	SourceCodePro_700Bold,
-	SourceCodePro_800ExtraBold,
-	SourceCodePro_900Black,
-	SourceCodePro_200ExtraLight_Italic,
-	SourceCodePro_300Light_Italic,
-	SourceCodePro_400Regular_Italic,
-	SourceCodePro_500Medium_Italic,
-	SourceCodePro_600SemiBold_Italic,
-	SourceCodePro_700Bold_Italic,
-	SourceCodePro_800ExtraBold_Italic,
-	SourceCodePro_900Black_Italic
-} from '@expo-google-fonts/source-code-pro';
-//import {
-//	Scheherazade_400Regular,
-//	Scheherazade_700Bold
-//} from '@expo-google-fonts/scheherazade';
-//import {
-//	Sriracha_400Regular
-//} from '@expo-google-fonts/sriracha'
+import { NotoSans_400Regular, NotoSans_400Regular_Italic, NotoSans_700Bold, NotoSans_700Bold_Italic } from '@expo-google-fonts/noto-sans';
+import { NotoSerif_400Regular, NotoSerif_400Regular_Italic, NotoSerif_700Bold, NotoSerif_700Bold_Italic } from '@expo-google-fonts/noto-serif';
+import { SourceCodePro_200ExtraLight, SourceCodePro_300Light, SourceCodePro_400Regular, SourceCodePro_500Medium, SourceCodePro_600SemiBold, SourceCodePro_700Bold, SourceCodePro_800ExtraBold, SourceCodePro_900Black, SourceCodePro_200ExtraLight_Italic, SourceCodePro_300Light_Italic, SourceCodePro_400Regular_Italic, SourceCodePro_500Medium_Italic, SourceCodePro_600SemiBold_Italic, SourceCodePro_700Bold_Italic, SourceCodePro_800ExtraBold_Italic, SourceCodePro_900Black_Italic } from '@expo-google-fonts/source-code-pro';
+// KILLSWITCH
+
+//import { Arimo_400Regular, Arimo_400Regular_Italic, Arimo_700Bold, Arimo_700Bold_Italic } from '@expo-google-fonts/arimo';
+//import { NotoSansJP_100Thin, NotoSansJP_300Light, NotoSansJP_400Regular, NotoSansJP_500Medium, NotoSansJP_700Bold, NotoSansJP_900Black } from '@expo-google-fonts/noto-sans-jp';
+//import { NotoSerifJP_200ExtraLight, NotoSerifJP_300Light, NotoSerifJP_400Regular, NotoSerifJP_500Medium, NotoSerifJP_600SemiBold, NotoSerifJP_700Bold, NotoSerifJP_900Black } from '@expo-google-fonts/noto-serif-jp';
+//import { Scheherazade_400Regular, Scheherazade_700Bold } from '@expo-google-fonts/scheherazade';
+//import { Sriracha_400Regular } from '@expo-google-fonts/sriracha'
 
 import getTheme from './helpers/theme';
 
@@ -95,8 +47,16 @@ const App = () => {
 	);
 };
 
+// For when the font thingie keeps messing up:
+//	change comments so killSwitch is [true]
+//	comment out everything in "killswitch" above
+//	uncomment useFonts below
+//const killSwitch = [true];
+const killSwitch = false;
+//const useFonts = () => [true];
+
 const Layout = () => {
-	const [fontsloaded] = useFonts({
+	const [fontsloaded] = killSwitch || useFonts({
 		//Arimo_400Regular,
 		//Arimo_400Regular_Italic,
 		//Arimo_700Bold,

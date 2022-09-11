@@ -254,6 +254,7 @@ const mainCheckboxesDefaultProps = {
 };
 const modalProps = {
 	defaultProps: {
+		size: "xl",
 		_backdrop: {
 			opacity: 60
 		}

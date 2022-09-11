@@ -11,7 +11,8 @@ const StandardAlert = ({
 	continueProps, continueText, continueFunc,
 	leastDestructiveContinue,
 	overrideButtons,
-	detatchButtons
+	detatchButtons,
+	fontSize
 }) => {
 	// Makes an AlertDialog box
 	//
@@ -39,6 +40,7 @@ const StandardAlert = ({
 	//    Each button will be given a leastDestructiveRef - it should be
 	//      used by only ONE of them.
 	// detatchButtons: boolean, buttons should not appear attached
+	// fontSize: optional, gives default size for text; overridable by other *Props
 	const buttonRef = useRef(null);
 	const doCancel = () => {
 		setAlertOpen(false);
@@ -61,14 +63,14 @@ const StandardAlert = ({
 				<AlertDialog.Header
 					p={3}
 					bg="warning.500"
-					_text={{color: useContrastText((headerProps && headerProps.bg) || "warning.500")}}
+					_text={{color: useContrastText((headerProps && headerProps.bg) || "warning.500"), fontSize}}
 					borderBottomWidth={0}
 					{...(headerProps || {})}
 				>
 					{headerContent || "Warning"}
 				</AlertDialog.Header>
 				<AlertDialog.Body
-					_text={{color: "text.50"}}
+					_text={{color: "text.50", fontSize}}
 					{...(bodyProps || {})}
 				>
 					{bodyContent || "Are you sure?"}
@@ -86,7 +88,7 @@ const StandardAlert = ({
 								<Button
 									bg="darker"
 									ref={leastDestructiveContinue ? undefined : buttonRef}
-									_text={{color: "text.50"}}
+									_text={{color: "text.50", fontSize}}
 									{...(cancelProps || {})}
 									onPress={() => doCancel()}
 								>
@@ -95,7 +97,7 @@ const StandardAlert = ({
 								<Button
 									bg="success.500"
 									ref={leastDestructiveContinue ? buttonRef : undefined}
-									_text={{color: useContrastText((continueProps && continueProps.bg) || "success.50")}}
+									_text={{color: useContrastText((continueProps && continueProps.bg) || "success.50"), fontSize}}
 									{...(continueProps || {})}
 									onPress={() => doContinue()}
 								>

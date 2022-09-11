@@ -89,12 +89,12 @@ const ModalTransformEditingItem = ({
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
-						<ExtraChars size={headerSize} color={primaryContrast} buttonProps={{flex:0, mx: 1}} />
+						<ExtraChars size={headerSize} color={primaryContrast} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 						<IconButton
 							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 							onPress={() => endEditingFunc()}
-							mx={1}
-							flex={0}
+							flexGrow={0}
+							flexShrink={0}
 						/>
 					</HStack>
 				</Modal.Header>
@@ -130,7 +130,7 @@ const ModalTransformEditingItem = ({
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer>
-					<HStack justifyContent="space-between" p={1}>
+					<HStack justifyContent="space-between" p={1} flexWrap="wrap">
 						<Button
 							startIcon={<TrashIcon color="danger.50" size={textSize} />}
 							bg="danger.500"

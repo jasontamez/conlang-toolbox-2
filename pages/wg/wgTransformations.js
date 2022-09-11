@@ -63,6 +63,7 @@ const WGTransformations = () => {
 	const [deletingTransform, setDeletingTransform] = useState(false);
 	const [transformDeleteString, setTransformDeleteString] = useState("");
 	const textSize = useBreakpointValue(sizes.sm);
+	const fabSize = useBreakpointValue(sizes.md);
 	const descSize = useBreakpointValue(sizes.xs);
 	const primaryContrast = useContrastText("primary.500");
 	const maybeDeleteTransform = (transform = deletingTransform) => {
@@ -231,12 +232,12 @@ const WGTransformations = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Add Transform</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flex: 0, mx: 1}} />
+							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => closeAddTransform()}
-								mx={1}
-								flex={0}
+								flexGrow={0}
+								flexShrink={0}
 							/>
 						</HStack>
 					</Modal.Header>
@@ -245,27 +246,31 @@ const WGTransformations = () => {
 							<TextSetting
 								text="Search Expression"
 								placeholder="(what to replace)"
-								inputProps={{ mt: 1, ref: refSearch, ...saveOnEnd(setAddSearch) }}
+								inputProps={{ mt: 1, ref: refSearch, ...saveOnEnd(setAddSearch), fontSize: descSize }}
 								boxProps={{ pb: 2 }}
+								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting
 								text="Replacement Expression"
 								placeholder="(what to replace with)"
-								inputProps={{ mt: 1, ref: refReplace, ...saveOnEnd(setAddReplace) }}
+								inputProps={{ mt: 1, ref: refReplace, ...saveOnEnd(setAddReplace), fontSize: descSize }}
 								boxProps={{ py: 2 }}
+								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting
 								text="Transformation Description"
 								placeholder="(optional)"
-								inputProps={{ mt: 1, ref: refDescription, ...saveOnEnd(setAddDescription) }}
+								inputProps={{ mt: 1, ref: refDescription, ...saveOnEnd(setAddDescription), fontSize: descSize }}
 								boxProps={{ pb: 2 }}
+								labelProps={{ fontSize: textSize }}
 							/>
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>
-						<HStack justifyContent="flex-end" p={1}>
+						<HStack justifyContent="flex-end" p={1} flexWrap="wrap">
 							<Button
-								startIcon={<AddIcon color="secondary.50" />}
+								startIcon={<AddIcon color="secondary.50" size={textSize} />}
+								_text={{fontSize: textSize}}
 								bg="secondary.500"
 								px={2}
 								py={1}
@@ -273,7 +278,8 @@ const WGTransformations = () => {
 								onPress={() => addNewTransform(false)}
 							>ADD</Button>
 							<Button
-								startIcon={<AddIcon />}
+								startIcon={<AddIcon size={textSize} />}
+								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
 								onPress={() => addNewTransform(true)}
@@ -285,7 +291,7 @@ const WGTransformations = () => {
 			<Fab
 				bg="tertiary.500"
 				renderInPortal={false}
-				icon={<AddIcon color="tertiary.50" />}
+				icon={<AddIcon color="tertiary.50" size={fabSize} />}
 				accessibilityLabel="Add Transform"
 				onPress={() => setAddTransformOpen(true)}
 			/>
@@ -293,9 +299,9 @@ const WGTransformations = () => {
 				bg="secondary.500"
 				renderInPortal={false}
 				icon={reordering ?
-					<StopIcon size="md" color="secondary.50" />
+					<StopIcon color="secondary.50" size={fabSize} />
 				:
-					<ReorderIcon size="md" color="secondary.50" />
+					<ReorderIcon color="secondary.50" size={fabSize} />
 				}
 				accessibilityLabel={reordering ?
 					"Stop Reordering"
@@ -326,7 +332,7 @@ const WGTransformations = () => {
 							{reordering ?
 								<IconButton
 									key={item.id + "-reorder-up"}
-									icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} />}
+									icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} size={textSize} />}
 									accessibilityLabel="Move Up in List"
 									bg={index === 0 ? "transparent" : "darker"}
 									p={1}
@@ -351,7 +357,7 @@ const WGTransformations = () => {
 							{reordering ?
 								<IconButton
 									key={item.id + "-reorder-down"}
-									icon={<DownIcon color={index === lastTransform ? "transparent" : "primary.400"} />}
+									icon={<DownIcon color={index === lastTransform ? "transparent" : "primary.400"} size={textSize} />}
 									accessibilityLabel="Move Down in List"
 									bg={index === lastTransform ? "transparent" : "darker"}
 									p={1}
@@ -364,7 +370,7 @@ const WGTransformations = () => {
 							:
 								<React.Fragment key={item.id + "-Editing-Buttons"}>
 									<IconButton
-										icon={<EditIcon color="primary.400" />}
+										icon={<EditIcon color="primary.400" size={textSize} />}
 										accessibilityLabel="Edit"
 										bg="transparent"
 										p={1}
@@ -374,7 +380,7 @@ const WGTransformations = () => {
 										onPress={() => setEditingTransform(item)}
 									/>
 									<IconButton
-										icon={<TrashIcon color="danger.400" />}
+										icon={<TrashIcon color="danger.400" size={textSize} />}
 										accessibilityLabel="Delete"
 										bg="transparent"
 										p={1}

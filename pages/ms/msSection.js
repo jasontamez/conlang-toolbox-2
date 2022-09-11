@@ -34,7 +34,7 @@ const ParseMSJSON = (props) => {
 	const synNum = useSelector((state) => state.morphoSyntax.num);
 	const synText = useSelector((state) => state.morphoSyntax.text);
 	const sizes = useSelector(state => state.appState.sizes);
-	const { width } = useWindowDimensions();
+	const { height, width } = useWindowDimensions();
 	const textSize = useBreakpointValue(sizes.md);
 	const headerSize = useBreakpointValue(sizes.lg);
 	const { page } = props;
@@ -257,7 +257,6 @@ const ParseMSJSON = (props) => {
 					</TextAreaSetting>
 				);
 			case "Modal":
-				const screenWidth = { maxWidth: width };
 				//
 				// BEGIN MODAL CONTENT DECLARATION
 				//
@@ -440,7 +439,7 @@ const ParseMSJSON = (props) => {
 				//
 				// END MODAL CONTENT DECLARATION
 				//
-				return (
+				return ( //TO-DO: Need a major look at the modal dimensions and padding and dot sizes
 					<HStack
 						justifyContent="flex-start"
 						key={getKey("ModalButton")}
@@ -450,39 +449,44 @@ const ParseMSJSON = (props) => {
 							bg="main.800"
 							m={0}
 							isOpen={modalState === id}
-							style={screenWidth}
 							onClose={() => setModal('')}
+							size="full"
+							style={{
+								width: "100%",
+								height: "100%"
+							}}
 							safeArea
 						>
-							<Modal.Header w="full" p={3}>
-								<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-									<Text textAlign="center" fontSize={headerSize} flexGrow={1} flexShrink={1}>{title}</Text>
-									<IconButton
-										icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
-										onPress={() => setModal('')}
-										variant="ghost"
-										flexGrow={0}
-										flexShrink={0}
-										px={0}
-									/>
-								</HStack>
-							</Modal.Header>
-							<Modal.Body
-								style={screenWidth}
-								safeArea
-								mx="auto"
-							>
-								<ModalContent content={content} />
-							</Modal.Body>
-							<Modal.Footer w="full" p={2}>
-								<Button
-									m={0}
-									startIcon={<OkIcon size={textSize} />}
-									onPress={() => setModal('')}
+							<Modal.Content w="full" h="full" borderRadius="none">
+								<Modal.Header w="full" p={3}>
+									<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+										<Text textAlign="center" fontSize={headerSize} flexGrow={1} flexShrink={1}>{title}</Text>
+										<IconButton
+											icon={<CloseCircleIcon color="primary.50" size={headerSize} />}
+											onPress={() => setModal('')}
+											variant="ghost"
+											flexGrow={0}
+											flexShrink={0}
+											px={0}
+										/>
+									</HStack>
+								</Modal.Header>
+								<Modal.Body
+									safeArea
+									mx="auto"
 								>
-									Done
-								</Button>
-							</Modal.Footer>
+									<ModalContent content={content} />
+								</Modal.Body>
+								<Modal.Footer w="full" p={2}>
+									<Button
+										m={0}
+										startIcon={<OkIcon size={textSize} />}
+										onPress={() => setModal('')}
+									>
+										Done
+									</Button>
+								</Modal.Footer>
+							</Modal.Content>
 						</Modal>
 						<Button
 							py={1}

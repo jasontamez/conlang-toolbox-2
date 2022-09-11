@@ -65,6 +65,7 @@ const WGSettings = () => {
 		space: 1.5
 	};
 	const textSize = useBreakpointValue(sizes.sm);
+	const inputSize = useBreakpointValue(sizes.xs);
 	const maybeClearEverything = () => {
 		if(disableConfirms) {
 			doClearEveything();
@@ -118,6 +119,8 @@ const WGSettings = () => {
 				{ namespace: text }
 			)}
 			boxProps={stackProps}
+			inputProps={{fontSize: inputSize}}
+			labelProps={{fontSize: textSize}}
 		/>
 	);
 	const InfoButton = (props) => {
@@ -145,6 +148,7 @@ const WGSettings = () => {
 					bodyContent="This will erase every Character Group, Syllable and Transform currently loaded in the app. Are you sure you want to do this?"
 					continueText="Yes, Do It"
 					continueFunc={() => doClearEveything()}
+					fontSize={textSize}
 				/>
 				<HStack
 					py={1.5}

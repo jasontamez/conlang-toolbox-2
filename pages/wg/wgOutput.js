@@ -664,7 +664,7 @@ const WGOutput = () => {
 						alignSelf="flex-end"
 						onPress={() => toast.closeAll()}
 						bg="transparent"
-						icon={<CloseIcon color="success.50" />}
+						icon={<CloseIcon color="success.50" size={descSize} />}
 						p={1}
 						m={0}
 					/>
@@ -772,7 +772,7 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => setOpenSettings(false)}
 							/>
 						</HStack>
@@ -901,7 +901,8 @@ const WGOutput = () => {
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" w="full" p={1}>
 							<Button
-								startIcon={<OkIcon />}
+								startIcon={<OkIcon size={textSize} />}
+								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
 								onPress={() => setOpenSettings(false)}
@@ -918,14 +919,14 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => setChooseWhereToSaveInLex(false)}
 							/>
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
 						<VStack alignItems="center" justifyContent="center" space={2}>
-							<Text textAlign="center">Choose which Lexicon column to save the words to:</Text>
+							<Text textAlign="center" fontSize={textSize}>Choose which Lexicon column to save the words to:</Text>
 							<Menu
 								placement="bottom left"
 								closeOnSelect={true}
@@ -940,27 +941,48 @@ const WGOutput = () => {
 													px={4}
 													py={2}
 												>
-													<Text color="error.50" textAlign="center">There are no columns in the Lexicon. You must have at least one column in order to save anything.</Text>
+													<Text color="error.50" textAlign="center" fontSize={textSize}>There are no columns in the Lexicon. You must have at least one column in order to save anything.</Text>
 												</Box>
 											);
 										}
 										return (
 											<Button
-												p={3}
-												pl={2}
+												px={2}
+												py={1}
 												bg="secondary.500"
-												flex={0}
 												_stack={{
 													justifyContent: "space-between",
 													alignItems: "center",
+													flexGrow: 1,
+													flexShrink: 1,
+													flexBasis: 0,
+													space: 0,
 													style: {
 														overflow: "hidden"
 													}
 												}}
-												startIcon={<SortEitherIcon mx={1} color={secondaryContrast} flexGrow={0} flexShrink={0} />}
+												startIcon={
+													<SortEitherIcon
+														mx={1}
+														size={descSize}
+														color={secondaryContrast}
+														flexGrow={0}
+														flexShrink={0}
+													/>
+												}
 												{...props}
 											>
-												<Text color={secondaryContrast} isTruncated textAlign="center" noOfLines={1}>{whereToSaveInLex.label}</Text>
+												<Box
+													overflow="hidden"
+												>
+													<Text
+														fontSize={textSize}
+														color={secondaryContrast}
+														isTruncated
+														textAlign="center"
+														noOfLines={1}
+													>{whereToSaveInLex.label}</Text>
+												</Box>
 											</Button>
 										)
 									}
@@ -998,7 +1020,8 @@ const WGOutput = () => {
 							alignContent="center"
 						>
 							<Button
-								startIcon={<CancelIcon />}
+								startIcon={<CancelIcon size={textSize} />}
+								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
 								colorScheme="danger"
@@ -1010,16 +1033,17 @@ const WGOutput = () => {
 								}}
 							>Quit Saving</Button>
 							<Button
-								startIcon={<CloseCircleIcon color="text.50" />}
+								startIcon={<CloseCircleIcon color="text.50" size={textSize} />}
 								bg="darker"
-								_text={{ color: "text.50" }}
+								_text={{ color: "text.50", fontSize: textSize }}
 								px={2}
 								py={1}
 								onPress={() => setChooseWhereToSaveInLex(false)}
 								ref={saveToLexRef}
 							>Go Back</Button>
 							<Button
-								startIcon={<SaveIcon />}
+								startIcon={<SaveIcon size={textSize} />}
+								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
 								onPress={() => doSaveToLex()}
@@ -1065,7 +1089,7 @@ const WGOutput = () => {
 											overflow: "hidden"
 										}
 									}}
-									startIcon={<SortEitherIcon mx={1} color={tertiaryContrast} flexGrow={0} flexShrink={0} />}
+									startIcon={<SortEitherIcon mx={1} size={descSize} color={tertiaryContrast} flexGrow={0} flexShrink={0} />}
 									{...props}
 								>
 									<Box
@@ -1073,7 +1097,7 @@ const WGOutput = () => {
 										flexGrow={1}
 										flexShrink={0}
 									>
-										<Text color={tertiaryContrast} isTruncated textAlign="left" noOfLines={1}>{
+										<Text fontSize={textSize} color={tertiaryContrast} isTruncated textAlign="left" noOfLines={1}>{
 											output === "text" ?
 												"Pseudo-Text"
 											: (
@@ -1114,9 +1138,9 @@ const WGOutput = () => {
 						pr={4}
 						py={1.5}
 						endIcon={savingToLexicon ?
-							<SaveIcon ml={1} />
+							<SaveIcon ml={1} size={largeSize} />
 						:	
-							<GenerateIcon ml={1} />
+							<GenerateIcon ml={1} size={largeSize} />
 						}
 						colorScheme={savingToLexicon ? "success" : "primary"}
 						onPress={() => {
@@ -1146,7 +1170,7 @@ const WGOutput = () => {
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
-						icon={<GearIcon />}
+						icon={<GearIcon size={textSize} />}
 						px={3.5}
 						py={1}
 						mr={2}
@@ -1155,7 +1179,7 @@ const WGOutput = () => {
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
-						icon={/* TO-DO: Copy code */ <CopyIcon />}
+						icon={/* TO-DO: Copy code */ <CopyIcon size={textSize} />}
 						px={3.5}
 						py={1}
 						mr={2}
@@ -1170,7 +1194,7 @@ const WGOutput = () => {
 								<IconButton
 									colorScheme="secondary"
 									variant="solid"
-									icon={<SaveIcon />}
+									icon={<SaveIcon size={textSize} />}
 									px={3.5}
 									py={1}
 									{...props}

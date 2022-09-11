@@ -131,7 +131,7 @@ const WGSyllables = () => {
 					}}
 					p={1}
 					bg="transparent"
-					icon={<EditIcon color="primary.400" />}
+					icon={<EditIcon color="primary.400" size={textSize} />}
 				/>
 			</HStack>
 		</VStack>
@@ -143,12 +143,12 @@ const WGSyllables = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center" w="full">
 							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{modalTitle}</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{mx: 1, flex: 0}} />
+							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 								onPress={() => setModalOpen(false)}
-								flex={0}
-								mx={1}
+								flexGrow={0}
+								flexShrink={0}
 							/>
 						</HStack>
 					</Modal.Header>
@@ -167,14 +167,16 @@ const WGSyllables = () => {
 									}}
 									inputProps={{
 										maxW: 64,
-										minW: 32
+										minW: 32,
+										fontSize: descSize
 									}}
 								/>
 								<ToggleSwitch
 									hProps={{
 										space: 2.5,
 										py: 2,
-										justifyContent: "center"
+										justifyContent: "center",
+										flexWrap: "wrap"
 									}}
 									vProps={{
 										flexGrow: undefined,
@@ -194,8 +196,8 @@ const WGSyllables = () => {
 									>
 										<SliderWithLabels
 											max={50}
-											beginLabel={<EquiprobableIcon color="text.50" />}
-											endLabel={<SharpDropoffIcon color="text.50" />}
+											beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+											endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 											value={modalOverrideValue}
 											sliderProps={{
 												accessibilityLabel: "Dropoff rate",
@@ -225,7 +227,8 @@ const WGSyllables = () => {
 					<Modal.Footer>
 						<Button
 							colorScheme="success"
-							startIcon={<SaveIcon color="success.50" />}
+							startIcon={<SaveIcon color="success.50" size={textSize} />}
+							_text={{fontSize: textSize}}
 							px={2}
 							py={1}
 							mx={2}
@@ -248,8 +251,8 @@ const WGSyllables = () => {
 			<ScrollView>
 				<SliderWithLabels
 					max={50}
-					beginLabel={<EquiprobableIcon color="text.50" />}
-					endLabel={<SharpDropoffIcon color="text.50" />}
+					beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+					endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 					value={syllableBoxDropoff}
 					sliderProps={{
 						accessibilityLabel: "Dropoff rate",

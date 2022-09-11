@@ -77,7 +77,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 					bg={isActive ? "main.700" : "main.800"}
 					h={12}
 				>
-					<DragHandleIcon fontSize={textSize} />
+					<DragHandleIcon size={textSize} />
 					<Box
 						py={1}
 						px={2}
