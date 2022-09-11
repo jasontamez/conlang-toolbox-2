@@ -45,7 +45,6 @@ import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
 import { TextAreaSetting, TextSetting } from '../components/layoutTags';
 import { fontSizesInPx } from '../store/appStateSlice';
-// TO-DO: Fix Menu sizes of sort menu/settings menu
 
 const Lex = () => {
 	//
@@ -66,7 +65,7 @@ const Lex = () => {
 	} = useSelector((state) => state.lexicon, equalityCheck);
 	const { sizes, disableConfirms } = useSelector((state) => state.appState);
 	const extraData = [truncateColumns, columns];
-	const {absoluteMaxColumns} = consts;
+	const { absoluteMaxColumns } = consts;
 	//
 	//
 	// GET STATE
@@ -457,6 +456,7 @@ const Lex = () => {
 						>
 							<Menu.OptionGroup
 								title="Sort By:"
+								_title={{fontSize: smallerSize}}
 								defaultValue={sortPattern[0]+1}
 								type="radio"
 								onChange={(v) => doSortBy(v)}
@@ -466,6 +466,7 @@ const Lex = () => {
 										<Menu.ItemOption
 											key={item.id + "-Sorting"}
 											value={i+1}
+											_text={{fontSize: textSize}}
 										>
 											{item.label}
 										</Menu.ItemOption>
@@ -521,13 +522,18 @@ const Lex = () => {
 								/>
 							)}
 						>
-							<Menu.Group title="Columns">
+							<Menu.Group
+								title="Columns"
+								_title={{fontSize: smallerSize}}
+							>
 								<Menu.Item
+									_text={{fontSize: textSize}}
 									onPress={() => setModalOpen('edit')}
 								>
 									Edit Column Info
 								</Menu.Item>
 								<Menu.Item
+									_text={{fontSize: textSize}}
 									onPress={() => setModalOpen('reorder')}
 								>
 									Reorder Columns
@@ -535,10 +541,12 @@ const Lex = () => {
 							</Menu.Group>
 							<Menu.OptionGroup
 								title="Lexicon Entries"
+								_title={{fontSize: smallerSize}}
 								type="checkbox"
 								value={deletingMode ? ["mass delete"] : []}
 							>
 								<Menu.ItemOption
+									_text={{fontSize: textSize}}
 									onPress={() => toggleDeletingMode()}
 									value="mass delete"
 								>

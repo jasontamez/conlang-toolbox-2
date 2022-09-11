@@ -8,7 +8,6 @@ import {
 	IconButton,
 	Button,
 	Modal,
-	Heading,
 	useBreakpointValue,
 	useContrastText
 } from 'native-base';
@@ -42,7 +41,7 @@ const ModalLexiconEditingItem = ({
 	const [alertOpen, setAlertOpen] = useState(false);
 	const firstFieldRef = useRef(null);
 	const textSize = useBreakpointValue(sizes.sm);
-	const headerSize = useBreakpointValue(sizes.md);
+	const inputSize = useBreakpointValue(sizes.xs);
 	const doClose = () => {
 		setNewFields([]);
 		endEditingFunc();
@@ -51,7 +50,7 @@ const ModalLexiconEditingItem = ({
 		setNewFields([...columns]);
 	}, [columns]);
 	const primaryContrast = useContrastText('primary.500');
-	return ( //TO-DO: Fix sizing of modal, test that StandardAlerts look ok
+	return (
 		<Modal
 			isOpen={isEditing}
 			closeOnOverlayClick={false}
@@ -66,6 +65,7 @@ const ModalLexiconEditingItem = ({
 				continueProps={{
 					bg: "danger.500"
 				}}
+				fontSize={textSize}
 			/>
 			<Modal.Content>
 				<Modal.Header>
@@ -77,20 +77,21 @@ const ModalLexiconEditingItem = ({
 						alignItems="center"
 						bg="primary.500"
 					>
-						<Heading
+						<Text
 							color={primaryContrast}
-							size={headerSize}
+							fontSize={textSize}
+							bold
 						>
 							Edit Lexicon Item
-						</Heading>
+						</Text>
 						<HStack justifyContent="flex-end" space={2}>
 							<ExtraChars
 								color={primaryContrast}
-								size={headerSize}
+								size={textSize}
 								buttonProps={{p: 1, m: 0}}
 							/>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								p={1}
 								m={0}
 								variant="ghost"
@@ -107,7 +108,7 @@ const ModalLexiconEditingItem = ({
 									<Text fontSize={textSize}>{labels[i]}</Text>
 									<Input
 										defaultValue={info}
-										fontSize={textSize}
+										fontSize={inputSize}
 										ref={i ? null : firstFieldRef}
 										onChangeText={(value) => {
 											let fields = [...newFields];
@@ -121,23 +122,23 @@ const ModalLexiconEditingItem = ({
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
-					<HStack justifyContent="space-between" w="full">
+					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
 						<Button
 							startIcon={<TrashIcon color="danger.50" size={textSize} m={0} />}
 							bg="danger.500"
 							onPress={() => (disableConfirms ? deleteEditingItemFunc() : setAlertOpen(true))}
-							_text={{color: "danger.50"}}
+							_text={{color: "danger.50", fontSize: textSize}}
 							p={1}
 							m={2}
-						>DELETE ITEM</Button>
+						>DELETE</Button>
 						<Button
 							startIcon={<SaveIcon color="tertiary.50" size={textSize} m={0} />}
 							bg="tertiary.500"
 							onPress={() => saveItemFunc([...newFields])}
-							_text={{color: "tertiary.50"}}
+							_text={{color: "tertiary.50", fontSize: textSize}}
 							p={1}
 							m={2}
-						>SAVE ITEM</Button>
+						>SAVE</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>

@@ -5,7 +5,7 @@ import {
 	HStack,
 	IconButton,
 	Button,
-	Heading,
+	Text,
 	Modal,
 	useBreakpointValue,
 	useContrastText
@@ -26,14 +26,13 @@ import { MultiAlert } from '../components/StandardAlert';
 const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
 	const {sizes, disableConfirms} = useSelector(state => state.appState);
-	const headerSize = useBreakpointValue(sizes.md);
 	const [editing, setEditing] = useState(false);
 	const [newColumns, setNewColumns] = useState([]);
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
 	const [alertOpen, setAlertOpen] = useState('');
 	const [savedIndex, setSavedIndex] = useState(null);
 	const dispatch = useDispatch();
-	const iconSize = useBreakpointValue(sizes.sm);
+	const smallerSize = useBreakpointValue(sizes.sm);
 	const textSize = useBreakpointValue(sizes.md);
 	const primaryContrast = useContrastText('primary.500');
 	useEffect(() => {
@@ -50,7 +49,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const AddColumnButton = () => {
 		return newColumns.length === maxColumns ? <></> : (
 			<Button
-				startIcon={<AddCircleIcon color="tertiary.50" m={0} size={iconSize} />}
+				startIcon={<AddCircleIcon color="tertiary.50" m={0} size={smallerSize} />}
 				bg="tertiary.700"
 				onPress={() => addNewColumnFunc()}
 				_text={{color: "tertiary.50", fontSize: textSize}}
@@ -141,8 +140,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				}}
 				px={2}
 				py={1}
-				mx={3}
-				_text={{color: "primary.50", fontSize: textSize}}
+				_text={{color: "primary.50", fontSize: smallerSize}}
 				{...variation}
 			>{props.children}</Button>
 		);
@@ -163,7 +161,8 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				<VStack px={4}>
 					<Input
 						defaultValue={label}
-						size={textSize}
+						fontSize={smallerSize}
+						maxW="5/6"
 						p={1}
 						onChangeText={(value) => {
 							let newCols;
@@ -182,7 +181,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							setNewColumns(newCols);
 						}}
 					/>
-					<HStack justifyContent="space-between" alignItems="flex-start" my={2}>
+					<HStack justifyContent="space-between" alignItems="flex-start" w="5/6" my={2}>
 						<ColButton size={size} value="lexSm" i={i}>Small</ColButton>
 						<ColButton size={size} value="lexMd" i={i}>Med</ColButton>
 						<ColButton size={size} value="lexLg" i={i}>Large</ColButton>
@@ -193,7 +192,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 						alignSelf="flex-start"
 						p={1}
 						mt={1}
-						icon={<TrashIcon color="danger.50" size={iconSize} />}
+						icon={<TrashIcon color="danger.50" size={smallerSize} />}
 						bg="danger.500"
 						onPress={() => maybeDeleteColumn(col, i)}
 					/>
@@ -214,22 +213,24 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							alignItems="center"
 							bg="primary.500"
 						>
-							<Heading
+							<Text
 								color={primaryContrast}
-								size={headerSize}
-							>Edit Lexicon Columns</Heading>
-							<HStack justifyContent="flex-end" space={2}>
+								fontSize={textSize}
+								bold
+							>Edit Lexicon Columns</Text>
+							<HStack justifyContent="flex-end">
 								<ExtraChars
 									color={primaryContrast}
-									size={headerSize}
-									buttonProps={{p: 1, m: 0}}
+									size={textSize}
+									buttonProps={{p: 1, flexGrow: 0, flexShrink: 0}}
 								/>
 								<IconButton
-									icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+									icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 									p={1}
-									m={0}
 									variant="ghost"
 									onPress={() => doClose()}
+									flexGrow={0}
+									flexShrink={0}
 								/>
 							</HStack>
 						</HStack>
@@ -269,7 +270,9 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			<MultiAlert
 				alertOpen={alertOpen}
 				setAlertOpen={setAlertOpen}
-				sharedProps={{}}
+				sharedProps={{
+					fontSize: textSize
+				}}
 				passedProps={[
 					{
 						id: "deleteColumn",

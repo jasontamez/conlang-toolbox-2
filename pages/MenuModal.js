@@ -71,6 +71,7 @@ const MenuModal = () => {
 		dispatch(setMenuToggleName(openId));
 	};
 	let decrementingZIndex = 1001;
+	// TO-DO: Handle lineHeight values for different font sizes
 	const renderItem = (item) => {
 		const {
 			icon,

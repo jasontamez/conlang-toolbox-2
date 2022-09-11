@@ -26,7 +26,6 @@ import { /*
 import { CloseCircleIcon, DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../helpers/debounce";
-//TO-DO: Fix sizing of buttons, headers, text, close icon
 
 const ParseMSJSON = (props) => {
 	const [modalState, setModal] = useState('');
@@ -35,15 +34,47 @@ const ParseMSJSON = (props) => {
 	const synText = useSelector((state) => state.morphoSyntax.text);
 	const sizes = useSelector(state => state.appState.sizes);
 	const { height, width } = useWindowDimensions();
+	const dotSize = useBreakpointValue(sizes.xs);
+	const smallerSize = useBreakpointValue(sizes.sm);
 	const textSize = useBreakpointValue(sizes.md);
-	const headerSize = useBreakpointValue(sizes.lg);
+	const lineHeights = {
+		xs: "xs",
+		sm: "xs",
+		md: "sm",
+		lg: "md",
+		xl: "lg",
+		"2xl": "xl",
+		"3xl": "xl",
+		"4xl": "xl"
+	};
+	const dotProps = {
+		size: dotSize,
+		mt: {
+			"2xs": 1,
+			xs: 1,
+			sm: 1.5,
+			md: 1.5,
+			lg: 2.5,
+			xl: 3.5,
+			"2xl": 4
+		}[dotSize],
+		mr: {
+			"2xs": 1.5,
+			xs: 2,
+			sm: 2.5,
+			md: 2.5,
+			lg: 3,
+			xl: 3.5,
+			"2xl": 4
+		}[dotSize]
+	};
 	const { page } = props;
 	const doc = ms[page];
 	const headings = {
-		0: "2xl",
-		1: "xl",
-		2: "lg",
-		3: "md"
+		0: useBreakpointValue(sizes.x2),
+		1: useBreakpointValue(sizes.xl),
+		2: useBreakpointValue(sizes.lg),
+		3: textSize
 	};
 	const margins = {
 		0: 2,
@@ -58,7 +89,7 @@ const ParseMSJSON = (props) => {
 			m={0}
 			p={0}
 			borderWidth={0}
-			lineHeight={textSize}
+			lineHeight={lineHeights[textSize]}
 			fontSize={textSize}
 			{...props}
 		/>
@@ -160,9 +191,7 @@ const ParseMSJSON = (props) => {
 					<Text
 						bold={forceBold}
 						key={getKey("formattedText")}
-					>
-						{oneLine}
-					</Text>
+					>{oneLine}</Text>
 				);
 			} else {
 				final = oneLine;
@@ -174,9 +203,7 @@ const ParseMSJSON = (props) => {
 			<Text
 				bold={forceBold}
 				key={getKey("formattedText")}
-			>
-				{temp2}
-			</Text>
+			>{temp2}</Text>
 		);
 	};
 	const content = doc.map((bit) => {
@@ -194,6 +221,7 @@ const ParseMSJSON = (props) => {
 		} = bit;
 		switch(tag) {
 			case "Header":
+				const headingSize = headings[level || 0];
 				return (
 					<Box
 						my={margins[level || 0]}
@@ -201,10 +229,9 @@ const ParseMSJSON = (props) => {
 					>
 						<Text
 							bold
-							fontSize={headings[level || 0]}
-						>
-							{content}
-						</Text>
+							fontSize={headingSize}
+							lineHeight={lineHeights[headingSize]}
+						>{content}</Text>
 					</Box>
 				);
 			case "Range":
@@ -246,6 +273,8 @@ const ParseMSJSON = (props) => {
 						rows={rows}
 						placeholder={placeholder}
 						defaultValue={synText[prop] || ""}
+						labelProps={{fontSize: textSize}}
+						inputProps={{fontSize: smallerSize}}
 						onChangeText={
 							(value) => debounce(
 								() => dispatch(setText({prop, value})),
@@ -324,12 +353,11 @@ const ParseMSJSON = (props) => {
 									justifyContent="flex-start"
 									key={getKey(id)}
 								>
-									{
-										prefix ?
-											<DotIcon m={0} p={0} mt={1.5} mr={1} size={textSize} />
-										:
-											<></>
-										}
+									{prefix ?
+										<DotIcon m={0} p={0} {...dotProps} />
+									:
+										<></>
+									}
 									<FormatText content={bit} />
 								</HStack>
 							);
@@ -431,6 +459,7 @@ const ParseMSJSON = (props) => {
 							space={0}
 							key={getKey("MainModal")}
 							mx={4}
+							maxW={width - 32}
 						>
 							{output}
 						</VStack>
@@ -439,7 +468,7 @@ const ParseMSJSON = (props) => {
 				//
 				// END MODAL CONTENT DECLARATION
 				//
-				return ( //TO-DO: Need a major look at the modal dimensions and padding and dot sizes
+				return (
 					<HStack
 						justifyContent="flex-start"
 						key={getKey("ModalButton")}
@@ -451,18 +480,18 @@ const ParseMSJSON = (props) => {
 							isOpen={modalState === id}
 							onClose={() => setModal('')}
 							size="full"
-							style={{
-								width: "100%",
-								height: "100%"
-							}}
+							style={{ width, height }}
 							safeArea
 						>
-							<Modal.Content w="full" h="full" borderRadius="none">
-								<Modal.Header w="full" p={3}>
+							<Modal.Content
+								borderRadius="none"
+								style={{ width, height, maxHeight: height }}
+							>
+								<Modal.Header style={{width}}>
 									<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-										<Text textAlign="center" fontSize={headerSize} flexGrow={1} flexShrink={1}>{title}</Text>
+										<Text textAlign="center" bold flexGrow={1} flexShrink={1}>{title}</Text>
 										<IconButton
-											icon={<CloseCircleIcon color="primary.50" size={headerSize} />}
+											icon={<CloseCircleIcon color="primary.50" size={textSize} />}
 											onPress={() => setModal('')}
 											variant="ghost"
 											flexGrow={0}
@@ -473,18 +502,18 @@ const ParseMSJSON = (props) => {
 								</Modal.Header>
 								<Modal.Body
 									safeArea
-									mx="auto"
+									m={0}
+									style={{width}}
 								>
 									<ModalContent content={content} />
 								</Modal.Body>
-								<Modal.Footer w="full" p={2}>
+								<Modal.Footer style={{width}} p={2}>
 									<Button
 										m={0}
 										startIcon={<OkIcon size={textSize} />}
 										onPress={() => setModal('')}
-									>
-										Done
-									</Button>
+										_text={{fontSize: textSize}}
+									>Done</Button>
 								</Modal.Footer>
 							</Modal.Content>
 						</Modal>
@@ -494,11 +523,10 @@ const ParseMSJSON = (props) => {
 							ml={4}
 							colorScheme="primary"
 							size="sm"
-							startIcon={<InfoIcon size={textSize} />}
+							startIcon={<InfoIcon size={smallerSize} />}
 							onPress={() => setModal(id)}
-						>
-							{(label || "Read About It").toUpperCase()}
-						</Button>
+							_text={{fontSize: smallerSize}}
+						>{(label || "Read About It").toUpperCase()}</Button>
 					</HStack>
 				);
 			case "Checkboxes":
@@ -623,7 +651,7 @@ const ParseMSJSON = (props) => {
 										/>
 									</Box>
 								:
-									<React.Fragment></React.Fragment>
+									<></>
 							}
 							{boxRows.map((row, i) => {
 								// Stripe odd-numbered rows

@@ -3,7 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import {
 	Menu,
 	HStack,
-	Text,
+	Text as Tx,
 	Divider,
 	Modal,
 	VStack,
@@ -36,7 +36,7 @@ const LexiconContextMenu = () => {
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.md);
-	const dotSize = useBreakpointValue(sizes.sm);
+	const smallerSize = useBreakpointValue(sizes.sm);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
@@ -47,6 +47,9 @@ const LexiconContextMenu = () => {
 			...(disableBlankConfirms ? ["disableBlankConfirms"] : [])
 		]);
 	}, [menuOpen, truncateColumns, disableBlankConfirms]);
+	const Text = (props) => {
+		return <Tx fontSize={textSize} {...props} />;
+	};
 	const handleLexiconOptions = (checkboxes) => {
 		let options = {};
 		checkboxes.forEach(opt => options[opt] = true);
@@ -79,7 +82,7 @@ const LexiconContextMenu = () => {
 						accessibilityLabel="More options menu"
 						flexGrow={0}
 						flexShrink={0}
-						icon={<DotsIcon size={dotSize} />}
+						icon={<DotsIcon size={smallerSize} />}
 						{...triggerProps}
 					/>
 				)}
@@ -90,6 +93,7 @@ const LexiconContextMenu = () => {
 			>
 				<Menu.OptionGroup
 					title="Options"
+					_title={{ fontSize: smallerSize }}
 					defaultValue={checkboxOptions}
 					type="checkbox"
 					onChange={(v) => handleLexiconOptions(v)}
@@ -119,7 +123,10 @@ const LexiconContextMenu = () => {
 					</Menu.ItemOption>
 				</Menu.OptionGroup>
 				<Divider my={2} mx="auto" w="5/6" bg="main.50" opacity={25} />
-				<Menu.Group title="Advanced">
+				<Menu.Group
+					title="Advanced"
+					_title={{ fontSize: smallerSize }}
+				>
 					<Menu.Item onPress={() => showColumnsRange()}>
 						<HStack
 							w="full"
