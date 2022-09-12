@@ -255,6 +255,7 @@ const mainCheckboxesDefaultProps = {
 const modalProps = {
 	defaultProps: {
 		size: "xl",
+		maxWidth: "full",
 		_backdrop: {
 			opacity: 60
 		}
@@ -304,7 +305,12 @@ const components = {
 	Button: {...mainButton},
 	IconButton: {...mainButton},
 	Modal: {...modalProps},
-	ModalContent: {...mainBG},
+	ModalContent: {
+		defaultProps: {
+			maxWidth: "full",
+			...mainBG.defaultProps
+		}
+	},
 	ModalHeader: {...mainModalHeader},
 	ModalBody: {
 		defaultProps: {

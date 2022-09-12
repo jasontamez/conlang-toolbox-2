@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { NavBar } from '../components/layoutTags';
 import { SettingsIcon } from '../components/icons';
+import { fontSizesInPx } from '../store/appStateSlice';
 
 const MS = () => {
 	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
@@ -13,16 +14,17 @@ const MS = () => {
 	const navigate = useNavigate();
 	const pathname = location.pathname;
 	const scrollRef = useRef(null);
+	const sizes = useSelector(state => state.appState.sizes);
+	const textSize = useBreakpointValue(sizes.sm);
+	const buffer = fontSizesInPx[textSize] * 3;
 	useEffect(() => {
 		// Scrolls to top of page when we navigate
 		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
 	}, [location]);
 	const NavTab = (props) => {
 		const { isCurrent, icon, link, label } = props;
-		const sizes = useSelector(state => state.appState.sizes);
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "text.50";
-		const textSize = useBreakpointValue(sizes.sm);
 		if(icon) {
 			return (
 				<IconButton
@@ -50,7 +52,7 @@ const MS = () => {
 		);
 	};
 	const range = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
-	return ( // TO-DO: Figure out why content is slipping behind the nav bar
+	return (
 		<>
 			<VStack
 				alignItems="stretch"
@@ -59,7 +61,7 @@ const MS = () => {
 				bottom={0}
 				right={0}
 				flex={1}
-				mb={8}
+				style={{marginBottom: buffer}}
 			>
 				<Box
 					flexGrow={2}
@@ -78,7 +80,8 @@ const MS = () => {
 					{
 						flex: 1,
 						borderColor: "main.700",
-						borderTopWidth: 1
+						borderTopWidth: 1,
+						style: {height: buffer}
 					}
 				}
 			>

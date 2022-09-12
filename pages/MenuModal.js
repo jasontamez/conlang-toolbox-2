@@ -12,7 +12,7 @@ import {
 	HStack,
 	VStack,
 	Pressable,
-	Text,
+	Text as Tx,
 	Modal,
 	Divider,
 	IconButton,
@@ -21,7 +21,7 @@ import {
 } from 'native-base';
 
 import * as Icons from '../components/icons';
-import { setMenuToggleName } from '../store/appStateSlice';
+import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
 
 const MenuModal = () => {
@@ -37,6 +37,15 @@ const MenuModal = () => {
 	const menuSize = useBreakpointValue(sizes.sm);
 	const subMenuSize = useBreakpointValue(sizes.xs);
 	const headerSize = useBreakpointValue(sizes.md);
+	const lineHeight = {
+		"2xs": "2xs",
+		xs: "2xs",
+		sm: "xs",
+		md: "sm"
+	}[subMenuSize] || "md";
+	const menuHeight = (fontSizesInPx[menuSize] * 2) + 12;
+	const subMenuHeight = (fontSizesInPx[subMenuSize] * 2) + 8;
+	const Text = (props) => <Tx lineHeight={lineHeight} {...props} />;
 	const fontSizeAdjustments = {
 		"-1": subMenuSize,
 		"+1": headerSize
@@ -71,7 +80,6 @@ const MenuModal = () => {
 		dispatch(setMenuToggleName(openId));
 	};
 	let decrementingZIndex = 1001;
-	// TO-DO: Handle lineHeight values for different font sizes
 	const renderItem = (item) => {
 		const {
 			icon,
@@ -99,11 +107,7 @@ const MenuModal = () => {
 			// App Section w/subpages
 			const isSelected = location.pathname.startsWith(url);
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
-			const textOptions = isSelected ?
-				{ color: "primary.500", fontSize: menuSize }
-			:
-				{ fontSize: menuSize }
-			;
+			const textOptions = isSelected ? { color: "primary.500" } : {};
 			// Get new information for this section
 			const caretAnimationValue = useSharedValue(id === openId ? 2 : 0);
 			allAnimationValues[id] = caretAnimationValue;
@@ -121,19 +125,19 @@ const MenuModal = () => {
 					onPress={() => toggleSection(id)}
 					zIndex={decrementingZIndex}
 					key={id}
-					h={10}
+					style={{height: menuHeight}}
 					w="full"
 					bg="main.800"
 				>
 					<ZStack>
 						<HStack
-							height={10}
+							style={{height: menuHeight}}
 							w="full"
 							{...bgOptions}
 							opacity={20}
 						/>
 						<HStack
-							height={10}
+							style={{height: menuHeight}}
 							alignItems="center"
 							w="full"
 							justifyContent="flex-start"
@@ -151,9 +155,13 @@ const MenuModal = () => {
 								justifyContent="center"
 								flex={1}
 								m={2}
-								textAlign="right"
 							>
-								<Text {...textOptions}>{menuTitle || title}</Text>
+								<Text
+									textAlign="left"
+									isTruncated
+									fontSize={menuSize}
+									{...textOptions}
+								>{menuTitle || title}</Text>
 							</VStack>
 							<ReAnimated.View
 								 style={{
@@ -166,6 +174,7 @@ const MenuModal = () => {
 								}}
 			 				>
 								<Icons.CaretIcon
+									size={menuSize}
 									{...textOptions}
 								/>
 							</ReAnimated.View>
@@ -191,25 +200,25 @@ const MenuModal = () => {
 					layout={CurvedTransition}
 					style={{
 						zIndex: decrementingZIndex,
-						height: 36,
+						height: subMenuHeight,
 						flex: 1
 					}}
 				>
 					<Pressable
 						onPress={() => navigate(url)}
 						bg="darker"
-						h={9 /* 36px */}
+						style={{height: subMenuHeight}}
 					>
 						<ZStack>
 							<HStack
-								height={9}
+								style={{height: subMenuHeight}}
 								w="full"
 								{...bgOptions}
 								opacity={10}
 							/>
 							<HStack
 								w="full"
-								height={9}
+								style={{height: subMenuHeight}}
 								alignItems="center"
 								justifyContent="flex-end"
 							>
@@ -220,7 +229,12 @@ const MenuModal = () => {
 									m={2}
 									ml={4}
 								>
-									<Text textAlign="right" fontSize={subMenuSize} {...textOptions}>{menuTitle || title}</Text>
+									<Text
+										textAlign="right"
+										fontSize={subMenuSize}
+										{...textOptions}
+										isTruncated
+									>{menuTitle || title}</Text>
 								</VStack>
 								<VStack
 									alignItems="center"
@@ -264,20 +278,20 @@ const MenuModal = () => {
 				onPress={() => navigate(url)}
 				zIndex={decrementingZIndex}
 				key={id}
-				h={10}
+				style={{height: menuHeight}}
 				w="full"
 				bg="main.800"
 			>
 				<ZStack>
 					<HStack
-						height={10}
+						style={{height: menuHeight}}
 						w="full"
 						{...bgOptions}
 						opacity={20}
 					/>
 					<HStack
 						w="full"
-						height={10}
+						style={{height: menuHeight}}
 						alignItems="center"
 						justifyContent="flex-start"
 						{...boxOptions}
@@ -339,8 +353,10 @@ const MenuModal = () => {
 							w="full"
 							mr={5}
 						>
-							<Text bold fontSize={headerSize}>Conlang Toolbox</Text>
-							<Text fontSize={menuSize} color="primary.200">tools for language invention</Text>
+							<Text fontSize={menuSize}>
+								<Tx bold fontSize={headerSize}>Conlang Toolbox</Tx>{"\n"}
+								<Tx color="primary.200">tools for language invention</Tx>
+							</Text>
 						</VStack>
 						<VStack
 							m={0}

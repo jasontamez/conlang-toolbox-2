@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
+import { useWindowDimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 import {
 	VStack,
@@ -18,18 +19,17 @@ import {
 	WGSettingsIcon,
 	WGSyllablesIcon
 } from '../components/icons';
+import { fontSizesInPx } from '../store/appStateSlice';
 
-const WG = () => { //TO-DO: Fix flex of header, make sure nav bar stretches if needed
+const WG = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const sizes = useSelector(state => state.appState.sizes);
 	const buttonTextSize = useBreakpointValue(sizes.xs);
 	const iconSize = useBreakpointValue(sizes.sm);
+	const lineHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2;
 	const pathname = location.pathname;
-	const w = useBreakpointValue({
-		base: 12,
-		sm: 20
-	});
+	const w = (useWindowDimensions().width / 5) - 10;
 	const ButtonLabel = useBreakpointValue({
 		base: () => <></>,
 		sm: ({color, label}) => <Text fontSize={buttonTextSize} color={color}>{label}</Text>
@@ -38,13 +38,13 @@ const WG = () => { //TO-DO: Fix flex of header, make sure nav bar stretches if n
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "main.600";
 		return (
-			<Pressable onPress={() => navigate(link)}>
+			<Pressable onPress={() => navigate(link)} overflow="hidden">
 				<VStack
 					alignItems="center"
 					justifyContent="center"
-					h={12}
 					bg={bg}
 					w={w}
+					style={{height: lineHeight}}
 				>
 					<TabIcon color={colorString} size={iconSize} />
 					<ButtonLabel color={colorString} label={label} />
@@ -56,12 +56,12 @@ const WG = () => { //TO-DO: Fix flex of header, make sure nav bar stretches if n
 		<>
 			<VStack
 				alignItems="stretch"
-				justifyContent="space-between"
+				justifyContent="center"
 				left={0}
 				bottom={0}
 				right={0}
 				flex={1}
-				mb={16}
+				style={{marginBottom: lineHeight + 10}}
 			>
 				<Box
 					flexGrow={2}
@@ -78,8 +78,10 @@ const WG = () => { //TO-DO: Fix flex of header, make sure nav bar stretches if n
 						flex: 1,
 						borderColor: "main.700",
 						borderTopWidth: 1,
-						h: 16,
-						pt: 2
+						pt: 2,
+						style: {
+							height: lineHeight + 10
+						}
 					}
 				}
 				divider={
@@ -88,10 +90,9 @@ const WG = () => { //TO-DO: Fix flex of header, make sure nav bar stretches if n
 						orientation="vertical"
 						thickness={1}
 						mx={2}
-						height={10}
+						style={{height: lineHeight * 0.8}}
 					/>
 				}
-				h={12}
 			>
 				<NavTab
 					isCurrent={pathname === "/wg/characters"}

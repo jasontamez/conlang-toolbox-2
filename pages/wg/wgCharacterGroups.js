@@ -44,6 +44,7 @@ import {
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
 import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
+import { fontSizesInPx } from "../../store/appStateSlice";
 
 const WGChar = () => {
 	const { characterGroups, characterGroupDropoff } = useSelector(state => state.wg, equalityCheck);
@@ -99,7 +100,8 @@ const WGChar = () => {
 		doToast({
 			toast,
 			placement: "top",
-			msg: "Character Group added!"
+			msg: "Character Group added!",
+			fontSize: smallerSize
 		});
 		if (closeAfterAdd) {
 			closeAddGroup();
@@ -147,7 +149,8 @@ const WGChar = () => {
 				center: true,
 				boxProps: {
 					maxW: "2/3"
-				}
+				},
+				fontSize: smallerSize
 			});
 		} else {
 			// Suitable label found
@@ -206,7 +209,8 @@ const WGChar = () => {
 		doToast({
 			toast,
 			placement: "top",
-			msg: "Character Group edited!"
+			msg: "Character Group edited!",
+			fontSize: smallerSize
 		});
 		setEditingGroup(false);
 	};
@@ -225,13 +229,15 @@ const WGChar = () => {
 			toast,
 			placement: "bottom",
 			msg: "Deleted",
-			bg: "warning.500"
+			bg: "warning.500",
+			fontSize: smallerSize
 		});
 		setEditingGroup(false);
 		setDeletingGroup(false);
 	};
 	const textSize = useBreakpointValue(sizes.sm);
-	const descSize = useBreakpointValue(sizes.xs);
+	const smallerSize = useBreakpointValue(sizes.xs);
+	const emSize = fontSizesInPx[textSize];
 	const renderGroup = (group) => {
 		const {label, run, description, dropoff} = group;
 		return (
@@ -250,16 +256,16 @@ const WGChar = () => {
 					justifyContent="center"
 				>
 					<Text fontSize={textSize} isTruncated><Text bold>{label}</Text>={run}</Text>
-					{description ? <Text italic fontSize={descSize} noOfLines={3}>{description}</Text> : <></>}
+					{description ? <Text italic fontSize={smallerSize} noOfLines={3}>{description}</Text> : <></>}
 				</VStack>
 				<HStack>
 					{dropoff === undefined ?
 						<></>
 					:
-						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={descSize} fontSize={descSize} italic>{dropoff}%</Text>
+						<Text bg="lighter" px={1.5} py={1} m={0.5} lineHeight={smallerSize} fontSize={smallerSize} italic>{dropoff}%</Text>
 					}
 					<IconButton
-						icon={<EditIcon color="primary.400" size={descSize} />}
+						icon={<EditIcon color="primary.400" size={smallerSize} />}
 						accessibilityLabel="Edit"
 						bg="transparent"
 						p={1}
@@ -267,7 +273,7 @@ const WGChar = () => {
 						onPress={() => startEditGroup(group)}
 					/>
 					<IconButton
-						icon={<TrashIcon color="danger.400" size={descSize} />}
+						icon={<TrashIcon color="danger.400" size={smallerSize} />}
 						accessibilityLabel="Delete"
 						bg="transparent"
 						p={1}
@@ -289,6 +295,7 @@ const WGChar = () => {
 					bg: "danger.500",
 				}}
 				continueFunc={() => doDeleteGroup(deletingGroup)}
+				fontSize={textSize}
 			/>
 			<StandardAlert
 				alertOpen={alertOpenError}
@@ -302,17 +309,19 @@ const WGChar = () => {
 					({leastDestructiveRef}) => <Button
 						onPress={() => setAlertOpenError(false)}
 						ref={leastDestructiveRef}
-					>Ok</Button> //TO-DO: Figure out how Short Label shrunk? also, fix header flex and size of both modals?
+					>Ok</Button>
 				]}
+				fontSize={textSize}
 			/>
 			<Modal isOpen={!!editingGroup}>
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Character Group</Text>
-							<ExtraChars flex={0} color={primaryContrast} size={textSize} />
+							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
-								flex={0}
+								flexGrow={0}
+								flexShrink={0}
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize}  />}
 								onPress={() => setEditingGroup(false)}
 							/>
@@ -323,7 +332,7 @@ const WGChar = () => {
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{ mt: 1, fontSize: descSize }}
+								inputProps={{ mt: 1, fontSize: smallerSize }}
 								boxProps={{ pb: 2 }}
 								value={modifiedDesc}
 								labelProps={{fontSize: textSize}}
@@ -335,23 +344,23 @@ const WGChar = () => {
 								alignItems="center"
 								w="full"
 							>
-								<Text size={textSize}>Short Label:</Text>
+								<Text fontSize={textSize}>Short Label:</Text>
 								<Input
-									w={8}
 									py={1}
 									px={0}
 									textAlign="center"
 									mx={2}
 									value={modifiedLabel}
 									onChangeText={(v) => setModifiedLabel(v)}
-									fontSize={descSize}
-								/>
+									fontSize={smallerSize}
+									style={{width: emSize * 2}}
+							/>
 							</HStack>
 							<TextSetting
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, fontSize: descSize }}
+								inputProps={{ mt: 1, fontSize: smallerSize }}
 								value={modifiedRun}
 								labelProps={{fontSize: textSize}}
 								onChangeText={(v) => setModifiedRun(v)}
@@ -370,8 +379,8 @@ const WGChar = () => {
 								>
 									<SliderWithLabels
 										max={50}
-										beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-										endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+										beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+										endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
 										value={editOverrideValue}
 										sliderProps={{
 											accessibilityLabel: "Dropoff rate",
@@ -397,7 +406,7 @@ const WGChar = () => {
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>
-						<HStack justifyContent="space-between" p={1}>
+						<HStack justifyContent="space-between" p={1} flexWrap="wrap">
 							<Button
 								startIcon={<TrashIcon color="danger.50" size={textSize} />}
 								bg="danger.500"
@@ -423,12 +432,12 @@ const WGChar = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Character Group</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flex: 0, mx: 1}} />
+							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
-								flex={0}
+								flexGrow={0}
+								flexShrink={0}
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => closeAddGroup()}
-								mx={1}
 							/>
 						</HStack>
 					</Modal.Header>
@@ -437,7 +446,7 @@ const WGChar = () => {
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{ mt: 1, ref: refAddDesc, fontSize: descSize, ...saveOnEnd(setAddDesc) }}
+								inputProps={{ mt: 1, ref: refAddDesc, fontSize: smallerSize, ...saveOnEnd(setAddDesc) }}
 								labelProps={{fontSize: textSize}}
 								boxProps={{ pb: 2 }}
 							/>
@@ -450,26 +459,26 @@ const WGChar = () => {
 								<HStack alignItems="center">
 									<Text fontSize={textSize}>Short Label:</Text>
 									<Input
-										w={8}
 										py={1}
 										px={0}
 										textAlign="center"
 										mx={2}
 										value={addLabel}
-										fontSize={descSize}
+										fontSize={smallerSize}
+										style={{width: emSize * 2}}
 										onChangeText={v => setAddLabel(v)}
 									/>
 								</HStack>
 								<Button
 									startIcon={
 										<SuggestLeftIcon
-											size={descSize}
+											size={smallerSize}
 											color={primaryContrast}
 										/>
 									}
 									py={1}
 									bg="primary.500"
-									_text={{ fontSize: descSize }}
+									_text={{ fontSize: smallerSize }}
 									_stack={{ space: 0.5 }}
 									onPress={suggestLabel}
 								>SUGGEST</Button>
@@ -478,7 +487,7 @@ const WGChar = () => {
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddRun, fontSize: descSize, ...saveOnEnd(setAddRun) }}
+								inputProps={{ mt: 1, ref: refAddRun, fontSize: smallerSize, ...saveOnEnd(setAddRun) }}
 								labelProps={{fontSize: textSize}}
 							/>
 							<ToggleSwitch
@@ -491,8 +500,8 @@ const WGChar = () => {
 							{addOverrideSwitch ?
 								<SliderWithLabels
 									max={50}
-									beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-									endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+									beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+									endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
 									value={addOverrideValue}
 									sliderProps={{
 										accessibilityLabel: "Dropoff rate",
@@ -517,7 +526,7 @@ const WGChar = () => {
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>
-						<HStack justifyContent="flex-end" p={1}>
+						<HStack justifyContent="flex-end" p={1} flexWrap="wrap">
 							<Button
 								startIcon={<AddIcon color="secondary.50" size={textSize} />}
 								bg="secondary.500"
@@ -548,8 +557,8 @@ const WGChar = () => {
 			<ScrollView bg="main.900">
 				<SliderWithLabels
 					max={50}
-					beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-					endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+					beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+					endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
 					value={characterGroupDropoff}
 					sliderProps={{
 						accessibilityLabel: "Dropoff rate",
@@ -565,7 +574,7 @@ const WGChar = () => {
 								<Text bold fontSize={textSize}>Dropoff Rate</Text>
 								<Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text>
 							</HStack>
-							<Text fontSize={descSize}>Characters at the beginning of a group tend to be picked more often than characters at the end of the group. This slider controls this tendency. A rate of zero is flat, making all characters equiprobable.</Text>
+							<Text fontSize={smallerSize}>Characters at the beginning of a group tend to be picked more often than characters at the end of the group. This slider controls this tendency. A rate of zero is flat, making all characters equiprobable.</Text>
 						</Box>
 					)}
 					stackProps={{

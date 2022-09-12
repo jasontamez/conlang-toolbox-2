@@ -83,7 +83,7 @@ const ModalTransformEditingItem = ({
 		});
 		endEditingFunc();
 	};
-	return ( //TO-DO: Fix modal sizing
+	return (
 		<Modal isOpen={!!transform}>
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
@@ -137,7 +137,7 @@ const ModalTransformEditingItem = ({
 							px={2}
 							py={1}
 							mx={1}
-							onPress={() => maybeDeleteTransform()}
+							onPress={() => maybeDeleteTransform(transform)}
 							_text={{ fontSize: textSize }}
 						>DELETE</Button>
 						<Button

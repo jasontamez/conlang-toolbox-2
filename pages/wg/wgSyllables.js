@@ -166,7 +166,7 @@ const WGSyllables = () => {
 										alignItems: "center"
 									}}
 									inputProps={{
-										maxW: 64,
+										maxW: "5/6",
 										minW: 32,
 										fontSize: descSize
 									}}
@@ -205,7 +205,7 @@ const WGSyllables = () => {
 											}}
 											Label={({value}) => (
 												<Center>
-													<Text>Rate: <Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text></Text>
+													<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
 												</Center>
 											)}
 											stackProps={{

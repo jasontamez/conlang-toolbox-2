@@ -145,24 +145,24 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 			>{props.children}</Button>
 		);
 	};
-	// TO-DO: Fix sizing of modal contents
 	const renderItem = (col, i) => {
 		const {id, label, size} = col;
 		return (
 			<HStack
 				alignItems="center"
 				justifyContent="space-between"
-				p={1}
+				py={1}
+				px={4}
 				borderTopWidth={i ? 1 : 0}
 				borderTopColor="lighter"
 				bg="main.800"
 				key={id + "-Editable-" + String(i)}
+				maxW="full"
 			>
-				<VStack px={4}>
+				<VStack maxW="5/6">
 					<Input
 						defaultValue={label}
 						fontSize={smallerSize}
-						maxW="5/6"
 						p={1}
 						onChangeText={(value) => {
 							let newCols;
@@ -181,7 +181,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							setNewColumns(newCols);
 						}}
 					/>
-					<HStack justifyContent="space-between" alignItems="flex-start" w="5/6" my={2}>
+					<HStack flexWrap="wrap" justifyContent="space-between" alignItems="flex-start" w="full" my={2}>
 						<ColButton size={size} value="lexSm" i={i}>Small</ColButton>
 						<ColButton size={size} value="lexMd" i={i}>Med</ColButton>
 						<ColButton size={size} value="lexLg" i={i}>Large</ColButton>
@@ -241,6 +241,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							alignItems="center"
 							justifyContent="center"
 							bg="main.800"
+							w="full"
 						>
 							{newColumns.map((col, i) => renderItem(col, i))}
 						</VStack>

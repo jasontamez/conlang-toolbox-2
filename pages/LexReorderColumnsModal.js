@@ -5,7 +5,6 @@ import {
 	HStack,
 	IconButton,
 	Button,
-	Heading,
 	Pressable,
 	Center,
 	Box,
@@ -23,9 +22,10 @@ import {
 	DragHandleIcon
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
+import { fontSizesInPx } from '../store/appStateSlice';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
-	return ( //TO-DO: Fix sizing of modal
+	return (
 		<>
 			<Modal
 				animationType="fade"
@@ -47,11 +47,12 @@ const LexiconColumnReorderer = ({doClose}) => {
 	const {columns} = useSelector((state) => state.lexicon, equalityCheck);
 	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
-	const textSize = useBreakpointValue(sizes.md);
+	const textSize = useBreakpointValue(sizes.sm);
+	const lineHeight = fontSizesInPx[textSize] * 2;
 	const [newColumns, setNewColumns] = useState([]);
 	const {height, width} = useWindowDimensions();
 	const maxHeight = Math.floor(height * 0.8);
-	const minWidth = Math.min(300, Math.floor(width * 0.8));
+	const minWidth = Math.max(300, Math.floor(width * 0.8));
 
 	useEffect(() => {
 		// Load column info when mounted or when columns change.
@@ -75,22 +76,35 @@ const LexiconColumnReorderer = ({doClose}) => {
 					justifyContent="space-evenly"
 					p={1}
 					bg={isActive ? "main.700" : "main.800"}
-					h={12}
+					style={{height: lineHeight + 8}}
 				>
-					<DragHandleIcon size={textSize} />
+					<DragHandleIcon
+						size={textSize}
+						flexGrow={0}
+						flexShrink={0}
+					/>
 					<Box
 						py={1}
 						px={2}
 						bg="lighter"
-						style={{width: Math.round(minWidth * 0.8)}}
+						flex={1}
+						mr={1}
 					>
-						<Text color="text.50" fontSize={textSize} isTruncated={true}>{item.label}</Text>
+						<Text
+							color="text.50"
+							fontSize={textSize}
+							isTruncated={true}
+							style={{lineHeight: lineHeight - 4}}
+						>{item.label}</Text>
 					</Box>
 				</HStack>
 			</Pressable>
 		);
 	};
 	const primaryContrast = useContrastText('primary.500');
+	const modalHeight = ((lineHeight + 8) * newColumns.length) + 10 // drag area
+		+ lineHeight + 4 // header
+		+ lineHeight + 10; // footer
 	return (
 		<VStack
 			flex={1}
@@ -98,23 +112,27 @@ const LexiconColumnReorderer = ({doClose}) => {
 			alignItems="center"
 			borderRadius="lg"
 			style={{
-				maxHeight: maxHeight,
-				minWidth: minWidth,
-				maxHeight: 562, // {12}*10 + {10} + {8} + 10px margin = 562
+				maxHeight: Math.min(maxHeight, modalHeight),
+				width: minWidth,
+				height: modalHeight
 			}}
 		>
 			<HStack
-				h={8}
-				style={{width: minWidth}}
+				style={{width: minWidth, height: lineHeight + 4}}
 				pl={2}
 				justifyContent="space-between"
 				alignItems="center"
-				space={3}
 				bg="primary.500"
 				borderTopRadius="lg"
-				flex={2}
+				flexGrow={0}
+				flexShrink={0}
 			>
-				<Heading color={primaryContrast} size={textSize}>Reorder Columns</Heading>
+				<Text
+					bold
+					color={primaryContrast}
+					fontSize={textSize}
+					isTruncated
+				>Reorder Columns</Text>
 				<IconButton
 					icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 					p={1}
@@ -126,10 +144,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 			<VStack
 				alignItems="center"
 				bg="main.800"
-				flex={5}
-				style={{
-					height: Math.min(490, (newColumns.length * 48) + 10)
-				}}
+				flex={1}
 			>
 				<GestureHandlerRootView
 					style={{
@@ -138,7 +153,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 						marginTop: 5,
 						marginBottom: 5,
 						width: minWidth,
-						maxHeight: 480, // size 12 is 48px, so ten rows is 480
+						maxHeight: ((lineHeight + 8) * 10) + 10 // ten rows
 					}}
 				>
 					<DraggableFlatList
@@ -150,9 +165,9 @@ const LexiconColumnReorderer = ({doClose}) => {
 				</GestureHandlerRootView>
 			</VStack>
 			<HStack
-				h={10}
-				flex={1}
-				style={{width: minWidth}}
+				flexGrow={0}
+				flexShrink={0}
+				style={{width: minWidth, height: lineHeight + 10}}
 				justifyContent="flex-end"
 				alignItems="center"
 				bg="main.700"
@@ -166,7 +181,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 					_text={{color: "success.50", fontSize: textSize}}
 					px={1}
 					py={0.5}
-					m={1}
+					mr={2}
 				>DONE</Button>
 			</HStack>
 		</VStack>

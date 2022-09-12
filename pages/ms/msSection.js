@@ -639,8 +639,10 @@ const ParseMSJSON = (props) => {
 						<VStack
 							bg="darker"
 							m={0}
-							mr="auto"
-							minWidth="300px"
+							maxW="5/6"
+							style={{
+								minWidth: 300
+							}}
 						>
 							{
 								header ?

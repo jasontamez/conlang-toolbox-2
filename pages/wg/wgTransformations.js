@@ -205,6 +205,7 @@ const WGTransformations = () => {
 					bg: "danger.500",
 				}}
 				continueFunc={() => doDeleteTransform(deletingTransform)}
+				fontSize={textSize}
 			/>
 			<StandardAlert
 				alertOpen={alertOpenError}
@@ -220,12 +221,13 @@ const WGTransformations = () => {
 						ref={leastDestructiveRef}
 					>Ok</Button>
 				]}
+				fontSize={textSize}
 			/>
 			<ModalTransformEditingItem
 				transform={editingTransform}
 				alertOpener={() => setAlertOpenError(true)}
 				endEditingFunc={() => setEditingTransform(false)}
-				maybeDeleteTransform={() => maybeDeleteTransform()}
+				maybeDeleteTransform={maybeDeleteTransform}
 			/>
 			<Modal isOpen={addTransformOpen}>
 				<Modal.Content>
