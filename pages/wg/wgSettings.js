@@ -13,8 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import debounce from '../../helpers/debounce';
 import {
 	TextSetting,
-	SliderWithLabels,
-	SliderWithTicksAndLabels,
+	SliderWithValueDisplay,
+	SliderWithTicksAndValueDisplay,
 	ToggleSwitch
 } from '../../components/layoutTags';
 import {
@@ -102,7 +102,7 @@ const WGSettings = () => {
 			</Box>
 		);
 	};
-	const Label = ({pre, post, value}) =>
+	const Display = ({pre, post, value}) =>
 		<Text
 			fontSize={textSize}
 		>{pre || ""}<Text
@@ -178,7 +178,7 @@ const WGSettings = () => {
 					>SAVE CURRENT INFO</InfoButton>
 				</HStack>
 			<SectionHeader>Word Generation Controls</SectionHeader>
-			<SliderWithLabels
+			<SliderWithValueDisplay
 				max={100}
 				beginLabel="Never"
 				endLabel="Always"
@@ -188,10 +188,10 @@ const WGSettings = () => {
 					accessibilityLabel: "Monosyllable Rate",
 					onChangeEnd: (v) => dispatch(setMonosyllablesRate(v))
 				}}
-				Label={({value}) => <Label pre="Rate of monosyllable words: " value={value} post="%" />}
+				Display={({value}) => <Display pre="Rate of monosyllable words: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
-			<SliderWithTicksAndLabels
+			<SliderWithTicksAndValueDisplay
 				min={2}
 				max={15}
 				beginLabel="2"
@@ -202,10 +202,10 @@ const WGSettings = () => {
 					accessibilityLabel: "Maximum Syllables per Word",
 					onChangeEnd: (v) => dispatch(setMaxSyllablesPerWord(v))
 				}}
-				Label={({value}) => <Label pre="Maximum syllables per word: " value={value} />}
+				Display={({value}) => <Display pre="Maximum syllables per word: " value={value} />}
 				stackProps={stackProps}
 			/>
-			<SliderWithLabels
+			<SliderWithValueDisplay
 				max={50}
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
@@ -214,10 +214,10 @@ const WGSettings = () => {
 					accessibilityLabel: "Character Group dropoff",
 					onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
 				}}
-				Label={({value}) => <Label pre="Character Group dropoff: " value={value} post="%" />}
+				Display={({value}) => <Display pre="Character Group dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
-			<SliderWithLabels
+			<SliderWithValueDisplay
 				max={50}
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
@@ -226,7 +226,7 @@ const WGSettings = () => {
 					accessibilityLabel: "Syllable box dropoff",
 					onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
 				}}
-				Label={({value}) => <Label pre="Syllable box dropoff: " value={value} post="%" />}
+				Display={({value}) => <Display pre="Syllable box dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>

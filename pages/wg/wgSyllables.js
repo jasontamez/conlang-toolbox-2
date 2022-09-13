@@ -25,7 +25,7 @@ import {
 	SaveIcon,
 	SharpDropoffIcon
 } from "../../components/icons";
-import { SliderWithLabels, TextAreaSetting, ToggleSwitch } from "../../components/layoutTags";
+import { SliderWithValueDisplay, TextAreaSetting, ToggleSwitch } from "../../components/layoutTags";
 import {
 	equalityCheck,
 	setSyllableBoxDropoff,
@@ -194,7 +194,7 @@ const WGSyllables = () => {
 										exiting={FadeOutUp}
 										key="modalSlider"
 									>
-										<SliderWithLabels
+										<SliderWithValueDisplay
 											max={50}
 											beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
 											endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
@@ -203,7 +203,7 @@ const WGSyllables = () => {
 												accessibilityLabel: "Dropoff rate",
 												onChangeEnd: (v) => setModalOverrideValue(v)
 											}}
-											Label={({value}) => (
+											Display={({value}) => (
 												<Center>
 													<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
 												</Center>
@@ -249,7 +249,7 @@ const WGSyllables = () => {
 				</Modal.Content>
 			</Modal>
 			<ScrollView>
-				<SliderWithLabels
+				<SliderWithValueDisplay
 					max={50}
 					beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
 					endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
@@ -258,7 +258,7 @@ const WGSyllables = () => {
 						accessibilityLabel: "Dropoff rate",
 						onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
 					}}
-					Label={({value}) => (
+					Display={({value}) => (
 						<Box pb={1}>
 							<HStack
 								justifyContent="space-between"

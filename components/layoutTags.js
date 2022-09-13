@@ -284,8 +284,8 @@ export const SliderWithTicks = (props) => {
 	);
 };
 
-export const SliderWithTicksAndLabels = (props) => {
-	// <SliderWithTicksAndLabels
+export const SliderWithTicksAndValueDisplay = (props) => {
+	// <SliderWithTicksAndValueDisplay
 	//    min={default 0}
 	//    max={default 4}
 	//    value={starting value of the slider, defaults to `min`}
@@ -298,7 +298,7 @@ export const SliderWithTicksAndLabels = (props) => {
 	//    stackProps={props for the containing VStack}
 	//    zStackProps={props for the ZStack}
 	//    tickProps={props for the background tick bar}
-	//    Label={element that goes above the slider, gets given a
+	//    Display={element that goes above the slider, gets given a
 	//       `value` property}
 	// />
 	const {
@@ -310,7 +310,7 @@ export const SliderWithTicksAndLabels = (props) => {
 		tickProps,
 		value,
 		notFilled,
-		Label,
+		Display,
 		stackProps,
 		zStackProps,
 		fontSize
@@ -318,7 +318,7 @@ export const SliderWithTicksAndLabels = (props) => {
 	const [currentValue, setCurrentValue] = useState($v(value, $v(min, 0)));
 	return (
 		<VStack {...$v(stackProps, {})}>
-			<Label value={currentValue} />
+			<Display value={currentValue} />
 			<SliderWithTicks
 				stackProps={zStackProps}
 				sliderProps={{
@@ -341,8 +341,8 @@ export const SliderWithTicksAndLabels = (props) => {
 }
 
 
-export const SliderWithLabels = (props) => {
-	// <SliderWithLabels
+export const SliderWithValueDisplay = (props) => {
+	// <SliderWithValueDisplay
 	//    min={default 0}
 	//    max={default 4}
 	//    value={starting value of the slider, defaults to `min`}
@@ -353,7 +353,7 @@ export const SliderWithLabels = (props) => {
 	//    sliderProps={props for the Slider}
 	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
-	//    Label={element that goes above the slider, gets given a
+	//    Display={element that goes above the slider, gets given a
 	//       `value` property}
 	// />
 	const {
@@ -364,7 +364,7 @@ export const SliderWithLabels = (props) => {
 		sliderProps,
 		value,
 		notFilled,
-		Label,
+		Display,
 		stackProps,
 		fontSize
 	} = props;
@@ -376,7 +376,7 @@ export const SliderWithLabels = (props) => {
 	const [currentValue, setCurrentValue] = useState(defaultValue);
 	return (
 		<VStack {...$v(stackProps, {})}>
-			<Label value={currentValue} />
+			<Display value={currentValue} />
 			<HStack
 				w="full"
 				bg="darker"

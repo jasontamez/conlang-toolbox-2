@@ -61,7 +61,7 @@ import {
 	setWordsPerWordlist
 } from "../../store/wgSlice";
 import StandardAlert from "../../components/StandardAlert";
-import { SliderWithLabels, ToggleSwitch } from "../../components/layoutTags";
+import { SliderWithValueDisplay, ToggleSwitch } from "../../components/layoutTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 
@@ -813,7 +813,7 @@ const WGOutput = () => {
 								color="main.600"
 							>Pseudo-Text Controls</Text>
 						</Box>
-						<SliderWithLabels
+						<SliderWithValueDisplay
 							min={1}
 							max={100}
 							value={sentencesPerText}
@@ -824,7 +824,7 @@ const WGOutput = () => {
 							stackProps={{
 								p: 2
 							}}
-							Label={({value}) => (
+							Display={({value}) => (
 								<Box mb={1}>
 									<Text fontSize={textSize}>Sentences per text: <Text px={2.5} bg="lighter">{value}</Text></Text>
 								</Box>
@@ -880,7 +880,7 @@ const WGOutput = () => {
 							switchState={wordlistMultiColumn}
 							switchToggle={() => dispatch(setWordlistMultiColumn(!wordlistMultiColumn))}
 						/>
-						<SliderWithLabels
+						<SliderWithValueDisplay
 							min={50}
 							max={1000}
 							value={wordsPerWordlist}
@@ -888,7 +888,7 @@ const WGOutput = () => {
 							endLabel="1000"
 							fontSize={descSize}
 							notFilled
-							Label={({value}) => (
+							Display={({value}) => (
 								<Box mb={1}>
 									<Text fontSize={textSize}>Words per wordlist: <Text px={2.5} bg="lighter">{value}</Text></Text>
 								</Box>

@@ -32,7 +32,7 @@ import {
 	SharpDropoffIcon,
 	TrashIcon
 } from "../../components/icons";
-import { SliderWithLabels, TextSetting, ToggleSwitch } from "../../components/layoutTags";
+import { SliderWithValueDisplay, TextSetting, ToggleSwitch } from "../../components/layoutTags";
 import StandardAlert from "../../components/StandardAlert";
 import {
 	addCharacterGroup,
@@ -377,7 +377,7 @@ const WGChar = () => {
 									entering={FadeInUp}
 									exiting={FadeOutUp}
 								>
-									<SliderWithLabels
+									<SliderWithValueDisplay
 										max={50}
 										beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
 										endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
@@ -386,7 +386,7 @@ const WGChar = () => {
 											accessibilityLabel: "Dropoff rate",
 											onChangeEnd: (v) => setEditOverrideValue(v)
 										}}
-										Label={({value}) => (
+										Display={({value}) => (
 											<Center>
 												<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
 											</Center>
@@ -498,7 +498,7 @@ const WGChar = () => {
 								switchToggle={() => setAddOverrideSwitch(!addOverrideSwitch)}
 							/>
 							{addOverrideSwitch ?
-								<SliderWithLabels
+								<SliderWithValueDisplay
 									max={50}
 									beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
 									endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
@@ -507,7 +507,7 @@ const WGChar = () => {
 										accessibilityLabel: "Dropoff rate",
 										onChangeEnd: (v) => setAddOverrideValue(v)
 									}}
-									Label={({value}) => (
+									Display={({value}) => (
 										<Center>
 											<Text fontSize={fontSize}>Rate: <Text px={2.5} bg="lighter">{value}</Text></Text>
 										</Center>
@@ -555,7 +555,7 @@ const WGChar = () => {
 				onPress={() => setAddGroupOpen(true)}
 			/>
 			<ScrollView bg="main.900">
-				<SliderWithLabels
+				<SliderWithValueDisplay
 					max={50}
 					beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
 					endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
@@ -564,7 +564,7 @@ const WGChar = () => {
 						accessibilityLabel: "Dropoff rate",
 						onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
 					}}
-					Label={({value}) => (
+					Display={({value}) => (
 						<Box pb={1}>
 							<HStack
 								justifyContent="space-between"
