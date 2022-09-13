@@ -12,7 +12,8 @@ import {
 	Text as Tx,
 	VStack,
 	useBreakpointValue,
-	IconButton
+	IconButton,
+	Center
 } from 'native-base';
 
 import ms from './msinfo.json';
@@ -26,6 +27,7 @@ import { /*
 import { CloseCircleIcon, DotIcon, InfoIcon, OkIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../helpers/debounce";
+import { fontSizesInPx } from "../../store/appStateSlice";
 
 const ParseMSJSON = (props) => {
 	const [modalState, setModal] = useState('');
@@ -47,6 +49,7 @@ const ParseMSJSON = (props) => {
 		"3xl": "xl",
 		"4xl": "xl"
 	};
+	const emSize = fontSizesInPx[textSize];
 	const dotProps = {
 		size: dotSize,
 		mt: {
@@ -74,7 +77,8 @@ const ParseMSJSON = (props) => {
 		0: useBreakpointValue(sizes.x2),
 		1: useBreakpointValue(sizes.xl),
 		2: useBreakpointValue(sizes.lg),
-		3: textSize
+		3: textSize,
+		4: smallerSize
 	};
 	const margins = {
 		0: 2,
@@ -98,6 +102,7 @@ const ParseMSJSON = (props) => {
 	const FormatText = (props) => {
 		const bit = props.content;
 		const forceBold = !!props.forceBold;
+		const textProps = props.textProps || {};
 		let temp = [bit];
 		let temp2 = [];
 		// Check for BOLD text
@@ -112,6 +117,7 @@ const ParseMSJSON = (props) => {
 							<Text
 								bold
 								key={getKey("formattedText")}
+								{...textProps}
 							>
 								{x}
 							</Text>
@@ -140,6 +146,7 @@ const ParseMSJSON = (props) => {
 							<Text
 								italic
 								key={getKey("formattedText")}
+								{...textProps}
 							>
 								{x}
 							</Text>
@@ -168,6 +175,7 @@ const ParseMSJSON = (props) => {
 							<Text
 								strikeThrough
 								key={getKey("formattedText")}
+								{...textProps}
 							>
 								{x}
 							</Text>
@@ -191,6 +199,7 @@ const ParseMSJSON = (props) => {
 					<Text
 						bold={forceBold}
 						key={getKey("formattedText")}
+						{...textProps}
 					>{oneLine}</Text>
 				);
 			} else {
@@ -203,6 +212,7 @@ const ParseMSJSON = (props) => {
 			<Text
 				bold={forceBold}
 				key={getKey("formattedText")}
+				{...textProps}
 			>{temp2}</Text>
 		);
 	};
@@ -256,6 +266,7 @@ const ParseMSJSON = (props) => {
 						key={getKey("range")}
 						beginLabel={start}
 						endLabel={end}
+						fontSize={smallerSize}
 						notFilled={notFilled}
 						min={0}
 						max={max}
@@ -553,7 +564,7 @@ const ParseMSJSON = (props) => {
 				const isCentered = (display.centering || []);
 				// Assemble tabular section
 				//
-				let boxRows = [];
+				let checkBoxDisplayRow = [];
 				// See if we have multiple boxes per row
 				if(multiBoxes) {
 					// Iterate over the boxes until none remain
@@ -582,46 +593,65 @@ const ParseMSJSON = (props) => {
 							);
 							counter++;
 						}
-						boxRows.push(row);
+						checkBoxDisplayRow.push(row);
 					}
 				} else {
 					boxes.forEach((box) => {
 						const label = labels.shift() || "MISSING LABEL";
-						boxRows.push([
+						let textProps = {fontSize: smallerSize};
+						if(isCentered[0]) {
+							textProps.textAlign = "center";
+						}
+						checkBoxDisplayRow.push([
 							<Checkbox
 								value={box}
 								onChange={() => doSetBool(box, !synBool[id])}
 								defaultIsChecked={synBool[box] || false}
 								key={getKey(id + "CheckBox")}
 							>
-								<FormatText content={label} />
+								<Box flex={1} style={{marginLeft: emSize}}>
+									<FormatText
+										content={label}
+										textProps={textProps}
+									/>
+								</Box>
 							</Checkbox>
 						]);
 					});
 				}
 				// Add rowDescriptions as a new column, if they exist
-				rowDescriptions.length && boxRows.forEach((row, i) => {
+				rowDescriptions.length && checkBoxDisplayRow.forEach((row, i) => {
 					const rDesc = rowDescriptions[i] || "MISSING INFO";
+					let textProps = {fontSize: smallerSize};
+					if(isCentered[row.length]) {
+						textProps.textAlign = "center";
+					}
 					row.push(
 						<FormatText
 							key={getKey("FormattedText")}
 							content={rDesc}
+							textProps={textProps}
 						/>
 					);
 				});
 				// Add inlineheaders, if any, to the tops of the existing columns
 				if(inlineHeaders) {
 					let row = [];
-					inlineHeaders.forEach((ih) => {
+					inlineHeaders.forEach((ih, i) => {
+						let textProps = {};
+						if(isCentered[i]) {
+							textProps.textAlign = "center";
+						}
 						row.push(
 							<FormatText
 								key={getKey("InlineHeader")}
 								content={ih}
 								forceBold
+								textProps={textProps}
 							/>
 						);
 					});
-					boxRows.unshift(row);
+					checkBoxDisplayRow.unshift(row);
 				}
 				const fractions = {
 					1: "full",
@@ -655,7 +685,7 @@ const ParseMSJSON = (props) => {
 								:
 									<></>
 							}
-							{boxRows.map((row, i) => {
+							{checkBoxDisplayRow.map((row, i) => {
 								// Stripe odd-numbered rows
 								let stripedRow = (
 									striped && (i % 2) ?
@@ -670,16 +700,20 @@ const ParseMSJSON = (props) => {
 										{...stripedRow}
 									>
 										{row.map((col, i) => {
-											const alignment = isCentered[i] ? {textAlign: "center"} : {};
+											const Element =
+												isCentered[i] ?
+													(props) => <Center {...props} />
+												:
+													(props) => <Box {...props} />
+											;
 											return (
-												<Box
+												<Element
 													p={2}
 													key={getKey(id+"Col")}
 													w={maxWidth}
-													{...alignment}
 												>
 													{col}
-												</Box>
+												</Element>
 											);
 										})}
 									</HStack>
