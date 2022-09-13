@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
 	Text,
 	VStack,
@@ -68,7 +68,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 		dispatch(modifyLexiconColumns(newColumns));
 		doClose();
 	};
-	const renderItem = ({item, drag, isActive}) => {
+	const renderItem = useCallback(({item, drag, isActive}) => {
 		return (
 			<Pressable onPressIn={drag}>
 				<HStack
@@ -100,7 +100,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 				</HStack>
 			</Pressable>
 		);
-	};
+	}, [lineHeight, textSize]);
 	const primaryContrast = useContrastText('primary.500');
 	const modalHeight = ((lineHeight + 8) * newColumns.length) + 10 // drag area
 		+ lineHeight + 4 // header

@@ -570,7 +570,7 @@ const Lex = () => {
 						flexShrink={0}
 					>
 						{
-							columns.map((col, i) => (
+							columns.map(col => (
 								<Box
 									pr={1}
 									key={col.id + "-ColumnLabel"}
