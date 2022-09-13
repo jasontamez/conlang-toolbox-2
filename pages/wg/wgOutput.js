@@ -819,6 +819,7 @@ const WGOutput = () => {
 							value={sentencesPerText}
 							beginLabel="1"
 							endLabel="100"
+							fontSize={descSize}
 							notFilled
 							stackProps={{
 								p: 2
@@ -885,6 +886,7 @@ const WGOutput = () => {
 							value={wordsPerWordlist}
 							beginLabel="50"
 							endLabel="1000"
+							fontSize={descSize}
 							notFilled
 							Label={({value}) => (
 								<Box mb={1}>

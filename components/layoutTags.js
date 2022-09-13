@@ -191,6 +191,7 @@ export const SliderWithTicks = (props) => {
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
+	//    fontSize={size of the labels, defaults to 'sizes.sm'}
 	//    tickProps={props for the background tick bar}
 	//    stackProps={props for the inner ZStack}
 	//    sliderProps={props for the Slider}
@@ -205,7 +206,8 @@ export const SliderWithTicks = (props) => {
 		stackProps,
 		sliderProps,
 		notFilled,
-		value
+		value,
+		fontSize
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes); // TO-DO: examine usage of sizes in the Slider components
 	const minVal = $v(min, 0);
@@ -218,7 +220,7 @@ export const SliderWithTicks = (props) => {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
-	const textSize = useBreakpointValue(sizes.sm);
+	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	return (
 		<HStack
 			w="full"
@@ -234,7 +236,10 @@ export const SliderWithTicks = (props) => {
 				flexShrink={1}
 				flexBasis={labelW}
 			>
-				<Text textAlign="center" fontSize={textSize}>{$v(beginLabel, "MISSING LABEL")}</Text>
+				<Text
+					textAlign="center"
+					fontSize={textSize}
+				>{$v(beginLabel, "MISSING LABEL")}</Text>
 			</Box>
 			<ZStack
 				alignItems="center"
@@ -270,7 +275,10 @@ export const SliderWithTicks = (props) => {
 				flexShrink={1}
 				flexBasis={labelW}
 			>
-				<Text textAlign="center" fontSize={textSize}>{$v(endLabel, "MISSING LABEL")}</Text>
+				<Text
+					textAlign="center"
+					fontSize={textSize}
+				>{$v(endLabel, "MISSING LABEL")}</Text>
 			</Box>
 		</HStack>
 	);
@@ -284,6 +292,7 @@ export const SliderWithTicksAndLabels = (props) => {
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
+	//    fontSize={size of the labels, defaults to 'sizes.sm'}
 	//    sliderProps={props for the Slider}
 	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
@@ -303,7 +312,8 @@ export const SliderWithTicksAndLabels = (props) => {
 		notFilled,
 		Label,
 		stackProps,
-		zStackProps
+		zStackProps,
+		fontSize
 	} = props;
 	const [currentValue, setCurrentValue] = useState($v(value, $v(min, 0)));
 	return (
@@ -322,7 +332,8 @@ export const SliderWithTicksAndLabels = (props) => {
 					tickProps,
 					endLabel,
 					notFilled,
-					value
+					value,
+					fontSize
 				}}
 			/>
 		</VStack>
@@ -338,6 +349,7 @@ export const SliderWithLabels = (props) => {
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
+	//    fontSize={size of the labels, defaults to 'sizes.sm'}
 	//    sliderProps={props for the Slider}
 	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
@@ -353,13 +365,14 @@ export const SliderWithLabels = (props) => {
 		value,
 		notFilled,
 		Label,
-		stackProps
+		stackProps,
+		fontSize
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
 	const defaultValue = $v(value, minVal);
 	const labelW = useBreakpointValue(sliderCapWidths);
-	const textSize = useBreakpointValue(sizes.sm);
+	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	const [currentValue, setCurrentValue] = useState(defaultValue);
 	return (
 		<VStack {...$v(stackProps, {})}>
@@ -418,6 +431,7 @@ export const SliderWithTicksNoCaps = (props) => {
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
+	//    fontSize={size of the labels, defaults to 'sizes.sm'}
 	//    tickProps={props for the background tick bar}
 	//    stackProps={props for the inner ZStack}
 	//    sliderProps={props for the Slider}
@@ -432,7 +446,8 @@ export const SliderWithTicksNoCaps = (props) => {
 		stackProps,
 		sliderProps,
 		notFilled,
-		value
+		value,
+		fontSize
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
@@ -444,7 +459,7 @@ export const SliderWithTicksNoCaps = (props) => {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
-	const textSize = useBreakpointValue(sizes.sm);
+	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	return (
 		<VStack
 			w="full"
@@ -494,10 +509,10 @@ export const ToggleSwitch = (props) => {
 	//    hProps={props for the outer HStack}
 	//    vProps={props for the inner VStack}
 	//    label={String, main text of the toggle}
-	//    labelSize={font size of the label, defaults to 'sm'}
+	//    labelSize={font size of the label, defaults to 'sizes.sm'}
 	//    labelProps={props for the label's Text}
 	//    desc={optional; String with additional text}
-	//    descSize={font size of the desc text, defaults to 'xs'}
+	//    descSize={font size of the desc text, defaults to 'sizes.xs'}
 	//    descProps={props for the desc's Text}
 	//    switchState={default Boolean state of the toggle}
 	//    switchToggle={Function that will be called when toggle changes}
@@ -516,6 +531,9 @@ export const ToggleSwitch = (props) => {
 		switchToggle,
 		switchProps
 	} = props;
+	const sizes = useSelector(state => state.appState.sizes);
+	const textSize = $v(labelSize, useBreakpointValue(sizes.sm));
+	const smallerSize = $v(descSize, useBreakpointValue(sizes.xs));
 	return (
 		<HStack
 			w="full"
@@ -529,8 +547,8 @@ export const ToggleSwitch = (props) => {
 				mr={2}
 				{...(vProps || {})}
 			>
-				<Text fontSize={labelSize || 'sm'} {...(labelProps || {})}>{label}</Text>
-				{desc ? <Text fontSize={descSize || 'xs'} {...(descProps || {})}>{desc}</Text> : <></>}
+				<Text fontSize={textSize} {...(labelProps || {})}>{label}</Text>
+				{desc ? <Text fontSize={smallerSize} {...(descProps || {})}>{desc}</Text> : <></>}
 			</VStack>
 			<Switch
 				isChecked={switchState}

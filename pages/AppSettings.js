@@ -88,7 +88,7 @@ const AppSettings = () => {
 					<Menu.OptionGroup
 						defaultValue={theme}
 						type="radio"
-						onChange={(newTheme) => dispatch(setBaseTextSize(newTheme))}
+						onChange={(newTheme) => dispatch(setTheme(newTheme))}
 					>
 						<Menu.ItemOption value="Default">Default</Menu.ItemOption>
 						<Menu.ItemOption value="Light">Light</Menu.ItemOption>

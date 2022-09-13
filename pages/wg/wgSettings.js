@@ -182,6 +182,7 @@ const WGSettings = () => {
 				max={100}
 				beginLabel="Never"
 				endLabel="Always"
+				fontSize={inputSize}
 				value={monosyllablesRate}
 				sliderProps={{
 					accessibilityLabel: "Monosyllable Rate",
@@ -195,6 +196,7 @@ const WGSettings = () => {
 				max={15}
 				beginLabel="2"
 				endLabel="15"
+				fontSize={inputSize}
 				value={maxSyllablesPerWord}
 				sliderProps={{
 					accessibilityLabel: "Maximum Syllables per Word",
