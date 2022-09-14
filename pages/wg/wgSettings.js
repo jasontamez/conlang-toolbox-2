@@ -37,6 +37,7 @@ import {
 } from "../../components/icons";
 import doToast from "../../helpers/toast";
 import StandardAlert from "../../components/StandardAlert";
+import WGPresetsModal from "./wgPresetsModal";
 
 const WGSettings = () => {
 	const {
@@ -55,6 +56,7 @@ const WGSettings = () => {
 	const { disableConfirms, sizes } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
+	const [openPresetModal, setOpenPresetModal] = useState(false);
 	const toast = useToast();
 	const stackProps = {
 		justifyContent: "flex-start",
@@ -83,7 +85,7 @@ const WGSettings = () => {
 	};
 	const maybeLoadInfo = () => {};
 	const maybeSaveInfo = () => {};
-	const maybeLoadPreset = () => {};
+	const maybeLoadPreset = () => setOpenPresetModal(true);
 	const SectionHeader = (props) => {
 		return (
 			<Box
@@ -149,6 +151,10 @@ const WGSettings = () => {
 					continueText="Yes, Do It"
 					continueFunc={() => doClearEveything()}
 					fontSize={textSize}
+				/>
+				<WGPresetsModal
+					modalOpen={openPresetModal}
+					setModalOpen={setOpenPresetModal}
 				/>
 				<HStack
 					py={1.5}

@@ -209,7 +209,7 @@ export const SliderWithTicks = (props) => {
 		value,
 		fontSize
 	} = props;
-	const sizes = useSelector(state => state.appState.sizes); // TO-DO: examine usage of sizes in the Slider components
+	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
 	const maxVal = $v(max, 4);
 	const defaultValue = $v(value, minVal);

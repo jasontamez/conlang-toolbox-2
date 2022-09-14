@@ -150,6 +150,13 @@ const setWordsPerWordlistFunc = (state, action) => {
 	state.wordsPerWordlist = action.payload;
 	return state;
 };
+const loadPresetFunc = (state, action) => {
+	const newState = {
+		...state,
+		...action.payload
+	};
+	return newState;
+};
 
 
 const wgSlice = createSlice({
@@ -184,7 +191,8 @@ const wgSlice = createSlice({
 		setCapitalizeWords: setCapitalizeWordsFunc,
 		setSortWordlist: setSortWordlistFunc,
 		setWordlistMultiColumn: setWordlistMultiColumnFunc,
-		setWordsPerWordlist: setWordsPerWordlistFunc
+		setWordsPerWordlist: setWordsPerWordlistFunc,
+		loadPreset: loadPresetFunc
 	}
 });
 
@@ -217,7 +225,8 @@ export const {
 	setCapitalizeWords,
 	setSortWordlist,
 	setWordlistMultiColumn,
-	setWordsPerWordlist
+	setWordsPerWordlist,
+	loadPreset
 } = wgSlice.actions;
 
 export default wgSlice.reducer;
