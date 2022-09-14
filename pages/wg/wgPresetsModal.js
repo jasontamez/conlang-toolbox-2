@@ -39,6 +39,7 @@ const WGPresetsModal = ({
 		const preset = wgPresets.find(wgp => wgp[0] === presetChosen);
 		dispatch(loadPreset(preset[1]));
 		setModalOpen(false);
+		// TO-DO: Add toast
 	};
 	return (
 		<Modal isOpen={modalOpen} size="sm">
