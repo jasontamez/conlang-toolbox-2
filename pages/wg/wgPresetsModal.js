@@ -8,14 +8,16 @@ import {
 	Modal,
 	useBreakpointValue,
 	useContrastText,
-	Radio
+	Radio,
+	useToast
 } from 'native-base';
 
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
-import { PresetIcon } from '../../components/icons';
+import { LoadIcon } from '../../components/icons';
 import { loadPreset } from '../../store/wgSlice';
+import doToast from '../../helpers/toast';
 
 
 const WGPresetsModal = ({
@@ -29,6 +31,7 @@ const WGPresetsModal = ({
 	const [presetChosen, setPresetChosen] = useState(wgPresets[0][0]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const dispatch = useDispatch();
+	const toast = useToast();
 	const maybeLoadPreset = () => {
 		if(disableConfirms) {
 			return doLoadPreset();
@@ -38,8 +41,13 @@ const WGPresetsModal = ({
 	const doLoadPreset = () => {
 		const preset = wgPresets.find(wgp => wgp[0] === presetChosen);
 		dispatch(loadPreset(preset[1]));
+		doToast({
+			toast,
+			msg: `"${preset[0]}" loaded`,
+			placement: "top",
+			fontSize: inputSize
+		});
 		setModalOpen(false);
-		// TO-DO: Add toast
 	};
 	return (
 		<Modal isOpen={modalOpen} size="sm">
@@ -116,7 +124,7 @@ const WGPresetsModal = ({
 							m={2}
 						>Cancel</Button>
 						<Button
-							startIcon={<PresetIcon color="tertiary.50" size={textSize} m={0} />}
+							startIcon={<LoadIcon color="tertiary.50" size={textSize} m={0} />}
 							bg="tertiary.500"
 							onPress={() => maybeLoadPreset()}
 							_text={{color: "tertiary.50", fontSize: textSize}}
