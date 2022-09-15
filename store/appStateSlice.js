@@ -47,6 +47,13 @@ const setBaseTextSizeFunc = (state, action) => {
 	return state;
 };
 
+// These are settings that will only be looked at by the app and aren't
+//    directly settable by the user.
+const setHasCheckedForOldCustomInfo_WGFunc = (state, action) => {
+	state.hasCheckedForOldCustomInfo_WG = action.payload;
+	return state;
+};
+
 const appStateSlice = createSlice({
 	name: 'appState',
 	initialState,
@@ -54,7 +61,8 @@ const appStateSlice = createSlice({
 		setMenuToggleName: setMenuToggleNameFunc,
 		setTheme: setThemeFunc,
 		setDisableConfirms: setDisableConfirmsFunc,
-		setBaseTextSize: setBaseTextSizeFunc
+		setBaseTextSize: setBaseTextSizeFunc,
+		setHasCheckedForOldCustomInfo_WG: setHasCheckedForOldCustomInfo_WGFunc
 	}
 });
 
@@ -62,7 +70,8 @@ export const {
 	setMenuToggleName,
 	setTheme,
 	setDisableConfirms,
-	setBaseTextSize
+	setBaseTextSize,
+	setHasCheckedForOldCustomInfo_WG
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

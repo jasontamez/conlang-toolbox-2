@@ -139,7 +139,8 @@ const blankAppState = {/*
 				lg: "4xl",
 				xl: "5xl"
 			}
-		}
+		},
+		hasCheckedForOldCustomInfo_WG: false
 	},
 	/*
 	modalState: {
