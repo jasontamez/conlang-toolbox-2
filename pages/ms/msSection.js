@@ -24,10 +24,11 @@ import { /*
 	setNum,
 	setText
 } from '../../store/morphoSyntaxSlice';
-import { CloseCircleIcon, DotIcon, InfoIcon, OkIcon } from "../../components/icons";
+import { DotIcon, InfoIcon } from "../../components/icons";
 import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
 import debounce from "../../helpers/debounce";
 import { fontSizesInPx } from "../../store/appStateSlice";
+import FullPageModal from "../../components/FullBodyModal";
 
 const ParseMSJSON = (props) => {
 	const [modalState, setModal] = useState('');
@@ -35,7 +36,7 @@ const ParseMSJSON = (props) => {
 	const synNum = useSelector((state) => state.morphoSyntax.num);
 	const synText = useSelector((state) => state.morphoSyntax.text);
 	const sizes = useSelector(state => state.appState.sizes);
-	const { height, width } = useWindowDimensions();
+	const { width } = useWindowDimensions();
 	const dotSize = useBreakpointValue(sizes.xs);
 	const smallerSize = useBreakpointValue(sizes.sm);
 	const textSize = useBreakpointValue(sizes.md);
@@ -485,49 +486,13 @@ const ParseMSJSON = (props) => {
 						key={getKey("ModalButton")}
 						safeArea
 					>
-						<Modal
-							bg="main.800"
-							m={0}
-							isOpen={modalState === id}
-							onClose={() => setModal('')}
-							size="full"
-							style={{ width, height }}
-							safeArea
-						>
-							<Modal.Content
-								borderRadius="none"
-								style={{ width, height, maxHeight: height }}
-							>
-								<Modal.Header style={{width}}>
-									<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-										<Text textAlign="center" bold flexGrow={1} flexShrink={1}>{title}</Text>
-										<IconButton
-											icon={<CloseCircleIcon color="primary.50" size={textSize} />}
-											onPress={() => setModal('')}
-											variant="ghost"
-											flexGrow={0}
-											flexShrink={0}
-											px={0}
-										/>
-									</HStack>
-								</Modal.Header>
-								<Modal.Body
-									safeArea
-									m={0}
-									style={{width}}
-								>
-									<ModalContent content={content} />
-								</Modal.Body>
-								<Modal.Footer style={{width}} p={2}>
-									<Button
-										m={0}
-										startIcon={<OkIcon size={textSize} />}
-										onPress={() => setModal('')}
-										_text={{fontSize: textSize}}
-									>Done</Button>
-								</Modal.Footer>
-							</Modal.Content>
-						</Modal>
+						<FullPageModal
+							modalOpen={modalState === id}
+							closeModal={() => setModal('')}
+							BodyContent={() => <ModalContent content={content} />}
+							textSize={textSize}
+							modalTitle={title}
+						/>
 						<Button
 							py={1}
 							px={2}
