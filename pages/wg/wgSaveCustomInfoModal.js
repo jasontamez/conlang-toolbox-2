@@ -5,13 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/PersistentInfo';
 import { equalityCheck } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
-import { CloseCircleIcon, LoadIcon } from '../../components/icons';
+import { CloseCircleIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
 //import doExport from '../../components/ExportServices';
 
 const CustomInfoModal = ({
-	openModal,
-	setOpenModal
+	modalOpen,
+	setModalOpen
 }) => {
 	const dispatch = useDispatch();
 	const {
@@ -51,7 +51,7 @@ const CustomInfoModal = ({
 	};
 	const doCleanClose = () => {
 		// close modal
-		setOpenModal(false);
+		setModalOpen(false);
 	};
 	// TO-DO: Finish everything else!!!
 	const maybeSaveInfo = () => {

@@ -60,20 +60,21 @@ const rearrangeTransformsFunc = (state, action) => {
 };
 
 // CLEAR ALL
-const clearWGFunc = (state, action) => {
-	state.characterGroups = [];
-	state.multipleSyllableTypes = false;
-	state.singleWord = "";
-	state.wordInitial = "";
-	state.wordMiddle = "";
-	state.wordFinal = "";
-	state.transforms = [];
-	state.syllableDropoffOverrides = {
-		singleWord: null,
-		wordInitial: null,
-		wordMiddle: null,
-		wordFinal: null
-	};
+const resetWGFunc = (state, action) => {
+	state = {...initialState};
+//	state.characterGroups = [];
+//	state.multipleSyllableTypes = false;
+//	state.singleWord = "";
+//	state.wordInitial = "";
+//	state.wordMiddle = "";
+//	state.wordFinal = "";
+//	state.transforms = [];
+//	state.syllableDropoffOverrides = {
+//		singleWord: null,
+//		wordInitial: null,
+//		wordMiddle: null,
+//		wordFinal: null
+//	};
 	return state;
 };
 
@@ -173,7 +174,7 @@ const wgSlice = createSlice({
 		deleteTransform: deleteTransformFunc,
 		editTransform: editTransformFunc,
 		rearrangeTransforms: rearrangeTransformsFunc,
-		clearWG: clearWGFunc,
+		resetWG: resetWGFunc,
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
 		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
@@ -207,7 +208,7 @@ export const {
 	deleteTransform,
 	editTransform,
 	rearrangeTransforms,
-	clearWG,
+	resetWG,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,

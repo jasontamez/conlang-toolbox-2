@@ -7,6 +7,8 @@ import {
 	Radio,
 	Spinner,
 	Text,
+	useBreakpointValue,
+	useContrastText,
 	useToast
 } from 'native-base';
 import { useEffect, useState } from 'react';
@@ -25,10 +27,11 @@ import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
 import doToast from '../../helpers/toast';
+import FullPageModal from '../../components/FullBodyModal';
 
-const CustomInfoModal = ({
-	openModal,
-	setOpenModal
+const LoadCustomInfoModal = ({
+	modalOpen,
+	setModalOpen
 }) => {
 	const dispatch = useDispatch();
 	const {
@@ -52,7 +55,7 @@ const CustomInfoModal = ({
 		exclamatorySentencePre,
 		exclamatorySentencePost
 	} = useSelector((state) => state.wg, equalityCheck);
-	const { disableConfirms, hasCheckedForOldCustomInfo_WG } = useSelector(state => state.appState);
+	const { sizes, disableConfirms, hasCheckedForOldCustomInfo_WG } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
 	const [savedCustomInfo, setSavedCustomInfo] = useState([]);
 	const [initialLoadingInProgress, setInitialLoadingInProgress] = useState(true);
@@ -61,6 +64,11 @@ const CustomInfoModal = ({
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
 	const [gettingStoredInfo, setGettingStoredInfo] = useState(false);
 	const [retrievedInfo, setRetrievedInfo] = useState(null);
+	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+	const textSize = useBreakpointValue(sizes.sm);
+	const largeText = useBreakpointValue(sizes.xl);
+	const primaryContrast = useContrastText("primary.500");
+	const secondaryContrast = useContrastText("secondary.500");
 	const toast = useToast();
 	// Grab keys when this mounts
 	useEffect(() => {
@@ -111,7 +119,7 @@ const CustomInfoModal = ({
 	};
 	const doCleanClose = () => {
 		// close modal
-		setOpenModal(false);
+		setModalOpen(false);
 	};
 	// TO-DO: Finish everything else!!!
 	const maybeLoadInfo = () => {
@@ -120,13 +128,14 @@ const CustomInfoModal = ({
 		if(disableConfirms) {
 			return waitForInfoToLoad();
 		}
-		// TO-DO: Show overwrite warning
+		// Show the warning dialog
 		setOverwriteWarningOpen(true);
 	};
 	const waitForInfoToLoad = () => {
-		// TO-DO: display permanent loading toast or overlay or alert
+		// Display loading overlay or alert
 		//    while info is still being fetched - probably a full-size
 		//    modal, like MS's modals
+		setLoadingOverlayOpen(true);
 	};
 	const fetchInfo = async () => {
 		// TO-DO: is this state variable really necessary?
@@ -137,7 +146,7 @@ const CustomInfoModal = ({
 		// Check if the user is still deciding whether or not to overwrite
 		if(!overwriteWarningOpen) {
 			// If warning modal is closed, do the load
-			// TO-DO: close the waitForInfoToLoad overlay thingie
+			setLoadingOverlayOpen(false);
 			return finishLoadInfo(info);
 		}
 		// Modal open? Save info.
@@ -154,10 +163,10 @@ const CustomInfoModal = ({
 		finishLoadInfo(retrievedInfo);
 	};
 	const finishLoadInfo = (info) => {
-		const newInfo = JSON.parse(info);
+		const loadedInfo = JSON.parse(info);
 		setRetrievedInfo(null);
 		// TO-DO: dispatch the new info to store
-		// TO-DO: close the waitForInfoToLoad overlay thingie
+		setLoadingOverlayOpen(false);
 		doToast({
 			toast,
 			// TO-DO: Fix toast message
@@ -191,23 +200,77 @@ const CustomInfoModal = ({
 	//   map of saved info, each with Load and Delete buttons
 	//   notice message if nothing previously saved
 	return (
-		<Modal isOpen={openModal} size="sm">
-			<StandardAlert
-				alertOpen={overwriteWarningOpen}
-				setAlertOpen={setOverwriteWarningOpen}
-				bodyContent=""
-				continueText="Yes"
-				continueFunc={loadingApproved}
-				fontSize={textSize}
-			/>
-			<StandardAlert
-				alertOpen={deleteWarningOpen}
-				setAlertOpen={setDeleteWarningOpen}
-				bodyContent=""
-				continueText="Yes"
-				continueFunc={doDeleteInfo}
-				fontSize={textSize}
-			/>
+		<><FullPageModal
+			modalOpen={loadingOverlayOpen}
+			closeModal={() => setLoadingOverlayOpen(false)}
+			HeaderOverride={() => <></>}
+			FooterOverride={() => <></>}
+			modalProps={{
+				bg: "transparent"
+			}}
+			modalContentProps={{
+				bg: "darker"
+			}}
+			modalHeaderProps={{
+				height: 0,
+				borderBottomWidth: 0,
+				bg: "transparent"
+			}}
+			modalFooterProps={{
+				height: 0,
+				borderTopWidth: 0,
+				bg: "transparent"
+			}}
+			modalBodyProps={{
+				bg: "transparent"
+			}}
+			BodyContent={({modalHeight, modalWidth}) => (
+				<Center
+					width={modalWidth}
+					height={modalHeight}
+					bg="darker"
+				>
+					<HStack
+						flexWrap="wrap"
+						alignItems="center"
+						justifyContent="center"
+						space={10}
+						py={4}
+						px={8}
+						bg="secondary.900"
+						borderRadius="3xl"
+						borderWidth={2}
+						borderColor="secondary.500"
+					>
+						<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customInfoChosen}"...</Text>
+						<Spinner size="lg" color="secondary.500" />
+					</HStack>
+				</Center>
+			)}
+		/>
+		<StandardAlert
+			alertOpen={overwriteWarningOpen}
+			setAlertOpen={setOverwriteWarningOpen}
+			bodyContent={`Are you sure you want to load "${customInfoChosen}"? This will overwrite all current Character Groups, Syllables, Transformations and Settings.`}
+			continueText="Yes"
+			continueFunc={loadingApproved}
+			fontSize={textSize}
+		/>
+		<StandardAlert
+			alertOpen={deleteWarningOpen}
+			setAlertOpen={setDeleteWarningOpen}
+			bodyContent={`Are you sure you want to delete "${customInfoChosen}"? This cannot be undone.`}
+			continueText="Yes"
+			continueFunc={doDeleteInfo}
+			continueProps={{
+				bg: "danger.500",
+				_text: {
+					color: "danger.50"
+				}
+			}}
+			fontSize={textSize}
+		/>
+		<Modal isOpen={modalOpen} size="sm">
 			<Modal.Content>
 				<Modal.Header>
 					<HStack
@@ -255,7 +318,7 @@ const CustomInfoModal = ({
 								w="full"
 								bg="lighter"
 							>
-								<Text fontSize={size} textAlign="center">Loading...</Text>
+								<Text fontSize={textSize} textAlign="center">Loading...</Text>
 								<Spinner size="lg" color="primary.500" />
 							</HStack>
 						</ReAnimated.View>
@@ -330,8 +393,8 @@ const CustomInfoModal = ({
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>
-		</Modal>
+		</Modal></>
 	);
 };
 
-export default CustomInfoModal;
+export default LoadCustomInfoModal;

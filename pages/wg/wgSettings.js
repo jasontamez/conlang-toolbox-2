@@ -18,7 +18,7 @@ import {
 	ToggleSwitch
 } from '../../components/layoutTags';
 import {
-	clearWG,
+	resetWG,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,
@@ -38,6 +38,7 @@ import {
 import doToast from "../../helpers/toast";
 import StandardAlert from "../../components/StandardAlert";
 import WGPresetsModal from "./wgPresetsModal";
+import LoadCustomInfoModal from "./wgLoadCustomInfoModal";
 
 const WGSettings = () => {
 	const {
@@ -57,6 +58,7 @@ const WGSettings = () => {
 	const dispatch = useDispatch();
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
 	const [openPresetModal, setOpenPresetModal] = useState(false);
+	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
 	const toast = useToast();
 	const stackProps = {
 		justifyContent: "flex-start",
@@ -66,6 +68,7 @@ const WGSettings = () => {
 		px: 2,
 		space: 1.5
 	};
+	const buttonSize = useBreakpointValue(sizes.md);
 	const textSize = useBreakpointValue(sizes.sm);
 	const inputSize = useBreakpointValue(sizes.xs);
 	const maybeClearEverything = () => {
@@ -75,7 +78,7 @@ const WGSettings = () => {
 		setClearAlertOpen(true);
 	};
 	const doClearEveything = () => {
-		dispatch(clearWG());
+		dispatch(resetWG());
 		doToast({
 			toast,
 			msg: "Info has been cleared.",
@@ -83,7 +86,6 @@ const WGSettings = () => {
 			placement: "bottom"
 		})
 	};
-	const maybeLoadInfo = () => {};
 	const maybeSaveInfo = () => {};
 	const maybeLoadPreset = () => setOpenPresetModal(true);
 	const SectionHeader = (props) => {
@@ -129,7 +131,12 @@ const WGSettings = () => {
 		return (
 			<Button
 				borderRadius="full"
-				_text={{fontSize: textSize}}
+				_text={{
+					fontSize: buttonSize,
+					style: {
+						fontVariant: ["small-caps"]
+					}
+				}}
 				py={0.5}
 				px={3}
 				m={1}
@@ -144,45 +151,49 @@ const WGSettings = () => {
 				Load Preset button
 				Save/Load Custom Info button
 			*/}
-				<StandardAlert
-					alertOpen={clearAlertOpen}
-					setAlertOpen={setClearAlertOpen}
-					bodyContent="This will erase every Character Group, Syllable and Transform currently loaded in the app. Are you sure you want to do this?"
-					continueText="Yes, Do It"
-					continueFunc={() => doClearEveything()}
-					fontSize={textSize}
-				/>
-				<WGPresetsModal
-					modalOpen={openPresetModal}
-					setModalOpen={setOpenPresetModal}
-				/>
-				<HStack
-					py={1.5}
-					px={2}
-					alignItems="center"
-					justifyContent="center"
-					alignContent="space-between"
-					flexWrap="wrap"
-					borderBottomWidth={0.5}
-					borderColor="main.700"
-				>
-					<InfoButton
-						colorScheme="primary"
-						onPress={() => maybeLoadPreset()}
-					>LOAD A PRESET</InfoButton>
-					<InfoButton
-						colorScheme="danger"
-						onPress={() => maybeClearEverything()}
-					>CLEAR ALL FIELDS</InfoButton>
-					<InfoButton
-						colorScheme="secondary"
-						onPress={() => maybeLoadInfo()}
-					>LOAD SAVED INFO</InfoButton>
-					<InfoButton
-						colorScheme="tertiary"
-						onPress={() => maybeSaveInfo()}
-					>SAVE CURRENT INFO</InfoButton>
-				</HStack>
+			<StandardAlert
+				alertOpen={clearAlertOpen}
+				setAlertOpen={setClearAlertOpen}
+				bodyContent="This will erase every Character Group, Syllable and Transform currently loaded in the app, and reset the settings on this page to their initial values. Are you sure you want to do this?"
+				continueText="Yes, Do It"
+				continueFunc={() => doClearEveything()}
+				fontSize={textSize}
+			/>
+			<WGPresetsModal
+				modalOpen={openPresetModal}
+				setModalOpen={setOpenPresetModal}
+			/>
+			<LoadCustomInfoModal
+				modalOpen={openLoadCustomInfoModal}
+				setModalOpen={() => setOpenLoadCustomInfoModal(false)}
+			/>
+			<HStack
+				py={1.5}
+				px={2}
+				alignItems="center"
+				justifyContent="center"
+				alignContent="space-between"
+				flexWrap="wrap"
+				borderBottomWidth={0.5}
+				borderColor="main.700"
+			>
+				<InfoButton
+					colorScheme="primary"
+					onPress={() => maybeLoadPreset()}
+				>Load a Preset</InfoButton>
+				<InfoButton
+					colorScheme="danger"
+					onPress={() => maybeClearEverything()}
+				>Reset All Fields</InfoButton>
+				<InfoButton
+					colorScheme="secondary"
+					onPress={() => setOpenLoadCustomInfoModal(true)}
+				>Load Saved Info</InfoButton>
+				<InfoButton
+					colorScheme="tertiary"
+					onPress={() => maybeSaveInfo()}
+				>Save Current Info</InfoButton>
+			</HStack>
 			<SectionHeader>Word Generation Controls</SectionHeader>
 			<SliderWithValueDisplay
 				max={100}
