@@ -221,6 +221,9 @@ export const SliderWithTicks = (props) => {
 	}
 	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
+	// TO-DO: Replace <Slider> with @react-native-community/slider
+	//    Allows you to set value AND automatically move the handle
+	//    Also has the tooltip!
 	return (
 		<HStack
 			w="full"
