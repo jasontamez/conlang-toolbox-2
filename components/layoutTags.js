@@ -199,13 +199,13 @@ const MySlider = ({
 	onSlidingComplete = (v) => console.log(v),
 	...props
 }) => {
-	const colorProp = colorScheme ? colorScheme + "." : "secondary.";
-	const filledProp = notFilled ? "800" : "400";
+	const colorProp = $v(colorScheme, "secondary");
+	const filledProp = notFilled ? ".800" : ".400";
 	const [
 		filledColor,
 		emptyColor,
 		thumbColor
-	] = useToken("colors", [colorProp + filledProp, colorProp + "800", colorProp + "400"]);
+	] = useToken("colors", [colorProp + filledProp, colorProp + ".800", colorProp + ".400"]);
 	const styles = StyleSheet.create({
 		slider: {
 		  width: "100%",
@@ -214,7 +214,7 @@ const MySlider = ({
 		},
 	  });
 	return (
-		<NewSlider
+		<ThisSlider
 			minimumValue={min}
 			maximumValue={max}
 			step={step}
@@ -223,7 +223,8 @@ const MySlider = ({
 			thumbTintColor={thumbColor}
 			onSlidingComplete={onSlidingComplete}
 			value={value}
-			style={styles.slider}
+			w="full"
+			height={12}
 		/>
 	);
 };
@@ -264,19 +265,37 @@ export const SliderWithTicks = (props) => {
 		onSlidingEnd,
 		notFilled,
 		value,
-		fontSize
+		fontSize,
+		step = 1
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes);
 	const minVal = $v(min, 0);
 	const maxVal = $v(max, 4);
 	const defaultValue = $v(value, minVal);
 	const labelW = useBreakpointValue(sliderCapWidths);
-	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...$v(tickProps, {})} {...props} />;
-	let middleTicks = [<Tick key="FirstTick" size="xs" />];
-	for (let c = minVal + 1; c < maxVal; c++) {
+	const Tick = ({adjustment= 0.5}) => {
+		const pre = adjustment * 20;
+		const post = 20 - pre;
+		const h = 8;
+		// {5} === 20px
+		// {0.5} === 2px
+		// pre + post === 18
+		return (
+			<HStack h={h} w={5} bg="transparent">
+				<Box h={h} style={{width: pre}} bg="transparent" />
+				<Box h={h} style={{width: 2}} bg="yellow.500" {...props} />
+				<Box h={h} style={{width: post}} bg="transparent" />
+			</HStack>
+		);
+	};
+	const Ticky = (props) => <Bar size="xs" color="sliderTickColor" {...$v(tickProps, {})} {...props} />;
+	let middleTicks = [<Tick key="FirstTick" adjustment={0} />];
+	// padding depends on a formula where the first is 0, the median is 9, and the last is 18
+	const stepsUntilEnd = (maxVal - minVal) / step;
+	for (let c = 1; c < stepsUntilEnd; c++) {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
-	middleTicks.push(<Tick key="LastTick" size="xs" />);
+	middleTicks.push(<Tick key="LastTick" size="xs" adjustment={1} />);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	// TO-DO: Replace <Slider> with @react-native-community/slider
 	//    Allows you to set value AND automatically move the handle
@@ -305,7 +324,7 @@ export const SliderWithTicks = (props) => {
 				justifyContent="center"
 				flexGrow={1}
 				flexShrink={1}
-				flexBasis={labelW * 4   /* TO-DO: Change this labelW thing to something else? */}
+				flexBasis={labelW * 4}
 				{...$v(stackProps, {})}
 			>
 				<HStack
@@ -317,7 +336,7 @@ export const SliderWithTicks = (props) => {
 				<MySlider
 					min={minVal}
 					max={maxVal}
-					step={1}
+					step={step}
 					value={defaultValue}
 					notFilled={notFilled}
 					accessibilityLabel={accessibilityLabel}
