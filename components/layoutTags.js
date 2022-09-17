@@ -12,8 +12,12 @@ import {
 	TextArea,
 	VStack,
 	useBreakpointValue,
-	Switch
+	Switch,
+	Factory,
+	useToken
  } from "native-base";
+ import { StyleSheet } from 'react-native';
+ import NewSlider from '@react-native-community/slider';
 
 import { Bar } from "./icons";
 import debounce from '../helpers/debounce';
@@ -29,6 +33,7 @@ const sliderCapWidths = {
 	lg: 213,
 	xl: 350
 };
+const ThisSlider = Factory(NewSlider);
 
 export const NavBar = (props) => {
 	// <NavBar
@@ -184,6 +189,56 @@ export const TextSetting = (props) => {
 	);
 };
 
+const MySlider = ({
+	min,
+	max,
+	colorScheme,
+	notFilled,
+	step,
+	value,
+	onSlidingComplete = (v) => console.log(v),
+	...props
+}) => {
+	const colorProp = colorScheme ? colorScheme + "." : "secondary.";
+	const filledProp = notFilled ? "800" : "400";
+	const [
+		filledColor,
+		emptyColor,
+		thumbColor
+	] = useToken("colors", [colorProp + filledProp, colorProp + "800", colorProp + "400"]);
+	const styles = StyleSheet.create({
+		slider: {
+		  width: "100%",
+		  opacity: 1,
+		  height: 50
+		},
+	  });
+	return (
+		<NewSlider
+			minimumValue={min}
+			maximumValue={max}
+			step={step}
+			minimumTrackTintColor={filledColor}
+			maximumTrackTintColor={emptyColor}
+			thumbTintColor={thumbColor}
+			onSlidingComplete={onSlidingComplete}
+			value={value}
+			style={styles.slider}
+		/>
+	);
+};
+
+/*
+				<Slider
+					size="sm"
+					minimumValue={minVal}
+					maximumValue={maxVal}
+					step={1}
+					defaultValue={defaultValue}
+					{...$v(sliderProps, {})}
+				>
+*/
+
 export const SliderWithTicks = (props) => {
 	// <SliderWithTicks
 	//    min={default 0}
@@ -205,6 +260,8 @@ export const SliderWithTicks = (props) => {
 		tickProps,
 		stackProps,
 		sliderProps,
+		accessibilityLabel,
+		onSlidingEnd,
 		notFilled,
 		value,
 		fontSize
@@ -215,15 +272,14 @@ export const SliderWithTicks = (props) => {
 	const defaultValue = $v(value, minVal);
 	const labelW = useBreakpointValue(sliderCapWidths);
 	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...$v(tickProps, {})} {...props} />;
-	let middleTicks = [<Tick key="FirstTick" color="transparent" size="2xs" />];
+	let middleTicks = [<Tick key="FirstTick" size="xs" />];
 	for (let c = minVal + 1; c < maxVal; c++) {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
-	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
+	middleTicks.push(<Tick key="LastTick" size="xs" />);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	// TO-DO: Replace <Slider> with @react-native-community/slider
 	//    Allows you to set value AND automatically move the handle
-	//    Also has the tooltip!
 	return (
 		<HStack
 			w="full"
@@ -249,7 +305,7 @@ export const SliderWithTicks = (props) => {
 				justifyContent="center"
 				flexGrow={1}
 				flexShrink={1}
-				flexBasis={labelW * 4}
+				flexBasis={labelW * 4   /* TO-DO: Change this labelW thing to something else? */}
 				{...$v(stackProps, {})}
 			>
 				<HStack
@@ -258,19 +314,15 @@ export const SliderWithTicks = (props) => {
 					w="full"
 					children={middleTicks}
 				/>
-				<Slider
-					size="sm"
-					minValue={minVal}
-					maxValue={maxVal}
+				<MySlider
+					min={minVal}
+					max={maxVal}
 					step={1}
-					defaultValue={defaultValue}
+					value={defaultValue}
+					notFilled={notFilled}
+					accessibilityLabel={accessibilityLabel}
 					{...$v(sliderProps, {})}
-				>
-					<Slider.Track>
-						{notFilled ? <></> : <Slider.FilledTrack />}
-					</Slider.Track>
-					<Slider.Thumb />
-				</Slider>
+				/>
 			</ZStack>
 			<Box
 				ml={3}
@@ -326,6 +378,7 @@ export const SliderWithTicksAndValueDisplay = (props) => {
 				stackProps={zStackProps}
 				sliderProps={{
 					onChange: (v) => setCurrentValue(v),
+					onValueChange: (v) => setCurrentValue(v),
 					...$v(sliderProps, {})
 				}}
 				{...{
@@ -399,8 +452,8 @@ export const SliderWithValueDisplay = (props) => {
 				</Box>
 				<Slider
 					size="sm"
-					minValue={minVal}
-					maxValue={$v(max, 50)}
+					minimumValue={minVal}
+					maximumValue={$v(max, 50)}
 					step={1}
 					defaultValue={defaultValue}
 					flexGrow={1}
@@ -491,8 +544,8 @@ export const SliderWithTicksNoCaps = (props) => {
 				/>
 				<Slider
 					size="sm"
-					minValue={minVal}
-					maxValue={maxVal}
+					minimumValue={minVal}
+					maximumValue={maxVal}
 					step={1}
 					defaultValue={defaultValue}
 					{...$v(sliderProps, {})}

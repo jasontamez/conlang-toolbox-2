@@ -217,6 +217,7 @@ const WGSettings = () => {
 				value={maxSyllablesPerWord}
 				sliderProps={{
 					accessibilityLabel: "Maximum Syllables per Word",
+					onSlidingComplete: (v) => {dispatch(setMaxSyllablesPerWord(v)); console.log("Dispatched: " + String(v));},
 					onChangeEnd: (v) => dispatch(setMaxSyllablesPerWord(v))
 				}}
 				Display={({value}) => <Display pre="Maximum syllables per word: " value={value} />}
