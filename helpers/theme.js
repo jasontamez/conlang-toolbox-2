@@ -107,7 +107,7 @@ const fontConfig = {
 			normal: "SourceCodePro_700Bold",
 			italic: "SourceCodePro_700Bold_Italic",
 		},
-		700: {
+		800: {
 			normal: "SourceCodePro_800ExtraBold",
 			italic: "SourceCodePro_800ExtraBold_Italic",
 		},
@@ -882,8 +882,8 @@ const themes = {
 				50: "#f5e5ff",
 				100: "#c6dcff",
 				200: "#d8b3ff",
-				100: "#d0a4fe",
-				100: "#c695fd",
+				300: "#d0a4fe",
+				400: "#c695fd",
 				500: "#bb86fc",
 				600: "#a576de",
 				700: "#9e21f7",

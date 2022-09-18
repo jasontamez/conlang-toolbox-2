@@ -241,9 +241,9 @@ const Lex = () => {
 	const smallerSize = useBreakpointValue(sizes.sm);
 	const textSize = useBreakpointValue(sizes.md);
 	const bigTextSize = useBreakpointValue(sizes.x2);
-	const [] = useBreakpointValue({
-		base: [1, 3],
-	});
+	//const [] = useBreakpointValue({
+	//	base: [1, 3],
+	//});
 	// Calculate dimensions of the upper area so they are readable
 	const calculateInfoHeight = () => {
 		// Base height is 1/4 the area

@@ -72,51 +72,53 @@ const LoadCustomInfoModal = ({
 	const toast = useToast();
 	// Grab keys when this mounts
 	useEffect(() => {
-		loadKeys();
-	}, []);
-	const loadKeys = async () => {
-		// Look at storage and find the keys of all saved info
-		setInitialLoadingInProgress(true);
-		// First, look at the old storage method, if needed.
-		hasCheckedForOldCustomInfo_WG ? false : await loadInfoFromOldStorage();
-		// Get info from new storage
-		const keys = await wgCustomStorage.getAllKeys();
-		setSavedCustomInfo(keys || []);
-		keys && keys.length > 0 && setCustomInfoChosen(keys[0]);
-		setInitialLoadingInProgress(false);
-	};
-	const loadInfoFromOldStorage = async () => {
-		let information = [];
-		return OldCustomStorageWG.iterate((value, key) => {
-			information.push([key, JSON.stringify(value)]);
-			return; // Blank return keeps the loop going
-		}).then(async () => {
-			// Save to new storage system
-			for(let x = 0; x < information.length; x++) {
-				const [key, value] = information[x];
-				// Save as stringified
-				await wgCustomStorage.setItem(key, value);
-			}
-			// Doublecheck that everything was saved properly.
-			let flag = true;
-			for(let x = 0; x < information.length; x++) {
-				const [key, value] = information[x];
-				let test = await wgCustomStorage.getItem(key);
-				if(test !== value) {
-					flag = false;
-					console.log(`${key} not saved`);
-					console.log(`Expected [${value}]`);
-					console.log(`Received {${test}}`);
+		const loadInfoFromOldStorage = async () => {
+			let information = [];
+			return OldCustomStorageWG.iterate((value, key) => {
+				information.push([key, JSON.stringify(value)]);
+				return; // Blank return keeps the loop going
+			}).then(async () => {
+				// Save to new storage system
+				for(let x = 0; x < information.length; x++) {
+					const [key, value] = information[x];
+					// Save as stringified
+					await wgCustomStorage.setItem(key, value);
 				}
+				// Doublecheck that everything was saved properly.
+				let flag = true;
+				for(let x = 0; x < information.length; x++) {
+					const [key, value] = information[x];
+					let test = await wgCustomStorage.getItem(key);
+					if(test !== value) {
+						flag = false;
+						console.log(`${key} not saved`);
+						console.log(`Expected [${value}]`);
+						console.log(`Received {${test}}`);
+					}
+				}
+				// Mark in the app that we no longer need to check old storage
+				flag && dispatch(setHasCheckedForOldCustomInfo_WG(true));
+				// Clear the old storage
+				flag && OldCustomStorageWG.clear();
+			}).catch((err) => {
+				console.log(err);
+			});
+		};
+		const loadKeys = async () => {
+			// Look at storage and find the keys of all saved info
+			setInitialLoadingInProgress(true);
+			// First, look at the old storage method, if needed.
+			if (hasCheckedForOldCustomInfo_WG) {
+				await loadInfoFromOldStorage();
 			}
-			// Mark in the app that we no longer need to check old storage
-			flag && dispatch(setHasCheckedForOldCustomInfo_WG(true));
-			// Clear the old storage
-			flag && OldCustomStorageWG.clear();
-		}).catch((err) => {
-			console.log(err);
-		});
-	};
+			// Get info from new storage
+			const keys = await wgCustomStorage.getAllKeys();
+			setSavedCustomInfo(keys || []);
+			keys && keys.length > 0 && setCustomInfoChosen(keys[0]);
+			setInitialLoadingInProgress(false);
+		};
+		loadKeys();
+	}, [dispatch, hasCheckedForOldCustomInfo_WG]);
 	const doCleanClose = () => {
 		// close modal
 		setModalOpen(false);

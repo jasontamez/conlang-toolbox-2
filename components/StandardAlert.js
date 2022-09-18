@@ -50,6 +50,7 @@ const StandardAlert = ({
 		setAlertOpen(false);
 		continueFunc && continueFunc();
 	};
+	const contrastingText = useContrastText((continueProps && continueProps.bg) || "success.50");
 	return (
 		<AlertDialog
 			zIndex={100}
@@ -97,7 +98,7 @@ const StandardAlert = ({
 								<Button
 									bg="success.500"
 									ref={leastDestructiveContinue ? buttonRef : undefined}
-									_text={{color: useContrastText((continueProps && continueProps.bg) || "success.50"), fontSize}}
+									_text={{color: contrastingText, fontSize}}
 									{...(continueProps || {})}
 									onPress={() => doContinue()}
 								>
