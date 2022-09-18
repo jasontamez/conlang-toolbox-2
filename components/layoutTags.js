@@ -5,7 +5,6 @@ import {
 	Box,
 	HStack,
 	ZStack,
-	Slider,
 	Input,
 	ScrollView,
 	Text,
@@ -16,10 +15,8 @@ import {
 	Factory,
 	useToken
  } from "native-base";
- import { StyleSheet } from 'react-native';
  import NewSlider from '@react-native-community/slider';
 
-import { Bar } from "./icons";
 import debounce from '../helpers/debounce';
 
 // $v(unknown property, default value)
@@ -33,9 +30,13 @@ const sliderCapWidths = {
 	lg: 213,
 	xl: 350
 };
-const ThisSlider = Factory(NewSlider);
+const Slider = Factory(NewSlider);
 
-export const NavBar = (props) => {
+export const NavBar = ({
+	boxProps = {},
+	scrollProps = {},
+	...props
+}) => {
 	// <NavBar
 	//    scrollProps={props for inner ScrollView}
 	//    boxProps={props for outer Box}
@@ -49,7 +50,6 @@ export const NavBar = (props) => {
 	useEffect(() => {
 		navRef.current.scrollTo({x: scrollPos, y: 0, animated: false});
 	}, [location]);
-	const { boxProps, scrollProps, ...otherProps } = props;
 	return (
 		<Box
 			w="full"
@@ -58,7 +58,7 @@ export const NavBar = (props) => {
 			bottom={0}
 			right={0}
 			bg="main.800"
-			{...$v(boxProps, {})}
+			{...boxProps}
 		>
 			<ScrollView
 				horizontal
@@ -75,24 +75,26 @@ export const NavBar = (props) => {
 						)
 				}
 				scrollEventThrottle={16}
-				{...$v(scrollProps, {})}
+				{...scrollProps}
 			>
 				<HStack
 					w="full"
 					space={4}
 					justifyContent="space-between"
-					{...otherProps}
+					{...props}
 				/>
 			</ScrollView>
 		</Box>
 	);
 };
 
-export const TabBar = (props) => {
+export const TabBar = ({
+	boxProps = {},
+	...props
+}) => {
 	// <TabBar
 	//    boxProps={properties for outer Box}
 	//    {other props go to inner HStack} />
-	const { boxProps, ...otherProps } = props;
 	return (
 		<Box
 			w="full"
@@ -101,19 +103,30 @@ export const TabBar = (props) => {
 			bottom={0}
 			right={0}
 			bg="main.800"
-			{...$v(boxProps, {})}
+			{...boxProps}
 		>
 			<HStack
 				w="full"
 				justifyContent="space-evenly"
 				alignItems="center"
-				{...otherProps}
+				{...props}
 			/>
 		</Box>
 	);
 };
 
-export const TextAreaSetting = (props) => {
+export const TextAreaSetting = ({
+	boxProps = {},
+	labelProps = {},
+	inputProps = {},
+	text,
+	children,
+	value,
+	defaultValue,
+	placeholder,
+	rows = 3,
+	onChangeText
+}) => {
 	// <TextAreaSetting
 	//    boxProps={props for outer Box}
 	//    labelProps={props for Text}
@@ -125,35 +138,33 @@ export const TextAreaSetting = (props) => {
 	//    onChangeText={TextArea onChangeText}
 	//    inputProps={other props for TextArea}
 	// />
-	const {
-		boxProps,
-		labelProps,
-		inputProps,
-		text,
-		children,
-		value,
-		defaultValue,
-		placeholder,
-		rows,
-		onChangeText
-	} = props;
 	return (
-		<Box w="full" {...$v(boxProps, {})}>
-			{text === null ? <></> : <Text {...$v(labelProps, {})}>{$v(text, children)}</Text>}
+		<Box w="full" {...boxProps}>
+			{text === null ? <></> : <Text {...labelProps}>{$v(text, children)}</Text>}
 			<TextArea
 				mt={2}
 				value={value}
 				defaultValue={defaultValue}
 				placeholder={placeholder}
-				totalLines={$v(rows, 3)}
+				totalLines={rows}
 				onChangeText={onChangeText}
-				{...$v(inputProps, {})}
+				{...inputProps}
 			/>
 		</Box>
 	);
 };
 
-export const TextSetting = (props) => {
+export const TextSetting = ({
+	boxProps = {},
+	labelProps = {},
+	inputProps = {},
+	text,
+	children,
+	value,
+	defaultValue,
+	placeholder,
+	onChangeText
+}) => {
 	// <TextSetting
 	//    boxProps={props for outer Box}
 	//    labelProps={props for Text}
@@ -164,141 +175,109 @@ export const TextSetting = (props) => {
 	//    onChangeText={Input onChangeText}
 	//    inputProps={other props for Input}
 	// />
-	const {
-		boxProps,
-		labelProps,
-		inputProps,
-		text,
-		children,
-		value,
-		defaultValue,
-		placeholder,
-		onChangeText
-	} = props;
 	return (
-		<Box w="full" {...$v(boxProps, {})}>
-			<Text {...$v(labelProps, {})}>{$v(text, children)}</Text>
+		<Box w="full" {...boxProps}>
+			<Text {...labelProps}>{$v(text, children)}</Text>
 			<Input
 				value={value}
 				defaultValue={defaultValue}
 				placeholder={placeholder}
 				onChangeText={onChangeText}
-				{...$v(inputProps, {})}
+				{...inputProps}
 			/>
 		</Box>
 	);
 };
 
-const MySlider = ({
+const getSliderProps = ({
 	min,
 	max,
-	colorScheme,
-	notFilled,
 	step,
-	value,
-	onSlidingComplete = (v) => console.log(v),
+	colorScheme = "secondary",
+	notFilled,
+	updateValue,
 	...props
 }) => {
-	const colorProp = $v(colorScheme, "secondary");
 	const filledProp = notFilled ? ".800" : ".400";
 	const [
 		filledColor,
 		emptyColor,
 		thumbColor
-	] = useToken("colors", [colorProp + filledProp, colorProp + ".800", colorProp + ".400"]);
-	const styles = StyleSheet.create({
-		slider: {
-		  width: "100%",
-		  opacity: 1,
-		  height: 50
-		},
-	  });
-	return (
-		<ThisSlider
-			minimumValue={min}
-			maximumValue={max}
-			step={step}
-			minimumTrackTintColor={filledColor}
-			maximumTrackTintColor={emptyColor}
-			thumbTintColor={thumbColor}
-			onSlidingComplete={onSlidingComplete}
-			value={value}
-			w="full"
-			height={12}
-		/>
+	] = useToken(
+		"colors",
+		[
+			colorScheme + filledProp,
+			colorScheme + ".800",
+			colorScheme + ".400"
+		]
 	);
+	return {
+		minimumValue: min,
+		maximumValue: max,
+		step,
+		w: "full",
+		height: 8,
+		minimumTrackTintColor: filledColor,
+		maximumTrackTintColor: emptyColor,
+		thumbTintColor: thumbColor,
+		...props
+	};
 };
 
-/*
-				<Slider
-					size="sm"
-					minimumValue={minVal}
-					maximumValue={maxVal}
-					step={1}
-					defaultValue={defaultValue}
-					{...$v(sliderProps, {})}
-				>
-*/
+
+const Tick = () => {
+	return (
+		<HStack alignItems="center" style={{width: 20, height: 12}} bg="transparent">
+			<Box style={{width: 9, height: 12}} bg="transparent" />
+			<Box style={{width: 2, height: 12}} bg="sliderTickColor" />
+			<Box style={{width: 9, height: 12}} bg="transparent" />
+		</HStack>
+	);
+};
+const makeTicks = (min, max, step) => {
+	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
+	const stepsUntilEnd = (max - min) / step;
+	for (let c = 1; c < stepsUntilEnd; c++) {
+		middleTicks.push(<Tick key={"Tick" + String(c)} />);
+	}
+	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
+	return middleTicks;
+};
 
 export const SliderWithTicks = (props) => {
 	// <SliderWithTicks
 	//    min={default 0}
 	//    max={default 4}
+	//    step={default 1}
+	//    colorScheme={defaults to "secondary"}
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    tickProps={props for the background tick bar}
 	//    stackProps={props for the inner ZStack}
-	//    sliderProps={props for the Slider}
 	//    value={default value for the slider (defaults to `min`)
+	//    onSlidingComplete={function for when the slider stops}
+	//    accessibilityLabel={description of slider}
+	//    sliderProps={optional properties for the slider}
 	//  />
 	const {
-		min,
-		max,
-		beginLabel,
-		endLabel,
-		tickProps,
-		stackProps,
-		sliderProps,
+		min = 0,
+		max = 4,
+		step = 1,
+		beginLabel = "MISSING LABEL",
+		endLabel = "MISSING LABEL",
+		stackProps = {},
+		sliderProps = {},
 		accessibilityLabel,
-		onSlidingEnd,
+		onSlidingComplete,
 		notFilled,
 		value,
-		fontSize,
-		step = 1
+		fontSize
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes);
-	const minVal = $v(min, 0);
-	const maxVal = $v(max, 4);
-	const defaultValue = $v(value, minVal);
+	const defaultValue = $v(value, min);
 	const labelW = useBreakpointValue(sliderCapWidths);
-	const Tick = ({adjustment= 0.5}) => {
-		const pre = adjustment * 20;
-		const post = 20 - pre;
-		const h = 8;
-		// {5} === 20px
-		// {0.5} === 2px
-		// pre + post === 18
-		return (
-			<HStack h={h} w={5} bg="transparent">
-				<Box h={h} style={{width: pre}} bg="transparent" />
-				<Box h={h} style={{width: 2}} bg="yellow.500" {...props} />
-				<Box h={h} style={{width: post}} bg="transparent" />
-			</HStack>
-		);
-	};
-	const Ticky = (props) => <Bar size="xs" color="sliderTickColor" {...$v(tickProps, {})} {...props} />;
-	let middleTicks = [<Tick key="FirstTick" adjustment={0} />];
-	// padding depends on a formula where the first is 0, the median is 9, and the last is 18
-	const stepsUntilEnd = (maxVal - minVal) / step;
-	for (let c = 1; c < stepsUntilEnd; c++) {
-		middleTicks.push(<Tick key={"Tick" + String(c)} />);
-	}
-	middleTicks.push(<Tick key="LastTick" size="xs" adjustment={1} />);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
-	// TO-DO: Replace <Slider> with @react-native-community/slider
-	//    Allows you to set value AND automatically move the handle
 	return (
 		<HStack
 			w="full"
@@ -317,7 +296,7 @@ export const SliderWithTicks = (props) => {
 				<Text
 					textAlign="center"
 					fontSize={textSize}
-				>{$v(beginLabel, "MISSING LABEL")}</Text>
+				>{beginLabel}</Text>
 			</Box>
 			<ZStack
 				alignItems="center"
@@ -325,22 +304,25 @@ export const SliderWithTicks = (props) => {
 				flexGrow={1}
 				flexShrink={1}
 				flexBasis={labelW * 4}
-				{...$v(stackProps, {})}
+				{...stackProps}
 			>
 				<HStack
 					alignItems="center"
 					justifyContent="space-between"
 					w="full"
-					children={middleTicks}
+					children={makeTicks(min, max, step)}
 				/>
-				<MySlider
-					min={minVal}
-					max={maxVal}
-					step={step}
-					value={defaultValue}
-					notFilled={notFilled}
-					accessibilityLabel={accessibilityLabel}
-					{...$v(sliderProps, {})}
+				<Slider
+					{...getSliderProps({
+						min,
+						max,
+						step,
+						value: defaultValue,
+						notFilled,
+						accessibilityLabel,
+						onSlidingComplete,
+						...sliderProps
+					})}
 				/>
 			</ZStack>
 			<Box
@@ -352,7 +334,7 @@ export const SliderWithTicks = (props) => {
 				<Text
 					textAlign="center"
 					fontSize={textSize}
-				>{$v(endLabel, "MISSING LABEL")}</Text>
+				>{endLabel}</Text>
 			</Box>
 		</HStack>
 	);
@@ -362,55 +344,103 @@ export const SliderWithTicksAndValueDisplay = (props) => {
 	// <SliderWithTicksAndValueDisplay
 	//    min={default 0}
 	//    max={default 4}
+	//    step={default 1}
 	//    value={starting value of the slider, defaults to `min`}
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    sliderProps={props for the Slider}
-	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
 	//    zStackProps={props for the ZStack}
-	//    tickProps={props for the background tick bar}
 	//    Display={element that goes above the slider, gets given a
 	//       `value` property}
+	//    onSlidingComplete={function for when the slider stops}
+	//    accessibilityLabel={description of slider}
+	//    sliderProps={optional properties for the slider}
 	// />
 	const {
-		min,
-		max,
-		beginLabel,
-		endLabel,
-		sliderProps,
-		tickProps,
+		min = 0,
+		max = 4,
+		step = 1,
+		beginLabel = "MISSING LABEL",
+		endLabel = "MISSING LABEL",
 		value,
 		notFilled,
 		Display,
-		stackProps,
-		zStackProps,
-		fontSize
+		stackProps = {},
+		zStackProps = {},
+		fontSize,
+		accessibilityLabel,
+		sliderProps = {},
+		onSlidingComplete
 	} = props;
-	const [currentValue, setCurrentValue] = useState($v(value, $v(min, 0)));
+	const sizes = useSelector(state => state.appState.sizes);
+	const defaultValue = $v(value, min);
+	const [currentValue, setCurrentValue] = useState(defaultValue);
+	const labelW = useBreakpointValue(sliderCapWidths);
+	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	return (
-		<VStack {...$v(stackProps, {})}>
+		<VStack {...stackProps}>
 			<Display value={currentValue} />
-			<SliderWithTicks
-				stackProps={zStackProps}
-				sliderProps={{
-					onChange: (v) => setCurrentValue(v),
-					onValueChange: (v) => setCurrentValue(v),
-					...$v(sliderProps, {})
-				}}
-				{...{
-					min,
-					max,
-					beginLabel,
-					tickProps,
-					endLabel,
-					notFilled,
-					value,
-					fontSize
-				}}
-			/>
+			<HStack
+				w="full"
+				bg="darker"
+				px={2}
+				py={1}
+				rounded="md"
+				alignItems="center"
+			>
+				<Box
+					mr={3}
+					flexGrow={0}
+					flexShrink={1}
+					flexBasis={labelW}
+				>
+					<Text
+						textAlign="center"
+						fontSize={textSize}
+					>{beginLabel}</Text>
+				</Box>
+				<ZStack
+					alignItems="center"
+					justifyContent="center"
+					flexGrow={1}
+					flexShrink={1}
+					flexBasis={labelW * 4}
+					{...zStackProps}
+				>
+					<HStack
+						alignItems="center"
+						justifyContent="space-between"
+						w="full"
+						children={makeTicks(min, max, step)}
+					/>
+					<Slider
+						{...getSliderProps({
+							min,
+							max,
+							step,
+							value: defaultValue,
+							notFilled,
+							accessibilityLabel,
+							onSlidingComplete,
+							...sliderProps
+						})}
+						onValueChange={(v) => setCurrentValue(v)}
+					/>
+				</ZStack>
+				<Box
+					ml={3}
+					flexGrow={0}
+					flexShrink={1}
+					flexBasis={labelW}
+				>
+					<Text
+						textAlign="center"
+						fontSize={textSize}
+					>{endLabel}</Text>
+				</Box>
+			</HStack>
 		</VStack>
 	);
 }
@@ -420,37 +450,41 @@ export const SliderWithValueDisplay = (props) => {
 	// <SliderWithValueDisplay
 	//    min={default 0}
 	//    max={default 4}
+	//    step={default 1}
 	//    value={starting value of the slider, defaults to `min`}
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    sliderProps={props for the Slider}
-	//       NOTE: sliderProps.defaultValue can override `value`
 	//    stackProps={props for the containing VStack}
 	//    Display={element that goes above the slider, gets given a
 	//       `value` property}
+	//    onSlidingComplete={function for when the slider stops}
+	//    accessibilityLabel={description of slider}
+	//    sliderProps={optional properties for the slider}
 	// />
 	const {
-		min,
-		max,
-		beginLabel,
-		endLabel,
-		sliderProps,
+		min = 0,
+		max = 4,
+		step = 1,
+		beginLabel = "MISSING LABEL",
+		endLabel = "MISSING LABEL",
+		sliderProps = {},
 		value,
 		notFilled,
 		Display,
-		stackProps,
-		fontSize
+		stackProps = {},
+		fontSize,
+		accessibilityLabel,
+		onSlidingComplete
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes);
-	const minVal = $v(min, 0);
-	const defaultValue = $v(value, minVal);
+	const defaultValue = $v(value, min);
 	const labelW = useBreakpointValue(sliderCapWidths);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	const [currentValue, setCurrentValue] = useState(defaultValue);
 	return (
-		<VStack {...$v(stackProps, {})}>
+		<VStack {...stackProps}>
 			<Display value={currentValue} />
 			<HStack
 				w="full"
@@ -467,32 +501,31 @@ export const SliderWithValueDisplay = (props) => {
 					flexShrink={1}
 					flexBasis={labelW}
 				>
-					<Text textAlign="center" fontSize={textSize}>{$v(beginLabel, "MISSING LABEL")}</Text>
+					<Text textAlign="center" fontSize={textSize}>{beginLabel}</Text>
 				</Box>
 				<Slider
-					size="sm"
-					minimumValue={minVal}
-					maximumValue={$v(max, 50)}
-					step={1}
-					defaultValue={defaultValue}
 					flexGrow={1}
 					flexShrink={1}
 					flexBasis={labelW * 4}
-					onChange={(v) => setCurrentValue(v)}
-					{...$v(sliderProps, {})}
-				>
-					<Slider.Track>
-						{notFilled ? <></> : <Slider.FilledTrack />}
-					</Slider.Track>
-					<Slider.Thumb />
-				</Slider>
+					{...getSliderProps({
+						min,
+						max,
+						step,
+						value: defaultValue,
+						notFilled,
+						accessibilityLabel,
+						onSlidingComplete,
+						...sliderProps
+					})}
+					onValueChange={(v) => setCurrentValue(v)}
+				/>
 				<Box
 					ml={3}
 					flexGrow={0}
 					flexShrink={1}
 					flexBasis={labelW}
 				>
-					<Text textAlign="center" fontSize={textSize}>{$v(endLabel, "MISSING LABEL")}</Text>
+					<Text textAlign="center" fontSize={textSize}>{endLabel}</Text>
 				</Box>
 			</HStack>
 		</VStack>
@@ -503,37 +536,39 @@ export const SliderWithTicksNoCaps = (props) => {
 	// <SliderWithTicksNoCaps
 	//    min={default 0}
 	//    max={default 4}
+	//    step={default 1}
 	//    notFilled={if true, the slider does not fill}
 	//    beginLabel={left of Slider}
 	//    endLabel={right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    tickProps={props for the background tick bar}
 	//    stackProps={props for the inner ZStack}
-	//    sliderProps={props for the Slider}
 	//    value={default value for the slider (defaults to `min`)
+	//    onSlidingComplete={function for when the slider stops}
+	//    accessibilityLabel={description of slider}
+	//    sliderProps={optional properties for the slider}
 	//  />
 	const {
-		min,
-		max,
-		beginLabel,
-		endLabel,
-		tickProps,
-		stackProps,
-		sliderProps,
+		min = 0,
+		max = 4,
+		step = 1,
+		beginLabel = "MISSING LABEL",
+		endLabel = "MISSING LABEL",
+		stackProps = {},
+		sliderProps = {},
 		notFilled,
 		value,
-		fontSize
+		fontSize,
+		accessibilityLabel,
+		onSlidingComplete
 	} = props;
 	const sizes = useSelector(state => state.appState.sizes);
-	const minVal = $v(min, 0);
-	const maxVal = $v(max, 4);
-	const defaultValue = $v(value, minVal);
-	const Tick = (props) => <Bar size="xs" color="sliderTickColor" {...$v(tickProps, {})} {...props} />;
-	let middleTicks = [<Tick key="FirstTick" color="transparent" size="2xs" />];
-	for (let c = minVal + 1; c < maxVal; c++) {
+	const defaultValue = $v(value, min);
+	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
+	const stepsUntilEnd = (max - min) / step;
+	for (let c = 1; c < stepsUntilEnd; c++) {
 		middleTicks.push(<Tick key={"Tick" + String(c)} />);
 	}
-	middleTicks.push(<Tick key="LastTick" color="transparent" size="2xs" />);
+	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	return (
 		<VStack
@@ -545,15 +580,15 @@ export const SliderWithTicksNoCaps = (props) => {
 			alignItems="center"
 		>
 			<HStack justifyContent="space-between" w="full">
-				<Text textAlign="left" fontSize={textSize}>{$v(beginLabel, "MISSING LABEL")}</Text>
-				<Text textAlign="right" fontSize={textSize}>{$v(endLabel, "MISSING LABEL")}</Text>
+				<Text textAlign="left" fontSize={textSize}>{beginLabel}</Text>
+				<Text textAlign="right" fontSize={textSize}>{endLabel}</Text>
 			</HStack>
 			<ZStack
 				w="5/6"
 				m={3}
 				alignItems="center"
 				justifyContent="center"
-				{...$v(stackProps, {})}
+				{...stackProps}
 			>
 				<HStack
 					alignItems="center"
@@ -562,18 +597,17 @@ export const SliderWithTicksNoCaps = (props) => {
 					children={middleTicks}
 				/>
 				<Slider
-					size="sm"
-					minimumValue={minVal}
-					maximumValue={maxVal}
-					step={1}
-					defaultValue={defaultValue}
-					{...$v(sliderProps, {})}
-				>
-					<Slider.Track>
-						{notFilled ? <></> : <Slider.FilledTrack />}
-					</Slider.Track>
-					<Slider.Thumb />
-				</Slider>
+					{...getSliderProps({
+						min,
+						max,
+						step,
+						value: defaultValue,
+						notFilled,
+						accessibilityLabel,
+						onSlidingComplete,
+						...sliderProps
+					})}
+				/>
 			</ZStack>
 		</VStack>
 	);

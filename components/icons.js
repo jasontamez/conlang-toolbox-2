@@ -6,7 +6,7 @@ import MCI from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Foundation from '@expo/vector-icons/Foundation';
-import Octicons from '@expo/vector-icons/Octicons';
+//import Octicons from '@expo/vector-icons/Octicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 
@@ -34,9 +34,6 @@ export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" {...props
 export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />;
 export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />;
 export const SortEitherIcon = (props) => <Icon as={FAFive} name="sort" {...props} />;
-
-// MS pages
-export const Bar = (props) => <Icon as={Octicons} name="horizontal-rule" style={{transform: [{"rotate": "90deg"}]}} {...props} />;
 
 // WG pages
 export const WGSettingsIcon = (props) => <Icon as={Ionicons} name="options-outline" {...props} />;

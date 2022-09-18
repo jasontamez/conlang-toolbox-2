@@ -7,19 +7,15 @@ import {
 	Box,
 	Checkbox,
 	HStack,
-	Modal,
 	ScrollView,
 	Text as Tx,
 	VStack,
 	useBreakpointValue,
-	IconButton,
 	Center
 } from 'native-base';
 
 import ms from './msinfo.json';
-import { /*
-	setKey,
-	setLastSave,*/
+import {
 	setBool,
 	setNum,
 	setText
@@ -265,17 +261,15 @@ const ParseMSJSON = (props) => {
 				return (
 					<Element
 						key={getKey("range")}
+						min={0}
+						max={max}
 						beginLabel={start}
 						endLabel={end}
 						fontSize={smallerSize}
 						notFilled={notFilled}
-						min={0}
-						max={max}
 						value={synNum[prop] || 0}
-						sliderProps={{
-							accessibilityLabel: label,
-							onChangeEnd: (v) => doSetNum(prop, v)
-						}}
+						accessibilityLabel={label}
+						onSlidingComplete={(v) => doSetNum(prop, v)}
 					/>
 				);
 			case "Text":

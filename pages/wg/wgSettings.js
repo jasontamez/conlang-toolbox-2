@@ -201,10 +201,8 @@ const WGSettings = () => {
 				endLabel="Always"
 				fontSize={inputSize}
 				value={monosyllablesRate}
-				sliderProps={{
-					accessibilityLabel: "Monosyllable Rate",
-					onChangeEnd: (v) => dispatch(setMonosyllablesRate(v))
-				}}
+				accessibilityLabel="Monosyllable Rate"
+				onSlidingComplete={(v) => dispatch(setMonosyllablesRate(v))}
 				Display={({value}) => <Display pre="Rate of monosyllable words: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
@@ -215,11 +213,8 @@ const WGSettings = () => {
 				endLabel="15"
 				fontSize={inputSize}
 				value={maxSyllablesPerWord}
-				sliderProps={{
-					accessibilityLabel: "Maximum Syllables per Word",
-					onSlidingComplete: (v) => {dispatch(setMaxSyllablesPerWord(v)); console.log("Dispatched: " + String(v));},
-					onChangeEnd: (v) => dispatch(setMaxSyllablesPerWord(v))
-				}}
+				accessibilityLabel="Maximum Syllables per Word"
+				onSlidingComplete={(v) => dispatch(setMaxSyllablesPerWord(v))}
 				Display={({value}) => <Display pre="Maximum syllables per word: " value={value} />}
 				stackProps={stackProps}
 			/>
@@ -228,10 +223,8 @@ const WGSettings = () => {
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
 				value={characterGroupDropoff}
-				sliderProps={{
-					accessibilityLabel: "Character Group dropoff",
-					onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
-				}}
+				accessibilityLabel="Character Group dropoff"
+				onSlidingComplete={(v) => dispatch(setCharacterGroupDropoff(v))}
 				Display={({value}) => <Display pre="Character Group dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
@@ -240,10 +233,8 @@ const WGSettings = () => {
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
 				value={syllableBoxDropoff}
-				sliderProps={{
-					accessibilityLabel: "Syllable box dropoff",
-					onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
-				}}
+				accessibilityLabel="Syllable box dropoff"
+				onSlidingComplete={(v) => dispatch(setSyllableBoxDropoff(v))}
 				Display={({value}) => <Display pre="Syllable box dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
 			/>
