@@ -1,7 +1,7 @@
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { HStack, Menu, ScrollView, Text, useBreakpointValue, VStack } from 'native-base';
 import { setTheme, setDisableConfirms, setBaseTextSize } from '../store/appStateSlice';
-import { ToggleSwitch } from "../components/layoutTags";
+import { ToggleSwitch } from "../components/inputTags";
 
 
 const AppSettings = () => {

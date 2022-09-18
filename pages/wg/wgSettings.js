@@ -16,7 +16,7 @@ import {
 	SliderWithValueDisplay,
 	SliderWithTicksAndValueDisplay,
 	ToggleSwitch
-} from '../../components/layoutTags';
+} from '../../components/inputTags';
 import {
 	resetWG,
 	setMonosyllablesRate,

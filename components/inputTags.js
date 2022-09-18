@@ -1,12 +1,10 @@
-import { useRef, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
 	Box,
 	HStack,
 	ZStack,
 	Input,
-	ScrollView,
 	Text,
 	TextArea,
 	VStack,
@@ -16,8 +14,6 @@ import {
 	useToken
  } from "native-base";
  import NewSlider from '@react-native-community/slider';
-
-import debounce from '../helpers/debounce';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -31,89 +27,6 @@ const sliderCapWidths = {
 	xl: 350
 };
 const Slider = Factory(NewSlider);
-
-export const NavBar = ({
-	boxProps = {},
-	scrollProps = {},
-	...props
-}) => {
-	// <NavBar
-	//    scrollProps={props for inner ScrollView}
-	//    boxProps={props for outer Box}
-	//    {other props go to inner HStack} />
-	const location = useLocation();
-	const [scrollPos, setScrollPos] = useState(0);
-	const navRef = useRef(null);
-	const maybeUpdateScrollPos = ({contentOffset}) => {
-		contentOffset && contentOffset.x && setScrollPos(contentOffset.x);
-	};
-	useEffect(() => {
-		navRef.current.scrollTo({x: scrollPos, y: 0, animated: false});
-	}, [location]);
-	return (
-		<Box
-			w="full"
-			position="absolute"
-			left={0}
-			bottom={0}
-			right={0}
-			bg="main.800"
-			{...boxProps}
-		>
-			<ScrollView
-				horizontal
-				w="full"
-				ref={navRef}
-				onScroll={
-					({nativeEvent}) =>
-						debounce(
-							maybeUpdateScrollPos,
-							{
-								args: [nativeEvent],
-								namespace: "navBar"
-							}
-						)
-				}
-				scrollEventThrottle={16}
-				{...scrollProps}
-			>
-				<HStack
-					w="full"
-					space={4}
-					justifyContent="space-between"
-					{...props}
-				/>
-			</ScrollView>
-		</Box>
-	);
-};
-
-export const TabBar = ({
-	boxProps = {},
-	...props
-}) => {
-	// <TabBar
-	//    boxProps={properties for outer Box}
-	//    {other props go to inner HStack} />
-	return (
-		<Box
-			w="full"
-			position="absolute"
-			left={0}
-			bottom={0}
-			right={0}
-			bg="main.800"
-			{...boxProps}
-		>
-			<HStack
-				w="full"
-				justifyContent="space-evenly"
-				alignItems="center"
-				{...props}
-			/>
-		</Box>
-	);
-};
 
 export const TextAreaSetting = ({
 	boxProps = {},

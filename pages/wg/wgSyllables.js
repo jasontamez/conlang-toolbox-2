@@ -25,7 +25,7 @@ import {
 	SaveIcon,
 	SharpDropoffIcon
 } from "../../components/icons";
-import { SliderWithValueDisplay, TextAreaSetting, ToggleSwitch } from "../../components/layoutTags";
+import { SliderWithValueDisplay, TextAreaSetting, ToggleSwitch } from "../../components/inputTags";
 import {
 	equalityCheck,
 	setSyllableBoxDropoff,

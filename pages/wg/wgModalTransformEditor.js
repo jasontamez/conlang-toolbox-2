@@ -19,7 +19,7 @@ import {
 	SaveIcon
 } from '../../components/icons';
 import { editTransform } from '../../store/wgSlice';
-import { TextSetting } from '../../components/layoutTags';
+import { TextSetting } from '../../components/inputTags';
 import doToast from '../../helpers/toast';
 
 const ModalTransformEditingItem = ({

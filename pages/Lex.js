@@ -43,7 +43,7 @@ import doToast from '../helpers/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
-import { TextAreaSetting, TextSetting } from '../components/layoutTags';
+import { TextAreaSetting, TextSetting } from '../components/inputTags';
 import { fontSizesInPx } from '../store/appStateSlice';
 
 const Lex = () => {

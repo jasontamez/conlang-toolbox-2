@@ -11,7 +11,7 @@ import {
 	useBreakpointValue
 } from 'native-base';
 
-import { TabBar } from '../components/layoutTags';
+import TabBar from '../components/TabBar';
 import {
 	WGCharactersIcon,
 	WGOutputIcon,

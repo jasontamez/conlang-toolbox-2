@@ -32,7 +32,7 @@ import {
 	SharpDropoffIcon,
 	TrashIcon
 } from "../../components/icons";
-import { SliderWithValueDisplay, TextSetting, ToggleSwitch } from "../../components/layoutTags";
+import { SliderWithValueDisplay, TextSetting, ToggleSwitch } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
 import {
 	addCharacterGroup,

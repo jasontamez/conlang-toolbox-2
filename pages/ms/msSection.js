@@ -21,7 +21,7 @@ import {
 	setText
 } from '../../store/morphoSyntaxSlice';
 import { DotIcon, InfoIcon } from "../../components/icons";
-import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/layoutTags";
+import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../components/inputTags";
 import debounce from "../../helpers/debounce";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import FullPageModal from "../../components/FullBodyModal";

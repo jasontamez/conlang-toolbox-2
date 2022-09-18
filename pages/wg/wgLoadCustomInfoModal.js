@@ -20,7 +20,7 @@ import ReAnimated, {
 	ZoomOutEasyDown
 } from 'react-native-reanimated';
 
-import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/PersistentInfo';
+import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
 import { equalityCheck } from '../../store/wgSlice';
 import { setHasCheckedForOldCustomInfo_WG } from '../../store/appStateSlice';
 import ExtraChars from '../../components/ExtraCharsButton';

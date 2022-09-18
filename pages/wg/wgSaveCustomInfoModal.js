@@ -2,7 +2,7 @@ import { Button, HStack, IconButton, Modal, Radio, Text } from 'native-base';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
-import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/PersistentInfo';
+import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
 import { equalityCheck } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon } from '../../components/icons';

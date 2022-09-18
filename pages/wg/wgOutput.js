@@ -61,7 +61,7 @@ import {
 	setWordsPerWordlist
 } from "../../store/wgSlice";
 import StandardAlert from "../../components/StandardAlert";
-import { SliderWithValueDisplay, ToggleSwitch } from "../../components/layoutTags";
+import { SliderWithValueDisplay, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 
@@ -181,7 +181,7 @@ const WGOutput = () => {
 			return <SaveableElement text={text} rawWord={rawWord} wordsToSave={wordsToSave} />;
 		}
 		return <Simple fontSize={textSize} lineHeight={headerSize}>{text}</Simple>;
-	}, [savingToLexicon, wordsToSave]);
+	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
 	const PseudoText = memo(() => {
 		const stuff = displayedText.map((word, i) => {
 			// Add trailing space to every word.

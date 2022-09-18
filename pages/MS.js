@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-native';
 import { ScrollView, VStack, Box, Button, IconButton, useBreakpointValue } from 'native-base';
 import { useSelector } from 'react-redux';
 
-import { NavBar } from '../components/layoutTags';
+import NavBar from '../components/NavBar';
 import { SettingsIcon } from '../components/icons';
 import { fontSizesInPx } from '../store/appStateSlice';
 

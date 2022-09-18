@@ -3,7 +3,7 @@ import { Text, VStack, Pressable, HStack, useBreakpointValue } from "native-base
 import { useDispatch, useSelector } from "react-redux";
 
 import debounce from '../../helpers/debounce';
-import { TextAreaSetting, TextSetting } from '../../components/layoutTags';
+import { TextAreaSetting, TextSetting } from '../../components/inputTags';
 import { setTitle, setDescription } from "../../store/morphoSyntaxSlice";
 import {
 	AddCircleIcon,

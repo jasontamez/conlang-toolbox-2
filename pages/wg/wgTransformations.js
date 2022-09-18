@@ -31,7 +31,7 @@ import {
 	TrashIcon,
 	UpIcon
 } from "../../components/icons";
-import { TextSetting } from "../../components/layoutTags";
+import { TextSetting } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
 import {
 	equalityCheck,
