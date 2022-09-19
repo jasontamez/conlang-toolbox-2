@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import {
 	Box,
 	Heading,
@@ -26,12 +27,9 @@ import { setBaseTextSize } from '../store/appStateSlice';
 import {useDispatch} from 'react-redux';
 
 const About = () => {
-	const dispatch=useDispatch();
+	const dispatch = useDispatch();
 	const sizes = useSelector(state => state.appState.sizes);
 	let navigate = useNavigate();
-	const doNav = (where) => {
-		navigate(where);
-	};
 	const headerSize = useBreakpointValue(sizes.xl);
 	const textSize = useBreakpointValue(sizes.md);
 	const dotSize = useBreakpointValue(sizes.xs);
@@ -43,18 +41,21 @@ const About = () => {
 		xl: 18
 	})
 
-	const Pressable = ({onPress, firstElement, children}) => (
-		<Press
-			bg="main.800"
-			shadow={3}
-			onPress={onPress}
-			mt={firstElement ? 4 : 6}
-		>
-			<VStack p={4} pt={0}>{children}</VStack>
-		</Press>
-	);
+	const Pressable = memo(({goto, otherFunc, firstElement, children}) => {
+		const onPress = useCallback(() => navigate(goto), [goto]);
+		return (
+			<Press
+				bg="main.800"
+				shadow={3}
+				onPress={otherFunc || onPress}
+				mt={firstElement ? 4 : 6}
+			>
+				<VStack p={4} pt={0}>{children}</VStack>
+			</Press>
+		)
+	});
 
-	const Highlight = (props) => (
+	const Highlight = memo(({children}) => (
 		<Box
 			alignSelf="center"
 			w="full"
@@ -62,11 +63,11 @@ const About = () => {
 			p={2}
 			mb={3}
 		>
-			<Text fontSize={textSize} textAlign="center">{props.children}</Text>
+			<Text fontSize={textSize} textAlign="center">{children}</Text>
 		</Box>
-	);
+	));
 
-	const Indented = (props) => {
+	const Indented = memo(({children}) => {
 		return (
 			<HStack
 				m={1}
@@ -75,12 +76,12 @@ const About = () => {
 				alignItems="flex-start"
 			>
 				<DotIcon m={1} size={dotSize} />
-				<Text fontSize={textSize}>{props.children}</Text>
+				<Text fontSize={textSize}>{children}</Text>
 			</HStack>
 		)
-	};
+	});
 
-	const SectionHeader = ({SectionIcon, text}) => {
+	const SectionHeader = memo(({SectionIcon, text}) => {
 		return (
 			<HStack
 				p={4}
@@ -99,23 +100,23 @@ const About = () => {
 				</Text>
 			</HStack>
 		)
-	};
+	});
 	
 	return (
 		<ScrollView
 			p={3}
 			bg="darker"
 		>
-			<Pressable onPress={() => dispatch(setBaseTextSize("2xl"))} firstElement p={4}><Text fontSize="xl">Embiggen</Text></Pressable>
-			<Pressable onPress={() => dispatch(setBaseTextSize("sm"))} firstElement p={6}><Text fontSize="sm">Ensmallen</Text></Pressable>
-			<Pressable onPress={() => {doNav("/ms")}} firstElement>
+			<Pressable otherFunc={() => dispatch(setBaseTextSize("2xl"))} firstElement p={4}><Text fontSize="xl">Embiggen</Text></Pressable>
+			<Pressable otherFunc={() => dispatch(setBaseTextSize("sm"))} firstElement p={6}><Text fontSize="sm">Ensmallen</Text></Pressable>
+			<Pressable goto="/ms" firstElement>
 				<SectionHeader SectionIcon={MorphoSyntaxIcon} text={"Morpho\u00ADSyntax"} />
 				<Highlight>This tool is for designing the basic structure of your language.</Highlight>
 				<Indented>Covers large-scale structures and small</Indented>
 				<Indented>Grouped into ten sections</Indented>
 				<Indented>Use as many or as few of the prompts as you like</Indented>
 			</Pressable>
-			<Pressable onPress={() => {doNav("/wg")}}>
+			<Pressable goto="/wg">
 				<SectionHeader SectionIcon={WordGenIcon} text={"Word\u00ADGen"} />
 				<Highlight>This tool is for creating words according to rules you set up.</Highlight>
 				<Indented>Organize your language's sounds into groups</Indented>
@@ -132,7 +133,7 @@ const About = () => {
 				<Indented>Use standard rules to determine how they evolve</Indented>
 				<Indented>Tweak the output through transformations</Indented>
 			</Pressable>
-			<Pressable onPress={() => {doNav("/lex")}}>
+			<Pressable goto="/lex">
 				<SectionHeader SectionIcon={LexiconIcon} text={"Lexicon"} />
 				<Highlight>A place to store your conlangs.</Highlight>
 				<Indented>Store bits of information for each word, such as part of speech or definition</Indented>
@@ -141,7 +142,7 @@ const About = () => {
 				<Indented>Store multiple lexicons</Indented>
 				<Indented>Export your data</Indented>
 			</Pressable>
-			<Pressable onPress={() => {doNav("/wordlists")}}>
+			<Pressable goto="/wordlists">
 				<SectionHeader SectionIcon={WordListsIcon} text={"Word Lists"} />
 				<Highlight>A small storehouse of basic words, useful for starting a lexicon.</Highlight>
 				<Indented>Easily add words to Lexicon</Indented>

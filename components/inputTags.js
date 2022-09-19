@@ -12,8 +12,8 @@ import {
 	Switch,
 	Factory,
 	useToken
- } from "native-base";
- import NewSlider from '@react-native-community/slider';
+} from "native-base";
+import NewSlider from '@react-native-community/slider';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -108,7 +108,6 @@ const getSliderProps = ({
 	step,
 	colorScheme = "secondary",
 	notFilled,
-	updateValue,
 	...props
 }) => {
 	const filledProp = notFilled ? ".800" : ".400";

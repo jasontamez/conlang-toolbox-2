@@ -59,6 +59,12 @@ const WGSettings = () => {
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
 	const [openPresetModal, setOpenPresetModal] = useState(false);
 	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
+	//
+	// TO-DO: Go back to the native-base Slider and devise
+	//   some way where the component reloads on some outside
+	//   stimulus. Like, maybe a state variable that only
+	//   changes on load, and when the Reset is fired.
+	//
 	const toast = useToast();
 	const stackProps = {
 		justifyContent: "flex-start",
