@@ -65,6 +65,7 @@ const WGSettings = () => {
 	//   stimulus. Like, maybe a state variable that only
 	//   changes on load, and when the Reset is fired.
 	//
+	const [resetCounter, setResetCounter] = useState(0); // key
 	const toast = useToast();
 	const stackProps = {
 		justifyContent: "flex-start",
@@ -83,8 +84,10 @@ const WGSettings = () => {
 		}
 		setClearAlertOpen(true);
 	};
+	const triggerResets = () => setResetCounter(resetCounter + 1);
 	const doClearEveything = () => {
 		dispatch(resetWG());
+		triggerResets();
 		doToast({
 			toast,
 			msg: "Info has been cleared.",
@@ -92,6 +95,7 @@ const WGSettings = () => {
 			placement: "bottom"
 		})
 	};
+	// TO-DO: save info
 	const maybeSaveInfo = () => {};
 	const maybeLoadPreset = () => setOpenPresetModal(true);
 	const SectionHeader = (props) => {
@@ -168,10 +172,12 @@ const WGSettings = () => {
 			<WGPresetsModal
 				modalOpen={openPresetModal}
 				setModalOpen={setOpenPresetModal}
+				triggerResets={triggerResets}
 			/>
 			<LoadCustomInfoModal
 				modalOpen={openLoadCustomInfoModal}
 				setModalOpen={() => setOpenLoadCustomInfoModal(false)}
+				triggerResets={triggerResets}
 			/>
 			<HStack
 				py={1.5}
@@ -207,10 +213,13 @@ const WGSettings = () => {
 				endLabel="Always"
 				fontSize={inputSize}
 				value={monosyllablesRate}
-				accessibilityLabel="Monosyllable Rate"
-				onSlidingComplete={(v) => dispatch(setMonosyllablesRate(v))}
+				sliderProps={{
+					accessibilityLabel: "Monosyllable Rate",
+					onChangeEnd: (v) => dispatch(setMonosyllablesRate(v))
+				}}
 				Display={({value}) => <Display pre="Rate of monosyllable words: " value={value} post="%" />}
 				stackProps={stackProps}
+				reloadTrigger={resetCounter}
 			/>
 			<SliderWithTicksAndValueDisplay
 				min={2}
@@ -219,30 +228,39 @@ const WGSettings = () => {
 				endLabel="15"
 				fontSize={inputSize}
 				value={maxSyllablesPerWord}
-				accessibilityLabel="Maximum Syllables per Word"
-				onSlidingComplete={(v) => dispatch(setMaxSyllablesPerWord(v))}
+				sliderProps={{
+					accessibilityLabel: "Maximum Syllables per Word",
+					onChangeEnd: (v) => dispatch(setMaxSyllablesPerWord(v))
+				}}
 				Display={({value}) => <Display pre="Maximum syllables per word: " value={value} />}
 				stackProps={stackProps}
+				reloadTrigger={resetCounter}
 			/>
 			<SliderWithValueDisplay
 				max={50}
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
 				value={characterGroupDropoff}
-				accessibilityLabel="Character Group dropoff"
-				onSlidingComplete={(v) => dispatch(setCharacterGroupDropoff(v))}
+				sliderProps={{
+					accessibilityLabel: "Character Group dropoff",
+					onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
+				}}
 				Display={({value}) => <Display pre="Character Group dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
+				reloadTrigger={resetCounter}
 			/>
 			<SliderWithValueDisplay
 				max={50}
 				beginLabel={<EquiprobableIcon color="text.50" />}
 				endLabel={<SharpDropoffIcon color="text.50" />}
 				value={syllableBoxDropoff}
-				accessibilityLabel="Syllable box dropoff"
-				onSlidingComplete={(v) => dispatch(setSyllableBoxDropoff(v))}
+				sliderProps={{
+					accessibilityLabel: "Syllable box dropoff",
+					onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
+				}}
 				Display={({value}) => <Display pre="Syllable box dropoff: " value={value} post="%" />}
 				stackProps={stackProps}
+				reloadTrigger={resetCounter}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>
 			<ToggleSwitch

@@ -22,7 +22,8 @@ import doToast from '../../helpers/toast';
 
 const WGPresetsModal = ({
 	modalOpen,
-	setModalOpen
+	setModalOpen,
+	triggerResets
 }) => {
 	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	const textSize = useBreakpointValue(sizes.sm);
@@ -41,6 +42,8 @@ const WGPresetsModal = ({
 	const doLoadPreset = () => {
 		const preset = wgPresets.find(wgp => wgp[0] === presetChosen);
 		dispatch(loadPreset(preset[1]));
+		// Trigger any resets needed on the main page
+		triggerResets();
 		doToast({
 			toast,
 			msg: `"${preset[0]}" loaded`,

@@ -263,13 +263,16 @@ const ParseMSJSON = (props) => {
 						key={getKey("range")}
 						min={0}
 						max={max}
+						step={1}
 						beginLabel={start}
 						endLabel={end}
 						fontSize={smallerSize}
 						notFilled={notFilled}
 						value={synNum[prop] || 0}
-						accessibilityLabel={label}
-						onSlidingComplete={(v) => doSetNum(prop, v)}
+						sliderProps={{
+							accessibilityLabel: label,
+							onChangeEnd: (v) => doSetNum(prop, v)
+						}}
 					/>
 				);
 			case "Text":

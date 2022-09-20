@@ -31,7 +31,8 @@ import FullPageModal from '../../components/FullBodyModal';
 
 const LoadCustomInfoModal = ({
 	modalOpen,
-	setModalOpen
+	setModalOpen,
+	triggerResets
 }) => {
 	const dispatch = useDispatch();
 	const {
@@ -168,6 +169,8 @@ const LoadCustomInfoModal = ({
 		const loadedInfo = JSON.parse(info);
 		setRetrievedInfo(null);
 		// TO-DO: dispatch the new info to store
+		// Trigger any resets needed on the main page
+		triggerResets();
 		setLoadingOverlayOpen(false);
 		doToast({
 			toast,
