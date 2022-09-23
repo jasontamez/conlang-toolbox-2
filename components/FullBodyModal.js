@@ -113,3 +113,59 @@ const FullPageModal = ({
 };
 
 export default FullPageModal;
+
+export const LoadingOverlay = ({
+	overlayOpen,
+	contents,
+	spinnerSize = "lg",
+	colorFamily
+}) => (
+	<FullPageModal
+		modalOpen={overlayOpen}
+		closeModal={() => null}
+		HeaderOverride={() => <></>}
+		FooterOverride={() => <></>}
+		modalProps={{
+			bg: "transparent"
+		}}
+		modalContentProps={{
+			bg: "darker"
+		}}
+		modalHeaderProps={{
+			height: 0,
+			borderBottomWidth: 0,
+			bg: "transparent"
+		}}
+		modalFooterProps={{
+			height: 0,
+			borderTopWidth: 0,
+			bg: "transparent"
+		}}
+		modalBodyProps={{
+			bg: "transparent"
+		}}
+		BodyContent={({modalHeight, modalWidth}) => (
+			<Center
+				width={modalWidth}
+				height={modalHeight}
+				bg="darker"
+			>
+				<HStack
+					flexWrap="wrap"
+					alignItems="center"
+					justifyContent="center"
+					space={10}
+					py={4}
+					px={8}
+					bg={`${colorFamily}.900`}
+					borderRadius="3xl"
+					borderWidth={2}
+					borderColor={`${colorFamily}.500`}
+				>
+					{contents}
+					<Spinner size={spinnerSize} color={`${colorFamily}.500`} />
+				</HStack>
+			</Center>
+		)}
+	/>
+);

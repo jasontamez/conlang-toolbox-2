@@ -1,12 +1,26 @@
-import { Button, HStack, IconButton, Modal, Radio, Text } from 'native-base';
-import { useEffect, useState } from 'react';
+import {
+	Box,
+	Button,
+	HStack,
+	IconButton,
+	Modal,
+	Text,
+	useBreakpointValue,
+	useContrastText,
+	useToast
+} from 'native-base';
+import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { v4 as uuidv4 } from 'uuid';
 
-import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
+import { wgCustomStorage } from '../../helpers/persistentInfo';
 import { equalityCheck } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
-import { CloseCircleIcon } from '../../components/icons';
+import { CloseCircleIcon, SaveIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
+import { TextSetting } from '../../components/inputTags';
+import doToast from '../../helpers/toast';
+import { LoadingOverlay } from '../../components/FullBodyModal';
 //import doExport from '../../components/ExportServices';
 
 const CustomInfoModal = ({
@@ -35,52 +49,61 @@ const CustomInfoModal = ({
 		exclamatorySentencePre,
 		exclamatorySentencePost
 	} = useSelector((state) => state.wg, equalityCheck);
-	const disableConfirms = useSelector(state => state.appState.disableConfirms);
+	const { sizes } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
-	const [savedCustomInfo, setSavedCustomInfo] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
-	// Grab keys when this loads
-	useEffect(() => {
-		loadKeys();
-	}, []);
-	const loadKeys = async () => {
-		setIsLoading(true);
-		const keys = await wgCustomStorage.getAllKeys();
-		setSavedCustomInfo(keys || []);
-		setIsLoading(false);
-	};
+	const [saveName, setSaveName] = useState("");
+	const [isSaving, setIsSaving] = useState(false);
+	const textSize = useBreakpointValue(sizes.sm);
+	const largeText = useBreakpointValue(sizes.xl);
+	const primaryContrast = useContrastText("primary.500");
+	const tertiaryContrast = useContrastText("tertiary.500");
+	const toast = useToast();
 	const doCleanClose = () => {
 		// close modal
 		setModalOpen(false);
 	};
 	// TO-DO: Finish everything else!!!
 	const maybeSaveInfo = () => {
-		let title = ($i("currentInfoSaveName").value).trim();
-		if(title === "") {
-			// toast error - need title
-		}
-		const doSave = (title, msg = "saved") => {
-			const save = [
-				//categories,
-				//syllables,
-				//rules,
-				//{...settingsWG}
-			];
-			OldCustomStorageWG.setItem(title, save).then(() => {
-				// toast - msg ("saved" or "overwritten")
-			}).finally(() => doCleanClose());
-		};
-		// Check if overwriting
-		OldCustomStorageWG.getItem(title).then((value) => {
-			if(!value) {
-				doSave(title);
-			} else if (disableConfirms) {
-				doSave(title, "overwritten");
-			} else {
-				// Alert - overwrite?
-				// doSave(title, "overwritten");
+		let title = saveName.trim();
+		setSaveName(title);
+		doSave(title);
+	};
+	const doSave = () => {
+		const label = saveName.trim();
+		setSaveName(label);
+		const id = uuidv4();
+		const save = {
+			label,
+			info: {
+				characterGroups,
+				multipleSyllableTypes,
+				syllableDropoffOverrides,
+				singleWord,
+				wordInitial,
+				wordMiddle,
+				wordFinal,
+				transforms,
+				monosyllablesRate,
+				maxSyllablesPerWord,
+				characterGroupDropoff,
+				syllableBoxDropoff,
+				capitalizeSentences,
+				declarativeSentencePre,
+				declarativeSentencePost,
+				interrogativeSentencePre,
+				interrogativeSentencePost,
+				exclamatorySentencePre,
+				exclamatorySentencePost	
 			}
-		});
+		};
+		setIsSaving(true);
+		wgCustomStorage.setItem(id, save).then(() => {
+			doToast({
+				toast,
+				msg: "Info Saved",
+				position: "top"
+			});
+		}).finally(() => setIsSaving(false));
 	};
 	//const maybeExportInfo = () => {
 	//	let title = ($i("currentInfoExportName").value).trim();
@@ -98,16 +121,18 @@ const CustomInfoModal = ({
 	//		.catch((e = "Error?") => console.log(e))
 	//		.then(() => doCleanClose());
 	//};
-	// has ExtraChars
-	// Save Current Info
+	// TO-DO: Overwrite Last Save
 	//   name input
-	// Export Current Info to File
+	// TO-DO: Export Current Info to File
 	//   name input
-	// Load Saved Info
-	//   map of saved info, each with Load and Delete buttons
-	//   notice message if nothing previously saved
 	return (
-		<Modal isOpen={modalOpen} size="sm">
+		<>
+		<LoadingOverlay
+			overlayOpen={isSaving}
+			contents={<Text fontSize={largeText} color={tertiaryContrast} textAlign="center">Saving "{saveName}"...</Text>}
+			colorFamily="tertiary"
+		/>
+		<Modal isOpen={modalOpen} size="md">
 			<StandardAlert
 				alertOpen={alertOpen}
 				setAlertOpen={setAlertOpen}
@@ -147,7 +172,16 @@ const CustomInfoModal = ({
 						</HStack>
 					</HStack>
 				</Modal.Header>
-				<Modal.Body m={0} p={0}>
+				<Modal.Body m={0} p={0} size="sm">
+					<Box>
+						<Text textAlign="center">This will save all current Character Groups, Syllables, Transformations, and the settings on this page.</Text>
+					</Box>
+					<TextSetting
+						text="Give this save a title"
+						placeholder="(optional)"
+						onChangeText={(v) => setSaveName(v)}
+						defaultValue=""
+					/>
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
@@ -159,17 +193,17 @@ const CustomInfoModal = ({
 							m={2}
 						>Cancel</Button>
 						<Button
-							bg="primary"
-							onPress={() => setModalOpen(false)}
-							_text={{color: primaryContrast, fontSize: textSize}}
-							startIcon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							onPress={maybeSaveInfo}
+							_text={{fontSize: textSize}}
+							startIcon={<SaveIcon size={textSize} />}
 							p={1}
 							m={2}
-						>Close</Button>
+						>Save</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>
 		</Modal>
+		</>
 	);
 };
 

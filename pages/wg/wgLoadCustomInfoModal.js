@@ -27,7 +27,7 @@ import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
 import doToast from '../../helpers/toast';
-import FullPageModal from '../../components/FullBodyModal';
+import { LoadingOverlay } from '../../components/FullBodyModal';
 
 const LoadCustomInfoModal = ({
 	modalOpen,
@@ -205,53 +205,10 @@ const LoadCustomInfoModal = ({
 	//   map of saved info, each with Load and Delete buttons
 	//   notice message if nothing previously saved
 	return (
-		<><FullPageModal
-			modalOpen={loadingOverlayOpen}
-			closeModal={() => setLoadingOverlayOpen(false)}
-			HeaderOverride={() => <></>}
-			FooterOverride={() => <></>}
-			modalProps={{
-				bg: "transparent"
-			}}
-			modalContentProps={{
-				bg: "darker"
-			}}
-			modalHeaderProps={{
-				height: 0,
-				borderBottomWidth: 0,
-				bg: "transparent"
-			}}
-			modalFooterProps={{
-				height: 0,
-				borderTopWidth: 0,
-				bg: "transparent"
-			}}
-			modalBodyProps={{
-				bg: "transparent"
-			}}
-			BodyContent={({modalHeight, modalWidth}) => (
-				<Center
-					width={modalWidth}
-					height={modalHeight}
-					bg="darker"
-				>
-					<HStack
-						flexWrap="wrap"
-						alignItems="center"
-						justifyContent="center"
-						space={10}
-						py={4}
-						px={8}
-						bg="secondary.900"
-						borderRadius="3xl"
-						borderWidth={2}
-						borderColor="secondary.500"
-					>
-						<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customInfoChosen}"...</Text>
-						<Spinner size="lg" color="secondary.500" />
-					</HStack>
-				</Center>
-			)}
+		<><LoadingOverlay
+			overlayOpen={loadingOverlayOpen}
+			colorFamily="secondary"
+			contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customInfoChosen}"...</Text>}
 		/>
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}
