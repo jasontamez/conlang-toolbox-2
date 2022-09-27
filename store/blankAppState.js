@@ -140,7 +140,7 @@ const blankAppState = {/*
 				xl: "5xl"
 			}
 		},
-		hasCheckedForOldCustomInfo_WG: false
+		hasCheckedForOldCustomInfo: false
 	},
 	/*
 	modalState: {

@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { useWindowDimensions, StatusBar } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
@@ -39,6 +40,7 @@ import WGCharacters from './pages/wg/wgCharacterGroups';
 import WGSyllables from './pages/wg/wgSyllables';
 import WGTransformations from './pages/wg/wgTransformations';
 import WGOutput from './pages/wg/wgOutput';
+import doConvert from './helpers/convertOldStorageToNew';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -105,19 +107,33 @@ const Layout = () => {
 		//'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
 	});
-	const themeName = useSelector((state) => state.appState.theme);
-	const theme = getTheme(themeName)
+	const { theme, hasCheckedForOldCustomInfo } = useSelector((state) => state.appState);
+	const themeObject = getTheme(theme);
+	const [okToProceed, setOkToProceed] = useState(hasCheckedForOldCustomInfo);
+	const [oldInfoCheckDispatched, setOldInfoCheckDispatched] = useState(false);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if(!oldInfoCheckDispatched) {
+			setOldInfoCheckDispatched(true);
+			// Convert old storage to new storage (if needed)
+			hasCheckedForOldCustomInfo || doConvert(dispatch);
+		}
+		setOkToProceed(hasCheckedForOldCustomInfo && fontsloaded);
+	}, [
+		fontsloaded,
+		hasCheckedForOldCustomInfo
+	]);
 	return (
 		<NativeBaseProvider
-			theme={theme}
+			theme={themeObject}
 			safeArea
 			bg="main.500"
 		>
 			<StatusBar
-				backgroundColor={theme.colors.main["900"]}
-				barStyle={themeName.indexOf("Light") === -1 ? "light-content" : "dark-content"}
+				backgroundColor={themeObject.colors.main["900"]}
+				barStyle={theme.indexOf("Light") === -1 ? "light-content" : "dark-content"}
 			/>
-			{fontsloaded ? <AppRoutes /> : <Fontless />}
+			{okToProceed ? <AppRoutes /> : <Fontless />}
 		</NativeBaseProvider>
 	);
 };

@@ -49,8 +49,8 @@ const setBaseTextSizeFunc = (state, action) => {
 
 // These are settings that will only be looked at by the app and aren't
 //    directly settable by the user.
-const setHasCheckedForOldCustomInfo_WGFunc = (state, action) => {
-	state.hasCheckedForOldCustomInfo_WG = action.payload;
+const setHasCheckedForOldCustomInfoFunc = (state, action) => {
+	state.hasCheckedForOldCustomInfo = action.payload;
 	return state;
 };
 
@@ -62,7 +62,7 @@ const appStateSlice = createSlice({
 		setTheme: setThemeFunc,
 		setDisableConfirms: setDisableConfirmsFunc,
 		setBaseTextSize: setBaseTextSizeFunc,
-		setHasCheckedForOldCustomInfo_WG: setHasCheckedForOldCustomInfo_WGFunc
+		setHasCheckedForOldCustomInfo: setHasCheckedForOldCustomInfoFunc
 	}
 });
 
@@ -71,7 +71,7 @@ export const {
 	setTheme,
 	setDisableConfirms,
 	setBaseTextSize,
-	setHasCheckedForOldCustomInfo_WG
+	setHasCheckedForOldCustomInfo
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

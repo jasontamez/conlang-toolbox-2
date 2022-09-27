@@ -22,7 +22,6 @@ import ReAnimated, {
 
 import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
 import { equalityCheck } from '../../store/wgSlice';
-import { setHasCheckedForOldCustomInfo_WG } from '../../store/appStateSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
@@ -56,7 +55,7 @@ const LoadCustomInfoModal = ({
 		exclamatorySentencePre,
 		exclamatorySentencePost
 	} = useSelector((state) => state.wg, equalityCheck);
-	const { sizes, disableConfirms, hasCheckedForOldCustomInfo_WG } = useSelector(state => state.appState);
+	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
 	const [savedCustomInfo, setSavedCustomInfo] = useState([]);
 	const [initialLoadingInProgress, setInitialLoadingInProgress] = useState(true);
@@ -72,54 +71,19 @@ const LoadCustomInfoModal = ({
 	const secondaryContrast = useContrastText("secondary.500");
 	const toast = useToast();
 	// Grab keys when this mounts
+	// TO-DO: determine if we need to do this, or if App will
+	//   keep the stored info id/label pair in redux state
 	useEffect(() => {
-		const loadInfoFromOldStorage = async () => {
-			let information = [];
-			return OldCustomStorageWG.iterate((value, key) => {
-				information.push([key, JSON.stringify(value)]);
-				return; // Blank return keeps the loop going
-			}).then(async () => {
-				// Save to new storage system
-				for(let x = 0; x < information.length; x++) {
-					const [key, value] = information[x];
-					// Save as stringified
-					await wgCustomStorage.setItem(key, value);
-				}
-				// Doublecheck that everything was saved properly.
-				let flag = true;
-				for(let x = 0; x < information.length; x++) {
-					const [key, value] = information[x];
-					let test = await wgCustomStorage.getItem(key);
-					if(test !== value) {
-						flag = false;
-						console.log(`${key} not saved`);
-						console.log(`Expected [${value}]`);
-						console.log(`Received {${test}}`);
-					}
-				}
-				// Mark in the app that we no longer need to check old storage
-				flag && dispatch(setHasCheckedForOldCustomInfo_WG(true));
-				// Clear the old storage
-				flag && OldCustomStorageWG.clear();
-			}).catch((err) => {
-				console.log(err);
-			});
-		};
 		const loadKeys = async () => {
-			// Look at storage and find the keys of all saved info
 			setInitialLoadingInProgress(true);
-			// First, look at the old storage method, if needed.
-			if (hasCheckedForOldCustomInfo_WG) {
-				await loadInfoFromOldStorage();
-			}
-			// Get info from new storage
+			// Look at storage and find the keys of all saved info
 			const keys = await wgCustomStorage.getAllKeys();
 			setSavedCustomInfo(keys || []);
 			keys && keys.length > 0 && setCustomInfoChosen(keys[0]);
 			setInitialLoadingInProgress(false);
 		};
-		loadKeys();
-	}, [dispatch, hasCheckedForOldCustomInfo_WG]);
+		initialLoadingInProgress || loadKeys();
+	}, []);
 	const doCleanClose = () => {
 		// close modal
 		setModalOpen(false);
@@ -180,6 +144,7 @@ const LoadCustomInfoModal = ({
 			fontSize: inputSize
 		});
 	};
+	// TO-DO: Delete stored info
 	const maybeDeleteInfo = () => {
 		const thenFunc = () => {
 			let newCustom = customInfo.filter(ci => ci !== title);
