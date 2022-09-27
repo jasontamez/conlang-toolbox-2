@@ -21,7 +21,7 @@ import ReAnimated, {
 } from 'react-native-reanimated';
 
 import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
-import { equalityCheck } from '../../store/wgSlice';
+import { equalityCheck, loadPreset } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
@@ -65,6 +65,7 @@ const LoadCustomInfoModal = ({
 	const [gettingStoredInfo, setGettingStoredInfo] = useState(false);
 	const [retrievedInfo, setRetrievedInfo] = useState(null);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+	const inputSize = useBreakpointValue(sizes.xs);
 	const textSize = useBreakpointValue(sizes.sm);
 	const largeText = useBreakpointValue(sizes.xl);
 	const primaryContrast = useContrastText("primary.500");
@@ -129,19 +130,20 @@ const LoadCustomInfoModal = ({
 		// We're ok to go.
 		finishLoadInfo(retrievedInfo);
 	};
-	const finishLoadInfo = (info) => {
-		const loadedInfo = JSON.parse(info);
+	const finishLoadInfo = (loaded) => {
+		const loadedInfo = JSON.parse(loaded);
+		const {label, info} = loadedInfo;
 		setRetrievedInfo(null);
-		// TO-DO: dispatch the new info to store
+		// Dispatch the new info to store
+		dispatch(loadPreset(info));
 		// Trigger any resets needed on the main page
 		triggerResets();
 		setLoadingOverlayOpen(false);
 		doToast({
 			toast,
-			// TO-DO: Fix toast message
-			msg: `"${preset[0]}" loaded`,
+			msg: label ? `"${label}" loaded` : "Info loaded",
 			placement: "top",
-			fontSize: inputSize
+			fontSize: textSize
 		});
 	};
 	// TO-DO: Delete stored info
