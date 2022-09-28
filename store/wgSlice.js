@@ -59,25 +59,6 @@ const rearrangeTransformsFunc = (state, action) => {
 	return state;
 };
 
-// CLEAR ALL
-const resetWGFunc = (state, action) => {
-	state = {...initialState};
-//	state.characterGroups = [];
-//	state.multipleSyllableTypes = false;
-//	state.singleWord = "";
-//	state.wordInitial = "";
-//	state.wordMiddle = "";
-//	state.wordFinal = "";
-//	state.transforms = [];
-//	state.syllableDropoffOverrides = {
-//		singleWord: null,
-//		wordInitial: null,
-//		wordMiddle: null,
-//		wordFinal: null
-//	};
-	return state;
-};
-
 // SETTINGS
 const setMonosyllablesRateFunc = (state, action) => {
 	state.monosyllablesRate = action.payload;
@@ -151,12 +132,59 @@ const setWordsPerWordlistFunc = (state, action) => {
 	state.wordsPerWordlist = action.payload;
 	return state;
 };
-const loadPresetFunc = (state, action) => {
-	const newState = {
+
+// STORED CUSTOM INFO
+const setStoredCustomInfoFunc = (state, action) => {
+	console.log(action.payload);
+	state.storedCustomInfo = action.payload;
+	return state;
+};
+
+// LOAD INFO and CLEAR ALL
+const loadWGStateFunc = (state, action) => {
+	const {
+		characterGroups,
+		multipleSyllableTypes,
+		singleWord,
+		wordInitial,
+		wordMiddle,
+		wordFinal,
+		transforms,
+		syllableDropoffOverrides,
+		monosyllablesRate,
+		maxSyllablesPerWord,
+		characterGroupDropoff,
+		syllableBoxDropoff,
+		capitalizeSentences,
+		declarativeSentencePre,
+		declarativeSentencePost,
+		interrogativeSentencePre,
+		interrogativeSentencePost,
+		exclamatorySentencePre,
+		exclamatorySentencePost
+	} = action.payload || initialState;
+	return {
 		...state,
-		...action.payload
+		characterGroups: [...characterGroups],
+		multipleSyllableTypes,
+		singleWord,
+		wordInitial,
+		wordMiddle,
+		wordFinal,
+		transforms: [...transforms],
+		syllableDropoffOverrides: {...syllableDropoffOverrides},
+		monosyllablesRate,
+		maxSyllablesPerWord,
+		characterGroupDropoff,
+		syllableBoxDropoff,
+		capitalizeSentences,
+		declarativeSentencePre,
+		declarativeSentencePost,
+		interrogativeSentencePre,
+		interrogativeSentencePost,
+		exclamatorySentencePre,
+		exclamatorySentencePost
 	};
-	return newState;
 };
 
 
@@ -174,7 +202,6 @@ const wgSlice = createSlice({
 		deleteTransform: deleteTransformFunc,
 		editTransform: editTransformFunc,
 		rearrangeTransforms: rearrangeTransformsFunc,
-		resetWG: resetWGFunc,
 		setMonosyllablesRate: setMonosyllablesRateFunc,
 		setMaxSyllablesPerWord: setMaxSyllablesPerWordFunc,
 		setCharacterGroupDropoff: setCharacterGroupDropoffFunc,
@@ -193,7 +220,8 @@ const wgSlice = createSlice({
 		setSortWordlist: setSortWordlistFunc,
 		setWordlistMultiColumn: setWordlistMultiColumnFunc,
 		setWordsPerWordlist: setWordsPerWordlistFunc,
-		loadPreset: loadPresetFunc
+		loadWGState: loadWGStateFunc,
+		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
 
@@ -208,7 +236,6 @@ export const {
 	deleteTransform,
 	editTransform,
 	rearrangeTransforms,
-	resetWG,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,
@@ -227,7 +254,8 @@ export const {
 	setSortWordlist,
 	setWordlistMultiColumn,
 	setWordsPerWordlist,
-	loadPreset
+	loadWGState,
+	setStoredCustomInfo
 } = wgSlice.actions;
 
 export default wgSlice.reducer;
@@ -263,6 +291,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const sortWordlistA = stateA.sortWordlist;
 	const wordlistMultiColumnA = stateA.wordlistMultiColumn;
 	const wordsPerWordlistA = stateA.wordsPerWordlist;
+	const storedCustomInfoA = stateA.storedCustomInfo;
 	// stateB
 	const characterGroupsB = stateB.characterGroups;
 	const multipleSyllableTypesB = stateB.multipleSyllableTypes;
@@ -290,6 +319,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const sortWordlistB = stateB.sortWordlist;
 	const wordlistMultiColumnB = stateB.wordlistMultiColumn;
 	const wordsPerWordlistB = stateB.wordsPerWordlist;
+	const storedCustomInfoB = stateB.storedCustomInfo;
 	// Test simple values
 	if (
 		multipleSyllableTypesA !== multipleSyllableTypesB
@@ -337,11 +367,25 @@ export const equalityCheck = (stateA, stateB) => {
 		return false;
 	}
 	// Test syllableDropoffOverrides
-	return !testIfArrayOfObjectsAreUnequal(
+	if(testIfArrayOfObjectsAreUnequal(
 		[syllableDropoffOverridesA],
 		[syllableDropoffOverridesB],
 		["singleWord", "wordInitial", "wordMiddle", "wordFinal"]
-	);
+	)) {
+		// At least one was unequal
+		return false;
+	}
+	// Test custom info
+	if(storedCustomInfoA !== storedCustomInfoB) {
+		const customA = Object.keys(storedCustomInfoA).sort().map(ci => ci + storedCustomInfoA[ci]).join(' ');
+		const customB = Object.keys(storedCustomInfoB).sort().map(ci => ci + storedCustomInfoB[ci]).join(' ');
+		if(customA !== customB) {
+			// unequal
+			return false;
+		}
+	}
+	// Made it through everything?
+	return true;
 };
 
 const testIfArrayOfObjectsAreUnequal = (A, B, props) => {

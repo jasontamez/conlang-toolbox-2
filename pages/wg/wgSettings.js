@@ -18,7 +18,7 @@ import {
 	ToggleSwitch
 } from '../../components/inputTags';
 import {
-	resetWG,
+	loadWGState,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,
@@ -39,6 +39,7 @@ import doToast from "../../helpers/toast";
 import StandardAlert from "../../components/StandardAlert";
 import WGPresetsModal from "./wgPresetsModal";
 import LoadCustomInfoModal from "./wgLoadCustomInfoModal";
+import SaveCustomInfoModal from "./wgSaveCustomInfoModal";
 
 const WGSettings = () => {
 	const {
@@ -59,6 +60,7 @@ const WGSettings = () => {
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
 	const [openPresetModal, setOpenPresetModal] = useState(false);
 	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
+	const [openSaveCustomInfoModal, setOpenSaveCustomInfoModal] = useState(false);
 	const [resetCounter, setResetCounter] = useState(0); // key
 	const toast = useToast();
 	const stackProps = {
@@ -80,7 +82,7 @@ const WGSettings = () => {
 	};
 	const triggerResets = () => setResetCounter(resetCounter + 1);
 	const doClearEveything = () => {
-		dispatch(resetWG());
+		dispatch(loadWGState(null));
 		triggerResets();
 		doToast({
 			toast,
@@ -90,7 +92,7 @@ const WGSettings = () => {
 		})
 	};
 	// TO-DO: save info
-	const maybeSaveInfo = () => {};
+	const maybeSaveInfo = () => setOpenSaveCustomInfoModal(true);
 	const maybeLoadPreset = () => setOpenPresetModal(true);
 	const SectionHeader = (props) => {
 		return (
@@ -150,11 +152,6 @@ const WGSettings = () => {
 	};
 	return (
 		<ScrollView>
-			<SectionHeader>Info Management</SectionHeader>
-			{/* TO-DO: presets/stored info buttons
-				Load Preset button
-				Save/Load Custom Info button
-			*/}
 			<StandardAlert
 				alertOpen={clearAlertOpen}
 				setAlertOpen={setClearAlertOpen}
@@ -170,9 +167,14 @@ const WGSettings = () => {
 			/>
 			<LoadCustomInfoModal
 				modalOpen={openLoadCustomInfoModal}
-				setModalOpen={() => setOpenLoadCustomInfoModal(false)}
+				closeModal={() => setOpenLoadCustomInfoModal(false)}
 				triggerResets={triggerResets}
 			/>
+			<SaveCustomInfoModal
+				modalOpen={openSaveCustomInfoModal}
+				closeModal={() => setOpenSaveCustomInfoModal(false)}
+			/>
+			<SectionHeader>Info Management</SectionHeader>
 			<HStack
 				py={1.5}
 				px={2}

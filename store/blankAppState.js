@@ -57,7 +57,8 @@ const blankAppState = {/*
 		capitalizeWords: false,
 		sortWordlist: true,
 		wordlistMultiColumn: true,
-		wordsPerWordlist: 250
+		wordsPerWordlist: 250,
+		storedCustomInfo: {}
 	},
 	morphoSyntax: {
 		key: "",

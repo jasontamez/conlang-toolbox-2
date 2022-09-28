@@ -21,7 +21,7 @@ import ReAnimated, {
 } from 'react-native-reanimated';
 
 import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
-import { equalityCheck, loadPreset } from '../../store/wgSlice';
+import { equalityCheck, loadWGState } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
@@ -30,36 +30,18 @@ import { LoadingOverlay } from '../../components/FullBodyModal';
 
 const LoadCustomInfoModal = ({
 	modalOpen,
-	setModalOpen,
+	closeModal,
 	triggerResets
 }) => {
 	const dispatch = useDispatch();
 	const {
-		characterGroups,
-		multipleSyllableTypes,
-		syllableDropoffOverrides,
-		singleWord,
-		wordInitial,
-		wordMiddle,
-		wordFinal,
-		transforms,
-		monosyllablesRate,
-		maxSyllablesPerWord,
-		characterGroupDropoff,
-		syllableBoxDropoff,
-		capitalizeSentences,
-		declarativeSentencePre,
-		declarativeSentencePost,
-		interrogativeSentencePre,
-		interrogativeSentencePost,
-		exclamatorySentencePre,
-		exclamatorySentencePost
+		storedCustomInfo
 	} = useSelector((state) => state.wg, equalityCheck);
 	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
-	const [savedCustomInfo, setSavedCustomInfo] = useState([]);
-	const [initialLoadingInProgress, setInitialLoadingInProgress] = useState(true);
 	const [customInfoChosen, setCustomInfoChosen] = useState(undefined);
+	const [customLabelChosen, setCustomLabelChosen] = useState(undefined);
+	const [customInfo, setCustomInfo] = useState([]);
 	const [overwriteWarningOpen, setOverwriteWarningOpen] = useState(false);
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
 	const [gettingStoredInfo, setGettingStoredInfo] = useState(false);
@@ -71,25 +53,14 @@ const LoadCustomInfoModal = ({
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
 	const toast = useToast();
-	// Grab keys when this mounts
-	// TO-DO: determine if we need to do this, or if App will
-	//   keep the stored info id/label pair in redux state
 	useEffect(() => {
-		const loadKeys = async () => {
-			setInitialLoadingInProgress(true);
-			// Look at storage and find the keys of all saved info
-			const keys = await wgCustomStorage.getAllKeys();
-			setSavedCustomInfo(keys || []);
-			keys && keys.length > 0 && setCustomInfoChosen(keys[0]);
-			setInitialLoadingInProgress(false);
-		};
-		initialLoadingInProgress || loadKeys();
-	}, []);
-	const doCleanClose = () => {
-		// close modal
-		setModalOpen(false);
-	};
+		const keys = Object.keys(storedCustomInfo);
+		setCustomInfo(keys);
+	}, [storedCustomInfo]);
 	// TO-DO: Finish everything else!!!
+	//TO-DO: Figure out this Promise hell, why it's fetching info and
+	//   then immediately loading instead of waiting for the yes/no
+	//   prompt to be answered
 	const maybeLoadInfo = () => {
 		// Fetch the info
 		fetchInfo();
@@ -135,7 +106,7 @@ const LoadCustomInfoModal = ({
 		const {label, info} = loadedInfo;
 		setRetrievedInfo(null);
 		// Dispatch the new info to store
-		dispatch(loadPreset(info));
+		dispatch(loadWGState(info));
 		// Trigger any resets needed on the main page
 		triggerResets();
 		setLoadingOverlayOpen(false);
@@ -149,7 +120,7 @@ const LoadCustomInfoModal = ({
 	// TO-DO: Delete stored info
 	const maybeDeleteInfo = () => {
 		const thenFunc = () => {
-			let newCustom = customInfo.filter(ci => ci !== title);
+			let newCustom = customInfoxxx.filter(ci => ci !== title);
 			//dispatch(setTemporaryInfo({type: "custominfo", data: newCustom}));
 			OldCustomStorageWG.removeItem(title).then(() => {
 				// toast
@@ -175,12 +146,12 @@ const LoadCustomInfoModal = ({
 		<><LoadingOverlay
 			overlayOpen={loadingOverlayOpen}
 			colorFamily="secondary"
-			contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customInfoChosen}"...</Text>}
+			contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customLabelChosen}"...</Text>}
 		/>
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}
 			setAlertOpen={setOverwriteWarningOpen}
-			bodyContent={`Are you sure you want to load "${customInfoChosen}"? This will overwrite all current Character Groups, Syllables, Transformations and Settings.`}
+			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite all current Character Groups, Syllables, Transformations and Settings.`}
 			continueText="Yes"
 			continueFunc={loadingApproved}
 			fontSize={textSize}
@@ -188,7 +159,7 @@ const LoadCustomInfoModal = ({
 		<StandardAlert
 			alertOpen={deleteWarningOpen}
 			setAlertOpen={setDeleteWarningOpen}
-			bodyContent={`Are you sure you want to delete "${customInfoChosen}"? This cannot be undone.`}
+			bodyContent={`Are you sure you want to delete "${customLabelChosen}"? This cannot be undone.`}
 			continueText="Yes"
 			continueFunc={doDeleteInfo}
 			continueProps={{
@@ -226,72 +197,54 @@ const LoadCustomInfoModal = ({
 								p={1}
 								m={0}
 								variant="ghost"
-								onPress={() => setModalOpen(false)}
+								onPress={closeModal}
 							/>
 						</HStack>
 					</HStack>
 				</Modal.Header>
 				<Modal.Body m={0} p={0}>
-					{initialLoadingInProgress ?
+					{customInfo.length > 0 ?
 						<ReAnimated.View
-							entering={ZoomInEasyDown}
-							exiting={ZoomOutEasyDown}
+							entering={FlipInYRight}
+							exiting={FlipOutYRight}
 							style={{flex: 1, width: "100%"}}
 						>
-							<HStack
-								flexWrap="wrap"
-								alignItems="center"
+							<Radio.Group
+								value={customInfoChosen}
+								onChange={(v) => {
+									setCustomInfoChosen(v);
+									setCustomLabelChosen(storedCustomInfo[v]);
+								}}
+								alignItems="flex-start"
 								justifyContent="center"
-								space={10}
-								py={4}
-								w="full"
-								bg="lighter"
+								mx="auto"
+								my={4}
+								label="List of Custom Info saved"
 							>
-								<Text fontSize={textSize} textAlign="center">Loading...</Text>
-								<Spinner size="lg" color="primary.500" />
-							</HStack>
+								{customInfo.map(id => (
+									<Radio
+										key={`${id}-RadioButton`}
+										size={textSize}
+										value={id}
+										_text={{
+											fontSize: inputSize,
+											isTruncated: true
+										}}
+										my={1}
+									>{storedCustomInfo[id]}</Radio>
+								))}
+							</Radio.Group>
 						</ReAnimated.View>
 					:
-						(savedCustomInfo.length > 0 ?
-							<ReAnimated.View
-								entering={FlipInYRight}
-								exiting={FlipOutYRight}
-								style={{flex: 1, width: "100%"}}
-							>
-								<Radio.Group
-									value={customInfoChosen}
-									onChange={(v) => setCustomInfoChosen(v)}
-									alignItems="flex-start"
-									justifyContent="center"
-									mx="auto"
-									my={4}
-									label="List of Custom Info saved"
-								>
-									{savedCustomInfo.map(info => (
-										<Radio
-											key={`${info}-RadioButton`}
-											size={textSize}
-											value={info}
-											_text={{
-												fontSize: inputSize,
-												isTruncated: true
-											}}
-											my={1}
-										>{info}</Radio>
-									))}
-								</Radio.Group>
-							</ReAnimated.View>
-						:
-							<ReAnimated.View
-								entering={FlipInYRight}
-								exiting={FlipOutYRight}
-								style={{flex: 1, width: "100%"}}
-							>
-								<Center>
-									<Text fontSize={textSize} bold>No information has been saved.</Text>
-								</Center>
-							</ReAnimated.View>
-						)
+						<ReAnimated.View
+							entering={FlipInYRight}
+							exiting={FlipOutYRight}
+							style={{flex: 1, width: "100%"}}
+						>
+							<Center p={4}>
+								<Text fontSize={textSize} bold>No information has been stored.</Text>
+							</Center>
+						</ReAnimated.View>
 					}
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
@@ -306,7 +259,7 @@ const LoadCustomInfoModal = ({
 						>Delete</Button>
 						<Button
 							bg="darker"
-							onPress={() => setModalOpen(false)}
+							onPress={closeModal}
 							_text={{color: "text.50", fontSize: textSize}}
 							p={1}
 							m={2}
