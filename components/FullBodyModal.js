@@ -3,7 +3,9 @@ import {
 	HStack,
 	Text,
 	IconButton,
-	Button
+	Button,
+	Center,
+	Spinner
 } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import { CloseCircleIcon, OkIcon } from './icons';
