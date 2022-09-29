@@ -5,7 +5,6 @@ import {
 	IconButton,
 	Modal,
 	Radio,
-	Spinner,
 	Text,
 	useBreakpointValue,
 	useContrastText,
@@ -20,7 +19,7 @@ import ReAnimated, {
 	ZoomOutEasyDown
 } from 'react-native-reanimated';
 
-import { wgCustomStorage, OldCustomStorageWG } from '../../helpers/persistentInfo';
+import { wgCustomStorage } from '../../helpers/persistentInfo';
 import { equalityCheck, loadWGState } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
@@ -44,8 +43,6 @@ const LoadCustomInfoModal = ({
 	const [customInfo, setCustomInfo] = useState([]);
 	const [overwriteWarningOpen, setOverwriteWarningOpen] = useState(false);
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
-	const [gettingStoredInfo, setGettingStoredInfo] = useState(false);
-	const [retrievedInfo, setRetrievedInfo] = useState(null);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
 	const inputSize = useBreakpointValue(sizes.xs);
 	const textSize = useBreakpointValue(sizes.sm);
@@ -58,81 +55,42 @@ const LoadCustomInfoModal = ({
 		setCustomInfo(keys);
 	}, [storedCustomInfo]);
 	// TO-DO: Finish everything else!!!
-	//TO-DO: Figure out this Promise hell, why it's fetching info and
-	//   then immediately loading instead of waiting for the yes/no
-	//   prompt to be answered
 	const maybeLoadInfo = () => {
-		// Fetch the info
-		fetchInfo();
 		if(disableConfirms) {
-			return waitForInfoToLoad();
+			// Skip the warning dialog
+			return fetchInfo();
 		}
 		// Show the warning dialog
 		setOverwriteWarningOpen(true);
 	};
-	const waitForInfoToLoad = () => {
-		// Display loading overlay or alert
-		//    while info is still being fetched - probably a full-size
-		//    modal, like MS's modals
-		setLoadingOverlayOpen(true);
-	};
 	const fetchInfo = async () => {
-		// TO-DO: is this state variable really necessary?
-		//   Is its purpose fulfilled by retrievedInfo?
-		setGettingStoredInfo(true);
-		const info = await wgCustomStorage.getItem(customInfoChosen);
-		setGettingStoredInfo(false);
-		// Check if the user is still deciding whether or not to overwrite
-		if(!overwriteWarningOpen) {
-			// If warning modal is closed, do the load
+		// open overlay
+		setLoadingOverlayOpen(true);
+		return await wgCustomStorage.getItem(customInfoChosen).then((result) => {
+			// close overlay
 			setLoadingOverlayOpen(false);
-			return finishLoadInfo(info);
-		}
-		// Modal open? Save info.
-		setRetrievedInfo(info);
-	};
-	const loadingApproved = () => {
-		// The overwrite warning has given the go-ahead
-		setOverwriteWarningOpen(false);
-		if(retrievedInfo === null) {
-			// We're still waiting for the info.
-			return waitForInfoToLoad();
-		}
-		// We're ok to go.
-		finishLoadInfo(retrievedInfo);
-	};
-	const finishLoadInfo = (loaded) => {
-		const loadedInfo = JSON.parse(loaded);
-		const {label, info} = loadedInfo;
-		setRetrievedInfo(null);
-		// Dispatch the new info to store
-		dispatch(loadWGState(info));
-		// Trigger any resets needed on the main page
-		triggerResets();
-		setLoadingOverlayOpen(false);
-		doToast({
-			toast,
-			msg: label ? `"${label}" loaded` : "Info loaded",
-			placement: "top",
-			fontSize: textSize
+			// convert info
+			const loadedInfo = JSON.parse(loaded);
+			const { label, info } = loadedInfo;
+			// Dispatch the new info to store
+			dispatch(loadWGState(info));
+			// Trigger any resets needed on the main page
+			triggerResets();
+			// Announce success
+			doToast({
+				toast,
+				msg: `"${label}" loaded`,
+				placement: "top",
+				fontSize: textSize
+			});
+		}).catch((err) => {
+			console.log("ERROR in getting custom info");
+			console.log(err);
+			setLoadingOverlayOpen(false);
 		});
 	};
 	// TO-DO: Delete stored info
-	const maybeDeleteInfo = () => {
-		const thenFunc = () => {
-			let newCustom = customInfoxxx.filter(ci => ci !== title);
-			//dispatch(setTemporaryInfo({type: "custominfo", data: newCustom}));
-			OldCustomStorageWG.removeItem(title).then(() => {
-				// toast
-			});
-		};
-		if(disableConfirms) {
-			thenFunc();
-		} else {
-			// Warning alert - deleting
-			// thenFunc();
-		}
-	};
+	const maybeDeleteInfo = () => {};
 	const doDeleteInfo = () => {};
 	// has ExtraChars
 	// Save Current Info
@@ -153,7 +111,10 @@ const LoadCustomInfoModal = ({
 			setAlertOpen={setOverwriteWarningOpen}
 			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite all current Character Groups, Syllables, Transformations and Settings.`}
 			continueText="Yes"
-			continueFunc={loadingApproved}
+			continueFunc={() => {
+				setOverwriteWarningOpen(false);
+				fetchInfo();
+			}}
 			fontSize={textSize}
 		/>
 		<StandardAlert

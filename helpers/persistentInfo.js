@@ -7,21 +7,24 @@ const makeAsyncStorageObject = (prefix, errorHandler) => {
 			try {
 				return await AsyncStorage.getItem(`@${prefix}/${item}`);
 			} catch(e) {
-				return errorHandler("getItem", prefix, e);
+				errorHandler("getItem", prefix, e);
+				return null;
 			}
 		},
 		setItem: async (item, value) => {
 			try {
 				return await AsyncStorage.setItem(`@${prefix}/${item}`, value);
 			} catch(e) {
-				return errorHandler("setItem", prefix, e);
+				errorHandler("setItem", prefix, e);
+				return null;
 			}
 		},
 		removeItem: async (item) => {
 			try {
 				return await AsyncStorage.removeItem(`@${prefix}/${item}`);
 			} catch(e) {
-				return errorHandler("removeItem", prefix, e);
+				errorHandler("removeItem", prefix, e);
+				return null;
 			}
 		},
 		getAllKeys: async () => {
@@ -34,7 +37,8 @@ const makeAsyncStorageObject = (prefix, errorHandler) => {
 					.filter(key => key.indexOf(prefixString) === 0)
 					.map(key => key.slice(length));
 			} catch(e) {
-				return errorHandler("getAllKeys", prefix, e);
+				errorHandler("getAllKeys", prefix, e);
+				return null;
 			}
 		}
 		// multiGet?
@@ -43,7 +47,7 @@ const makeAsyncStorageObject = (prefix, errorHandler) => {
 	};
 };
 
-const errHandle = (where, prefix, error) => {
+export const errHandle = (where, prefix, error) => {
 	console.log(`ERROR in @${prefix} storage, ${where} method:`);
 	console.log(error);
 };
