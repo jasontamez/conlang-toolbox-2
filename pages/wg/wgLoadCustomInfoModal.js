@@ -20,7 +20,7 @@ import ReAnimated, {
 } from 'react-native-reanimated';
 
 import { wgCustomStorage } from '../../helpers/persistentInfo';
-import { equalityCheck, loadWGState } from '../../store/wgSlice';
+import { equalityCheck, loadWGState, setStoredCustomInfo } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
@@ -98,16 +98,33 @@ const LoadCustomInfoModal = ({
 		});
 	};
 	// TO-DO: Delete stored info
-	const maybeDeleteInfo = () => {};
-	const doDeleteInfo = () => {};
-	// has ExtraChars
-	// Save Current Info
-	//   name input
-	// Export Current Info to File
-	//   name input
-	// Load Saved Info
-	//   map of saved info, each with Load and Delete buttons
-	//   notice message if nothing previously saved
+	const maybeDeleteInfo = () => {
+		if(disableConfirms) {
+			// Skip the warning dialog
+			return doDeleteInfo();
+		}
+		// Show the warning dialog
+		setDeleteWarningOpen(true);
+	};
+	const doDeleteInfo = async () => {
+		return await wgCustomStorage.removeItem(customInfoChosen).then(() => {
+			let deleted = {...storedCustomInfo};
+			// Announce success
+			doToast({
+				toast,
+				msg: `"${customLabelChosen}" deleted`,
+				scheme: "secondary",
+				placement: "bottom",
+				fontSize: textSize
+			});
+			// Dispatch the new info to store
+			delete deleted[customInfoChosen];
+			dispatch(setStoredCustomInfo(deleted));
+		}).catch((err) => {
+			console.log("ERROR in getting custom info");
+			console.log(err);
+		});
+	};
 	return (
 		<><LoadingOverlay
 			overlayOpen={loadingOverlayOpen}
@@ -131,7 +148,10 @@ const LoadCustomInfoModal = ({
 			setAlertOpen={setDeleteWarningOpen}
 			bodyContent={`Are you sure you want to delete "${customLabelChosen}"? This cannot be undone.`}
 			continueText="Yes"
-			continueFunc={doDeleteInfo}
+			continueFunc={() => {
+				setDeleteWarningOpen(false);
+				doDeleteInfo();
+			}}
 			continueProps={{
 				bg: "danger.500",
 				_text: {
