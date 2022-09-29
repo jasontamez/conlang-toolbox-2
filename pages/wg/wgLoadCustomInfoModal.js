@@ -34,13 +34,13 @@ const LoadCustomInfoModal = ({
 }) => {
 	const dispatch = useDispatch();
 	const {
-		storedCustomInfo
+		storedCustomInfo,
+		storedCustomIDs
 	} = useSelector((state) => state.wg, equalityCheck);
 	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
-	const [customInfoChosen, setCustomInfoChosen] = useState(undefined);
-	const [customLabelChosen, setCustomLabelChosen] = useState(undefined);
-	const [customInfo, setCustomInfo] = useState([]);
+	const [customInfoChosen, setCustomInfoChosen] = useState(null);
+	const [customLabelChosen, setCustomLabelChosen] = useState(null);
 	const [overwriteWarningOpen, setOverwriteWarningOpen] = useState(false);
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
@@ -51,12 +51,20 @@ const LoadCustomInfoModal = ({
 	const secondaryContrast = useContrastText("secondary.500");
 	const toast = useToast();
 	useEffect(() => {
-		const keys = Object.keys(storedCustomInfo);
-		setCustomInfo(keys);
-	}, [storedCustomInfo]);
+		if(storedCustomIDs.length > 0) {
+			const [first, ...etc] = storedCustomIDs;
+			setCustomInfoChosen(first);
+			setCustomLabelChosen(storedCustomInfo[first])
+		} else {
+			setCustomInfoChosen(null);
+			setCustomLabelChosen(null);
+		}
+	}, [storedCustomIDs, storedCustomInfo]);
 	// TO-DO: Finish everything else!!!
 	const maybeLoadInfo = () => {
 		if(disableConfirms) {
+			// close modal
+			closeModal();
 			// Skip the warning dialog
 			return fetchInfo();
 		}
@@ -70,7 +78,7 @@ const LoadCustomInfoModal = ({
 			// close overlay
 			setLoadingOverlayOpen(false);
 			// convert info
-			const loadedInfo = JSON.parse(loaded);
+			const loadedInfo = JSON.parse(result);
 			const { label, info } = loadedInfo;
 			// Dispatch the new info to store
 			dispatch(loadWGState(info));
@@ -113,6 +121,7 @@ const LoadCustomInfoModal = ({
 			continueText="Yes"
 			continueFunc={() => {
 				setOverwriteWarningOpen(false);
+				closeModal();
 				fetchInfo();
 			}}
 			fontSize={textSize}
@@ -164,7 +173,7 @@ const LoadCustomInfoModal = ({
 					</HStack>
 				</Modal.Header>
 				<Modal.Body m={0} p={0}>
-					{customInfo.length > 0 ?
+					{storedCustomIDs.length > 0 ?
 						<ReAnimated.View
 							entering={FlipInYRight}
 							exiting={FlipOutYRight}
@@ -182,7 +191,7 @@ const LoadCustomInfoModal = ({
 								my={4}
 								label="List of Custom Info saved"
 							>
-								{customInfo.map(id => (
+								{storedCustomIDs.map(id => (
 									<Radio
 										key={`${id}-RadioButton`}
 										size={textSize}

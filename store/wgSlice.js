@@ -135,8 +135,9 @@ const setWordsPerWordlistFunc = (state, action) => {
 
 // STORED CUSTOM INFO
 const setStoredCustomInfoFunc = (state, action) => {
-	console.log(action.payload);
-	state.storedCustomInfo = action.payload;
+	const { payload } = action;
+	state.storedCustomInfo = payload;
+	state.storedCustomIDs = Object.keys(payload);
 	return state;
 };
 

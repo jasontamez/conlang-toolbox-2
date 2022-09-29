@@ -58,7 +58,8 @@ const blankAppState = {/*
 		sortWordlist: true,
 		wordlistMultiColumn: true,
 		wordsPerWordlist: 250,
-		storedCustomInfo: {}
+		storedCustomInfo: {},
+		storedCustomIDs: []
 	},
 	morphoSyntax: {
 		key: "",
