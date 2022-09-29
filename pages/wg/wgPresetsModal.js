@@ -145,6 +145,12 @@ export default WGPresetsModal;
 
 const basicSettings = {
 	multipleSyllableTypes: false,
+	syllableDropoffOverrides: {
+		singleWord: null,
+		wordInitial: null,
+		wordMiddle: null,
+		wordFinal: null
+	},
 	monosyllablesRate: 20,
 	maxSyllablesPerWord: 6,
 	characterGroupDropoff: 25,
@@ -701,7 +707,7 @@ const wgPresets = [
 				label: "J",
 				title: "Word-final conjugation",
 				run: "1234567890!@#-&=_;:~",
-				dropoffOverride: 0
+				dropoff: 0
 			}
 		],
 		singleWord: "SV\nSVEJ\nSV\nSV",
