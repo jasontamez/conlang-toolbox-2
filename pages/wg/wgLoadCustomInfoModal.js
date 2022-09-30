@@ -60,7 +60,6 @@ const LoadCustomInfoModal = ({
 			setCustomLabelChosen(null);
 		}
 	}, [storedCustomIDs, storedCustomInfo]);
-	// TO-DO: Finish everything else!!!
 	const maybeLoadInfo = () => {
 		if(disableConfirms) {
 			// close modal
@@ -97,7 +96,6 @@ const LoadCustomInfoModal = ({
 			setLoadingOverlayOpen(false);
 		});
 	};
-	// TO-DO: Delete stored info
 	const maybeDeleteInfo = () => {
 		if(disableConfirms) {
 			// Skip the warning dialog

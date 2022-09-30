@@ -3,22 +3,23 @@ import {
 	Button,
 	HStack,
 	IconButton,
+	Menu,
 	Modal,
 	Text,
 	useBreakpointValue,
 	useContrastText,
 	useToast
 } from 'native-base';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 
 import { wgCustomStorage } from '../../helpers/persistentInfo';
 import { equalityCheck, setStoredCustomInfo } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
-import { CloseCircleIcon, SaveIcon } from '../../components/icons';
+import { CloseCircleIcon, SaveIcon, SortEitherIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
-import { TextSetting } from '../../components/inputTags';
+import { TextSetting, ToggleSwitch } from '../../components/inputTags';
 import doToast from '../../helpers/toast';
 import { LoadingOverlay } from '../../components/FullBodyModal';
 //import doExport from '../../components/ExportServices';
@@ -48,21 +49,39 @@ const SaveCustomInfoModal = ({
 		interrogativeSentencePost,
 		exclamatorySentencePre,
 		exclamatorySentencePost,
-		storedCustomInfo
+		storedCustomInfo,
+		storedCustomIDs
 	} = useSelector((state) => state.wg, equalityCheck);
-	const { sizes } = useSelector(state => state.appState);
+	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
 	const [saveName, setSaveName] = useState("");
 	const [isSaving, setIsSaving] = useState(false);
+	const [newSave, setNewSave] = useState(true);
+	const [overwriteSaveID, setOverwriteSaveID] = useState(null);
+	const [overwriteSaveLabel, setOverwriteSaveLabel] = useState(null);
 	const [missingLabelAlert, setMissingLabelAlert] = useState(false);
+	const [overwriteAlert, setOverwriteAlert] = useState(false);
 	const textSize = useBreakpointValue(sizes.sm);
 	const largeText = useBreakpointValue(sizes.xl);
 	const primaryContrast = useContrastText("primary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
 	const toast = useToast();
 	const labelTextRef = useRef(null);
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			if(storedCustomIDs.length > 0) {
+				const id = storedCustomIDs[0];
+				setOverwriteSaveID(id);
+				setOverwriteSaveLabel(storedCustomInfo[id]);
+			} else {
+				setOverwriteSaveID(null);
+				setOverwriteSaveLabel(null);
+			}	
+		}, 50);
+		return () => clearTimeout(timeout);
+	}, [storedCustomIDs, storedCustomInfo]);
 	// TO-DO: Double-check if this needs anything else
-	const maybeSaveInfo = () => {
+	const maybeSaveNewInfo = () => {
 		let label = saveName.trim();
 		setSaveName(label);
 		// Warning if blank title
@@ -71,6 +90,18 @@ const SaveCustomInfoModal = ({
 		}
 		// Go ahead and save
 		const id = uuidv4();
+		doSaving(id, label);
+	};
+	const maybeOverwriteSave = () => {
+		if(disableConfirms) {
+			// Just go ahead and overwrite
+			return doOverwriteSave();
+		}
+		// open the alert box
+		setOverwriteAlert(true);
+	};
+	const doOverwriteSave = () => doSaving(overwriteSaveID, overwriteSaveLabel);
+	const doSaving = (id, label) => {
 		const save = {
 			label,
 			info: {
@@ -107,8 +138,10 @@ const SaveCustomInfoModal = ({
 			});
 			setSaveName("");
 			labelTextRef.current && labelTextRef.current.clear && labelTextRef.current.clear();
+		}).finally(() => {
+			setIsSaving(false);
 			closeModal();
-		}).finally(() => setIsSaving(false));
+		});
 	};
 	//const maybeExportInfo = () => {
 	//	let title = ($i("currentInfoExportName").value).trim();
@@ -126,8 +159,6 @@ const SaveCustomInfoModal = ({
 	//		.catch((e = "Error?") => console.log(e))
 	//		.then(() => doCleanClose());
 	//};
-	// TO-DO: Overwrite Last Save
-	//   name input
 	// TO-DO: Export Current Info to File
 	//   name input
 	return (
@@ -138,16 +169,17 @@ const SaveCustomInfoModal = ({
 			colorFamily="tertiary"
 		/>
 		<Modal isOpen={modalOpen} size="md">
-			{/*
 			<StandardAlert
-				alertOpen={alertOpen}
-				setAlertOpen={setAlertOpen}
-				bodyContent=""
+				alertOpen={overwriteAlert}
+				setAlertOpen={setOverwriteAlert}
+				bodyContent={`Are you sure you want to overwrite "${overwriteSaveLabel}"? This cannot be undone.`}
 				continueText="Yes"
-				continueFunc={doLoadPreset}
+				continueFunc={() => {
+					setOverwriteAlert(false);
+					doOverwriteSave();
+				}}
 				fontSize={textSize}
 			/>
-			*/}
 			<StandardAlert
 				alertOpen={missingLabelAlert}
 				setAlertOpen={setMissingLabelAlert}
@@ -201,13 +233,108 @@ const SaveCustomInfoModal = ({
 					<Box pb={4}>
 						<Text textAlign="center">This will save all current Character Groups, Syllables, Transformations, and the settings on this page.</Text>
 					</Box>
-					<TextSetting
-						text="Give this save a title"
-						placeholder=""
-						onChangeText={(v) => setSaveName(v)}
-						defaultValue=""
-						inputProps={{ref: labelTextRef}}
+					<ToggleSwitch
+						label={newSave ? "Make New Save" : "Overwrite Previous Save"}
+						labelSize={textSize}
+						switchState={newSave}
+						switchToggle={() => setNewSave(!newSave)}
+						switchProps={{
+							disabled: storedCustomIDs.length === 0
+						}}
+						hProps={{
+							justifyContent: "center",
+							space: 2,
+							borderRadius: "sm",
+							bg: "darker"
+						}}
+						vProps={{
+							flexGrow: undefined,
+							flexShrink: undefined
+						}}
 					/>
+					{newSave ?
+						<TextSetting
+							text="Give this save a title"
+							placeholder=""
+							onChangeText={(v) => setSaveName(v)}
+							defaultValue=""
+							inputProps={{ref: labelTextRef}}
+							boxProps={{pt: 4}}
+						/>
+					:
+						<Menu
+							placement="bottom left"
+							closeOnSelect={true}
+							trigger={
+								(props) => (
+									<Button
+										p={1}
+										mt={4}
+										mb={2}
+										bg="tertiary.500"
+										flexGrow={1}
+										flexShrink={2}
+										_stack={{
+											justifyContent: "space-between",
+											alignItems: "center",
+											flexGrow: 1,
+											flexShrink: 1,
+											flexBasis: 0,
+											space: 0,
+											style: {
+												overflow: "hidden"
+											}
+										}}
+										startIcon={
+											<SortEitherIcon
+												size={textSize}
+												mr={1}
+												color="tertiary.50"
+												flexGrow={0}
+												flexShrink={0}
+											/>
+										}
+										{...props}
+									>
+										<Box
+											overflow="hidden"
+										>
+											<Text
+												fontSize={textSize}
+												color="tertiary.50"
+												isTruncated
+												textAlign="left"
+												noOfLines={1}
+											>{overwriteSaveLabel}</Text>
+										</Box>
+									</Button>
+								)
+							}
+						>
+							<Menu.OptionGroup
+								title="Previous Saves:"
+								_title={{fontSize: textSize}}
+								defaultValue={overwriteSaveID}
+								type="radio"
+								onChange={(id) => {
+									setOverwriteSaveID(id);
+									setOverwriteSaveLabel(storedCustomInfo[id]);
+								}}
+							>
+								{
+									storedCustomIDs.map((id) => (
+										<Menu.ItemOption
+											key={id + "-Sorting"}
+											value={id}
+											_text={{fontSize: textSize}}
+										>
+											{storedCustomInfo[id]}
+										</Menu.ItemOption>
+									))
+								}
+							</Menu.OptionGroup>
+						</Menu>
+					}
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
@@ -219,7 +346,9 @@ const SaveCustomInfoModal = ({
 							m={2}
 						>Cancel</Button>
 						<Button
-							onPress={maybeSaveInfo}
+							onPress={() => {
+								newSave ? maybeSaveNewInfo() : maybeOverwriteSave()
+							}}
 							_text={{fontSize: textSize}}
 							startIcon={<SaveIcon size={textSize} />}
 							p={1}

@@ -91,7 +91,6 @@ const WGSettings = () => {
 			placement: "bottom"
 		})
 	};
-	// TO-DO: save info
 	const maybeSaveInfo = () => setOpenSaveCustomInfoModal(true);
 	const maybeLoadPreset = () => setOpenPresetModal(true);
 	const SectionHeader = (props) => {
