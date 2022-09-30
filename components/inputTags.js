@@ -143,7 +143,7 @@ export const SliderWithTicks = ({
 	//    stackProps={props for the inner ZStack}
 	//    value={default value for the slider (defaults to `min`)
 	//    sliderProps={optional properties for the slider}
-	//  />
+	// />
 	const sizes = useSelector(state => state.appState.sizes);
 	const defaultValue = $v(value, min);
 	const labelW = useBreakpointValue(sliderCapWidths);
@@ -437,7 +437,7 @@ export const SliderWithTicksNoCaps = ({
 	//    stackProps={props for the inner ZStack}
 	//    value={default value for the slider (defaults to `min`)
 	//    sliderProps={optional properties for the slider}
-	//  />
+	// />
 	const sizes = useSelector(state => state.appState.sizes);
 	const defaultValue = $v(value, min);
 	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
@@ -492,17 +492,17 @@ export const SliderWithTicksNoCaps = ({
 };
 
 export const ToggleSwitch = ({
-	hProps,
-	vProps,
-	label,
+	hProps = {},
+	vProps = {},
+	label = "MISSING LABEL",
 	labelSize,
-	labelProps,
+	labelProps = {},
 	desc,
 	descSize,
-	descProps,
+	descProps = {},
 	switchState,
 	switchToggle,
-	switchProps
+	switchProps = {}
 }) => {
 	// <ToggleSwitch
 	//    hProps={props for the outer HStack}
@@ -516,7 +516,7 @@ export const ToggleSwitch = ({
 	//    switchState={default Boolean state of the toggle}
 	//    switchToggle={Function that will be called when toggle changes}
 	//    switchProps={props for the Switch}
-	//  />
+	// />
 	const sizes = useSelector(state => state.appState.sizes);
 	const textSize = $v(labelSize, useBreakpointValue(sizes.sm));
 	const smallerSize = $v(descSize, useBreakpointValue(sizes.xs));
@@ -525,21 +525,21 @@ export const ToggleSwitch = ({
 			w="full"
 			justifyContent="space-between"
 			alignItems="center"
-			{...(hProps || {})}
+			{...hProps}
 		>
 			<VStack
 				flexGrow={1}
 				flexShrink={2}
 				mr={2}
-				{...(vProps || {})}
+				{...vProps}
 			>
-				<Text fontSize={textSize} {...(labelProps || {})}>{label}</Text>
-				{desc ? <Text fontSize={smallerSize} {...(descProps || {})}>{desc}</Text> : <></>}
+				<Text fontSize={textSize} {...labelProps}>{label}</Text>
+				{desc ? <Text fontSize={smallerSize} {...descProps}>{desc}</Text> : <></>}
 			</VStack>
 			<Switch
 				isChecked={switchState}
 				onToggle={switchToggle}
-				{...(switchProps || {})}
+				{...switchProps}
 			/>
 		</HStack>
 );
