@@ -36,7 +36,7 @@ import ReAnimated, {
 	ZoomOutEasyDown,
 	ZoomOutRight
 } from 'react-native-reanimated';
-import escapeRegexp from 'escape-string-regexp';
+import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { FlatGrid } from 'react-native-super-grid';
 
 import {
@@ -151,7 +151,7 @@ const WGOutput = () => {
 			let regex;
 			if(search.indexOf("%") !== -1) {
 				// Found a possibility.
-				regex = calculateCategoryReferenceRegex(search, newMap);
+				regex = calculateCharacterGroupReferenceRegex(search, newMap);
 			} else {
 				regex = new RegExp(search, "g");
 			}
@@ -1227,22 +1227,12 @@ const WGOutput = () => {
 					style={{flex: 1, paddingHorizontal: 16, paddingVertical: 8}}
 				>
 					<ScrollView>
-						<PseudoText />
-						{
-						//<Text fontSize={textSize}>{
-						//	displayedText.map((word, i) => {
-						//		// Format should be [string, array, string, array... string]
-						//		if(i % 2 === 1) {
-						//			// array
-						//			const [text, raw] = word;
-						//			return <OneWordElement key={`GeneratedWord-${i}:[${raw}]`} rawWord={raw} text={text} />;
-						//		} else {
-						//			// string
-						//			return <Fragment key={`UngeneratedString-${i}:[${word}]`}>{word}</Fragment>;
-						//		}
-						//	})
-						//}</Text>
-						}
+						<PseudoText
+							text={displayedText}
+							saving={savingToLexicon}
+							fontSize={textSize}
+							lineHeight={headerSize}
+						/>
 					</ScrollView>
 				</ReAnimated.View>
 			:
@@ -1274,57 +1264,4 @@ const WGOutput = () => {
 };
 
 export default WGOutput;
-
-// TO-DO: put this in its own component for WE to use when needed
-const calculateCategoryReferenceRegex = (transformer, mapObj) => {
-	// Check transformations for %Category references
-	// %% condenses to %, so split on those to begin with.
-	let broken = transformer.split("%%");
-	// Create a variable to hold the pieces as they are handled
-	let final = [];
-	while(broken.length > 0) {
-		// First, check for charGroup negation
-		// Separate along !% instances
-		let testing = broken.shift().split("!%");
-		// Save first bit, before any !%
-		let reformed = testing.shift();
-		// Handle each instance
-		while(testing.length > 0) {
-			let bit = testing.shift();
-			// What's the charGroup being negated?
-			let charGroup = mapObj[bit.charAt(0)];
-			// Does it exist?
-			if(charGroup !== undefined) {
-				// Category found. Replace with [^a-z] construct, where a-z is the charGroup contents.
-				reformed += "[^" + escapeRegexp(charGroup.run) + "]" + bit.slice(1);
-			} else {
-				// If charGroup is not found, it gets ignored.
-				reformed = "!%" + bit;
-			}
-		}
-		// Now check for categories
-		// Separate along % instances
-		testing = reformed.split("%");
-		// Save the first bit, before any %
-		reformed = testing.shift();
-		// Handle each instance
-		while(testing.length > 0) {
-			let bit = testing.shift();
-			// What's the charGroup?
-			let charGroup = mapObj[bit.charAt(0)];
-			// Does it exist?
-			if(charGroup !== undefined) {
-				// Category found. Replace with [a-z] construct, where a-z is the charGroup contents.
-				reformed += "[" + escapeRegexp(charGroup.run) + "]" + bit.slice(1);
-			} else {
-				// If charGroup is not found, it gets ignored.
-				reformed = "%" + bit;
-			}
-		}
-		// Save reformed for later!
-		final.push(reformed);
-	}
-	// Reform info with %% reduced back to % and return as regexp
-	return new RegExp(final.join("%"), "g");
-};
 
