@@ -182,11 +182,11 @@ const WGOutput = () => {
 		}
 		return <Simple fontSize={textSize} lineHeight={headerSize}>{text}</Simple>;
 	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
-	const PseudoText = memo(() => {
-		const stuff = displayedText.map((word, i) => {
+	const PseudoText = memo(({text, saving, fontSize, lineHeight}) => {
+		const stuff = text.map((word, i) => {
 			// Add trailing space to every word.
 			const [text, raw] = word;
-			if(savingToLexicon) {
+			if(saving) {
 				return (
 					<Fragment
 						key={`GeneratedWord-Saveable-${i}:[${raw}]`}
@@ -203,7 +203,7 @@ const WGOutput = () => {
 				><Simple>{text}</Simple>{" "}</Fragment>
 			);
 		});
-		return <Text fontSize={textSize} lineHeight={headerSize}>{stuff}</Text>;
+		return <Text fontSize={fontSize} lineHeight={lineHeight}>{stuff}</Text>;
 	});
 	const SaveableElement = memo(({text, rawWord, wordsToSave}) => {
 		const saved = wordsToSave[rawWord];
