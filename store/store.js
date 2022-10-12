@@ -14,6 +14,7 @@ import wordListsSlice from './wordListsSlice';
 import appStateSlice from './appStateSlice';
 import lexiconSlice from './lexiconSlice';
 import wgSlice from './wgSlice';
+import weSlice from './weSlice';
 import blankAppState from './blankAppState';
 
 //const reconcile = async (incoming, original, reduced) => {
@@ -24,6 +25,7 @@ import blankAppState from './blankAppState';
 export default () => {
 	const reducer = {
 		// SLICES here
+		we: weSlice,
 		wg: wgSlice,
 		morphoSyntax: morphoSyntaxSlice,
 		appState: appStateSlice,

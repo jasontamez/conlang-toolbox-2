@@ -124,7 +124,7 @@ const About = () => {
 				<Indented>Tweak the output through transformations</Indented>
 				<Indented>Jumpstart your process with built-in presets</Indented>
 			</Pressable>
-			<Pressable>
+			<Pressable goto="/we">
 				<SectionHeader SectionIcon={WordEvolveIcon} text={"Word\u00ADEvolve"} />
 				<Highlight>
 					This tool is for modifying words according to rules you set up, mimicking

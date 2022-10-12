@@ -48,6 +48,13 @@ export const CopyIcon = (props) => <Icon as={MaterialIcons} name="content-copy" 
 export const CancelIcon = (props) => <Icon as={MCI} name="cancel" {...props} />;
 export const LoadIcon = (props) => <Icon as={MCI} name="chevron-double-up" {...props} />;
 
+// WE pages
+export const WEInputIcon = (props) => <Icon as={Ionicons} name="enter-outline" {...props} />;
+export const WECharactersIcon = (props) => <Icon as={Entypo} name="language" {...props} />;
+export const WESoundChangesIcon = (props) => <Icon as={MCI} name="transfer" {...props} />;
+export const WETransformationsIcon = (props) => <Icon as={MaterialIcons} name="transform" {...props} />;
+export const WEOutputIcon = (props) => <Icon as={Ionicons} name="exit-outline" {...props} />;
+
 // Reordering controls
 export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
 export const StopIcon = (props) => <Icon as={MCI} name="stop" {...props} />;
@@ -65,6 +72,8 @@ export const TrashIcon = (props) => <Icon as={Ionicons} name="trash-outline" {..
 export const CloseCircleIcon = (props) => <Icon as={Ionicons} name="close-circle-outline" {...props} />;
 export const CloseIcon = (props) => <Icon as={Ionicons} name="close-outline" {...props} />;
 export const DragHandleIcon = (props) => <Icon as={MaterialIcons} name="drag-handle" {...props} />;
+export const ImportIcon = (props) => <Icon as={MCI} name="book-arrow-right-outline" {...props} />;
+export const ClearIcon = (props) => <Icon as={Ionicons} name="trash-bin-outline" {...props} />;
 
 // Info controls
 export const InfoIcon = (props) => <Icon as={MCI} name="information" {...props} />;

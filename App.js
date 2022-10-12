@@ -41,6 +41,12 @@ import WGSyllables from './pages/wg/wgSyllables';
 import WGTransformations from './pages/wg/wgTransformations';
 import WGOutput from './pages/wg/wgOutput';
 import doConvert from './helpers/convertOldStorageToNew';
+import WE from './pages/WE';
+import WEInput from './pages/we/weInput';
+//import WECharacters from './pages/we/weCharacterGroups';
+//import WETransformations from './pages/we/weTransformations';
+//import WESoundChanges from './pages/we/weSoundChanges';
+//import WEOutput from './pages/we/weOutput';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -166,16 +172,21 @@ const AppRoutes = () => {
 				}}
 			>
 				<AppHeader />
-				<Routes> {
+				<Routes>
 					<Route path="/wg/*" element={<WG />}>
 						<Route index element={<WGSettings />} />
 						<Route path="characters" element={<WGCharacters />} />
 						<Route path="syllables" element={<WGSyllables />} />
 						<Route path="transformations" element={<WGTransformations />} />
 						<Route path="output" element={<WGOutput/>} />
-					</Route> /*
+					</Route>
 					<Route path="/we/*" element={<WE />}>
-					</Route> */ }
+						<Route index element={<WEInput />} />
+						{ /*<Route path="characters" element={<WECharacters />} />
+						<Route path="transformations" element={<WETransformations />} />
+						<Route path="soundchanges" element={<WESoundChanges />} />
+						<Route path="output" element={<WEOutput/>} /> */ }
+					</Route>
 					<Route path="/lex" element={<Lexicon />} />
 					<Route path="/ms/*" element={<MS />}>
 						<Route index element={<MSSettings />} />

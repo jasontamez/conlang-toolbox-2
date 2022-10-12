@@ -1,9 +1,5 @@
 const blankAppState = {/*
 	currentVersion: packageJson.version,
-	wordgenTransformations: {
-		list: [],
-		editing: null
-	},
 	wordevolveCharacters: {
 		map: [],
 		editing: null
@@ -20,6 +16,13 @@ const blankAppState = {/*
 	wordevolveSettings: {
 		output: "outputOnly"
 	}*/
+	we: {
+		input: "",
+		characterGroups: [],
+		transforms: [],
+		soundChanges: [],
+		output: "outputOnly"
+	},
 	wg: {
 		// GROUPS
 		characterGroups: [],
