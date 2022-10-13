@@ -6,7 +6,7 @@ const initialState = blankAppState.we;
 // INPUT
 const editInputFunc = (state, action) => {
 	const { payload } = action;
-	state.input = payload.trim().replaceAll(/\s*\n\s*/g, "\n");
+	state.input = payload.trim().replaceAll(/(\s*\n\s*)+/g, "\n");
 	return state;
 };
 

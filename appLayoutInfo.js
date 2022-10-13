@@ -123,7 +123,7 @@ const WG = {
 
 const weInput = {
 	title: "Input",
-	url: "/we/input",
+	url: "/we/",
 	isChildOf: "WE",
 	id: "WEinp"
 };
