@@ -3,7 +3,6 @@ import {
 	Text,
 	HStack,
 	Box,
-	Switch,
 	ScrollView,
 	VStack,
 	IconButton,

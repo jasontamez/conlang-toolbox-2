@@ -157,6 +157,7 @@ const WE = {
 	icon: "WordEvolveIcon",
 	id: "WE",
 	sectionId: "apps",
+	rightHeader: ["WEContextMenu"],
 	kids: [
 		weInput,
 		weCharacters,

@@ -10,11 +10,13 @@ import ExtraChars from './ExtraCharsButton';
 import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
+import WEContextMenu from '../pages/contextMenus/WEContextMenu';
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
 	LexiconContextMenu: <LexiconContextMenu key="header2" />,
-	WGContextMenu: <WGContextMenu key="header3" />
+	WGContextMenu: <WGContextMenu key="header3" />,
+	WEContextMenu: <WEContextMenu key="header4" />
 };
 
 const AppHeader = () => {

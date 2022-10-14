@@ -160,10 +160,9 @@ const WGContextMenu = () => {
 						</HStack>
 						<P>
 							{'\t'}Click the (+) button to add a new transformation. The first transformation in the
-							list will be run first, the second trandformation second, and so on down the list.
+							list will be run first, the second transformation second, and so on down the list.
 							This may cause unintended effects, so you can reorganize your transformations to
-							avoid any such effects by using
-							the [TO-DO: reorderTwo] drag handles.
+							avoid any such effects by using the [TO-DO: reorderTwo] rearrange button.
 						</P>
 						<Divider />
 						<P>
