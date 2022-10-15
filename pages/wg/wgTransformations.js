@@ -278,14 +278,14 @@ const WGTransformations = () => {
 								py={1}
 								mx={1}
 								onPress={() => addNewTransform(false)}
-							>ADD</Button>
+							>Add</Button>
 							<Button
 								startIcon={<AddIcon size={textSize} />}
 								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
 								onPress={() => addNewTransform(true)}
-							>ADD AND CLOSE</Button>
+							>Add and Close</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>

@@ -244,7 +244,7 @@ const WGSyllables = () => {
 								}));
 								setModalOpen(false);
 							}}
-						>SAVE</Button>
+						>Save</Button>
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>

@@ -101,7 +101,7 @@ const WordLists = () => {
 				_text={{color: "secondary.50"}}
 				startIcon={<SaveIcon color="secondary.50" size={textSize} />}
 				onPress={saveAllFunc}
-			>SAVE ALL TO LEXICON</Button>
+			>Save All to Lexicon</Button>
 		);
 		const SaveSome = () => (
 			<Button
@@ -112,7 +112,7 @@ const WordLists = () => {
 				_text={{color: "tertiary.50"}}
 				startIcon={<SaveIcon color="tertiary.50" size={textSize} />}
 				onPress={beginSaveSome}
-			>SAVE SOME TO LEXICON</Button>
+			>Save Some to Lexicon</Button>
 		);
 		const Cancel = () => (
 			<Button
@@ -123,7 +123,7 @@ const WordLists = () => {
 				_text={{color: "danger.50"}}
 				startIcon={<CloseCircleIcon color="danger.50" size={textSize} />}
 				onPress={cancelSaveSome}
-			>CANCEL</Button>
+			>Cancel</Button>
 		);
 		const SaveChosen = () => (
 			<Button
@@ -134,7 +134,7 @@ const WordLists = () => {
 				_text={{color: "tertiary.50"}}
 				startIcon={<SaveIcon color="tertiary.50" size={textSize} />}
 				onPress={saveSomeFunc}
-			>SAVE</Button>
+			>Save</Button>
 		);
 		const buttons = [];
 		if(pickAndSaveForLexicon) {

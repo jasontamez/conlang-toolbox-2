@@ -200,7 +200,7 @@ const LexiconContextMenu = () => {
 								p={1}
 								m={2}
 								onPress={() => setColumnsRangeOpen(false)}
-							>CANCEL</Button>
+							>Cancel</Button>
 							<Button
 								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
 								bg="success.500"
@@ -216,7 +216,7 @@ const LexiconContextMenu = () => {
 										msg: "Saved: " + String(cols) + " columns"
 									});
 								}}
-							>SAVE</Button>
+							>Save</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>

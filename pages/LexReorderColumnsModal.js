@@ -182,7 +182,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 					px={1}
 					py={0.5}
 					mr={2}
-				>DONE</Button>
+				>Done</Button>
 			</HStack>
 		</VStack>
 	);

@@ -174,10 +174,7 @@ const WEInput = () => {
 								onPress={() => setImportModalOpen(false)}
 								_text={{
 									fontSize: buttonSize,
-									color: "text.50",
-									style: {
-										fontVariant: ["small-caps"]
-									}
+									color: "text.50"
 								}}
 							>Cancel</Button>
 							<Button
@@ -186,10 +183,7 @@ const WEInput = () => {
 								py={1}
 								onPress={doImport}
 								_text={{
-									fontSize: buttonSize,
-									style: {
-										fontVariant: ["small-caps"]
-									}
+									fontSize: buttonSize
 								}}
 							>Import</Button>
 						</HStack>
@@ -235,10 +229,7 @@ const WEInput = () => {
 					bg={clearDisabled ? "gray.500" : "warning.500"}
 					_text={{
 						fontSize: buttonSize,
-						color: warningContrast,
-						style: {
-							fontVariant: ["small-caps"]
-						}
+						color: warningContrast
 					}}
 					disabled={clearDisabled}
 					py={0.5}
@@ -252,10 +243,7 @@ const WEInput = () => {
 					bg={importDisabled ? "gray.500" : "primary.500"}
 					_text={{
 						fontSize: buttonSize,
-						color: primaryContrast,
-						style: {
-							fontVariant: ["small-caps"]
-						}
+						color: primaryContrast
 					}}
 					disabled={importDisabled}
 					py={0.5}

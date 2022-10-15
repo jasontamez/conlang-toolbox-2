@@ -137,10 +137,7 @@ const WGSettings = () => {
 			<Button
 				borderRadius="full"
 				_text={{
-					fontSize: buttonSize,
-					style: {
-						fontVariant: ["small-caps"]
-					}
+					fontSize: buttonSize
 				}}
 				py={0.5}
 				px={3}

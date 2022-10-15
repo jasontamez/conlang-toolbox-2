@@ -499,7 +499,7 @@ const ParseMSJSON = (props) => {
 							startIcon={<InfoIcon size={smallerSize} />}
 							onPress={() => setModal(id)}
 							_text={{fontSize: smallerSize}}
-						>{(label || "Read About It").toUpperCase()}</Button>
+						>{(label || "Read About It")}</Button>
 					</HStack>
 				);
 			case "Checkboxes":

@@ -164,7 +164,10 @@ const mainButton = {
 			color: "success.50",
 //			fontFamily: "body",
 			fontWeight: 400,
-			fontStyle: "normal"
+			fontStyle: "normal",
+			style: {
+				fontVariant: ["small-caps"]
+			}
 		}
 	}
 };

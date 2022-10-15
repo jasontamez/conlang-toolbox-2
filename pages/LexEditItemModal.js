@@ -130,7 +130,7 @@ const ModalLexiconEditingItem = ({
 							_text={{color: "danger.50", fontSize: textSize}}
 							p={1}
 							m={2}
-						>DELETE</Button>
+						>Delete</Button>
 						<Button
 							startIcon={<SaveIcon color="tertiary.50" size={textSize} m={0} />}
 							bg="tertiary.500"
@@ -138,7 +138,7 @@ const ModalLexiconEditingItem = ({
 							_text={{color: "tertiary.50", fontSize: textSize}}
 							p={1}
 							m={2}
-						>SAVE</Button>
+						>Save</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>

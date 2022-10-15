@@ -55,7 +55,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				_text={{color: "tertiary.50", fontSize: textSize}}
 				p={1}
 				m={2}
-			>ADD</Button>
+			>Add</Button>
 		);
 	};
 	const addNewColumnFunc = () => {
@@ -264,7 +264,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							_text={{color: "success.50", fontSize: textSize}}
 							p={1}
 							m={2}
-						>SAVE</Button>
+						>Save</Button>
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>

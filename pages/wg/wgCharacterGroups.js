@@ -414,14 +414,14 @@ const WGChar = () => {
 								mx={1}
 								onPress={() => maybeDeleteGroup(editingGroup)}
 								_text={{fontSize: textSize}}
-							>DELETE</Button>
+							>Delete</Button>
 							<Button
 								startIcon={<SaveIcon size={textSize} />}
 								px={2}
 								py={1}
 								onPress={() => maybeSaveEditedGroup()}
 								_text={{fontSize: textSize}}
-							>SAVE</Button>
+							>Save</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>
@@ -480,7 +480,7 @@ const WGChar = () => {
 									_text={{ fontSize: smallerSize }}
 									_stack={{ space: 0.5 }}
 									onPress={suggestLabel}
-								>SUGGEST</Button>
+								>Suggest</Button>
 							</HStack>
 							<TextSetting
 								text="Letters/Characters"
@@ -534,14 +534,14 @@ const WGChar = () => {
 								mx={1}
 								onPress={() => addNewGroup(false)}
 								_text={{fontSize: textSize}}
-							>ADD</Button>
+							>Add</Button>
 							<Button
 								startIcon={<AddIcon size={textSize} />}
 								px={2}
 								py={1}
 								onPress={() => addNewGroup(true)}
 								_text={{fontSize: textSize}}
-							>ADD AND CLOSE</Button>
+							>Add and Close</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>

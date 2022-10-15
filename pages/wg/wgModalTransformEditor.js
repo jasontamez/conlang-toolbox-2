@@ -139,14 +139,14 @@ const ModalTransformEditingItem = ({
 							mx={1}
 							onPress={() => maybeDeleteTransform(transform)}
 							_text={{ fontSize: textSize }}
-						>DELETE</Button>
+						>Delete</Button>
 						<Button
 							startIcon={<SaveIcon size={textSize} />}
 							px={2}
 							py={1}
 							onPress={() => maybeSaveEditedTransform(true)}
 							_text={{ fontSize: textSize }}
-						>SAVE</Button>
+						>Save</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>
