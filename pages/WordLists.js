@@ -12,11 +12,11 @@ import {
 	ScrollView,
 	Modal,
 	VStack,
-	Radio,
 	useToast,
 	IconButton,
 	useBreakpointValue,
-	useContrastText
+	useContrastText,
+	Menu
 } from 'native-base';
 
 import {
@@ -26,7 +26,7 @@ import {
 	setSavingForLexicon,
 	equalityCheck
 } from '../store/wordListsSlice';
-import { CloseCircleIcon, CloseIcon, SaveIcon } from "../components/icons";
+import { CloseCircleIcon, CloseIcon, SaveIcon, SortEitherIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
 
@@ -46,7 +46,7 @@ const WordLists = () => {
 	const textSize= useBreakpointValue(sizes.sm);
 	const buttonTextSize = useBreakpointValue(sizes.xs);
 	const [addToLexicon, setAddToLexicon] = useState([]);
-	const [columnID, setColumnID] = useState(columns[0].id);
+	const [columnID, setColumnID] = useState(0);
 	const shown = [];
 	WL.words.forEach(({word, lists}) => {
 		if(lists.some((list) => listsDisplayed[list])) {
@@ -92,6 +92,10 @@ const WordLists = () => {
 		dispatch(setSavingForLexicon({}));
 	};
 	const SaveBar = () => {
+		// sanity check
+		if(columns.length === 0) {
+			return <></>;
+		}
 		const SaveAll = () => (
 			<Button
 				bg="secondary.500"
@@ -168,7 +172,7 @@ const WordLists = () => {
 		// change global state
 		dispatch(addMultipleItemsAsColumn({
 			words: addToLexicon,
-			column: columnID
+			column: columns[columnID].id
 		}));
 		// close modal
 		setAddToLexicon([]);
@@ -313,7 +317,7 @@ const WordLists = () => {
 				</ScrollView>
 			</Box>
 			<SaveBar />
-			<Modal isOpen={addToLexicon.length > 0}>
+			<Modal isOpen={addToLexicon.length > 0} size="sm">
 				<Modal.Content>
 					<Modal.Header
 						bg="primary.500"
@@ -337,38 +341,60 @@ const WordLists = () => {
 							alignItems="center"
 							justifyContent="flex-start"
 						>
-							<Text alignSelf="flex-start" mb={4} fontSize={textSize}>Choose which Lexicon column to put the words in.</Text>
-							<Radio.Group
-								onChange={(value) => setColumnID(value)}
-								accessibilityLabel="Lexicon columns"
-								alignItems="stretch"
-								shadow={3}
-								defaultValue={columns[0].id}
-								_radio={{
-									_text: {
-										fontSize: textSize
-									},
-									_icon: {
-										size: buttonTextSize
-									},
-									p: 2,
-									pr: 4
-								}}
+							<Text textAlign="center" mb={4} fontSize={textSize}>Choose which Lexicon column to put the words in.</Text>
+							<Menu
+								placement="top right"
+								closeOnSelect={true}
+								trigger={
+									(props) => (
+										<Button
+											p={1}
+											ml={2}
+											mr={1}
+											bg="secondary.500"
+											_stack={{
+												justifyContent: "space-between",
+												alignItems: "center",
+												flexGrow: 1,
+												flexShrink: 1,
+												flexBasis: 0,
+												space: 0,
+												style: {
+													overflow: "hidden"
+												}
+											}}
+											startIcon={<SortEitherIcon size={buttonTextSize} mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
+											{...props}
+										>
+											<Box
+												overflow="hidden"
+											>
+												<Text fontSize={buttonTextSize} color="secondary.50" isTruncated textAlign="left" noOfLines={1}>{columns.length > 0 && columns[columnID].label}</Text>
+											</Box>
+										</Button>
+									)
+								}
 							>
-								{columns.map((col, index) => (
-									<Radio
-										value={col.id}
-										key={col.id}
-										_stack={{
-											bg: index % 2
-												? "lighter"
-												: "darker"
-										}}
-									>
-										{col.label}
-									</Radio>
-								))}
-							</Radio.Group>
+								<Menu.OptionGroup
+									title="Sort By:"
+									_title={{fontSize: buttonTextSize}}
+									defaultValue={0}
+									type="radio"
+									onChange={(v) => setColumnID(v)}
+								>
+									{
+										columns.map((item, i) => (
+											<Menu.ItemOption
+												key={item.id + "-ImportDestination"}
+												value={i}
+												_text={{fontSize: textSize}}
+											>
+												{item.label}
+											</Menu.ItemOption>
+										))
+									}
+								</Menu.OptionGroup>
+							</Menu>
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer
