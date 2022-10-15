@@ -4,7 +4,7 @@ export const saveOnEnd = (func) => {
 	// This will work correctly for web and Android, but will double-fire on iOS.
 	const sendToFunc = (e) => {
 		if(e.nativeEvent && e.nativeEvent.text !== undefined) {
-			console.log("fired: " + e.nativeEvent.text);
+			//console.log("fired: " + e.nativeEvent.text);
 			func(e.nativeEvent.text);
 		}
 	};

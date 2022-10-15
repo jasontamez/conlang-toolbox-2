@@ -223,6 +223,7 @@ const ParseMSJSON = (props) => {
 			rows,
 			placeholder,
 			content,
+			label,
 			level,
 			title
 		} = bit;
@@ -250,7 +251,6 @@ const ParseMSJSON = (props) => {
 					end,
 					notFilled,
 					max,
-					label,
 					uncapped
 				} = bit;
 				const Element = uncapped ?
