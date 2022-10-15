@@ -2,7 +2,6 @@ import {
 	useBreakpointValue,
 	Text,
 	HStack,
-	Box,
 	ScrollView,
 	VStack,
 	IconButton,
@@ -10,16 +9,11 @@ import {
 	Modal,
 	useContrastText,
 	Button,
-	Center,
 	Input,
 	useToast
 } from "native-base";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReAnimated, {
-	FadeInUp,
-	FadeOutUp
-} from 'react-native-reanimated';
 
 import {
 	AddIcon,
@@ -29,7 +23,7 @@ import {
 	SaveIcon,
 	TrashIcon
 } from "../../components/icons";
-import { SliderWithValueDisplay, TextSetting, ToggleSwitch } from "../../components/inputTags";
+import { TextSetting } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
 import {
 	addCharacterGroup,
