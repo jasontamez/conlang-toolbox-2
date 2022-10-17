@@ -19,7 +19,7 @@ import { equalityCheck, setStoredCustomInfo } from '../../store/wgSlice';
 import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon, SaveIcon, SortEitherIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
-import { TextSetting, ToggleSwitch } from '../../components/inputTags';
+import { DropDown, TextSetting, ToggleSwitch } from '../../components/inputTags';
 import doToast from '../../helpers/toast';
 import { LoadingOverlay } from '../../components/FullBodyModal';
 //import doExport from '../../components/ExportServices';
@@ -262,78 +262,32 @@ const SaveCustomInfoModal = ({
 							boxProps={{pt: 4}}
 						/>
 					:
-						<Menu
-							placement="bottom left"
-							closeOnSelect={true}
-							trigger={
-								(props) => (
-									<Button
-										p={1}
-										mt={4}
-										mb={2}
-										bg="tertiary.500"
-										flexGrow={1}
-										flexShrink={2}
-										_stack={{
-											justifyContent: "space-between",
-											alignItems: "center",
-											flexGrow: 1,
-											flexShrink: 1,
-											flexBasis: 0,
-											space: 0,
-											style: {
-												overflow: "hidden"
-											}
-										}}
-										startIcon={
-											<SortEitherIcon
-												size={textSize}
-												mr={1}
-												color="tertiary.50"
-												flexGrow={0}
-												flexShrink={0}
-											/>
-										}
-										{...props}
-									>
-										<Box
-											overflow="hidden"
-										>
-											<Text
-												fontSize={textSize}
-												color="tertiary.50"
-												isTruncated
-												textAlign="left"
-												noOfLines={1}
-											>{overwriteSaveLabel}</Text>
-										</Box>
-									</Button>
-								)
-							}
-						>
-							<Menu.OptionGroup
-								title="Previous Saves:"
-								_title={{fontSize: textSize}}
-								defaultValue={overwriteSaveID}
-								type="radio"
-								onChange={(id) => {
-									setOverwriteSaveID(id);
-									setOverwriteSaveLabel(storedCustomInfo[id]);
-								}}
-							>
-								{
-									storedCustomIDs.map((id) => (
-										<Menu.ItemOption
-											key={id + "-Sorting"}
-											value={id}
-											_text={{fontSize: textSize}}
-										>
-											{storedCustomInfo[id]}
-										</Menu.ItemOption>
-									))
-								}
-							</Menu.OptionGroup>
-						</Menu>
+						<DropDown
+						buttonProps={{
+							ml: 0,
+							mr: 0,
+							mt: 4,
+							mb: 2,
+							flexShrink: 2
+						}}
+						fontSize={textSize}
+							labelFunc={() => overwriteSaveLabel}
+							onChange={(id) => {
+								setOverwriteSaveID(id);
+								setOverwriteSaveLabel(storedCustomInfo[id]);
+							}}
+							defaultValue={overwriteSaveID}
+							title="Display:"
+							options={storedCustomIDs.map((id) => {
+								return {
+									key: `${id}-Sorting`,
+									value: id,
+									label: storedCustomInfo[id]
+								};
+							})}
+							bg="tertiary.500"
+							color="tertiary.50"
+						/>
 					}
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>

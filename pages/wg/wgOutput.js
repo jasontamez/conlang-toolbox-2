@@ -61,7 +61,7 @@ import {
 	setWordsPerWordlist
 } from "../../store/wgSlice";
 import StandardAlert from "../../components/StandardAlert";
-import { SliderWithValueDisplay, ToggleSwitch } from "../../components/inputTags";
+import { DropDown, SliderWithValueDisplay, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 
@@ -724,6 +724,24 @@ const WGOutput = () => {
 		);
 	});
 
+	const outputOptions = [
+		{
+			key: "text",
+			value: "text",
+			label: "Pseudo-Text"
+		},
+		{
+			key: "wordlist",
+			value: "wordlist",
+			label: "List of Words"
+		},
+		{
+			key: "syllables",
+			value: "syllables",
+			label: "Every possible syllable"
+		}
+	];
+
 	return (
 		<VStack h="full" alignContent="flex-start" bg="main.900" mb={16}>
 			<StandardAlert
@@ -929,88 +947,49 @@ const WGOutput = () => {
 					<Modal.Body>
 						<VStack alignItems="center" justifyContent="center" space={2}>
 							<Text textAlign="center" fontSize={textSize}>Choose which Lexicon column to save the words to:</Text>
-							<Menu
-								placement="bottom left"
-								closeOnSelect={true}
-								trigger={
-									(props) => {
-										if(columns.length <= 0) {
-											return (
-												<Box
-													bg="error.800"
-													borderColor="error.500"
-													borderWidth={2}
-													px={4}
-													py={2}
-												>
-													<Text color="error.50" textAlign="center" fontSize={textSize}>There are no columns in the Lexicon. You must have at least one column in order to save anything.</Text>
-												</Box>
-											);
-										}
-										return (
-											<Button
-												px={2}
-												py={1}
-												bg="secondary.500"
-												_stack={{
-													justifyContent: "space-between",
-													alignItems: "center",
-													flexGrow: 1,
-													flexShrink: 1,
-													flexBasis: 0,
-													space: 0,
-													style: {
-														overflow: "hidden"
-													}
-												}}
-												startIcon={
-													<SortEitherIcon
-														mx={1}
-														size={descSize}
-														color={secondaryContrast}
-														flexGrow={0}
-														flexShrink={0}
-													/>
-												}
-												{...props}
-											>
-												<Box
-													overflow="hidden"
-												>
-													<Text
-														fontSize={textSize}
-														color={secondaryContrast}
-														isTruncated
-														textAlign="center"
-														noOfLines={1}
-													>{whereToSaveInLex.label}</Text>
-												</Box>
-											</Button>
-										)
-									}
-								}
-							>
-								<Menu.OptionGroup
-									title="Choose a column:"
-									defaultValue={whereToSaveInLex}
-									type="radio"
-									onChange={(v) => setWhereToSaveInLex(v)}
+							{columns.length <= 0 ?
+								<Box
+									bg="error.800"
+									borderColor="error.500"
+									borderWidth={2}
+									px={4}
+									py={2}
 								>
-									{
-										columns.map((item) => {
-											const {id, label} = item;
-											return (
-												<Menu.ItemOption
-													key={id + "-LexColumn"}
-													value={item}
-												>
-													{label}
-												</Menu.ItemOption>
-											);
-										})
+									<Text color="error.50" textAlign="center" fontSize={textSize}>There are no columns in the Lexicon. You must have at least one column in order to save anything.</Text>
+								</Box>
+							:
+								<DropDown
+									fontSize={textSize}
+									labelFunc={() => whereToSaveInLex.label}
+									color={secondaryContrast}
+									onChange={(v) => setWhereToSaveInLex(v)}
+									defaultValue={whereToSaveInLex}
+									title="Choose a Column:"
+									options={columns.map((item) => {
+										const {id, label} = item;
+										return {
+											key: `${id}-LexColumn`,
+											value: item,
+											label
+										};
+									})}
+									startIcon={
+										<SortEitherIcon
+											mx={1}
+											size={descSize}
+											color={secondaryContrast}
+											flexGrow={0}
+											flexShrink={0}
+										/>
 									}
-								</Menu.OptionGroup>
-							</Menu>
+									buttonProps={{
+										px: 2,
+										py: 1,
+										ml: 0,
+										mr: 0
+									}}
+								/>
+							}
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>
@@ -1068,69 +1047,34 @@ const WGOutput = () => {
 					justifyContent="flex-start"
 					space={4}
 				>
-					<Menu
-						placement="bottom left"
-						closeOnSelect={true}
-						trigger={
-							(props) => (
-								<Button
-									py={1}
-									pl={2}
-									pr={3}
-									bg="tertiary.500"
-									flexGrow={1}
-									flexShrink={2}
-									_stack={{
-										justifyContent: "space-between",
-										alignItems: "center",
-										flexGrow: 1,
-										flexShrink: 1,
-										flexBasis: 0,
-										space: 0,
-										style: {
-											overflow: "hidden"
-										}
-									}}
-									startIcon={<SortEitherIcon mx={1} size={descSize} color={tertiaryContrast} flexGrow={0} flexShrink={0} />}
-									{...props}
-								>
-									<Box
-										overflow="hidden"
-										flexGrow={1}
-										flexShrink={0}
-									>
-										<Text fontSize={textSize} color={tertiaryContrast} isTruncated textAlign="left" noOfLines={1}>{
-											output === "text" ?
-												"Pseudo-Text"
-											: (
-												output === "syllables" ?
-													"Every possible syllable"
-												:
-													"List of Words"
-											)
-										}</Text>
-									</Box>
-								</Button>
-							)
-						}
-					>
-						<Menu.OptionGroup
-							title="Display:"
-							defaultValue={output}
-							type="radio"
-							onChange={(v) => setOutput(v)}
-						>
-							<Menu.ItemOption value="text">
-								Pseudo-Text
-							</Menu.ItemOption>
-							<Menu.ItemOption value="wordlist">
-								List of Words
-							</Menu.ItemOption>
-							<Menu.ItemOption value="syllables">
-								Every possible syllable
-							</Menu.ItemOption>
-						</Menu.OptionGroup>
-					</Menu>
+					<DropDown
+						fontSize={textSize}
+						labelFunc={() => {
+							let opt;
+							outputOptions.some(o => {
+								if(o.value === output) {
+									opt = o.label;
+									return true;
+								}
+								return false;
+							});
+							return opt || "ERROR";
+						}}
+						buttonProps={{
+							py: 1,
+							pr: 3,
+							pl: 2,
+							flexShrink: 2,
+							ml: 0,
+							mr: 0
+						}}
+						onChange={(v) => setOutput(v)}
+						defaultValue={output}
+						title="Display:"
+						options={outputOptions}
+						bg="tertiary.500"
+						color={tertiaryContrast}
+					/>
 					<Button
 						_text={{
 							fontSize: largeSize,

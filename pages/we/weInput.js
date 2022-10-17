@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { editInput } from "../../store/weSlice";
 import {
+	DropDown,
 	TextAreaSetting
 } from '../../components/inputTags';
 import {
@@ -133,34 +134,29 @@ const WEInput = () => {
 							px={4}
 						>
 							<Text textAlign="center" fontSize={textSize}>Which Lexicon column do you want to import?</Text>
-							<Menu
-								placement="bottom left"
-								closeOnSelect={true}
-								trigger={(triggerProps) => (
-									<Button
-										m="auto"
-										accessibilityLabel="More options menu"
-										startIcon={<SortEitherIcon size={inputSize} mr={1} color={secondaryContrast} />}
-										_text={{
-											color: secondaryContrast,
-											fontSize: buttonSize
-										}}
-										bg="secondary.500"
-										px={2}
-										py={1}
-										my={2}
-										{...triggerProps}
-									>{column ? column.label : "[Empty Lexicon]"}</Button>
-								)}
-							>
-								{getCols().map(col => (
-									<Menu.Item
-										key={col.id}
-										value={col.id}
-										onPress={() => setColumn(col)}
-									>{col.label}</Menu.Item>
-								))}
-							</Menu>
+							<DropDown
+								fontSize={buttonSize}
+								labelFunc={() => column ? column.label : "[Empty Lexicon]"}
+								onChange={(v) => setColumn(v)}
+								title="Columns:"
+								color={secondaryContrast}
+								options={getCols().map((item) => {
+									const {id, label} = item;
+									return {
+										key: id,
+										value: id,
+										label
+									};
+								})}
+								buttonProps={{
+									p: 2,
+									py: 1,
+									my: 2,
+									mr: 0,
+									ml: 0,
+									mx: "auto"
+								}}
+							/>
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>

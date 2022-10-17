@@ -43,7 +43,7 @@ import doToast from '../helpers/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
-import { TextAreaSetting, TextSetting } from '../components/inputTags';
+import { DropDown, TextAreaSetting, TextSetting } from '../components/inputTags';
 import { fontSizesInPx } from '../store/appStateSlice';
 
 const Lex = () => {
@@ -418,62 +418,27 @@ const Lex = () => {
 						style={{maxWidth: width - 110 - 36}}
 						flexWrap="wrap"
 					>
-						<Menu
+						<DropDown
 							placement="top right"
-							closeOnSelect={true}
-							trigger={
-								(props) => (
-									<Button
-										p={1}
-										ml={2}
-										mr={1}
-										bg="secondary.500"
-										flexGrow={1}
-										flexShrink={2}
-										maxW={width / 2}
-										_stack={{
-											justifyContent: "space-between",
-											alignItems: "center",
-											flexGrow: 1,
-											flexShrink: 1,
-											flexBasis: 0,
-											space: 0,
-											style: {
-												overflow: "hidden"
-											}
-										}}
-										startIcon={<SortEitherIcon size={smallerSize} mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
-										{...props}
-									>
-										<Box
-											overflow="hidden"
-										>
-											<Text fontSize={smallerSize} color="secondary.50" isTruncated textAlign="left" noOfLines={1}>{columns[sortPattern[0]].label}</Text>
-										</Box>
-									</Button>
-								)
-							}
-						>
-							<Menu.OptionGroup
-								title="Sort By:"
-								_title={{fontSize: smallerSize}}
-								defaultValue={sortPattern[0]+1}
-								type="radio"
-								onChange={(v) => doSortBy(v)}
-							>
-								{
-									columns.map((item, i) => (
-										<Menu.ItemOption
-											key={item.id + "-Sorting"}
-											value={i+1}
-											_text={{fontSize: textSize}}
-										>
-											{item.label}
-										</Menu.ItemOption>
-									))
-								}
-							</Menu.OptionGroup>
-						</Menu>
+							fontSize={smallerSize}
+							menuSize={textSize}
+							labelFunc={() => columns[sortPattern[0]].label}
+							onChange={(v) => doSortBy(v)}
+							defaultValue={sortPattern[0]+1}
+							title="Sort By:"
+							options={columns.map((item, i) => {
+								const {id, label} = item;
+								return {
+									key: `${id}-Sorting`,
+									value: i + 1,
+									label
+								};
+							})}
+							buttonProps={{
+								maxW: width / 2,
+								flexShrink: 2
+							}}
+						/>
 						<IconButton
 							onPress={() => dispatch(toggleSortDir())}
 							icon={sortDir ? <SortUpIcon size={smallerSize} /> : <SortDownIcon size={smallerSize} />}

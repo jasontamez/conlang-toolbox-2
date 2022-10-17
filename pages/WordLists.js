@@ -29,6 +29,7 @@ import {
 import { CloseCircleIcon, CloseIcon, SaveIcon, SortEitherIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
+import { DropDown } from '../components/inputTags';
 
 const WordLists = () => {
 	const {
@@ -342,59 +343,22 @@ const WordLists = () => {
 							justifyContent="flex-start"
 						>
 							<Text textAlign="center" mb={4} fontSize={textSize}>Choose which Lexicon column to put the words in.</Text>
-							<Menu
+							<DropDown
 								placement="top right"
-								closeOnSelect={true}
-								trigger={
-									(props) => (
-										<Button
-											p={1}
-											ml={2}
-											mr={1}
-											bg="secondary.500"
-											_stack={{
-												justifyContent: "space-between",
-												alignItems: "center",
-												flexGrow: 1,
-												flexShrink: 1,
-												flexBasis: 0,
-												space: 0,
-												style: {
-													overflow: "hidden"
-												}
-											}}
-											startIcon={<SortEitherIcon size={buttonTextSize} mr={1} color="secondary.50" flexGrow={0} flexShrink={0} />}
-											{...props}
-										>
-											<Box
-												overflow="hidden"
-											>
-												<Text fontSize={buttonTextSize} color="secondary.50" isTruncated textAlign="left" noOfLines={1}>{columns.length > 0 && columns[columnID].label}</Text>
-											</Box>
-										</Button>
-									)
-								}
-							>
-								<Menu.OptionGroup
-									title="Sort By:"
-									_title={{fontSize: buttonTextSize}}
-									defaultValue={0}
-									type="radio"
-									onChange={(v) => setColumnID(v)}
-								>
-									{
-										columns.map((item, i) => (
-											<Menu.ItemOption
-												key={item.id + "-ImportDestination"}
-												value={i}
-												_text={{fontSize: textSize}}
-											>
-												{item.label}
-											</Menu.ItemOption>
-										))
-									}
-								</Menu.OptionGroup>
-							</Menu>
+								fontSize={buttonTextSize}
+								labelFunc={() => columns.length > 0 && columns[columnID].label}
+								onChange={(v) => setColumnID(v)}
+								defaultValue={0}
+								title="Columns:"
+								options={columns.map((item, i) => {
+									const {id, label} = item;
+									return {
+										key: `${id}-ImportDestination`,
+										value: i,
+										label
+									};
+								})}
+							/>
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer
