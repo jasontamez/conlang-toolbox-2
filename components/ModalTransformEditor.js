@@ -12,19 +12,19 @@ import {
 	useToast
 } from 'native-base';
 
-import ExtraChars from '../../components/ExtraCharsButton';
+import ExtraChars from './ExtraCharsButton';
 import {
 	CloseCircleIcon,
 	TrashIcon,
 	SaveIcon
-} from '../../components/icons';
-import { editTransform } from '../../store/wgSlice';
-import { TextSetting } from '../../components/inputTags';
-import doToast from '../../helpers/toast';
+} from './icons';
+import { TextSetting } from './inputTags';
+import doToast from '../helpers/toast';
 
 const ModalTransformEditingItem = ({
 	transform,
 	alertOpener,
+	editTransform,
 	endEditingFunc,
 	maybeDeleteTransform,
 }) => {
