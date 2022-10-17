@@ -6,6 +6,6 @@ import {
 } from "../../store/weSlice";
 import Transformations from "../../components/Transformations";
 
-const WETransformations = (props) => <Transformations selector="we" {...{addTransform, editTransform, deleteTransform, rearrangeTransforms, ...props}} />;
+const WETransformations = (props) => <Transformations useDirection={true} selector="we" {...{addTransform, editTransform, deleteTransform, rearrangeTransforms, ...props}} />;
 
 export default WETransformations;

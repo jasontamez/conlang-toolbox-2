@@ -44,7 +44,7 @@ import doConvert from './helpers/convertOldStorageToNew';
 import WE from './pages/WE';
 import WEInput from './pages/we/weInput';
 import WECharacters from './pages/we/weCharacterGroups';
-//import WETransformations from './pages/we/weTransformations';
+import WETransformations from './pages/we/weTransformations';
 //import WESoundChanges from './pages/we/weSoundChanges';
 //import WEOutput from './pages/we/weOutput';
 
@@ -183,8 +183,8 @@ const AppRoutes = () => {
 					<Route path="/we/*" element={<WE />}>
 						<Route index element={<WEInput />} />
 						<Route path="characters" element={<WECharacters />} />
-						{ /*<Route path="transformations" element={<WETransformations />} />
-						<Route path="soundchanges" element={<WESoundChanges />} />
+						<Route path="transformations" element={<WETransformations />} />
+						{ /*<Route path="soundchanges" element={<WESoundChanges />} />
 						<Route path="output" element={<WEOutput/>} /> */ }
 					</Route>
 					<Route path="/lex" element={<Lexicon />} />

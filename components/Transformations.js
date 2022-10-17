@@ -38,7 +38,9 @@ import doToast from "../helpers/toast";
 import ModalTransformEditingItem from "./ModalTransformEditor";
 import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 
+//direction: both | in | out | double
 const Transformations = ({
+	useDirection,
 	selector,
 	addTransform,
 	editTransform,
@@ -56,6 +58,7 @@ const Transformations = ({
 	const [addSearch, setAddSearch] = useState("");
 	const [addReplace, setAddReplace] = useState("");
 	const [addDescription, setAddDescription] = useState("");
+	const [addDirection, setAddDirection] = useState("both");
 	const refSearch = useRef(null);
 	const refReplace = useRef(null);
 	const refDescription = useRef(null);
@@ -125,6 +128,9 @@ const Transformations = ({
 			search,
 			replace
 		};
+		if(useDirection) {
+			newTransform.direction = addDirection;
+		}
 		if(description) {
 			newTransform.description = description;
 		}
@@ -170,8 +176,30 @@ const Transformations = ({
 		</Box>
 	);
 	const Arrow = (props) => <Text fontSize={textSize} {...props}>⟶</Text>;
+	const Direction = ({direction}) => {
+		// input only
+		// output only
+		// input, then reverse at output
+		// input, again at output
+		let msg = "ERROR";
+		switch(direction) {
+			case "input":
+				msg = "[input only]";
+				break;
+			case "output":
+				msg = "[output only]";
+				break;
+			case "both":
+				msg = "[input, then undo]";
+				break;
+			case "double":
+				msg = "[input and output]";
+				break;
+		}
+		return <Text fontSize={textSize}>{msg}</Text>;
+	};
 	const Item = ({item, stackProps}) => {
-		const { search, replace, description } = item;
+		const { search, replace, description, direction } = item;
 		return (
 			<VStack
 				alignItems="flex-start"
@@ -187,6 +215,7 @@ const Transformations = ({
 					<Unit>{search}</Unit>
 					<Arrow />
 					<Unit>{replace || " "}</Unit>
+					{useDirection ? <Direction direction={direction} /> : <></>}
 				</HStack>
 				<Text italic fontSize={descSize}>{description}</Text>
 			</VStack>
@@ -229,6 +258,7 @@ const Transformations = ({
 				endEditingFunc={() => setEditingTransform(false)}
 				maybeDeleteTransform={maybeDeleteTransform}
 				editTransform={editTransform}
+				useDirection={useDirection}
 			/>
 			<Modal isOpen={addTransformOpen}>
 				<Modal.Content>

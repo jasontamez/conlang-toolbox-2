@@ -22,6 +22,7 @@ import { TextSetting } from './inputTags';
 import doToast from '../helpers/toast';
 
 const ModalTransformEditingItem = ({
+	useDirection,
 	transform,
 	alertOpener,
 	editTransform,
@@ -37,6 +38,7 @@ const ModalTransformEditingItem = ({
 	const sizes = useSelector(state => state.appState.sizes);
 	const [modifiedSearch, setModifiedSearch] = useState("");
 	const [modifiedReplace, setModifiedReplace] = useState("");
+	const [modifiedDirection, setModifiedDirection] = useState("both");
 	const [modifiedDescription, setModifiedDescription] = useState("");
 	const [editingID, setEditingID] = useState("");
 	const inputSize = useBreakpointValue(sizes.xs);
@@ -48,7 +50,7 @@ const ModalTransformEditingItem = ({
 	const rRef = useRef(null);
 	const dRef = useRef(null);
 	useEffect(() => {
-		const { id, search, replace, description } = transform;
+		const { id, search, replace, direction, description } = transform;
 		const dummy = { value: "" };
 		setEditingID(id);
 		setModifiedSearch(search || "");
@@ -57,6 +59,7 @@ const ModalTransformEditingItem = ({
 		(rRef.current || dummy).value = replace || "";
 		setModifiedDescription(description || "");
 		(dRef.current || dummy).value = description || "";
+		setModifiedDirection(direction || "both");
 	}, [transform]);
 	const primaryContrast = useContrastText('primary.500');
 	const maybeSaveEditedTransform = () => {
@@ -69,9 +72,12 @@ const ModalTransformEditingItem = ({
 		let editedTransform = {
 			id: editingID,
 			search: modSearch,
-			replace: modifiedReplace.trim(),
+			replace: modifiedReplace.trim()
 		};
 		const modDesc = modifiedDescription.trim();
+		if(useDirection) {
+			editedTransform.direction = modifiedDirection;
+		}
 		if (modDesc) {
 			editedTransform.description = modDesc;
 		}
@@ -127,6 +133,7 @@ const ModalTransformEditingItem = ({
 							value={modifiedDescription}
 							onChangeText={(v) => setModifiedDescription(v)}
 						/>
+						<Text>TO-DO: Direction Menu thingie</Text>
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer>

@@ -30,7 +30,7 @@ const editCharacterGroupFunc = (state, action) => {
 
 // TRANSFORMS
 const addTransformFunc = (state, action) => {
-	// { id, search, replace, ?description }
+	// { id, search, replace, direction, ?description }
 	state.transforms.push(action.payload);
 	return state;
 };
@@ -49,6 +49,8 @@ const rearrangeTransformsFunc = (state, action) => {
 	state.transforms = action.payload;
 	return state;
 };
+
+// SOUND CHANGES
 
 // SETTINGS
 

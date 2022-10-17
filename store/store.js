@@ -308,6 +308,57 @@ initialAppState.wg = {
 		}
 	]
 };
+initialAppState.we = {
+	input: "what\ndo\nyou\nknow\npot\nnot\nkeep\nduk",
+	characterGroups: [
+		{
+			label: "C",
+			description: "Consonants",
+			run: "tnsrdlmqwfgypbcvhkjxqzNW"
+		},
+		{
+			label: "V",
+			description: "Vowels",
+			run: "eaoiuOiU"
+		}
+	],
+	transforms: [
+		{
+			id: "1",
+			search: "kn",
+			replace: "N",
+			direction: "both"
+		},
+		{
+			id: "2",
+			search: "wh",
+			replace: "W",
+			direction: "both"
+		},
+		{
+			id: "3",
+			search: "ow",
+			replace: "O",
+			direction: "both"
+		},
+		{
+			id: "4",
+			search: "ou",
+			replace: "U",
+			direction: "both"
+		}
+	],
+	soundChanges: [
+		{
+			key: "s1",
+			seek: "([ptk])ʰ",
+			replace: "$1",
+			context: "_[aeiou]+[ptk]ʰ",
+			anticontext: "",
+			description: ""
+		}
+	]
+};
 initialAppState.lexicon = {
 	...initialAppState.lexicon,
 	description: "Hi, this is a description.",
