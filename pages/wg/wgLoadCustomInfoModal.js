@@ -4,7 +4,6 @@ import {
 	HStack,
 	IconButton,
 	Modal,
-	Radio,
 	Text,
 	useBreakpointValue,
 	useContrastText,
@@ -14,9 +13,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import ReAnimated, {
 	FlipInYRight,
-	FlipOutYRight,
-	ZoomInEasyDown,
-	ZoomOutEasyDown
+	FlipOutYRight
 } from 'react-native-reanimated';
 
 import { wgCustomStorage } from '../../helpers/persistentInfo';
@@ -26,6 +23,7 @@ import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
 import doToast from '../../helpers/toast';
 import { LoadingOverlay } from '../../components/FullBodyModal';
+import { DropDown } from '../../components/inputTags';
 
 const LoadCustomInfoModal = ({
 	modalOpen,
@@ -195,33 +193,45 @@ const LoadCustomInfoModal = ({
 						<ReAnimated.View
 							entering={FlipInYRight}
 							exiting={FlipOutYRight}
-							style={{flex: 1, width: "100%"}}
+							style={{
+								flex: 1,
+								width: "100%",
+								alignItems: "center",
+								justifyContent: "center"
+							}}
 						>
-							<Radio.Group
-								value={customInfoChosen}
+							<DropDown
+								placement="top right"
+								fontSize={textSize}
+								defaultValue={customInfoChosen}
+								labelFunc={() => customLabelChosen}
+								title="Choose a Save:"
 								onChange={(v) => {
 									setCustomInfoChosen(v);
 									setCustomLabelChosen(storedCustomInfo[v]);
 								}}
-								alignItems="flex-start"
-								justifyContent="center"
-								mx="auto"
-								my={4}
-								label="List of Custom Info saved"
-							>
-								{storedCustomIDs.map(id => (
-									<Radio
-										key={`${id}-RadioButton`}
-										size={textSize}
-										value={id}
-										_text={{
-											fontSize: inputSize,
-											isTruncated: true
-										}}
-										my={1}
-									>{storedCustomInfo[id]}</Radio>
-								))}
-							</Radio.Group>
+								options={storedCustomIDs.map(id => {
+									return {
+										key: `${id}-CustomInfo`,
+										value: id,
+										label: storedCustomInfo[id]
+									};
+								})}
+								buttonProps={{
+									flex: 1,
+									px: 2,
+									my: 3,
+									_stack: {
+										justifyContent: "flex-start",
+										alignItems: "center",
+										flex: 1,
+										space: 0,
+										style: {
+											overflow: "hidden"
+										}						
+									}
+								}}
+							/>
 						</ReAnimated.View>
 					:
 						<ReAnimated.View
