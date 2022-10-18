@@ -31,7 +31,7 @@ import {
 	TrashIcon,
 	UpIcon
 } from "./icons";
-import { TextSetting } from "./inputTags";
+import { DropDown, TextSetting } from "./inputTags";
 import StandardAlert from "./StandardAlert";
 import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
@@ -196,7 +196,11 @@ const Transformations = ({
 				msg = "[input and output]";
 				break;
 		}
-		return <Text fontSize={textSize}>{msg}</Text>;
+		return (
+			<Box bg="lighter" mx={1} px={1.5} py={0.5}>
+				<Text fontSize={descSize}>{msg}</Text>
+			</Box>
+		);
 	};
 	const Item = ({item, stackProps}) => {
 		const { search, replace, description, direction } = item;
@@ -220,6 +224,12 @@ const Transformations = ({
 				<Text italic fontSize={descSize}>{description}</Text>
 			</VStack>
 		);
+	};
+	const directionTexts = {
+		both: "at input, then undo at output",
+		input: "at input only",
+		output: "at output only",
+		double: "at input, then again at output"
 	};
 	return (
 		<VStack h="full">
@@ -297,6 +307,49 @@ const Transformations = ({
 								boxProps={{ pb: 2 }}
 								labelProps={{ fontSize: textSize }}
 							/>
+							{
+								useDirection ?
+									<HStack
+										space={1}
+										flexWrap="wrap"
+										alignItems="center"
+										justifyContent="flex-start"
+									>
+										<Text fontSize={textSize}>Transform:</Text>
+										<DropDown
+											placement="top right"
+											bg="lighter"
+											color="text.50"
+											fontSize={textSize}
+											labelFunc={() => directionTexts[addDirection]}
+											onChange={(v) => setAddDirection(v)}
+											defaultValue={addDirection}
+											title="When Used?"
+											options={Object.keys(directionTexts).map(opt => {
+												return {
+													key: `${opt}-AddDirectionChoice`,
+													value: opt,
+													label: directionTexts[opt]
+												};
+											})}
+											buttonProps={{
+												flex: 1,
+												px: 2,
+												_stack: {
+													justifyContent: "flex-start",
+													alignItems: "center",
+													flex: 1,
+													space: 0,
+													style: {
+														overflow: "hidden"
+													}						
+												}
+											}}
+										/>
+									</HStack>
+								:
+									<></>
+							}
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>
