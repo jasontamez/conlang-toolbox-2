@@ -51,6 +51,26 @@ const rearrangeTransformsFunc = (state, action) => {
 };
 
 // SOUND CHANGES
+const addSoundChangeFunc = (state, action) => {
+	// { id, beginning, ending, context, anticontext }
+	state.soundChanges.push(action.payload);
+	return state;
+};
+const deleteSoundChangeFunc = (state, action) => {
+	const id = action.payload;
+	state.soundChanges = state.soundChanges.filter(t => t.id !== id);
+	return state;
+};
+const editSoundChangeFunc = (state, action) => {
+	const item = action.payload;
+	const { id } = item;
+	state.soundChanges = state.soundChanges.map(t => t.id === id ? item : t);
+	return state;
+};
+const rearrangeSoundChangesFunc = (state, action) => {
+	state.soundChanges = action.payload;
+	return state;
+};
 
 // SETTINGS
 
@@ -94,6 +114,10 @@ const weSlice = createSlice({
 		deleteTransform: deleteTransformFunc,
 		editTransform: editTransformFunc,
 		rearrangeTransforms: rearrangeTransformsFunc,
+		addSoundChange: addSoundChangeFunc,
+		deleteSoundChange: deleteSoundChangeFunc,
+		editSoundChange: editSoundChangeFunc,
+		rearrangeSoundChanges: rearrangeSoundChangesFunc,
 		loadWEState: loadWEStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
@@ -108,6 +132,10 @@ export const {
 	deleteTransform,
 	editTransform,
 	rearrangeTransforms,
+	addSoundChange,
+	deleteSoundChange,
+	editSoundChange,
+	rearrangeSoundChanges,
 	loadWEState,
 	setStoredCustomInfo
 } = weSlice.actions;

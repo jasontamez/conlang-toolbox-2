@@ -7,8 +7,7 @@ import {
 	VStack,
 	useContrastText,
 	Modal,
-	IconButton,
-	Menu
+	IconButton
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,8 +19,7 @@ import {
 import {
 	ClearIcon,
 	CloseCircleIcon,
-	ImportIcon,
-	SortEitherIcon,
+	ImportIcon
 } from "../../components/icons";
 import StandardAlert from "../../components/StandardAlert";
 import debounce from "../../helpers/debounce";

@@ -350,12 +350,27 @@ initialAppState.we = {
 	],
 	soundChanges: [
 		{
-			key: "s1",
-			seek: "([ptk])ʰ",
-			replace: "$1",
+			id: "s1",
+			beginning: "([ptk])ʰ",
+			ending: "$1",
 			context: "_[aeiou]+[ptk]ʰ",
-			anticontext: "",
-			description: ""
+			//anticontext: "",
+			//description: ""
+		},
+		{
+			id: "s2",
+			beginning: "h",
+			ending: "w",
+			context: "_",
+			anticontext: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s3",
+			beginning: "t{1}",
+			ending: "tt",
+			context: "._.",
+			description: "double ts not at ends of words"
 		}
 	]
 };

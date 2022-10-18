@@ -379,7 +379,10 @@ const Transformations = ({
 				renderInPortal={false}
 				icon={<AddIcon color="tertiary.50" size={fabSize} />}
 				accessibilityLabel="Add Transform"
-				onPress={() => setAddTransformOpen(true)}
+				onPress={() => {
+					setAddTransformOpen(true);
+					setReordering(false);
+				}}
 			/>
 			<Fab
 				bg="secondary.500"
