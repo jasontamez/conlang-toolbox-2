@@ -12,6 +12,7 @@ import {
 	Modal,
 	Box,
 	Menu,
+	FlatList,
 	useToast
 } from "native-base";
 import React, {
@@ -77,11 +78,11 @@ const WGOutput = () => {
 	const dispatch = useDispatch();
 	const [alertCannotEvolve, setAlertCannotEvolve] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
+	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 
 	const [displayedWords, setDisplayedWords] = useState([]);
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
 	const [displayedText, setDisplayedText] = useState(false);
-	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 	const [rawWords, setRawWords] = useState([]);
 	const [outputStyle, setOutputStyle] = useState("output");
 	const outputStyles = [
@@ -106,6 +107,9 @@ const WGOutput = () => {
 			label: "Output ⟵ Input"
 		}
 	];
+	const [evolvedWords, setEvolvedWords] = useState(false);
+	const [originalEvolvedWords, setOriginalEvolvedWords] = useState(false);
+	const [originalEvolvedRulesWords, setOriginalEvolvedRulesWords] = useState(false);
 
 	const [savingToLexicon, setSavingToLexicon] = useState(false);
 	const [wordsToSave, setWordsToSave] = useState({});
@@ -374,10 +378,6 @@ const WGOutput = () => {
 	// Display functions
 	// // //
 	const evolveOutput = (output) => {
-//		// Clear any previous output.
-//		while(output.firstChild !== null) {
-//			output.removeChild(output.firstChild);
-//		}
 		// Sanity check
 		const err = [];
 		if(soundChanges.length < 1) {
@@ -389,55 +389,47 @@ const WGOutput = () => {
 			setAlertMsg(err.join(" "));
 			setAlertCannotEvolve(true);
 			return;
-//			return output.append(...err);
 		}
 
-// TO-DO:
-//   inputoutput, outputinput, output : columnize
-//   rules : flatlist output
-
-		const evolvedWords = changeTheWords(rawInput);
+		setShowLoadingScreen(true);
+		setEvolvedWords(false);
+		setOriginalEvolvedWords(false);
+		setOriginalEvolvedRulesWords(false);
+		const changedWords = changeTheWords(rawInput);
 		const output = [];
-		// Add to screen.
 		const arrowLR = "⟶";
 		const arrowRL = "⟵";
-		const reverse = (outputStyle === "outputinput");
-//		const arrow = (ltr(output) ? (reverse ? arrowRL : arrowLR) : (reverse ? arrowLR : arrowRL));
-//		let arrowDiv = $e("div", arrow, ["arrow"]);
-//		let style = output.style;
-//		style.gridTemplateColumns = "1fr";
+		const arrow = outputStyle === "outputinput" ? arrowRL : arrowLR;
+
 		switch(outputStyle) {
 			case "output":
 				// format will be a simple array of strings
-				output.push(...evolvedWords);
+				setEvolvedWords(changedWords);
 				break;
 			case "inputoutput":
-			case "outputinput":
 				// format will be an array of two-string arrays
 				// [originalWord, evolvedWord]
-				style.gridTemplateColumns = (arrow ? "1fr 2em 1fr" : "1fr 1fr");
-				evolvedWords.forEach(bit => {
+			case "outputinput":
+				// format will be an array of two-string arrays
+				// [evolvedWord, originalWord]
+				changedWords.forEach(bit => {
 					const [one, two] = bit;
-					output.append(outputStyle === "inputoutput" ? $e("div", one, ["leadingWord"]) : $t(one, "div", ["leadingWord"]));
-					arrow && output.append(arrowDiv.cloneNode(true));
-					output.append(outputStyle === "inputoutput" ? $t(two) : $e("div", two));
+					output.push([one, arrow, two]);
 				});
+				setOriginalEvolvedWords(output);
 				break;
 			case "rules":
 				// [original, word, [[rule, new word]...]]  	grid-template-columns: 1fr 2em 1fr;
-				evolvedWords.forEach(unit => {
-					let div = $e("div", unit.shift() + " " + arrow);
-					div.append(" ", $t(unit.shift(), "span"));
-					output.append(div);
-					unit.shift().forEach((bit) => {
-						const [rule, to] = bit;
-						output.append($e("div", rule + " " + arrow + " " + to, ["ruleExplanation"]));
-					});
+				changedWords.forEach(unit => {
+					const [original, evolved, ...rules] = unit;
+					output.append(original, arrow, evolved, rules);
 				});
+				setOriginalEvolvedRulesWords(output);
 				break;
 			default:
-				output.append("Unknown error occurred.");
+				console.log("Unknown error occurred.");
 		}
+		setShowLoadingScreen(false);
 	};
 	// Take an array of strings and apply each sound change rule
 	//  to each string one at a time, then return an array
@@ -685,12 +677,14 @@ const WGOutput = () => {
 					goingOut = word;
 					break;
 				case "rules":
-					goingOut = [original, word, rulesThatApplied];
+					goingOut = [original, word, ...rulesThatApplied];
 					rulesThatApplied = [];
 					break;
 				case "inputoutput":
-				case "outputinput":
 					goingOut = [original, word];
+					break;
+				case "outputinput":
+					goingOut = [word, original];
 					break;
 				default:
 					goingOut = `ERROR [${outputStyle}] unknown`;
@@ -1151,7 +1145,11 @@ const WGOutput = () => {
 			:
 				[]
 			)}
-			{(displayedText ?
+			{// TO-DO:
+			// evolvedWords (grid)
+			// originalEvolvedWords (grid, but flex-aligned? centered?)
+			// originalEvolvedRulesWords (flat list)
+			(displayedText ?
 				<ReAnimated.View
 					entering={ZoomInRight}
 					exiting={ZoomOutRight}
