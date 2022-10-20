@@ -31,8 +31,10 @@ import ReAnimated, {
 	FlipInYRight,
 	FlipOutYRight,
 	ZoomInEasyDown,
+	ZoomInLeft,
 	ZoomInRight,
 	ZoomOutEasyDown,
+	ZoomOutLeft,
 	ZoomOutRight
 } from 'react-native-reanimated';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
@@ -99,10 +101,11 @@ const WGOutput = () => {
 	];
 	const [evolvedWords, setEvolvedWords] = useState(false);
 	const [originalEvolvedWords, setOriginalEvolvedWords] = useState(false);
+	const [evolvedOriginalWords, setEvolvedOriginalWords] = useState(false);
 	const [originalEvolvedRulesWords, setOriginalEvolvedRulesWords] = useState(false);
 
 	const [savingToLexicon, setSavingToLexicon] = useState(false);
-	const [wordsToSave, setWordsToSave] = useState([]);
+	const [wordsToSave, setWordsToSave] = useState({});
 	const [chooseWhereToSaveInLex, setChooseWhereToSaveInLex] = useState(false);
 	const [whereToSaveInLex, setWhereToSaveInLex] = useState(columns.length > 0 ? columns[0] : {label: "No columns"});
 	const [alertNothingToSave, setAlertNothingToSave] = useState(false);
@@ -126,6 +129,8 @@ const WGOutput = () => {
 	const secondaryContrast = useContrastText("secondary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
 	const saveToLexRef = useRef(null);
+	const arrowLR = "⟶";
+	const arrowRL = "⟵";
 
 
 	// // //
@@ -385,12 +390,10 @@ const WGOutput = () => {
 		setShowLoadingScreen(true);
 		setEvolvedWords(false);
 		setOriginalEvolvedWords(false);
+		setEvolvedOriginalWords(false);
 		setOriginalEvolvedRulesWords(false);
 		const changedWords = changeTheWords(rawInput);
 		const output = [];
-		const arrowLR = "⟶";
-		const arrowRL = "⟵";
-		const arrow = (outputStyle === "outputinput") ? arrowRL : arrowLR;
 
 		switch(outputStyle) {
 			case "output":
@@ -399,23 +402,29 @@ const WGOutput = () => {
 				// but we need to set up keys
 				setEvolvedWords(changedWords.map((word, i) => [word, i]));
 				break;
-			case "inputoutput":
-				// format will be an array of two-string arrays
-				// [originalWord, evolvedWord]
 			case "outputinput":
 				// format will be an array of two-string arrays
 				// [evolvedWord, originalWord]
 				changedWords.forEach((bit, i) => {
 					const [one, two] = bit;
-					output.push([one, arrow, two, i]);
+					output.push([one, two, i]);
+				});
+				setEvolvedOriginalWords(output);
+				break;
+			case "inputoutput":
+				// format will be an array of two-string arrays
+				// [originalWord, evolvedWord]
+				changedWords.forEach((bit, i) => {
+					const [one, two] = bit;
+					output.push([one, two, i]);
 				});
 				setOriginalEvolvedWords(output);
 				break;
 			case "rules":
-				// [original, word, [[rule, new word]...]]  	grid-template-columns: 1fr 2em 1fr;
+				// [original, word, ...[[rule, new word]...]]
 				changedWords.forEach((unit, i) => {
 					const [original, evolved, ...rules] = unit;
-					output.push([original, arrow, evolved, i, rules]);
+					output.push([original, evolved, i, rules]);
 				});
 				setOriginalEvolvedRulesWords(output);
 				break;
@@ -732,16 +741,10 @@ const WGOutput = () => {
 	});
 	const Simple = memo((props) => <Text fontSize={textSize} lineHeight={headerSize} {...props} />);
 	const renderOriginalEvolved = useCallback(({item}) => {
-		// TO-DO: Make this so it doesn't switch automatically?
-		// TO-DO: split into two functions?
 		// originalEvolvedWords (flat list, but flex-aligned? centered?)
-		const [a, arrow, b, i] = item;
-		const one = (outputStyle === "inputoutput") ?
-			<Simple fontSize={textSize} lineHeight={headerSize}>{a}</Simple>
-		:
-			<SaveableElement text={a} index={i} wordsToSave={wordsToSave} />
-		;
-		const two = (outputStyle === "inputoutput") ?
+		const [a, b, i] = item;
+		const one = <Simple fontSize={textSize} lineHeight={headerSize}>{a}</Simple>;
+		const two = savingToLexicon ?
 			<SaveableElement text={b} index={i} wordsToSave={wordsToSave} />
 		:
 			<Simple fontSize={textSize} lineHeight={headerSize}>{b}</Simple>
@@ -756,16 +759,47 @@ const WGOutput = () => {
 				<Box flex={1}>
 					<Text textAlign="right" fontSize={textSize}>{one}</Text>
 				</Box>
-				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrow}</Simple>
+				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
 				<Box flex={1}>
 					<Text textAlign="left" fontSize={textSize}>{two}</Text>
 				</Box>
 			</HStack>
 		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize, outputStyle]);
+	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
+	const renderEvolvedOriginal = useCallback(({item}) => {
+		// evolvedOriginalWords (flat list, but flex-aligned? centered?)
+		const [a, b, i] = item;
+		const one = savingToLexicon ?
+			<SaveableElement text={a} index={i} wordsToSave={wordsToSave} />
+		:
+			<Simple fontSize={textSize} lineHeight={headerSize}>{a}</Simple>
+		;
+		const two = <Simple fontSize={textSize} lineHeight={headerSize}>{b}</Simple>;
+		return (
+			<HStack
+				justifyContent="center"
+				alignItems="center"
+				space={1.5}
+				py={2}
+			>
+				<Box flex={1}>
+					<Text textAlign="right" fontSize={textSize}>{one}</Text>
+				</Box>
+				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowRL}</Simple>
+				<Box flex={1}>
+					<Text textAlign="left" fontSize={textSize}>{two}</Text>
+				</Box>
+			</HStack>
+		);
+	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
 	const renderOriginalEvolvedRules = useCallback(({item}) => {
 		// originalEvolvedRulesWords (flat list)
-		const [original, arrow, evolved, i, rules] = item;
+		const [original, evolved, i, rules] = item;
+		const evolvedOutput = savingToLexicon ?
+			<SaveableElement text={evolved} index={i} wordsToSave={wordsToSave} />
+		:
+			<Simple textAlign="left" lineHeight={headerSize}>{evolved}</Simple>
+		;
 		return (
 			<VStack
 				justifyContent="flex-start"
@@ -781,10 +815,8 @@ const WGOutput = () => {
 					<Box flex={1} w={longestWordSizeEstimate}>
 						<Simple textAlign="right" lineHeight={headerSize}>{original}</Simple>
 					</Box>
-					<Text textAlign="center" fontSize={textSize} flexShrink={0} flexGrow={0}>{arrow}</Text>
-					<Box flex={1}>
-						<SaveableElement text={evolved} index={i} wordsToSave={wordsToSave} />
-					</Box>
+					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
+					<Box flex={1}>{evolvedOutput}</Box>
 				</HStack>
 				{rules.map(r => {
 					const [rule, newWord] = r;
@@ -796,14 +828,14 @@ const WGOutput = () => {
 							space={1.5}
 						>
 							<Box><Text textAlign="right" fontSize={textSize}>{rule}</Text></Box>
-							<Text textAlign="center" fontSize={textSize} flexShrink={0} flexGrow={0}>{arrow}</Text>
+							<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
 							<Box w={longestWordSizeEstimate}><Text fontSize={textSize}>{newWord}</Text></Box>
 						</HStack>
 					);
 				})}
 			</VStack>
 		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize, outputStyle]);
+	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
 	const renderEvolved = useCallback(({item}) => {
 		// evolvedWords (grid)
 		const [word, i] = item;
@@ -812,14 +844,13 @@ const WGOutput = () => {
 		}
 		return <Simple fontSize={textSize} lineHeight={headerSize}>{word}</Simple>;
 	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
-	//TO-DO: Fix this so it's not always on
 	const SaveableElement = memo(({text, index, wordsToSave}) => {
-		const saved = wordsToSave[index];
+		const saved = wordsToSave[text];
 		const onPressWord = useCallback(() => {
-			let newSave = [...wordsToSave];
-			newSave[index] = !wordsToSave[index];
+			let newSave = {...wordsToSave};
+			newSave[text] = !wordsToSave[text];
 			setWordsToSave(newSave);
-		}, [index, wordsToSave]);
+		}, [text, wordsToSave]);
 		const Item = memo(({text, index, saved, onPress}) => {
 			let bg = "secondary.500",
 				color = secondaryContrast;
@@ -1150,7 +1181,22 @@ const WGOutput = () => {
 					<FlatList
 						data={originalEvolvedWords}
 						renderItem={renderOriginalEvolved}
-						keyExtractor={(item) => `${item[0]}-${item[2]}--${item[3]}`}
+						keyExtractor={(item) => item.join("-")}
+					/>
+				</ReAnimated.View>
+			:
+				<></>
+			)}
+			{((evolvedOriginalWords) ?
+				<ReAnimated.View
+					entering={ZoomInLeft}
+					exiting={ZoomOutLeft}
+					style={{flex: 1, paddingHorizontal: 16, paddingVertical: 8}}
+				>
+					<FlatList
+						data={evolvedOriginalWords}
+						renderItem={renderEvolvedOriginal}
+						keyExtractor={(item) => item.join("-")}
 					/>
 				</ReAnimated.View>
 			:
@@ -1165,7 +1211,7 @@ const WGOutput = () => {
 					<FlatList
 						data={originalEvolvedRulesWords}
 						renderItem={renderOriginalEvolvedRules}
-						keyExtractor={(item) => `${item[0]}-${item[2]}--${item[3]}`}
+						keyExtractor={(item) => item.slice(0, 3).join("-")}
 					/>
 				</ReAnimated.View>
 			:

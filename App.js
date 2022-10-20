@@ -46,7 +46,7 @@ import WEInput from './pages/we/weInput';
 import WECharacters from './pages/we/weCharacterGroups';
 import WETransformations from './pages/we/weTransformations';
 import WESoundChanges from './pages/we/weSoundChanges';
-//import WEOutput from './pages/we/weOutput';
+import WEOutput from './pages/we/weOutput';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
@@ -185,7 +185,7 @@ const AppRoutes = () => {
 						<Route path="characters" element={<WECharacters />} />
 						<Route path="transformations" element={<WETransformations />} />
 						<Route path="soundchanges" element={<WESoundChanges />} />
-						{ /*<Route path="output" element={<WEOutput/>} /> */ }
+						<Route path="output" element={<WEOutput/>} />
 					</Route>
 					<Route path="/lex" element={<Lexicon />} />
 					<Route path="/ms/*" element={<MS />}>
