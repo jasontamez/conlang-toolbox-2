@@ -309,7 +309,7 @@ initialAppState.wg = {
 	]
 };
 initialAppState.we = {
-	input: "what\ndo\nyou\nknow\npot\nnot\nkeep\nduk",
+	input: "what\ndo\nyou\nknow\npot\nnot\nkeep\nduk\nguttter\nknowhow\nneuter",
 	characterGroups: [
 		{
 			label: "C",
@@ -351,15 +351,15 @@ initialAppState.we = {
 	soundChanges: [
 		{
 			id: "s1",
-			beginning: "([ptk])ʰ",
-			ending: "$1",
-			context: "_[aeiou]+[ptk]ʰ",
+			beginning: "([ptk])",
+			ending: "$1$1",
+			context: "[aeiou]+_#",
 			//anticontext: "",
 			//description: ""
 		},
 		{
 			id: "s2",
-			beginning: "h",
+			beginning: "w*h",
 			ending: "w",
 			context: "_",
 			anticontext: "_#",
@@ -367,9 +367,10 @@ initialAppState.we = {
 		},
 		{
 			id: "s3",
-			beginning: "t{1}",
+			beginning: "t{1}(?!t)",
 			ending: "tt",
 			context: "._.",
+			anticontext: "t_",
 			description: "double ts not at ends of words"
 		}
 	]
