@@ -18,7 +18,7 @@ import {
 	ToggleSwitch
 } from '../../components/inputTags';
 import {
-	loadWGState,
+	loadState,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,
@@ -29,7 +29,8 @@ import {
 	setInterrogativeSentencePre,
 	setInterrogativeSentencePost,
 	setExclamatorySentencePre,
-	setExclamatorySentencePost
+	setExclamatorySentencePost,
+	setStoredCustomInfo
 } from  "../../store/wgSlice";
 import {
 	EquiprobableIcon,
@@ -38,11 +39,20 @@ import {
 import doToast from "../../helpers/toast";
 import StandardAlert from "../../components/StandardAlert";
 import WGPresetsModal from "./wgPresetsModal";
-import LoadCustomInfoModal from "./wgLoadCustomInfoModal";
-import SaveCustomInfoModal from "./wgSaveCustomInfoModal";
+import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
+import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
+import { wgCustomStorage } from "../../helpers/persistentInfo";
 
 const WGSettings = () => {
 	const {
+		characterGroups,
+		multipleSyllableTypes,
+		syllableDropoffOverrides,
+		singleWord,
+		wordInitial,
+		wordMiddle,
+		wordFinal,
+		transforms,
 		monosyllablesRate,
 		maxSyllablesPerWord,
 		characterGroupDropoff,
@@ -53,7 +63,9 @@ const WGSettings = () => {
 		interrogativeSentencePre,
 		interrogativeSentencePost,
 		exclamatorySentencePre,
-		exclamatorySentencePost
+		exclamatorySentencePost,
+		storedCustomInfo,
+		storedCustomIDs
 	} = useSelector(state => state.wg);
 	const { disableConfirms, sizes } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
@@ -82,7 +94,7 @@ const WGSettings = () => {
 	};
 	const triggerResets = () => setResetCounter(resetCounter + 1);
 	const doClearEveything = () => {
-		dispatch(loadWGState(null));
+		dispatch(loadState(null));
 		triggerResets();
 		doToast({
 			toast,
@@ -165,10 +177,41 @@ const WGSettings = () => {
 				modalOpen={openLoadCustomInfoModal}
 				closeModal={() => setOpenLoadCustomInfoModal(false)}
 				triggerResets={triggerResets}
+				customStorage={wgCustomStorage}
+				loadState={loadState}
+				setStoredCustomInfo={setStoredCustomInfo}
+				storedCustomIDs={storedCustomIDs}
+				storedCustomInfo={storedCustomInfo}
 			/>
 			<SaveCustomInfoModal
 				modalOpen={openSaveCustomInfoModal}
 				closeModal={() => setOpenSaveCustomInfoModal(false)}
+				customStorage={wgCustomStorage}
+				saveableObject={{
+					characterGroups,
+					multipleSyllableTypes,
+					syllableDropoffOverrides,
+					singleWord,
+					wordInitial,
+					wordMiddle,
+					wordFinal,
+					transforms,
+					monosyllablesRate,
+					maxSyllablesPerWord,
+					characterGroupDropoff,
+					syllableBoxDropoff,
+					capitalizeSentences,
+					declarativeSentencePre,
+					declarativeSentencePost,
+					interrogativeSentencePre,
+					interrogativeSentencePost,
+					exclamatorySentencePre,
+					exclamatorySentencePost	
+				}}
+				setStoredCustomInfo={setStoredCustomInfo}
+				storedCustomInfo={storedCustomInfo}
+				storedCustomIDs={storedCustomIDs}
+				savedInfoString="all current Character Groups, Syllables, Transformations, and the settings on this page"
 			/>
 			<SectionHeader>Info Management</SectionHeader>
 			<HStack

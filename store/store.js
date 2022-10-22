@@ -309,6 +309,7 @@ initialAppState.wg = {
 	]
 };
 initialAppState.we = {
+	...initialAppState.we,
 	input: "what\ndo\nyou\nknow\npot\nnot\nkeep\nduk\nguttter\nknowhow\nneuter",
 	characterGroups: [
 		{
@@ -327,12 +328,6 @@ initialAppState.we = {
 			id: "1",
 			search: "kn",
 			replace: "N",
-			direction: "both"
-		},
-		{
-			id: "2",
-			search: "wh",
-			replace: "W",
 			direction: "both"
 		},
 		{
@@ -373,13 +368,7 @@ initialAppState.we = {
 			exception: "t_",
 			description: "double ts not at ends of words"
 		}
-	],
-	settings: {
-		outputStyle: "output",
-		multicolumn: true,
-		inputLower: false,
-		inputAlpha: false
-	}
+	]
 };
 initialAppState.lexicon = {
 	...initialAppState.lexicon,

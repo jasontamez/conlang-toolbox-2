@@ -13,44 +13,25 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 
-import { wgCustomStorage } from '../../helpers/persistentInfo';
-import { equalityCheck, setStoredCustomInfo } from '../../store/wgSlice';
-import ExtraChars from '../../components/ExtraCharsButton';
-import { CloseCircleIcon, SaveIcon } from '../../components/icons';
-import StandardAlert from '../../components/StandardAlert';
-import { DropDown, TextSetting, ToggleSwitch } from '../../components/inputTags';
-import doToast from '../../helpers/toast';
-import { LoadingOverlay } from '../../components/FullBodyModal';
-//import doExport from '../../components/ExportServices';
+import ExtraChars from './ExtraCharsButton';
+import { CloseCircleIcon, SaveIcon } from './icons';
+import StandardAlert from './StandardAlert';
+import { DropDown, TextSetting, ToggleSwitch } from './inputTags';
+import doToast from '../helpers/toast';
+import { LoadingOverlay } from './FullBodyModal';
+//import doExport from './ExportServices';
 
 const SaveCustomInfoModal = ({
 	modalOpen,
-	closeModal
+	closeModal,
+	customStorage,
+	saveableObject,
+	setStoredCustomInfo,
+	storedCustomInfo,
+	storedCustomIDs,
+	savedInfoString
 }) => {
 	const dispatch = useDispatch();
-	const {
-		characterGroups,
-		multipleSyllableTypes,
-		syllableDropoffOverrides,
-		singleWord,
-		wordInitial,
-		wordMiddle,
-		wordFinal,
-		transforms,
-		monosyllablesRate,
-		maxSyllablesPerWord,
-		characterGroupDropoff,
-		syllableBoxDropoff,
-		capitalizeSentences,
-		declarativeSentencePre,
-		declarativeSentencePost,
-		interrogativeSentencePre,
-		interrogativeSentencePost,
-		exclamatorySentencePre,
-		exclamatorySentencePost,
-		storedCustomInfo,
-		storedCustomIDs
-	} = useSelector((state) => state.wg, equalityCheck);
 	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
 	const [saveName, setSaveName] = useState("");
@@ -103,30 +84,10 @@ const SaveCustomInfoModal = ({
 	const doSaving = (id, label) => {
 		const save = {
 			label,
-			info: {
-				characterGroups,
-				multipleSyllableTypes,
-				syllableDropoffOverrides,
-				singleWord,
-				wordInitial,
-				wordMiddle,
-				wordFinal,
-				transforms,
-				monosyllablesRate,
-				maxSyllablesPerWord,
-				characterGroupDropoff,
-				syllableBoxDropoff,
-				capitalizeSentences,
-				declarativeSentencePre,
-				declarativeSentencePost,
-				interrogativeSentencePre,
-				interrogativeSentencePost,
-				exclamatorySentencePre,
-				exclamatorySentencePost	
-			}
+			info: saveableObject
 		};
 		setIsSaving(true);
-		wgCustomStorage.setItem(id, JSON.stringify(save)).then(() => {
+		customStorage.setItem(id, JSON.stringify(save)).then(() => {
 			let newStoredInfo = {...storedCustomInfo};
 			newStoredInfo[id] = label;
 			dispatch(setStoredCustomInfo(newStoredInfo));
@@ -230,7 +191,7 @@ const SaveCustomInfoModal = ({
 				</Modal.Header>
 				<Modal.Body m={0} p={4}>
 					<Box pb={4}>
-						<Text textAlign="center">This will save all current Character Groups, Syllables, Transformations, and the settings on this page.</Text>
+						<Text textAlign="center">This will save {savedInfoString}.</Text>
 					</Box>
 					<ToggleSwitch
 						label={newSave ? "Make New Save" : "Overwrite Previous Save"}

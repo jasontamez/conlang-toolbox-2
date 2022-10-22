@@ -16,25 +16,24 @@ import ReAnimated, {
 	FlipOutYRight
 } from 'react-native-reanimated';
 
-import { wgCustomStorage } from '../../helpers/persistentInfo';
-import { equalityCheck, loadWGState, setStoredCustomInfo } from '../../store/wgSlice';
-import ExtraChars from '../../components/ExtraCharsButton';
-import { CloseCircleIcon, LoadIcon, TrashIcon } from '../../components/icons';
-import StandardAlert from '../../components/StandardAlert';
-import doToast from '../../helpers/toast';
-import { LoadingOverlay } from '../../components/FullBodyModal';
-import { DropDown } from '../../components/inputTags';
+import ExtraChars from './ExtraCharsButton';
+import { CloseCircleIcon, LoadIcon, TrashIcon } from './icons';
+import StandardAlert from './StandardAlert';
+import doToast from '../helpers/toast';
+import { LoadingOverlay } from './FullBodyModal';
+import { DropDown } from './inputTags';
 
 const LoadCustomInfoModal = ({
 	modalOpen,
 	closeModal,
-	triggerResets
+	triggerResets,
+	customStorage,
+	loadState,
+	setStoredCustomInfo,
+	storedCustomIDs,
+	storedCustomInfo
 }) => {
 	const dispatch = useDispatch();
-	const {
-		storedCustomInfo,
-		storedCustomIDs
-	} = useSelector((state) => state.wg, equalityCheck);
 	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
 	const [customInfoChosen, setCustomInfoChosen] = useState(null);
@@ -42,7 +41,6 @@ const LoadCustomInfoModal = ({
 	const [overwriteWarningOpen, setOverwriteWarningOpen] = useState(false);
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
-	const inputSize = useBreakpointValue(sizes.xs);
 	const textSize = useBreakpointValue(sizes.sm);
 	const largeText = useBreakpointValue(sizes.xl);
 	const primaryContrast = useContrastText("primary.500");
@@ -71,16 +69,16 @@ const LoadCustomInfoModal = ({
 	const fetchInfo = async () => {
 		// open overlay
 		setLoadingOverlayOpen(true);
-		return await wgCustomStorage.getItem(customInfoChosen).then((result) => {
+		return await customStorage.getItem(customInfoChosen).then((result) => {
 			// close overlay
 			setLoadingOverlayOpen(false);
 			// convert info
 			const loadedInfo = JSON.parse(result);
 			const { label, info } = loadedInfo;
 			// Dispatch the new info to store
-			dispatch(loadWGState(info));
+			dispatch(loadState(info));
 			// Trigger any resets needed on the main page
-			triggerResets();
+			triggerResets && triggerResets();
 			// Announce success
 			doToast({
 				toast,
@@ -103,7 +101,7 @@ const LoadCustomInfoModal = ({
 		setDeleteWarningOpen(true);
 	};
 	const doDeleteInfo = async () => {
-		return await wgCustomStorage.removeItem(customInfoChosen).then(() => {
+		return await customStorage.removeItem(customInfoChosen).then(() => {
 			let deleted = {...storedCustomInfo};
 			// Announce success
 			doToast({

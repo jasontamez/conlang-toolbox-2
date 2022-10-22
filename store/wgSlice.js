@@ -142,7 +142,8 @@ const setStoredCustomInfoFunc = (state, action) => {
 };
 
 // LOAD INFO and CLEAR ALL
-const loadWGStateFunc = (state, action) => {
+const loadStateFunc = (state, action) => {
+	// If payload is null (or falsy), then initialState is used
 	const {
 		characterGroups,
 		multipleSyllableTypes,
@@ -221,7 +222,7 @@ const wgSlice = createSlice({
 		setSortWordlist: setSortWordlistFunc,
 		setWordlistMultiColumn: setWordlistMultiColumnFunc,
 		setWordsPerWordlist: setWordsPerWordlistFunc,
-		loadWGState: loadWGStateFunc,
+		loadState: loadStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
@@ -255,7 +256,7 @@ export const {
 	setSortWordlist,
 	setWordlistMultiColumn,
 	setWordsPerWordlist,
-	loadWGState,
+	loadState,
 	setStoredCustomInfo
 } = wgSlice.actions;
 
