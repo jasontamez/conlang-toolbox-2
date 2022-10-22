@@ -77,15 +77,15 @@ export const OldCustomStorageWG = localForage.createInstance({
 	description: 'Stores WordGen custom information.'
 });
 
-//TO-DO: Mine this for old info
-export const CustomStorageWE = localForage.createInstance({
+export const OldCustomStorageWE = localForage.createInstance({
 	name: 'Conlang Toolbox',
 	storeName: 'customStorageWE',
 	version: 1,
 	description: 'Stores WordEvolve custom information.'
 });
 
-//export const MorphoSyntaxStorage = localForage.createInstance({
+//TO-DO: Mine this for old info
+//export const OldMorphoSyntaxStorage = localForage.createInstance({
 //	name: 'Conlang Toolbox',
 //	storeName: 'morphoSyntaxStorage',
 //	version: 1,

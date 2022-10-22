@@ -2,14 +2,18 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { setHasCheckedForOldCustomInfo } from '../store/appStateSlice';
 import { setStoredCustomInfo as setStoredCustomInfoWG } from '../store/wgSlice';
-import { OldCustomStorageWG, wgCustomStorage } from './persistentInfo';
+import { setStoredCustomInfo as setStoredCustomInfoWE } from '../store/weSlice';
+import { OldCustomStorageWE, OldCustomStorageWG, weCustomStorage, wgCustomStorage } from './persistentInfo';
 
 
 const doConvert = async (dispatch) => {
 	// Convert WG info
 	// TO-DO: chain in other converters as needed, like Lex and WE
-	return convertWG(dispatch).then(() => {
-		return dispatch(setHasCheckedForOldCustomInfo(true));
+	return Promise.allSettled([
+		convertWG(dispatch),
+		convertWE(dispatch)
+	]).then((values) => {
+		return values.every(v => v.status === "fulfilled") && dispatch(setHasCheckedForOldCustomInfo(true));
 	}).catch((err) => {
 		console.log(err);
 	});
@@ -118,6 +122,88 @@ const convertWG = async (dispatch) => {
 		dispatch(setStoredCustomInfoWG(ids));
 	}).catch(() => {
 		console.log("WG Error");
+	});
+};
+const convertWE = async (dispatch) => {
+	let information = [];
+	let ids = {};
+	// Get all info
+	return OldCustomStorageWE.iterate((value, key) => {
+		information.push([key, value]);
+		return; // Blank return keeps the loop going
+	}).then(() => {
+		// Convert info from old format into new format
+		for(let x = 0; x < information.length; x++) {
+			const [ infoLabel, { categories, transforms, soundchanges } ] = information[x];
+			const { map } = categories;
+			let characterGroups = [],
+				soundChanges = [],
+				transformations = [];
+			// character groups
+			map.forEach(cat => {
+				const [ label, { title, run } ] = cat;
+				characterGroups.push({
+					label,
+					run,
+					description: title
+				});
+			});
+			// transformations
+			transforms.forEach(rule => {
+				let { key, seek, replace, description, direction } = rule;
+				switch(direction) {
+					case "in":
+						direction = "input";
+						break;
+					case "out":
+						direction = "output";
+				}
+				transformations.push({
+					id: key,
+					search: seek,
+					replace,
+					direction,
+					description
+				});
+			});
+			// sound changes
+			soundchanges.list.forEach(sc => {
+				const { key, seek, replace, context, anticontext, description } = sc;
+				let newSC = {
+					id: key,
+					beginning: seek,
+					ending: replace,
+					context
+				}
+				if(anticontext) {
+					newSC.exception = anticontext;
+				}
+				if(description) {
+					newSC.description = description;
+				}
+				soundChanges.push(newSC);
+			});
+			// overwrite info with new format
+			information[x] = {
+				label: infoLabel,
+				info: {
+					characterGroups,
+					transformations,
+					soundChanges
+				}
+			};
+		}
+		// All information converted.
+		// Save all info
+		return Promise.all(information.map(info => {
+			const id = uuidv4();
+			ids[id] = info.label;
+			return weCustomStorage.setItem(id, JSON.stringify(info));
+		}));
+	}).then(() => {
+		dispatch(setStoredCustomInfoWE(ids));
+	}).catch(() => {
+		console.log("WE Error");
 	});
 };
 
