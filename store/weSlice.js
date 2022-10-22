@@ -102,16 +102,15 @@ const setStoredCustomInfoFunc = (state, action) => {
 };
 
 // LOAD INFO and CLEAR ALL
-const loadWEStateFunc = (state, action) => {
+const loadStateFunc = (state, action) => {
+	// If payload is null (or falsy), then initialState is used
 	const {
-		input,
 		characterGroups,
 		transforms,
 		soundChanges
 	} = action.payload || initialState;
 	return {
 		...state,
-		input,
 		characterGroups: [...characterGroups],
 		transforms: [...transforms],
 		soundChanges: [...soundChanges]
@@ -138,7 +137,7 @@ const weSlice = createSlice({
 		setOutput: setOutputFunc,
 		setFlag: setFlagFunc,
 
-		loadWEState: loadWEStateFunc,
+		loadState: loadStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
@@ -159,7 +158,7 @@ export const {
 	setOutput,
 	setFlag,
 
-	loadWEState,
+	loadState,
 	setStoredCustomInfo
 } = weSlice.actions;
 

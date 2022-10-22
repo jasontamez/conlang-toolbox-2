@@ -26,7 +26,9 @@ const blankAppState = {/*
 			multicolumn: true,
 			inputLower: false,
 			inputAlpha: true,
-		}
+		},
+		storedCustomInfo: {},
+		storedCustomIDs: []
 	},
 	wg: {
 		// GROUPS

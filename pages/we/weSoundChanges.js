@@ -407,7 +407,6 @@ const WESoundChanges = () => {
 			</HStack>
 		);
 	};
-	// TO-DO: Add in presets modal
 	return (
 		<VStack h="full">
 			<StandardAlert

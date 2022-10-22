@@ -58,7 +58,12 @@ import StandardAlert from "../../components/StandardAlert";
 import { DropDown, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
-import { setFlag, setOutput } from "../../store/weSlice";
+import { loadState, setFlag, setOutput, setStoredCustomInfo } from "../../store/weSlice";
+//TO-DO: Work on PresetsModal
+//import WEPresetsModal from "./wePresetsModal";
+import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
+import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
+import { weCustomStorage } from "../../helpers/persistentInfo";
 
 const WGOutput = () => {
 	const {
@@ -66,6 +71,8 @@ const WGOutput = () => {
 		characterGroups,
 		transforms,
 		soundChanges,
+		storedCustomInfo,
+		storedCustomIDs,
 		settings: {
 			outputStyle,
 			multicolumn,
@@ -122,6 +129,12 @@ const WGOutput = () => {
 	const [soundChangesInterpreted, setSoundChangesInterpreted] = useState({});
 
 	const [openSettings, setOpenSettings] = useState(false);
+
+	const [clearAlertOpen, setClearAlertOpen] = useState(false);
+	const [openPresetModal, setOpenPresetModal] = useState(false);
+	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
+	const [openSaveCustomInfoModal, setOpenSaveCustomInfoModal] = useState(false);
+
 	const textSize = useBreakpointValue(sizes.sm);
 	const descSize = useBreakpointValue(sizes.xs);
 	const headerSize = useBreakpointValue(sizes.md);
@@ -834,6 +847,30 @@ const WGOutput = () => {
 
 
 	// // //
+	// Buttons
+	// // //
+	const maybeClearEverything = () => {
+		if(disableConfirms) {
+			doClearEveything();
+		}
+		setClearAlertOpen(true);
+	};
+	const doClearEveything = () => {
+		dispatch(loadState(null));
+		doToast({
+			toast,
+			msg: "Info has been cleared.",
+			scheme: "danger",
+			placement: "bottom"
+		})
+	};
+	const maybeSaveInfo = () => setOpenSaveCustomInfoModal(true);
+	const maybeLoadPreset = () => setOpenPresetModal(true);
+
+
+
+
+	// // //
 	// JSX
 	// // //
 	const LoadingScreen = memo(({size}) => {
@@ -860,7 +897,7 @@ const WGOutput = () => {
 	});
 	const Simple = memo((props) => <Text fontSize={textSize} lineHeight={headerSize} {...props} />);
 	const renderOriginalEvolved = useCallback(({item}) => {
-		// originalEvolvedWords (flat list, but flex-aligned? centered?)
+		// originalEvolvedWords (flat list)
 		const [a, b, i] = item;
 		const original = <Simple fontSize={textSize} lineHeight={headerSize}>{a}</Simple>;
 		const evolved = savingToLexicon ?
@@ -891,7 +928,7 @@ const WGOutput = () => {
 		);
 	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
 	const renderEvolvedOriginal = useCallback(({item}) => {
-		// evolvedOriginalWords (flat list, but flex-aligned? centered?)
+		// evolvedOriginalWords (flat list)
 		const [a, b, i] = item;
 		const evolved = savingToLexicon ?
 			<SaveableElement text={a} index={i} wordsToSave={wordsToSave} />
@@ -1013,6 +1050,21 @@ const WGOutput = () => {
 		});
 		return <Item text={text} index={index} onPress={onPressWord} saved={saved} />;
 	});
+
+	const InfoButton = (props) => {
+		return (
+			<Button
+				borderRadius="full"
+				_text={{
+					fontSize: textSize
+				}}
+				py={0.5}
+				px={3}
+				m={1}
+				{...props}
+			/>
+		);
+	};
 
 	return (
 		<VStack h="full" alignContent="flex-start" bg="main.900" mb={16}>
@@ -1226,6 +1278,68 @@ const WGOutput = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
+			<StandardAlert
+				alertOpen={clearAlertOpen}
+				setAlertOpen={setClearAlertOpen}
+				bodyContent="This will erase every Character Group, Syllable and Transform currently loaded in the app, and reset the settings on this page to their initial values. Are you sure you want to do this?"
+				continueText="Yes, Do It"
+				continueFunc={() => doClearEveything()}
+				fontSize={textSize}
+			/>
+			{/*<WEPresetsModal
+				modalOpen={openPresetModal}
+				setModalOpen={setOpenPresetModal}
+			/> */}
+			<LoadCustomInfoModal
+				modalOpen={openLoadCustomInfoModal}
+				closeModal={() => setOpenLoadCustomInfoModal(false)}
+				customStorage={weCustomStorage}
+				loadState={loadState}
+				setStoredCustomInfo={setStoredCustomInfo}
+				storedCustomIDs={storedCustomIDs}
+				storedCustomInfo={storedCustomInfo}
+			/>
+			<SaveCustomInfoModal
+				modalOpen={openSaveCustomInfoModal}
+				closeModal={() => setOpenSaveCustomInfoModal(false)}
+				customStorage={weCustomStorage}
+				saveableObject={{
+					characterGroups,
+					transforms,
+					soundChanges
+				}}
+				setStoredCustomInfo={setStoredCustomInfo}
+				storedCustomInfo={storedCustomInfo}
+				storedCustomIDs={storedCustomIDs}
+				savedInfoString="all current Character Groups, Transformations, and Sound Changes"
+			/>
+			<HStack
+				py={1.5}
+				px={2}
+				alignItems="center"
+				justifyContent="center"
+				alignContent="space-between"
+				flexWrap="wrap"
+				borderBottomWidth={0.5}
+				borderColor="main.700"
+			>
+				<InfoButton
+					colorScheme="primary"
+					onPress={() => maybeLoadPreset()}
+				>Load a Preset</InfoButton>
+				<InfoButton
+					colorScheme="danger"
+					onPress={() => maybeClearEverything()}
+				>Reset All Fields</InfoButton>
+				<InfoButton
+					colorScheme="secondary"
+					onPress={() => setOpenLoadCustomInfoModal(true)}
+				>Load Saved Info</InfoButton>
+				<InfoButton
+					colorScheme="tertiary"
+					onPress={() => maybeSaveInfo()}
+				>Save Current Info</InfoButton>
+			</HStack>
 			<HStack
 				justifyContent="space-between"
 				alignItems="flex-start"

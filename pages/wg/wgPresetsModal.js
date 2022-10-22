@@ -16,7 +16,7 @@ import ExtraChars from '../../components/ExtraCharsButton';
 import { CloseCircleIcon } from '../../components/icons';
 import StandardAlert from '../../components/StandardAlert';
 import { LoadIcon } from '../../components/icons';
-import { loadWGState } from '../../store/wgSlice';
+import { loadState } from '../../store/wgSlice';
 import doToast from '../../helpers/toast';
 
 
@@ -41,7 +41,7 @@ const WGPresetsModal = ({
 	};
 	const doLoadPreset = () => {
 		const preset = wgPresets.find(wgp => wgp[0] === presetChosen);
-		dispatch(loadWGState(preset[1]));
+		dispatch(loadState(preset[1]));
 		// Trigger any resets needed on the main page
 		triggerResets();
 		doToast({
