@@ -563,6 +563,7 @@ export const DropDown = (props) => {
 		labelFunc,
 		onChange,
 		defaultValue,
+		value,
 		title,
 		options = [],
 		buttonProps = {}
@@ -579,6 +580,7 @@ export const DropDown = (props) => {
 	//    labelFunc = {Function; returns a string for the current label}
 	//    onChange = {Function}
 	//    defaultValue = {starting value}
+	//    value = {controlled value}
 	//    title = {title of the Menu}
 	//    options = {Array; {key: string, label: string, value: any}}
 	//    buttonProps = {Object; additional props for the <Button>}
@@ -622,6 +624,7 @@ export const DropDown = (props) => {
 				title={title}
 				_title={{fontSize: titleSize || fontSize}}
 				defaultValue={defaultValue}
+				value={value}
 				type="radio"
 				onChange={onChange}
 			>

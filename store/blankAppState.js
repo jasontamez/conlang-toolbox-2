@@ -21,7 +21,12 @@ const blankAppState = {/*
 		characterGroups: [],
 		transforms: [],
 		soundChanges: [],
-		output: "outputOnly"
+		settings: {
+			outputStyle: "output",
+			multicolumn: true,
+			inputLower: false,
+			inputAlpha: true,
+		}
 	},
 	wg: {
 		// GROUPS

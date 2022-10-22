@@ -61,25 +61,25 @@ const WESoundChanges = () => {
 	const [modifiedBeginning, setModifiedBeginning] = useState("");
 	const [modifiedEnding, setModifiedEnding] = useState("");
 	const [modifiedContext, setModifiedContext] = useState("");
-	const [modifiedAnticontext, setModifiedAnticontext] = useState("");
+	const [modifiedException, setModifiedException] = useState("");
 	const [modifiedDesc, setModifiedDesc] = useState("");
 	// are these even needed?
 	const refEditBeginning = useRef(null);
 	const refEditEnding = useRef(null);
 	const refEditContext = useRef(null);
-	const refEditAnticontext = useRef(null);
+	const refEditException = useRef(null);
 	const refEditDesc = useRef(null);
 
 	const [addSoundChangeOpen, setAddSoundChangeOpen] = useState(false);
 	const [addBeginning, setAddBeginning] = useState("");
 	const [addEnding, setAddEnding] = useState("");
 	const [addContext, setAddContext] = useState("");
-	const [addAnticontext, setAddAnticontext] = useState("");
+	const [addException, setAddException] = useState("");
 	const [addDesc, setAddDesc] = useState("");
 	const refAddBeginning = useRef(null);
 	const refAddEnding = useRef(null);
 	const refAddContext = useRef(null);
-	const refAddAnticontext = useRef(null);
+	const refAddException = useRef(null);
 	const refAddDesc = useRef(null);
 
 	const fabSize = useBreakpointValue(sizes.md);
@@ -93,11 +93,11 @@ const WESoundChanges = () => {
 	// add soundChange
 	const addNewSoundChange = (closeAfterAdd) => {
 		// attempts to add the modal info as a new soundChange
-		ensureEnd([refAddBeginning, refAddEnding, refAddContext, refAddAnticontext]);
+		ensureEnd([refAddBeginning, refAddEnding, refAddContext, refAddException]);
 		const beginning = addBeginning.trim();
 		const ending = addEnding.trim();
 		const context = addContext.trim() || "_";
-		const anticontext = addAnticontext.trim();
+		const exception = addException.trim();
 		const description = addDesc.trim();
 		let msg = [];
 		let id;
@@ -113,10 +113,10 @@ const WESoundChanges = () => {
 			if(ind === -1 || ind !== context.lastIndexOf("_")) {
 				msg.push("Context must contain exactly one instance of _ the underscore")
 			}
-			if(anticontext) {
-				const ind = anticontext.indexOf("_");
-				if(ind === -1 || ind !== anticontext.lastIndexOf("_")) {
-					msg.push("Anticontext must contain exactly one instance of _ the underscore")
+			if(exception) {
+				const ind = exception.indexOf("_");
+				if(ind === -1 || ind !== exception.lastIndexOf("_")) {
+					msg.push("Exception must contain exactly one instance of _ the underscore")
 				}
 			}
 		}
@@ -135,8 +135,8 @@ const WESoundChanges = () => {
 			ending,
 			context
 		};
-		if(anticontext) {
-			newSC.anticontext = anticontext;
+		if(exception) {
+			newSC.exception = exception;
 		}
 		if(description) {
 			newSC.description = description;
@@ -160,12 +160,12 @@ const WESoundChanges = () => {
 		refAddBeginning.current && refAddBeginning.current.clear && refAddBeginning.current.clear();
 		refAddContext.current && refAddContext.current.clear && refAddContext.current.clear();
 		refAddEnding.current && refAddEnding.current.clear && refAddEnding.current.clear();
-		refAddAnticontext.current && refAddAnticontext.current.clear && refAddAnticontext.current.clear();
+		refAddException.current && refAddException.current.clear && refAddException.current.clear();
 		refAddDesc.current && refAddDesc.current.clear && refAddDesc.current.clear();
 		setAddBeginning("");
 		setAddEnding("");
 		setAddContext("");
-		setAddAnticontext("");
+		setAddException("");
 		setAddDesc("");
 	};
 	const closeAddSoundChange = () => {
@@ -177,12 +177,12 @@ const WESoundChanges = () => {
 	// edit soundChange
 	const startEditSoundChange = (soundChange) => {
 		// Opens the editing modal and populates it
-		const {id, beginning, ending, context, anticontext, description} = soundChange;
+		const {id, beginning, ending, context, exception, description} = soundChange;
 		setModifiedID(id);
 		setModifiedBeginning(beginning);
 		setModifiedEnding(ending);
 		setModifiedContext(context);
-		setModifiedAnticontext(anticontext || "");
+		setModifiedException(exception || "");
 		setModifiedDesc(description || "")
 		setEditingSoundChange(soundChange);
 	};
@@ -191,7 +191,7 @@ const WESoundChanges = () => {
 		const modEnding = (modifiedEnding.trim());
 		const modBeginning = (modifiedBeginning.trim());
 		const modContext = (modifiedContext.trim());
-		const modAnticontext = (modifiedAnticontext.trim());
+		const modException = (modifiedException.trim());
 		const modDesc = (modifiedDesc.trim());
 		if(!modBeginning) {
 			msg.push("Beginning expression not provided");
@@ -205,10 +205,10 @@ const WESoundChanges = () => {
 			if(ind === -1 || ind !== modContext.lastIndexOf("_")) {
 				msg.push("Context must contain exactly one instance of _ the underscore")
 			}
-			if(modAnticontext) {
-				const ind = modAnticontext.indexOf("_");
-				if(ind === -1 || ind !== modAnticontext.lastIndexOf("_")) {
-					msg.push("Anticontext must contain exactly one instance of _ the underscore")
+			if(modException) {
+				const ind = modException.indexOf("_");
+				if(ind === -1 || ind !== modException.lastIndexOf("_")) {
+					msg.push("Exception must contain exactly one instance of _ the underscore")
 				}
 			}
 		}
@@ -224,8 +224,8 @@ const WESoundChanges = () => {
 			ending: modEnding,
 			context: modContext
 		}
-		if(modAnticontext) {
-			edited.anticontext = modAnticontext;
+		if(modException) {
+			edited.exception = modException;
 		}
 		if(modDesc) {
 			edited.description = modDesc;
@@ -246,10 +246,10 @@ const WESoundChanges = () => {
 			return doDeleteSoundChange(soundChange);
 		}
 		// create the label
-		const {beginning, ending, context, anticontext} = soundChange;
+		const {beginning, ending, context, exception} = soundChange;
 		setSoundChangeDeletingString(
 			`${beginning} ⟶ ${ending} / ${context}`
-			+ (anticontext ? ` ! ${anticontext}` : "")
+			+ (exception ? ` ! ${exception}` : "")
 		);
 		// open the delete alert
 		setDeletingSoundChange(soundChange);
@@ -341,7 +341,7 @@ const WESoundChanges = () => {
 		;
 	};
 	const renderSoundChange = (soundChange, i) => {
-		const {id, beginning, ending, context, anticontext, description} = soundChange;
+		const {id, beginning, ending, context, exception, description} = soundChange;
 		return (
 			<HStack
 				justifyContent="flex-start"
@@ -371,13 +371,13 @@ const WESoundChanges = () => {
 						<T>/</T>
 						<Unit>{context}</Unit>
 						{
-							anticontext ?
+							exception ?
 								<>
-									<T key={`${id}-anticontext-point`}>!</T>
-									<Unit key={`${id}-anticontext`}>{anticontext}</Unit>
+									<T key={`${id}-exception-point`}>!</T>
+									<Unit key={`${id}-exception`}>{exception}</Unit>
 								</>
 							:
-								<Fragment key={`${id}-no-anticontext`} />
+								<Fragment key={`${id}-no-exception`} />
 						}
 					</HStack>
 					<Text italic>{description || ""}</Text>
@@ -407,6 +407,7 @@ const WESoundChanges = () => {
 			</HStack>
 		);
 	};
+	// TO-DO: Add in presets modal
 	return (
 		<VStack h="full">
 			<StandardAlert
@@ -480,13 +481,13 @@ const WESoundChanges = () => {
 								onChangeText={(v) => setModifiedContext(v)}
 							/>
 							<TextSetting
-								text="Anticontext"
+								text="Exception"
 								placeholder="(where not to replace; optional)"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refEditAnticontext, fontSize: smallerSize }}
+								inputProps={{ mt: 1, ref: refEditException, fontSize: smallerSize }}
 								labelProps={{ fontSize: textSize }}
-								value={modifiedAnticontext}
-								onChangeText={(v) => setModifiedAnticontext(v)}
+								value={modifiedException}
+								onChangeText={(v) => setModifiedException(v)}
 							/>
 							<TextSetting
 								text="Description"
@@ -559,10 +560,10 @@ const WESoundChanges = () => {
 								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting
-								text="Anticontext"
+								text="Exception"
 								placeholder="(where not to replace; optional)"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddAnticontext, fontSize: smallerSize, ...saveOnEnd(setAddAnticontext) }}
+								inputProps={{ mt: 1, ref: refAddException, fontSize: smallerSize, ...saveOnEnd(setAddException) }}
 								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting

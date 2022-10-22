@@ -55,9 +55,10 @@ import {
 } from "../../components/icons";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import StandardAlert from "../../components/StandardAlert";
-import { DropDown, SliderWithValueDisplay, ToggleSwitch } from "../../components/inputTags";
+import { DropDown, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
+import { setFlag, setOutput } from "../../store/weSlice";
 
 const WGOutput = () => {
 	const {
@@ -65,6 +66,12 @@ const WGOutput = () => {
 		characterGroups,
 		transforms,
 		soundChanges,
+		settings: {
+			outputStyle,
+			multicolumn,
+			inputLower,
+			inputAlpha
+		}
 	} = useSelector(state => state.we);
 	const columns = useSelector(state => state.lexicon.columns);
 	const sizes = useSelector(state => state.appState.sizes);
@@ -76,7 +83,6 @@ const WGOutput = () => {
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
 	const [longestOriginalWordSizeEstimate, setLongestOriginalWordSizeEstimate] = useState(undefined);
 	const [longestEvolvedWordSizeEstimate, setLongestEvolvedWordSizeEstimate] = useState(undefined);
-	const [outputStyle, setOutputStyle] = useState("output");
 	const outputStyles = [
 		{
 			key: "output",
@@ -127,12 +133,102 @@ const WGOutput = () => {
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
-	const saveToLexRef = useRef(null);
+	const saveToLexInitialRef = useRef(null);
 	const arrowLR = "⟶";
 	const arrowRL = "⟵";
+	const { width } = useWindowDimensions();
 
-	// TO-DO: toggle to save
-	const toggleSaveSomeToLex = () => {};
+	const toggleSaveSomeToLex = () => {
+		let scheme = "success";
+		let msg = "Tap on a word to mark it for saving. Click the giant Save button when you're done.";
+		let duration = 5000;
+		if(savingToLexicon) {
+			// set toast options differently
+			msg = "No longer saving.";
+			scheme = "warning";
+			duration = undefined;
+			setWordsToSave({});
+		} else {
+			// we're beginning to save, so set up wordsToSave
+			let rawObj = {};
+			saveableWords.forEach(word => rawObj[word] = false);
+			setWordsToSave(rawObj);
+		}
+		setSavingToLexicon(!savingToLexicon);
+		doToast({
+			toast,
+			scheme,
+			msg,
+			placement: "top-right",
+			duration,
+			boxProps: {
+				maxWidth: (width * 2 / 5)
+			},
+			center: true
+		});
+	};
+	const findWordsToSave = () => {
+		if(savingToLexicon) {
+			// Return only chosen values
+			return saveableWords.filter(word => wordsToSave[word]);
+		}
+		// Return all values
+		return saveableWords;
+	};
+	const doSaveToLex = () => {
+		const words = findWordsToSave();
+		// Save to Lexicon
+		dispatch(addMultipleItemsAsColumn({
+			words,
+			column: whereToSaveInLex.id
+		}));
+		doToast({
+			toast,
+			override: (
+				<VStack
+					alignItems="center"
+					borderRadius="sm"
+					bg="success.500"
+					maxW={56}
+					p={0}
+					m={0}
+				>
+					<IconButton
+						alignSelf="flex-end"
+						onPress={() => toast.closeAll()}
+						bg="transparent"
+						icon={<CloseIcon color="success.50" size={descSize} />}
+						p={1}
+						m={0}
+					/>
+					<Box
+						mb={2}
+						mt={0}
+						p={0}
+						px={3}
+					>
+						<Text textAlign="center" color="success.50">Added <Text bold>{words.length}</Text> words to the Lexicon.</Text>
+					</Box>
+					<Button
+						bg="darker"
+						px={2}
+						py={1}
+						mb={1}
+						_text={{color: "success.50"}}
+						onPress={() => {
+							navigate("/lex");
+							toast.closeAll();
+						}}
+					>Go to Lexicon</Button>
+				</VStack>
+			),
+			placement: "top",
+			duration: 5000
+		});
+		setWordsToSave({});
+		setChooseWhereToSaveInLex(false);
+		setSavingToLexicon(false);
+	};
 
 	// // //
 	// Convenience Variables
@@ -329,7 +425,7 @@ const WGOutput = () => {
 			}
 			const context = temp;
 			// ANTICONTEXT
-			temp = (change.anticontext || "").split("_");
+			temp = (change.exception || "").split("_");
 			if(temp.length !== 2) {
 				// Error. Treat as "_"
 				temp = [null, null];
@@ -356,13 +452,13 @@ const WGOutput = () => {
 				}
 				temp = [first, second];
 			}
-			const anticontext = temp;
+			const exception = temp;
 			// SAVE
 			newSoundChanges[id] = {
 				beginning,
 				ending,
 				context,
-				anticontext,
+				exception,
 				characterGroupsFound: characterGroupFlag
 			};
 		});
@@ -376,7 +472,7 @@ const WGOutput = () => {
 	const evolveOutput = () => {
 		// Sanity check
 		const err = [];
-		const rawInput = input.split(/\n/);
+		let rawInput = input.split(/\n/);
 		if(soundChanges.length < 1) {
 			err.push("You have no sound changes defined.");
 		} else if (rawInput.length < 1) {
@@ -393,6 +489,14 @@ const WGOutput = () => {
 		setOriginalEvolvedWords(false);
 		setEvolvedOriginalWords(false);
 		setOriginalEvolvedRulesWords(false);
+		// lowercase option
+		if(inputLower) {
+			rawInput = rawInput.map(word => word.toLowerCase());
+		}
+		// alphabetic-only option
+		if(inputAlpha) {
+			rawInput = rawInput.map(word => word.replace(/[^a-zA-Z]/g, ""));
+		}
 		const changedWords = changeTheWords(rawInput);
 		const output = [];
 		const changed = [];
@@ -460,7 +564,7 @@ const WGOutput = () => {
 		originalWords.forEach((original) => {
 			let rulesThatApplied = [];
 			let word = original;
-			// Loop over the rewrite rules.
+			// Loop over the transformations.
 			transforms.forEach((tr) => {
 				const {id, search, replace, direction} = tr;
 				// Check to see if we apply this rule.
@@ -474,13 +578,12 @@ const WGOutput = () => {
 			});
 			// Loop over every sound change in order.
 			soundChanges.forEach((change) => {
-				const {id, beginning, ending, context, anticontext} = change;
+				const {id, beginning, ending, context, exception} = change;
 				const modified = soundChangesInterpreted[id];
-				const rule = `${beginning}➜${ending} / ${context}` + (anticontext ? " ! " + anticontext : "");
 				let previous = word;
 				if(modified.characterGroupsFound) {
 					// We have character group matches to deal with.
-					const {beginning, ending, context, anticontext} = modified;
+					const {beginning, ending, context, exception} = modified;
 					let textBasic = "";
 					let textCharacterGroup = "";
 					const ids = [];
@@ -513,7 +616,7 @@ const WGOutput = () => {
 						//   match
 						// Therefore: word.slice(0, beginning.lastIndex) will
 						//   be everything up to and including the match
-						// Make sure our match doesn't match the anticontext
+						// Make sure our match doesn't match the exception
 						// PLI = previous value of 'lastIndex' (or 0)
 						// (a) = pre match
 						// (b) = post match
@@ -526,14 +629,14 @@ const WGOutput = () => {
 						// Make 'pre' into the matchable string: 0 to LI - (b).
 						const pre = word.slice(0, basicMatch.index);
 						const post = word.slice(basicMatch.index + basicMatch[0].length);
-						// We do NOT want to match the anticontext
-						if(anticontext.some(a => a)) {
-							const [a, b] = anticontext;
+						// We do NOT want to match the exception
+						if(exception.some(a => a)) {
+							const [a, b] = exception;
 							if(
 								(a ? pre.match(a) : true)
 								&& (b ? post.match(b) : true)
 							) {
-								// We matched the anticontext, so forget about this.
+								// We matched the exception, so forget about this.
 								okToReplace = null;
 							}
 						}
@@ -586,7 +689,7 @@ const WGOutput = () => {
 					}
 				} else {
 					// No special character group match handling
-					const {beginning, ending, context, anticontext} = modified;
+					const {beginning, ending, context, exception} = modified;
 					// Reset lastIndex to prevent certain errors.
 					beginning.lastIndex = 0;
 					let m = beginning.exec(word);
@@ -600,7 +703,7 @@ const WGOutput = () => {
 						//   match
 						// Therefore: word.slice(0, beginning.lastIndex)
 						//   will be everything up to and including the match
-						// Make sure our match doesn't match the anticontext
+						// Make sure our match doesn't match the exception
 						// PLI = previous value of 'lastIndex' (or 0)
 						// (a) = pre match
 						// (b) = post match
@@ -613,14 +716,14 @@ const WGOutput = () => {
 						// Make 'pre' into the matchable string: 0 to LI - (b).
 						const pre = word.slice(0, m.index);
 						const post = word.slice(m.index + m[0].length);
-						// We do NOT want to match the anticontext
-						if(anticontext.some(a => a)) {
-							const [a, b] = anticontext;
+						// We do NOT want to match the exception
+						if(exception.some(a => a)) {
+							const [a, b] = exception;
 							if(
 								(a ? pre.match(a) : true)
 								&& (b ? post.match(b) : true)
 							) {
-								// We matched the anticontext, so forget about this.
+								// We matched the exception, so forget about this.
 								okToReplace = null;
 							}
 						}
@@ -642,7 +745,7 @@ const WGOutput = () => {
 								let rep = ending;
 								let c = m.length;
 								while(c >= 1) {
-									rep = rep.replace("$" + c.toString(), m[c]);
+									rep = rep.replaceAll("$" + c.toString(), m[c]);
 									c--;
 								}
 								word = pre + rep + post;
@@ -673,7 +776,7 @@ const WGOutput = () => {
 				}
 				previous !== word
 					&& outputStyle === "rules"
-					&& rulesThatApplied.push([rule, word]);
+					&& rulesThatApplied.push([`${beginning}➜${ending} / ${context}` + (exception ? " ! " + exception : ""), word]);
 			});
 			// Loop over the transforms again.
 			transforms.forEach((tr) => {
@@ -713,19 +816,11 @@ const WGOutput = () => {
 		// Return the output.
 		return output;
 	}
-	const findWordsToSave = () => {
-		if(savingToLexicon) {
-			// Return only chosen values
-			return saveableWords.filter(word => wordsToSave[word]);
-		}
-		// Return all values
-		return saveableWords;
-	};
 
 
 
 	// // //
-	// Determine number of columns from given array of words
+	// Estimate largest column width from given array of words
 	// // //
 	const determineColumnSize = (words) => {
 		// Find length of longest word
@@ -849,7 +944,11 @@ const WGOutput = () => {
 					w="full"
 					flexWrap="wrap"
 				>
-					<Box style={{width: longestOriginalWordSizeEstimate}}>
+					<Box style={{
+						flexGrow: 0,
+						flexShrink: 0,
+						flexBasis: longestOriginalWordSizeEstimate
+					}}>
 						<Simple textAlign="right" lineHeight={headerSize}>{original}</Simple>
 					</Box>
 					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
@@ -969,10 +1068,48 @@ const WGOutput = () => {
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
-						<Text>Empty for now.</Text>
-						{
-							// TO-DO: Output Settings
-						}
+						<ToggleSwitch
+							hProps={{
+								borderBottomWidth: 1,
+								borderColor: "main.900",
+								p: 2
+							}}
+							label="Render output in multiple columns"
+							labelSize={textSize}
+							desc="Only has an effect in Output-Only mode"
+							descSize={descSize}
+							descProps={{ color: "main.500" }}
+							switchState={multicolumn}
+							switchToggle={() => dispatch(setFlag(["multicolumn", !multicolumn]))}
+						/>
+						<ToggleSwitch
+							hProps={{
+								borderBottomWidth: 1,
+								borderColor: "main.900",
+								p: 2
+							}}
+							label="Convert input to lowercase before evolving"
+							labelSize={textSize}
+							desc="This is essentially an input-only Transform"
+							descSize={descSize}
+							descProps={{ color: "main.500" }}
+							switchState={inputLower}
+							switchToggle={() => dispatch(setFlag(["inputLower", !inputLower]))}
+						/>
+						<ToggleSwitch
+							hProps={{
+								borderBottomWidth: 1,
+								borderColor: "main.900",
+								p: 2
+							}}
+							label="Strip non-alphabetic characters before evolving"
+							labelSize={textSize}
+							desc="This is essentially an input-only Transform, and it will not work well with non-Latin scripts"
+							descSize={descSize}
+							descProps={{ color: "main.500" }}
+							switchState={inputAlpha}
+							switchToggle={() => dispatch(setFlag(["inputAlpha", !inputAlpha]))}
+						/>
 					</Modal.Body>
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" w="full" p={1}>
@@ -987,7 +1124,7 @@ const WGOutput = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<Modal isOpen={chooseWhereToSaveInLex} initialFocusRef={saveToLexRef}>
+			<Modal isOpen={chooseWhereToSaveInLex} initialFocusRef={saveToLexInitialRef}>
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
@@ -1076,7 +1213,7 @@ const WGOutput = () => {
 								px={2}
 								py={1}
 								onPress={() => setChooseWhereToSaveInLex(false)}
-								ref={saveToLexRef}
+								ref={saveToLexInitialRef}
 							>Go Back</Button>
 							<Button
 								startIcon={<SaveIcon size={textSize} />}
@@ -1124,7 +1261,7 @@ const WGOutput = () => {
 							ml: 0,
 							mr: 0
 						}}
-						onChange={(v) => setOutputStyle(v)}
+						onChange={(v) => dispatch(setOutput(v))}
 						defaultValue={outputStyle}
 						title="Display:"
 						options={outputStyles}
@@ -1274,7 +1411,7 @@ const WGOutput = () => {
 					<FlatGrid
 						renderItem={renderEvolved}
 						data={evolvedWords}
-						itemDimension={longestWordSizeEstimate}
+						itemDimension={multicolumn ? longestWordSizeEstimate : width - 32}
 						keyExtractor={(item) => item.join("-")}
 						style={{
 							paddingVertical: 0,

@@ -354,7 +354,7 @@ initialAppState.we = {
 			beginning: "([ptk])",
 			ending: "$1$1",
 			context: "[aeiou]+_#",
-			//anticontext: "",
+			//exception: "",
 			//description: ""
 		},
 		{
@@ -362,7 +362,7 @@ initialAppState.we = {
 			beginning: "w*h",
 			ending: "w",
 			context: "_",
-			anticontext: "_#",
+			exception: "_#",
 			description: "h to w but not at end of word"
 		},
 		{
@@ -370,10 +370,16 @@ initialAppState.we = {
 			beginning: "t{1}(?!t)",
 			ending: "tt",
 			context: "._.",
-			anticontext: "t_",
+			exception: "t_",
 			description: "double ts not at ends of words"
 		}
-	]
+	],
+	settings: {
+		outputStyle: "output",
+		multicolumn: true,
+		inputLower: false,
+		inputAlpha: false
+	}
 };
 initialAppState.lexicon = {
 	...initialAppState.lexicon,

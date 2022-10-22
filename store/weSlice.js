@@ -52,7 +52,7 @@ const rearrangeTransformsFunc = (state, action) => {
 
 // SOUND CHANGES
 const addSoundChangeFunc = (state, action) => {
-	// { id, beginning, ending, context, anticontext }
+	// { id, beginning, ending, context, exception }
 	state.soundChanges.push(action.payload);
 	return state;
 };
@@ -73,6 +73,25 @@ const rearrangeSoundChangesFunc = (state, action) => {
 };
 
 // SETTINGS
+const setOutputFunc = (state, action) => {
+	const outputStyle = action.payload;
+	switch(outputStyle) {
+		case "output":
+		case "inputoutput":
+		case "outputinput":
+		case "rules":
+			state.settings.outputStyle = outputStyle;
+			break;
+		default:
+			console.log(`INVALID OUTPUT STYLE [${outputStyle}]`);
+	}
+	return state;
+};
+const setFlagFunc = (state, action) => {
+	const [prop, value] = action.payload;
+	state.settings[prop] = value;
+	return state;
+};
 
 // STORED CUSTOM INFO
 const setStoredCustomInfoFunc = (state, action) => {
@@ -88,16 +107,14 @@ const loadWEStateFunc = (state, action) => {
 		input,
 		characterGroups,
 		transforms,
-		soundChanges,
-		output
+		soundChanges
 	} = action.payload || initialState;
 	return {
 		...state,
 		input,
 		characterGroups: [...characterGroups],
 		transforms: [...transforms],
-		soundChanges: [...soundChanges],
-		output
+		soundChanges: [...soundChanges]
 	};
 };
 
@@ -118,6 +135,9 @@ const weSlice = createSlice({
 		deleteSoundChange: deleteSoundChangeFunc,
 		editSoundChange: editSoundChangeFunc,
 		rearrangeSoundChanges: rearrangeSoundChangesFunc,
+		setOutput: setOutputFunc,
+		setFlag: setFlagFunc,
+
 		loadWEState: loadWEStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
@@ -136,6 +156,9 @@ export const {
 	deleteSoundChange,
 	editSoundChange,
 	rearrangeSoundChanges,
+	setOutput,
+	setFlag,
+
 	loadWEState,
 	setStoredCustomInfo
 } = weSlice.actions;
