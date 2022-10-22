@@ -59,8 +59,7 @@ import { DropDown, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 import { loadState, setFlag, setOutput, setStoredCustomInfo } from "../../store/weSlice";
-//TO-DO: Work on PresetsModal
-//import WEPresetsModal from "./wePresetsModal";
+import WEPresetsModal from "./wePresetsModal";
 import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
 import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
 import { weCustomStorage } from "../../helpers/persistentInfo";
@@ -276,7 +275,7 @@ const WGOutput = () => {
 		// Go through a from/to string and check for character groups and
 		//   other regex stuff. Returns an array.
 		const interpretFromAndTo = (input) => {
-			const rules = [];
+			let rules = [];
 			let assembly;
 			let fromTo = "",
 				backslash = false,
@@ -801,7 +800,7 @@ const WGOutput = () => {
 				} else if (direction === "double") {
 					// regex not possible
 					word = word.replace(search, replace);
-				} else if (direction === "out") {
+				} else if (direction === "output") {
 					// regex possible
 					word = word.replace(transformsAsRegExps[id].regex, replace);
 				}
@@ -1286,10 +1285,11 @@ const WGOutput = () => {
 				continueFunc={() => doClearEveything()}
 				fontSize={textSize}
 			/>
-			{/*<WEPresetsModal
+			<WEPresetsModal
 				modalOpen={openPresetModal}
 				setModalOpen={setOpenPresetModal}
-			/> */}
+				loadState={loadState}
+			/>
 			<LoadCustomInfoModal
 				modalOpen={openLoadCustomInfoModal}
 				closeModal={() => setOpenLoadCustomInfoModal(false)}

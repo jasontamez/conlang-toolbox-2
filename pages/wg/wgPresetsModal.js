@@ -1,145 +1,18 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-	Text,
-	HStack,
-	IconButton,
-	Button,
-	Modal,
-	useBreakpointValue,
-	useContrastText,
-	Radio,
-	useToast
-} from 'native-base';
-
-import ExtraChars from '../../components/ExtraCharsButton';
-import { CloseCircleIcon } from '../../components/icons';
-import StandardAlert from '../../components/StandardAlert';
-import { LoadIcon } from '../../components/icons';
-import { loadState } from '../../store/wgSlice';
-import doToast from '../../helpers/toast';
-
+import PresetsModal from '../../components/PresetsModal';
 
 const WGPresetsModal = ({
 	modalOpen,
 	setModalOpen,
-	triggerResets
-}) => {
-	const { sizes, disableConfirms } = useSelector(state => state.appState);
-	const textSize = useBreakpointValue(sizes.sm);
-	const inputSize = useBreakpointValue(sizes.xs);
-	const primaryContrast = useContrastText('primary.500');
-	const [presetChosen, setPresetChosen] = useState(wgPresets[0][0]);
-	const [alertOpen, setAlertOpen] = useState(false);
-	const dispatch = useDispatch();
-	const toast = useToast();
-	const maybeLoadPreset = () => {
-		if(disableConfirms) {
-			return doLoadPreset();
-		}
-		setAlertOpen(true);
-	};
-	const doLoadPreset = () => {
-		const preset = wgPresets.find(wgp => wgp[0] === presetChosen);
-		dispatch(loadState(preset[1]));
-		// Trigger any resets needed on the main page
-		triggerResets();
-		doToast({
-			toast,
-			msg: `"${preset[0]}" loaded`,
-			placement: "top",
-			fontSize: inputSize
-		});
-		setModalOpen(false);
-	};
-	return (
-		<Modal isOpen={modalOpen} size="sm">
-			<StandardAlert
-				alertOpen={alertOpen}
-				setAlertOpen={setAlertOpen}
-				bodyContent={`Are you sure you want to load the ${presetChosen} Preset? This will overwrite all character groups, syllables, transforms, and settings.`}
-				continueText="Yes"
-				continueFunc={doLoadPreset}
-				fontSize={textSize}
-			/>
-			<Modal.Content>
-				<Modal.Header>
-					<HStack
-						pl={2}
-						w="full"
-						justifyContent="space-between"
-						space={5}
-						alignItems="center"
-						bg="primary.500"
-					>
-						<Text
-							color={primaryContrast}
-							fontSize={textSize}
-							bold
-						>Load Preset</Text>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars
-								color={primaryContrast}
-								size={textSize}
-								buttonProps={{p: 1, m: 0}}
-							/>
-							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
-								p={1}
-								m={0}
-								variant="ghost"
-								onPress={() => setModalOpen(false)}
-							/>
-						</HStack>
-					</HStack>
-				</Modal.Header>
-				<Modal.Body m={0} p={0}>
-					<Radio.Group
-						value={presetChosen}
-						onChange={(v) => setPresetChosen(v)}
-						alignItems="flex-start"
-						justifyContent="center"
-						mx="auto"
-						my={4}
-						label="List of Presets"
-					>
-						{wgPresets.map(preset => {
-							const label = preset[0];
-							return (
-								<Radio
-									key={`${label}-RadioButton`}
-									size={textSize}
-									value={label}
-									_text={{fontSize: inputSize}}
-									my={1}
-								>{label}</Radio>
-							);
-						})}
-					</Radio.Group>
-				</Modal.Body>
-				<Modal.Footer borderTopWidth={0}>
-					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
-						<Button
-							bg="darker"
-							onPress={() => setModalOpen(false)}
-							_text={{color: "text.50", fontSize: textSize}}
-							p={1}
-							m={2}
-						>Cancel</Button>
-						<Button
-							startIcon={<LoadIcon color="tertiary.50" size={textSize} m={0} />}
-							bg="tertiary.500"
-							onPress={() => maybeLoadPreset()}
-							_text={{color: "tertiary.50", fontSize: textSize}}
-							p={1}
-							m={2}
-						>Load</Button>
-					</HStack>
-				</Modal.Footer>
-			</Modal.Content>
-		</Modal>
-	);
-};
+	triggerResets,
+	loadState
+}) => <PresetsModal
+	modalOpen={modalOpen}
+	setModalOpen={setModalOpen}
+	triggerResets={triggerResets}
+	presetsInfo={wgPresets}
+	loadState={loadState}
+	overwriteText="all character groups, syllables, transforms, and settings on this page"
+/>;
 
 export default WGPresetsModal;
 
@@ -402,7 +275,7 @@ const wgPresets = [
 			{
 				label: "C",
 				title: "Consonants",
-				run: "ptknslrmbdgfvwyhšzñxčžŊ"
+				run: "ptknslrmbdgfvwyhšzñxčžŋ"
 			},
 			{
 				label: "V",
@@ -430,6 +303,12 @@ const wgPresets = [
 				id: "1",
 				search: "ô",
 				replace: "au",
+				description: ""
+			},
+			{
+				id: "2",
+				search: "(%L)%L",
+				replace: "$1",
 				description: ""
 			}
 		]

@@ -172,6 +172,7 @@ const WGSettings = () => {
 				modalOpen={openPresetModal}
 				setModalOpen={setOpenPresetModal}
 				triggerResets={triggerResets}
+				loadState={loadState}
 			/>
 			<LoadCustomInfoModal
 				modalOpen={openLoadCustomInfoModal}
