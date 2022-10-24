@@ -3,11 +3,13 @@ import blankAppState from './blankAppState';
 
 const initialState = blankAppState.morphoSyntax;
 
-const setKeyFunc = (state, action) => {
-	state.key = action.payload;
+const setIDFunc = (state, action) => {
+	// TO-DO: Determine if we really need this
+	state.id = action.payload;
 	return state;
 };
 const setLastSaveFunc = (state, action) => {
+	// TO-DO: Determine if we really need this
 	state.lastSave = action.payload;
 	return state;
 };
@@ -51,7 +53,7 @@ const morphoSyntaxSlice = createSlice({
 	name: 'morphoSyntax',
 	initialState,
 	reducers: {
-		setKey: setKeyFunc,
+		setID: setIDFunc,
 		setLastSave: setLastSaveFunc,
 		setTitle: setTitleFunc,
 		setDescription: setDescriptionFunc,
@@ -62,7 +64,7 @@ const morphoSyntaxSlice = createSlice({
 });
 
 export const {
-	setKey,
+	setID,
 	setLastSave,
 	setTitle,
 	setDescription,

@@ -16,7 +16,7 @@ import {
 	IconButton
 } from 'native-base';
 
-import { CloseCircleIcon, DotsIcon, SaveIcon } from '../../components/icons';
+import { AddCircleIcon, CloseCircleIcon, DotsIcon, RemoveCircleIcon, SaveIcon } from '../../components/icons';
 import {
 	setDisableBlankConfirms,
 	setMaxColumns,
@@ -40,6 +40,10 @@ const LexiconContextMenu = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
+	const [yesNoMsg, setYesNoMsg] = useState(false);
+	const [loadLexicon, setLoadLexicon] = useState(false);
+	const [saveLexicon, setSaveLexicon] = useState(false);
+	const [saveNewLexicon, setSaveNewLexicon] = useState(false);
 	const [cols, setCols] = useState(maxColumns);
 	useEffect(() => {
 		setCheckboxOptions([
@@ -71,6 +75,14 @@ const LexiconContextMenu = () => {
 	}
 	const toast = useToast();
 	const primaryContrast = useContrastText('primary.500');
+	const maybeClearLexicon = () => {};
+	const maybeLoadLexicon = () => {
+		// [title, lastSave, numberOfLexiconWords]
+		// My Lang                 Saved: 10/12/2022, 10:00:00 PM
+		// [14 Words]
+	};// TO-DO: FINISH THIS ALL
+	const maybeSaveLexicon = () => {};
+	const maybeSaveNewLexicon = () => {};
 	return (
 		<>
 			<Menu
@@ -91,6 +103,47 @@ const LexiconContextMenu = () => {
 				onClose={() => doMenuClose()}
 				isOpen={menuOpen}
 			>
+				<Menu.Group
+					title="Info Management"
+					_title={{ fontSize: smallerSize }}
+				>
+					<Menu.Item onPress={maybeClearLexicon}>
+						<HStack
+							space={1}
+							justifyContent="flex-start"
+						>
+							<RemoveCircleIcon size={smallerSize} color="text.50" px={1} />
+							<Text>Clear Lexicon</Text>
+						</HStack>
+					</Menu.Item>
+					<Menu.Item onPress={maybeLoadLexicon}>
+						<HStack
+							space={1}
+							justifyContent="flex-start"
+						>
+							<AddCircleIcon size={smallerSize} color="text.50" px={1} />
+							<Text>Load Lexicon</Text>
+						</HStack>
+					</Menu.Item>
+					<Menu.Item onPress={maybeSaveLexicon}>
+						<HStack
+							space={1}
+							justifyContent="flex-start"
+						>
+							<SaveIcon size={smallerSize} color="text.50" px={1} />
+							<Text>Save Lexicon</Text>
+						</HStack>
+					</Menu.Item>
+					<Menu.Item onPress={maybeSaveNewLexicon}>
+						<HStack
+							space={1}
+							justifyContent="flex-start"
+						>
+							<SaveIcon size={smallerSize} color="text.50" px={1} />
+							<Text>Save as New Lexicon</Text>
+						</HStack>
+					</Menu.Item>
+				</Menu.Group>
 				<Menu.OptionGroup
 					title="Options"
 					_title={{ fontSize: smallerSize }}

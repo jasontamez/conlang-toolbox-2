@@ -233,6 +233,19 @@ const Lex = () => {
 	};
 	//
 	//
+	// LOAD AND SAVE	
+	//
+	//
+
+	// load: overwrite lexicon or add to lexicon?
+	//       overwrite desc/title?
+	//       how to handle key/lastSave?
+	// save: new or overwrite old?
+	//       set a key (if needed)
+	//       what is lastSave format?
+
+	//
+	//
 	// RENDER
 	//
 	//
@@ -241,6 +254,14 @@ const Lex = () => {
 	const smallerSize = useBreakpointValue(sizes.sm);
 	const textSize = useBreakpointValue(sizes.md);
 	const bigTextSize = useBreakpointValue(sizes.x2);
+	const getBoxSize = (size) => {
+		if(size === "s") {
+			return "lexSm";
+		} else if (size === "l") {
+			return "lexLg";
+		}
+		return "lexMd";
+	};
 	//const [] = useBreakpointValue({
 	//	base: [1, 3],
 	//});
@@ -280,7 +301,7 @@ const Lex = () => {
 			<HStack key={id} py={3.5} px={1.5} bg={bg}>
 				{cols.map(
 					(text, i) =>
-						<Box px={1} size={columns[i].size} key={id + "-Column-" + String(i)}>
+						<Box px={1} size={getBoxSize(columns[i].size)} key={id + "-Column-" + String(i)}>
 							<Text fontSize={smallerSize} isTruncated={truncateColumns}>{text}</Text>
 						</Box>
 					)
@@ -539,7 +560,7 @@ const Lex = () => {
 								<Box
 									pr={1}
 									key={col.id + "-ColumnLabel"}
-									size={col.size}
+									size={getBoxSize(col.size)}
 								>
 									<Text bold isTruncated={truncateColumns} fontSize={textSize}>{col.label}</Text>
 								</Box>
@@ -556,7 +577,7 @@ const Lex = () => {
 							<Box
 								px={0.5}
 								mx={0}
-								size={col.size}
+								size={getBoxSize(col.size)}
 								key={col.id + "-Input"}
 							>
 								<Input

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid';
 import blankAppState from './blankAppState';
+import { setStoredCustomInfo } from './weSlice';
 
 const initialState = blankAppState.lexicon;
 
@@ -42,12 +43,36 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 };
 
 
-const loadNewLexiconFunc = (state, action) => {
+const loadLexiconFunc = (state, action) => {
 	//
 	//
 	// TO-DO: add code for saving/loading lexicons
 	//
 	//
+	const {
+		method,
+		lexicon: {
+			id,
+			lastSave, // needed?
+			title,
+			description,
+			truncateColumns,
+			sortDir,
+			sortPattern,
+			columns,
+			lexicon
+		}
+	} = action.payload;
+};
+const setIDFunc = (state, action) => {
+	// TO-DO: Determine if we really need this
+	state.id = action.payload;
+	return state;
+};
+const setLastSaveFunc = (state, action) => {
+	// TO-DO: Determine if we really need this
+	state.lastSave = action.payload;
+	return state;
 };
 const setTitleFunc = (state, action) => {
 	state.title = action.payload;
@@ -242,6 +267,16 @@ const setMaxColumnsFunc = (state, action) => {
 	state.maxColumns = action.payload;
 	return state;
 };
+const setStoredCustomInfoFunc = (state, action) => {
+	//setStoredCustomInfo({
+	//  id: [title, lastSave],
+	//  ...
+	//})
+	const { payload } = action;
+	state.storedCustomInfo = payload;
+	state.storedCustomIDs = Object.keys(payload);
+	return state;
+};
 //const setTitleFunc = (state, action) => {};
 
 
@@ -249,7 +284,9 @@ const lexiconSlice = createSlice({
 	name: 'lexicon',
 	initialState,
 	reducers: {
-		loadNewLexicon: loadNewLexiconFunc,
+		setID: setIDFunc,
+		setLastSave: setLastSaveFunc,
+		loadLexicon: loadLexiconFunc,
 		setTitle: setTitleFunc,
 		setDesc: setDescFunc,
 		addLexiconItem: addLexiconItemFunc,
@@ -262,12 +299,15 @@ const lexiconSlice = createSlice({
 		toggleSortDir: toggleSortDirFunc,
 		setTruncate: setTruncateFunc,
 		setDisableBlankConfirms: setDisableBlankConfirmsFunc,
-		setMaxColumns: setMaxColumnsFunc
+		setMaxColumns: setMaxColumnsFunc,
+		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
 
 export const {
-	loadNewLexicon,
+	setID,
+	setLastSave,
+	loadLexicon,
 	setTitle,
 	setDesc,
 	addLexiconItem,
@@ -281,7 +321,8 @@ export const {
 	toggleSortDir,
 	setTruncate,
 	setDisableBlankConfirms,
-	setMaxColumns
+	setMaxColumns,
+	setStoredCustomInfo
 } = lexiconSlice.actions;
 
 export default lexiconSlice.reducer;

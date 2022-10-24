@@ -68,7 +68,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 		newCols.push({
 			id,
 			label: "",
-			size: "lexMd"
+			size: "m"
 		});
 		setNewColumns(newCols);
 	};
@@ -182,9 +182,9 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 						}}
 					/>
 					<HStack flexWrap="wrap" justifyContent="space-between" alignItems="flex-start" w="full" my={2}>
-						<ColButton size={size} value="lexSm" i={i}>Small</ColButton>
-						<ColButton size={size} value="lexMd" i={i}>Med</ColButton>
-						<ColButton size={size} value="lexLg" i={i}>Large</ColButton>
+						<ColButton size={size} value="s" i={i}>Small</ColButton>
+						<ColButton size={size} value="m" i={i}>Med</ColButton>
+						<ColButton size={size} value="l" i={i}>Large</ColButton>
 					</HStack>
 				</VStack>
 				<VStack justifyContent="space-between" alignItems="center">

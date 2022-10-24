@@ -72,7 +72,7 @@ const blankAppState = {/*
 		storedCustomIDs: []
 	},
 	morphoSyntax: {
-		key: "",
+		id: "",
 		lastSave: 0,
 		title: "",
 		description: "",
@@ -81,13 +81,13 @@ const blankAppState = {/*
 		text: {}
 	},
 	lexicon: {
-		key: "",
+		id: "",
 		lastSave: 0,
 		title: "",
 		description: "",
 		truncateColumns: true,
 		sortDir: false,
-		sortPattern: [],
+		sortPattern: [0, 1, 2],
 		columns: [
 			{
 				id: "00",
@@ -107,7 +107,9 @@ const blankAppState = {/*
 		],
 		lexicon: [],
 		disableBlankConfirms: false,
-		maxColumns: 10
+		maxColumns: 10,
+		storedCustomInfo: {},
+		storedCustomIDs: []
 	},
 	wordLists: {
 		centerTheDisplayedWords: [],

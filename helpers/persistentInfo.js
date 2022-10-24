@@ -54,6 +54,7 @@ export const errHandle = (where, prefix, error) => {
 
 export const wgCustomStorage = makeAsyncStorageObject("WordGen", errHandle);
 export const weCustomStorage = makeAsyncStorageObject("WordEvolve", errHandle);
+export const lexCustomStorage = makeAsyncStorageObject("Lexicon", errHandle);
 
 
 //export const StateStorage = localForage.createInstance({
@@ -63,12 +64,12 @@ export const weCustomStorage = makeAsyncStorageObject("WordEvolve", errHandle);
 //	description: 'Stores state information for the next time we load.'
 //});
 
-//export const LexiconStorage = localForage.createInstance({
-//	name: 'Conlang Toolbox',
-//	storeName: 'lexStorage',
-//	version: 1,
-//	description: 'Stores lexicon information.'
-//});
+export const OldLexiconStorage = localForage.createInstance({
+	name: 'Conlang Toolbox',
+	storeName: 'lexStorage',
+	version: 1,
+	description: 'Stores lexicon information.'
+});
 
 export const OldCustomStorageWG = localForage.createInstance({
 	name: 'Conlang Toolbox',

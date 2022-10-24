@@ -3,15 +3,24 @@ import { v4 as uuidv4 } from 'uuid';
 import { setHasCheckedForOldCustomInfo } from '../store/appStateSlice';
 import { setStoredCustomInfo as setStoredCustomInfoWG } from '../store/wgSlice';
 import { setStoredCustomInfo as setStoredCustomInfoWE } from '../store/weSlice';
-import { OldCustomStorageWE, OldCustomStorageWG, weCustomStorage, wgCustomStorage } from './persistentInfo';
+import { setStoredCustomInfo as setStoredCustomInfoLex } from '../store/lexiconSlice';
+import {
+	OldCustomStorageWE,
+	OldCustomStorageWG,
+	OldLexiconStorage,
+	lexCustomStorage,
+	weCustomStorage,
+	wgCustomStorage
+} from './persistentInfo';
 
 
 const doConvert = async (dispatch) => {
 	// Convert WG info
-	// TO-DO: chain in other converters as needed, like Lex and WE
+	// TO-DO: chain in other converters as needed
 	return Promise.allSettled([
 		convertWG(dispatch),
-		convertWE(dispatch)
+		convertWE(dispatch),
+		convertLexicon(dispatch)
 	]).then((values) => {
 		return values.every(v => v.status === "fulfilled") && dispatch(setHasCheckedForOldCustomInfo(true));
 	}).catch((err) => {
@@ -204,6 +213,105 @@ const convertWE = async (dispatch) => {
 		dispatch(setStoredCustomInfoWE(ids));
 	}).catch(() => {
 		console.log("WE Error");
+	});
+};
+const convertLexicon = async (dispatch) => {
+	let information = [];
+	let ids = {};
+	// Get all info
+	return OldLexiconStorage.iterate((value, key) => {
+		information.push([key, value]);
+		return; // Blank return keeps the loop going
+	}).then(() => {
+		// Convert info from old format into new format
+		const infoLen = information.length;
+		for(let x = 0; x < infoLen; x++) {
+			const [
+				id,
+				{
+					lastSave,
+					title,
+					description,
+					columns,
+					columnOrder,
+					columnTitles,
+					columnSizes,
+					sort,
+					lexicon,
+					lexiconWrap
+				}
+			] = information[x];
+			const [colNum, direction] = sort;
+			let newLex = {
+				id,
+				title,
+				description,
+				lastSave,
+				columns: [],
+				sortPattern: [colNum],
+				sortDir: !!direction,
+				lexicon: [],
+				maxColumns: Math.min(Math.max(columns, 10), 30),
+				truncateColumns: !lexiconWrap
+			};
+			//columnOrder: [0,1,2],
+			//columnTitles: ["Word", "Part of Speech", "Definition"],
+			//columnSizes: ["m", "s", "l"],
+			//sort: [0, 0],
+			columnOrder.forEach((col, i) => {
+				if(col >= 30) {
+					// Why would you do this?
+					return;
+				}
+				const ids = {};
+				let id;
+				do {
+					id = uuidv4();
+				} while (!ids[id]);
+				ids[id] = true;
+				newLex.columns.push({
+					id,
+					label: columnTitles[col],
+					size: columnSizes[col]
+				});
+				if(col !== newCol) {
+					newLex.sortPattern.push(i);
+				} else {
+					newLex.sortPattern[0] = i;
+				}
+			});
+			//lexicon: [],
+			//{
+			//	key: string,
+			//	columns: string[]
+			//}
+			lexicon.forEach((lex) => {
+				const {key, columns} = lex;
+				let item = {
+					id: key,
+					columns: []
+				};
+				columnOrder.forEach(col => {
+					if(col >= 30) {
+						// Why would you do this?
+						return;
+					}
+					item.columns.push(columns[col]);
+				});
+				newLex.lexicon.push(item);
+			});
+		}
+		// All information converted.
+		// Save all info
+		return Promise.all(information.map(info => {
+			const id = info.id;
+			ids[id] = [info.title, info.lastSave, info.lexicon.length];
+			return lexCustomStorage.setItem(id, JSON.stringify(info));
+		}));
+	}).then(() => {
+		dispatch(setStoredCustomInfoLex(ids));
+	}).catch(() => {
+		console.log("Lex Error");
 	});
 };
 
