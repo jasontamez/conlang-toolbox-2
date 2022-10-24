@@ -1298,6 +1298,7 @@ const WGOutput = () => {
 				setStoredCustomInfo={setStoredCustomInfo}
 				storedCustomIDs={storedCustomIDs}
 				storedCustomInfo={storedCustomInfo}
+				overwriteMessage={"all current Character Groups, Transformations, and Sound Changes"}
 			/>
 			<SaveCustomInfoModal
 				modalOpen={openSaveCustomInfoModal}

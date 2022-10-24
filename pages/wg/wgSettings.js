@@ -183,6 +183,7 @@ const WGSettings = () => {
 				setStoredCustomInfo={setStoredCustomInfo}
 				storedCustomIDs={storedCustomIDs}
 				storedCustomInfo={storedCustomInfo}
+				overwriteMessage={"all current Character Groups, Syllables, Transformations, and the settings on this page"}
 			/>
 			<SaveCustomInfoModal
 				modalOpen={openSaveCustomInfoModal}

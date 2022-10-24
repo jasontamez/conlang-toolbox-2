@@ -103,6 +103,9 @@ const LoadCustomInfoModal = ({
 	const doDeleteInfo = async () => {
 		return await customStorage.removeItem(customInfoChosen).then(() => {
 			let deleted = {...storedCustomInfo};
+			// Dispatch the new info to store
+			delete deleted[customInfoChosen];
+			dispatch(setStoredCustomInfo(deleted));
 			// Announce success
 			doToast({
 				toast,
@@ -111,9 +114,6 @@ const LoadCustomInfoModal = ({
 				placement: "bottom",
 				fontSize: textSize
 			});
-			// Dispatch the new info to store
-			delete deleted[customInfoChosen];
-			dispatch(setStoredCustomInfo(deleted));
 		}).catch((err) => {
 			console.log("ERROR in getting custom info");
 			console.log(err);
@@ -128,7 +128,7 @@ const LoadCustomInfoModal = ({
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}
 			setAlertOpen={setOverwriteWarningOpen}
-			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite all current Character Groups, Syllables, Transformations and Settings.`}
+			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite ${loadOptions ? overwriteMessage[loadOption] : overwriteMessage}.`}
 			continueText="Yes"
 			continueFunc={() => {
 				setOverwriteWarningOpen(false);
