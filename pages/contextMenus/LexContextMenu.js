@@ -24,6 +24,11 @@ import {
 	consts
 } from "../../store/lexiconSlice";
 import doToast from '../../helpers/toast';
+import { LexiconStorage } from '../../store/persistentInfo';
+import { loadState } from '../../store/lexiconSlice';
+import StandardAlert from '../../components/StandardAlert';
+import { LoadingOverlay } from '../../components/FullBodyModal';
+import blankAppState from '../../store/blankAppState';
 
 const LexiconContextMenu = () => {
 	const {
@@ -32,7 +37,7 @@ const LexiconContextMenu = () => {
 		truncateColumns,
 		maxColumns
 	} = useSelector((state) => state.lexicon, shallowEqual);
-	const sizes = useSelector(state => state.appState.sizes);
+	const { sizes, disableConfirms } = useSelector(state => state.appState);
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.md);
@@ -40,10 +45,18 @@ const LexiconContextMenu = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
-	const [yesNoMsg, setYesNoMsg] = useState(false);
+
+	const [yesNoMsg, setYesNoMsg] = useState("");
+	const [yesFuncArg, setYesFuncArg] = useState("");
+
 	const [loadLexicon, setLoadLexicon] = useState(false);
+	const [customLabelChosen, setCustomLabelChosen] = useState(false);
+	const [loadingMethod, setLoadingMethod] = useState(false);
+	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+
 	const [saveLexicon, setSaveLexicon] = useState(false);
 	const [saveNewLexicon, setSaveNewLexicon] = useState(false);
+
 	const [cols, setCols] = useState(maxColumns);
 	useEffect(() => {
 		setCheckboxOptions([
@@ -75,16 +88,69 @@ const LexiconContextMenu = () => {
 	}
 	const toast = useToast();
 	const primaryContrast = useContrastText('primary.500');
-	const maybeClearLexicon = () => {};
+	const maybeClearLexicon = () => {
+		if(disableConfirms) {
+			doClearLexicon();
+			return;
+		}
+		setYesNoMsg("This will erase the Title, Description, and every item in the Lexicon. It cannot be undone. Are you sure you want to do this?");
+		setYesFuncArg("clear");
+	};
+	const doClearLexicon = () => {
+		dispatch(loadState({
+			method: "overwrite",
+			lexicon: blankAppState.lexicon
+		}));
+		// TO-DO: toast success
+	};
+	// TO-DO: FINISH THIS ALL; remember LoadCustomInfo modals, etc
 	const maybeLoadLexicon = () => {
-		// [title, lastSave, numberOfLexiconWords]
+		// [title, lastSave, numberOfLexiconWords, columns]
 		// My Lang                 Saved: 10/12/2022, 10:00:00 PM
 		// [14 Words]
-	};// TO-DO: FINISH THIS ALL
+		// Overwrite, Append/Overwrite, Append Only
+		// method: overwrite | overappend | append
+		// We will need to match columns
+		// columnConversion: [(integer | null)...]
+	};
+	const doLoadLexicon = () => {
+		// TO-DO: load info from storage
+		dispatch(loadState({
+			method: loadingMethod
+			// TO-DO: add lexicon prop
+		}));
+		// TO-DO: handle loading overlay and toast success message
+	};
 	const maybeSaveLexicon = () => {};
 	const maybeSaveNewLexicon = () => {};
+	const doSaveLexicon = () => {};
+	const yesFunc = () => {
+		switch(yesFuncArg) {
+			case "clear":
+				return doClearLexicon();
+			case "load":
+				return doLoadLexicon();
+			case "save":
+				return doSaveLexicon();
+		}
+		console.log("Nothing to say 'YES' to");
+	};
 	return (
 		<>
+			<StandardAlert
+				alertOpen={!!yesNoMsg}
+				setAlertOpen={setYesNoMsg}
+				bodyContent={yesNoMsg}
+				cancelText="No"
+				continueText="Yes"
+				continueFunc={yesFunc}
+				fontSize={textSize}
+			/>
+			<LoadingOverlay
+				overlayOpen={loadingOverlayOpen}
+				colorFamily="secondary"
+				contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customLabelChosen}"...</Text>}
+			/>
 			<Menu
 				placement="bottom right"
 				closeOnSelect={false}

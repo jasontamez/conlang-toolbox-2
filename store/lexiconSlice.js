@@ -43,14 +43,10 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 };
 
 
-const loadLexiconFunc = (state, action) => {
-	//
-	//
-	// TO-DO: add code for saving/loading lexicons
-	//
-	//
+const loadStateFunc = (state, action) => {
 	const {
 		method,
+		columnConversion,
 		lexicon: {
 			id,
 			lastSave, // needed?
@@ -63,6 +59,48 @@ const loadLexiconFunc = (state, action) => {
 			lexicon
 		}
 	} = action.payload;
+	if(method === "overwrite") {
+		return {
+			...state,
+			id,
+			lastSave,
+			title,
+			description,
+			truncateColumns,
+			sortDir,
+			sortPattern,
+			columns,
+			lexicon: sortLexicon(lexicon, sortPattern, sortDir)
+		};
+	} else if (method === "overappend") {
+		// overwrite title/desc
+		state = {
+			...state,
+			title,
+			description
+		};
+	}
+	// append lexicon
+	state.lexicon.push(...lexicon.map(item => {
+		const {id, columns} = item;
+		// columnConversion is an array of integers and nulls
+		//   that represents how the incoming columns should
+		//   be arranged
+		return {
+			id,
+			columns: columnConversion.map(c => {
+				if(c === null) {
+					// insert a blank column
+					return "";
+				}
+				// use the indicated column
+				return columns[c];
+			})
+		};
+	}));
+	// sort new lexicon
+	state.lexicon = sortLexicon(state.lexicon, state.sortPattern, state.sortDir);
+	return state;
 };
 const setIDFunc = (state, action) => {
 	// TO-DO: Determine if we really need this
@@ -286,7 +324,7 @@ const lexiconSlice = createSlice({
 	reducers: {
 		setID: setIDFunc,
 		setLastSave: setLastSaveFunc,
-		loadLexicon: loadLexiconFunc,
+		loadState: loadStateFunc,
 		setTitle: setTitleFunc,
 		setDesc: setDescFunc,
 		addLexiconItem: addLexiconItemFunc,
@@ -307,7 +345,7 @@ const lexiconSlice = createSlice({
 export const {
 	setID,
 	setLastSave,
-	loadLexicon,
+	loadState,
 	setTitle,
 	setDesc,
 	addLexiconItem,

@@ -304,8 +304,13 @@ const convertLexicon = async (dispatch) => {
 		// All information converted.
 		// Save all info
 		return Promise.all(information.map(info => {
-			const id = info.id;
-			ids[id] = [info.title, info.lastSave, info.lexicon.length];
+			const { id, title, lastSave, lexicon, columns } = info;
+			ids[id] = [
+				title,
+				lastSave,
+				lexicon.length,
+				columns
+			];
 			return lexCustomStorage.setItem(id, JSON.stringify(info));
 		}));
 	}).then(() => {
