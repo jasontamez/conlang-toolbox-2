@@ -643,3 +643,99 @@ export const DropDown = (props) => {
 		</Menu>
 	);
 };
+
+
+export const DropDownMenu = (props) => {
+	const {
+		placement = "bottom left",
+		closeOnSelect = true,
+		bg = "secondary.500",
+		color = "secondary.50",
+		markedColor = "secondary.50",
+		markedBg = "secondary.600",
+		isMarked,
+		fontSize = "sm",
+		titleSize,
+		menuSize,
+		startIcon,
+		labelFunc,
+		title,
+		options = [],
+		buttonProps = {}
+	} = props;
+	// <DropDown
+	//    placement = {string; default "bottom left"}
+	//    closeOnSelect = {boolean; default true}
+	//    bg = {string; background color; defaults to secondary.500}
+	//    color = {string; foreground color; defaults to secondary.50}
+	//    markedColor = {string; special text color; defaults to secondary.50}
+	//    markedBg = {string; special bg color; defaults to secondary.600}
+	//    isMarked = {Function; optional; given menu key as argument}
+	//    fontSize = {enum; font size}
+	//    titleSize = {enum; optional; font size for Menu title}
+	//    menuSize = {enum; optional; font size for Menu.ItemOption}
+	//    startIcon = {<Icon>; optional}
+	//    labelFunc = {Function; returns a string for the current label}
+	//    title = {title of the Menu}
+	//    options = {Array: {key: string, label: string, onPress: Function}}
+	//    buttonProps = {Object; additional props for the <Button>}
+	// />
+	const labelText = labelFunc();
+	return (
+		<Menu
+			placement={placement}
+			closeOnSelect={closeOnSelect}
+			trigger={
+				(props) => (
+					<Button
+						p={1}
+						ml={2}
+						mr={1}
+						bg={bg}
+						_stack={{
+							justifyContent: "space-between",
+							alignItems: "center",
+							flexGrow: 1,
+							flexShrink: 1,
+							flexBasis: 0,
+							space: 0,
+							style: {
+								overflow: "hidden"
+							}
+						}}
+						startIcon={startIcon || <SortEitherIcon size={fontSize} mr={1} color={color} flexGrow={0} flexShrink={0} />}
+						{...buttonProps}
+						{...props}
+					>
+						<Box
+							overflow="hidden"
+						>
+							<Text fontSize={fontSize} color={color} isTruncated textAlign="left" noOfLines={1}>{labelText}</Text>
+						</Box>
+					</Button>
+				)
+			}
+		>
+			<Menu.Group
+				title={title}
+				_title={{fontSize: titleSize || fontSize}}
+			>
+				{
+					options.map(({key, onPress, label}) => (
+						<Menu.Item
+							key={key}
+							_text={{
+								fontSize: menuSize || fontSize,
+								color: isMarked && isMarked(key) ? markedColor : "text.50"
+							}}
+							bg={isMarked && isMarked(key) ? markedBg : "main.900"}
+							onPress={onPress}
+						>
+							{label}
+						</Menu.Item>
+					))
+				}
+			</Menu.Group>
+		</Menu>
+	);
+};
