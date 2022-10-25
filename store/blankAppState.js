@@ -92,17 +92,17 @@ const blankAppState = {/*
 			{
 				id: "00",
 				label: "Word",
-				size: "lexMd"
+				size: "m"
 			},
 			{
 				id: "11",
 				label: "Part of Speech",
-				size: "lexSm"
+				size: "s"
 			},
 			{
 				id: "22",
 				label: "Definition",
-				size: "lexLg"
+				size: "l"
 			}
 		],
 		lexicon: [],

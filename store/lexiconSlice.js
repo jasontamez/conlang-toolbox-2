@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid';
 import blankAppState from './blankAppState';
-import { setStoredCustomInfo } from './weSlice';
 
 const initialState = blankAppState.lexicon;
 
@@ -385,6 +384,8 @@ export const equalityCheck = (stateA, stateB) => {
 	const sortPatternA = stateA.sortPattern;
 	const disableBlankConfirmsA = stateA.disableBlankConfirms;
 	const maxColumnsA = stateA.maxColumns;
+	const storedCustomInfoA = stateA.storedCustomInfo;
+	const storedCustomIDsA = stateA.storedCustomIDs;
 	// stateB
 	const titleB = stateB.title;
 	const descriptionB = stateB.description;
@@ -395,9 +396,8 @@ export const equalityCheck = (stateA, stateB) => {
 	const sortPatternB = stateB.sortPattern;
 	const disableBlankConfirmsB = stateB.disableBlankConfirms;
 	const maxColumnsB = stateB.maxColumns;
-	// flags
-	let lex = false;
-	let col = false;
+	const storedCustomInfoB = stateB.storedCustomInfo;
+	const storedCustomIDsB = stateB.storedCustomIDs;
 	if (
 		titleA !== titleB
 		|| descriptionA !== descriptionB
@@ -405,20 +405,15 @@ export const equalityCheck = (stateA, stateB) => {
 		|| sortDirA !== sortDirB
 		|| disableBlankConfirmsA !== disableBlankConfirmsB
 		|| maxColumnsA !== maxColumnsB
+		|| storedCustomInfoA !== storedCustomInfoB
 		|| String(sortPatternA) !== String(sortPatternB)
+		|| String(storedCustomIDsA) !== String(storedCustomIDsB)
 	) {
 		return false;
-	} else if(lexiconA === lexiconB) {
-		if(columnsA === columnsB) {
-			return true;
-		}
-		lex = true;
 	}
-	if(columnsA === columnsB) {
-		col = true;
-	} else {
+	if(columnsA !== columnsB) {
 		// Cols bad?
-		col = columnsA.every((col, i) => {
+		const col = columnsA.every((col, i) => {
 			const otherCol = columnsB[i];
 			return col === otherCol ||
 				(
@@ -431,9 +426,8 @@ export const equalityCheck = (stateA, stateB) => {
 			return false;
 		}
 	}
-	// Cols are good.
-	// Lex bad?
-	return lex || lexiconA.every((lex, i) => {
+	// Cols good. Lex bad?
+	return (lexiconA === lexiconB) || lexiconA.every((lex, i) => {
 		const otherLex = lexiconB[i];
 		return lex === otherLex ||
 			(
