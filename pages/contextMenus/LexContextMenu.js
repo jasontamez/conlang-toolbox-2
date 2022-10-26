@@ -71,6 +71,7 @@ const LexiconContextMenu = () => {
 
 	const [saveLexicon, setSaveLexicon] = useState(false);
 	const [saveNewLexicon, setSaveNewLexicon] = useState(false);
+	const [overwriteLexicon, setOverwriteLexicon] = useState(false);
 
 	const [cols, setCols] = useState(maxColumns);
 	useEffect(() => {
@@ -162,9 +163,14 @@ const LexiconContextMenu = () => {
 		// TO-DO: handle loading overlay and toast success message
 	};
 	// TO-DO: Need to be able to save Lexicons in order to test Loader!
-	const maybeSaveLexicon = () => {};
+	const maybeSaveLexicon = () => {
+		// if there's a previous save loaded, default to overwriting that
+		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
+	};
+	const maybeOverwriteSaveLexicon = () => {};
 	const maybeSaveNewLexicon = () => {};
 	const doSaveLexicon = () => {};
+	const doSaveNewLexicon = () => {};
 	const yesFunc = () => {
 		switch(yesFuncArg) {
 			case "clear":
@@ -176,9 +182,37 @@ const LexiconContextMenu = () => {
 		}
 		console.log("Nothing to say 'YES' to");
 	};
-	const closeMenuThen = (func) => {
-		setMenuOpen(false);
-		func();
+	const displayPreviousSaves = () => {
+		return storedCustomIDs.map(info => {
+			const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
+			const time = new Date(lastSave);
+			const color = customLabelChosen === info ? primaryContrast : "text.50"
+			// TO-DO: Determine if time.toLocaleString() is going to work
+			//    or if we need to use Moment.js or something else
+			return (
+				<Pressable
+					onPress={() => setCustomLabelChosen(info)}
+				>
+					<HStack
+						justifyContent="space-between"
+						alignItems="center"
+						borderWidth={1}
+						borderColor={customLabelChosen === info ? "primary.500" : "darker"}
+						borderRadius="xs"
+						bg={customLabelChosen === info ? "primary.800" : "main.800"}
+					>
+						<VStack
+							alignItems="flex-start"
+							justifyContent="center"
+						>
+							<Text color={color} fontSize={textSize}>{title}</Text>
+							<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
+						</VStack>
+						<Text color={color} italic fontSize={smallerSize}>Saved: {time.toLocaleString()}</Text>
+					</HStack>
+				</Pressable>
+			);
+		});
 	};
 	return (
 		<>
@@ -190,6 +224,24 @@ const LexiconContextMenu = () => {
 				continueText="Yes"
 				continueFunc={yesFunc}
 				fontSize={textSize}
+			/>
+			<StandardAlert
+				alertOpen={overwriteLexicon}
+				setAlertOpen={setOverwriteLexicon}
+				bodyContent={"TO-DO: write this message"}
+				fontSize={textSize}
+				overrideButtons={
+	// TO-DO: an array of elements to replace the two buttons
+	//    Each button will be given a leastDestructiveRef - it should be
+	//      used by only ONE of them.
+	//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
+					[
+						// cancel - leastDestructiveRef
+						// new save
+						// save elsewhere
+						// overwrite previous save
+					]
+				}
 			/>
 			<LoadingOverlay
 				overlayOpen={loadingOverlayOpen}
@@ -419,38 +471,7 @@ const LexiconContextMenu = () => {
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
-						{
-							storedCustomIDs.map(info => {
-								const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
-								const time = new Date(lastSave);
-								const color = customLabelChosen === info ? primaryContrast : "text.50"
-								// TO-DO: Determine if time.toLocaleString() is going to work
-								//    or if we need to use Moment.js or something else
-								return (
-									<Pressable
-										onPress={() => setCustomLabelChosen(info)}
-									>
-										<HStack
-											justifyContent="space-between"
-											alignItems="center"
-											borderWidth={1}
-											borderColor={customLabelChosen === info ? "primary.500" : "darker"}
-											borderRadius="xs"
-											bg={customLabelChosen === info ? "primary.800" : "main.800"}
-										>
-											<VStack
-												alignItems="flex-start"
-												justifyContent="center"
-											>
-												<Text color={color} fontSize={textSize}>{title}</Text>
-												<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
-											</VStack>
-											<Text color={color} italic fontSize={smallerSize}>Saved: {time.toLocaleString()}</Text>
-										</HStack>
-									</Pressable>
-								);
-							})
-						}
+						{displayPreviousSaves()}
 					</Modal.Body>
 					<Modal.Footer
 						borderTopWidth={0}
@@ -486,6 +507,115 @@ const LexiconContextMenu = () => {
 								disabled={storedCustomIDs.length === 0}
 								onPress={maybeLoadLexicon}
 							>Load</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+			<Modal isOpen={saveLexicon}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+						px={3}
+					>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={textSize}>Save Lexicon</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setSaveLexicon(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						{displayPreviousSaves()}
+					</Modal.Body>
+					<Modal.Footer
+						borderTopWidth={0}
+					>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+							flexWrap="wrap"
+						>
+							<Button
+								bg="lighter"
+								_text={{color: "text.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								onPress={() => setSaveLexicon(false)}
+							>Cancel</Button>
+							<Button
+								startIcon={<SaveIcon color={primaryContrast} m={0} size={textSize} />}
+								bg="primary.500"
+								_text={{color: primaryContrast, fontSize: textSize}}
+								p={1}
+								m={2}
+								onPress={() => {
+									setSaveLexicon(false);
+									setSaveNewLexicon(true);
+								}}
+							>New Save</Button>
+							<Button
+								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
+								bg="success.500"
+								_text={{color: "success.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								disabled={storedCustomIDs.length === 0}
+								onPress={maybeOverwriteSaveLexicon}
+							>Overwrite Save</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+			<Modal isOpen={saveNewLexicon}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+						px={3}
+					>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={textSize}>Save Lexicon</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setSaveNewLexicon(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						{
+							// TO-DO: TextInput
+						}
+					</Modal.Body>
+					<Modal.Footer
+						borderTopWidth={0}
+					>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+							flexWrap="wrap"
+						>
+							<Button
+								bg="lighter"
+								_text={{color: "text.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								onPress={() => setSaveNewLexicon(false)}
+							>Cancel</Button>
+							<Button
+								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
+								bg="success.500"
+								_text={{color: "success.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								disabled={storedCustomIDs.length === 0}
+								onPress={maybeSaveNewLexicon}
+							>Save</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>
