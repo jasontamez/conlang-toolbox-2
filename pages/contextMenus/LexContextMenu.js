@@ -70,8 +70,7 @@ const LexiconContextMenu = () => {
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
 
 	const [saveLexicon, setSaveLexicon] = useState(false);
-	const [saveNewLexicon, setSaveNewLexicon] = useState(false);
-	const [overwriteLexicon, setOverwriteLexicon] = useState(false);
+	const [howToSaveAlert, setHowToSaveAlert] = useState(false);
 
 	const [cols, setCols] = useState(maxColumns);
 	useEffect(() => {
@@ -156,6 +155,7 @@ const LexiconContextMenu = () => {
 	};
 	const doLoadLexicon = () => {
 		// TO-DO: load info from storage
+		// TO-DO: determine if columns match
 		dispatch(loadState({
 			method: loadingMethods[loadingMethod].key
 			// TO-DO: add lexicon prop
@@ -166,10 +166,14 @@ const LexiconContextMenu = () => {
 	const maybeSaveLexicon = () => {
 		// if there's a previous save loaded, default to overwriting that
 		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
+		if(disableConfirms) {
+			return doSaveLexicon();
+		}
+		setHowToSaveAlert(true);
 	};
+	const doSaveLexicon = () => {};
 	const maybeOverwriteSaveLexicon = () => {};
 	const maybeSaveNewLexicon = () => {};
-	const doSaveLexicon = () => {};
 	const doSaveNewLexicon = () => {};
 	const yesFunc = () => {
 		switch(yesFuncArg) {
@@ -226,20 +230,41 @@ const LexiconContextMenu = () => {
 				fontSize={textSize}
 			/>
 			<StandardAlert
-				alertOpen={overwriteLexicon}
-				setAlertOpen={setOverwriteLexicon}
-				bodyContent={"TO-DO: write this message"}
+				alertOpen={howToSaveAlert}
+				setAlertOpen={setHowToSaveAlert}
+				bodyContent={"Overwrite previous save?"}
 				fontSize={textSize}
 				overrideButtons={
-	// TO-DO: an array of elements to replace the two buttons
-	//    Each button will be given a leastDestructiveRef - it should be
-	//      used by only ONE of them.
-	//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
 					[
-						// cancel - leastDestructiveRef
-						// new save
-						// save elsewhere
-						// overwrite previous save
+						({leastDestructiveRef}) => <Button
+							onPress={() => {
+								setHowToSaveAlert(false);
+							}}
+							bg="darker"
+							ref={leastDestructiveRef}
+						>Cancel</Button>,
+						() => <Button
+							onPress={() => {
+								setHowToSaveAlert(false);
+								doSaveNewLexicon();
+							}}
+							bg="primary.500"
+							_text={{color: primaryContrast}}
+						>New Save</Button>,
+						() => <Button
+							onPress={() => {
+								setHowToSaveAlert(false);
+								maybeOverwriteSaveLexicon();
+							}}
+							bg="secondary.500"
+							_text={{color: "secondary.50"}}
+						>Overwrite Other</Button>,
+						() => <Button
+							onPress={() => {
+								setHowToSaveAlert(false);
+								doSaveLexicon();
+							}}
+						>Overwrite Save</Button>
 					]
 				}
 			/>
@@ -554,7 +579,7 @@ const LexiconContextMenu = () => {
 								m={2}
 								onPress={() => {
 									setSaveLexicon(false);
-									setSaveNewLexicon(true);
+									doSaveNewLexicon();
 								}}
 							>New Save</Button>
 							<Button
@@ -564,58 +589,11 @@ const LexiconContextMenu = () => {
 								p={1}
 								m={2}
 								disabled={storedCustomIDs.length === 0}
-								onPress={maybeOverwriteSaveLexicon}
+								onPress={() => {
+									setSaveLexicon(false);
+									maybeOverwriteSaveLexicon();
+								}}
 							>Overwrite Save</Button>
-						</HStack>
-					</Modal.Footer>
-				</Modal.Content>
-			</Modal>
-			<Modal isOpen={saveNewLexicon}>
-				<Modal.Content>
-					<Modal.Header
-						bg="primary.500"
-						borderBottomWidth={0}
-						px={3}
-					>
-						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={textSize}>Save Lexicon</Text>
-							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
-								onPress={() => setSaveNewLexicon(false)}
-								variant="ghost"
-								px={0}
-							/>
-						</HStack>
-					</Modal.Header>
-					<Modal.Body>
-						{
-							// TO-DO: TextInput
-						}
-					</Modal.Body>
-					<Modal.Footer
-						borderTopWidth={0}
-					>
-						<HStack
-							justifyContent="space-between"
-							w="full"
-							flexWrap="wrap"
-						>
-							<Button
-								bg="lighter"
-								_text={{color: "text.50", fontSize: textSize}}
-								p={1}
-								m={2}
-								onPress={() => setSaveNewLexicon(false)}
-							>Cancel</Button>
-							<Button
-								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
-								bg="success.500"
-								_text={{color: "success.50", fontSize: textSize}}
-								p={1}
-								m={2}
-								disabled={storedCustomIDs.length === 0}
-								onPress={maybeSaveNewLexicon}
-							>Save</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>
