@@ -5,7 +5,6 @@
 ////import { persistStore, persistReducer } from 'redux-persist';
 //import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import { StateStorage as OldStateStorage } from './persistentInfo';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 //import packageJson from '../package.json';
@@ -514,30 +513,3 @@ initialAppState.lexicon = {
 		},
 	]
 };
-
-const reconcileOld = async (incoming, original, reduced) => {
-	if(!incoming || typeof incoming !== 'object') {
-		// If we have no incoming state, then there might be previously stored state.
-		let storedState = await OldStateStorage.getItem("lastState");
-		if(storedState !== null && (typeof storedState) === "object") {
-			// Delete stored state
-			OldStateStorage.removeItem("lastState");
-			// Not going to use a currentVersion prop anymore
-			delete storedState.currentVersion;
-			//
-			//
-			// Make any other changes if needed
-			//
-			//
-			//
-			return storedState;
-			//const VERSION = packageJson.version;
-			//if(checkIfState(storedState)) {
-			//	return dispatch(overwriteState(storedState));
-			//}
-		}
-	}
-	// Previous state given? No state found from old method? Just pass along.
-	return autoMergeLevel2(incoming, original, reduced);
-};
-
