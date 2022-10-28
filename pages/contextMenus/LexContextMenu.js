@@ -16,6 +16,7 @@ import {
 	IconButton,
 	Pressable
 } from 'native-base';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
 	AddCircleIcon,
@@ -29,10 +30,13 @@ import {
 	setDisableBlankConfirms,
 	setMaxColumns,
 	setTruncate,
-	consts
+	consts,
+	setLastSave,
+	setID,
+	setStoredCustomInfo
 } from "../../store/lexiconSlice";
 import doToast from '../../helpers/toast';
-import { LexiconStorage } from '../../store/persistentInfo';
+import { lexCustomStorage } from '../../helpers/persistentInfo';
 import { loadState } from '../../store/lexiconSlice';
 import StandardAlert from '../../components/StandardAlert';
 import { LoadingOverlay } from '../../components/FullBodyModal';
@@ -41,10 +45,17 @@ import { DropDownMenu } from '../../components/inputTags';
 
 const LexiconContextMenu = () => {
 	const {
+		id,
+		lastSave,
+		title,
+		description,
+		lexicon,
+		columns,
+		sortDir,
 		sortPattern,
-		disableBlankConfirms,
 		truncateColumns,
 		maxColumns,
+		disableBlankConfirms,
 		storedCustomInfo,
 		storedCustomIDs
 	} = useSelector((state) => state.lexicon, shallowEqual);
@@ -120,7 +131,7 @@ const LexiconContextMenu = () => {
 			scheme: "danger",
 			placement: "top",
 			fontSize: textSize
-		})
+		});
 	};
 	// TO-DO: FINISH THIS ALL; remember LoadCustomInfo modals, etc
 	const loadingMethods = [
@@ -155,34 +166,81 @@ const LexiconContextMenu = () => {
 	};
 	const doLoadLexicon = () => {
 		setLoadingOverlayOpen(true);
-		LexiconStorage.getItem(loadChosen).then(
-			(...x) => console.log(x)
-		);
+		setLoadLexicon(false);
+		lexCustomStorage.getItem(loadChosen).then(savedInfo => {
+			const newLex = JSON.parse(savedInfo);
+			console.log(loadChosen);
+			console.log(newLex);
+//			dispatch(loadState({
+//				method: loadingMethods[loadingMethod].key
+//				// TO-DO: add lexicon prop
+//			}));
+			setTimeout(() => setLoadingOverlayOpen(false), 5000);
+		});
 		// TO-DO: load info from storage
 		// TO-DO: determine if columns match
-		dispatch(loadState({
-			method: loadingMethods[loadingMethod].key
-			// TO-DO: add lexicon prop
-		}));
 		// TO-DO: handle loading overlay and toast success message
 	};
 	// TO-DO: Need to be able to save Lexicons in order to test Loader!
 	const maybeSaveLexicon = () => {
 		// if there's a previous save loaded, default to overwriting that
 		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
-		if(1) {
-			// TO-DO: check for prev save
-		}
-		if(disableConfirms) {
+		if(!title) {
+			return doToast({
+				toast,
+				msg: "Please create a title for your Lexicon before saving.", // at...
+				scheme: "error",
+				placement: "top",
+				fontSize: textSize
+			});
+		} else if(id) {
+			// Previous save found.
 			return doSaveLexicon();
 		}
 		// Otherwise, detemine how we're saving
 		setHowToSaveAlertOpen(true);
 	};
-	const doSaveLexicon = () => {};
+	const doSaveLexicon = (saveID = id) => {
+		const time = Date.now();
+		lexCustomStorage.setItem(saveID, JSON.stringify({
+			id: saveID,
+			lastSave: time,
+			title,
+			description,
+			lexicon,
+			columns,
+			sortDir,
+			sortPattern,
+			truncateColumns,
+			maxColumns
+		})).then((...x) => {
+			// return val is the stringified string
+			console.log(x);
+			console.log(id);
+			console.log(time);
+		});
+		id !== saveID && dispatch(setID(saveID));
+		dispatch(setLastSave(time));
+		//  id: [title, lastSave, lexicon-length, columns],
+		let info = {...storedCustomInfo};
+		info[saveID] = [
+			title,
+			time,
+			lexicon.length,
+			[...columns]
+		];
+		dispatch(setStoredCustomInfo(info));
+		doToast({
+			toast,
+			msg: "Lexicon saved", // at...
+			scheme: "success",
+			placement: "bottom",
+			fontSize: textSize
+		});
+};
+	const doSaveNewLexicon = () => doSaveLexicon(uuidv4());
 	const maybeOverwriteSaveLexicon = () => {};
 	const maybeSaveNewLexicon = () => {};
-	const doSaveNewLexicon = () => {};
 	const yesFunc = () => {
 		switch(yesFuncArg) {
 			case "clear":
@@ -199,11 +257,14 @@ const LexiconContextMenu = () => {
 			const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
 			const time = new Date(lastSave);
 			const color = loadChosen === info ? primaryContrast : "text.50"
+			const timeString = time.toLocaleDateString();
 			// TO-DO: Determine if time.toLocaleString() is going to work
 			//    or if we need to use Moment.js or something else
+			// DateString is only the date, need more info
 			return (
 				<Pressable
 					onPress={() => setLoadChosen(info)}
+					key={info}
 				>
 					<HStack
 						justifyContent="space-between"
@@ -212,6 +273,8 @@ const LexiconContextMenu = () => {
 						borderColor={loadChosen === info ? "primary.500" : "darker"}
 						borderRadius="xs"
 						bg={loadChosen === info ? "primary.800" : "main.800"}
+						px={1.5}
+						py={1}
 					>
 						<VStack
 							alignItems="flex-start"
@@ -220,13 +283,13 @@ const LexiconContextMenu = () => {
 							<Text color={color} fontSize={textSize}>{title}</Text>
 							<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
 						</VStack>
-						<Text color={color} italic fontSize={smallerSize}>Saved: {time.toLocaleString()}</Text>
+						<Text color={color} italic fontSize={smallerSize}>Saved: {timeString}</Text>
 					</HStack>
 				</Pressable>
 			);
 		});
 	};
-	return (
+	return ( // TO-DO: "Warning" title
 		<>
 			<StandardAlert
 				alertOpen={!!yesNoMsg}
@@ -240,7 +303,49 @@ const LexiconContextMenu = () => {
 			<StandardAlert
 				alertOpen={howToSaveAlertOpen}
 				setAlertOpen={setHowToSaveAlertOpen}
-				bodyContent={"Overwrite previous save?"}
+				bodyContent={
+					<VStack
+						justifyContent="center"
+						alignItems="center"
+					>
+						<HStack
+							flexWrap="wrap"
+							justifyContent="space-between"
+						>
+							<Button
+								onPress={() => {
+									setHowToSaveAlertOpen(false);
+									doSaveNewLexicon();
+								}}
+								bg="primary.500"
+								_text={{
+									color: primaryContrast,
+									fontSize: textSize
+								}}
+								px={2}
+								py={1}
+							>New Save</Button>
+							{
+								storedCustomIDs.length > 0 ?
+									<Button
+										onPress={() => {
+											setHowToSaveAlertOpen(false);
+											maybeOverwriteSaveLexicon();
+										}}
+										bg="secondary.500"
+										_text={{
+											color: primaryContrast,
+											fontSize: textSize
+										}}
+										px={2}
+										py={1}
+									>Overwrite Previous Save</Button>
+								:
+									<></>
+							}
+						</HStack>
+					</VStack>
+				}
 				fontSize={textSize}
 				detatchButtons
 				overrideButtons={
@@ -254,49 +359,14 @@ const LexiconContextMenu = () => {
 							_text={{fontSize: textSize}}
 							px={2}
 							py={1}
-						>Cancel</Button>,
-						() => <Button
-							onPress={() => {
-								setHowToSaveAlertOpen(false);
-								doSaveNewLexicon();
-							}}
-							bg="primary.500"
-							_text={{
-								color: primaryContrast,
-								fontSize: textSize
-							}}
-							px={2}
-							py={1}
-						>New Save</Button>,
-						() => <Button
-							onPress={() => {
-								setHowToSaveAlertOpen(false);
-								maybeOverwriteSaveLexicon();
-							}}
-							bg="secondary.500"
-							_text={{
-								color: primaryContrast,
-								fontSize: textSize
-							}}
-							px={2}
-							py={1}
-						>Overwrite Other</Button>,
-						() => <Button
-							onPress={() => {
-								setHowToSaveAlertOpen(false);
-								doSaveLexicon();
-							}}
-							_text={{fontSize: textSize}}
-							px={2}
-							py={1}
-						>Overwrite Save</Button>
+						>Cancel</Button>
 					]
 				}
 			/>
 			<LoadingOverlay
 				overlayOpen={loadingOverlayOpen}
 				colorFamily="secondary"
-				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading "{loadChosen}"...</Text>}
+				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading Lexicon...</Text>}
 			/>
 			<Menu
 				placement="bottom right"
@@ -555,7 +625,7 @@ const LexiconContextMenu = () => {
 								p={1}
 								m={2}
 								disabled={storedCustomIDs.length === 0}
-								onPress={maybeLoadLexicon}
+								onPress={doLoadLexicon}
 							>Load</Button>
 						</HStack>
 					</Modal.Footer>

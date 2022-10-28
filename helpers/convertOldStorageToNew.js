@@ -129,8 +129,9 @@ const convertWG = async (dispatch) => {
 		}));
 	}).then(() => {
 		dispatch(setStoredCustomInfoWG(ids));
-	}).catch(() => {
+	}).catch((err) => {
 		console.log("WG Error");
+		console.log(err);
 	});
 };
 const convertWE = async (dispatch) => {
@@ -211,8 +212,9 @@ const convertWE = async (dispatch) => {
 		}));
 	}).then(() => {
 		dispatch(setStoredCustomInfoWE(ids));
-	}).catch(() => {
+	}).catch((err) => {
 		console.log("WE Error");
+		console.log(err);
 	});
 };
 const convertLexicon = async (dispatch) => {
@@ -224,6 +226,7 @@ const convertLexicon = async (dispatch) => {
 		return; // Blank return keeps the loop going
 	}).then(() => {
 		// Convert info from old format into new format
+		console.log(information);
 		const infoLen = information.length;
 		for(let x = 0; x < infoLen; x++) {
 			const [
@@ -315,8 +318,9 @@ const convertLexicon = async (dispatch) => {
 		}));
 	}).then(() => {
 		dispatch(setStoredCustomInfoLex(ids));
-	}).catch(() => {
+	}).catch((err) => {
 		console.log("Lex Error");
+		console.log(err);
 	});
 };
 

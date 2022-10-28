@@ -306,7 +306,7 @@ const setMaxColumnsFunc = (state, action) => {
 };
 const setStoredCustomInfoFunc = (state, action) => {
 	//setStoredCustomInfo({
-	//  id: [title, lastSave],
+	//  id: [title, lastSave, lexicon-length, columns],
 	//  ...
 	//})
 	const { payload } = action;
