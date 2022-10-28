@@ -65,12 +65,12 @@ const LexiconContextMenu = () => {
 	const [yesFuncArg, setYesFuncArg] = useState("");
 
 	const [loadLexicon, setLoadLexicon] = useState(false);
-	const [customLabelChosen, setCustomLabelChosen] = useState(storedCustomIDs && storedCustomIDs[0]);
+	const [loadChosen, setLoadChosen] = useState(storedCustomIDs && storedCustomIDs[0]);
 	const [loadingMethod, setLoadingMethod] = useState(0);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
 
 	const [saveLexicon, setSaveLexicon] = useState(false);
-	const [howToSaveAlert, setHowToSaveAlert] = useState(false);
+	const [howToSaveAlertOpen, setHowToSaveAlertOpen] = useState(false);
 
 	const [cols, setCols] = useState(maxColumns);
 	useEffect(() => {
@@ -154,6 +154,10 @@ const LexiconContextMenu = () => {
 		setLoadLexicon(true);
 	};
 	const doLoadLexicon = () => {
+		setLoadingOverlayOpen(true);
+		LexiconStorage.getItem(loadChosen).then(
+			(...x) => console.log(x)
+		);
 		// TO-DO: load info from storage
 		// TO-DO: determine if columns match
 		dispatch(loadState({
@@ -166,10 +170,14 @@ const LexiconContextMenu = () => {
 	const maybeSaveLexicon = () => {
 		// if there's a previous save loaded, default to overwriting that
 		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
+		if(1) {
+			// TO-DO: check for prev save
+		}
 		if(disableConfirms) {
 			return doSaveLexicon();
 		}
-		setHowToSaveAlert(true);
+		// Otherwise, detemine how we're saving
+		setHowToSaveAlertOpen(true);
 	};
 	const doSaveLexicon = () => {};
 	const maybeOverwriteSaveLexicon = () => {};
@@ -190,20 +198,20 @@ const LexiconContextMenu = () => {
 		return storedCustomIDs.map(info => {
 			const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
 			const time = new Date(lastSave);
-			const color = customLabelChosen === info ? primaryContrast : "text.50"
+			const color = loadChosen === info ? primaryContrast : "text.50"
 			// TO-DO: Determine if time.toLocaleString() is going to work
 			//    or if we need to use Moment.js or something else
 			return (
 				<Pressable
-					onPress={() => setCustomLabelChosen(info)}
+					onPress={() => setLoadChosen(info)}
 				>
 					<HStack
 						justifyContent="space-between"
 						alignItems="center"
 						borderWidth={1}
-						borderColor={customLabelChosen === info ? "primary.500" : "darker"}
+						borderColor={loadChosen === info ? "primary.500" : "darker"}
 						borderRadius="xs"
-						bg={customLabelChosen === info ? "primary.800" : "main.800"}
+						bg={loadChosen === info ? "primary.800" : "main.800"}
 					>
 						<VStack
 							alignItems="flex-start"
@@ -230,40 +238,57 @@ const LexiconContextMenu = () => {
 				fontSize={textSize}
 			/>
 			<StandardAlert
-				alertOpen={howToSaveAlert}
-				setAlertOpen={setHowToSaveAlert}
+				alertOpen={howToSaveAlertOpen}
+				setAlertOpen={setHowToSaveAlertOpen}
 				bodyContent={"Overwrite previous save?"}
 				fontSize={textSize}
+				detatchButtons
 				overrideButtons={
 					[
 						({leastDestructiveRef}) => <Button
 							onPress={() => {
-								setHowToSaveAlert(false);
+								setHowToSaveAlertOpen(false);
 							}}
 							bg="darker"
 							ref={leastDestructiveRef}
+							_text={{fontSize: textSize}}
+							px={2}
+							py={1}
 						>Cancel</Button>,
 						() => <Button
 							onPress={() => {
-								setHowToSaveAlert(false);
+								setHowToSaveAlertOpen(false);
 								doSaveNewLexicon();
 							}}
 							bg="primary.500"
-							_text={{color: primaryContrast}}
+							_text={{
+								color: primaryContrast,
+								fontSize: textSize
+							}}
+							px={2}
+							py={1}
 						>New Save</Button>,
 						() => <Button
 							onPress={() => {
-								setHowToSaveAlert(false);
+								setHowToSaveAlertOpen(false);
 								maybeOverwriteSaveLexicon();
 							}}
 							bg="secondary.500"
-							_text={{color: "secondary.50"}}
+							_text={{
+								color: primaryContrast,
+								fontSize: textSize
+							}}
+							px={2}
+							py={1}
 						>Overwrite Other</Button>,
 						() => <Button
 							onPress={() => {
-								setHowToSaveAlert(false);
+								setHowToSaveAlertOpen(false);
 								doSaveLexicon();
 							}}
+							_text={{fontSize: textSize}}
+							px={2}
+							py={1}
 						>Overwrite Save</Button>
 					]
 				}
@@ -271,7 +296,7 @@ const LexiconContextMenu = () => {
 			<LoadingOverlay
 				overlayOpen={loadingOverlayOpen}
 				colorFamily="secondary"
-				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading "{customLabelChosen}"...</Text>}
+				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading "{loadChosen}"...</Text>}
 			/>
 			<Menu
 				placement="bottom right"
