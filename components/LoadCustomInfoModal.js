@@ -128,7 +128,7 @@ const LoadCustomInfoModal = ({
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}
 			setAlertOpen={setOverwriteWarningOpen}
-			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite ${loadOptions ? overwriteMessage[loadOption] : overwriteMessage}.`}
+			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite ${loadOptions ? overwriteMessage[loadOptions] : overwriteMessage}.`}
 			continueText="Yes"
 			continueFunc={() => {
 				setOverwriteWarningOpen(false);

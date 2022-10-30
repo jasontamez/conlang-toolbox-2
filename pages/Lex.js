@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
 	Input,
 	ScrollView,
-	Text,
+	Text as Tx,
 	VStack,
 	FlatList,
 	HStack,
@@ -12,19 +12,27 @@ import {
 	IconButton,
 	Menu,
 	Button,
+	Modal,
+	Pressable,
 	useToast,
-	useBreakpointValue
+	useBreakpointValue,
+	useContrastText
 } from 'native-base';
+import { v4 as uuidv4 } from 'uuid';
 
 import debounce from '../helpers/debounce';
 import {
 	EditIcon,
-	SortEitherIcon,
 	SortDownIcon,
 	SortUpIcon,
 	AddIcon,
 	SettingsIcon,
-	TrashIcon
+	TrashIcon,
+	RemoveCircleIcon,
+	AddCircleIcon,
+	SaveIcon,
+	CloseCircleIcon,
+	LoadIcon
 } from '../components/icons';
 import { MultiAlert } from '../components/StandardAlert';
 import {
@@ -37,14 +45,26 @@ import {
 	toggleSortDir,
 	equalityCheck,
 	editLexiconItem,
+	loadState,
+	setLastSave,
+	setID,
+	setStoredCustomInfo,
 	consts
 } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
-import { DropDown, TextAreaSetting, TextSetting } from '../components/inputTags';
+import {
+	DropDown,
+	DropDownMenu,
+	ResettableTextSetting,
+	ResettableTextAreaSetting
+} from '../components/inputTags';
 import { fontSizesInPx } from '../store/appStateSlice';
+import blankAppState from '../store/blankAppState';
+import { LoadingOverlay } from '../components/FullBodyModal';
+import { lexCustomStorage } from '../helpers/persistentInfo';
 
 const Lex = () => {
 	//
@@ -54,6 +74,8 @@ const Lex = () => {
 	//
 	const dispatch = useDispatch();
 	const {
+		id,
+		lastSave,
 		title,
 		description,
 		lexicon,
@@ -61,11 +83,23 @@ const Lex = () => {
 		columns,
 		sortDir,
 		sortPattern,
-		disableBlankConfirms
+		disableBlankConfirms,
+		maxColumns,
+		storedCustomInfo,
+		storedCustomIDs
 	} = useSelector((state) => state.lexicon, equalityCheck);
+	const titleRef = useRef(null);
+	const descRef = useRef(null);
 	const { sizes, disableConfirms } = useSelector((state) => state.appState);
 	const extraData = [truncateColumns, columns];
 	const { absoluteMaxColumns } = consts;
+	const smallerSize = useBreakpointValue(sizes.sm);
+	const textSize = useBreakpointValue(sizes.md);
+	const largeSize = useBreakpointValue(sizes.lg);
+	const bigTextSize = useBreakpointValue(sizes.x2);
+	const Text = (props) => {
+		return <Tx fontSize={textSize} {...props} />;
+	};
 	//
 	//
 	// GET STATE
@@ -80,6 +114,19 @@ const Lex = () => {
 	const [itemsToDelete, setItemsToDelete] = useState([]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState('');
+
+	const [loadLexicon, setLoadLexicon] = useState(false);
+	const [loadChosen, setLoadChosen] = useState(storedCustomIDs && storedCustomIDs[0]);
+	const [loadingMethod, setLoadingMethod] = useState(0);
+	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+
+	const [saveLexicon, setSaveLexicon] = useState(false);
+
+	const [reloadTrigger, setReloadTrigger] = useState(0);
+
+	const primaryContrast = useContrastText('primary.500');
+	const secondaryContrast = useContrastText('secondary.500');
+
 	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
 	// 10 seems like a decent amount that would strain even a wide-screen
@@ -233,16 +280,184 @@ const Lex = () => {
 	};
 	//
 	//
-	// LOAD AND SAVE	
+	// LOAD LEXICON
 	//
 	//
+	// TO-DO: FINISH THIS ALL; remember LoadCustomInfo modals, etc
+	const loadingMethods = [
+		{
+			key: "overwrite",
+			desc: "Overwrite all",
+			label: "Overwrite title, description, and lexicon items",
+			onPress: () => setLoadingMethod(0)
+		},
+		{
+			key: "overappend",
+			desc: "Overwrite info, append items",
+			label: "Overwrite title and description, keep current lexicon items and append new items",
+			onPress: () => setLoadingMethod(1)
+		},
+		{
+			key: "append",
+			desc: "Append new items",
+			label: "Keep current lexicon info and only append new items",
+			onPress: () => setLoadingMethod(2)
+		},
+	];
+	const maybeLoadLexicon = () => {
+		// [title, lastSave, numberOfLexiconWords, columns]
+		// My Lang                 Saved: 10/12/2022, 10:00:00 PM
+		// [14 Words]
+		// Overwrite, Append/Overwrite, Append Only
+		// method: overwrite | overappend | append
+		// We will need to match columns
+		// columnConversion: [(integer | null)...]
+		setLoadLexicon(true);
+	};
+	const doLoadLexicon = () => {
+		setLoadingOverlayOpen(true);
+		lexCustomStorage.getItem(loadChosen).then(savedInfo => {
+			const newLex = JSON.parse(savedInfo);
+			// TO-DO: We will need to match columns
+			// columnConversion: [(integer | null)...]
+			dispatch(loadState({
+				method: loadingMethods[loadingMethod].key,
+				lexicon: newLex
+			}));
+			debounce(() => {
+				setLoadLexicon(false);
+				setReloadTrigger(reloadTrigger + 1);
+				setLoadingOverlayOpen(false);
+				// TO-DO: handle toast success message
+			}, {
+				namespace: "loadingLexicon",
+				amount: 500
+			});
+		});
+	};
+	//
+	//
+	// SAVE LEXICON
+	//
+	//
+	const displayPreviousSaves = () => {
+		return storedCustomIDs.map(info => {
+			const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
+			const time = new Date(lastSave);
+			const color = loadChosen === info ? primaryContrast : "text.50"
+			const timeString = time.toLocaleString();
+			// TO-DO: Determine if time.toLocaleString() is going to work
+			//    or if we need to use Moment.js or something else
+			// DateString is only the date, need more info
+			return (
+				<Pressable
+					onPress={() => setLoadChosen(info)}
+					key={info}
+				>
+					<HStack
+						justifyContent="space-between"
+						alignItems="center"
+						borderWidth={1}
+						borderColor={loadChosen === info ? "primary.500" : "darker"}
+						borderRadius="xs"
+						bg={loadChosen === info ? "primary.800" : "main.800"}
+						px={1.5}
+						py={1}
+					>
+						<VStack
+							alignItems="flex-start"
+							justifyContent="center"
+						>
+							<Text color={color} fontSize={textSize}>{title}</Text>
+							<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
+						</VStack>
+						<Text color={color} italic fontSize={smallerSize}>Saved: {timeString}</Text>
+					</HStack>
+				</Pressable>
+			);
+		});
+	};
+	// TO-DO: Need to be able to save Lexicons in order to test Loader!
+	const maybeSaveLexicon = () => {
+		// if there's a previous save loaded, default to overwriting that
+		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
+		if(!title) {
+			return doToast({
+				toast,
+				msg: "Please create a title for your Lexicon before saving.", // at...
+				scheme: "error",
+				placement: "top",
+				fontSize: textSize
+			});
+		} else if(id) {
+			// Previous save found.
+			return doSaveLexicon();
+		}
+		// Otherwise, make an id and save
+		doSaveNewLexicon();
+	};
+	const doSaveLexicon = (saveID = id) => {
+		const time = Date.now();
+		// TO-DO: Some sort of "saving..." message
+		lexCustomStorage.setItem(saveID, JSON.stringify({
+			id: saveID,
+			lastSave: time,
+			title,
+			description,
+			lexicon,
+			columns,
+			sortDir,
+			sortPattern,
+			truncateColumns,
+			maxColumns
+		})).then(() => {
+			// return val is undefined?
+			id !== saveID && dispatch(setID(saveID));
+			dispatch(setLastSave(time));
+			//  id: [title, lastSave, lexicon-length, columns],
+			let info = {...storedCustomInfo};
+			info[saveID] = [
+				title,
+				time,
+				lexicon.length,
+				[...columns]
+			];
+			dispatch(setStoredCustomInfo(info));
+				doToast({
+				toast,
+				msg: "Lexicon saved", // at...?
+				scheme: "success",
+				placement: "bottom",
+				fontSize: textSize
+			});
+		});
+	};
+	const doSaveNewLexicon = () => doSaveLexicon(uuidv4());
+	// TO-DO: finish below
+	const maybeOverwriteSaveLexicon = () => {};
+	const maybeSaveNewLexicon = () => {};
 
-	// load: overwrite lexicon or add to lexicon?
-	//       overwrite desc/title?
-	//       how to handle key/lastSave?
-	// save: new or overwrite old?
-	//       set a key (if needed)
-	//       what is lastSave format?
+
+	//
+	//
+	// CLEAR LEXICON
+	//
+	//
+	const doClearLexicon = () => {
+		dispatch(loadState({
+			method: "overwrite",
+			lexicon: blankAppState.lexicon // TO-DO: Does this need modifying to not overwrite special things?
+		}));
+		titleRef && titleRef.current && titleRef.current.clear();
+		descRef && descRef.current && descRef.current.clear();
+		doToast({
+			toast,
+			msg: "Lexicon cleared",
+			scheme: "danger",
+			placement: "top",
+			fontSize: textSize
+		});
+	};
 
 	//
 	//
@@ -251,9 +466,6 @@ const Lex = () => {
 	//
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
 	const { width, height } = useWindowDimensions();
-	const smallerSize = useBreakpointValue(sizes.sm);
-	const textSize = useBreakpointValue(sizes.md);
-	const bigTextSize = useBreakpointValue(sizes.x2);
 	const getBoxSize = (size) => {
 		if(size === "s") {
 			return "lexSm";
@@ -324,9 +536,134 @@ const Lex = () => {
 	//
 	return (
 		<>
+			<Modal isOpen={loadLexicon}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+						px={3}
+					>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={textSize}>Load Lexicon</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setLoadLexicon(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						{displayPreviousSaves()}
+					</Modal.Body>
+					<Modal.Footer
+						borderTopWidth={0}
+					>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+						>
+							<Button
+								bg="lighter"
+								_text={{color: "text.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								onPress={() => setLoadLexicon(false)}
+							>Cancel</Button>
+							<DropDownMenu
+								placement="top left"
+								fontSize={textSize}
+								menuSize={smallerSize}
+								titleSize={smallerSize}
+								labelFunc={() => loadingMethods[loadingMethod].desc}
+								options={loadingMethods}
+								title="How to Load Lexicon"
+								buttonProps={{mx: 4, my: 2}}
+								isMarked={(key) => loadingMethods[loadingMethod].key === key}
+							/>
+							<Button
+								startIcon={<LoadIcon color="success.50" m={0} size={textSize} />}
+								bg={loadChosen ? "success.500" : "muted.800"}
+								_text={{color: "success.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								disabled={!loadChosen}
+								onPress={doLoadLexicon}
+							>Load</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+			<Modal isOpen={saveLexicon}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+						px={3}
+					>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={textSize}>Save Lexicon</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => setSaveLexicon(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						{displayPreviousSaves()}
+					</Modal.Body>
+					<Modal.Footer
+						borderTopWidth={0}
+					>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+							flexWrap="wrap"
+						>
+							<Button
+								bg="lighter"
+								_text={{color: "text.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								onPress={() => setSaveLexicon(false)}
+							>Cancel</Button>
+							<Button
+								startIcon={<SaveIcon color={primaryContrast} m={0} size={textSize} />}
+								bg="primary.500"
+								_text={{color: primaryContrast, fontSize: textSize}}
+								p={1}
+								m={2}
+								onPress={() => {
+									setSaveLexicon(false);
+									doSaveNewLexicon();
+								}}
+							>New Save</Button>
+							<Button
+								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
+								bg="success.500"
+								_text={{color: "success.50", fontSize: textSize}}
+								p={1}
+								m={2}
+								disabled={storedCustomIDs.length === 0}
+								onPress={() => {
+									setSaveLexicon(false);
+									maybeOverwriteSaveLexicon();
+								}}
+							>Overwrite Save</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+			<LoadingOverlay
+				overlayOpen={loadingOverlayOpen}
+				colorFamily="secondary"
+				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading Lexicon...</Text>}
+			/>
 			<ScrollView height={infoHeight} flexGrow={0} flexShrink={0}>
 				<VStack m={3} mb={0}>
-					<TextSetting
+					<ResettableTextSetting
 						text="Lexicon Title:"
 						defaultValue={title}
 						onChangeText={(v) => debounce(
@@ -334,12 +671,13 @@ const Lex = () => {
 							{ namespace: "LexTitle" }
 						)}
 						labelProps={{fontSize: textSize}}
-						inputProps={{mt: 2, fontSize: smallerSize}}
+						inputProps={{mt: 2, fontSize: smallerSize, ref: titleRef}}
 						placeholder="Usually the language name."
+						reloadTrigger={reloadTrigger}
 					/>
 				</VStack>
 				<VStack m={3} mt={2}>
-					<TextAreaSetting
+					<ResettableTextAreaSetting
 						text="Description:"
 						defaultValue={description}
 						onChangeText={(v) => debounce(
@@ -347,9 +685,10 @@ const Lex = () => {
 							{ namespace: "LexDesc" }
 						)}
 						labelProps={{fontSize: textSize}}
-						inputProps={{mt: 2, fontSize: smallerSize}}
+						inputProps={{mt: 2, fontSize: smallerSize, ref: descRef}}
 						rows={3}
 						placeholder="A short description of this lexicon."
+						reloadTrigger={reloadTrigger}
 					/>
 				</VStack>
 			</ScrollView>
@@ -419,7 +758,83 @@ const Lex = () => {
 								)
 							}
 						},
-						{}
+						{
+							id: "willClearLexicon",
+							properties: {
+								continueText: "Yes",
+								continueFunc: doClearLexicon,
+								continueProps: {
+									bg: "danger.500"
+								},
+								bodyContent: (
+									<Text>This will erase the Title, Description, and every item in the Lexicon. It cannot be undone. Are you sure you want to do this?</Text>
+								)
+							}
+						},
+						{
+							id: "howToSaveLexicon",
+							properties: {
+								fontSize: textSize,
+								detatchButtons: true,
+								bodyContent: (
+									<VStack
+										justifyContent="center"
+										alignItems="center"
+										w="full"
+									>
+										<HStack
+											flexWrap="wrap"
+											justifyContent="space-between"
+											flex={1}
+										>
+											<Button
+												onPress={() => {
+													setAlertOpen(false);
+													doSaveNewLexicon();
+												}}
+												bg="primary.500"
+												_text={{
+													color: primaryContrast,
+													fontSize: textSize
+												}}
+												px={2}
+												py={1}
+											>New Save</Button>
+											{
+												storedCustomIDs.length > 0 ?
+													<Button
+														onPress={() => {
+															setAlertOpen(false);
+															maybeOverwriteSaveLexicon();
+														}}
+														bg="secondary.500"
+														_text={{
+															color: primaryContrast,
+															fontSize: textSize
+														}}
+														px={2}
+														py={1}
+													>Overwrite Previous Save</Button>
+												:
+													<></>
+											}
+										</HStack>
+									</VStack>
+								),
+								overrideButtons: [
+									({leastDestructiveRef}) => <Button
+										onPress={() => {
+											setAlertOpen(false);
+										}}
+										bg="darker"
+										ref={leastDestructiveRef}
+										_text={{fontSize: textSize}}
+										px={2}
+										py={1}
+									>Cancel</Button>
+								]
+							}
+						}
 					]}
 				/>
 				<HStack
@@ -513,16 +928,14 @@ const Lex = () => {
 								_title={{fontSize: smallerSize}}
 							>
 								<Menu.Item
-									_text={{fontSize: textSize}}
 									onPress={() => setModalOpen('edit')}
 								>
-									Edit Column Info
+									<Text>Edit Column Info</Text>
 								</Menu.Item>
 								<Menu.Item
-									_text={{fontSize: textSize}}
 									onPress={() => setModalOpen('reorder')}
 								>
-									Reorder Columns
+									<Text>Reorder Columns</Text>
 								</Menu.Item>
 							</Menu.Group>
 							<Menu.OptionGroup
@@ -536,9 +949,64 @@ const Lex = () => {
 									onPress={() => toggleDeletingMode()}
 									value="mass delete"
 								>
-									Mass Delete Mode
+									<Text>Mass Delete Mode</Text>
 								</Menu.ItemOption>
 							</Menu.OptionGroup>
+							<Menu.Group
+								title="Lexicon"
+								_title={{fontSize: smallerSize}}
+							>
+								<Menu.Item
+									_text={{fontSize: textSize}}
+									onPress={() => setAlertOpen('willClearLexicon')}
+								>
+									<HStack
+										space={4}
+										justifyContent="flex-start"
+										alignItems="center"
+									>
+										<RemoveCircleIcon size={smallerSize} color="text.50" px={1} />
+										<Text>Clear Lexicon</Text>
+									</HStack>
+								</Menu.Item>
+								<Menu.Item onPress={() => {
+									//setMenuOpen(false);
+									maybeLoadLexicon();
+								}}>
+									<HStack
+										space={4}
+										justifyContent="flex-start"
+										alignItems="center"
+									>
+										<AddCircleIcon size={smallerSize} color="text.50" px={1} />
+										<Text>Load Lexicon</Text>
+									</HStack>
+								</Menu.Item>
+								<Menu.Item onPress={() => {
+									maybeSaveLexicon();
+								}}>
+									<HStack
+										space={4}
+										justifyContent="flex-start"
+										alignItems="center"
+									>
+										<SaveIcon size={smallerSize} color="text.50" px={1} />
+										<Text>Save Lexicon</Text>
+									</HStack>
+								</Menu.Item>
+								<Menu.Item onPress={() => {
+									maybeSaveNewLexicon();
+								}}>
+									<HStack
+										space={4}
+										justifyContent="flex-start"
+										alignItems="center"
+									>
+										<SaveIcon size={smallerSize} color="text.50" px={1} />
+										<Text>Save as...</Text>
+									</HStack>
+								</Menu.Item>
+							</Menu.Group>
 						</Menu>
 					</HStack>
 				</HStack>

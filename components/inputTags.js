@@ -104,6 +104,95 @@ export const TextSetting = ({
 };
 
 
+export const ResettableTextAreaSetting = ({
+	boxProps = {},
+	labelProps = {},
+	inputProps = {},
+	text,
+	children,
+	defaultValue,
+	placeholder,
+	rows = 3,
+	onChangeText,
+	reloadTrigger = 0,
+	id = ""
+}) => {
+	// <ResettableTextAreaSetting
+	//    boxProps={props for outer Box}
+	//    labelProps={props for Text}
+	//    text={goes into Text; if missing, uses children instead; if null, not shown}
+	//    defaultValue={TextArea defaultValue}
+	//    placeholder={TextArea placeholder}
+	//    rows={TextArea totalLines}
+	//    onChangeText={TextArea onChangeText}
+	//    inputProps={other props for TextArea}
+	// />
+	const [inputElement, setInputElement] = useState(() => <Fragment key={`TextAreaInput-Frag-${id}-${reloadTrigger}`} />);
+	useEffect(() => {
+		setInputElement(() => (
+			<TextArea
+				key={`TextAreaInput-${id}-${reloadTrigger}`}
+				mt={2}
+				defaultValue={defaultValue}
+				placeholder={placeholder}
+				totalLines={rows}
+				onChangeText={onChangeText}
+				{...inputProps}
+			/>
+		));
+	}, [reloadTrigger]);
+	return (
+		<Box w="full" {...boxProps}>
+			{text === null ? <></> : <Text {...labelProps}>{$v(text, children)}</Text>}
+			{[inputElement]}
+		</Box>
+	);
+};
+
+
+export const ResettableTextSetting = ({
+	boxProps = {},
+	labelProps = {},
+	inputProps = {},
+	text,
+	children,
+	defaultValue,
+	placeholder,
+	onChangeText,
+	reloadTrigger = 0,
+	id = ""
+}) => {
+	// <ResettableTextSetting
+	//    boxProps={props for outer Box}
+	//    labelProps={props for Text}
+	//    text={goes into Text; if missing, uses children instead}
+	//    defaultValue={Input defaultValue}
+	//    placeholder={Input placeholder}
+	//    onChangeText={Input onChangeText}
+	//    inputProps={other props for Input}
+	//    reloadTrigger={a value that changes when underlying props are modified}
+	// />
+	const [inputElement, setInputElement] = useState(() => <Fragment key={`TextInput-Frag-${id}-${reloadTrigger}`} />);
+	useEffect(() => {
+		setInputElement(() => (
+			<Input
+				key={`TextInput-${id}-${reloadTrigger}`}
+				defaultValue={defaultValue}
+				placeholder={placeholder}
+				onChangeText={onChangeText}
+				{...inputProps}
+			/>
+		));
+	}, [reloadTrigger]);
+	return (
+		<Box w="full" {...boxProps}>
+			<Text {...labelProps}>{$v(text, children)}</Text>
+			{[inputElement]}
+		</Box>
+	);
+};
+
+
 const Tick = () => {
 	return (
 		<HStack alignItems="center" style={{width: 20, height: 12}} bg="transparent">
