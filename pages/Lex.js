@@ -118,6 +118,7 @@ const Lex = () => {
 	const [loadLexicon, setLoadLexicon] = useState(false);
 	const [loadChosen, setLoadChosen] = useState(storedCustomIDs && storedCustomIDs[0]);
 	const [loadingMethod, setLoadingMethod] = useState(0);
+	const [loadingColumnsPicker, setLoadingColumnsPicker] = useState(false);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
 
 	const [saveLexicon, setSaveLexicon] = useState(false);
@@ -314,21 +315,60 @@ const Lex = () => {
 		// columnConversion: [(integer | null)...]
 		setLoadLexicon(true);
 	};
-	const doLoadLexicon = () => {
+	const checkLexiconToLoad = () => {
+		// Check columns against each other.
+		if(loadingMethods[loadingMethod].key === "overwrite") {
+			// No need to check columns or anything.
+			return doLoadLexicon(null);
+		}
+		// columnConversion: [(integer | null)...] | null
+		// [title, lastSave, lexiconLength, incomingColumns]
+		const incomingCols = storedCustomInfo[loadChosen][3];
+		if(columns.length === incomingCols.length) {
+			if (columns.every((col, i) => col.label === incomingCols[i].label)) {
+				// All columns are equal
+				return doLoadLexicon(null);
+			}
+			let colsNow = columns.map((col, i) => [col, i]);
+			let colsNext = incomingCols.map((col, i) => [col, i]);
+			const sorter = (x, y) => {
+				const a = x[0];
+				const b = y[0];
+				return a.label.localeCompare(b.label, "en", { sensitivity: "variant" })
+					|| a.size.localeCompare(b.size, "en", { sensitivity: "base" });
+			};
+			colsNow.sort(sorter);
+			colsNext.sort(sorter);
+			if (colsNow.every((col, i) => col[0].label === colsNext[0][i].label)) {
+				// All columns are equal
+				const order = colsNow.map(col => col[1]);
+				const columnConversion = order.map(o => colsNext[o][1]);
+				return doLoadLexicon(columnConversion);
+			}
+		}
+		// TO-DO: Set up modal where you line up columns
+		setLoadLexicon(false);
+		setLoadingColumnsPicker(true);
+	};
+	const doLoadLexicon = (columnConversion) => {
 		setLoadingOverlayOpen(true);
 		lexCustomStorage.getItem(loadChosen).then(savedInfo => {
 			const newLex = JSON.parse(savedInfo);
-			// TO-DO: We will need to match columns
-			// columnConversion: [(integer | null)...]
 			dispatch(loadState({
 				method: loadingMethods[loadingMethod].key,
+				columnConversion,
 				lexicon: newLex
 			}));
 			debounce(() => {
 				setLoadLexicon(false);
 				setReloadTrigger(reloadTrigger + 1);
 				setLoadingOverlayOpen(false);
-				// TO-DO: handle toast success message
+				doToast({
+					toast,
+					msg: "Lexicon Loaded",
+					scheme: "success",
+					fontSize: textSize
+				})
 			}, {
 				namespace: "loadingLexicon",
 				amount: 500
@@ -588,7 +628,7 @@ const Lex = () => {
 								p={1}
 								m={2}
 								disabled={!loadChosen}
-								onPress={doLoadLexicon}
+								onPress={checkLexiconToLoad}
 							>Load</Button>
 						</HStack>
 					</Modal.Footer>

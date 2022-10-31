@@ -82,19 +82,29 @@ const loadStateFunc = (state, action) => {
 	// append lexicon
 	state.lexicon.push(...lexicon.map(item => {
 		const {id, columns} = item;
-		// columnConversion is an array of integers and nulls
+		// columnConversion is either null (in which case columns
+		//   are NOT rearranged), or an array of integers and nulls
 		//   that represents how the incoming columns should
 		//   be arranged
+		// Ex: [0, 3, null, 4, 5]
+		//   => [ col[0], col[3], "", col[5], col[4] ]
+		//     columns 1 and 2 are deleted, 4 and 5 are swapped,
+		//   and a new 2 is added
 		return {
 			id,
-			columns: columnConversion.map(c => {
-				if(c === null) {
-					// insert a blank column
-					return "";
-				}
-				// use the indicated column
-				return columns[c];
-			})
+			columns: (
+				columnConversion !== null ?
+					columnConversion.map(c => {
+						if(c === null) {
+							// insert a blank column
+							return "";
+						}
+						// use the indicated column
+						return columns[c];
+					})
+				:
+					columns
+			)
 		};
 	}));
 	// sort new lexicon
