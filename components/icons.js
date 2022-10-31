@@ -34,6 +34,7 @@ export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" {...props
 export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />;
 export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />;
 export const SortEitherIcon = (props) => <Icon as={FAFive} name="sort" {...props} />;
+export const ResetIcon = (props) => <Icon as={Fontisto} name="undo" {...props} />;
 
 // WG pages
 export const WGSettingsIcon = (props) => <Icon as={Ionicons} name="options-outline" {...props} />;

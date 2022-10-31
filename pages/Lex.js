@@ -55,6 +55,7 @@ import doToast from '../helpers/toast';
 import ModalLexiconEditingItem from './LexEditItemModal';
 import LexiconColumnEditorModal from './LexEditColumnsModal';
 import LexiconColumnReorderingModal from './LexReorderColumnsModal';
+import LoadingColumnsPickerModal from './LexLoadingColumnsPickerModal';
 import {
 	DropDown,
 	DropDownMenu,
@@ -65,6 +66,8 @@ import { fontSizesInPx } from '../store/appStateSlice';
 import blankAppState from '../store/blankAppState';
 import { LoadingOverlay } from '../components/FullBodyModal';
 import { lexCustomStorage } from '../helpers/persistentInfo';
+
+// TO-DO: Bugfix: editing columns modal doesn't clear info when you (x)
 
 const Lex = () => {
 	//
@@ -361,6 +364,7 @@ const Lex = () => {
 			}));
 			debounce(() => {
 				setLoadLexicon(false);
+				setLoadingColumnsPicker(false);
 				setReloadTrigger(reloadTrigger + 1);
 				setLoadingOverlayOpen(false);
 				doToast({
@@ -553,7 +557,7 @@ const Lex = () => {
 			<HStack key={id} py={3.5} px={1.5} bg={bg}>
 				{cols.map(
 					(text, i) =>
-						<Box px={1} size={getBoxSize(columns[i].size)} key={id + "-Column-" + String(i)}>
+						<Box px={1} size={getBoxSize(columns[i].size)} key={`${id}-Column-${i}`}>
 							<Text fontSize={smallerSize} isTruncated={truncateColumns}>{text}</Text>
 						</Box>
 					)
@@ -696,6 +700,15 @@ const Lex = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
+			<LoadingColumnsPickerModal
+				modalOpen={loadingColumnsPicker}
+				textSize={textSize}
+				primaryContrast={primaryContrast}
+				closeModal={() => setLoadingColumnsPicker(false)}
+				endingFunc={doLoadLexicon}
+				currentColumns={columns}
+				incomingColumns={loadChosen ? storedCustomInfo[loadChosen][3] : []}
+			/>
 			<LoadingOverlay
 				overlayOpen={loadingOverlayOpen}
 				colorFamily="secondary"

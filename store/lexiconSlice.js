@@ -43,6 +43,7 @@ const sortLexicon = (lexicon, sortPattern, sortDir) => {
 
 
 const loadStateFunc = (state, action) => {
+	let newState;
 	const {
 		method,
 		columnConversion,
@@ -73,15 +74,28 @@ const loadStateFunc = (state, action) => {
 		};
 	} else if (method === "overappend") {
 		// overwrite title/desc
-		state = {
+		newState = {
 			...state,
 			title,
 			description
 		};
+	} else {
+		newState = {...state};
 	}
+	let ids = {};
+	const newLexi = [];
+	newState.lexicon.forEach(item => {
+		ids[item.id] = true;
+		newLexi.push({...item});
+	});
 	// append lexicon
-	state.lexicon.push(...lexicon.map(item => {
+	newLexi.push(...lexicon.map(item => {
 		const {id, columns} = item;
+		let newID = id;
+		while(ids[newID]) {
+			newID = uuidv4();
+		}
+		ids[newID] = true;
 		// columnConversion is either null (in which case columns
 		//   are NOT rearranged), or an array of integers and nulls
 		//   that represents how the incoming columns should
@@ -89,9 +103,9 @@ const loadStateFunc = (state, action) => {
 		// Ex: [0, 3, null, 4, 5]
 		//   => [ col[0], col[3], "", col[5], col[4] ]
 		//     columns 1 and 2 are deleted, 4 and 5 are swapped,
-		//   and a new 2 is added
+		//   and a new blank 2 is added
 		return {
-			id,
+			id: newID,
 			columns: (
 				columnConversion !== null ?
 					columnConversion.map(c => {
@@ -108,8 +122,11 @@ const loadStateFunc = (state, action) => {
 		};
 	}));
 	// sort new lexicon
-	state.lexicon = sortLexicon(state.lexicon, state.sortPattern, state.sortDir);
-	return state;
+	const sortedLexi = sortLexicon(newLexi, state.sortPattern, state.sortDir);
+	return {
+		...newState,
+		lexicon: sortedLexi
+	};
 };
 const setIDFunc = (state, action) => {
 	// TO-DO: Determine if we really need this
