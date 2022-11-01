@@ -4,7 +4,8 @@ import {
 	IconButton,
 	Button,
 	Modal,
-	Text
+	Text,
+	Box
 } from 'native-base';
 
 import {
@@ -19,13 +20,13 @@ const LoadingColumnsPickerModal = ({
 	closeModal,
 	currentColumns,
 	incomingColumns,
-	textSize,
+	textSizes,
 	primaryContrast,
 	endingFunc
 }) => {
-	// TO-DO: lots of state variables?
 	const [unusedIncoming, setUnusedIncoming] = useState([]);
 	const [columnsChosen, setColumnsChosen] = useState([]);
+	const [smallerSize, textSize] = textSizes;
 
 	const resetAll = () => {
 		// everything starts unused
@@ -38,9 +39,7 @@ const LoadingColumnsPickerModal = ({
 		resetAll();
 	}, [currentColumns, incomingColumns]);
 
-	// TO-DO: We need to check for entirely blank appending
-	//   It's likely a user error, and anyway, we can't append
-	//   a bunch of blank lines!
+	const nothingChosen = columnsChosen.every(cc => cc === null);
 
 	return (
 		<Modal isOpen={modalOpen}>
@@ -61,12 +60,10 @@ const LoadingColumnsPickerModal = ({
 					</HStack>
 				</Modal.Header>
 				<Modal.Body>
+					<Box mb={3} mx={1.5}>
+						<Text fontSize={smallerSize} textAlign="center">The saved Lexicon has different categories from the current Lexicon. For each column in the current Lexicon, choose a column in the saved Lexicon that corresponds to it. You can also choose to leave columns blank and not import saved info into them.</Text>
+					</Box>
 					{
-						// TO-DO: Code goes here
-						// Explanation at top
-						// currentColumns.map()
-						// possible values = null + unused + current value
-						// probably DropDown tags
 						currentColumns.map((col, i) => {
 							const valSort = (a, b) => {
 								if(a === null) {
@@ -96,43 +93,56 @@ const LoadingColumnsPickerModal = ({
 									py={1}
 									key={`${i}/${col.label}/HStack`}
 								>
-									<Text fontSize={textSize}>{col.label}</Text>
-									<DropDown
-										fontSize={textSize}
-										title="Incoming Column:"
-										labelFunc={() => current == null ? "(blank)" : incomingColumns[current].label}
-										onChange={(newValue) => {
-											// remove new value from unused
-											let newUnused = unusedIncoming.filter(ui => ui !== newValue);
-											if(current !== null) {
-												// add in current value (if not null)
-												newUnused.push(current);
-											}
-											newUnused.sort(valSort);
-											setUnusedIncoming(newUnused);
-											// Set chosen column
-											setColumnsChosen(columnsChosen.map((cc, ind) => {
-												return ind === i ? newValue : cc
-											}));
-										}}
-										defaultValue={null}
-										options={possibles.map(p => {
-											if(p === null) {
+									<HStack
+										flex={4}
+										justifyContent="flex-end"
+										alignItems="center"
+										flexWrap="wrap"
+									>
+										<Text fontSize={textSize}>{col.label}</Text>
+									</HStack>
+									<HStack
+										flex={5}
+										justifyContent="flex-start"
+										alignItems="center"
+									>
+										<DropDown
+											fontSize={textSize}
+											title="Incoming Column:"
+											labelFunc={() => current == null ? "(blank)" : incomingColumns[current].label}
+											onChange={(newValue) => {
+												// remove new value from unused
+												let newUnused = unusedIncoming.filter(ui => ui !== newValue);
+												if(current !== null) {
+													// add in current value (if not null)
+													newUnused.push(current);
+												}
+												newUnused.sort(valSort);
+												setUnusedIncoming(newUnused);
+												// Set chosen column
+												setColumnsChosen(columnsChosen.map((cc, ind) => {
+													return ind === i ? newValue : cc
+												}));
+											}}
+											defaultValue={null}
+											options={possibles.map(p => {
+												if(p === null) {
+													return {
+														key: `${i}/${p}/blank`,
+														value: null,
+														label: "(blank)"
+													};
+												}
+												const {id, label} = incomingColumns[p];
 												return {
-													key: `${i}/${p}/blank`,
-													value: null,
-													label: "(blank)"
+													key: `${i}/${id}/${label}`,
+													value: p,
+													label
 												};
-											}
-											const {id, label} = incomingColumns[p];
-											return {
-												key: `${i}/${id}/${label}`,
-												value: p,
-												label
-											};
-										})}
-										buttonProps={{ marginLeft: 2 }}
-									/>
+											})}
+											buttonProps={{ marginLeft: 2 }}
+										/>
+									</HStack>
 								</HStack>
 							);
 						})
@@ -163,11 +173,14 @@ const LoadingColumnsPickerModal = ({
 						>Reset</Button>
 						<Button
 							startIcon={<LoadIcon color="success.50" m={0} size={textSize} />}
-							bg="success.500"
+							bg={nothingChosen ? "muted.800" : "success.500"}
 							_text={{color: "success.50", fontSize: textSize}}
 							p={1}
 							m={2}
-							disabled={unusedIncoming.length === incomingColumns.length}
+							disabled={
+								nothingChosen
+								|| unusedIncoming.length === incomingColumns.length
+							}
 							onPress={() => endingFunc(columnsChosen)}
 						>Load Lexicon</Button>
 					</HStack>

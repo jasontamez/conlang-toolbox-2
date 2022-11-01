@@ -67,8 +67,6 @@ import blankAppState from '../store/blankAppState';
 import { LoadingOverlay } from '../components/FullBodyModal';
 import { lexCustomStorage } from '../helpers/persistentInfo';
 
-// TO-DO: Bugfix: editing columns modal doesn't clear info when you (x)
-
 const Lex = () => {
 	//
 	//
@@ -287,7 +285,6 @@ const Lex = () => {
 	// LOAD LEXICON
 	//
 	//
-	// TO-DO: FINISH THIS ALL; remember LoadCustomInfo modals, etc
 	const loadingMethods = [
 		{
 			key: "overwrite",
@@ -349,7 +346,6 @@ const Lex = () => {
 				return doLoadLexicon(columnConversion);
 			}
 		}
-		// TO-DO: Set up modal where you line up columns
 		setLoadLexicon(false);
 		setLoadingColumnsPicker(true);
 	};
@@ -392,7 +388,6 @@ const Lex = () => {
 			const timeString = time.toLocaleString();
 			// TO-DO: Determine if time.toLocaleString() is going to work
 			//    or if we need to use Moment.js or something else
-			// DateString is only the date, need more info
 			return (
 				<Pressable
 					onPress={() => setLoadChosen(info)}
@@ -421,7 +416,6 @@ const Lex = () => {
 			);
 		});
 	};
-	// TO-DO: Need to be able to save Lexicons in order to test Loader!
 	const maybeSaveLexicon = () => {
 		// if there's a previous save loaded, default to overwriting that
 		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
@@ -442,7 +436,13 @@ const Lex = () => {
 	};
 	const doSaveLexicon = (saveID = id) => {
 		const time = Date.now();
-		// TO-DO: Some sort of "saving..." message
+		doToast({
+			toast,
+			msg: "Saving lexicon...",
+			scheme: "info",
+			placement: "bottom",
+			fontSize: textSize
+		});
 		lexCustomStorage.setItem(saveID, JSON.stringify({
 			id: saveID,
 			lastSave: time,
@@ -467,7 +467,7 @@ const Lex = () => {
 				[...columns]
 			];
 			dispatch(setStoredCustomInfo(info));
-				doToast({
+			doToast({
 				toast,
 				msg: "Lexicon saved", // at...?
 				scheme: "success",
@@ -477,7 +477,7 @@ const Lex = () => {
 		});
 	};
 	const doSaveNewLexicon = () => doSaveLexicon(uuidv4());
-	// TO-DO: finish below
+	// TO-DO: finish overwrite/save below
 	const maybeOverwriteSaveLexicon = () => {};
 	const maybeSaveNewLexicon = () => {};
 
@@ -702,7 +702,7 @@ const Lex = () => {
 			</Modal>
 			<LoadingColumnsPickerModal
 				modalOpen={loadingColumnsPicker}
-				textSize={textSize}
+				textSizes={[smallerSize, textSize]}
 				primaryContrast={primaryContrast}
 				closeModal={() => setLoadingColumnsPicker(false)}
 				endingFunc={doLoadLexicon}

@@ -44,6 +44,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	}, [triggerOpen]);
 	const doClose = () => {
 		setColumnLabelsToBeDeleted([]);
+		setNewColumns(columns.map(c => {return {...c}}));
 		clearTrigger();
 	};
 	const AddColumnButton = () => {
@@ -228,7 +229,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 									icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 									p={1}
 									variant="ghost"
-									onPress={() => doClose()}
+									onPress={doClose}
 									flexGrow={0}
 									flexShrink={0}
 								/>
