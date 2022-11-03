@@ -30,14 +30,14 @@ const LoadingColumnsPickerModal = ({
 
 	const resetAll = () => {
 		// everything starts unused
-		setUnusedIncoming(incomingColumns.map((col, i) => i));
+		setUnusedIncoming(modalOpen ? incomingColumns.map((col, i) => i) : []);
 		// set all selections to "nothing"
 		const chosen = currentColumns.map(() => null);
 		setColumnsChosen(chosen);
 	};
 	useEffect(() => {
 		resetAll();
-	}, [currentColumns, incomingColumns]);
+	}, [modalOpen, currentColumns, incomingColumns]);
 
 	const nothingChosen = columnsChosen.every(cc => cc === null);
 

@@ -117,10 +117,12 @@ const Lex = () => {
 	const [modalOpen, setModalOpen] = useState('');
 
 	const [loadLexicon, setLoadLexicon] = useState(false);
-	const [loadChosen, setLoadChosen] = useState(storedCustomIDs && storedCustomIDs[0]);
+	const [loadChosen, setLoadChosen] = useState(storedCustomIDs && storedCustomIDs.length > 0 && storedCustomIDs[0]);
 	const [loadingMethod, setLoadingMethod] = useState(0);
 	const [loadingColumnsPicker, setLoadingColumnsPicker] = useState(false);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+
+	const [destroyingLexicon, setDestroyingLexicon] = useState({});
 
 	const [saveLexicon, setSaveLexicon] = useState(false);
 
@@ -128,6 +130,7 @@ const Lex = () => {
 
 	const primaryContrast = useContrastText('primary.500');
 	const secondaryContrast = useContrastText('secondary.500');
+	const warningContrast = useContrastText('warning.500');
 
 	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
@@ -346,7 +349,6 @@ const Lex = () => {
 				return doLoadLexicon(columnConversion);
 			}
 		}
-		setLoadLexicon(false);
 		setLoadingColumnsPicker(true);
 	};
 	const doLoadLexicon = (columnConversion) => {
@@ -389,36 +391,90 @@ const Lex = () => {
 			// TO-DO: Determine if time.toLocaleString() is going to work
 			//    or if we need to use Moment.js or something else
 			return (
-				<Pressable
-					onPress={() => setLoadChosen(info)}
+				<HStack
 					key={info}
+					alignItems="center"
+					justifyContent="space-between"
+					space={3}
 				>
-					<HStack
-						justifyContent="space-between"
-						alignItems="center"
-						borderWidth={1}
-						borderColor={loadChosen === info ? "primary.500" : "darker"}
-						borderRadius="xs"
-						bg={loadChosen === info ? "primary.800" : "main.800"}
-						px={1.5}
-						py={1}
+					<Pressable
+						onPress={() => setLoadChosen(info)}
+						flex={1}
 					>
-						<VStack
-							alignItems="flex-start"
-							justifyContent="center"
+						<HStack
+							justifyContent="space-between"
+							alignItems="center"
+							borderWidth={1}
+							borderColor={loadChosen === info ? "primary.500" : "darker"}
+							borderRadius="xs"
+							bg={loadChosen === info ? "primary.800" : "main.800"}
+							px={1.5}
+							py={1}
 						>
-							<Text color={color} fontSize={textSize}>{title}</Text>
-							<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
-						</VStack>
-						<Text color={color} italic fontSize={smallerSize}>Saved: {timeString}</Text>
-					</HStack>
-				</Pressable>
+							<VStack
+								alignItems="flex-start"
+								justifyContent="center"
+							>
+								<Text color={color} fontSize={textSize}>{title}</Text>
+								<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
+							</VStack>
+							<Text color={color} italic fontSize={smallerSize}>Saved: {timeString}</Text>
+						</HStack>
+					</Pressable>
+					<IconButton
+						icon={<TrashIcon color="danger.500" size={smallerSize} />}
+						variant="ghost"
+						onPress={() => maybeDeleteLexicon(info, title, timeString, lexNumber)}
+					/>
+				</HStack>
 			);
+		});
+	};
+	const maybeDeleteLexicon = (id, title, time, lexNumber) => {
+		if(disableConfirms) {
+			return doDeleteLexicon(id, title);
+		}
+		setDestroyingLexicon({
+			id,
+			title,
+			time,
+			lexNumber,
+			msg: "delete",
+			func: () => doDeleteLexicon(id, title)
+		});
+		setAlertOpen('willDestroyLexicon');
+	};
+	const doDeleteLexicon = (id, title) => {
+		const newInfo = {...storedCustomInfo};
+		delete newInfo[id];
+		doToast({
+			toast,
+			msg: `Deleting "${title}"...`,
+			scheme: "danger",
+			fontSize: textSize
+		});
+		setLoadChosen(false);
+		lexCustomStorage.removeItem(id).then(() => {
+			dispatch(setStoredCustomInfo(newInfo));
+			doToast({
+				toast,
+				msg: `"${title}" deleted`,
+				scheme: "danger",
+				fontSize: textSize
+			});
+		}).catch((err) => {
+			console.log(err);
+			console.log(`${id} - "${title}"`);
+			doToast({
+				toast,
+				msg: `Unable to delete "${title}"`,
+				scheme: "danger",
+				fontSize: textSize
+			});
 		});
 	};
 	const maybeSaveLexicon = () => {
 		// if there's a previous save loaded, default to overwriting that
-		//   -> Overwrite "X"? yes / cancel / overwrite other save / new save
 		if(!title) {
 			return doToast({
 				toast,
@@ -477,9 +533,22 @@ const Lex = () => {
 		});
 	};
 	const doSaveNewLexicon = () => doSaveLexicon(uuidv4());
-	// TO-DO: finish overwrite/save below
-	const maybeOverwriteSaveLexicon = () => {};
-	const maybeSaveNewLexicon = () => {};
+	const maybeOverwriteSaveLexicon = () => {
+		const [title, lastSave, lexNumber, columns] = storedCustomInfo[loadChosen];
+		if(disableConfirms) {
+			return doSaveLexicon(loadChosen);
+		}
+		const time = (new Date(lastSave)).toLocaleString();
+		setDestroyingLexicon({
+			id,
+			title,
+			time,
+			lexNumber,
+			msg: "overwrite",
+			func: () => doSaveLexicon(loadChosen)
+		});
+		setAlertOpen('willDestroyLexicon');
+	};
 
 
 	//
@@ -490,7 +559,7 @@ const Lex = () => {
 	const doClearLexicon = () => {
 		dispatch(loadState({
 			method: "overwrite",
-			lexicon: blankAppState.lexicon // TO-DO: Does this need modifying to not overwrite special things?
+			lexicon: blankAppState.lexicon
 		}));
 		titleRef && titleRef.current && titleRef.current.clear();
 		descRef && descRef.current && descRef.current.clear();
@@ -580,6 +649,181 @@ const Lex = () => {
 	//
 	return (
 		<>
+			<ModalLexiconEditingItem
+				isEditing={editingItemID !== null}
+				columns={editingItemColumns}
+				{...{
+					saveItemFunc,
+					deleteEditingItemFunc,
+					disableConfirms,
+					endEditingFunc,
+					labels
+				}}
+			/>
+			<MultiAlert
+				alertOpen={alertOpen}
+				setAlertOpen={setAlertOpen}
+				sharedProps={{
+					headerProps: {
+						_text: {
+							color: warningContrast,
+							fontSize: largeSize
+						}
+					}
+				}}
+				passedProps={[
+					{
+						id: "hasBlankColumns",
+						properties: {
+							continueFunc: doAddToLexicon,
+							continueText: "Yes",
+							bodyContent: "You have one or more blank columns in this entry. Are you sure you want to add this to your Lexicon?"
+						}
+					},
+					{
+						id: "pendingDeleteQueue",
+						properties: {
+							continueText: "No, Don't Delete",
+							continueFunc: () => toggleDeletingMode(true),
+							leastDestructiveContinue: true,
+							cancelText: "Yes, Delete Them",
+							cancelFunc: doMassDelete,
+							cancelProps: {
+								bg: "danger.500"
+							},
+							bodyContent: "You have marked " + String(itemsToDelete.length) + " item" + maybePlural(itemsToDelete.length) + " for deletion. Do you want to delete them?"
+						}
+					},
+					{
+						id: "willMassDelete",
+						properties: {
+							continueText: "Yes",
+							continueFunc: doMassDelete,
+							continueProps: {
+								bg: "danger.500"
+							},
+							bodyContent: (
+								<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>
+							)
+						}
+					},
+					{
+						id: "willClearLexicon",
+						properties: {
+							continueText: "Yes",
+							continueFunc: doClearLexicon,
+							continueProps: {
+								bg: "danger.500"
+							},
+							bodyContent: (
+								<Text>This will erase the Title, Description, and every item in the Lexicon. It cannot be undone. Are you sure you want to do this?</Text>
+							)
+						}
+					},
+					{
+						id: "willDestroyLexicon",
+						properties: {
+							continueText: "Yes",
+							continueFunc: destroyingLexicon.func,
+							continueProps: {
+								bg: "danger.500"
+							},
+							bodyContent: (
+								<VStack
+									alignItems="center"
+									justifyContent="center"
+									py={2}
+									px={4}
+									space={2}
+								>
+									<Text textAlign="center">You are about to {destroyingLexicon.msg}:</Text>
+									<Box bg="darker" px={2} py={1}>
+										<Text textAlign="center" fontSize={smallerSize}>
+											<Tx bold>{destroyingLexicon.title}</Tx>: {destroyingLexicon.lexNumber === 1 ? "1 item" : `${destroyingLexicon.lexNumber} items`}
+										</Text>
+										<Text textAlign="center">Last save: <Tx italic>{destroyingLexicon.time}</Tx></Text>
+									</Box>
+									<Text textAlign="center">Are you sure you want to {destroyingLexicon.msg} this? It cannot be undone.</Text>
+								</VStack>
+							)
+						}
+					},
+					{
+						id: "howToSaveLexicon",
+						properties: {
+							fontSize: textSize,
+							detatchButtons: true,
+							headerProps: {
+								bg: "primary.500",
+								_text: {
+									color: primaryContrast
+								}
+							},
+							headerContent: "Where to Save?",
+							bodyContent: (
+								<VStack
+									justifyContent="center"
+									alignItems="center"
+									w="full"
+								>
+									<HStack
+										flexWrap="wrap"
+										justifyContent="space-between"
+										flex={1}
+										my={2}
+										mx={2}
+										space={2}
+									> 
+										<Button
+											onPress={() => {
+												setAlertOpen(false);
+												doSaveNewLexicon();
+											}}
+											bg="primary.500"
+											_text={{
+												color: primaryContrast,
+												fontSize: largeSize
+											}}
+											px={2.5}
+											py={1.5}
+										>New Save</Button>
+										{
+											storedCustomIDs.length > 0 ?
+												<Button
+													onPress={() => {
+														setAlertOpen(false);
+														setSaveLexicon(true);
+													}}
+													bg="secondary.500"
+													_text={{
+														color: primaryContrast,
+														fontSize: largeSize
+													}}
+													px={2.5}
+													py={1.5}
+												>Overwrite Previous Save</Button>
+											:
+												<></>
+										}
+									</HStack>
+								</VStack>
+							),
+							overrideButtons: [
+								({leastDestructiveRef}) => <Button
+									onPress={() => {
+										setAlertOpen(false);
+									}}
+									bg="darker"
+									ref={leastDestructiveRef}
+									_text={{fontSize: textSize}}
+									px={2}
+									py={1}
+								>Cancel</Button>
+							]
+						}
+					}
+				]}
+			/>
 			<Modal isOpen={loadLexicon}>
 				<Modal.Content>
 					<Modal.Header
@@ -690,7 +934,7 @@ const Lex = () => {
 								_text={{color: "success.50", fontSize: textSize}}
 								p={1}
 								m={2}
-								disabled={storedCustomIDs.length === 0}
+								disabled={!loadChosen || storedCustomIDs.length === 0}
 								onPress={() => {
 									setSaveLexicon(false);
 									maybeOverwriteSaveLexicon();
@@ -760,136 +1004,6 @@ const Lex = () => {
 					elevation: 10
 				}}
 			>
-				<ModalLexiconEditingItem
-					isEditing={editingItemID !== null}
-					columns={editingItemColumns}
-					{...{
-						saveItemFunc,
-						deleteEditingItemFunc,
-						disableConfirms,
-						endEditingFunc,
-						labels
-					}}
-				/>
-				<MultiAlert
-					alertOpen={alertOpen}
-					setAlertOpen={setAlertOpen}
-					sharedProps={{}}
-					passedProps={[
-						{
-							id: "hasBlankColumns",
-							properties: {
-								continueFunc: doAddToLexicon,
-								continueText: "Yes",
-								bodyContent: "You have one or more blank columns in this entry. Are you sure you want to add this to your Lexicon?"
-							}
-						},
-						{
-							id: "pendingDeleteQueue",
-							properties: {
-								continueText: "No, Don't Delete",
-								continueFunc: () => toggleDeletingMode(true),
-								leastDestructiveContinue: true,
-								cancelText: "Yes, Delete Them",
-								cancelFunc: doMassDelete,
-								cancelProps: {
-									bg: "danger.500"
-								},
-								bodyContent: "You have marked " + String(itemsToDelete.length) + " item" + maybePlural(itemsToDelete.length) + " for deletion. Do you want to delete them?"
-							}
-						},
-						{
-							id: "willMassDelete",
-							properties: {
-								continueText: "Yes",
-								continueFunc: doMassDelete,
-								continueProps: {
-									bg: "danger.500"
-								},
-								bodyContent: (
-									<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>
-								)
-							}
-						},
-						{
-							id: "willClearLexicon",
-							properties: {
-								continueText: "Yes",
-								continueFunc: doClearLexicon,
-								continueProps: {
-									bg: "danger.500"
-								},
-								bodyContent: (
-									<Text>This will erase the Title, Description, and every item in the Lexicon. It cannot be undone. Are you sure you want to do this?</Text>
-								)
-							}
-						},
-						{
-							id: "howToSaveLexicon",
-							properties: {
-								fontSize: textSize,
-								detatchButtons: true,
-								bodyContent: (
-									<VStack
-										justifyContent="center"
-										alignItems="center"
-										w="full"
-									>
-										<HStack
-											flexWrap="wrap"
-											justifyContent="space-between"
-											flex={1}
-										>
-											<Button
-												onPress={() => {
-													setAlertOpen(false);
-													doSaveNewLexicon();
-												}}
-												bg="primary.500"
-												_text={{
-													color: primaryContrast,
-													fontSize: textSize
-												}}
-												px={2}
-												py={1}
-											>New Save</Button>
-											{
-												storedCustomIDs.length > 0 ?
-													<Button
-														onPress={() => {
-															setAlertOpen(false);
-															maybeOverwriteSaveLexicon();
-														}}
-														bg="secondary.500"
-														_text={{
-															color: primaryContrast,
-															fontSize: textSize
-														}}
-														px={2}
-														py={1}
-													>Overwrite Previous Save</Button>
-												:
-													<></>
-											}
-										</HStack>
-									</VStack>
-								),
-								overrideButtons: [
-									({leastDestructiveRef}) => <Button
-										onPress={() => {
-											setAlertOpen(false);
-										}}
-										bg="darker"
-										ref={leastDestructiveRef}
-										_text={{fontSize: textSize}}
-										px={2}
-										py={1}
-									>Cancel</Button>
-								]
-							}
-						}
-					]}
-				/>
 				<HStack
 					ml={3}
 					justifyContent="space-between"
@@ -1048,7 +1162,7 @@ const Lex = () => {
 									</HStack>
 								</Menu.Item>
 								<Menu.Item onPress={() => {
-									maybeSaveNewLexicon();
+									setAlertOpen('howToSaveLexicon');
 								}}>
 									<HStack
 										space={4}
