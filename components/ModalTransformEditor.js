@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
 	Text,
 	VStack,
@@ -7,7 +7,6 @@ import {
 	IconButton,
 	Button,
 	Modal,
-	useBreakpointValue,
 	useContrastText,
 	useToast
 } from 'native-base';
@@ -20,6 +19,7 @@ import {
 } from './icons';
 import { DropDown, TextSetting } from './inputTags';
 import doToast from '../helpers/toast';
+import getSizes from '../helpers/getSizes';
 
 const ModalTransformEditingItem = ({
 	useDirection,
@@ -35,15 +35,12 @@ const ModalTransformEditingItem = ({
 	//
 	//
 	// (has to be separate to keep State updates from flickering this all the time)
-	const sizes = useSelector(state => state.appState.sizes);
 	const [modifiedSearch, setModifiedSearch] = useState("");
 	const [modifiedReplace, setModifiedReplace] = useState("");
 	const [modifiedDirection, setModifiedDirection] = useState("both");
 	const [modifiedDescription, setModifiedDescription] = useState("");
 	const [editingID, setEditingID] = useState("");
-	const inputSize = useBreakpointValue(sizes.xs);
-	const textSize = useBreakpointValue(sizes.sm);
-	const headerSize = useBreakpointValue(sizes.md);
+	const [inputSize, textSize, headerSize] = getSizes("xs", "sm", "md")
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const sRef = useRef(null);

@@ -15,7 +15,6 @@ import {
 	Modal,
 	Pressable,
 	useToast,
-	useBreakpointValue,
 	useContrastText
 } from 'native-base';
 import { v4 as uuidv4 } from 'uuid';
@@ -66,6 +65,7 @@ import { fontSizesInPx } from '../store/appStateSlice';
 import blankAppState from '../store/blankAppState';
 import { LoadingOverlay } from '../components/FullBodyModal';
 import { lexCustomStorage } from '../helpers/persistentInfo';
+import getSizes from '../helpers/getSizes';
 
 const Lex = () => {
 	//
@@ -91,13 +91,10 @@ const Lex = () => {
 	} = useSelector((state) => state.lexicon, equalityCheck);
 	const titleRef = useRef(null);
 	const descRef = useRef(null);
-	const { sizes, disableConfirms } = useSelector((state) => state.appState);
+	const { disableConfirms } = useSelector((state) => state.appState);
 	const extraData = [truncateColumns, columns];
 	const { absoluteMaxColumns } = consts;
-	const smallerSize = useBreakpointValue(sizes.sm);
-	const textSize = useBreakpointValue(sizes.md);
-	const largeSize = useBreakpointValue(sizes.lg);
-	const bigTextSize = useBreakpointValue(sizes.x2);
+	const [smallerSize, textSize, largeSize, bigTextSize] = getSizes("sm", "md", "lg", "x2")
 	const Text = (props) => {
 		return <Tx fontSize={textSize} {...props} />;
 	};

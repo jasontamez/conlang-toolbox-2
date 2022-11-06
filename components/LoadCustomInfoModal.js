@@ -5,7 +5,6 @@ import {
 	IconButton,
 	Modal,
 	Text,
-	useBreakpointValue,
 	useContrastText,
 	useToast
 } from 'native-base';
@@ -22,6 +21,7 @@ import StandardAlert from './StandardAlert';
 import doToast from '../helpers/toast';
 import { LoadingOverlay } from './FullBodyModal';
 import { DropDown } from './inputTags';
+import getSizes from '../helpers/getSizes';
 
 const LoadCustomInfoModal = ({
 	modalOpen,
@@ -34,15 +34,14 @@ const LoadCustomInfoModal = ({
 	storedCustomInfo
 }) => {
 	const dispatch = useDispatch();
-	const { sizes, disableConfirms } = useSelector(state => state.appState);
+	const { disableConfirms } = useSelector(state => state.appState);
 	// state variable for holding saved custom info keys
 	const [customInfoChosen, setCustomInfoChosen] = useState(null);
 	const [customLabelChosen, setCustomLabelChosen] = useState(null);
 	const [overwriteWarningOpen, setOverwriteWarningOpen] = useState(false);
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
-	const textSize = useBreakpointValue(sizes.sm);
-	const largeText = useBreakpointValue(sizes.xl);
+	const [textSize, largeText] = getSizes("sm", "xl");
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
 	const toast = useToast();

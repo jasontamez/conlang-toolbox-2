@@ -12,7 +12,6 @@ import {
  } from 'native-base';
 import { useNavigate } from "react-router-dom";
 import packageJson from '../package.json';
-import { useSelector } from 'react-redux';
 
 import {
 	DotIcon,
@@ -25,14 +24,12 @@ import {
 } from '../components/icons';
 import { setBaseTextSize } from '../store/appStateSlice';
 import {useDispatch} from 'react-redux';
+import getSizes from '../helpers/getSizes';
 
 const About = () => {
 	const dispatch = useDispatch();
-	const sizes = useSelector(state => state.appState.sizes);
 	let navigate = useNavigate();
-	const headerSize = useBreakpointValue(sizes.xl);
-	const textSize = useBreakpointValue(sizes.md);
-	const dotSize = useBreakpointValue(sizes.xs);
+	const [headerSize, textSize, dotSize] = getSizes("xl", "md", "xs");
 	const indentMargin = useBreakpointValue({
 		base: 4,
 		sm: 8,

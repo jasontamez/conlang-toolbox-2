@@ -1,7 +1,8 @@
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import { HStack, Menu, ScrollView, Text, useBreakpointValue, VStack } from 'native-base';
+import { HStack, Menu, ScrollView, Text, VStack } from 'native-base';
 import { setTheme, setDisableConfirms, setBaseTextSize } from '../store/appStateSlice';
 import { ToggleSwitch } from "../components/inputTags";
+import getSizes from "../helpers/getSizes";
 
 
 const AppSettings = () => {
@@ -9,11 +10,9 @@ const AppSettings = () => {
 	const {
 		disableConfirms,
 		theme,
-		sizes,
 		sizeName
 	} = useSelector((state) => state.appState, shallowEqual);
-	const titleSize = useBreakpointValue(sizes.md);
-	const textSize = useBreakpointValue(sizes.xs);
+	const [titleSize, textSize] = getSizes("md", "xs");
 	return (
 		<ScrollView>
 			<ToggleSwitch

@@ -1,5 +1,4 @@
 import {
-	useBreakpointValue,
 	Text,
 	HStack,
 	Box,
@@ -38,6 +37,7 @@ import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
 import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 import { fontSizesInPx } from "../store/appStateSlice";
+import getSizes from "../helpers/getSizes";
 
 const CharGroups = ({
 	useDropoff,
@@ -48,7 +48,7 @@ const CharGroups = ({
 	setCharacterGroupDropoff
 }) => {
 	const { characterGroups, characterGroupDropoff } = useSelector(state => state[selector]);
-	const { sizes, disableConfirms } = useSelector(state => state.appState);
+	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [saveGroupError, setSaveGroupError] = useState('');
@@ -245,8 +245,7 @@ const CharGroups = ({
 		setEditingGroup(false);
 		setDeletingGroup(false);
 	};
-	const textSize = useBreakpointValue(sizes.sm);
-	const smallerSize = useBreakpointValue(sizes.xs);
+	const [textSize, smallerSize] = getSizes("sm", "xs");
 	const emSize = fontSizesInPx[textSize];
 	const renderGroup = (group) => {
 		const {label, run, description, dropoff} = group;

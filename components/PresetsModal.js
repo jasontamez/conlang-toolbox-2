@@ -6,7 +6,6 @@ import {
 	IconButton,
 	Button,
 	Modal,
-	useBreakpointValue,
 	useContrastText,
 	Radio,
 	useToast
@@ -16,6 +15,7 @@ import ExtraChars from './ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon } from './icons';
 import StandardAlert from './StandardAlert';
 import doToast from '../helpers/toast';
+import getSizes from '../helpers/getSizes';
 
 
 const PresetsModal = ({
@@ -26,9 +26,8 @@ const PresetsModal = ({
 	loadState,
 	overwriteText
 }) => {
-	const { sizes, disableConfirms } = useSelector(state => state.appState);
-	const textSize = useBreakpointValue(sizes.sm);
-	const inputSize = useBreakpointValue(sizes.xs);
+	const { disableConfirms } = useSelector(state => state.appState);
+	const [textSize, inputSize] = getSizes("sm", "xs");
 	const primaryContrast = useContrastText('primary.500');
 	const [presetChosen, setPresetChosen] = useState("");
 	const [alertOpen, setAlertOpen] = useState(false);

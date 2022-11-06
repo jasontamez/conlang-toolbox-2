@@ -1,5 +1,4 @@
 import {
-	useBreakpointValue,
 	Text,
 	HStack,
 	Box,
@@ -37,6 +36,7 @@ import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
 import ModalTransformEditingItem from "./ModalTransformEditor";
 import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
+import getSizes from "../helpers/getSizes";
 
 //direction: both | in | out | double
 const Transformations = ({
@@ -49,7 +49,7 @@ const Transformations = ({
 }) => {
 	const { transforms } = useSelector(state => state[selector]);
 	const lastTransform = transforms.length - 1;
-	const { sizes, disableConfirms } = useSelector(state => state.appState);
+	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const [reordering, setReordering] = useState(false);
@@ -65,9 +65,7 @@ const Transformations = ({
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [deletingTransform, setDeletingTransform] = useState(false);
 	const [transformDeleteString, setTransformDeleteString] = useState("");
-	const textSize = useBreakpointValue(sizes.sm);
-	const fabSize = useBreakpointValue(sizes.md);
-	const descSize = useBreakpointValue(sizes.xs);
+	const [textSize, fabSize, descSize] = getSizes("sm", "md", "xs");
 	const primaryContrast = useContrastText("primary.500");
 	const maybeDeleteTransform = (transform = deletingTransform) => {
 		if(disableConfirms) {
