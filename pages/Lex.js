@@ -316,6 +316,14 @@ const Lex = () => {
 		// method: overwrite | overappend | append
 		// We will need to match columns
 		// columnConversion: [(integer | null)...]
+		if(storedCustomIDs.length < 1) {
+			return doToast({
+				toast,
+				msg: "There are no previous saves to load.",
+				scheme: "error",
+				placement: "bottom"
+			});
+		}
 		setLoadLexicon(true);
 	};
 	const checkLexiconToLoad = () => {
@@ -1162,6 +1170,15 @@ const Lex = () => {
 									</HStack>
 								</Menu.Item>
 								<Menu.Item onPress={() => {
+									if(!title) {
+										return doToast({
+											toast,
+											msg: "Please create a title for your Lexicon before saving.",
+											scheme: "error",
+											placement: "top",
+											fontSize: textSize
+										});
+									}
 									setAlertOpen('howToSaveLexicon');
 								}}>
 									<HStack

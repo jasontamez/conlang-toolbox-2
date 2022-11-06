@@ -532,7 +532,17 @@ const Settings = () => {
 				<StoredInfoButton
 					bg="darker"
 					icon={<AddCircleIcon size={textSize} />}
-					onPress={() => setOperation(-1)}
+					onPress={() => {
+						if(storedCustomIDs.length < 1) {
+							return doToast({
+								toast,
+								msg: "There are no previous saves to load.",
+								scheme: "error",
+								placement: "bottom"
+							});
+						}
+						setOperation(-1)
+					}}
 					text="Load MorphoSyntax Info"
 				/>
 				<StoredInfoButton
@@ -544,7 +554,18 @@ const Settings = () => {
 				<StoredInfoButton
 					bg="darker"
 					icon={<SaveIcon size={textSize} />}
-					onPress={() => setAlertOpen("howToSaveMS")}
+					onPress={() => {
+						if(!title) {
+							return doToast({
+								toast,
+								msg: "Please create a title for your MorphoSyntax before saving.",
+								scheme: "error",
+								placement: "top",
+								fontSize: textSize
+							});
+						}
+						setAlertOpen("howToSaveMS");
+					}}
 					text="Save as..."
 				/>
 				<StoredInfoButton
