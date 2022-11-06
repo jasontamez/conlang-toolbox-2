@@ -4,15 +4,17 @@ import { setHasCheckedForOldCustomInfo } from '../store/appStateSlice';
 import { setStoredCustomInfo as setStoredCustomInfoWG } from '../store/wgSlice';
 import { setStoredCustomInfo as setStoredCustomInfoWE } from '../store/weSlice';
 import { setStoredCustomInfo as setStoredCustomInfoLex } from '../store/lexiconSlice';
+import { setStoredCustomInfo as setStoredCustomInfoMS } from '../store/morphoSyntaxSlice';
 import {
 	OldCustomStorageWE,
 	OldCustomStorageWG,
 	OldLexiconStorage,
 	lexCustomStorage,
 	weCustomStorage,
-	wgCustomStorage
+	wgCustomStorage,
+	OldMorphoSyntaxStorage,
+	msCustomStorage
 } from './persistentInfo';
-// TO-DO: Convert MS info, too
 
 
 const doConvert = async (dispatch) => {
@@ -21,7 +23,8 @@ const doConvert = async (dispatch) => {
 	return Promise.allSettled([
 		convertWG(dispatch),
 		convertWE(dispatch),
-		convertLexicon(dispatch)
+		convertLexicon(dispatch),
+		convertMS(dispatch)
 	]).then((values) => {
 		return values.every(v => v.status === "fulfilled") && dispatch(setHasCheckedForOldCustomInfo(true));
 	}).catch((err) => {
@@ -320,6 +323,53 @@ const convertLexicon = async (dispatch) => {
 		dispatch(setStoredCustomInfoLex(ids));
 	}).catch((err) => {
 		console.log("Lex Error");
+		console.log(err);
+	});
+};
+const convertMS = async (dispatch) => {
+	let information = [];
+	let ids = {};
+	// Get all info
+	return OldMorphoSyntaxStorage.iterate((value, key) => {
+		information.push([key, value]);
+		return; // Blank return keeps the loop going
+	}).then(() => {
+		// Convert info from old format into new format
+		const infoLen = information.length;
+		const final = [];
+		for(let x = 0; x < infoLen; x++) {
+			const [
+				id,
+				{
+					lastSave,
+					title,
+					description,
+					boolStrings,
+					num,
+					text
+				}
+			] = information[x];
+			let bool = {};
+			boolStrings.forEach(s => bool[s] = true);
+			final.push({
+				id,
+				lastSave,
+				description,
+				title,
+				num,
+				text,
+				bool
+			});
+		}
+		return Promise.all(final.map(info => {
+			const { id, title, lastSave } = info;
+			ids[id] = [title, lastSave];
+			return msCustomStorage.setItem(id, JSON.stringify(info));
+		}));
+	}).then(() => {
+		dispatch(setStoredCustomInfoMS(ids));
+	}).catch((err) => {
+		console.log("MS Error");
 		console.log(err);
 	});
 };
