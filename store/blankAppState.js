@@ -78,7 +78,9 @@ const blankAppState = {/*
 		description: "",
 		bool: {},
 		num: {},
-		text: {}
+		text: {},
+		storedCustomInfo: {},
+		storedCustomIDs: []
 	},
 	lexicon: {
 		id: "",

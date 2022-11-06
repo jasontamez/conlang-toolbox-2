@@ -12,6 +12,7 @@ import {
 	weCustomStorage,
 	wgCustomStorage
 } from './persistentInfo';
+// TO-DO: Convert MS info, too
 
 
 const doConvert = async (dispatch) => {
@@ -226,7 +227,6 @@ const convertLexicon = async (dispatch) => {
 		return; // Blank return keeps the loop going
 	}).then(() => {
 		// Convert info from old format into new format
-		console.log(information);
 		const infoLen = information.length;
 		for(let x = 0; x < infoLen; x++) {
 			const [

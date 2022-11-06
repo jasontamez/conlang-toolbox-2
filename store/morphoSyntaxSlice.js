@@ -4,12 +4,10 @@ import blankAppState from './blankAppState';
 const initialState = blankAppState.morphoSyntax;
 
 const setIDFunc = (state, action) => {
-	// TO-DO: Determine if we really need this
 	state.id = action.payload;
 	return state;
 };
 const setLastSaveFunc = (state, action) => {
-	// TO-DO: Determine if we really need this
 	state.lastSave = action.payload;
 	return state;
 };
@@ -48,6 +46,30 @@ const setTextFunc = (state, action) => {
 	}
 	return state;
 };
+// LOAD INFO and CLEAR ALL
+const loadStateFunc = (state, action) => {
+	// If payload is null (or falsy), then initialState is used
+	const {
+		bool,
+		num,
+		text,
+		...others
+	} = action.payload || initialState;
+	return {
+		...state,
+		...others,
+		bool: {...bool},
+		num: {...num},
+		text: {...text}
+	};
+};
+// STORED CUSTOM INFO
+const setStoredCustomInfoFunc = (state, action) => {
+	const { payload } = action;
+	state.storedCustomInfo = payload;
+	state.storedCustomIDs = Object.keys(payload);
+	return state;
+};
 
 const morphoSyntaxSlice = createSlice({
 	name: 'morphoSyntax',
@@ -59,7 +81,9 @@ const morphoSyntaxSlice = createSlice({
 		setDescription: setDescriptionFunc,
 		setBool: setBoolFunc,
 		setNum: setNumFunc,
-		setText: setTextFunc
+		setText: setTextFunc,
+		loadState: loadStateFunc,
+		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
 
@@ -70,7 +94,9 @@ export const {
 	setDescription,
 	setBool,
 	setNum,
-	setText
+	setText,
+	loadState,
+	setStoredCustomInfo
 } = morphoSyntaxSlice.actions;
 
 export default morphoSyntaxSlice.reducer;

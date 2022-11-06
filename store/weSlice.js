@@ -136,7 +136,6 @@ const weSlice = createSlice({
 		rearrangeSoundChanges: rearrangeSoundChangesFunc,
 		setOutput: setOutputFunc,
 		setFlag: setFlagFunc,
-
 		loadState: loadStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
@@ -157,7 +156,6 @@ export const {
 	rearrangeSoundChanges,
 	setOutput,
 	setFlag,
-
 	loadState,
 	setStoredCustomInfo
 } = weSlice.actions;

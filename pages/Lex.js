@@ -494,7 +494,7 @@ const Lex = () => {
 		const time = Date.now();
 		doToast({
 			toast,
-			msg: "Saving lexicon...",
+			msg: "Saving Lexicon...",
 			scheme: "info",
 			placement: "bottom",
 			fontSize: textSize
