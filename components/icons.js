@@ -35,6 +35,7 @@ export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-
 export const SortUpIcon = (props) => <Icon as={FAFive} name="sort-amount-up" {...props} />;
 export const SortEitherIcon = (props) => <Icon as={FAFive} name="sort" {...props} />;
 export const ResetIcon = (props) => <Icon as={Fontisto} name="undo" {...props} />;
+export const LoadSaveIcon = (props) => <Icon as={MCI} name="content-save-cog-outline" {...props} />;
 
 // WG pages
 export const WGSettingsIcon = (props) => <Icon as={Ionicons} name="options-outline" {...props} />;

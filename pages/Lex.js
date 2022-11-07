@@ -31,7 +31,9 @@ import {
 	AddCircleIcon,
 	SaveIcon,
 	CloseCircleIcon,
-	LoadIcon
+	LoadIcon,
+	LoadSaveIcon,
+	ExportIcon
 } from '../components/icons';
 import { MultiAlert } from '../components/StandardAlert';
 import {
@@ -1124,6 +1126,23 @@ const Lex = () => {
 									<Text>Mass Delete Mode</Text>
 								</Menu.ItemOption>
 							</Menu.OptionGroup>
+						</Menu>
+						<Menu
+							placement="bottom right"
+							closeOnSelect={true}
+							trigger={(props) => (
+								<IconButton
+									p={1}
+									px={1.5}
+									ml={2}
+									icon={<LoadSaveIcon color="tertiary.50" size={smallerSize} />}
+									bg="tertiary.500"
+									flexGrow={0}
+									flexShrink={0}
+									{...props}
+								/>
+							)}
+						>
 							<Menu.Group
 								title="Lexicon"
 								_title={{fontSize: smallerSize}}
@@ -1185,6 +1204,27 @@ const Lex = () => {
 									>
 										<SaveIcon size={smallerSize} color="text.50" px={1} />
 										<Text>Save as...</Text>
+									</HStack>
+								</Menu.Item>
+								<Menu.Item onPress={() => {
+									if(!title) {
+										return doToast({
+											toast,
+											msg: "Please create a title for your Lexicon before exporting.",
+											scheme: "error",
+											placement: "top",
+											fontSize: textSize
+										});
+									}
+									setAlertOpen('howToSaveLexicon');
+								}}>
+									<HStack
+										space={4}
+										justifyContent="flex-start"
+										alignItems="center"
+									>
+										<ExportIcon size={smallerSize} color="text.50" px={1} />
+										<Text>Export Lexicon</Text>
 									</HStack>
 								</Menu.Item>
 							</Menu.Group>
