@@ -13,7 +13,15 @@ import {
 import { useLocation } from "react-router-native";
 import { useSelector } from 'react-redux';
 
-import { InfoIcon, CloseCircleIcon, DotIcon } from '../../components/icons';
+import {
+	InfoIcon,
+	CloseCircleIcon,
+	DotIcon,
+	ReorderIcon,
+	GearIcon,
+	SaveIcon,
+	AddCircleIcon
+} from '../../components/icons';
 
 const WEContextMenu = () => {
 	const sizes = useSelector(state => state.appState.sizes);
@@ -57,15 +65,16 @@ const WEContextMenu = () => {
 				setModalBody(
 					<ModalBody>
 						<P>
-							{'\t'}This is where you define groups of characters representing sounds. You can reference these
-							groups in <B>Transformations</B> and <B>Sound Changes</B> to fine-tune
-							the way your language evolves.
+							{'\t'}This is where you define groups of characters representing sounds. You can reference
+							these groups in <B>Transformations</B> and <B>Sound Changes</B> to fine-tune the way your
+							language evolves.
 						</P><P>
-							{'\t'}Click the (+) button to add a new group. When you make a group, you must give it
-							a <Em>description</Em> and a one-character <Em>label</Em>. The description is for your
-							own benefit, while the label will be used to refer to this group in the other tabs.
-							The label can be any single character except for these: <B>{"^$\\()[]{}.*+?|"}</B>.
-							The letters/characters in your group are called a <Em>run</Em>.
+							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
+							group. When you make a group, you must give it a <Em>description</Em> and a
+							one-character <Em>label</Em>. The description is for your own benefit, while the label
+							will be used to refer to this group in the other tabs. The label can be any single
+							character except for these: <B>{"^$\\()[]{}.*+?|"}</B>. The letters/characters in
+							your group are called a <Em>run</Em>.
 						</P>
 					</ModalBody>
 				);
@@ -136,11 +145,11 @@ const WEContextMenu = () => {
 							{'\t'}If you have no special rules for where in a word a replacement can happen,
 							just make a <Em>context expression</Em> that's only a single underscore.
 						</P><P>
-							{'\t'}Click the (+) button to add a new sound-change. The first sound-change in
-							the list will be run first, the second sound-change second, and so on down
-							the list. This may cause unintended effects, so you can reorganize your
-							sound-changes to avoid any such effects by using
-							the [TO-DO: reorderTwo] drag handles.
+							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
+							sound-change. The first sound-change in the list will be run first, the second
+							sound-change second, and so on down the list. This may cause unintended effects,
+							so you can reorganize your sound-changes to avoid any such effects by using
+							the <ReorderIcon color="text.50" size={dotSize} /> reordering mode.
 						</P>
 					</ModalBody>
 				);
@@ -203,10 +212,11 @@ const WEContextMenu = () => {
 							</P>
 						</VStack>
 						<P>
-							{'\t'}Click the (+) button to add a new transform. The first transform in the list will
-							be run first, the second transform second, and so on down the list. This may cause
-							unintended effects, so you can reorganize your transforms by using
-							the [TO-DO: reorderTwo] drag handles.
+							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
+							transform. The first transform in the list will be run first, the second transform
+							second, and so on down the list. This may cause unintended effects, so you can
+							reorganize your transforms by using
+							the <ReorderIcon color="text.50" size={dotSize} /> reordering mode.
 						</P>
 					</ModalBody>
 				);
@@ -219,35 +229,34 @@ const WEContextMenu = () => {
 							{'\t'}This is where the magic happens. Click the <B>Generate</B> button and the
 							evolver will process all your input words and present your output in the space below.
 						</P><P>
-							{'\t'}Click on the gear icon [TO-DO: settingsOutline] to open a
-							list of options. The first is a drop-down menu where you can select what to output.
-							The choices are <B>Output only</B>, <B>Output and Sound-Change
-							Rules</B>, <B>Input, then Output</B> and <B>Output, then
+							{'\t'}Click on the gear icon <GearIcon color="text.50" size={dotSize} /> to open a
+							list of options. They should all be self-explanatory.
+						</P><P>
+							{'\t'}There is a drop-down menu above the
+							Evolve <GenerateIcon color="text.50" size={dotSize} /> button where you can
+							select what to output. The choices are <B>Output only</B>, <B>Output with
+							Rules</B>, <B>Input ⟶ Output</B> and <B>Output, then
 							Input</B>.
 						</P><P>
 							{'\t'}Choosing <B>Output only</B> will display a simple list of evolved words.
 						</P><P>
-							{'\t'}<B>Output and Sound-Change Rules</B> displays the most complex output.
+							{'\t'}<B>Output with Rules</B> displays the most complex output.
 							For every word, it will print the input word, an arrow, and then the evolved word.
 							Below that, it will print an indented list of the <B>Sound Changes</B> that
-							evolved the word, in the format [rule] [arrow] [evolved word]. (If a sound-change
+							evolved the word, in the format [rule] ⟶ [evolved word]. (If a sound-change
 							didn't affect that word, then it will be omitted from this list.)
 						</P><P>
-							{'\t'}<B>Input, then Output</B>, as you might guess, prints a list in the format
-							[input word] [arrow] [evolved word]. <B>Output, then Input</B> is the same,
+							{'\t'}<B>Input ⟶ Output</B>, as you might guess, prints a list in the format
+							[input word] ⟶ [evolved word]. <B>Output ⟵ Input</B> is the same,
 							but the evolved word comes first.
 						</P><P>
-							{'\t'}The second option under the gear icon determines the style of arrow that is displayed
-							with the output.
-						</P><P>
-							{'\t'}Once you've evolved words, you can save them to the <B>Lexicon</B>. Click the
-							book [TO-DO: bookOutline] button and you're presented with two
-							options. <Em>Save everything</Em> will store every single evolved word for the
-							Lexicon. <Em>Choose what to save</Em> will highlight every evolved word,
-							and you can tap on a word to store it; when you're done choosing, hit
-							the save [TO-DO: saveOutline] button that appears. In either
-							case, you will need to go to the <B>Lexicon</B> to add these stored words
-							to your lexicon.
+							{'\t'}Once you've evolved words, you can save them to the <B>Lexicon</B>. Click
+							the save icon <SaveIcon color="text.50" size={dotSize} /> button and you're presented with
+							two options. <Em>Save All to Lexicon</Em> will store every single evolved word for the
+							Lexicon. <Em>Choose What to Save</Em> will highlight every evolved word, and you can tap
+							on a word to store it; when you're done choosing, hit the big green save button that
+							appears. You will be presented with a pop-up asking you which Lexicon column to save the
+							words to.
 						</P>
 					</ModalBody>
 				);

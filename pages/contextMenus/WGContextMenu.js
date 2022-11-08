@@ -14,11 +14,20 @@ import {
 import { useLocation } from "react-router-native";
 import { useSelector } from 'react-redux';
 
-import { InfoIcon, CloseCircleIcon } from '../../components/icons';
+import {
+	InfoIcon,
+	CloseCircleIcon,
+	ReorderIcon,
+	GearIcon,
+	GenerateIcon,
+	SaveIcon,
+	AddCircleIcon
+} from '../../components/icons';
 
 const WGContextMenu = () => {
 	const sizes = useSelector(state => state.appState.sizes);
 	const { pathname } = useLocation();
+	const dotSize = useBreakpointValue(sizes.xs);
 	const textSize = useBreakpointValue(sizes.sm);
 	const headerSize = useBreakpointValue(sizes.md);
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
@@ -64,12 +73,12 @@ const WGContextMenu = () => {
 							groups, while also putting <I>pbklr</I> in a third group for general consonants.
 						</P>
 						<P>
-							{'\t'}Click the (+) button to add a new character group. When you make a group, you must
-							give it a <Em>description</Em> and a one-character <Em>label</Em>. The label can be
-							any single character except for these: <B>{"^$\\()[]{}.*+?|"}</B>. The
-							description is for your own benefit, while the label will be used to refer to this
-							group in the <B>Syllables</B> tab. So you may end up with groups that look
-							like the following:
+							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
+							character group. When you make a group, you must give it a <Em>description</Em> and
+							a one-character <Em>label</Em>. The label can be any single character except for
+							these: <B>{"^$\\()[]{}.*+?|"}</B>. The description is for your own benefit, while
+							the label will be used to refer to this group in the <B>Syllables</B> tab. So you
+							may end up with groups that look like the following:
 						</P>
 						<VStack w="full" alignItems="center" space={1}>
 							<C>I=pbk</C>
@@ -159,10 +168,11 @@ const WGContextMenu = () => {
 							<Unit>ch</Unit>
 						</HStack>
 						<P>
-							{'\t'}Click the (+) button to add a new transformation. The first transformation in the
-							list will be run first, the second transformation second, and so on down the list.
-							This may cause unintended effects, so you can reorganize your transformations to
-							avoid any such effects by using the [TO-DO: reorderTwo] rearrange button.
+							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a
+							new transformation. The first transformation in the list will be run first, the
+							second transformation second, and so on down the list. This may cause unintended
+							effects, so you can reorganize your transformations to avoid any such effects by
+							using the <ReorderIcon color="text.50" size={dotSize} /> reordering mode.
 						</P>
 						<Divider />
 						<P>
@@ -219,23 +229,31 @@ const WGContextMenu = () => {
 							will replace it.
 						</P>
 						<P>
-							{'\t'}Click on the gear icon [TO-DO: settingsOutline] to open a
-							list of options. The first is a drop-down menu where you can select what to output.
-							The choices are <B>Pseudo-text</B>, <B>Wordlist</B> and <B>All
+							{'\t'}Click on the gear icon <GearIcon color="text.50" size={dotSize} /> to open a
+							list of settings. At the top, you can choose to <B>show syllable breaks</B>, which
+							will in·sert a dot be·tween eve·ry syl·la·ble in each word. While this option can be useful,
+							please note that it will break any <Em>transformations</Em> that try to work across syllable
+							boundaries. The other settings are mentioned below.
+						</P>
+						<P>
+							{'\t'}There is a drop-down menu above the
+							Generate <GenerateIcon color="text.50" size={dotSize} /> button where you can
+							select what to output. The choices are <B>Pseudo-text</B>, <B>Wordlist</B> and <B>All
 							possible syllables</B>.
 						</P>
 						<P>
 							{'\t'}The <B>pseudo-text</B> will create words and put them into sentences, making a
 							block of text you might find in a book. You can determine how many sentences are made by
-							adjusting the <B>numer of sentences</B> slider.
+							adjusting the <B>numer of sentences</B> slider in
+							the <GearIcon color="text.50" size={dotSize} /> settings.
 						</P>
 						<P>
 							{'\t'}The <B>wordlist</B> outputs a list of words devoid of context. You can choose
-							a number of options to modify this list. <B>Capitalize words</B> will capitalize
-							every word. <B>Sort output</B> will alphabetize the list, and <B>multi-column
-							layout</B> will arrange the list in multiple columns instead of one long column. At
-							the bottom, there is a <B>wordlist size</B> slider that controls how many words
-							are generated.
+							a number of options <GearIcon color="text.50" size={dotSize} /> to modify this
+							list. <B>Capitalize words</B> will capitalize every word. <B>Sort output</B> will
+							alphabetize the list, and <B>multi-column layout</B> will arrange the list in multiple
+							columns instead of one long column. At the bottom, there is a <B>wordlist size</B> slider
+							that controls how many words are generated.
 						</P>
 						<P>
 							{'\t'}<B>All possible syllables</B>, as you might guess, outputs a list of every
@@ -244,19 +262,12 @@ const WGContextMenu = () => {
 							also work on this syllable list.
 						</P>
 						<P>
-							{'\t'}At the top of the settings, you can choose to <B>show syllable breaks</B>, which
-							will in·sert a dot be·tween eve·ry syl·la·ble in each word. While this option can be useful,
-							please note that it will break any <Em>transformations</Em> that try to work across syllable
-							boundaries.
-						</P>
-						<P>
 							{'\t'}Once you've generated words, you can save them to the <B>Lexicon</B>. Click the
-							book [TO-DO: bookOutline] button and you're presented with two options. <Em>Save
-							everything</Em> will store every single generated word for the Lexicon. <Em>Choose what to
-							save</Em> will highlight every word, and you can tap on a word to store it; when you're done
-							choosing, hit the save [TO-DO: saveOutline] button that appears. In
-							either case, you will need to go to the <B>Lexicon</B> to add these stored words to
-							your lexicon.
+							save <SaveIcon color="text.50" size={dotSize} /> button and you're presented with two
+							options. <Em>Save All to Lexicon</Em> will store every single generated word for the
+							Lexicon. <Em>Choose What to Save</Em> will highlight every word, and you can tap on a
+							word to store it; when you're done choosing, hit the big green save button that appears.
+							You will be presented with a pop-up asking you which Lexicon column to save the words to.
 						</P>
 					</ModalBody>
 				);
@@ -273,24 +284,24 @@ const WGContextMenu = () => {
 						</P>
 						<Divider />
 						<P>
-							{'\t'}<B>Load Presets</B> brings up a menu where you can choose from several
+							{'\t'}<B>Load a Preset</B> brings up a menu where you can choose from several
 							pre-loaded options. The initial settings when you first start the app are
 							the <Em>Simple</Em> preset. The others are offered to give you ideas of what's
 							possible with the app. They will load <Em>character
 							groups</Em>, <Em>syllables</Em>, <Em>transformations</Em> and possibly change the
 							remaining settings on this page, too.
 						</P><P>
-							{'\t'}<B>Clear All Fields</B> clears all <Em>character
-							groups</Em>, <Em>syllables</Em> and <Em>transformations</Em>, but does not
-							affect any other settings.
+							{'\t'}<B>Reset All Fields</B> clears all <Em>character
+							groups</Em>, <Em>syllables</Em>, and <Em>transformations</Em>, and resets all settings
+							to their default value.
 						</P><P>
-							{'\t'}<B>Save/Load Custom Info</B> opens a dialog where you can save your
-							own <Em>character groups</Em>, <Em>syllables</Em>, <Em>transformations</Em> and
+							{'\t'}<B>Save Current Info</B> and <B>Load Saved Info</B> open a dialogs where you
+							can save and load your own <Em>character groups</Em>, <Em>syllables</Em>, <Em>transformations</Em> and
 							the settings on this page. This allows you to switch between your own personal
 							language settings.
 						</P>
 						<Divider />
-						<P>These options apply to word generation.</P>
+						<Em>Word-Generation Controls</Em>
 						<P>
 							{'\t'}<B>Rate of monosyllable words</B> determines how often a one-syllable
 							word is created. It's a percentage from 0% (never) to 100% (always).
@@ -327,9 +338,7 @@ const WGContextMenu = () => {
 							</HStack>
 						</VStack>
 						<Divider />
-						<P>
-							The remaining options only apply to <Em>pseudo-texts</Em>.
-						</P>
+						<Em>Pseudo-text Controls</Em>
 						<P>
 							{'\t'}<B>Capitalize sentences</B> determines if each sentence starts with a capital
 							letter.
