@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
 	Input,
 	Text,
@@ -8,7 +7,6 @@ import {
 	IconButton,
 	Button,
 	Modal,
-	useBreakpointValue,
 	useContrastText
 } from 'native-base';
 
@@ -19,6 +17,7 @@ import {
 	SaveIcon
 } from '../components/icons';
 import StandardAlert from '../components/StandardAlert';
+import getSizes from '../helpers/getSizes';
 
 
 const ModalLexiconEditingItem = ({
@@ -36,12 +35,10 @@ const ModalLexiconEditingItem = ({
 	//
 	//
 	// (has to be separate to keep State updates from flickering this all the time)
-	const sizes = useSelector(state => state.appState.sizes);
 	const [newFields, setNewFields] = useState([]);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const firstFieldRef = useRef(null);
-	const textSize = useBreakpointValue(sizes.sm);
-	const inputSize = useBreakpointValue(sizes.xs);
+	const [textSize, inputSize] = getSizes("sm", "xs");
 	const doClose = () => {
 		setNewFields([]);
 		endEditingFunc();

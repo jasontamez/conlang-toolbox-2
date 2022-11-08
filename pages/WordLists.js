@@ -14,9 +14,7 @@ import {
 	VStack,
 	useToast,
 	IconButton,
-	useBreakpointValue,
-	useContrastText,
-	Menu
+	useContrastText
 } from 'native-base';
 
 import {
@@ -26,10 +24,11 @@ import {
 	setSavingForLexicon,
 	equalityCheck
 } from '../store/wordListsSlice';
-import { CloseCircleIcon, CloseIcon, SaveIcon, SortEitherIcon } from "../components/icons";
+import { CloseCircleIcon, CloseIcon, SaveIcon } from "../components/icons";
 import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
 import { DropDown } from '../components/inputTags';
+import getSizes from '../helpers/getSizes';
 
 const WordLists = () => {
 	const {
@@ -39,13 +38,10 @@ const WordLists = () => {
 		savingForLexicon
 	} = useSelector((state) => state.wordLists, equalityCheck);
 	const columns = useSelector((state) => state.lexicon.columns);
-	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const toast = useToast();
-	const headerSize = useBreakpointValue(sizes.md);
-	const textSize= useBreakpointValue(sizes.sm);
-	const buttonTextSize = useBreakpointValue(sizes.xs);
+	const [headerSize, textSize, buttonTextSize] = getSizes("md", "sm", "xs");
 	const [addToLexicon, setAddToLexicon] = useState([]);
 	const [columnID, setColumnID] = useState(0);
 	const shown = [];

@@ -1,5 +1,4 @@
 import {
-	useBreakpointValue,
 	VStack,
 	Text,
 	HStack,
@@ -64,6 +63,7 @@ import WEPresetsModal from "./wePresetsModal";
 import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
 import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
 import { weCustomStorage } from "../../helpers/persistentInfo";
+import getSizes from "../../helpers/getSizes";
 
 const WGOutput = () => {
 	const {
@@ -135,11 +135,13 @@ const WGOutput = () => {
 	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
 	const [openSaveCustomInfoModal, setOpenSaveCustomInfoModal] = useState(false);
 
-	const textSize = useBreakpointValue(sizes.sm);
-	const descSize = useBreakpointValue(sizes.xs);
-	const headerSize = useBreakpointValue(sizes.md);
-	const largeSize = useBreakpointValue(sizes.lg);
-	const giantSize = useBreakpointValue(sizes.x2);
+	const [
+		textSize,
+		descSize,
+		headerSize,
+		largeSize,
+		giantSize
+	] = getSizes("sm", "xs", "md", "lg", "x2");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const toast = useToast();
 	const navigate = useNavigate();

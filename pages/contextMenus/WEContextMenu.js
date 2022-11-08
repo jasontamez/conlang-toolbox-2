@@ -3,15 +3,12 @@ import {
 	VStack,
 	Text,
 	Modal,
-	useBreakpointValue,
 	useContrastText,
 	HStack,
 	IconButton,
-	//Box,
 	Button
 } from 'native-base';
 import { useLocation } from "react-router-native";
-import { useSelector } from 'react-redux';
 
 import {
 	InfoIcon,
@@ -22,25 +19,20 @@ import {
 	SaveIcon,
 	AddCircleIcon
 } from '../../components/icons';
+import getSizes from '../../helpers/getSizes';
 
 const WEContextMenu = () => {
-	const sizes = useSelector(state => state.appState.sizes);
 	const { pathname } = useLocation();
-	const dotSize = useBreakpointValue(sizes.xs);
-	const textSize = useBreakpointValue(sizes.sm);
-	const headerSize = useBreakpointValue(sizes.md);
+	const [dotSize, textSize, headerSize] = getSizes("xs", "sm", "md");
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');
 	const modalRef = useRef(null);
 	const primaryContrast = useContrastText('primary.500');
 	const P = (props) => <Text fontSize={textSize} {...props} />;
-	//const I = (props) => <P bg="darker" px={0.5} >/{props.children}/</P>;
 	const Em = (props) => <P italic {...props} />;
 	const B = (props) => <P bold {...props} />;
 	const S = (props) => <P fontFamily="serif" {...props} />;
-	//const Unit = (props) => <Box borderColor="text.50" borderWidth={2} py={1} px={2}><S bold {...props} /></Box>;
-	//const C = (props) => <B textAlign="center" {...props} />;
 	const HWrap = (props) => <HStack space={1} w="full" justifyContent="center" alignItems="center" flexWrap="wrap" {...props} />;
 	const Dot = (props) => <DotIcon color="text.50" size={dotSize} mr={2} {...props} />;
 	const ModalBody = (props) => (
@@ -292,7 +284,6 @@ const WEContextMenu = () => {
 				flexShrink={0}
 				icon={<InfoIcon size={textSize} />}
 				onPress={() => {
-					//modalRef.current.scrollTo({x: 0, y: 0, animated: false});
 					setInfoModalOpen(true);
 				}}
 			/>

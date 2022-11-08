@@ -1,5 +1,4 @@
 import {
-	useBreakpointValue,
 	Text,
 	HStack,
 	Box,
@@ -43,10 +42,11 @@ import {
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
 import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
+import getSizes from "../../helpers/getSizes";
 
 const WESoundChanges = () => {
 	const { soundChanges } = useSelector(state => state.we);
-	const { sizes, disableConfirms } = useSelector(state => state.appState);
+	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [saveSoundChangeError, setSaveSoundChangeError] = useState('');
@@ -82,9 +82,7 @@ const WESoundChanges = () => {
 	const refAddException = useRef(null);
 	const refAddDesc = useRef(null);
 
-	const fabSize = useBreakpointValue(sizes.md);
-	const textSize = useBreakpointValue(sizes.sm);
-	const smallerSize = useBreakpointValue(sizes.xs);
+	const [fabSize, textSize, smallerSize] = getSizes("md", "sm", "xs");
 	const toast = useToast();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");

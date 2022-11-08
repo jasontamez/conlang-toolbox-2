@@ -16,16 +16,16 @@ import {
 	Modal,
 	Divider,
 	IconButton,
-	ZStack,
-	useBreakpointValue
+	ZStack
 } from 'native-base';
 
 import * as Icons from '../components/icons';
 import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
+import getSizes from '../helpers/getSizes';
 
 const MenuModal = () => {
-	const { sizes, menuToggleName } = useSelector(
+	const { menuToggleName } = useSelector(
 		(state) => state.appState,
 		shallowEqual
 	);
@@ -34,9 +34,7 @@ const MenuModal = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigator = useNavigate();
-	const menuSize = useBreakpointValue(sizes.sm);
-	const subMenuSize = useBreakpointValue(sizes.xs);
-	const headerSize = useBreakpointValue(sizes.md);
+	const [menuSize, subMenuSize, headerSize] = getSizes("sm", "xs", "md")
 	const lineHeight = {
 		"2xs": "2xs",
 		xs: "2xs",

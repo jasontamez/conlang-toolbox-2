@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-	useBreakpointValue,
 	Text,
 	HStack,
 	Box,
@@ -34,6 +33,7 @@ import {
 	setSyllables
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
+import getSizes from "../../helpers/getSizes";
 
 
 const WGSyllables = () => {
@@ -46,7 +46,6 @@ const WGSyllables = () => {
 		wordMiddle,
 		wordFinal
 	} = useSelector(state => state.wg, equalityCheck);
-	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("");
@@ -56,9 +55,7 @@ const WGSyllables = () => {
 	const [modalOverrideValue, setModalOverrideValue] = useState(0);
 	const [modalTempInfo, setModalTempInfo] = useState("");
 	const primaryContrast = useContrastText('primary.500');
-	const headerSize = useBreakpointValue(sizes.md);
-	const textSize = useBreakpointValue(sizes.sm);
-	const descSize = useBreakpointValue(sizes.xs);
+	const [headerSize, textSize, descSize] = getSizes("md", "sm", "xs");
 	const oneBox = [
 		"singleWord"
 	];

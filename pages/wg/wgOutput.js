@@ -1,5 +1,4 @@
 import {
-	useBreakpointValue,
 	ScrollView,
 	VStack,
 	Text,
@@ -65,6 +64,7 @@ import StandardAlert from "../../components/StandardAlert";
 import { DropDown, SliderWithValueDisplay, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
+import getSizes from "../../helpers/getSizes";
 
 const WGOutput = () => {
 	const {
@@ -95,7 +95,6 @@ const WGOutput = () => {
 		wordsPerWordlist
 	} = useSelector(state => state.wg, equalityCheck);
 	const columns = useSelector(state => state.lexicon.columns);
-	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const [alertCannotGenerate, setAlertCannotGenerate] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
@@ -117,11 +116,13 @@ const WGOutput = () => {
 	const [transformsWithRegExps, setTransformsWithRegExps] = useState([]);
 
 	const [openSettings, setOpenSettings] = useState(false);
-	const textSize = useBreakpointValue(sizes.sm);
-	const descSize = useBreakpointValue(sizes.xs);
-	const headerSize = useBreakpointValue(sizes.md);
-	const largeSize = useBreakpointValue(sizes.lg);
-	const giantSize = useBreakpointValue(sizes.x2);
+	const [
+		textSize,
+		descSize,
+		headerSize,
+		largeSize,
+		giantSize
+	] = getSizes("sm", "xs", "md", "lg", "x2");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();

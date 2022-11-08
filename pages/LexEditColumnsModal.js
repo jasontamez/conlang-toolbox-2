@@ -7,7 +7,6 @@ import {
 	Button,
 	Text,
 	Modal,
-	useBreakpointValue,
 	useContrastText
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,18 +21,18 @@ import {
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 import { MultiAlert } from '../components/StandardAlert';
+import getSizes from '../helpers/getSizes';
 
 const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
-	const {sizes, disableConfirms} = useSelector(state => state.appState);
+	const {disableConfirms} = useSelector(state => state.appState);
 	const [editing, setEditing] = useState(false);
 	const [newColumns, setNewColumns] = useState([]);
 	const [columnLabelsToBeDeleted, setColumnLabelsToBeDeleted] = useState([]);
 	const [alertOpen, setAlertOpen] = useState('');
 	const [savedIndex, setSavedIndex] = useState(null);
 	const dispatch = useDispatch();
-	const smallerSize = useBreakpointValue(sizes.sm);
-	const textSize = useBreakpointValue(sizes.md);
+	const [smallerSize, textSize] = getSizes("sm", "md");
 	const primaryContrast = useContrastText('primary.500');
 	useEffect(() => {
 		// Load column info when mounted or when columns change.

@@ -11,7 +11,6 @@ import {
 	Slider,
 	Button,
 	useToast,
-	useBreakpointValue,
 	useContrastText,
 	IconButton
 } from 'native-base';
@@ -28,6 +27,7 @@ import {
 	consts
 } from "../../store/lexiconSlice";
 import doToast from '../../helpers/toast';
+import getSizes from '../../helpers/getSizes';
 
 const LexiconContextMenu = () => {
 	const {
@@ -36,13 +36,11 @@ const LexiconContextMenu = () => {
 		maxColumns,
 		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, shallowEqual);
-	const { sizes } = useSelector(state => state.appState);
 	const { absoluteMaxColumns } = consts;
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const primaryContrast = useContrastText('primary.500');
-	const textSize = useBreakpointValue(sizes.md);
-	const smallerSize = useBreakpointValue(sizes.sm);
+	const [textSize, smallerSize] = getSizes("md", "sm");
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);

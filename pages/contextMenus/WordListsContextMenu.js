@@ -8,21 +8,18 @@ import {
 	Divider,
 	Modal,
 	Button,
-	useBreakpointValue,
 	useContrastText,
 	HStack
 } from 'native-base';
 import { CloseCircleIcon, DotsIcon, HelpIcon } from '../../components/icons';
 import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
+import getSizes from "../../helpers/getSizes";
 
 const WordListsContextMenu = () => {
 	const centerTheDisplayedWords =
 		useSelector((state) => state.wordLists.centerTheDisplayedWords);
-	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
-	const menuSize = useBreakpointValue(sizes.xs);
-	const textSize = useBreakpointValue(sizes.sm);
-	const headerSize = useBreakpointValue(sizes.md);
+	const [menuSize, textSize, headerSize] = getSizes("xs", "sm", "md");
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [centerMenuOption, setCenterMenuOption] =
 		useState(centerTheDisplayedWords);

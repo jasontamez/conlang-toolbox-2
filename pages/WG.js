@@ -1,7 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
 import { useWindowDimensions } from 'react-native';
-import { useSelector } from 'react-redux';
 import {
 	VStack,
 	Box,
@@ -20,13 +19,12 @@ import {
 	WGSyllablesIcon
 } from '../components/icons';
 import { fontSizesInPx } from '../store/appStateSlice';
+import getSizes from '../helpers/getSizes';
 
 const WG = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const sizes = useSelector(state => state.appState.sizes);
-	const buttonTextSize = useBreakpointValue(sizes.xs);
-	const iconSize = useBreakpointValue(sizes.sm);
+	const [buttonTextSize, iconSize] = getSizes("xs", "sm");
 	const lineHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2;
 	const pathname = location.pathname;
 	const w = (useWindowDimensions().width / 5) - 10;

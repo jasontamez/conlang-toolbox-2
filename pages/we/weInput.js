@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
 	Text,
 	HStack,
-	useBreakpointValue,
 	Button,
 	VStack,
 	useContrastText,
@@ -23,6 +22,7 @@ import {
 } from "../../components/icons";
 import StandardAlert from "../../components/StandardAlert";
 import debounce from "../../helpers/debounce";
+import getSizes from "../../helpers/getSizes";
 
 const WEInput = () => {
 	const { input } = useSelector(state => state.we);
@@ -36,9 +36,7 @@ const WEInput = () => {
 	const [column, setColumn] = useState(null);
 	const [cols, setCols] = useState(null);
 	const [importDisabled, setImportDisabled] = useState(false);
-	const buttonSize = useBreakpointValue(sizes.lg);
-	const textSize = useBreakpointValue(sizes.md);
-	const inputSize = useBreakpointValue(sizes.sm);
+	const [buttonSize, textSize, inputSize] = getSizes("lg", "md", "sm");
 	const warningContrast = useContrastText("warning.500");
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");

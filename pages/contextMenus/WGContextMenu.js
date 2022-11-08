@@ -3,7 +3,6 @@ import {
 	VStack,
 	Text,
 	Modal,
-	useBreakpointValue,
 	useContrastText,
 	HStack,
 	IconButton,
@@ -12,7 +11,6 @@ import {
 	Button
 } from 'native-base';
 import { useLocation } from "react-router-native";
-import { useSelector } from 'react-redux';
 
 import {
 	InfoIcon,
@@ -23,13 +21,11 @@ import {
 	SaveIcon,
 	AddCircleIcon
 } from '../../components/icons';
+import getSizes from '../../helpers/getSizes';
 
 const WGContextMenu = () => {
-	const sizes = useSelector(state => state.appState.sizes);
 	const { pathname } = useLocation();
-	const dotSize = useBreakpointValue(sizes.xs);
-	const textSize = useBreakpointValue(sizes.sm);
-	const headerSize = useBreakpointValue(sizes.md);
+	const [dotSize, textSize, headerSize] = getSizes("xs", "sm", "md")
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');

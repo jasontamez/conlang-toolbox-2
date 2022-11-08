@@ -10,7 +10,6 @@ import {
 	ScrollView,
 	Text as Tx,
 	VStack,
-	useBreakpointValue,
 	Center
 } from 'native-base';
 
@@ -25,17 +24,15 @@ import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from "../../c
 import debounce from "../../helpers/debounce";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import FullPageModal from "../../components/FullBodyModal";
+import getSizes from "../../helpers/getSizes";
 
 const ParseMSJSON = (props) => {
 	const [modalState, setModal] = useState('');
 	const synBool = useSelector((state) => state.morphoSyntax.bool);
 	const synNum = useSelector((state) => state.morphoSyntax.num);
 	const synText = useSelector((state) => state.morphoSyntax.text);
-	const sizes = useSelector(state => state.appState.sizes);
 	const { width } = useWindowDimensions();
-	const dotSize = useBreakpointValue(sizes.xs);
-	const smallerSize = useBreakpointValue(sizes.sm);
-	const textSize = useBreakpointValue(sizes.md);
+	const [dotSize, smallerSize, textSize, lgSize, xlSize, x2Size] = getSizes("xs", "sm", "md", "lg", "xl", "x2");
 	const lineHeights = {
 		xs: "xs",
 		sm: "xs",
@@ -71,9 +68,9 @@ const ParseMSJSON = (props) => {
 	const { page } = props;
 	const doc = ms[page];
 	const headings = {
-		0: useBreakpointValue(sizes.x2),
-		1: useBreakpointValue(sizes.xl),
-		2: useBreakpointValue(sizes.lg),
+		0: x2Size,
+		1: xlSize,
+		2: lgSize,
 		3: textSize,
 		4: smallerSize
 	};

@@ -4,7 +4,6 @@ import {
 	HStack,
 	Box,
 	ScrollView,
-	useBreakpointValue,
 	Button,
 	useToast
 } from "native-base";
@@ -42,6 +41,7 @@ import WGPresetsModal from "./wgPresetsModal";
 import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
 import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
 import { wgCustomStorage } from "../../helpers/persistentInfo";
+import getSizes from "../../helpers/getSizes";
 
 const WGSettings = () => {
 	const {
@@ -67,7 +67,7 @@ const WGSettings = () => {
 		storedCustomInfo,
 		storedCustomIDs
 	} = useSelector(state => state.wg);
-	const { disableConfirms, sizes } = useSelector(state => state.appState);
+	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
 	const [openPresetModal, setOpenPresetModal] = useState(false);
@@ -83,9 +83,7 @@ const WGSettings = () => {
 		px: 2,
 		space: 1.5
 	};
-	const buttonSize = useBreakpointValue(sizes.md);
-	const textSize = useBreakpointValue(sizes.sm);
-	const inputSize = useBreakpointValue(sizes.xs);
+	const [buttonSize, textSize, inputSize] = getSizes("md", "sm", "xs");
 	const maybeClearEverything = () => {
 		if(disableConfirms) {
 			doClearEveything();
