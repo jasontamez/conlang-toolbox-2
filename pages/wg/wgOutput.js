@@ -38,6 +38,7 @@ import ReAnimated, {
 } from 'react-native-reanimated';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { FlatGrid } from 'react-native-super-grid';
+import { setStringAsync as setClipboard } from 'expo-clipboard';
 
 import {
 	CancelIcon,
@@ -230,6 +231,39 @@ const WGOutput = () => {
 		return <Item text={text} raw={rawWord} onPress={onPressWord} saved={saved} />;
 	});
 
+
+	// // //
+	// Clipboard
+	// // //
+	const copyAllToClipboard = () => {
+		let final = "";
+		if(displayedText) {
+			final = displayedText.map(dt => dt[0]).join(" ");
+		} else if(displayedWords.length > 0) {
+			final = displayedWords.map(dw => dw.text).join("\n");
+		} else {
+			// Nothing to copy
+			return doToast({
+				toast,
+				msg: "Nothing to copy!",
+				position: "top",
+				scheme: "error"
+			});
+		}
+		// Add to clipboard
+		setClipboard(final).then(() => {
+			// success toast
+			doToast({
+				toast,
+				msg: "Output has been copied to the clipboard",
+				position: "top",
+				scheme: "success"
+			});
+		}).catch((err) => {
+			console.log("Copy to clipboard error");
+			console.log(err);
+		});
+	};
 
 	// // //
 	// Generate Output!
@@ -1125,10 +1159,11 @@ const WGOutput = () => {
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
-						icon={/* TO-DO: Copy code */ <CopyIcon size={textSize} />}
+						icon={<CopyIcon size={textSize} />}
 						px={3.5}
 						py={1}
 						mr={2}
+						onPress={copyAllToClipboard}
 					/>
 					<Menu
 						placement="bottom right"

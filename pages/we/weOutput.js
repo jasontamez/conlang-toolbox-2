@@ -41,6 +41,7 @@ import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharac
 import { FlatGrid } from 'react-native-super-grid';
 import escapeRegexp from "escape-string-regexp";
 import { v4 as uuidv4 } from 'uuid';
+import { setStringAsync as setClipboard } from 'expo-clipboard';
 
 import {
 	CancelIcon,
@@ -149,6 +150,47 @@ const WGOutput = () => {
 	const arrowLR = "⟶";
 	const arrowRL = "⟵";
 	const { width } = useWindowDimensions();
+
+	const copyAllToClipboard = () => {
+		const info = [];
+		if(evolvedWords) {
+			info.push(...evolvedWords.map(ew => ew[0]));
+		} else if(originalEvolvedRulesWords) {
+			originalEvolvedRulesWords.forEach(oerw => {
+				const [o, e, i, r] = oerw;
+				info.push(`${o} ${arrowLR} ${e}`);
+				r.forEach(rr => {
+					const [rule, newWord] = rr;
+					info.push("\t" + `${rule} ${arrowLR} ${newWord}`);
+				});
+			});
+		} else if(evolvedOriginalWords) {
+			info.push(...evolvedOriginalWords.map(eow => `${eow[0]} ${arrowRL} ${eow[1]}`));
+		} else if(originalEvolvedWords) {
+			info.push(...originalEvolvedWords.map(eow => `${eow[0]} ${arrowLR} ${eow[1]}`));
+		} else {
+			// Nothing to copy
+			return doToast({
+				toast,
+				msg: "Nothing to copy!",
+				position: "top",
+				scheme: "error"
+			});
+		}
+		// Add to clipboard
+		setClipboard(info.join("\n")).then(() => {
+			// success toast
+			doToast({
+				toast,
+				msg: "Output has been copied to the clipboard",
+				position: "top",
+				scheme: "success"
+			});
+		}).catch((err) => {
+			console.log("Copy to clipboard error");
+			console.log(err);
+		});
+	};
 
 	const toggleSaveSomeToLex = () => {
 		let scheme = "success";
@@ -1433,10 +1475,11 @@ const WGOutput = () => {
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
-						icon={/* TO-DO: Copy code */ <CopyIcon size={textSize} />}
+						icon={<CopyIcon size={textSize} />}
 						px={3.5}
 						py={1}
 						mr={2}
+						onPress={copyAllToClipboard}
 					/>
 					<Menu
 						placement="bottom right"
