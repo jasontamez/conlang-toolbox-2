@@ -1048,11 +1048,13 @@ const WGOutput = () => {
 							flexWrap="wrap"
 							key={`${original}->${evolved}:${i}:${rule}/${newWord}`}
 						>
-							<Box flexShrink={0} flexGrow={0} pl={1.5}>
+							<Box justifyContent="center" flexGrow={0} flexShrink={3} pl={1.5}>
 								<Text textAlign="right" fontSize={textSize}>{rule}</Text>
 							</Box>
-							<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
-							<Box flex={1}>
+							<Box justifyContent="center" flexShrink={0} flexGrow={0}>
+								<Text textAlign="center" fontSize={textSize}>{arrowLR}</Text>
+							</Box>
+							<Box justifyContent="center" flexGrow={1} flexShrink={1}>	
 								<Text fontSize={textSize}>{newWord}</Text>
 							</Box>
 						</HStack>
