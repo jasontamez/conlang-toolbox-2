@@ -31,7 +31,8 @@ const LoadCustomInfoModal = ({
 	loadState,
 	setStoredCustomInfo,
 	storedCustomIDs,
-	storedCustomInfo
+	storedCustomInfo,
+	overwriteMessage
 }) => {
 	const dispatch = useDispatch();
 	const { disableConfirms } = useSelector(state => state.appState);
@@ -127,7 +128,7 @@ const LoadCustomInfoModal = ({
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}
 			setAlertOpen={setOverwriteWarningOpen}
-			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite ${loadOptions ? overwriteMessage[loadOptions] : overwriteMessage}.`}
+			bodyContent={`Are you sure you want to load "${customLabelChosen}"? This will overwrite ${overwriteMessage}.`}
 			continueText="Yes"
 			continueFunc={() => {
 				setOverwriteWarningOpen(false);
