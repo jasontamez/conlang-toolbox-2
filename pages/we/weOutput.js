@@ -81,7 +81,6 @@ const WGOutput = () => {
 		}
 	} = useSelector(state => state.we);
 	const columns = useSelector(state => state.lexicon.columns);
-	const sizes = useSelector(state => state.appState.sizes);
 	const dispatch = useDispatch();
 	const [alertCannotEvolve, setAlertCannotEvolve] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
@@ -159,11 +158,11 @@ const WGOutput = () => {
 			info.push(...evolvedWords.map(ew => ew[0]));
 		} else if(originalEvolvedRulesWords) {
 			originalEvolvedRulesWords.forEach(oerw => {
-				const [o, e, i, r] = oerw;
+				const [o, e, i, se, r] = oerw;
 				info.push(`${o} ${arrowLR} ${e}`);
 				r.forEach(rr => {
-					const [rule, newWord] = rr;
-					info.push("\t" + `${rule} ${arrowLR} ${newWord}`);
+					const [newWord, search, arrow, replace, ...others] = rr;
+					info.push("\t" + `${search}${arrow}${replace}${others.join("")} ${arrowLR} ${newWord}`);
 				});
 			});
 		} else if(evolvedOriginalWords) {
@@ -588,7 +587,8 @@ const WGOutput = () => {
 				// [original, word, ...[[rule, new word]...]]
 				changedWords.forEach((unit, i) => {
 					const [original, evolved, rules] = unit;
-					output.push([original, evolved, i, rules]);
+					const sizeEstimate = determineColumnSize(rules.map(r => r[0]));
+					output.push([original, evolved, i, sizeEstimate, rules]);
 					changed.push(evolved);
 				});
 				setOriginalEvolvedRulesWords(output);
@@ -832,7 +832,7 @@ const WGOutput = () => {
 				}
 				previous !== word
 					&& outputStyle === "rules"
-					&& rulesThatApplied.push([`${beginning}➜${ending} / ${context}` + (exception ? " ! " + exception : ""), word]);
+					&& rulesThatApplied.push([word, beginning, '➜', ending, ' / ', context, ...(exception ? [' ! ', exception] : [])]);
 			});
 			// Loop over the transforms again.
 			transforms.forEach((tr) => {
@@ -938,7 +938,7 @@ const WGOutput = () => {
 			</ReAnimated.View>
 		);
 	});
-	const Simple = memo((props) => <Text fontSize={textSize} lineHeight={headerSize} {...props} />);
+	const Simple = memo((props) => <Text selectable fontSize={textSize} lineHeight={headerSize} {...props} />);
 	const renderOriginalEvolved = useCallback(({item}) => {
 		// originalEvolvedWords (flat list)
 		const [a, b, i] = item;
@@ -961,11 +961,11 @@ const WGOutput = () => {
 					flexShrink: 0,
 					flexBasis: longestEvolvedWordSizeEstimate
 				}}>
-					<Text textAlign="right" fontSize={textSize}>{original}</Text>
+					<Text selectable textAlign="right" fontSize={textSize}>{original}</Text>
 				</Box>
 				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
 				<Box flex={1}>
-					<Text textAlign="left" fontSize={textSize}>{evolved}</Text>
+					<Text selectable textAlign="left" fontSize={textSize}>{evolved}</Text>
 				</Box>
 			</HStack>
 		);
@@ -992,18 +992,18 @@ const WGOutput = () => {
 					flexShrink: 0,
 					flexBasis: longestEvolvedWordSizeEstimate
 				}} flexShrink={0} flexGrow={0}>
-					<Text textAlign="right" fontSize={textSize}>{evolved}</Text>
+					<Text selectable textAlign="right" fontSize={textSize}>{evolved}</Text>
 				</Box>
 				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowRL}</Simple>
 				<Box flex={1}>
-					<Text textAlign="left" fontSize={textSize}>{original}</Text>
+					<Text selectable textAlign="left" fontSize={textSize}>{original}</Text>
 				</Box>
 			</HStack>
 		);
 	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
 	const renderOriginalEvolvedRules = useCallback(({item}) => {
 		// originalEvolvedRulesWords (flat list)
-		const [original, evolved, i, rules] = item;
+		const [original, evolved, i, sizeEstimate, rules] = item;
 		const evolvedOutput = savingToLexicon ?
 			<SaveableElement text={evolved} index={i} wordsToSave={wordsToSave} />
 		:
@@ -1014,7 +1014,7 @@ const WGOutput = () => {
 				justifyContent="flex-start"
 				alignItems="flex-start"
 				py={2}
-				w="full"
+				style={{width}}
 			>
 				<HStack
 					justifyContent="flex-start"
@@ -1035,27 +1035,45 @@ const WGOutput = () => {
 					<Box flex={1}>{evolvedOutput}</Box>
 				</HStack>
 				{rules.map(r => {
-					const [rule, newWord] = r;
+					const [newWord, search, arrow, replace, ...others] = r;
+					const etc = others.join("");
+					const key = `${original}->${evolved}:${i}:${search}${arrow}${replace}${etc}/${newWord}`;
+					const maxWidth = width - longestOriginalWordSizeEstimate - 32;
+					const innerMaxWidth = maxWidth - (emSize * 3) - sizeEstimate - 3 - 3 - 3;
 					return (
 						<HStack
+							key={key}
 							style={{
-								paddingLeft: longestOriginalWordSizeEstimate
+								marginLeft: longestOriginalWordSizeEstimate,
+								maxWidth
 							}}
-							justifyContent="flex-start"
-							alignContent="center"
-							space={1.5}
-							w="full"
-							flexWrap="wrap"
-							key={`${original}->${evolved}:${i}:${rule}/${newWord}`}
 						>
-							<Box justifyContent="center" flexGrow={0} flexShrink={3} pl={1.5}>
-								<Text textAlign="right" fontSize={textSize}>{rule}</Text>
+							<HStack
+								flexWrap="wrap"
+								ml={1.5}
+								style={{
+									maxWidth: innerMaxWidth
+								}}
+							>
+								<Text selectable textAlign="center" fontSize={textSize}>{search}{arrow}{replace}</Text>
+								{others.map((ar, i) => (
+									<Text selectable key={`${key} :: ${i}`} textAlign="center" fontSize={textSize}>{ar}</Text>
+								))}
+							</HStack>
+							<Box
+								justifyContent="center"
+								flexShrink={0}
+								flexGrow={0}
+								style={{width: emSize * 2}}
+								mx={1.5}
+							>
+								<Text selectable textAlign="center" fontSize={textSize}>{arrowLR}</Text>
 							</Box>
-							<Box justifyContent="center" flexShrink={0} flexGrow={0}>
-								<Text textAlign="center" fontSize={textSize}>{arrowLR}</Text>
-							</Box>
-							<Box justifyContent="center" flexGrow={1} flexShrink={1}>	
-								<Text fontSize={textSize}>{newWord}</Text>
+							<Box
+								justifyContent="center"
+								style={{width: sizeEstimate}}
+							>
+								<Text selectable fontSize={textSize}>{newWord}</Text>
 							</Box>
 						</HStack>
 					);
