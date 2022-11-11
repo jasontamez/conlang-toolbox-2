@@ -171,7 +171,7 @@ const SaveCustomInfoModal = ({
 							color={primaryContrast}
 							fontSize={textSize}
 							bold
-						>Save Preset</Text>
+						>Save Custom Info</Text>
 						<HStack justifyContent="flex-end" space={2}>
 							<ExtraChars
 								color={primaryContrast}

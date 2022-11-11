@@ -87,7 +87,6 @@ const WGOutput = () => {
 	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
-	const [longestOriginalWordSizeEstimate, setLongestOriginalWordSizeEstimate] = useState(undefined);
 	const [longestEvolvedWordSizeEstimate, setLongestEvolvedWordSizeEstimate] = useState(undefined);
 	const outputStyles = [
 		{
@@ -587,8 +586,7 @@ const WGOutput = () => {
 				// [original, word, ...[[rule, new word]...]]
 				changedWords.forEach((unit, i) => {
 					const [original, evolved, rules] = unit;
-					const sizeEstimate = determineColumnSize(rules.map(r => r[0]));
-					output.push([original, evolved, i, sizeEstimate, rules]);
+					output.push([original, evolved, i, rules]);
 					changed.push(evolved);
 				});
 				setOriginalEvolvedRulesWords(output);
@@ -598,9 +596,8 @@ const WGOutput = () => {
 		}
 		const inputLength = determineColumnSize(rawInput);
 		const outputLength = determineColumnSize(changed);
-		setLongestOriginalWordSizeEstimate(inputLength);
-		setLongestEvolvedWordSizeEstimate(outputLength);
-		setLongestWordSizeEstimate(Math.max(inputLength, outputLength));
+		setLongestEvolvedWordSizeEstimate(Math.min(width / 2, outputLength));
+		setLongestWordSizeEstimate(Math.min(width / 2, Math.max(inputLength, outputLength)));
 		let testing = {};
 		setSaveableWords(changed.filter(word => {
 			if(testing[word]) {
@@ -801,7 +798,9 @@ const WGOutput = () => {
 								let rep = ending;
 								let c = m.length;
 								while(c >= 1) {
-									rep = rep.replaceAll("$" + c.toString(), m[c]);
+									// replaceAll is not a function??
+									//rep = rep.replaceAll("$" + c.toString(), m[c]);
+									rep = rep.split(`\$${c}`).join(m[c]);
 									c--;
 								}
 								word = pre + rep + post;
@@ -881,9 +880,17 @@ const WGOutput = () => {
 	const determineColumnSize = (words) => {
 		// Find length of longest word
 		// (this will not be entirely correct if the word has two-character glyphs, but that's ok)
-		const longestWord = Math.max(...words.map(w => w.length));
-		// Estimate size of the longest word, erring on the larger size
-		return emSize * longestWord;
+		const longestWord = words.length && Math.max(...words.map(w => w.length));
+		// Estimate size of the longest word
+		// The longer the word, the more likely it is that any particular
+		//    character will be shorter than the max size
+		let size = 0;
+		for(let x = 0; x < longestWord; x++) {
+			const percentage = Math.max(0.25, (100 - (x * 3.5)) / 100);
+			size += (emSize * percentage);
+		}
+		console.log(`${size} vs old size of ${emSize}*${longestWord} = ${emSize * longestWord}`);
+		return size;
 		//setDisplayedColumns(Math.max(1, Math.floor(viewport / longestWordLength)));
 	};
 
@@ -1003,7 +1010,7 @@ const WGOutput = () => {
 	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
 	const renderOriginalEvolvedRules = useCallback(({item}) => {
 		// originalEvolvedRulesWords (flat list)
-		const [original, evolved, i, sizeEstimate, rules] = item;
+		const [original, evolved, i, rules] = item;
 		const evolvedOutput = savingToLexicon ?
 			<SaveableElement text={evolved} index={i} wordsToSave={wordsToSave} />
 		:
@@ -1027,9 +1034,8 @@ const WGOutput = () => {
 					<Box style={{
 						flexGrow: 0,
 						flexShrink: 0,
-						flexBasis: longestOriginalWordSizeEstimate
 					}}>
-						<Simple textAlign="right" lineHeight={headerSize}>{original}</Simple>
+						<Simple textAlign="left" lineHeight={headerSize}>{original}</Simple>
 					</Box>
 					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
 					<Box flex={1}>{evolvedOutput}</Box>
@@ -1038,41 +1044,29 @@ const WGOutput = () => {
 					const [newWord, search, arrow, replace, ...others] = r;
 					const etc = others.join("");
 					const key = `${original}->${evolved}:${i}:${search}${arrow}${replace}${etc}/${newWord}`;
-					const maxWidth = width - longestOriginalWordSizeEstimate - 32;
-					const innerMaxWidth = maxWidth - (emSize * 3) - sizeEstimate - 3 - 3 - 3;
 					return (
 						<HStack
 							key={key}
-							style={{
-								marginLeft: longestOriginalWordSizeEstimate,
-								maxWidth
-							}}
+							ml={5}
+							flexWrap="wrap"
 						>
 							<HStack
 								flexWrap="wrap"
 								ml={1.5}
-								style={{
-									maxWidth: innerMaxWidth
-								}}
 							>
-								<Text selectable textAlign="center" fontSize={textSize}>{search}{arrow}{replace}</Text>
+								<Text selectable textAlign="left" fontSize={textSize}>{search}{arrow}{replace}</Text>
 								{others.map((ar, i) => (
-									<Text selectable key={`${key} :: ${i}`} textAlign="center" fontSize={textSize}>{ar}</Text>
+									<Text selectable key={`${key} :: ${i}`} textAlign="left" fontSize={textSize}>{ar}</Text>
 								))}
 							</HStack>
 							<Box
-								justifyContent="center"
 								flexShrink={0}
 								flexGrow={0}
-								style={{width: emSize * 2}}
 								mx={1.5}
 							>
 								<Text selectable textAlign="center" fontSize={textSize}>{arrowLR}</Text>
 							</Box>
-							<Box
-								justifyContent="center"
-								style={{width: sizeEstimate}}
-							>
+							<Box>
 								<Text selectable fontSize={textSize}>{newWord}</Text>
 							</Box>
 						</HStack>
@@ -1080,7 +1074,7 @@ const WGOutput = () => {
 				})}
 			</VStack>
 		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestOriginalWordSizeEstimate]);
+	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
 	const renderEvolved = useCallback(({item}) => {
 		// evolvedWords (grid)
 		const [word, i] = item;

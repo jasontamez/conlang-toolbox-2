@@ -688,9 +688,6 @@ export const DropDown = (props) => {
 						_stack={{
 							justifyContent: "space-between",
 							alignItems: "center",
-							flexGrow: 1,
-							flexShrink: 1,
-							flexBasis: 0,
 							space: 0,
 							style: {
 								overflow: "hidden"
@@ -784,9 +781,6 @@ export const DropDownMenu = (props) => {
 						_stack={{
 							justifyContent: "space-between",
 							alignItems: "center",
-							flexGrow: 1,
-							flexShrink: 1,
-							flexBasis: 0,
 							space: 0,
 							style: {
 								overflow: "hidden"

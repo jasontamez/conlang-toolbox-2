@@ -1027,6 +1027,8 @@ const Lex = () => {
 						mx={3}
 						style={{maxWidth: width - 110 - 36}}
 						flexWrap="wrap"
+						flexGrow={0}
+						flexShrink={1}
 					>
 						<DropDown
 							placement="top right"
@@ -1156,7 +1158,7 @@ const Lex = () => {
 										justifyContent="flex-start"
 										alignItems="center"
 									>
-										<RemoveCircleIcon size={smallerSize} color="text.50" px={1} />
+										<RemoveCircleIcon size={smallerSize} color="text.50" />
 										<Text>Clear Lexicon</Text>
 									</HStack>
 								</Menu.Item>
@@ -1169,7 +1171,7 @@ const Lex = () => {
 										justifyContent="flex-start"
 										alignItems="center"
 									>
-										<AddCircleIcon size={smallerSize} color="text.50" px={1} />
+										<AddCircleIcon size={smallerSize} color="text.50" />
 										<Text>Load Lexicon</Text>
 									</HStack>
 								</Menu.Item>
@@ -1181,7 +1183,7 @@ const Lex = () => {
 										justifyContent="flex-start"
 										alignItems="center"
 									>
-										<SaveIcon size={smallerSize} color="text.50" px={1} />
+										<SaveIcon size={smallerSize} color="text.50"  />
 										<Text>Save Lexicon</Text>
 									</HStack>
 								</Menu.Item>
@@ -1202,7 +1204,7 @@ const Lex = () => {
 										justifyContent="flex-start"
 										alignItems="center"
 									>
-										<SaveIcon size={smallerSize} color="text.50" px={1} />
+										<SaveIcon size={smallerSize} color="text.50" />
 										<Text>Save as...</Text>
 									</HStack>
 								</Menu.Item>
@@ -1223,7 +1225,7 @@ const Lex = () => {
 										justifyContent="flex-start"
 										alignItems="center"
 									>
-										<ExportIcon size={smallerSize} color="text.50" px={1} />
+										<ExportIcon size={smallerSize} color="text.50" />
 										<Text>Export Lexicon</Text>
 									</HStack>
 								</Menu.Item>

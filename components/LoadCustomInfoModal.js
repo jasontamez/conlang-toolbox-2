@@ -169,7 +169,7 @@ const LoadCustomInfoModal = ({
 							color={primaryContrast}
 							fontSize={textSize}
 							bold
-						>Load Preset</Text>
+						>Load Saved Info</Text>
 						<HStack justifyContent="flex-end" space={2}>
 							<ExtraChars
 								color={primaryContrast}

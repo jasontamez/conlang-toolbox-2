@@ -68,6 +68,9 @@ const LexiconColumnReorderer = ({doClose}) => {
 		dispatch(modifyLexiconColumns(newColumns));
 		doClose();
 	};
+	const headerHeight = lineHeight * 1.25;
+	const footerHeight = lineHeight * 1.5;
+	const rowHeight = lineHeight * 1.5;
 	const renderItem = useCallback(({item, drag, isActive}) => {
 		return (
 			<Pressable onPressIn={drag}>
@@ -76,35 +79,36 @@ const LexiconColumnReorderer = ({doClose}) => {
 					justifyContent="space-evenly"
 					p={1}
 					bg={isActive ? "main.700" : "main.800"}
-					style={{height: lineHeight + 8}}
+					style={{height: rowHeight}}
 				>
 					<DragHandleIcon
 						size={textSize}
 						flexGrow={0}
 						flexShrink={0}
 					/>
-					<Box
+					<HStack
 						py={1}
 						px={2}
 						bg="lighter"
 						flex={1}
 						mr={1}
+						alignItems="center"
+						justifyContent="flex-start"
 					>
 						<Text
 							color="text.50"
 							fontSize={textSize}
 							isTruncated={true}
-							style={{lineHeight: lineHeight - 4}}
+							lineHeight={lineHeight}
 						>{item.label}</Text>
-					</Box>
+					</HStack>
 				</HStack>
 			</Pressable>
 		);
-	}, [lineHeight, textSize]);
+	}, [lineHeight, rowHeight, textSize]);
 	const primaryContrast = useContrastText('primary.500');
-	const modalHeight = ((lineHeight + 8) * newColumns.length) + 10 // drag area
-		+ lineHeight + 4 // header
-		+ lineHeight + 10; // footer
+	const modalHeight = (rowHeight * newColumns.length) + 10 // drag area
+		+ headerHeight + footerHeight;
 	return (
 		<VStack
 			flex={1}
@@ -118,7 +122,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 			}}
 		>
 			<HStack
-				style={{width: minWidth, height: lineHeight + 4}}
+				style={{width: minWidth, height: headerHeight}}
 				pl={2}
 				justifyContent="space-between"
 				alignItems="center"
@@ -153,7 +157,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 						marginTop: 5,
 						marginBottom: 5,
 						width: minWidth,
-						maxHeight: ((lineHeight + 8) * 10) + 10 // ten rows
+						maxHeight: ((rowHeight * 1.5) * 10) + 10 // ten rows
 					}}
 				>
 					<DraggableFlatList
@@ -167,7 +171,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 			<HStack
 				flexGrow={0}
 				flexShrink={0}
-				style={{width: minWidth, height: lineHeight + 10}}
+				style={{width: minWidth, height: footerHeight}}
 				justifyContent="flex-end"
 				alignItems="center"
 				bg="main.700"

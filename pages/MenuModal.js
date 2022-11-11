@@ -18,11 +18,20 @@ import {
 	IconButton,
 	ZStack
 } from 'native-base';
+import { Modal as MModal } from 'react-native';
 
 import * as Icons from '../components/icons';
 import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuPages } from '../appLayoutInfo';
 import getSizes from '../helpers/getSizes';
+
+// TO-DO: Massively fix this on mobile
+// https://docs.swmansion.com/react-native-reanimated/docs/api/LayoutAnimations/customAnimations
+// Why does it work ok on wg/syllables but not here?
+//
+// Maybe: redo appLayoutInfo.js to eliminate kids (again) and push them in
+//   via their parents and one large ReAnimation.View with delays and such
+// AND WHY DOESN'T THE ROTATION ANIMATION WORK? Needs timing.
 
 const MenuModal = () => {
 	const { menuToggleName } = useSelector(
@@ -57,7 +66,7 @@ const MenuModal = () => {
 			target.value = 0;
 		} else {
 			if (openId) {
-				// Closing another section and opening this one
+				// Closing already-open section
 				allAnimationValues[openId].value = 0;
 			}
 			// Opening this section
@@ -77,7 +86,7 @@ const MenuModal = () => {
 		// Save current state
 		dispatch(setMenuToggleName(openId));
 	};
-	let decrementingZIndex = 1001;
+//	let decrementingZIndex = 1001;
 	const renderItem = (item) => {
 		const {
 			icon,
@@ -89,11 +98,11 @@ const MenuModal = () => {
 			divider,
 			isChildOf
 		} = item;
-		decrementingZIndex -= 1;
+//		decrementingZIndex -= 1;
 		if(divider) {
 			return (
 				<Divider
-					zIndex={decrementingZIndex}
+					{/* zIndex={decrementingZIndex} */ ...{}}
 					key={id}
 					my={2}
 					mx="auto"
@@ -121,7 +130,7 @@ const MenuModal = () => {
 			return (
 				<Pressable
 					onPress={() => toggleSection(id)}
-					zIndex={decrementingZIndex}
+					{/* zIndex={decrementingZIndex} */ ...{}}
 					key={id}
 					style={{height: menuHeight}}
 					w="full"
@@ -197,7 +206,7 @@ const MenuModal = () => {
 					exiting={SlideOutLeft}
 					layout={CurvedTransition}
 					style={{
-						zIndex: decrementingZIndex,
+//						zIndex: decrementingZIndex,
 						height: subMenuHeight,
 						flex: 1
 					}}
@@ -206,6 +215,7 @@ const MenuModal = () => {
 						onPress={() => navigate(url)}
 						bg="darker"
 						style={{height: subMenuHeight}}
+						key={`${id}-pressable`}
 					>
 						<ZStack>
 							<HStack
@@ -274,7 +284,7 @@ const MenuModal = () => {
 		return (
 			<Pressable
 				onPress={() => navigate(url)}
-				zIndex={decrementingZIndex}
+				{/* zIndex={decrementingZIndex} */ ...{}}
 				key={id}
 				style={{height: menuHeight}}
 				w="full"
@@ -318,8 +328,66 @@ const MenuModal = () => {
 	};
 	return (
 		<>
+			<MModal
+				visible={menuOpen}
+				transparent={true}
+				style={{
+					height: "100%",
+					minHeight: "100%",
+					maxHeight: "100%"
+				}}
+				animationType="fade"
+			>
+				<HStack
+					h="full"
+					minHeight="full"
+					bg="#00000066"
+				>
+					<VStack bg="main.800">
+						<VStack
+							mb={3}
+							p={2}
+							w="full"
+							mr={5}
+						>
+							<Text fontSize={menuSize}>
+								<Tx bold fontSize={headerSize}>Conlang Toolbox</Tx>{"\n"}
+								<Tx color="primary.200">tools for language invention</Tx>
+							</Text>
+						</VStack>
+						<VStack
+							m={0}
+							p={0}
+						>
+							{
+								appMenuPages
+									.filter(
+										({isChildOf}) =>
+											!isChildOf || isChildOf === openId
+									)
+									.map((page) => renderItem(page))
+							}
+						</VStack>
+					</VStack>
+					<Pressable
+						h="full"
+						flex={1}
+						onPress={() => setMenuOpen(false)}
+					></Pressable>
+				</HStack>
+			</MModal>
+			<IconButton
+				variant="ghost"
+				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}
+				onPress={() => setMenuOpen(true)}
+				flexGrow={0}
+				flexShrink={0}
+			/>
+		</>
+	);
+	return (
+		<>
 			<Modal
-				h="full"
 				isOpen={menuOpen}
 				onClose={() => closeMenu()}
 				animationPreset="slide"
@@ -332,7 +400,6 @@ const MenuModal = () => {
 					style={{shadowOpacity: 0}}
 					w="full"
 					maxWidth="full"
-					minHeight="full"
 				>
 					<Modal.Header
 						borderBottomWidth={0}

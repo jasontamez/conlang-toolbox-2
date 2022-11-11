@@ -6,7 +6,9 @@ const initialState = blankAppState.we;
 // INPUT
 const editInputFunc = (state, action) => {
 	const { payload } = action;
-	state.input = payload.trim().replaceAll(/(\s*\n\s*)+/g, "\n");
+	// replaceAll is not a function??
+	//state.input = payload.trim().replaceAll(/(\s*\n\s*)+/g, "\n");
+	state.input = payload.trim().replace(/(\s*\n\s*)+/g, "\n");
 	return state;
 };
 
