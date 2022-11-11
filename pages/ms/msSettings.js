@@ -211,6 +211,9 @@ const Settings = () => {
 		setAlertOpen('willDestroyMS');
 	};
 
+	// Export MS
+	//const maybeExport
+
 	// JSX
 	const StoredInfoButton = ({onPress, bg, icon, text}) => {
 		return (
