@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from "react-router-dom";
-import ReAnimated, {
-	CurvedTransition,
-	SlideInLeft,
-	SlideOutLeft,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated';
 import {
 	HStack,
 	VStack,
@@ -18,7 +11,8 @@ import {
 	IconButton,
 	ZStack
 } from 'native-base';
-import { Modal as MModal } from 'react-native';
+import { Modal as MModal, useWindowDimensions } from 'react-native';
+import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
 import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
@@ -50,28 +44,20 @@ const MenuModal = () => {
 		sm: "xs",
 		md: "sm"
 	}[subMenuSize] || "md";
-	const menuHeight = (fontSizesInPx[menuSize] * 2) + 12;
-	const subMenuHeight = (fontSizesInPx[subMenuSize] * 2) + 8;
+	const menuItemHeight = (fontSizesInPx[menuSize] * 3);
+	const subMenuItemHeight = (fontSizesInPx[subMenuSize] * 2.5);
 	const Text = (props) => <Tx lineHeight={lineHeight} {...props} />;
 	const fontSizeAdjustments = {
 		"-1": subMenuSize,
 		"+1": headerSize
 	};
-	let allAnimationValues = {};
 	const toggleSection = (parentId) => {
-		const target = allAnimationValues[parentId];
 		if(openId === parentId) {
 			// Closing this section
 			setOpenId('');
-			target.value = 0;
 		} else {
-			if (openId) {
-				// Closing already-open section
-				allAnimationValues[openId].value = 0;
-			}
-			// Opening this section
+			// Opening new section
 			setOpenId(parentId);
-			target.value = 2;
 		}
 	};
 	const navigate = (url) => {
@@ -86,6 +72,7 @@ const MenuModal = () => {
 		// Save current state
 		dispatch(setMenuToggleName(openId));
 	};
+	const { width } = useWindowDimensions();
 //	let decrementingZIndex = 1001;
 	const renderItem = (item) => {
 		const {
@@ -116,35 +103,24 @@ const MenuModal = () => {
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			// Get new information for this section
-			const caretAnimationValue = useSharedValue(id === openId ? 2 : 0);
-			allAnimationValues[id] = caretAnimationValue;
-			const caretAnimationStyle = useAnimatedStyle(() => {
-				return {
-					transform: [
-						{rotate: String(caretAnimationValue.value * 45) + "deg"},
-						{translateY: caretAnimationValue.value},
-						{translateX: caretAnimationValue.value}
-					]
-				}
-			});
 			return (
 				<Pressable
 					onPress={() => toggleSection(id)}
 					{/* zIndex={decrementingZIndex} */ ...{}}
 					key={id}
-					style={{height: menuHeight}}
+					style={{height: menuItemHeight}}
 					w="full"
 					bg="main.800"
 				>
 					<ZStack>
 						<HStack
-							style={{height: menuHeight}}
+							style={{height: menuItemHeight}}
 							w="full"
 							{...bgOptions}
 							opacity={20}
 						/>
 						<HStack
-							style={{height: menuHeight}}
+							style={{height: menuItemHeight}}
 							alignItems="center"
 							w="full"
 							justifyContent="flex-start"
@@ -170,21 +146,29 @@ const MenuModal = () => {
 									{...textOptions}
 								>{menuTitle || title}</Text>
 							</VStack>
-							<ReAnimated.View
-								 style={{
-									...caretAnimationStyle,
+							<MotiView
+								animate={{
+									rotate: id === openId ? "90deg" : "0deg",
+									translateX: id === openId ? 2 : 0,
+									translateY: id === openId ? 2 : 0
+								}}
+								transition={{
+									type: 'timing',
+									duration: 1000
+								}}
+								style={{
 									display: "flex",
 									alignItems: "center",
 									justifyContent: "center",
 									margin: 8, // Same as {2}
 									marginLeft: 0
 								}}
-			 				>
+							>
 								<Icons.CaretIcon
 									size={menuSize}
 									{...textOptions}
 								/>
-							</ReAnimated.View>
+							</MotiView>
 						</HStack>
 					</ZStack>
 				</Pressable>
@@ -200,33 +184,42 @@ const MenuModal = () => {
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			return (
-				<ReAnimated.View
+				<MotiView
 					key={id}
-					entering={SlideInLeft}
-					exiting={SlideOutLeft}
-					layout={CurvedTransition}
+					from={{
+						opacity: 0,
+						height: 0
+					}}
+					animate={{
+						opacity: isChildOf === openId ? 1 : 0,
+						translateX: isChildOf === openId ? 200 : -width,
+						height: isChildOf === openId ? subMenuItemHeight : 0
+					}}
+					transition={{
+						type: 'timing',
+						duration: 1000
+					}}
 					style={{
 //						zIndex: decrementingZIndex,
-						height: subMenuHeight,
-						flex: 1
+						flex: 1,
+						overflow: "hidden"
+						// TO-DO: Try modi pressable?
 					}}
 				>
 					<Pressable
 						onPress={() => navigate(url)}
 						bg="darker"
-						style={{height: subMenuHeight}}
+						style={{height: isChildOf === openId ? subMenuItemHeight : 0}}
 						key={`${id}-pressable`}
 					>
 						<ZStack>
 							<HStack
-								style={{height: subMenuHeight}}
 								w="full"
 								{...bgOptions}
 								opacity={10}
 							/>
 							<HStack
 								w="full"
-								style={{height: subMenuHeight}}
 								alignItems="center"
 								justifyContent="flex-end"
 							>
@@ -256,7 +249,7 @@ const MenuModal = () => {
 							</HStack>
 						</ZStack>
 					</Pressable>
-				</ReAnimated.View>
+				</MotiView>
 			);
 		}
 		// App Section (standalone)
@@ -286,42 +279,42 @@ const MenuModal = () => {
 				onPress={() => navigate(url)}
 				{/* zIndex={decrementingZIndex} */ ...{}}
 				key={id}
-				style={{height: menuHeight}}
+				style={{height: menuItemHeight}}
 				w="full"
 				bg="main.800"
 			>
 				<ZStack>
 					<HStack
-						style={{height: menuHeight}}
+						style={{height: menuItemHeight}}
 						w="full"
 						{...bgOptions}
 						opacity={20}
 					/>
 					<HStack
 						w="full"
-						style={{height: menuHeight}}
+						style={{height: menuItemHeight}}
 						alignItems="center"
 						justifyContent="flex-start"
 						{...boxOptions}
 					>
-					<VStack
-						alignItems="center"
-						justifyContent="center"
-						m={2}
-						minW={6}
-					>
-						{icon ? Icons[icon](textOptions) : <></>}
-					</VStack>
-					<VStack
-						alignItems="flex-start"
-						justifyContent="center"
-						flex={1}
-						m={2}
-						{...alignOptions}
-					>
-						<Text fontSize={menuSize} {...textOptions}>{menuTitle || title}</Text>
-					</VStack>
-				</HStack>
+						<VStack
+							alignItems="center"
+							justifyContent="center"
+							m={2}
+							minW={6}
+						>
+							{icon ? Icons[icon](textOptions) : <></>}
+						</VStack>
+						<VStack
+							alignItems="flex-start"
+							justifyContent="center"
+							flex={1}
+							m={2}
+							{...alignOptions}
+						>
+							<Text fontSize={menuSize} {...textOptions}>{menuTitle || title}</Text>
+						</VStack>
+					</HStack>
 				</ZStack>
 			</Pressable>
 		);
@@ -359,14 +352,16 @@ const MenuModal = () => {
 							m={0}
 							p={0}
 						>
-							{
-								appMenuPages
-									.filter(
-										({isChildOf}) =>
-											!isChildOf || isChildOf === openId
-									)
-									.map((page) => renderItem(page))
-							}
+							<AnimatePresence>
+								{
+									appMenuPages
+										//.filter(
+										//	({isChildOf}) =>
+										//		!isChildOf || isChildOf === openId
+										//)
+										.map((page) => renderItem(page))
+								}
+							</AnimatePresence>
 						</VStack>
 					</VStack>
 					<Pressable
