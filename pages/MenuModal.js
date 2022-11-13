@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,7 @@ import {
 	ZStack,
 	View
 } from 'native-base';
-import { Modal as MModal } from 'react-native';
+import { Modal } from 'react-native';
 import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
@@ -19,17 +19,14 @@ import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuFormat } from '../appLayoutInfo';
 import getSizes from '../helpers/getSizes';
 
-// TO-DO: Massively fix this on mobile
-// https://docs.swmansion.com/react-native-reanimated/docs/api/LayoutAnimations/customAnimations
-// Why does it work ok on wg/syllables but not here?
-
 const MenuModal = () => {
 	const { menuToggleName } = useSelector(
 		(state) => state.appState,
 		shallowEqual
 	);
-	let [menuOpen, setMenuOpen] = useState(false);
-	let [openId, setOpenId] = useState(menuToggleName || '');
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [openId, setOpenId] = useState(menuToggleName || '');
+	const [hasBeenToggled, setHasBeenToggled] = useState(false);
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigator = useNavigate();
@@ -47,6 +44,7 @@ const MenuModal = () => {
 		"-1": subMenuSize,
 		"+1": headerSize
 	};
+	useEffect(() => setHasBeenToggled(false), [menuToggleName])
 	const toggleSection = (parentId) => {
 		if(openId === parentId) {
 			// Closing this section
@@ -55,6 +53,7 @@ const MenuModal = () => {
 			// Opening new section
 			setOpenId(parentId);
 		}
+		setHasBeenToggled(true);
 	};
 	const navigate = (url) => {
 		// Close this menu
@@ -93,7 +92,7 @@ const MenuModal = () => {
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			const isOpen = id === openId;
-			const previouslyOpen = id === menuToggleName;
+			const previouslyOpen = id === menuToggleName && !hasBeenToggled;
 			// Get new information for this section
 			return (
 				<React.Fragment key={`${id}-Fragment`}>
@@ -164,96 +163,97 @@ const MenuModal = () => {
 							</HStack>
 						</ZStack>
 					</Pressable>
-					<View style={{backgroundColor: "#00000066"}}><AnimatePresence>
-						{kids.map(kid => {
-							if(!isOpen) {
-								return false;
-							}
-							const {
-								id,
-								url,
-								title
-							} = kid;
-							const isSelected = location.pathname === url;
-							const dotOptions =
-								isSelected ?
-									{ color: "primary.500" }
-								:
-									{ color: "transparent" }
-							;
-							const textOptions = isSelected ? { color: "primary.500" } : {};
-							const bgOptions = isSelected ? { bg: "primary.500" } : {};
-							const offScreen = -500;
-							return (
-								<MotiView
-									key={id}
-									from={{
-										opacity: previouslyOpen ? 1 : 0.5,
-										height: previouslyOpen ? subMenuItemHeight : 0,
-										translateX: previouslyOpen ? 0 : offScreen
-									}}
-									animate={{
-										opacity: 1,
-										translateX: 0,
-										height: subMenuItemHeight
-									}}
-									exit={{
-										opacity: 0.5,
-										translateX: offScreen,
-										height: 0
-									}}
-									transition={{
-										type: 'timing',
-										duration: 800
-									}}
-									onDidAnimate={(a, b, c, d) => console.log(a, b, c, d)}
-								>
-									<Pressable
-										onPress={() => navigate(url)}
-										style={{height: subMenuItemHeight}}
-										key={`${id}-pressable`}
+					<View bg="darker">
+						<AnimatePresence>
+							{kids.map(kid => {
+								if(!isOpen) {
+									return false;
+								}
+								const {
+									id,
+									url,
+									title
+								} = kid;
+								const isSelected = location.pathname === url;
+								const dotOptions =
+									isSelected ?
+										{ color: "primary.500" }
+									:
+										{ color: "transparent" }
+								;
+								const textOptions = isSelected ? { color: "primary.500" } : {};
+								const bgOptions = isSelected ? { bg: "primary.500" } : {};
+								const offScreen = -500;
+								return (
+									<MotiView
+										key={id}
+										from={{
+											opacity: previouslyOpen ? 1 : 0.5,
+											height: previouslyOpen ? subMenuItemHeight : 0,
+											translateX: previouslyOpen ? 0 : offScreen
+										}}
+										animate={{
+											opacity: 1,
+											translateX: 0,
+											height: subMenuItemHeight
+										}}
+										exit={{
+											opacity: 0.5,
+											translateX: offScreen,
+											height: 0
+										}}
+										transition={{
+											type: 'timing',
+											duration: 800
+										}}
 									>
-										<ZStack>
-											<HStack
-												w="full"
-												{...bgOptions}
-												opacity={10}
-											/>
-											<HStack
-												w="full"
-												alignItems="center"
-												justifyContent="flex-end"
-											>
-												<VStack
-													alignItems="flex-end"
-													justifyContent="center"
-													flex={1}
-													m={2}
-													ml={4}
-												>
-													<Text
-														textAlign="right"
-														fontSize={subMenuSize}
-														{...textOptions}
-														isTruncated
-													>{title}</Text>
-												</VStack>
-												<VStack
+										<Pressable
+											onPress={() => navigate(url)}
+											style={{height: subMenuItemHeight}}
+											key={`${id}-pressable`}
+										>
+											<ZStack>
+												<HStack
+													w="full"
+													{...bgOptions}
+													opacity={10}
+												/>
+												<HStack
+													w="full"
 													alignItems="center"
-													justifyContent="center"
-													m={2}
-													minW={4}
-													ml={0}
+													justifyContent="flex-end"
 												>
-													<Icons.DotIcon {...dotOptions}/>
-												</VStack>
-											</HStack>
-										</ZStack>
-									</Pressable>
-								</MotiView>
-							);
-						})}
-					</AnimatePresence></View>
+													<VStack
+														alignItems="flex-end"
+														justifyContent="center"
+														flex={1}
+														m={2}
+														ml={4}
+													>
+														<Text
+															textAlign="right"
+															fontSize={subMenuSize}
+															{...textOptions}
+															isTruncated
+														>{title}</Text>
+													</VStack>
+													<VStack
+														alignItems="center"
+														justifyContent="center"
+														m={2}
+														minW={4}
+														ml={0}
+													>
+														<Icons.DotIcon {...dotOptions}/>
+													</VStack>
+												</HStack>
+											</ZStack>
+										</Pressable>
+									</MotiView>
+								);
+							})}
+						</AnimatePresence>
+					</View>
 				</React.Fragment>
 			);
 		}
@@ -325,7 +325,7 @@ const MenuModal = () => {
 	};
 	return (
 		<>
-			<MModal
+			<Modal
 				visible={menuOpen}
 				transparent={true}
 				style={{
@@ -365,7 +365,7 @@ const MenuModal = () => {
 						onPress={() => closeMenu()}
 					></Pressable>
 				</HStack>
-			</MModal>
+			</Modal>
 			<IconButton
 				variant="ghost"
 				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}

@@ -5,9 +5,11 @@ import {
 
 const TabBar = ({
 	boxProps = {},
+	rawHeight = 20,
 	...props
 }) => {
 	// <TabBar
+	//    rawHeight={height of the outer Box}
 	//    boxProps={properties for outer Box}
 	//    {other props go to inner HStack} />
 	return (
@@ -18,6 +20,13 @@ const TabBar = ({
 			bottom={0}
 			right={0}
 			bg="main.800"
+			alignItems="center"
+			flex={1}
+			borderColor="main.700"
+			borderTopWidth={1}
+			style={{
+				height: rawHeight
+			}}
 			{...boxProps}
 		>
 			<HStack

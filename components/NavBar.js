@@ -21,7 +21,11 @@ const NavBar = ({
 	const [scrollPos, setScrollPos] = useState(0);
 	const navRef = useRef(null);
 	const maybeUpdateScrollPos = ({contentOffset}) => {
-		contentOffset && contentOffset.x && setScrollPos(contentOffset.x);
+		if(contentOffset) {
+			if(contentOffset.x || contentOffset.x === 0) {
+				setScrollPos(contentOffset.x);
+			}
+		}
 	};
 	useEffect(() => {
 		navRef.current.scrollTo({x: scrollPos, y: 0, animated: false});

@@ -6,7 +6,6 @@ import {
 	Box,
 	Text,
 	Pressable,
-	Divider,
 	useBreakpointValue
 } from 'native-base';
 
@@ -27,10 +26,15 @@ const WG = () => {
 	const [buttonTextSize, iconSize] = getSizes("xs", "sm");
 	const lineHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2;
 	const pathname = location.pathname;
-	const w = (useWindowDimensions().width / 5) - 10;
+	const w = (useWindowDimensions().width - 6) / 5;
 	const ButtonLabel = useBreakpointValue({
 		base: () => <></>,
-		sm: ({color, label}) => <Text fontSize={buttonTextSize} color={color}>{label}</Text>
+		sm: ({color, label}) => <Text
+				textAlign="center"
+				fontSize={buttonTextSize}
+				color={color}
+				noOfLines={1}
+			>{label}</Text>
 	});
 	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";
@@ -59,7 +63,7 @@ const WG = () => {
 				bottom={0}
 				right={0}
 				flex={1}
-				style={{marginBottom: lineHeight + 10}}
+				style={{marginBottom: lineHeight}}
 			>
 				<Box
 					flexGrow={2}
@@ -70,28 +74,7 @@ const WG = () => {
 					<Outlet />
 				</Box>
 			</VStack>
-			<TabBar
-				boxProps={
-					{
-						flex: 1,
-						borderColor: "main.700",
-						borderTopWidth: 1,
-						pt: 2,
-						style: {
-							height: lineHeight + 10
-						}
-					}
-				}
-				divider={
-					<Divider
-						bg="main.700"
-						orientation="vertical"
-						thickness={1}
-						mx={2}
-						style={{height: lineHeight * 0.8}}
-					/>
-				}
-			>
+			<TabBar rawHeight={lineHeight}>
 				<NavTab
 					isCurrent={pathname === "/wg/characters"}
 					TabIcon={(props) => <WGCharactersIcon {...props} />}

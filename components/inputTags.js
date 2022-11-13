@@ -212,6 +212,8 @@ const makeTicks = (min, max, step) => {
 	return middleTicks;
 };
 
+// TO-DO: Investigate Sliders
+//   the ones with Ticks don't seem to work well
 export const SliderWithTicks = ({
 	min = 0,
 	max = 4,
@@ -301,6 +303,83 @@ export const SliderWithTicks = ({
 				>{endLabel}</Text>
 			</Box>
 		</HStack>
+	);
+};
+
+export const SliderWithTicksNoCaps = ({
+	min = 0,
+	max = 4,
+	step = 1,
+	beginLabel = "MISSING LABEL",
+	endLabel = "MISSING LABEL",
+	stackProps = {},
+	sliderProps = {},
+	notFilled,
+	value,
+	fontSize
+}) => {
+	// <SliderWithTicksNoCaps
+	//    min={default 0}
+	//    max={default 4}
+	//    step={default 1}
+	//    notFilled={if true, the slider does not fill}
+	//    beginLabel={left of Slider}
+	//    endLabel={right of Slider}
+	//    fontSize={size of the labels, defaults to 'sizes.sm'}
+	//    stackProps={props for the inner ZStack}
+	//    value={default value for the slider (defaults to `min`)
+	//    sliderProps={optional properties for the slider}
+	// />
+	const sizes = useSelector(state => state.appState.sizes);
+	const defaultValue = $v(value, min);
+	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
+	const stepsUntilEnd = (max - min) / step;
+	for (let c = 1; c < stepsUntilEnd; c++) {
+		middleTicks.push(<Tick key={"Tick" + String(c)} />);
+	}
+	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
+	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
+	return (
+		<VStack
+			w="full"
+			bg="darker"
+			px={2}
+			py={1}
+			rounded="md"
+			alignItems="center"
+		>
+			<HStack justifyContent="space-between" w="full">
+				<Text textAlign="left" fontSize={textSize}>{beginLabel}</Text>
+				<Text textAlign="right" fontSize={textSize}>{endLabel}</Text>
+			</HStack>
+			<ZStack
+				w="5/6"
+				m={3}
+				alignItems="center"
+				justifyContent="center"
+				{...stackProps}
+			>
+				<HStack
+					alignItems="center"
+					justifyContent="space-between"
+					w="full"
+					children={middleTicks}
+				/>
+				<Slider
+					size="sm"
+					minValue={min}
+					maxValue={max}
+					step={step}
+					defaultValue={defaultValue}
+					{...sliderProps}
+				>
+					<Slider.Track>
+						{notFilled ? <></> : <Slider.FilledTrack />}
+					</Slider.Track>
+					<Slider.Thumb />
+				</Slider>
+			</ZStack>
+		</VStack>
 	);
 };
 
@@ -415,7 +494,11 @@ export const SliderWithTicksAndValueDisplay = ({
 	);
 }
 
-
+// TO-DO: SliderWithValueDisplay doesn't always work
+//   wgSettings: the first slider is ok, the other two have the
+//     same issues as the Ticked ones
+//   wgOutput: the two (modal) sliders DO NOT SLIDE at all
+//   wgSyllables: same Ticked issue, plus modal sliders DON'T WORK
 export const SliderWithValueDisplay = (({
 	min = 0,
 	max = 4,
@@ -506,83 +589,6 @@ export const SliderWithValueDisplay = (({
 		</VStack>
 	);
 });
-
-export const SliderWithTicksNoCaps = ({
-	min = 0,
-	max = 4,
-	step = 1,
-	beginLabel = "MISSING LABEL",
-	endLabel = "MISSING LABEL",
-	stackProps = {},
-	sliderProps = {},
-	notFilled,
-	value,
-	fontSize
-}) => {
-	// <SliderWithTicksNoCaps
-	//    min={default 0}
-	//    max={default 4}
-	//    step={default 1}
-	//    notFilled={if true, the slider does not fill}
-	//    beginLabel={left of Slider}
-	//    endLabel={right of Slider}
-	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    stackProps={props for the inner ZStack}
-	//    value={default value for the slider (defaults to `min`)
-	//    sliderProps={optional properties for the slider}
-	// />
-	const sizes = useSelector(state => state.appState.sizes);
-	const defaultValue = $v(value, min);
-	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
-	const stepsUntilEnd = (max - min) / step;
-	for (let c = 1; c < stepsUntilEnd; c++) {
-		middleTicks.push(<Tick key={"Tick" + String(c)} />);
-	}
-	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
-	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
-	return (
-		<VStack
-			w="full"
-			bg="darker"
-			px={2}
-			py={1}
-			rounded="md"
-			alignItems="center"
-		>
-			<HStack justifyContent="space-between" w="full">
-				<Text textAlign="left" fontSize={textSize}>{beginLabel}</Text>
-				<Text textAlign="right" fontSize={textSize}>{endLabel}</Text>
-			</HStack>
-			<ZStack
-				w="5/6"
-				m={3}
-				alignItems="center"
-				justifyContent="center"
-				{...stackProps}
-			>
-				<HStack
-					alignItems="center"
-					justifyContent="space-between"
-					w="full"
-					children={middleTicks}
-				/>
-				<Slider
-					size="sm"
-					minValue={min}
-					maxValue={max}
-					step={step}
-					defaultValue={defaultValue}
-					{...sliderProps}
-				>
-					<Slider.Track>
-						{notFilled ? <></> : <Slider.FilledTrack />}
-					</Slider.Track>
-					<Slider.Thumb />
-				</Slider>
-			</ZStack>
-		</VStack>
-	);
-};
 
 export const ToggleSwitch = ({
 	hProps = {},

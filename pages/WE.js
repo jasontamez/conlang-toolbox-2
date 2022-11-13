@@ -6,7 +6,6 @@ import {
 	Box,
 	Text,
 	Pressable,
-	Divider,
 	useBreakpointValue
 } from 'native-base';
 
@@ -59,7 +58,7 @@ const WG = () => {
 				bottom={0}
 				right={0}
 				flex={1}
-				style={{marginBottom: lineHeight + 10}}
+				style={{marginBottom: lineHeight}}
 			>
 				<Box
 					flexGrow={2}
@@ -70,28 +69,7 @@ const WG = () => {
 					<Outlet />
 				</Box>
 			</VStack>
-			<TabBar
-				boxProps={
-					{
-						flex: 1,
-						borderColor: "main.700",
-						borderTopWidth: 1,
-						pt: 2,
-						style: {
-							height: lineHeight + 10
-						}
-					}
-				}
-				divider={
-					<Divider
-						bg="main.700"
-						orientation="vertical"
-						thickness={1}
-						mx={2}
-						style={{height: lineHeight * 0.8}}
-					/>
-				}
-			>
+			<TabBar rawHeight={lineHeight}>
 				<NavTab
 					isCurrent={pathname === "/we"}
 					TabIcon={(props) => <WEInputIcon {...props} />}

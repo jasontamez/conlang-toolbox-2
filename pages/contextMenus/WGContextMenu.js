@@ -57,6 +57,7 @@ const WGContextMenu = () => {
 		// END OF HACK (remove infoModalOpen from [list] at end, too)
 		switch (pathname) {
 			case "/wg/characters":
+				// TO-DO: Icons inside of <Text> screw up entire formatting.
 				setModalTitle("Character Groups");
 				setModalBody(
 					<ModalBody>
