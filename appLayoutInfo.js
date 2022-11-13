@@ -123,7 +123,7 @@ const WG = {
 
 const weInput = {
 	title: "Input",
-	url: "/we/",
+	url: "/we",
 	isChildOf: "WE",
 	id: "WEinp"
 };
@@ -209,7 +209,7 @@ const AppSettings = {
 	extraChars: false
 };
 const About = {
-	menuTitle: "About",
+	title: "About",
 	url: "/",
 	icon: "AboutIcon",
 	sectionId: "settingsEtc",
@@ -237,20 +237,10 @@ const Credits = {
 	}
 };
 
-export const appMenuPagesOLD = [
-	{
-		id: "apps",
-		pages: [MS, WG, WE, DC, PG, LX, WL]
-	},
-	{
-		id: "settingsEtc",
-		pages: [AppSettings, About, Credits]
-	}
-];
-export const appMenuPages = [
-	MS, ...MS.kids,
-	WG, ...WG.kids,
-	WE, ...WE.kids,
+export const appMenuFormat = [
+	MS,
+	WG,
+	WE,
 	DC, PG, LX, WL,
 	{id: "divider", divider: true},
 	AppSettings, About, Credits

@@ -6,26 +6,22 @@ import {
 	VStack,
 	Pressable,
 	Text as Tx,
-	Modal,
 	Divider,
 	IconButton,
-	ZStack
+	ZStack,
+	View
 } from 'native-base';
-import { Modal as MModal, useWindowDimensions } from 'react-native';
+import { Modal as MModal } from 'react-native';
 import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
 import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
-import { appMenuPages } from '../appLayoutInfo';
+import { appMenuFormat } from '../appLayoutInfo';
 import getSizes from '../helpers/getSizes';
 
 // TO-DO: Massively fix this on mobile
 // https://docs.swmansion.com/react-native-reanimated/docs/api/LayoutAnimations/customAnimations
 // Why does it work ok on wg/syllables but not here?
-//
-// Maybe: redo appLayoutInfo.js to eliminate kids (again) and push them in
-//   via their parents and one large ReAnimation.View with delays and such
-// AND WHY DOESN'T THE ROTATION ANIMATION WORK? Needs timing.
 
 const MenuModal = () => {
 	const { menuToggleName } = useSelector(
@@ -72,24 +68,18 @@ const MenuModal = () => {
 		// Save current state
 		dispatch(setMenuToggleName(openId));
 	};
-	const { width } = useWindowDimensions();
-//	let decrementingZIndex = 1001;
 	const renderItem = (item) => {
 		const {
 			icon,
 			id,
 			title,
-			menuTitle,
 			url,
 			kids,
-			divider,
-			isChildOf
+			divider
 		} = item;
-//		decrementingZIndex -= 1;
 		if(divider) {
 			return (
 				<Divider
-					{/* zIndex={decrementingZIndex} */ ...{}}
 					key={id}
 					my={2}
 					mx="auto"
@@ -102,154 +92,169 @@ const MenuModal = () => {
 			const isSelected = location.pathname.startsWith(url);
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			const textOptions = isSelected ? { color: "primary.500" } : {};
+			const isOpen = id === openId;
+			const previouslyOpen = id === menuToggleName;
 			// Get new information for this section
 			return (
-				<Pressable
-					onPress={() => toggleSection(id)}
-					{/* zIndex={decrementingZIndex} */ ...{}}
-					key={id}
-					style={{height: menuItemHeight}}
-					w="full"
-					bg="main.800"
-				>
-					<ZStack>
-						<HStack
-							style={{height: menuItemHeight}}
-							w="full"
-							{...bgOptions}
-							opacity={20}
-						/>
-						<HStack
-							style={{height: menuItemHeight}}
-							alignItems="center"
-							w="full"
-							justifyContent="flex-start"
-						>
-							<VStack
-								alignItems="center"
-								justifyContent="center"
-								m={2}
-								minW={6}
-							>
-								{icon ? Icons[icon](textOptions) : <></>}
-							</VStack>
-							<VStack
-								alignItems="flex-start"
-								justifyContent="center"
-								flex={1}
-								m={2}
-							>
-								<Text
-									textAlign="left"
-									isTruncated
-									fontSize={menuSize}
-									{...textOptions}
-								>{menuTitle || title}</Text>
-							</VStack>
-							<MotiView
-								animate={{
-									rotate: id === openId ? "90deg" : "0deg",
-									translateX: id === openId ? 2 : 0,
-									translateY: id === openId ? 2 : 0
-								}}
-								transition={{
-									type: 'timing',
-									duration: 1000
-								}}
-								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									margin: 8, // Same as {2}
-									marginLeft: 0
-								}}
-							>
-								<Icons.CaretIcon
-									size={menuSize}
-									{...textOptions}
-								/>
-							</MotiView>
-						</HStack>
-					</ZStack>
-				</Pressable>
-			);
-		} else if (isChildOf) {
-			const isSelected = location.pathname === url;
-			const dotOptions =
-				isSelected ?
-					{ color: "primary.500" }
-				:
-					{ color: "transparent" }
-			;
-			const textOptions = isSelected ? { color: "primary.500" } : {};
-			const bgOptions = isSelected ? { bg: "primary.500" } : {};
-			return (
-				<MotiView
-					key={id}
-					from={{
-						opacity: 0,
-						height: 0
-					}}
-					animate={{
-						opacity: isChildOf === openId ? 1 : 0,
-						translateX: isChildOf === openId ? 200 : -width,
-						height: isChildOf === openId ? subMenuItemHeight : 0
-					}}
-					transition={{
-						type: 'timing',
-						duration: 1000
-					}}
-					style={{
-//						zIndex: decrementingZIndex,
-						flex: 1,
-						overflow: "hidden"
-						// TO-DO: Try modi pressable?
-					}}
-				>
+				<React.Fragment key={`${id}-Fragment`}>
 					<Pressable
-						onPress={() => navigate(url)}
-						bg="darker"
-						style={{height: isChildOf === openId ? subMenuItemHeight : 0}}
-						key={`${id}-pressable`}
+						onPress={() => toggleSection(id)}
+						key={id}
+						style={{height: menuItemHeight}}
+						w="full"
+						bg="main.800"
 					>
 						<ZStack>
 							<HStack
+								style={{height: menuItemHeight}}
 								w="full"
 								{...bgOptions}
-								opacity={10}
+								opacity={20}
 							/>
 							<HStack
-								w="full"
+								style={{height: menuItemHeight}}
 								alignItems="center"
-								justifyContent="flex-end"
+								w="full"
+								justifyContent="flex-start"
 							>
-								<VStack
-									alignItems="flex-end"
-									justifyContent="center"
-									flex={1}
-									m={2}
-									ml={4}
-								>
-									<Text
-										textAlign="right"
-										fontSize={subMenuSize}
-										{...textOptions}
-										isTruncated
-									>{menuTitle || title}</Text>
-								</VStack>
 								<VStack
 									alignItems="center"
 									justifyContent="center"
 									m={2}
-									minW={4}
-									ml={0}
+									minW={6}
 								>
-									<Icons.DotIcon {...dotOptions}/>
+									{icon ? Icons[icon](textOptions) : <></>}
 								</VStack>
+								<VStack
+									alignItems="flex-start"
+									justifyContent="center"
+									flex={1}
+									m={2}
+								>
+									<Text
+										textAlign="left"
+										isTruncated
+										fontSize={menuSize}
+										{...textOptions}
+									>{title}</Text>
+								</VStack>
+								<MotiView
+									animate={{
+										rotate: isOpen ? "90deg" : "0deg",
+										translateX: isOpen ? 2 : 0,
+										translateY: isOpen ? 2 : 0
+									}}
+									transition={{
+										type: 'timing',
+										duration: 300
+									}}
+									style={{
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+										margin: 8, // Same as {2}
+										marginLeft: 0
+									}}
+								>
+									<Icons.CaretIcon
+										size={menuSize}
+										{...textOptions}
+									/>
+								</MotiView>
 							</HStack>
 						</ZStack>
 					</Pressable>
-				</MotiView>
+					<View style={{backgroundColor: "#00000066"}}><AnimatePresence>
+						{kids.map(kid => {
+							if(!isOpen) {
+								return false;
+							}
+							const {
+								id,
+								url,
+								title
+							} = kid;
+							const isSelected = location.pathname === url;
+							const dotOptions =
+								isSelected ?
+									{ color: "primary.500" }
+								:
+									{ color: "transparent" }
+							;
+							const textOptions = isSelected ? { color: "primary.500" } : {};
+							const bgOptions = isSelected ? { bg: "primary.500" } : {};
+							const offScreen = -500;
+							return (
+								<MotiView
+									key={id}
+									from={{
+										opacity: previouslyOpen ? 1 : 0.5,
+										height: previouslyOpen ? subMenuItemHeight : 0,
+										translateX: previouslyOpen ? 0 : offScreen
+									}}
+									animate={{
+										opacity: 1,
+										translateX: 0,
+										height: subMenuItemHeight
+									}}
+									exit={{
+										opacity: 0.5,
+										translateX: offScreen,
+										height: 0
+									}}
+									transition={{
+										type: 'timing',
+										duration: 800
+									}}
+									onDidAnimate={(a, b, c, d) => console.log(a, b, c, d)}
+								>
+									<Pressable
+										onPress={() => navigate(url)}
+										style={{height: subMenuItemHeight}}
+										key={`${id}-pressable`}
+									>
+										<ZStack>
+											<HStack
+												w="full"
+												{...bgOptions}
+												opacity={10}
+											/>
+											<HStack
+												w="full"
+												alignItems="center"
+												justifyContent="flex-end"
+											>
+												<VStack
+													alignItems="flex-end"
+													justifyContent="center"
+													flex={1}
+													m={2}
+													ml={4}
+												>
+													<Text
+														textAlign="right"
+														fontSize={subMenuSize}
+														{...textOptions}
+														isTruncated
+													>{title}</Text>
+												</VStack>
+												<VStack
+													alignItems="center"
+													justifyContent="center"
+													m={2}
+													minW={4}
+													ml={0}
+												>
+													<Icons.DotIcon {...dotOptions}/>
+												</VStack>
+											</HStack>
+										</ZStack>
+									</Pressable>
+								</MotiView>
+							);
+						})}
+					</AnimatePresence></View>
+				</React.Fragment>
 			);
 		}
 		// App Section (standalone)
@@ -277,7 +282,6 @@ const MenuModal = () => {
 		return (
 			<Pressable
 				onPress={() => navigate(url)}
-				{/* zIndex={decrementingZIndex} */ ...{}}
 				key={id}
 				style={{height: menuItemHeight}}
 				w="full"
@@ -312,7 +316,7 @@ const MenuModal = () => {
 							m={2}
 							{...alignOptions}
 						>
-							<Text fontSize={menuSize} {...textOptions}>{menuTitle || title}</Text>
+							<Text fontSize={menuSize} {...textOptions}>{title}</Text>
 						</VStack>
 					</HStack>
 				</ZStack>
@@ -352,92 +356,16 @@ const MenuModal = () => {
 							m={0}
 							p={0}
 						>
-							<AnimatePresence>
-								{
-									appMenuPages
-										//.filter(
-										//	({isChildOf}) =>
-										//		!isChildOf || isChildOf === openId
-										//)
-										.map((page) => renderItem(page))
-								}
-							</AnimatePresence>
+							{appMenuFormat.map((page) => renderItem(page))}
 						</VStack>
 					</VStack>
 					<Pressable
 						h="full"
 						flex={1}
-						onPress={() => setMenuOpen(false)}
+						onPress={() => closeMenu()}
 					></Pressable>
 				</HStack>
 			</MModal>
-			<IconButton
-				variant="ghost"
-				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}
-				onPress={() => setMenuOpen(true)}
-				flexGrow={0}
-				flexShrink={0}
-			/>
-		</>
-	);
-	return (
-		<>
-			<Modal
-				isOpen={menuOpen}
-				onClose={() => closeMenu()}
-				animationPreset="slide"
-				_slide={{delay: 0, placement: "left"}}
-			>
-				<Modal.Content
-					borderRadius={0}
-					alignItems="flex-start"
-					justifyContent="flex-start"
-					style={{shadowOpacity: 0}}
-					w="full"
-					maxWidth="full"
-				>
-					<Modal.Header
-						borderBottomWidth={0}
-						h={0}
-					/>
-					<Modal.Body
-						h="full"
-						minHeight="full"
-						maxHeight="full"
-						p={0}
-						m={0}
-					>
-						<VStack
-							mb={3}
-							p={2}
-							w="full"
-							mr={5}
-						>
-							<Text fontSize={menuSize}>
-								<Tx bold fontSize={headerSize}>Conlang Toolbox</Tx>{"\n"}
-								<Tx color="primary.200">tools for language invention</Tx>
-							</Text>
-						</VStack>
-						<VStack
-							m={0}
-							p={0}
-						>
-							{
-								appMenuPages
-									.filter(
-										({isChildOf}) =>
-											!isChildOf || isChildOf === openId
-									)
-									.map((page) => renderItem(page))
-							}
-						</VStack>
-					</Modal.Body>
-					<Modal.Footer
-						borderTopWidth={0}
-						h={0}
-					/>
-				</Modal.Content>
-			</Modal>
 			<IconButton
 				variant="ghost"
 				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}
