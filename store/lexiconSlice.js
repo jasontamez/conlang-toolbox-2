@@ -129,12 +129,10 @@ const loadStateFunc = (state, action) => {
 	};
 };
 const setIDFunc = (state, action) => {
-	// TO-DO: Determine if we really need this
 	state.id = action.payload;
 	return state;
 };
 const setLastSaveFunc = (state, action) => {
-	// TO-DO: Determine if we really need this
 	state.lastSave = action.payload;
 	return state;
 };

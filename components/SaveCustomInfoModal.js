@@ -55,7 +55,7 @@ const SaveCustomInfoModal = ({
 			} else {
 				setOverwriteSaveID(null);
 				setOverwriteSaveLabel(null);
-			}	
+			}
 		}, 50);
 		return () => clearTimeout(timeout);
 	}, [storedCustomIDs, storedCustomInfo]);

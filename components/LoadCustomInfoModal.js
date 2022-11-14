@@ -226,7 +226,7 @@ const LoadCustomInfoModal = ({
 										space: 0,
 										style: {
 											overflow: "hidden"
-										}						
+										}
 									}
 								}}
 							/>

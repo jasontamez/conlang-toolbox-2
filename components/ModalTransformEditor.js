@@ -171,7 +171,7 @@ const ModalTransformEditingItem = ({
 												space: 0,
 												style: {
 													overflow: "hidden"
-												}						
+												}
 											}
 										}}
 									/>

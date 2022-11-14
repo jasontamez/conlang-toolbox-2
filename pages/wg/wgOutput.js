@@ -1120,7 +1120,7 @@ const WGOutput = () => {
 						py={1.5}
 						endIcon={savingToLexicon ?
 							<SaveIcon ml={1} size={largeSize} />
-						:	
+						:
 							<GenerateIcon ml={1} size={largeSize} />
 						}
 						colorScheme={savingToLexicon ? "success" : "primary"}

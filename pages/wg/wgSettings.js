@@ -206,7 +206,7 @@ const WGSettings = () => {
 					interrogativeSentencePre,
 					interrogativeSentencePost,
 					exclamatorySentencePre,
-					exclamatorySentencePost	
+					exclamatorySentencePost
 				}}
 				setStoredCustomInfo={setStoredCustomInfo}
 				storedCustomInfo={storedCustomInfo}

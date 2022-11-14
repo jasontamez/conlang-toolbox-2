@@ -98,7 +98,7 @@ const About = () => {
 			</HStack>
 		)
 	});
-	
+
 	return (
 		<ScrollView
 			p={3}

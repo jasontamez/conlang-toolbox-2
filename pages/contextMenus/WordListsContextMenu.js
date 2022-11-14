@@ -112,7 +112,7 @@ const WordListsContextMenu = () => {
 								variant="ghost"
 								px={0}
 							/>
-						</HStack>						
+						</HStack>
 					</Modal.Header>
 					<Modal.Body
 						h="full"

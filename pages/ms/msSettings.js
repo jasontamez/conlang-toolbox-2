@@ -351,7 +351,7 @@ const Settings = () => {
 											my={2}
 											mx={2}
 											space={2}
-										> 
+										>
 											<Button
 												onPress={() => {
 													setAlertOpen(false);

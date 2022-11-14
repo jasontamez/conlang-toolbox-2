@@ -257,6 +257,7 @@ const mainCheckboxesDefaultProps = {
 };
 const modalProps = {
 	defaultProps: {
+		avoidKeyboard: true,
 		size: "xl",
 		maxWidth: "full",
 		_backdrop: {
@@ -266,6 +267,7 @@ const modalProps = {
 };
 const mainModalHeader = {
 	defaultProps: {
+		avoidKeyboard: true,
 		bg: "main.700",
 		shadowColor: "main.900",
 		shadowOffset: {
@@ -282,6 +284,7 @@ const mainModalHeader = {
 };
 const mainModalFooter = {
 	defaultProps: {
+		avoidKeyboard: true,
 		bg: "main.700",
 		shadowColor: "main.900",
 		shadowOffset: {

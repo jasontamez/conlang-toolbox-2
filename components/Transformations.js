@@ -340,7 +340,7 @@ const Transformations = ({
 													space: 0,
 													style: {
 														overflow: "hidden"
-													}						
+													}
 												}
 											}}
 										/>
