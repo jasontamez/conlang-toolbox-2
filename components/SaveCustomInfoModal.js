@@ -8,9 +8,11 @@ import {
 	useContrastText,
 	useToast
 } from 'native-base';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
+import { AnimatePresence, MotiView } from 'moti';
+import { useWindowDimensions } from 'react-native';
 
 import ExtraChars from './ExtraCharsButton';
 import { CloseCircleIcon, SaveIcon } from './icons';
@@ -19,6 +21,8 @@ import { DropDown, TextSetting, ToggleSwitch } from './inputTags';
 import doToast from '../helpers/toast';
 import { LoadingOverlay } from './FullBodyModal';
 import getSizes from '../helpers/getSizes';
+import { flipFlop, maybeAnimate } from '../helpers/motiAnimations';
+import { fontSizesInPx } from '../store/appStateSlice';
 //import doExport from './ExportServices';
 
 const SaveCustomInfoModal = ({
@@ -46,6 +50,8 @@ const SaveCustomInfoModal = ({
 	const tertiaryContrast = useContrastText("tertiary.500");
 	const toast = useToast();
 	const labelTextRef = useRef(null);
+	const { width } = useWindowDimensions();
+	const height = fontSizesInPx[textSize] * 5.5;
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			if(storedCustomIDs.length > 0) {
@@ -192,62 +198,112 @@ const SaveCustomInfoModal = ({
 					<Box pb={4}>
 						<Text textAlign="center">This will save {savedInfoString}.</Text>
 					</Box>
-					<ToggleSwitch
-						label={newSave ? "Make New Save" : "Overwrite Previous Save"}
-						labelSize={textSize}
-						switchState={newSave}
-						switchToggle={() => setNewSave(!newSave)}
-						switchProps={{
-							disabled: storedCustomIDs.length === 0
-						}}
-						hProps={{
-							justifyContent: "center",
-							space: 2,
-							borderRadius: "sm",
-							bg: "darker"
-						}}
-						vProps={{
-							flexGrow: undefined,
-							flexShrink: undefined
-						}}
-					/>
-					{newSave ?
-						<TextSetting
-							text="Give this save a title"
-							placeholder=""
-							onChangeText={(v) => setSaveName(v)}
-							defaultValue=""
-							inputProps={{ref: labelTextRef}}
-							boxProps={{pt: 4}}
+					{storedCustomIDs.length > 0 ?
+						<ToggleSwitch
+							key="previousSaveOrOverwrite"
+							label={newSave ? "Making a New Save" : "Overwriting a Previous Save"}
+							labelSize={textSize}
+							switchState={newSave}
+							switchToggle={() => setNewSave(!newSave)}
+							hProps={{
+								justifyContent: "center",
+								space: 2,
+								borderRadius: "sm",
+								bg: "darker"
+							}}
+							vProps={{
+								flexGrow: undefined,
+								flexShrink: undefined
+							}}
 						/>
 					:
-						<DropDown
-						buttonProps={{
-							ml: 0,
-							mr: 0,
-							mt: 4,
-							mb: 2,
-							flexShrink: 2
-						}}
-						fontSize={textSize}
-							labelFunc={() => overwriteSaveLabel}
-							onChange={(id) => {
-								setOverwriteSaveID(id);
-								setOverwriteSaveLabel(storedCustomInfo[id]);
-							}}
-							defaultValue={overwriteSaveID}
-							title="Display:"
-							options={storedCustomIDs.map((id) => {
-								return {
-									key: `${id}-Sorting`,
-									value: id,
-									label: storedCustomInfo[id]
-								};
-							})}
-							bg="tertiary.500"
-							color="tertiary.50"
-						/>
+						<Fragment key="noPrevSaves" />
 					}
+					<AnimatePresence exitBeforeEnter
+						style={{
+							overflow: "hidden",
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "center"
+						}}
+					>
+						{newSave ?
+							<MotiView
+								{...maybeAnimate(
+									storedCustomIDs.length > 0,
+									flipFlop,
+									{
+										translateX: width / 3,
+									},
+									{
+										opacity: 1
+									},
+									100
+								)}
+								key="makingANewSave"
+								style={{
+									overflow: "hidden",
+									height
+								}}
+							>
+								<TextSetting
+									text="Give this save a title"
+									placeholder=""
+									onChangeText={(v) => setSaveName(v)}
+									defaultValue=""
+									inputProps={{ref: labelTextRef}}
+									boxProps={{pt: 4}}
+								/>
+							</MotiView>
+						:
+							<MotiView
+								{...flipFlop(
+									{
+										translateX: 0 - width / 3,
+									},
+									{
+										opacity: 1
+									},
+									100
+								)}
+								style={{
+									overflow: "hidden",
+									display: "flex",
+									flexDirection: "column",
+									justifyContent: "center",
+									height
+								}}
+								key="overwritingAnOldSave"
+							>
+								<DropDown
+									buttonProps={{
+										ml: 0,
+										mr: 0,
+										mt: 4,
+										mb: 2,
+										flexShrink: 2
+									}}
+									fontSize={textSize}
+									labelFunc={() => overwriteSaveLabel}
+									onChange={(id) => {
+										setOverwriteSaveID(id);
+										setOverwriteSaveLabel(storedCustomInfo[id]);
+									}}
+									defaultValue={overwriteSaveID}
+									title="Display:"
+									options={storedCustomIDs.map((id) => {
+										return {
+											key: `${id}-Sorting`,
+											value: id,
+											label: storedCustomInfo[id]
+										};
+									})}
+									bg="tertiary.500"
+									color="tertiary.50"
+								/>
+							</MotiView>
+						}
+					</AnimatePresence>
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap">

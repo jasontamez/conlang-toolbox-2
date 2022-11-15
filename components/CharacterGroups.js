@@ -11,14 +11,12 @@ import {
 	Button,
 	Center,
 	Input,
-	useToast
+	useToast,
+	useTheme
 } from "native-base";
 import { useRef, useState, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReAnimated, {
-	FadeInUp,
-	FadeOutUp
-} from 'react-native-reanimated';
+import { AnimatePresence, MotiView } from "moti";
 //TO-DO: consider remove reanimated in favor of Moti
 //   here, LoadCustomInfoModal, Transformations, weOutput,
 //   weSoundChanges, wgOutput, wgSyllables
@@ -35,12 +33,12 @@ import {
 } from "./icons";
 import { SliderWithValueDisplay, TextSetting, ToggleSwitch } from "./inputTags";
 import StandardAlert from "./StandardAlert";
-
 import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
 import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
-import { fontSizesInPx } from "../store/appStateSlice";
+import { fontSizesInWs } from "../store/appStateSlice";
 import getSizes from "../helpers/getSizes";
+import { fromToZero } from "../helpers/motiAnimations";
 
 const CharGroups = ({
 	useDropoff,
@@ -254,7 +252,7 @@ const CharGroups = ({
 		setDeletingGroup(false);
 	};
 	const [textSize, smallerSize] = getSizes("sm", "xs");
-	const emSize = fontSizesInPx[textSize];
+	const smallestWidth = fontSizesInWs[textSize] * 2;
 	const renderGroup = (group) => {
 		const {label, run, description, dropoff} = group;
 		return (
@@ -369,10 +367,16 @@ const CharGroups = ({
 									textAlign="center"
 									mx={2}
 									value={modifiedLabel}
-									onChangeText={(v) => setModifiedLabel(v)}
 									fontSize={smallerSize}
-									style={{width: emSize * 2}}
-							/>
+									w={smallestWidth}
+									onChangeText={v => {
+										if(v.length > 1) {
+											setModifiedLabel(v[0]);
+										} else {
+											setModifiedLabel(v);
+										}
+									}}
+						/>
 							</HStack>
 							<TextSetting
 								text="Letters/Characters"
@@ -392,38 +396,49 @@ const CharGroups = ({
 										switchState={editOverrideSwitch}
 										switchToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
 									/>
-									{editOverrideSwitch ?
-										<ReAnimated.View
-											entering={FadeInUp}
-											exiting={FadeOutUp}
-											key={`${selector}-override-switch-modal-reanimated`}
-										>
-											<SliderWithValueDisplay
-												max={50}
-												beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
-												endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
-												value={editOverrideValue}
-												sliderProps={{
-													accessibilityLabel: "Dropoff rate",
-													onChangeEnd: (v) => setEditOverrideValue(v)
+									<AnimatePresence>
+										{editOverrideSwitch ?
+											<MotiView
+												style={{
+													overflow: "hidden",
+													display: "flex",
+													flexDirection: "column",
+													justifyContent: "center",
+													borderColor: useTheme().colors.primary["600"]
 												}}
-												Display={({value}) => (
-													<Center>
-														<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
-													</Center>
-												)}
-												stackProps={{
-													p: 2,
-													mt: 3,
-													space: 1,
+												key={`${selector}-override-switch-modal-reanimated`}
+												{...fromToZero({
+													height: smallestWidth * 12,
+													padding: 8,
+													marginTop: 12,
 													borderWidth: 1,
-													borderColor: "primary.600"
-												}}
-											/>
-										</ReAnimated.View>
-									:
-										<Fragment key={`${selector}-Frag3`} />
-									}
+													opacity: 1,
+													scaleY: 1
+												})}
+											>
+												<SliderWithValueDisplay
+													max={50}
+													beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+													endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
+													value={editOverrideValue}
+													sliderProps={{
+														accessibilityLabel: "Dropoff rate",
+														onChangeEnd: (v) => setEditOverrideValue(v)
+													}}
+													Display={({value}) => (
+														<Center>
+															<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
+														</Center>
+													)}
+													stackProps={{
+														space: 1
+													}}
+												/>
+											</MotiView>
+										:
+											<Fragment key={`${selector}-Frag3`} />
+										}
+									</AnimatePresence>
 								</Fragment>
 							:
 								<Fragment key={`${selector}-Frag4`} />
@@ -491,8 +506,15 @@ const CharGroups = ({
 										mx={2}
 										value={addLabel}
 										fontSize={smallerSize}
-										style={{width: emSize * 2}}
-										onChangeText={v => setAddLabel(v)}
+										w={smallestWidth}
+										onChangeText={v => {
+											if(v.length > 1) {
+												setAddLabel(v[0]);
+											} else {
+												setAddLabel(v);
+											}
+										}}
+										isFullWidth={false}
 									/>
 								</HStack>
 								<Button
@@ -525,32 +547,52 @@ const CharGroups = ({
 										switchState={addOverrideSwitch}
 										switchToggle={() => setAddOverrideSwitch(!addOverrideSwitch)}
 									/>
-									{addOverrideSwitch ?
-										<SliderWithValueDisplay
-											max={50}
-											beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
-											endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
-											value={addOverrideValue}
-											sliderProps={{
-												accessibilityLabel: "Dropoff rate",
-												onChangeEnd: (v) => setAddOverrideValue(v)
-											}}
-											Display={({value}) => (
-												<Center>
-													<Text fontSize={fontSize}>Rate: <Text px={2.5} bg="lighter">{value}</Text></Text>
-												</Center>
-											)}
-											stackProps={{
-												p: 2,
-												mt: 3,
-												space: 1,
-												borderWidth: 1,
-												borderColor: "primary.600"
-											}}
-										/>
-									:
-										<Fragment key={`${selector}-Frag5`} />
-									}
+									<AnimatePresence>
+										{addOverrideSwitch ?
+											<MotiView
+												style={{
+													overflow: "hidden",
+													display: "flex",
+													flexDirection: "column",
+													justifyContent: "center"
+												}}
+												key={`${selector}-override-switch-modal-reanimated`}
+												{...fromToZero({
+													height: smallestWidth * 12,
+													padding: 8,
+													marginTop: 12,
+													borderWidth: 1,
+													opacity: 1,
+													scaleY: 1
+												})}
+											>
+											<SliderWithValueDisplay
+													max={50}
+													beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+													endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
+													value={addOverrideValue}
+													sliderProps={{
+														accessibilityLabel: "Dropoff rate",
+														onChangeEnd: (v) => setAddOverrideValue(v)
+													}}
+													Display={({value}) => (
+														<Center>
+															<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}</Text></Text>
+														</Center>
+													)}
+													stackProps={{
+														p: 2,
+														mt: 3,
+														space: 1,
+														borderWidth: 1,
+														borderColor: "primary.600"
+													}}
+												/>
+											</MotiView>
+										:
+											<Fragment key={`${selector}-Frag5`} />
+										}
+									</AnimatePresence>
 								</Fragment>
 							:
 								<Fragment key={`${selector}-Frag6`} />

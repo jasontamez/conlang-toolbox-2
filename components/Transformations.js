@@ -9,16 +9,13 @@ import {
 	Modal,
 	useContrastText,
 	Button,
-	useToast
+	useToast,
+	useTheme
 } from "native-base";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-import ReAnimated, {
-	CurvedTransition,
-	StretchInY,
-	StretchOutY
-} from "react-native-reanimated";
+import { AnimatePresence, MotiView } from "moti";
 
 import {
 	AddIcon,
@@ -52,6 +49,8 @@ const Transformations = ({
 	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const toast = useToast();
+
+	// useState
 	const [reordering, setReordering] = useState(false);
 	const [editingTransform, setEditingTransform] = useState(false);
 	const [addTransformOpen, setAddTransformOpen] = useState(false);
@@ -65,8 +64,18 @@ const Transformations = ({
 	const [alertOpenError, setAlertOpenError] = useState(false);
 	const [deletingTransform, setDeletingTransform] = useState(false);
 	const [transformDeleteString, setTransformDeleteString] = useState("");
+	const [movedTransform, setMovedTransform] = useState("");
+	const [reorderedTransform, setReorderedTransform] = useState("");
+	const [reorderedOrder, setReorderedOrder] = useState(false);
+	const [reorderState, setReorderState] = useState(0);
+
 	const [textSize, fabSize, descSize] = getSizes("sm", "md", "xs");
 	const primaryContrast = useContrastText("primary.500");
+	const colors = useTheme().colors;
+	const highlightColor = colors.text["50"];
+	const bgColor = colors.primary["500"];
+
+	// Delete
 	const maybeDeleteTransform = (transform = deletingTransform) => {
 		if(disableConfirms) {
 			return doDeleteTransform(transform);
@@ -94,6 +103,8 @@ const Transformations = ({
 		setEditingTransform(false);
 		setDeletingTransform(false);
 	};
+
+	// Add Modal
 	const clearAddTransformModal = () => {
 		refSearch.current && refSearch.current.clear && refSearch.current.clear();
 		refReplace.current && refReplace.current.clear && refReplace.current.clear();
@@ -145,24 +156,126 @@ const Transformations = ({
 			refSearch.current && refSearch.current.focus && refSearch.current.focus();
 		}
 	};
+
+	// Reordering Transforms
 	const moveUpInList = (item, i) => {
-		if(i === 0) {
+		// Do not fire if we're mid-reorder, or if this is the first transform
+		if(reorderState || i === 0) {
 			return;
 		}
 		const pre = transforms.slice(0, i);
 		const post = transforms.slice(i + 1);
 		const moved = pre.pop();
-		dispatch(rearrangeTransforms([...pre, item, moved, ...post]));
+		setMovedTransform(moved.id);
+		setReorderedTransform(item.id);
+		setReorderedOrder([...pre, item, moved, ...post]);
+		setReorderState(-1);
 	};
 	const moveDownInList = (item, i) => {
-		if(i === lastTransform) {
+		// Do not fire if we're mid-reorder, or if this is the last transform
+		if(reorderState || i === lastTransform) {
 			return;
 		}
 		const pre = transforms.slice(0, i);
 		const post = transforms.slice(i + 1);
 		const moved = post.shift();
-		dispatch(rearrangeTransforms([...pre, moved, item, ...post]));
+		setMovedTransform(moved.id);
+		setReorderedTransform(item.id);
+		setReorderedOrder([...pre, moved, item, ...post]);
+		setReorderState(-1);
 	};
+	const triggerReorder = (prop, finished) => {
+		if(prop === "backgroundColor" && finished) {
+			dispatch(rearrangeTransforms(reorderedOrder));
+		}
+	};
+	const maybeEndReorder = (func) => {
+		func('');
+		const newState = reorderState - 1;
+		setReorderState(newState);
+		if(!newState) {
+			// We're done
+			setReorderState(0);
+		}
+	};
+	// Once reordering is passed to redux state, allow the new
+	//   positions to appear
+	useEffect(() => {
+		reorderedOrder && setReorderState(2);
+		setReorderedOrder(false);
+	}, [transforms]);
+	const reorderAnimations = {
+		basic: {
+			animate: {
+				opacity: 1,
+				backgroundColor: bgColor
+			}
+		},
+		// The tapped-on one, fading away
+		reordering: {
+			animate: {
+				opacity: 0,
+				backgroundColor: highlightColor
+			},
+			onDidAnimate: triggerReorder
+		},
+		// The tapped-on one, fading in
+		reordered: {
+			animate: {
+				opacity: 1,
+				backgroundcolor: bgColor
+			},
+			onDidAnimate: () => maybeEndReorder(setReorderedTransform),
+			transition: {
+				type: "timing",
+				duration: 500
+			}
+		},
+		// The other one, fading away
+		moving: {
+			animate: {
+				opacity: 0,
+				backgroundcolor: "#000000"
+			}
+		},
+		// The other one, fading in
+		moved: {
+			animate: {
+				opacity: 1,
+				backgroundcolor: bgColor
+			},
+			onDidAnimate: () => maybeEndReorder(setMovedTransform)
+		}
+	};
+	const findReorderState = (id) => {
+		const {
+			basic,
+			moving,
+			moved,
+			reordering,
+			reordered
+		} = reorderAnimations;
+		if(!reorderState) {
+			// Do nothing
+		} else if(id === movedTransform) {
+			if(reorderState < 0) {
+				console.log(id, "moving");
+				return moving;
+			}
+			console.log(id, "moved");
+			return moved;
+		} else if (id === reorderedTransform) {
+			if(reorderState < 0) {
+				console.log(id, "reordering", bgColor, highlightColor);
+				return reordering;
+			}
+			console.log(id, "reordered");
+			return reordered;
+		}
+		return basic;
+	};
+
+	// JSX
 	const Unit = (props) => (
 		<Box
 			borderColor="text.50"
@@ -200,13 +313,15 @@ const Transformations = ({
 			</Box>
 		);
 	};
-	const Item = ({item, stackProps}) => {
+	const Item = ({item, key}) => {
 		const { search, replace, description, direction } = item;
 		return (
 			<VStack
 				alignItems="flex-start"
 				justifyContent="center"
-				{...(stackProps || {})}
+				flexGrow={1}
+				flexShrink={1}
+				overflow="hidden"
 			>
 				<HStack
 					alignItems="center"
@@ -219,7 +334,11 @@ const Transformations = ({
 					<Unit>{replace || " "}</Unit>
 					{useDirection ? <Direction direction={direction} /> : <></>}
 				</HStack>
-				<Text italic fontSize={descSize}>{description}</Text>
+				{description ?
+					<Text key={`${key}//desc`} italic fontSize={descSize}>{description}</Text>
+				:
+					<React.Fragment key={`${key}//noDesc`}></React.Fragment>
+				}
 			</VStack>
 		);
 	};
@@ -399,88 +518,90 @@ const Transformations = ({
 				placement="bottom-left"
 			/>
 			<ScrollView bg="main.900">
-				<ReAnimated.View
-					entering={StretchInY}
-					exiting={StretchOutY}
-					layout={CurvedTransition}
-				>
-					{transforms.map((item, index) => (
-						<HStack
-							key={item.id}
-							alignItems="center"
-							justifyContent="flex-start"
-							borderBottomWidth={0.5}
-							borderColor="main.700"
-							py={2.5}
-							px={2}
-							bg="main.800"
-							w="full"
-						>
-							{reordering ?
-								<IconButton
-									key={item.id + "-reorder-up"}
-									icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} size={textSize} />}
-									accessibilityLabel="Move Up in List"
-									bg={index === 0 ? "transparent" : "darker"}
-									p={1}
-									my={0.5}
-									mr={2}
-									flexGrow={0}
-									flexShrink={0}
-									onPress={() => moveUpInList(item, index)}
-								/>
-							:
-								<React.Fragment key={item.id + "-No-Reordering-Button"}></React.Fragment>
-							}
-							<Item
-								item={item}
-								key={item.id + "-The-Transform"}
-								stackProps={{
-									flexGrow: 1,
-									flexShrink: 1,
-									overflow: "hidden"
+				<AnimatePresence>
+					{transforms.map((item, index) => {
+						const {id} = item;
+						return (
+							<MotiView
+								key={id}
+								transition={{
+									type: "timing",
+									duration: 350
 								}}
-							/>
-							{reordering ?
-								<IconButton
-									key={item.id + "-reorder-down"}
-									icon={<DownIcon color={index === lastTransform ? "transparent" : "primary.400"} size={textSize} />}
-									accessibilityLabel="Move Down in List"
-									bg={index === lastTransform ? "transparent" : "darker"}
-									p={1}
-									my={0.5}
-									ml={2}
-									flexGrow={0}
-									flexShrink={0}
-									onPress={() => moveDownInList(item, index)}
-								/>
-							:
-								<React.Fragment key={item.id + "-Editing-Buttons"}>
-									<IconButton
-										icon={<EditIcon color="primary.400" size={textSize} />}
-										accessibilityLabel="Edit"
-										bg="transparent"
-										p={1}
-										m={0.5}
-										flexGrow={0}
-										flexShrink={0}
-										onPress={() => setEditingTransform(item)}
+								{...findReorderState(id)}
+							>
+								<HStack
+									alignItems="center"
+									justifyContent="flex-start"
+									borderBottomWidth={1}
+									borderColor="main.700"
+									py={2.5}
+									px={2}
+									bg="main.800"
+									w="full"
+								>
+									{reordering ?
+										<IconButton
+											key={`${id}-reorder-up`}
+											icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} size={textSize} />}
+											accessibilityLabel="Move Up in List"
+											bg={index === 0 ? "transparent" : "darker"}
+											p={1}
+											my={0.5}
+											mr={2}
+											flexGrow={0}
+											flexShrink={0}
+											onPress={() => moveUpInList(item, index)}
+										/>
+									:
+										<React.Fragment key={`${id}-No-Reordering-Button`}></React.Fragment>
+									}
+									<Item
+										item={item}
+										key={`${id}-The-Transform`}
 									/>
-									<IconButton
-										icon={<TrashIcon color="danger.400" size={textSize} />}
-										accessibilityLabel="Delete"
-										bg="transparent"
-										p={1}
-										m={0.5}
-										flexGrow={0}
-										flexShrink={0}
-										onPress={() => maybeDeleteTransform(item)}
-									/>
-								</React.Fragment>
-							}
-						</HStack>
-					))}
-				</ReAnimated.View>
+									{reordering ?
+										<IconButton
+											key={`${id}-reorder-down`}
+											icon={<DownIcon color={index === lastTransform ? "transparent" : "primary.400"} size={textSize} />}
+											accessibilityLabel="Move Down in List"
+											bg={index === lastTransform ? "transparent" : "darker"}
+											p={1}
+											my={0.5}
+											ml={2}
+											flexGrow={0}
+											flexShrink={0}
+											onPress={() => moveDownInList(item, index)}
+										/>
+									:
+										<React.Fragment key={`${id}-Editing-Buttons`}>
+											<IconButton
+												icon={<EditIcon color="primary.400" size={textSize} />}
+												accessibilityLabel="Edit"
+												bg="transparent"
+												p={1}
+												m={0.5}
+												flexGrow={0}
+												flexShrink={0}
+												onPress={() => setEditingTransform(item)}
+											/>
+											<IconButton
+												icon={<TrashIcon color="danger.400" size={textSize} />}
+												accessibilityLabel="Delete"
+												bg="transparent"
+												p={1}
+												m={0.5}
+												flexGrow={0}
+												flexShrink={0}
+												onPress={() => maybeDeleteTransform(item)}
+											/>
+										</React.Fragment>
+									}
+								</HStack>
+							</MotiView>
+						);
+					})}
+				</AnimatePresence>
 				<Box h={20} bg="main.900" />
 			</ScrollView>
 		</VStack>

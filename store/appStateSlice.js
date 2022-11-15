@@ -110,18 +110,6 @@ export const basicSizes = {
 	}
 };
 export const fontSizesInPx = {
-//	'2xs': 10 * 0.75,
-//	xs: 12 * 0.75,
-//	sm: 14 * 0.75,
-//	md: 16 * 0.75,
-//	lg: 18 * 0.75,
-//	xl: 20 * 0.75,
-//	'2xl': 24 * 0.75,
-//	'3xl': 30 * 0.75,
-//	'4xl': 36 * 0.75,
-//	'5xl': 48 * 0.75,
-//	'6xl': 60 * 0.75,
-//	'7xl': 72 * 0.75,
 	'2xs': 10,
 	xs: 12,
 	sm: 14,
@@ -134,4 +122,18 @@ export const fontSizesInPx = {
 	'5xl': 48,
 	'6xl': 60,
 	'7xl': 72
+};
+export const fontSizesInWs = {
+	'2xs': 2.5,
+	xs: 3,
+	sm: 3.5,
+	md: 4,
+	lg: 5, // 18px is between 4 and 5
+	xl: 5,
+	'2xl': 6,
+	'3xl': 8, // 8 is actually 32px
+	'4xl': 10, // 10 is actually 40px; 9 is 36px but has no double
+	'5xl': 12,
+	'6xl': 16, // 16 is actually 64px
+	'7xl': 20 // 20 is actually 80px
 };

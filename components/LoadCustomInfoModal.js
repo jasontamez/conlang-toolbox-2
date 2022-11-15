@@ -10,10 +10,6 @@ import {
 } from 'native-base';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import ReAnimated, {
-	FlipInYRight,
-	FlipOutYRight
-} from 'react-native-reanimated';
 
 import ExtraChars from './ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from './icons';
@@ -188,59 +184,43 @@ const LoadCustomInfoModal = ({
 				</Modal.Header>
 				<Modal.Body m={0} p={0}>
 					{storedCustomIDs.length > 0 ?
-						<ReAnimated.View
-							entering={FlipInYRight}
-							exiting={FlipOutYRight}
-							style={{
-								flex: 1,
-								width: "100%",
-								alignItems: "center",
-								justifyContent: "center"
+						<DropDown
+							placement="top right"
+							fontSize={textSize}
+							defaultValue={customInfoChosen}
+							labelFunc={() => customLabelChosen}
+							title="Choose a Save:"
+							onChange={(v) => {
+								setCustomInfoChosen(v);
+								setCustomLabelChosen(storedCustomInfo[v]);
 							}}
-						>
-							<DropDown
-								placement="top right"
-								fontSize={textSize}
-								defaultValue={customInfoChosen}
-								labelFunc={() => customLabelChosen}
-								title="Choose a Save:"
-								onChange={(v) => {
-									setCustomInfoChosen(v);
-									setCustomLabelChosen(storedCustomInfo[v]);
-								}}
-								options={storedCustomIDs.map(id => {
-									return {
-										key: `${id}-CustomInfo`,
-										value: id,
-										label: storedCustomInfo[id]
-									};
-								})}
-								buttonProps={{
+							options={storedCustomIDs.map(id => {
+								return {
+									key: `${id}-CustomInfo`,
+									value: id,
+									label: storedCustomInfo[id]
+								};
+							})}
+							buttonProps={{
+								flex: 1,
+								px: 2,
+								my: 3,
+								mr: 2,
+								_stack: {
+									justifyContent: "flex-start",
+									alignItems: "center",
 									flex: 1,
-									px: 2,
-									my: 3,
-									_stack: {
-										justifyContent: "flex-start",
-										alignItems: "center",
-										flex: 1,
-										space: 0,
-										style: {
-											overflow: "hidden"
-										}
+									space: 0,
+									style: {
+										overflow: "hidden"
 									}
-								}}
-							/>
-						</ReAnimated.View>
+								}
+							}}
+						/>
 					:
-						<ReAnimated.View
-							entering={FlipInYRight}
-							exiting={FlipOutYRight}
-							style={{flex: 1, width: "100%"}}
-						>
-							<Center p={4}>
-								<Text fontSize={textSize} bold>No information has been stored.</Text>
-							</Center>
-						</ReAnimated.View>
+						<Center p={4}>
+							<Text fontSize={textSize} bold>No information has been stored.</Text>
+						</Center>
 					}
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
