@@ -29,7 +29,12 @@ const WG = () => {
 	const w = (useWindowDimensions().width / 5) - 10;
 	const ButtonLabel = useBreakpointValue({
 		base: () => <></>,
-		sm: ({color, label}) => <Text fontSize={buttonTextSize} color={color}>{label}</Text>
+		sm: ({color, label}) => <Text
+				textAlign="center"
+				fontSize={buttonTextSize}
+				color={color}
+				noOfLines={1}
+			>{label}</Text>
 	});
 	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";

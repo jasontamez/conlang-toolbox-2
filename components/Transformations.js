@@ -259,17 +259,13 @@ const Transformations = ({
 			// Do nothing
 		} else if(id === movedTransform) {
 			if(reorderState < 0) {
-				console.log(id, "moving");
 				return moving;
 			}
-			console.log(id, "moved");
 			return moved;
 		} else if (id === reorderedTransform) {
 			if(reorderState < 0) {
-				console.log(id, "reordering", bgColor, highlightColor);
 				return reordering;
 			}
-			console.log(id, "reordered");
 			return reordered;
 		}
 		return basic;

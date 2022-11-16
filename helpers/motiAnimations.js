@@ -34,7 +34,7 @@ export const flipFlop = (initialProps, finalProps, dur = 500) => {
 	};
 };
 
-// For when it should only animate on exit SOME of the time...
+// For when it should only animate on entrance SOME of the time...
 export const maybeAnimate = (truthy, func, ...props) => {
 	const maybeFunc = func(...props);
 	if(truthy) {
