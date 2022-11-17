@@ -23,24 +23,11 @@ import React, {
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import ReAnimated, {
-	CurvedTransition,
-	FadeInLeft,
-	FadeOutLeft,
-	FlipInYRight,
-	FlipOutYRight,
-	ZoomInEasyDown,
-	ZoomInLeft,
-	ZoomInRight,
-	ZoomOutEasyDown,
-	ZoomOutLeft,
-	ZoomOutRight
-} from 'react-native-reanimated';
-import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { FlatGrid } from 'react-native-super-grid';
 import escapeRegexp from "escape-string-regexp";
 import { v4 as uuidv4 } from 'uuid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
+import { AnimatePresence, MotiView } from "moti";
 
 import {
 	CancelIcon,
@@ -53,6 +40,7 @@ import {
 	SaveIcon,
 	SortEitherIcon
 } from "../../components/icons";
+import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import StandardAlert from "../../components/StandardAlert";
 import { DropDown, ToggleSwitch } from "../../components/inputTags";
@@ -64,6 +52,7 @@ import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
 import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
 import { weCustomStorage } from "../../helpers/persistentInfo";
 import getSizes from "../../helpers/getSizes";
+import { flipFlop } from "../../helpers/motiAnimations";
 
 const WGOutput = () => {
 	const {
@@ -84,7 +73,7 @@ const WGOutput = () => {
 	const dispatch = useDispatch();
 	const [alertCannotEvolve, setAlertCannotEvolve] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
-	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+	const [showGenerationInProgressMessage, setShowGenerationInProgressMessage] = useState(false);
 
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
 	const [longestEvolvedWordSizeEstimate, setLongestEvolvedWordSizeEstimate] = useState(undefined);
@@ -115,6 +104,8 @@ const WGOutput = () => {
 	const [evolvedOriginalWords, setEvolvedOriginalWords] = useState(false);
 	const [originalEvolvedRulesWords, setOriginalEvolvedRulesWords] = useState(false);
 	const [saveableWords, setSaveableWords] = useState([]);
+	const [showSaveButton, setShowSaveButton] = useState(false);
+	const [buttonWidth, setButtonWidth] = useState(0);
 
 	const [savingToLexicon, setSavingToLexicon] = useState(false);
 	const [wordsToSave, setWordsToSave] = useState({});
@@ -538,7 +529,7 @@ const WGOutput = () => {
 			return;
 		}
 
-		setShowLoadingScreen(true);
+		setShowGenerationInProgressMessage(true);
 		setEvolvedWords(false);
 		setOriginalEvolvedWords(false);
 		setEvolvedOriginalWords(false);
@@ -599,6 +590,10 @@ const WGOutput = () => {
 		setLongestEvolvedWordSizeEstimate(Math.min(width / 2, outputLength));
 		setLongestWordSizeEstimate(Math.min(width / 2, Math.max(inputLength, outputLength)));
 		let testing = {};
+		// mark that we've evolved
+		if (!showSaveButton) {
+			setShowSaveButton(true);
+		}
 		setSaveableWords(changed.filter(word => {
 			if(testing[word]) {
 				return false;
@@ -606,7 +601,7 @@ const WGOutput = () => {
 			testing[word] = true;
 			return true;
 		}));
-		setShowLoadingScreen(false);
+		setShowGenerationInProgressMessage(false);
 	};
 	// Take an array of strings and apply each sound change rule
 	//  to each string one at a time, then return an array
@@ -889,7 +884,7 @@ const WGOutput = () => {
 			const percentage = Math.max(0.25, (100 - (x * 3.5)) / 100);
 			size += (emSize * percentage);
 		}
-		console.log(`${size} vs old size of ${emSize}*${longestWord} = ${emSize * longestWord}`);
+		//console.log(`${size} vs old size of ${emSize}*${longestWord} = ${emSize * longestWord}`);
 		return size;
 		//setDisplayedColumns(Math.max(1, Math.floor(viewport / longestWordLength)));
 	};
@@ -923,12 +918,35 @@ const WGOutput = () => {
 	// // //
 	// JSX
 	// // //
-	const LoadingScreen = memo(({size}) => {
+	const GenerationInProgressMessage = memo(({size}) => {
 		return (
-			<ReAnimated.View
-				entering={ZoomInEasyDown}
-				exiting={ZoomOutEasyDown}
-				style={{flex: 1, width: "100%"}}
+			<MotiView
+				from={{
+					scaleY: 0,
+					scaleX: 0.25,
+					translateY: 50,
+					opacity: 0.5
+				}}
+				animate={{
+					scaleY: 1,
+					scaleX: 1,
+					translateY: 0,
+					opacity: 1
+				}}
+				exit={{
+					scaleY: 0,
+					scaleX: 0.25,
+					translateY: 50,
+					opacity: 0.5
+				}}
+				transition={{
+					type: "timing",
+					duration: 800
+				}}
+				style={{
+					flex: 1,
+					width: "100%"
+				}}
 			>
 				<HStack
 					flexWrap="wrap"
@@ -942,7 +960,7 @@ const WGOutput = () => {
 					<Text fontSize={size}>Generating...</Text>
 					<Spinner size="lg" color="primary.500" />
 				</HStack>
-			</ReAnimated.View>
+			</MotiView>
 		);
 	});
 	const Simple = memo((props) => <Text selectable fontSize={textSize} lineHeight={headerSize} {...props} />);
@@ -1472,131 +1490,195 @@ const WGOutput = () => {
 						}}
 					>{savingToLexicon ? "SAVE" : "EVOLVE"}</Button>
 				</VStack>
-				<ReAnimated.View
-					layout={CurvedTransition}
-					style={{
-						flexDirection: "row",
-						flexWrap: "wrap"
-					}}
+				<HStack
+					flexWrap="wrap"
+					justifyContent="flex-end"
+					alignItems="center"
 				>
-					<IconButton
-						colorScheme="secondary"
-						variant="solid"
-						icon={<GearIcon size={textSize} />}
-						px={3.5}
-						py={1}
-						mr={2}
-						onPress={() => setOpenSettings(true)}
-					/>
-					<IconButton
-						colorScheme="secondary"
-						variant="solid"
-						icon={<CopyIcon size={textSize} />}
-						px={3.5}
-						py={1}
-						mr={2}
-						onPress={copyAllToClipboard}
-					/>
-					<Menu
-						placement="bottom right"
-						trigger={(props) => (saveableWords.length > 0 ?
-							<ReAnimated.View
-								entering={FlipInYRight}
-								exiting={FlipOutYRight}
-							>
-								<IconButton
-									colorScheme="secondary"
-									variant="solid"
-									icon={<SaveIcon size={textSize} />}
-									px={3.5}
-									py={1}
-									{...props}
-								/>
-							</ReAnimated.View>
-						:
-							<></> // Only show this button when there are words to save.
-						)}
-					>
-						<Menu.Item
-							onPress={() => setChooseWhereToSaveInLex(true)}
-						>Save All to Lexicon</Menu.Item>
-						<Menu.Item
-							onPress={() => toggleSaveSomeToLex()}
-						>Choose What to Save</Menu.Item>
-					</Menu>
-				</ReAnimated.View>
+					<AnimatePresence>
+						<IconButton
+							colorScheme="secondary"
+							variant="solid"
+							icon={<GearIcon size={textSize} />}
+							px={3.5}
+							py={1}
+							mr={2}
+							onPress={() => setOpenSettings(true)}
+							key="settingsGearIcon"
+						/>
+						<IconButton
+							colorScheme="secondary"
+							variant="solid"
+							icon={<CopyIcon size={textSize} />}
+							px={3.5}
+							py={1}
+							mr={2}
+							onPress={copyAllToClipboard}
+							key="copyButton"
+							onLayout={(event) => {
+								// This sets up the width of the button that appears later
+								if(!buttonWidth) {
+									const {width} = event.nativeEvent.layout;
+									setButtonWidth(width);
+								}
+							}}
+						/>
+						<Menu
+							placement="bottom right"
+							trigger={(props) => (
+								<MotiView
+									key="saveMenu"
+									animate={
+										showSaveButton ?
+											{
+												width: buttonWidth,
+												translateX: 0,
+												rotateY: "0deg"
+											}
+										:
+											{
+												width: 0,
+												translateX: buttonWidth,
+												rotateY: "90deg"
+											}
+									}
+									transition={{
+										type: "timing",
+										duration: 600
+									}}
+									style={{
+										overflow: "hidden"
+									}}
+								>
+									<IconButton
+										colorScheme="secondary"
+										variant="solid"
+										icon={<SaveIcon size={textSize} />}
+										px={3.5}
+										py={1}
+										{...props}
+									/>
+								</MotiView>
+							)}
+						>
+							<Menu.Item
+								onPress={() => setChooseWhereToSaveInLex(true)}
+							>Save All to Lexicon</Menu.Item>
+							<Menu.Item
+								onPress={() => toggleSaveSomeToLex()}
+							>Choose What to Save</Menu.Item>
+						</Menu>
+					</AnimatePresence>
+				</HStack>
 			</HStack>
-			{(showLoadingScreen ?
-				<LoadingScreen key="loadingScreen" size={giantSize} />
-			:
-				<></>
-			)}
-			{((originalEvolvedWords) ?
-				<ReAnimated.View
-					entering={ZoomInRight}
-					exiting={ZoomOutRight}
-					style={{flex: 1, paddingHorizontal: 16, paddingVertical: 8}}
-				>
-					<FlatList
-						data={originalEvolvedWords}
-						renderItem={renderOriginalEvolved}
-						keyExtractor={(item) => item.join("-")}
-					/>
-				</ReAnimated.View>
-			:
-				<></>
-			)}
-			{((evolvedOriginalWords) ?
-				<ReAnimated.View
-					entering={ZoomInLeft}
-					exiting={ZoomOutLeft}
-					style={{flex: 1, paddingHorizontal: 16, paddingVertical: 8}}
-				>
-					<FlatList
-						data={evolvedOriginalWords}
-						renderItem={renderEvolvedOriginal}
-						keyExtractor={(item) => item.join("-")}
-					/>
-				</ReAnimated.View>
-			:
-				<></>
-			)}
-			{((originalEvolvedRulesWords) ?
-				<ReAnimated.View
-					entering={ZoomInRight}
-					exiting={ZoomOutRight}
-					style={{flex: 1, paddingHorizontal: 16, paddingVertical: 8}}
-				>
-					<FlatList
-						data={originalEvolvedRulesWords}
-						renderItem={renderOriginalEvolvedRules}
-						keyExtractor={(item) => item.slice(0, 3).join("-")}
-					/>
-				</ReAnimated.View>
-			:
-				<></>
-			)}
-			{evolvedWords ?
-				<ReAnimated.View
-					entering={FadeInLeft}
-					exiting={FadeOutLeft}
-					style={{flex: 1}}
-				>
-					<FlatGrid
-						renderItem={renderEvolved}
-						data={evolvedWords}
-						itemDimension={multicolumn ? longestWordSizeEstimate : width - 32}
-						keyExtractor={(item) => item.join("-")}
+			<AnimatePresence exitBeforeEnter>
+				{showGenerationInProgressMessage &&
+					<GenerationInProgressMessage key="loadingScreen" size={giantSize} />
+				}
+				{originalEvolvedWords &&
+					<MotiView
+						{...flipFlop({
+							translateX: width / 2
+						},
+						{
+							scale: 1,
+							opacity: 1
+						},
+						500)}
+						key="originalEvolvedWords"
 						style={{
-							paddingVertical: 0,
-							paddingHorizontal: 16
+							flex: 1,
+							paddingHorizontal: 16,
+							paddingVertical: 8,
+							overflow: "hidden"
 						}}
-						spacing={emSize}
-					/>
-				</ReAnimated.View>
-			:
-				<></>
-			}
+					>
+						<FlatList
+							data={originalEvolvedWords}
+							renderItem={renderOriginalEvolved}
+							keyExtractor={(item) => item.join("-")}
+						/>
+					</MotiView>
+				}
+				{evolvedOriginalWords &&
+					<MotiView
+						{...flipFlop({
+							translateX: width / -2
+						},
+						{
+							scale: 1,
+							opacity: 1
+						},
+						500)}
+						key="evolvedOriginalWords"
+						style={{
+							flex: 1,
+							paddingHorizontal: 16,
+							paddingVertical: 8,
+							overflow: "hidden"
+						}}
+					>
+						<FlatList
+							data={evolvedOriginalWords}
+							renderItem={renderEvolvedOriginal}
+							keyExtractor={(item) => item.join("-")}
+						/>
+					</MotiView>
+				}
+				{originalEvolvedRulesWords &&
+					<MotiView
+						{...flipFlop({
+							translateX: width / 2
+						},
+						{
+							scale: 1,
+							opacity: 1
+						},
+						500)}
+						key="originalEvolvedRulesWords"
+						style={{
+							flex: 1,
+							paddingHorizontal: 16,
+							paddingVertical: 8,
+							overflow: "hidden"
+						}}
+					>
+						<FlatList
+							data={originalEvolvedRulesWords}
+							renderItem={renderOriginalEvolvedRules}
+							keyExtractor={(item) => item.slice(0, 3).join("-")}
+						/>
+					</MotiView>
+				}
+				{evolvedWords &&
+					<MotiView
+						{...flipFlop({
+							translateX: -width
+						},
+						{
+							opacity: 1
+						},
+						500)}
+						style={{
+							flex: 1,
+							overflow: "hidden"
+						}}
+						key="evolvedWords"
+					>
+						<FlatGrid
+							renderItem={renderEvolved}
+							data={evolvedWords}
+							itemDimension={multicolumn ? longestWordSizeEstimate : width - 32}
+							keyExtractor={(item) => item.join("-")}
+							style={{
+								paddingVertical: 0,
+								paddingHorizontal: 16
+							}}
+							spacing={emSize}
+						/>
+					</MotiView>
+				}
+			</AnimatePresence>
 		</VStack>
 	);
 };
