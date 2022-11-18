@@ -13,12 +13,8 @@ import {
 } from "native-base";
 import { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReAnimated, {
-	CurvedTransition,
-	StretchInY,
-	StretchOutY
-} from "react-native-reanimated";
 import { v4 as uuidv4 } from 'uuid';
+import { AnimatePresence, MotiView } from 'moti';
 
 import {
 	AddIcon,
@@ -55,6 +51,8 @@ const WESoundChanges = () => {
 	const [soundChangeDeletingString, setSoundChangeDeletingString] = useState("");
 
 	const [reordering, setReordering] = useState(false);
+	const [reorderingInProgress, setReorderingInProgress] = useState(false);
+	const [unitHeights, setUnitHeights] = useState({});
 
 	const [editingSoundChange, setEditingSoundChange] = useState(false);
 	const [modifiedID, setModifiedID] = useState(false);
@@ -268,24 +266,34 @@ const WESoundChanges = () => {
 	// rearrange sound changes
 	const lastSC = soundChanges.length - 1;
 	const moveUpInList = (i) => {
-		if(i === 0) {
+		if(reorderingInProgress || i === 0) {
 			return;
 		}
 		const item = soundChanges[i];
 		const pre = soundChanges.slice(0, i);
 		const post = soundChanges.slice(i + 1);
 		const moved = pre.pop();
-		dispatch(rearrangeSoundChanges([...pre, item, moved, ...post]));
+		doMove(pre, item, [moved, ...post]);
 	};
 	const moveDownInList = (i) => {
-		if(i === lastSC) {
+		if(reorderingInProgress || i === lastSC) {
 			return;
 		}
 		const item = soundChanges[i];
 		const pre = soundChanges.slice(0, i);
 		const post = soundChanges.slice(i + 1);
 		const moved = post.shift();
-		dispatch(rearrangeSoundChanges([...pre, moved, item, ...post]));
+		doMove([...pre, moved], item, post);
+	};
+	const doMove = (pre, item, post) => {
+		setReorderingInProgress(true);
+		dispatch(rearrangeSoundChanges([...pre, ...post]));
+		setTimeout(() => {
+			dispatch(rearrangeSoundChanges([...pre, item, ...post]));
+			setTimeout(() => {
+				setReorderingInProgress(false);
+			}, 300);
+		}, 300);
 	};
 
 	// render sound change
@@ -340,69 +348,102 @@ const WESoundChanges = () => {
 	};
 	const renderSoundChange = (soundChange, i) => {
 		const {id, beginning, ending, context, exception, description} = soundChange;
+		const unitHeight = unitHeights[id] || undefined;
 		return (
-			<HStack
-				justifyContent="flex-start"
-				alignItems="center"
-				w="full"
-				bg="main.800"
-				py={1.5}
-				px={2}
-				borderBottomWidth={0.5}
-				borderColor="main.700"
+			<MotiView
+				from={{
+					scaleY: 1,
+					height: unitHeight
+				}}
+				animate={{
+					scaleY: 1,
+					height: unitHeight
+				}}
+				exit={{
+					scaleY: reordering ? 0 : 1,
+					height: reordering ? 0 : unitHeight
+				}}
+				transition={{
+					type: "timing",
+					duration: 200
+				}}
 				key={`${id}-SoundChange`}
 			>
-				<ArrowUp index={i} />
-				<VStack
-					justifyContent="center"
-					alignItems="flex-start"
-					flex={1}
-				>
-					<HStack
-						justifyContent="flex-start"
-						alignItems="center"
-						space={1.5}
-					>
-						<Unit>{beginning}</Unit>
-						<T>⟶</T>
-						<Unit>{ending}</Unit>
-						<T>/</T>
-						<Unit>{context}</Unit>
-						{
-							exception ?
-								<>
-									<T key={`${id}-exception-point`}>!</T>
-									<Unit key={`${id}-exception`}>{exception}</Unit>
-								</>
-							:
-								<Fragment key={`${id}-no-exception`} />
-						}
-					</HStack>
-					<Text italic>{description || ""}</Text>
-				</VStack>
 				<HStack
-					flexShrink={0}
-					flexGrow={0}
+					justifyContent="flex-start"
+					alignItems="center"
+					w="full"
+					bg="main.800"
+					py={1.5}
+					px={2}
+					borderBottomWidth={0.5}
+					borderColor="main.700"
+					onLayout={(event) => {
+						const {height} = event.nativeEvent.layout;
+						if(!unitHeight || height > unitHeight) {
+							const newHeights = {
+								...unitHeights,
+								[id]: height
+							};
+							setUnitHeights(newHeights);
+							console.log(`${id} set to ${height}`);
+							console.log(unitHeights);
+						}
+					}}
 				>
-					<IconButton
-						icon={<EditIcon color="primary.400" size={smallerSize} />}
-						accessibilityLabel="Edit"
-						bg="transparent"
-						p={1}
-						m={0.5}
-						onPress={() => startEditSoundChange(soundChange)}
-					/>
-					<IconButton
-						icon={<TrashIcon color="danger.400" size={smallerSize} />}
-						accessibilityLabel="Delete"
-						bg="transparent"
-						p={1}
-						m={0.5}
-						onPress={() => maybeDeleteSoundChange(soundChange)}
-					/>
+					<ArrowUp index={i} />
+					<VStack
+						justifyContent="center"
+						alignItems="flex-start"
+						flex={1}
+						style={{overflow: "hidden"}}
+					>
+						<HStack
+							justifyContent="flex-start"
+							alignItems="center"
+							space={1.5}
+						>
+							<Unit>{beginning}</Unit>
+							<T>⟶</T>
+							<Unit>{ending}</Unit>
+							<T>/</T>
+							<Unit>{context}</Unit>
+							{
+								exception ?
+									<>
+										<T key={`${id}-exception-point`}>!</T>
+										<Unit key={`${id}-exception`}>{exception}</Unit>
+									</>
+								:
+									<Fragment key={`${id}-no-exception`} />
+							}
+						</HStack>
+						{description && <Text italic key={`${id}//desc`}>{description}</Text>}
+					</VStack>
+					<HStack
+						flexShrink={0}
+						flexGrow={0}
+					>
+						<IconButton
+							icon={<EditIcon color="primary.400" size={smallerSize} />}
+							accessibilityLabel="Edit"
+							bg="transparent"
+							p={1}
+							m={0.5}
+							onPress={() => startEditSoundChange(soundChange)}
+						/>
+						<IconButton
+							icon={<TrashIcon color="danger.400" size={smallerSize} />}
+							accessibilityLabel="Delete"
+							bg="transparent"
+							p={1}
+							m={0.5}
+							onPress={() => maybeDeleteSoundChange(soundChange)}
+						/>
+					</HStack>
+					<ArrowDown index={i} />
 				</HStack>
-				<ArrowDown index={i} />
-			</HStack>
+			</MotiView>
 		);
 	};
 	return (
@@ -621,13 +662,9 @@ const WESoundChanges = () => {
 				placement="bottom-left"
 			/>
 			<ScrollView bg="main.900">
-				<ReAnimated.View
-					entering={StretchInY}
-					exiting={StretchOutY}
-					layout={CurvedTransition}
-				>
+				<AnimatePresence>
 					{soundChanges.map((soundChange, i) => renderSoundChange(soundChange, i))}
-				</ReAnimated.View>
+				</AnimatePresence>
 				<Box h={20} bg="main.900" />
 			</ScrollView>
 		</VStack>

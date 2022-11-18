@@ -1584,7 +1584,7 @@ const WGOutput = () => {
 							scale: 1,
 							opacity: 1
 						},
-						500)}
+						200)}
 						key="originalEvolvedWords"
 						style={{
 							flex: 1,
@@ -1609,7 +1609,7 @@ const WGOutput = () => {
 							scale: 1,
 							opacity: 1
 						},
-						500)}
+						200)}
 						key="evolvedOriginalWords"
 						style={{
 							flex: 1,
@@ -1634,7 +1634,7 @@ const WGOutput = () => {
 							scale: 1,
 							opacity: 1
 						},
-						500)}
+						200)}
 						key="originalEvolvedRulesWords"
 						style={{
 							flex: 1,
@@ -1653,12 +1653,12 @@ const WGOutput = () => {
 				{evolvedWords &&
 					<MotiView
 						{...flipFlop({
-							translateX: -width
+							translateX: width / -2
 						},
 						{
 							opacity: 1
 						},
-						500)}
+						200)}
 						style={{
 							flex: 1,
 							overflow: "hidden"
