@@ -206,7 +206,7 @@ const makeTicks = (min, max, step) => {
 	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
 	const stepsUntilEnd = (max - min) / step;
 	for (let c = 1; c < stepsUntilEnd; c++) {
-		middleTicks.push(<Tick key={"Tick" + String(c)} />);
+		middleTicks.push(<Tick key={`Tick-${c}`} />);
 	}
 	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
 	return middleTicks;
@@ -335,7 +335,7 @@ export const SliderWithTicksNoCaps = ({
 	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
 	const stepsUntilEnd = (max - min) / step;
 	for (let c = 1; c < stepsUntilEnd; c++) {
-		middleTicks.push(<Tick key={"Tick" + String(c)} />);
+		middleTicks.push(<Tick key={`Tick-${c}`} />);
 	}
 	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));

@@ -163,7 +163,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 					<DraggableFlatList
 						data={newColumns}
 						renderItem={renderItem}
-						keyExtractor={(item, index) => item.id + "-" + String(index)}
+						keyExtractor={(item, index) => `${item.id}-${index}`}
 						onDragEnd={(data) => setNewColumns(data.data.map(d => { return {...d} }))}
 					/>
 				</GestureHandlerRootView>

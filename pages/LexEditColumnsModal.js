@@ -156,7 +156,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				borderTopWidth={i ? 1 : 0}
 				borderTopColor="lighter"
 				bg="main.800"
-				key={id + "-Editable-" + String(i)}
+				key={`${id}-Editable-${i}`}
 				maxW="full"
 			>
 				<VStack maxW="5/6">

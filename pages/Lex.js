@@ -269,7 +269,7 @@ const Lex = () => {
 			toast,
 			placement: "top",
 			scheme: "danger",
-			msg: String(amount) + " item" + maybePlural(amount) + " deleted"
+			msg: `${amount} item${maybePlural(amount)} deleted`
 		});
 	};
 	const toggleMarkedForDeletion = (id) => {
@@ -698,7 +698,7 @@ const Lex = () => {
 							cancelProps: {
 								bg: "danger.500"
 							},
-							bodyContent: "You have marked " + String(itemsToDelete.length) + " item" + maybePlural(itemsToDelete.length) + " for deletion. Do you want to delete them?"
+							bodyContent: `You have marked ${itemsToDelete.length} item${maybePlural(itemsToDelete.length)} for deletion. Do you want to delete them?`
 						}
 					},
 					{
@@ -710,7 +710,7 @@ const Lex = () => {
 								bg: "danger.500"
 							},
 							bodyContent: (
-								<Text>You are about to delete <Text bold>{String(itemsToDelete.length)}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>
+								<Text>You are about to delete <Text bold>{itemsToDelete.length}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>
 							)
 						}
 					},
@@ -1021,7 +1021,7 @@ const Lex = () => {
 						flexShrink={1}
 						style={{minWidth: 110}}
 					>
-						<Text fontSize={bigTextSize} isTruncated>{String(lexicon.length)} Word{maybePlural(lexicon.length)}</Text>
+						<Text fontSize={bigTextSize} isTruncated>{lexicon.length} Word{maybePlural(lexicon.length)}</Text>
 					</Box>
 					<HStack
 						mx={3}

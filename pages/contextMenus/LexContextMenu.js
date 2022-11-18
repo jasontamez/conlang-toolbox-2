@@ -217,7 +217,7 @@ const LexiconContextMenu = () => {
 									doToast({
 										toast,
 										fontSize: textSize,
-										msg: "Saved: " + String(cols) + " columns"
+										msg: `Saved: ${cols} columns`
 									});
 								}}
 							>Save</Button>

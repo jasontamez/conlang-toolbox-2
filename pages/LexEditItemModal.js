@@ -101,7 +101,7 @@ const ModalLexiconEditingItem = ({
 					<VStack m={0} p={4} pb={10} space={6}>
 						{columns.map((info, i) => {
 							return (
-								<VStack key={info + "-" + String(i)} >
+								<VStack key={`${info}-${i}`} >
 									<Text fontSize={textSize}>{labels[i]}</Text>
 									<Input
 										defaultValue={info}

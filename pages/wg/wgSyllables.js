@@ -89,7 +89,7 @@ const WGSyllables = () => {
 					mt={2}
 				>
 					{title.split(" ").map((t, i) => (
-						<Text fontSize={textSize} bold key={title + t + String(i)}>{t}</Text>
+						<Text fontSize={textSize} bold key={`${title}/${t}/${i}`}>{t}</Text>
 					))}
 					{syllableDropoffOverrides[propName] !== null ?
 						<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
