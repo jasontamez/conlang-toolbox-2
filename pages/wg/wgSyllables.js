@@ -11,11 +11,9 @@ import {
 	Modal,
 	Button
 } from "native-base";
+import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import ReAnimated, {
-	FadeInUp,
-	FadeOutUp
-} from 'react-native-reanimated';
+import { AnimatePresence, MotiView } from "moti";
 
 import {
 	CloseCircleIcon,
@@ -34,6 +32,8 @@ import {
 } from "../../store/wgSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
 import getSizes from "../../helpers/getSizes";
+import { flipFlop, fromToZero, maybeAnimate } from "../../helpers/motiAnimations";
+import { fontSizesInPx } from "../../store/appStateSlice";
 
 
 const WGSyllables = () => {
@@ -54,8 +54,11 @@ const WGSyllables = () => {
 	const [modalOverrideFlag, setModalOverrideFlag] = useState(false);
 	const [modalOverrideValue, setModalOverrideValue] = useState(0);
 	const [modalTempInfo, setModalTempInfo] = useState("");
+	const [hasNotToggled, setHasNotToggled] = useState(true);
 	const primaryContrast = useContrastText('primary.500');
 	const [headerSize, textSize, descSize] = getSizes("md", "sm", "xs");
+	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
+	const { width } = useWindowDimensions();
 	const oneBox = [
 		"singleWord"
 	];
@@ -88,15 +91,19 @@ const WGSyllables = () => {
 					flexGrow={0}
 					mt={2}
 				>
-					{title.split(" ").map((t, i) => (
-						<Text fontSize={textSize} bold key={`${title}/${t}/${i}`}>{t}</Text>
-					))}
-					{syllableDropoffOverrides[propName] !== null ?
+					<VStack
+						justifyContent="flex-start"
+						alignItems="flex-end"
+						style={{minWidth: emSize * 8}}
+					>
+						{title.split(" ").map((t, i) => (
+							<Text textAlign="right" fontSize={textSize} bold key={`${title}/${t}/${i}`}>{t}</Text>
+						))}
+					</VStack>
+					{syllableDropoffOverrides[propName] !== null &&
 						<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
 							<Text lineHeight={descSize} fontSize={descSize} italic>{syllableDropoffOverrides[propName]}%</Text>
 						</Box>
-					:
-						<React.Fragment key={`${title}-noOverride`} />
 					}
 				</VStack>
 				<Box
@@ -105,6 +112,11 @@ const WGSyllables = () => {
 					py={2}
 					px={3}
 					minW={32}
+					style={{
+						maxWidth: width
+							- (emSize * 10) // label (8) + edit button (2)
+							- 24 // xPadding
+					}}
 				>
 					<Text fontSize={descSize} italic={syllablesValue === ""}>{syllablesValue || "(empty)"}</Text>
 				</Box>
@@ -185,39 +197,45 @@ const WGSyllables = () => {
 									switchState={modalOverrideFlag}
 									switchToggle={() =>  setModalOverrideFlag(!modalOverrideFlag)}
 								/>
-								{modalOverrideFlag ?
-									<ReAnimated.View
-										entering={FadeInUp}
-										exiting={FadeOutUp}
-										key="modalSlider"
-									>
-										<SliderWithValueDisplay
-											max={50}
-											beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-											endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
-											value={modalOverrideValue}
-											sliderProps={{
-												accessibilityLabel: "Dropoff rate",
-												onChangeEnd: (v) => setModalOverrideValue(v)
-											}}
-											Display={({value}) => (
-												<Center>
-													<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
-												</Center>
+								<AnimatePresence>
+									{modalOverrideFlag &&
+										<MotiView
+											{...fromToZero(
+												{
+													opacity: 1,
+													maxHeight: emSize * 6,
+													scaleY: 1
+												},
+												500
 											)}
-											stackProps={{
-												p: 2,
-												mt: 3,
-												space: 1,
-												borderWidth: 1,
-												borderColor: "primary.600",
-												w: "full"
-											}}
-										/>
-									</ReAnimated.View>
-								:
-									<React.Fragment key="noModalSlider" />
-								}
+											key="modalSlider"
+										>
+											<SliderWithValueDisplay
+												max={50}
+												beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+												endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+												value={modalOverrideValue}
+												sliderProps={{
+													accessibilityLabel: "Dropoff rate",
+													onChangeEnd: (v) => setModalOverrideValue(v)
+												}}
+												Display={({value}) => (
+													<Center>
+														<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
+													</Center>
+												)}
+												stackProps={{
+													p: 2,
+													mt: 3,
+													space: 1,
+													borderWidth: 1,
+													borderColor: "primary.600",
+													w: "full"
+												}}
+											/>
+										</MotiView>
+									}
+								</AnimatePresence>
 							</Box>
 						))}
 					</Modal.Body>
@@ -286,37 +304,49 @@ const WGSyllables = () => {
 					label="Use multiple syllable types"
 					labelSize={textSize}
 					switchState={multipleSyllableTypes}
-					switchToggle={() =>  dispatch(setMultipleSyllableTypes(!multipleSyllableTypes))}
+					switchToggle={() => {
+						dispatch(setMultipleSyllableTypes(!multipleSyllableTypes));
+						setHasNotToggled(false);
+					}}
 				/>
 				<SyllableBox
 					title={multipleSyllableTypes ? "Single-Word Syllables" : "Syllables"}
 					propName="singleWord"
 					syllablesValue={singleWord}
-				/>
-				{multipleSyllableTypes ?
-					<ReAnimated.View
-						entering={FadeInUp}
-						exiting={FadeOutUp}
-					>
-						<SyllableBox
-							title="Word-Initial Syllables"
-							propName="wordInitial"
-							syllablesValue={wordInitial}
-						/>
-						<SyllableBox
-							title="Word-Middle Syllables"
-							propName="wordMiddle"
-							syllablesValue={wordMiddle}
-						/>
-						<SyllableBox
-							title="Word-Final Syllables"
-							propName="wordFinal"
-							syllablesValue={wordFinal}
-						/>
-					</ReAnimated.View>
-				:
-					<></>
-				}
+			/>
+				<AnimatePresence>
+					{multipleSyllableTypes &&
+						<MotiView
+							{...maybeAnimate(
+								!hasNotToggled && multipleSyllableTypes,
+								flipFlop,
+								{
+									translateX: -128 - (emSize * 8)
+								},
+								{
+									opacity: 1
+								},
+								500
+							)}
+						>
+							<SyllableBox
+								title="Word-Initial Syllables"
+								propName="wordInitial"
+								syllablesValue={wordInitial}
+							/>
+							<SyllableBox
+								title="Word-Middle Syllables"
+								propName="wordMiddle"
+								syllablesValue={wordMiddle}
+							/>
+							<SyllableBox
+								title="Word-Final Syllables"
+								propName="wordFinal"
+								syllablesValue={wordFinal}
+							/>
+						</MotiView>
+					}
+				</AnimatePresence>
 			</ScrollView>
 		</VStack>
 	);

@@ -23,21 +23,10 @@ import React, {
 } from "react";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import ReAnimated, {
-	CurvedTransition,
-	FadeInLeft,
-	FadeOutLeft,
-	FlipInYRight,
-	FlipOutYRight,
-	ZoomInEasyDown,
-	ZoomInRight,
-	ZoomOutEasyDown,
-	ZoomOutRight
-} from 'react-native-reanimated';
-import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
+import { useNavigate, useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
+import { AnimatePresence, MotiView } from "moti";
 
 import {
 	CancelIcon,
@@ -50,6 +39,7 @@ import {
 	SaveIcon,
 	SortEitherIcon
 } from "../../components/icons";
+import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import {
 	equalityCheck,
@@ -65,6 +55,7 @@ import { DropDown, SliderWithValueDisplay, ToggleSwitch } from "../../components
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 import getSizes from "../../helpers/getSizes";
+import { flipFlop, fromToZero } from "../../helpers/motiAnimations";
 
 const WGOutput = () => {
 	const {
@@ -105,6 +96,8 @@ const WGOutput = () => {
 	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
 	const [rawWords, setRawWords] = useState([]);
 	const [output, setOutput] = useState("text");
+	const [buttonWidth, setButtonWidth] = useState(0);
+	const [showSaveButton, setShowSaveButton] = useState(false);
 
 	const [savingToLexicon, setSavingToLexicon] = useState(false);
 	const [wordsToSave, setWordsToSave] = useState({});
@@ -124,6 +117,7 @@ const WGOutput = () => {
 		giantSize
 	] = getSizes("sm", "xs", "md", "lg", "x2");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
+	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
 	const toast = useToast();
@@ -307,7 +301,7 @@ const WGOutput = () => {
 			} else {
 				generateWordList();
 			}
-		}, 250);
+		}, 500);
 	};
 
 
@@ -385,6 +379,10 @@ const WGOutput = () => {
 		setShowLoadingScreen(false);
 		setDisplayedText(text);
 		setRawWords(rawWords);
+		// mark that we've evolved
+		if (!showSaveButton) {
+			setShowSaveButton(true);
+		}
 	};
 
 	// // //
@@ -564,6 +562,10 @@ const WGOutput = () => {
 			};
 		}));
 		setRawWords(everySyllable);
+		// mark that we've evolved
+		if (!showSaveButton) {
+			setShowSaveButton(true);
+		}
 	};
 	const recurseSyllables = async (previous, toGo) => {
 		const current = toGo.charAt(0);
@@ -614,7 +616,10 @@ const WGOutput = () => {
 		determineColumnSize(words.map(w => w.text));
 		setDisplayedWords(words);
 		setRawWords(raws);
-		//return words;
+		// mark that we've evolved
+		if (!showSaveButton) {
+			setShowSaveButton(true);
+		}
 	};
 
 	// // //
@@ -738,10 +743,14 @@ const WGOutput = () => {
 	// // //
 	const LoadingScreen = memo(({size}) => {
 		return (
-			<ReAnimated.View
-				entering={ZoomInEasyDown}
-				exiting={ZoomOutEasyDown}
-				style={{flex: 1, width: "100%"}}
+			<MotiView
+				{...fromToZero(
+					{
+						opacity: 1
+					},
+					100
+				)}
+				style={{flex: 1, width}}
 			>
 				<HStack
 					flexWrap="wrap"
@@ -755,7 +764,7 @@ const WGOutput = () => {
 					<Text fontSize={size}>Generating...</Text>
 					<Spinner size="lg" color="primary.500" />
 				</HStack>
-			</ReAnimated.View>
+			</MotiView>
 		);
 	});
 
@@ -1141,13 +1150,7 @@ const WGOutput = () => {
 						}}
 					>{savingToLexicon ? "SAVE" : "GENERATE"}</Button>
 				</VStack>
-				<ReAnimated.View
-					layout={CurvedTransition}
-					style={{
-						flexDirection: "row",
-						flexWrap: "wrap"
-					}}
-				>
+				<HStack flexWrap="wrap">
 					<IconButton
 						colorScheme="secondary"
 						variant="solid"
@@ -1165,13 +1168,40 @@ const WGOutput = () => {
 						py={1}
 						mr={2}
 						onPress={copyAllToClipboard}
+						onLayout={(event) => {
+							// This sets up the width of the button that appears later
+							if(!buttonWidth) {
+								const {width} = event.nativeEvent.layout;
+								setButtonWidth(width);
+							}
+						}}
 					/>
 					<Menu
 						placement="bottom right"
 						trigger={(props) => (rawWords.length > 0 ?
-							<ReAnimated.View
-								entering={FlipInYRight}
-								exiting={FlipOutYRight}
+							<MotiView
+								key="saveMenu"
+								animate={
+									showSaveButton ?
+										{
+											width: buttonWidth,
+											translateX: 0,
+											rotateY: "0deg"
+										}
+									:
+										{
+											width: 0,
+											translateX: buttonWidth,
+											rotateY: "90deg"
+										}
+								}
+								transition={{
+									type: "timing",
+									duration: 600
+								}}
+								style={{
+									overflow: "hidden"
+								}}
 							>
 								<IconButton
 									colorScheme="secondary"
@@ -1181,7 +1211,7 @@ const WGOutput = () => {
 									py={1}
 									{...props}
 								/>
-							</ReAnimated.View>
+							</MotiView>
 						:
 							<></> // Only show this button when there are words to save.
 						)}
@@ -1193,52 +1223,63 @@ const WGOutput = () => {
 							onPress={() => toggleSaveSomeToLex()}
 						>Choose What to Save</Menu.Item>
 					</Menu>
-				</ReAnimated.View>
+				</HStack>
 			</HStack>
-			{(showLoadingScreen ?
-				<LoadingScreen key="loadingScreen" size={giantSize} />
-			:
-				[]
-			)}
-			{(displayedText ?
-				<ReAnimated.View
-					entering={ZoomInRight}
-					exiting={ZoomOutRight}
-					style={{flex: 1, paddingHorizontal: 16, paddingVertical: 8}}
-				>
-					<ScrollView>
-						<PseudoText
-							text={displayedText}
-							saving={savingToLexicon}
-							fontSize={textSize}
-							lineHeight={headerSize}
+			<AnimatePresence exitBeforeEnter>
+				{(showLoadingScreen &&
+					<LoadingScreen key="loadingScreen" size={giantSize} />
+				)}
+				{(displayedText &&
+					<MotiView
+						{...flipFlop(
+							{
+								translateX: width / 2
+							},
+							{
+								scaleY: 1,
+								opacity: 1
+							},
+							250
+						)}
+						style={{flex: 1}}
+					>
+						<ScrollView>
+							<PseudoText
+								text={displayedText}
+								saving={savingToLexicon}
+								fontSize={textSize}
+								lineHeight={headerSize}
+							/>
+						</ScrollView>
+					</MotiView>
+				)}
+				{(displayedWords.length > 0 &&
+					<MotiView
+						{...flipFlop(
+							{
+								translateX: width / -2
+							},
+							{
+								opacity: 1
+							},
+							250
+						)}
+						style={{flex: 1}}
+					>
+						<FlatGrid
+							renderItem={renderItem}
+							data={displayedWords}
+							itemDimension={longestWordSizeEstimate}
+							keyExtractor={makeKey}
+							style={{
+								paddingVertical: 0,
+								paddingHorizontal: 16
+							}}
+							spacing={emSize}
 						/>
-					</ScrollView>
-				</ReAnimated.View>
-			:
-				[]
-			)}
-			{(displayedWords.length > 0 ?
-				<ReAnimated.View
-					entering={FadeInLeft}
-					exiting={FadeOutLeft}
-					style={{flex: 1}}
-				>
-					<FlatGrid
-						renderItem={renderItem}
-						data={displayedWords}
-						itemDimension={longestWordSizeEstimate}
-						keyExtractor={makeKey}
-						style={{
-							paddingVertical: 0,
-							paddingHorizontal: 16
-						}}
-						spacing={emSize}
-					/>
-				</ReAnimated.View>
-			:
-				<></>
-			)}
+					</MotiView>
+				)}
+			</AnimatePresence>
 		</VStack>
 	);
 };
