@@ -2,14 +2,14 @@ import {
 	Text,
 	HStack,
 	Box,
-	ScrollView,
 	VStack,
 	IconButton,
 	Fab,
 	Modal,
 	useContrastText,
 	Button,
-	useToast
+	useToast,
+	Pressable
 } from "native-base";
 import { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ import {
 	AddIcon,
 	CloseCircleIcon,
 	DownIcon,
+	DragHandleIcon,
 	EditIcon,
 	ReorderIcon,
 	SaveIcon,
@@ -39,6 +40,10 @@ import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
 import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 import getSizes from "../../helpers/getSizes";
+import DraggableFlatList from "react-native-draggable-flatlist";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { fontSizesInPx } from "../../store/appStateSlice";
+import { useOutletContext } from "react-router-dom";
 
 const WESoundChanges = () => {
 	const { soundChanges } = useSelector(state => state.we);
@@ -53,6 +58,7 @@ const WESoundChanges = () => {
 	const [reordering, setReordering] = useState(false);
 	const [reorderingInProgress, setReorderingInProgress] = useState(false);
 	const [unitHeights, setUnitHeights] = useState({});
+	const [iconWidths, setIconWidths] = useState(0);
 
 	const [editingSoundChange, setEditingSoundChange] = useState(false);
 	const [modifiedID, setModifiedID] = useState(false);
@@ -81,11 +87,15 @@ const WESoundChanges = () => {
 	const refAddDesc = useRef(null);
 
 	const [fabSize, textSize, smallerSize] = getSizes("md", "sm", "xs");
+	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const toast = useToast();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
 	const dangerContrast = useContrastText("danger.500");
+
+	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
+
 	// add soundChange
 	const addNewSoundChange = (closeAfterAdd) => {
 		// attempts to add the modal info as a new soundChange
@@ -346,7 +356,7 @@ const WESoundChanges = () => {
 			<></>
 		;
 	};
-	const renderSoundChange = (soundChange, i) => {
+	const renderSoundChangeOLD = (soundChange, i) => {
 		const {id, beginning, ending, context, exception, description} = soundChange;
 		const unitHeight = unitHeights[id] || undefined;
 		return (
@@ -446,8 +456,124 @@ const WESoundChanges = () => {
 			</MotiView>
 		);
 	};
+	const renderSoundChange = ({item, index, drag, isActive}) => {
+		const {id, beginning, ending, context, exception, description} = item;
+		return (
+			<Pressable
+				onPressIn={(...props) => reordering && drag(...props)}
+			>
+				<HStack
+					justifyContent="flex-start"
+					alignItems="center"
+					w="full"
+					bg={isActive ? "main.700" : "main.800"}
+					py={1.5}
+					px={2}
+					borderBottomWidth={0.5}
+					borderColor="main.700"
+				>
+					<MotiView
+						animate={{
+							width: reordering ? emSize * 1.25 : 0,
+							scaleX: reordering ? 1 : 0
+						}}
+						transition={{
+							type: "timing",
+							duration: 300
+						}}
+					>
+						<DragHandleIcon color="primary.500" size={textSize} />
+					</MotiView>
+					<VStack
+						justifyContent="center"
+						alignItems="flex-start"
+						flex={1}
+						ml={2}
+						style={{overflow: "hidden"}}
+					>
+						<HStack
+							justifyContent="flex-start"
+							alignItems="center"
+							space={1.5}
+						>
+							<Unit>{beginning}</Unit>
+							<T>⟶</T>
+							<Unit>{ending}</Unit>
+							<T>/</T>
+							<Unit>{context}</Unit>
+							{
+								exception ?
+									<>
+										<T key={`${id}-exception-point`}>!</T>
+										<Unit key={`${id}-exception`}>{exception}</Unit>
+									</>
+								:
+									<Fragment key={`${id}-no-exception`} />
+							}
+						</HStack>
+						{description && <Text italic key={`${id}//desc`}>{description}</Text>}
+					</VStack>
+					<AnimatePresence>
+						{reordering ||
+							<MotiView
+								from={{
+									width: iconWidths ? 0 : undefined,
+									opacity: iconWidths ? 0 : 1
+								}}
+								animate={{
+									width: iconWidths || undefined,
+									opacity: 1
+								}}
+								exit={{
+									width: 0,
+									opacity: 0
+								}}
+								transition={{
+									type: "timing",
+									duration: 300
+								}}
+								style={{
+									overflow: "hidden"
+								}}
+								key={`${id}/edit/delete`}
+							>
+								<HStack
+									flexShrink={0}
+									flexGrow={0}
+									onLayout={(event => {
+										const {width} = event.nativeEvent.layout;
+										if(!iconWidths || width > iconWidths) {
+											setIconWidths(width)
+											console.log(width);
+										}
+									})}
+								>
+									<IconButton
+										icon={<EditIcon color="primary.400" size={smallerSize} />}
+										accessibilityLabel="Edit"
+										bg="transparent"
+										p={1}
+										m={0.5}
+										onPress={() => startEditSoundChange(item)}
+									/>
+									<IconButton
+										icon={<TrashIcon color="danger.400" size={smallerSize} />}
+										accessibilityLabel="Delete"
+										bg="transparent"
+										p={1}
+										m={0.5}
+										onPress={() => maybeDeleteSoundChange(item)}
+									/>
+								</HStack>
+							</MotiView>
+						}
+					</AnimatePresence>
+				</HStack>
+			</Pressable>
+		);
+	};
 	return (
-		<VStack h="full">
+		<GestureHandlerRootView style={{maxHeight: viewHeight}}><VStack style={{maxHeight: viewHeight}} bg="main.900">
 			<StandardAlert
 				alertOpen={!!deletingSoundChange}
 				setAlertOpen={setDeletingSoundChange}
@@ -635,16 +761,18 @@ const WESoundChanges = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<Fab
-				bg="tertiary.500"
-				renderInPortal={false}
-				icon={<AddIcon color={tertiaryContrast} size={fabSize} />}
-				accessibilityLabel="Add Sound Change"
-				onPress={() => {
-					setAddSoundChangeOpen(true);
-					setReordering(false);
-				}}
-			/>
+			{ reordering ||
+				<Fab
+					bg="tertiary.500"
+					renderInPortal={false}
+					icon={<AddIcon color={tertiaryContrast} size={fabSize} />}
+					accessibilityLabel="Add Sound Change"
+					onPress={() => {
+						setAddSoundChangeOpen(true);
+						setReordering(false);
+					}}
+				/>
+			}
 			<Fab
 				bg="secondary.500"
 				renderInPortal={false}
@@ -661,13 +789,29 @@ const WESoundChanges = () => {
 				onPress={() => setReordering(!reordering)}
 				placement="bottom-left"
 			/>
-			<ScrollView bg="main.900">
+			{/*<ScrollView bg="main.900">
 				<AnimatePresence>
-					{soundChanges.map((soundChange, i) => renderSoundChange(soundChange, i))}
+					{soundChanges.map((soundChange, i) => renderSoundChangeOLD(soundChange, i))}
 				</AnimatePresence>
 				<Box h={20} bg="main.900" />
-			</ScrollView>
-		</VStack>
+			</ScrollView>*/}
+				<DraggableFlatList
+					data={soundChanges}
+					renderItem={renderSoundChange}
+					keyExtractor={(item, index) => `${item.id}-${index}`}
+					onDragEnd={(end) => {
+						const { from, to, data } = end;
+						from !== to && dispatch(rearrangeSoundChanges(data));
+					}}
+					contentContainerStyle={{
+						maxHeight: viewHeight
+					}}
+					style={{
+						maxHeight: viewHeight
+					}}
+					ListFooterComponent={<Box h={20} />}
+				/>
+		</VStack></GestureHandlerRootView>
 	);
 };
 

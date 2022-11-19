@@ -366,6 +366,166 @@ initialAppState.we = {
 			context: "._.",
 			exception: "t_",
 			description: "double ts not at ends of words"
+		},
+		{
+			id: "s4",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s5",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s6",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s7",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s8",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s9",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s10",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s11",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s12",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s13",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s14",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s15",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s16",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s17",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s18",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s19",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s20",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s21",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
+		},
+		{
+			id: "s22",
+			beginning: "w*h",
+			ending: "w",
+			context: "_",
+			exception: "_#",
+			description: "h to w but not at end of word"
+		},
+		{
+			id: "s23",
+			beginning: "t{1}(?!t)",
+			ending: "tt",
+			context: "._.",
+			exception: "t_",
+			description: "double ts not at ends of words"
 		}
 	]
 };
