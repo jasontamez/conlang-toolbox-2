@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, HStack, Box, useBreakpointValue } from "native-base";
+import { Text, HStack, Box, useBreakpointValue, ZStack } from "native-base";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -11,6 +11,7 @@ import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
 import WEContextMenu from '../pages/contextMenus/WEContextMenu';
+import { fontSizesInPx } from "../store/appStateSlice";
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
@@ -39,18 +40,23 @@ const AppHeader = () => {
 		rightHeader
 	} = {...defaultProps, ...currentPage};
 	const textSize = useBreakpointValue(sizes.lg);
+	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
+	const style = {height: emSize * 2.5};
 	return (
-		<HStack
-			w="full"
-			alignItems="center"
-			bg="lighter"
-			flexGrow={0}
-			flexShrink={0}
+		<ZStack
+			style={style}
 			safeArea
-			{...boxProps}
+			bg="lighter"
+			w="full"
+			justifyContent="center"
+			alignItems="center"
 		>
-			<MenuModal />
-			<Box flexGrow={1} flexShrink={0}>
+			<HStack
+				w="full"
+				justifyContent="center"
+				style={style}
+				alignItems="center"
+			>
 				<Text
 					isTruncated
 					fontSize={textSize}
@@ -59,14 +65,23 @@ const AppHeader = () => {
 				>
 					{title}
 				</Text>
-			</Box>
-			{extraChars ? <ExtraChars size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} /> : <></>}
-			{rightHeader.map(header => (
-				<React.Fragment key={"Header-" + header}>
-					{Headers[header]}
-				</React.Fragment>
-			))}
-		</HStack>
+			</HStack>
+			<HStack
+				w="full"
+				style={style}
+				alignItems="center"
+				{...boxProps}
+			>
+				<MenuModal />
+				<Box flexGrow={1} flexShrink={0}></Box>
+				{extraChars ? <ExtraChars size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} /> : <></>}
+				{rightHeader.map(header => (
+					<React.Fragment key={"Header-" + header}>
+						{Headers[header]}
+					</React.Fragment>
+				))}
+			</HStack>
+		</ZStack>
 	);
 };
 

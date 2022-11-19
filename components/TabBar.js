@@ -12,20 +12,16 @@ const TabBar = ({
 	//    rawHeight={height of the outer Box}
 	//    boxProps={properties for outer Box}
 	//    {other props go to inner HStack} />
+	const barHeight = rawHeight; // remove width of border?
 	return (
 		<Box
 			w="full"
-			position="absolute"
-			left={0}
-			bottom={0}
-			right={0}
 			bg="main.800"
 			alignItems="center"
-			flex={1}
 			borderColor="main.700"
 			borderTopWidth={1}
 			style={{
-				height: rawHeight
+				height: barHeight
 			}}
 			{...boxProps}
 		>
@@ -34,6 +30,7 @@ const TabBar = ({
 				justifyContent="space-evenly"
 				alignItems="center"
 				{...props}
+				style={{maxHeight: barHeight}}
 			/>
 		</Box>
 	);
