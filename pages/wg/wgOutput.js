@@ -778,7 +778,7 @@ const WGOutput = () => {
 	];
 
 	return (
-		<VStack h="full" alignContent="flex-start" bg="main.900" mb={16}>
+		<VStack h="full" alignContent="flex-start" bg="main.900">
 			<StandardAlert
 				alertOpen={alertCannotGenerate}
 				setAlertOpen={setAlertCannotGenerate}

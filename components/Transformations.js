@@ -2,7 +2,6 @@ import {
 	Text,
 	HStack,
 	Box,
-	ScrollView,
 	VStack,
 	IconButton,
 	Fab,
@@ -16,16 +15,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import { AnimatePresence, MotiView } from "moti";
+import { useOutletContext } from "react-router-dom";
+import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import DraggableFlatList from "react-native-draggable-flatlist";
 
 import {
 	AddIcon,
 	CloseCircleIcon,
-	DownIcon,
+	DragHandleIcon,
 	EditIcon,
 	ReorderIcon,
 	StopIcon,
-	TrashIcon,
-	UpIcon
+	TrashIcon
 } from "./icons";
 import { DropDown, TextSetting } from "./inputTags";
 import StandardAlert from "./StandardAlert";
@@ -34,6 +35,7 @@ import doToast from "../helpers/toast";
 import ModalTransformEditingItem from "./ModalTransformEditor";
 import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 import getSizes from "../helpers/getSizes";
+import { fontSizesInPx } from "../store/appStateSlice";
 
 //direction: both | in | out | double
 const Transformations = ({
@@ -68,12 +70,16 @@ const Transformations = ({
 	const [reorderedTransform, setReorderedTransform] = useState("");
 	const [reorderedOrder, setReorderedOrder] = useState(false);
 	const [reorderState, setReorderState] = useState(0);
+	const [iconWidths, setIconWidths] = useState(0);
 
 	const [textSize, fabSize, descSize] = getSizes("sm", "md", "xs");
+	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const primaryContrast = useContrastText("primary.500");
 	const colors = useTheme().colors;
 	const highlightColor = colors.text["50"];
 	const bgColor = colors.primary["500"];
+
+	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
 
 	// Delete
 	const maybeDeleteTransform = (transform = deletingTransform) => {
@@ -318,6 +324,7 @@ const Transformations = ({
 				flexGrow={1}
 				flexShrink={1}
 				overflow="hidden"
+				pl={2}
 			>
 				<HStack
 					alignItems="center"
@@ -344,8 +351,103 @@ const Transformations = ({
 		output: "at output only",
 		double: "at input, then again at output"
 	};
+	const renderItem = ({item, index, drag, isActive}) => {
+		const {id} = item;
+		const onPressIn = reordering ? drag : undefined;
+		return (
+			<TouchableWithoutFeedback
+				onPressIn={onPressIn}
+			>
+				<HStack
+					alignItems="center"
+					justifyContent="flex-start"
+					borderBottomWidth={1}
+					borderColor="main.700"
+					py={2.5}
+					px={2}
+					bg={isActive ? "main.700" : "main.800"}
+					w="full"
+				>
+					<MotiView
+						animate={{
+							width: reordering ? emSize * 1.25 : 0,
+							scaleX: reordering ? 1 : 0
+						}}
+						transition={{
+							type: "timing",
+							duration: 300
+						}}
+					>
+						<DragHandleIcon color="primary.500" size={textSize} />
+					</MotiView>
+					<Item
+						item={item}
+						key={`${id}-The-Transform`}
+					/>
+					{reordering ||
+						<AnimatePresence key={`${id}-Editing-Buttons`}>
+							<MotiView
+								from={{
+									width: iconWidths ? 0 : undefined,
+									opacity: iconWidths ? 0 : 1
+								}}
+								animate={{
+									width: iconWidths || undefined,
+									opacity: 1
+								}}
+								exit={{
+									width: 0,
+									opacity: 0
+								}}
+								transition={{
+									type: "timing",
+									duration: 300
+								}}
+								style={{
+									overflow: "hidden"
+								}}
+								key={`${id}/edit/delete`}
+							>
+								<HStack
+									flexShrink={0}
+									flexGrow={0}
+									onLayout={(event => {
+										const {width} = event.nativeEvent.layout;
+										if(!iconWidths || width > iconWidths) {
+											setIconWidths(width)
+										}
+									})}
+								>
+									<IconButton
+										icon={<EditIcon color="primary.400" size={textSize} />}
+										accessibilityLabel="Edit"
+										bg="transparent"
+										p={1}
+										m={0.5}
+										flexGrow={0}
+										flexShrink={0}
+										onPress={() => setEditingTransform(item)}
+									/>
+									<IconButton
+										icon={<TrashIcon color="danger.400" size={textSize} />}
+										accessibilityLabel="Delete"
+										bg="transparent"
+										p={1}
+										m={0.5}
+										flexGrow={0}
+										flexShrink={0}
+										onPress={() => maybeDeleteTransform(item)}
+									/>
+								</HStack>
+							</MotiView>
+						</AnimatePresence>
+					}
+				</HStack>
+			</TouchableWithoutFeedback>
+		);
+	};
 	return (
-		<VStack h="full">
+		<VStack style={{height: viewHeight}} bg="main.900">
 			<StandardAlert
 				alertOpen={!!deletingTransform}
 				setAlertOpen={setDeletingTransform}
@@ -420,48 +522,46 @@ const Transformations = ({
 								boxProps={{ pb: 2 }}
 								labelProps={{ fontSize: textSize }}
 							/>
-							{
-								useDirection ?
-									<HStack
-										space={1}
-										flexWrap="wrap"
-										alignItems="center"
-										justifyContent="flex-start"
-									>
-										<Text fontSize={textSize}>Transform:</Text>
-										<DropDown
-											placement="top right"
-											bg="lighter"
-											color="text.50"
-											fontSize={textSize}
-											labelFunc={() => directionTexts[addDirection]}
-											onChange={(v) => setAddDirection(v)}
-											defaultValue={addDirection}
-											title="When Used?"
-											options={Object.keys(directionTexts).map(opt => {
-												return {
-													key: `${opt}-AddDirectionChoice`,
-													value: opt,
-													label: directionTexts[opt]
-												};
-											})}
-											buttonProps={{
+							{useDirection &&
+								<HStack
+									space={1}
+									flexWrap="wrap"
+									alignItems="center"
+									justifyContent="flex-start"
+									key="ModalDirectionality"
+								>
+									<Text fontSize={textSize}>Transform:</Text>
+									<DropDown
+										placement="top right"
+										bg="lighter"
+										color="text.50"
+										fontSize={textSize}
+										labelFunc={() => directionTexts[addDirection]}
+										onChange={(v) => setAddDirection(v)}
+										defaultValue={addDirection}
+										title="When Used?"
+										options={Object.keys(directionTexts).map(opt => {
+											return {
+												key: `${opt}-AddDirectionChoice`,
+												value: opt,
+												label: directionTexts[opt]
+											};
+										})}
+										buttonProps={{
+											flex: 1,
+											px: 2,
+											_stack: {
+												justifyContent: "flex-start",
+												alignItems: "center",
 												flex: 1,
-												px: 2,
-												_stack: {
-													justifyContent: "flex-start",
-													alignItems: "center",
-													flex: 1,
-													space: 0,
-													style: {
-														overflow: "hidden"
-													}
+												space: 0,
+												style: {
+													overflow: "hidden"
 												}
-											}}
-										/>
-									</HStack>
-								:
-									<></>
+											}
+										}}
+									/>
+								</HStack>
 							}
 						</VStack>
 					</Modal.Body>
@@ -487,16 +587,18 @@ const Transformations = ({
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<Fab
-				bg="tertiary.500"
-				renderInPortal={false}
-				icon={<AddIcon color="tertiary.50" size={fabSize} />}
-				accessibilityLabel="Add Transform"
-				onPress={() => {
-					setAddTransformOpen(true);
-					setReordering(false);
-				}}
-			/>
+			{reordering ||
+				<Fab
+					bg="tertiary.500"
+					renderInPortal={false}
+					icon={<AddIcon color="tertiary.50" size={fabSize} />}
+					accessibilityLabel="Add Transform"
+					onPress={() => {
+						setAddTransformOpen(true);
+						setReordering(false);
+					}}
+				/>
+			}
 			<Fab
 				bg="secondary.500"
 				renderInPortal={false}
@@ -513,93 +615,22 @@ const Transformations = ({
 				onPress={() => setReordering(!reordering)}
 				placement="bottom-left"
 			/>
-			<ScrollView bg="main.900">
-				<AnimatePresence>
-					{transforms.map((item, index) => {
-						const {id} = item;
-						return (
-							<MotiView
-								key={id}
-								transition={{
-									type: "timing",
-									duration: 350
-								}}
-								{...findReorderState(id)}
-							>
-								<HStack
-									alignItems="center"
-									justifyContent="flex-start"
-									borderBottomWidth={1}
-									borderColor="main.700"
-									py={2.5}
-									px={2}
-									bg="main.800"
-									w="full"
-								>
-									{reordering ?
-										<IconButton
-											key={`${id}-reorder-up`}
-											icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} size={textSize} />}
-											accessibilityLabel="Move Up in List"
-											bg={index === 0 ? "transparent" : "darker"}
-											p={1}
-											my={0.5}
-											mr={2}
-											flexGrow={0}
-											flexShrink={0}
-											onPress={() => moveUpInList(item, index)}
-										/>
-									:
-										<React.Fragment key={`${id}-No-Reordering-Button`}></React.Fragment>
-									}
-									<Item
-										item={item}
-										key={`${id}-The-Transform`}
-									/>
-									{reordering ?
-										<IconButton
-											key={`${id}-reorder-down`}
-											icon={<DownIcon color={index === lastTransform ? "transparent" : "primary.400"} size={textSize} />}
-											accessibilityLabel="Move Down in List"
-											bg={index === lastTransform ? "transparent" : "darker"}
-											p={1}
-											my={0.5}
-											ml={2}
-											flexGrow={0}
-											flexShrink={0}
-											onPress={() => moveDownInList(item, index)}
-										/>
-									:
-										<React.Fragment key={`${id}-Editing-Buttons`}>
-											<IconButton
-												icon={<EditIcon color="primary.400" size={textSize} />}
-												accessibilityLabel="Edit"
-												bg="transparent"
-												p={1}
-												m={0.5}
-												flexGrow={0}
-												flexShrink={0}
-												onPress={() => setEditingTransform(item)}
-											/>
-											<IconButton
-												icon={<TrashIcon color="danger.400" size={textSize} />}
-												accessibilityLabel="Delete"
-												bg="transparent"
-												p={1}
-												m={0.5}
-												flexGrow={0}
-												flexShrink={0}
-												onPress={() => maybeDeleteTransform(item)}
-											/>
-										</React.Fragment>
-									}
-								</HStack>
-							</MotiView>
-						);
-					})}
-				</AnimatePresence>
-				<Box h={20} bg="main.900" />
-			</ScrollView>
+			<GestureHandlerRootView>
+				<DraggableFlatList
+					data={transforms}
+					renderItem={renderItem}
+					keyExtractor={(item, index) => `${item.id}-${index}`}
+					onDragEnd={(end) => {
+						const { from, to, data } = end;
+						from !== to && dispatch(rearrangeTransforms(data));
+					}}
+					autoscrollThreshold={1}
+					containerStyle={{
+						maxHeight: viewHeight
+					}}
+					ListFooterComponent={<Box h={20} />}
+				/>
+			</GestureHandlerRootView>
 		</VStack>
 	);
 };

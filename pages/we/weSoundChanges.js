@@ -15,6 +15,7 @@ import { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 import { AnimatePresence, MotiView } from 'moti';
+import { useOutletContext } from "react-router-dom";
 
 import {
 	AddIcon,
@@ -43,7 +44,6 @@ import getSizes from "../../helpers/getSizes";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { fontSizesInPx } from "../../store/appStateSlice";
-import { useOutletContext } from "react-router-dom";
 
 const WESoundChanges = () => {
 	const { soundChanges } = useSelector(state => state.we);
@@ -502,14 +502,11 @@ const WESoundChanges = () => {
 							<Unit>{ending}</Unit>
 							<T>/</T>
 							<Unit>{context}</Unit>
-							{
-								exception ?
-									<>
-										<T key={`${id}-exception-point`}>!</T>
-										<Unit key={`${id}-exception`}>{exception}</Unit>
-									</>
-								:
-									<Fragment key={`${id}-no-exception`} />
+							{exception &&
+								<Fragment key={`${id}-no-exception`}>
+									<T key={`${id}-exception-point`}>!</T>
+									<Unit key={`${id}-exception`}>{exception}</Unit>
+								</Fragment>
 							}
 						</HStack>
 						{description && <Text italic key={`${id}//desc`}>{description}</Text>}
@@ -795,22 +792,20 @@ const WESoundChanges = () => {
 				</AnimatePresence>
 				<Box h={20} bg="main.900" />
 			</ScrollView>*/}
-				<DraggableFlatList
-					data={soundChanges}
-					renderItem={renderSoundChange}
-					keyExtractor={(item, index) => `${item.id}-${index}`}
-					onDragEnd={(end) => {
-						const { from, to, data } = end;
-						from !== to && dispatch(rearrangeSoundChanges(data));
-					}}
-					contentContainerStyle={{
-						maxHeight: viewHeight
-					}}
-					style={{
-						maxHeight: viewHeight
-					}}
-					ListFooterComponent={<Box h={20} />}
-				/>
+			<DraggableFlatList
+				data={soundChanges}
+				renderItem={renderSoundChange}
+				keyExtractor={(item, index) => `${item.id}-${index}`}
+				onDragEnd={(end) => {
+					const { from, to, data } = end;
+					from !== to && dispatch(rearrangeSoundChanges(data));
+				}}
+				autoscrollThreshold={1}
+				containerStyle={{
+					maxHeight: viewHeight
+				}}
+				ListFooterComponent={<Box h={20} />}
+			/>
 		</VStack></GestureHandlerRootView>
 	);
 };

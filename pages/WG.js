@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-native';
 import { useWindowDimensions } from 'react-native';
 import {
 	VStack,
-	Box,
 	Text,
 	Pressable,
 	useBreakpointValue
@@ -23,10 +22,12 @@ import getSizes from '../helpers/getSizes';
 const WG = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const [buttonTextSize, iconSize] = getSizes("xs", "sm");
-	const lineHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2;
+	const { width, height } = useWindowDimensions();
+	const [buttonTextSize, iconSize, appHeaderSize] = getSizes("xs", "sm", "lg");
+	const tabBarHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2 - 2;
+	const appHeaderHeight = fontSizesInPx[appHeaderSize] * 2.5;
+	const viewHeight = height - appHeaderHeight - tabBarHeight;
 	const pathname = location.pathname;
-	const w = (useWindowDimensions().width - 6) / 5;
 	const ButtonLabel = useBreakpointValue({
 		base: () => <></>,
 		sm: ({color, label}) => <Text
@@ -45,8 +46,10 @@ const WG = () => {
 					alignItems="center"
 					justifyContent="center"
 					bg={bg}
-					w={w}
-					style={{height: lineHeight}}
+					style={{
+						height: tabBarHeight,
+						width: (width - 6) / 5
+					}}
 				>
 					<TabIcon color={colorString} size={iconSize} />
 					<ButtonLabel color={colorString} label={label} />
@@ -59,22 +62,13 @@ const WG = () => {
 			<VStack
 				alignItems="stretch"
 				justifyContent="center"
-				left={0}
-				bottom={0}
-				right={0}
-				flex={1}
-				style={{marginBottom: lineHeight}}
+				style={{
+					height: viewHeight
+				}}
 			>
-				<Box
-					flexGrow={2}
-					flexShrink={2}
-					flexBasis="85%"
-					m={0}
-				>
-					<Outlet />
-				</Box>
+				<Outlet context={[appHeaderHeight, viewHeight, tabBarHeight]} />
 			</VStack>
-			<TabBar rawHeight={lineHeight}>
+			<TabBar rawHeight={tabBarHeight}>
 				<NavTab
 					isCurrent={pathname === "/wg/characters"}
 					TabIcon={(props) => <WGCharactersIcon {...props} />}
