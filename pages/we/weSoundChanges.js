@@ -41,7 +41,7 @@ import doToast from "../../helpers/toast";
 import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 import getSizes from "../../helpers/getSizes";
 import DraggableFlatList from "react-native-draggable-flatlist";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import { useOutletContext } from "react-router-dom";
 
@@ -458,9 +458,10 @@ const WESoundChanges = () => {
 	};
 	const renderSoundChange = ({item, index, drag, isActive}) => {
 		const {id, beginning, ending, context, exception, description} = item;
+		const onPressIn = reordering ? drag : undefined;
 		return (
-			<Pressable
-				onPressIn={(...props) => reordering && drag(...props)}
+			<TouchableWithoutFeedback
+				onPressIn={onPressIn}
 			>
 				<HStack
 					justifyContent="flex-start"
@@ -544,7 +545,6 @@ const WESoundChanges = () => {
 										const {width} = event.nativeEvent.layout;
 										if(!iconWidths || width > iconWidths) {
 											setIconWidths(width)
-											console.log(width);
 										}
 									})}
 								>
@@ -569,7 +569,7 @@ const WESoundChanges = () => {
 						}
 					</AnimatePresence>
 				</HStack>
-			</Pressable>
+			</TouchableWithoutFeedback>
 		);
 	};
 	return (

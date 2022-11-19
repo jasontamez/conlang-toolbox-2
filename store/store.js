@@ -521,11 +521,11 @@ initialAppState.we = {
 		},
 		{
 			id: "s23",
-			beginning: "t{1}(?!t)",
-			ending: "tt",
+			beginning: "oot{1}(?!t)",
+			ending: "oott",
 			context: "._.",
 			exception: "t_",
-			description: "double ts not at ends of words"
+			description: "LAST ONE"
 		}
 	]
 };

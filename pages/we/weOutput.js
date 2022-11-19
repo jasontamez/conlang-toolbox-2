@@ -22,7 +22,7 @@ import React, {
 } from "react";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import escapeRegexp from "escape-string-regexp";
 import { v4 as uuidv4 } from 'uuid';
@@ -132,6 +132,7 @@ const WGOutput = () => {
 		giantSize
 	] = getSizes("sm", "xs", "md", "lg", "x2");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
+	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
 	const toast = useToast();
 	const navigate = useNavigate();
 	const primaryContrast = useContrastText("primary.500");
@@ -1142,7 +1143,11 @@ const WGOutput = () => {
 	};
 
 	return (
-		<VStack h="full" alignContent="flex-start" bg="main.900" mb={16}>
+		<VStack
+			alignContent="flex-start"
+			bg="main.900"
+			style={{height: viewHeight}}
+		>
 			<StandardAlert
 				alertOpen={alertCannotEvolve}
 				setAlertOpen={setAlertCannotEvolve}
