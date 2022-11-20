@@ -8,6 +8,7 @@ import {
 	Spinner
 } from 'native-base';
 import { useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseCircleIcon, OkIcon } from './icons';
 
 // <FullPageModal
@@ -31,37 +32,42 @@ import { CloseCircleIcon, OkIcon } from './icons';
 const FullPageModal = ({
 	modalOpen,
 	closeModal,
-	modalProps,
-	modalContentProps,
-	modalHeaderProps,
+	modalProps = {},
+	modalContentProps = {},
+	modalHeaderProps = {},
 	HeaderOverride,
 	modalTitle,
-	modalBodyProps,
+	modalBodyProps = {},
 	BodyContent,
-	modalFooterProps,
+	modalFooterProps = {},
 	FooterOverride,
 	textSize,
 	headerTextSize,
 	footerTextSize
 }) => {
 	const { height, width } = useWindowDimensions();
+	// Still not sure if these are even useful, but here we go...
+	const {top, bottom, left, right} = useSafeAreaInsets();
+	const style = {
+		paddingTop: 0,
+		height: height - top - bottom,
+		width: width - left - right
+	};
 	return (
 		<Modal
-			m={0}
 			isOpen={modalOpen}
 			onClose={closeModal}
 			size="full"
-			style={{ width, height }}
-			safeArea
-			bg="main.800"
-			{...(modalProps || {})}
+			style={style}
+			{...modalProps}
 		>
 			<Modal.Content
+				bg="main.800"
 				borderRadius="none"
-				style={{ width, height, maxHeight: height }}
-				{...(modalContentProps || {})}
+				style={style}
+				{...modalContentProps}
 			>
-				<Modal.Header style={{width}} {...(modalHeaderProps || {})}>
+				<Modal.Header w="full" {...modalHeaderProps}>
 					{HeaderOverride === undefined ?
 						<HStack
 							w="full"
@@ -86,18 +92,16 @@ const FullPageModal = ({
 							/>
 						</HStack>
 					:
-						<HeaderOverride modalWidth={width} modalHeight={height} />
+						<HeaderOverride modalWidth={style.width} modalHeight={style.height} />
 					}
 				</Modal.Header>
 				<Modal.Body
-					safeArea
 					m={0}
-					style={{width, height}}
-					{...(modalBodyProps || {})}
+					{...modalBodyProps}
 				>
-					<BodyContent modalWidth={width} modalHeight={height} />
+					<BodyContent modalWidth={style.width} modalHeight={style.height} />
 				</Modal.Body>
-				<Modal.Footer style={{width}} p={2} {...(modalFooterProps || {})}>
+				<Modal.Footer p={2} {...modalFooterProps}>
 					{FooterOverride === undefined ?
 						<Button
 							m={0}
@@ -106,7 +110,7 @@ const FullPageModal = ({
 							_text={{fontSize: footerTextSize || textSize}}
 						>Done</Button>
 					:
-						<FooterOverride modalWidth={width} modalHeight={height} />
+						<FooterOverride modalWidth={style.width} modalHeight={style.height} />
 					}
 				</Modal.Footer>
 			</Modal.Content>

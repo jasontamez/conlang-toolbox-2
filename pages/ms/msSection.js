@@ -486,6 +486,7 @@ const ParseMSJSON = (props) => {
 							BodyContent={() => <ModalContent content={content} />}
 							textSize={textSize}
 							modalTitle={title}
+							modalBodyProps={{pr: 10}}
 						/>
 						<Button
 							py={1}

@@ -6,14 +6,14 @@ import {
 	useContrastText,
 	HStack,
 	IconButton,
-	Button
+	Button,
+	Center
 } from 'native-base';
 import { useLocation } from "react-router-native";
 
 import {
 	InfoIcon,
 	CloseCircleIcon,
-	DotIcon,
 	ReorderIcon,
 	GearIcon,
 	SaveIcon,
@@ -23,22 +23,32 @@ import getSizes from '../../helpers/getSizes';
 
 const WEContextMenu = () => {
 	const { pathname } = useLocation();
-	const [dotSize, textSize, headerSize] = getSizes("xs", "sm", "md");
+	const [textSize, headerSize, iconSize] = getSizes("sm", "md", "lg");
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');
 	const modalRef = useRef(null);
 	const primaryContrast = useContrastText('primary.500');
-	const P = (props) => <Text fontSize={textSize} {...props} />;
+	const P = (props) => <Text lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const Em = (props) => <P italic {...props} />;
 	const B = (props) => <P bold {...props} />;
 	const S = (props) => <P fontFamily="serif" {...props} />;
 	const HWrap = (props) => <HStack space={1} w="full" justifyContent="center" alignItems="center" flexWrap="wrap" {...props} />;
-	const Dot = (props) => <DotIcon color="text.50" size={dotSize} mr={2} {...props} />;
+	const space = {
+		md: 5,
+		lg: 6,
+		xl: 8,
+		"2xl": 12,
+		"3xl": 16,
+		"4xl": 20,
+		"5xl": 32,
+		"6xl": 48,
+		"7xl": 64
+	}[textSize] || 4;
 	const ModalBody = (props) => (
 		<Modal.Body _scrollview={{ref: modalRef}}>
 			<VStack
-				space={4}
+				space={space}
 				justifyContent="space-between"
 				{...props}
 			/>
@@ -60,13 +70,14 @@ const WEContextMenu = () => {
 							{'\t'}This is where you define groups of characters representing sounds. You can reference
 							these groups in <B>Transformations</B> and <B>Sound Changes</B> to fine-tune the way your
 							language evolves.
-						</P><P>
-							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
-							group. When you make a group, you must give it a <Em>description</Em> and a
-							one-character <Em>label</Em>. The description is for your own benefit, while the label
-							will be used to refer to this group in the other tabs. The label can be any single
-							character except for these: <B>{"^$\\()[]{}.*+?|"}</B>. The letters/characters in
-							your group are called a <Em>run</Em>.
+						</P>
+						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<P>
+							{'\t'}Click the <B>Add</B> button to add a new group. When you make a group, you must give
+							it a <Em>description</Em> and a one-character <Em>label</Em>. The description is for your
+							own benefit, while the label will be used to refer to this group in the other tabs. The
+							label can be any single character except for these: <B>{"^$\\()[]{}.*+?|"}</B>. The
+							letters/characters in a group are called a <Em>run</Em>.
 						</P>
 					</ModalBody>
 				);
@@ -136,12 +147,17 @@ const WEContextMenu = () => {
 						<P>
 							{'\t'}If you have no special rules for where in a word a replacement can happen,
 							just make a <Em>context expression</Em> that's only a single underscore.
-						</P><P>
-							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
-							sound-change. The first sound-change in the list will be run first, the second
+						</P>
+						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<P>
+							{'\t'}Click the <B>Add</B> button to add a new sound-change.
+						</P>
+						<Center><ReorderIcon color="text.50" size={iconSize} /></Center>
+						<P>
+							{'\t'}The first sound-change in the list will be run first, the second
 							sound-change second, and so on down the list. This may cause unintended effects,
-							so you can reorganize your sound-changes to avoid any such effects by using
-							the <ReorderIcon color="text.50" size={dotSize} /> reordering mode.
+							so you can reorganize your sound-changes to avoid them by using the reordering
+							mode.
 						</P>
 					</ModalBody>
 				);
@@ -166,19 +182,19 @@ const WEContextMenu = () => {
 						</P>
 						<VStack px={4} space={1}>
 							<P>
-								<Dot /><B>Input only:</B> Before anything else happens, input words are
+								{'\t'}<B>Input only:</B> Before anything else happens, input words are
 								searched, and any instances of the <Em>input expression</Em> are replaced with
 								the <Em>output expression</Em>. Regular expressions and %Group references
 								are allowed in the <Em>input expression</Em> only. (A group reference is
 								something like %G to indicate any character in characyer group C's run, or
 								!%G to indicate any character <Em>not</Em> in that run.)
 							</P><P>
-								<Dot /><B>Output only:</B> After all <B>sound changes</B> are
+								{'\t'}<B>Output only:</B> After all <B>sound changes</B> are
 								processed, any instances of the <Em>input expression</Em> are replaced with
 								the <Em>output expression</Em>. Regular expressions and %Group references
 								are allowed in the <Em>input expression</Em> only.
 							</P><P>
-								<Dot /><B>At input, then undo at output:</B> Before anything else happens,
+								{'\t'}<B>At input, then undo at output:</B> Before anything else happens,
 								input words are searched, and any instances of the <Em>input
 								expression</Em> are replaced with the <Em>output expression</Em>. After
 								all <B>sound changes</B> are processed, any instances of
@@ -198,17 +214,21 @@ const WEContextMenu = () => {
 								{'\t'}NOTE: If you have unequal numbers of %Groups in the beginning and ending
 								expressions, errors may occur.
 							</P><P>
-								<Dot /><B>At input and at output:</B> As <Em>at input, then undo at
+								{'\t'}<B>At input and at output:</B> As <Em>at input, then undo at
 								output</Em>, but the <Em>input expression</Em> is replaced with the <Em>output
 								expression</Em> before AND after the <B>sound changes</B> are processed.
 							</P>
 						</VStack>
+						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
-							transform. The first transform in the list will be run first, the second transform
-							second, and so on down the list. This may cause unintended effects, so you can
-							reorganize your transforms by using
-							the <ReorderIcon color="text.50" size={dotSize} /> reordering mode.
+							{'\t'}Click the <B>Add</B> button to add a new transformation.
+						</P>
+						<Center><ReorderIcon color="text.50" size={iconSize} /></Center>
+						<P>
+							{'\t'}The first transformation in the list will be run first, the second
+							transformation second, and so on down the list. This may cause unintended effects,
+							so you can reorganize your transformations to avoid them by using the reordering
+							mode.
 						</P>
 					</ModalBody>
 				);
@@ -220,12 +240,13 @@ const WEContextMenu = () => {
 						<P>
 							{'\t'}This is where the magic happens. Click the <B>Generate</B> button and the
 							evolver will process all your input words and present your output in the space below.
+						</P>
+							<Center><GearIcon color="text.50" size={iconSize} /></Center>
+						<P>
+							{'\t'}Click on the <B>Gear</B> to open a list of options. They should all be
+							self-explanatory.
 						</P><P>
-							{'\t'}Click on the gear icon <GearIcon color="text.50" size={dotSize} /> to open a
-							list of options. They should all be self-explanatory.
-						</P><P>
-							{'\t'}There is a drop-down menu above the
-							Evolve <GenerateIcon color="text.50" size={dotSize} /> button where you can
+							{'\t'}There is a drop-down menu above the <B>Evolve</B> button where you can
 							select what to output. The choices are <B>Output only</B>, <B>Output with
 							Rules</B>, <B>Input ⟶ Output</B> and <B>Output, then
 							Input</B>.
@@ -241,14 +262,15 @@ const WEContextMenu = () => {
 							{'\t'}<B>Input ⟶ Output</B>, as you might guess, prints a list in the format
 							[input word] ⟶ [evolved word]. <B>Output ⟵ Input</B> is the same,
 							but the evolved word comes first.
-						</P><P>
+						</P>
+						<Center><SaveIcon color="text.50" size={iconSize} /></Center>
+						<P>
 							{'\t'}Once you've evolved words, you can save them to the <B>Lexicon</B>. Click
-							the save icon <SaveIcon color="text.50" size={dotSize} /> button and you're presented with
-							two options. <Em>Save All to Lexicon</Em> will store every single evolved word for the
-							Lexicon. <Em>Choose What to Save</Em> will highlight every evolved word, and you can tap
-							on a word to store it; when you're done choosing, hit the big green save button that
-							appears. You will be presented with a pop-up asking you which Lexicon column to save the
-							words to.
+							the <B>Save</B> button and you're presented with two options. <Em>Save All to
+							Lexicon</Em> will store every single evolved word for the Lexicon. <Em>Choose What
+							to Save</Em> will highlight every evolved word, and you can tap on a word to store
+							it; when you're done choosing, hit the big green save button that appears. You
+							will be presented with a pop-up asking you which Lexicon column to save the words to.
 						</P>
 					</ModalBody>
 				);

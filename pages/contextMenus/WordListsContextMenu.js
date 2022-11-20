@@ -87,14 +87,10 @@ const WordListsContextMenu = () => {
 					<Text fontSize={menuSize}>Info About the Lists</Text>
 				</Menu.Item>
 			</Menu>
-			<Modal
-				isOpen={infoModalOpen}
-				h="full"
-			>
+			<Modal isOpen={infoModalOpen}>
 				<Modal.Content
 					w="full"
 					maxWidth="full"
-					minHeight="full"
 					p={0}
 					m={0}
 					borderTopRadius={0}

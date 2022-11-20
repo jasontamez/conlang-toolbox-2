@@ -8,7 +8,8 @@ import {
 	IconButton,
 	Divider,
 	Box,
-	Button
+	Button,
+	Center
 } from 'native-base';
 import { useLocation } from "react-router-native";
 
@@ -25,13 +26,13 @@ import getSizes from '../../helpers/getSizes';
 
 const WGContextMenu = () => {
 	const { pathname } = useLocation();
-	const [dotSize, textSize, headerSize] = getSizes("xs", "sm", "md")
+	const [iconSize, textSize, headerSize] = getSizes("lg", "sm", "md")
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState("TITLE");
 	const [modalBody, setModalBody] = useState('');
 	const modalRef = useRef(null);
 	const primaryContrast = useContrastText('primary.500');
-	const P = (props) => <Text fontSize={textSize} {...props} />;
+	const P = (props) => <Text lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const I = (props) => <P bg="darker" px={0.5} >/{props.children}/</P>;
 	const Em = (props) => <P italic {...props} />;
 	const B = (props) => <P bold {...props} />;
@@ -39,10 +40,21 @@ const WGContextMenu = () => {
 	const Unit = (props) => <Box borderColor="text.50" borderWidth={2} py={1} px={2}><S bold {...props} /></Box>;
 	const C = (props) => <B textAlign="center" {...props} />;
 	const HWrap = (props) => <HStack space={1} alignItems="center" flexWrap="wrap" {...props} />;
+	const space = {
+		md: 5,
+		lg: 6,
+		xl: 8,
+		"2xl": 12,
+		"3xl": 16,
+		"4xl": 20,
+		"5xl": 32,
+		"6xl": 48,
+		"7xl": 64
+	}[textSize] || 4;
 	const ModalBody = (props) => (
 		<Modal.Body _scrollview={{ref: modalRef}}>
 			<VStack
-				space={4}
+				space={space}
 				justifyContent="space-between"
 				{...props}
 			/>
@@ -69,13 +81,14 @@ const WGContextMenu = () => {
 							consonants <I>lr</I> at the beginning of syllables. So you might choose them as
 							groups, while also putting <I>pbklr</I> in a third group for general consonants.
 						</P>
+						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a new
-							character group. When you make a group, you must give it a <Em>description</Em> and
-							a one-character <Em>label</Em>. The label can be any single character except for
-							these: <B>{"^$\\()[]{}.*+?|"}</B>. The description is for your own benefit, while
-							the label will be used to refer to this group in the <B>Syllables</B> tab. So you
-							may end up with groups that look like the following:
+							{'\t'}Click the <B>Add</B> button to add a new character group. When you make a
+							group, you must give it a <Em>description</Em> and a one-character <Em>label</Em>.
+							The label can be any single character except for these: <B>{"^$\\()[]{}.*+?|"}</B>.
+							The description is for your own benefit, while the label will be used to refer
+							to this group in the <B>Syllables</B> tab. So you may end up with groups that
+							look like the following:
 						</P>
 						<VStack w="full" alignItems="center" space={1}>
 							<C>I=pbk</C>
@@ -164,12 +177,17 @@ const WGContextMenu = () => {
 							<P>⟶</P>
 							<Unit>ch</Unit>
 						</HStack>
+						<Divider />
+						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Click the <AddCircleIcon color="text.50" size={dotSize} /> button to add a
-							new transformation. The first transformation in the list will be run first, the
-							second transformation second, and so on down the list. This may cause unintended
-							effects, so you can reorganize your transformations to avoid any such effects by
-							using the <ReorderIcon color="text.50" size={dotSize} /> reordering mode.
+							{'\t'}Click the Add button to add a new transformation.
+						</P>
+						<Center><ReorderIcon color="text.50" size={iconSize} /></Center>
+						<P>
+							{'\t'}The first transformation in the list will be run first, the second
+							transformation second, and so on down the list. This may cause unintended
+							effects, so you can reorganize your transformations to avoid them by
+							using the reordering mode.
 						</P>
 						<Divider />
 						<P>
@@ -220,37 +238,37 @@ const WGContextMenu = () => {
 				setModalTitle("Output");
 				setModalBody(
 					<ModalBody>
+						<Center><GenerateIcon color="text.50" size={iconSize} /></Center>
 						<P>
 							{'\t'}This is where the magic happens. Click the <B>Generate</B> button and your
-							output will appear below. Press the button again and a new set of output
+							output will appear below it. Press the button again and a new set of output
 							will replace it.
 						</P>
+						<Center><GearIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Click on the gear icon <GearIcon color="text.50" size={dotSize} /> to open a
-							list of settings. At the top, you can choose to <B>show syllable breaks</B>, which
-							will in·sert a dot be·tween eve·ry syl·la·ble in each word. While this option can be useful,
-							please note that it will break any <Em>transformations</Em> that try to work across syllable
-							boundaries. The other settings are mentioned below.
+							{'\t'}Click on the gear icon to open a list of <B>Settings</B>. At the top, you
+							can choose to <B>show syllable breaks</B>, which will in·sert a dot be·tween
+							eve·ry syl·la·ble in each word. While this option can be useful, please note
+							that it will break any <Em>transformations</Em> that try to work across
+							syllable boundaries. The other settings are mentioned below.
 						</P>
 						<P>
-							{'\t'}There is a drop-down menu above the
-							Generate <GenerateIcon color="text.50" size={dotSize} /> button where you can
+							{'\t'}There is a drop-down menu above the Generate button where you can
 							select what to output. The choices are <B>Pseudo-text</B>, <B>Wordlist</B> and <B>All
 							possible syllables</B>.
 						</P>
 						<P>
 							{'\t'}The <B>pseudo-text</B> will create words and put them into sentences, making a
 							block of text you might find in a book. You can determine how many sentences are made by
-							adjusting the <B>numer of sentences</B> slider in
-							the <GearIcon color="text.50" size={dotSize} /> settings.
+							adjusting the <B>numer of sentences</B> slider in the <B>Settings</B>.
 						</P>
 						<P>
 							{'\t'}The <B>wordlist</B> outputs a list of words devoid of context. You can choose
-							a number of options <GearIcon color="text.50" size={dotSize} /> to modify this
-							list. <B>Capitalize words</B> will capitalize every word. <B>Sort output</B> will
-							alphabetize the list, and <B>multi-column layout</B> will arrange the list in multiple
-							columns instead of one long column. At the bottom, there is a <B>wordlist size</B> slider
-							that controls how many words are generated.
+							a number of options in the <B>Settings</B> to modify this list. <B>Capitalize
+							words</B> will capitalize every word. <B>Sort output</B> will alphabetize the list,
+							and <B>multi-column layout</B> will arrange the list in multiple columns instead of
+							one long column. At the bottom, there is a <B>wordlist size</B> slider that controls
+							how many words are generated.
 						</P>
 						<P>
 							{'\t'}<B>All possible syllables</B>, as you might guess, outputs a list of every
@@ -258,13 +276,15 @@ const WGContextMenu = () => {
 							The <Em>capitalize</Em>, <Em>sort</Em> and <Em>multi-column</Em> options above will
 							also work on this syllable list.
 						</P>
+						<Center><SaveIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Once you've generated words, you can save them to the <B>Lexicon</B>. Click the
-							save <SaveIcon color="text.50" size={dotSize} /> button and you're presented with two
-							options. <Em>Save All to Lexicon</Em> will store every single generated word for the
-							Lexicon. <Em>Choose What to Save</Em> will highlight every word, and you can tap on a
-							word to store it; when you're done choosing, hit the big green save button that appears.
-							You will be presented with a pop-up asking you which Lexicon column to save the words to.
+							{'\t'}Once you've generated words, you can save them to the <B>Lexicon</B>. Click
+							the <B>Save</B> button and you're presented with two options. <Em>Save All to
+							Lexicon</Em> will store every single generated word for the Lexicon. <Em>Choose
+							What to Save</Em> will highlight every word, and you can tap on a word to store
+							it; when you're done choosing, hit the big green save button that appears. You
+							will be presented with a pop-up asking you which Lexicon column to save the
+							words to.
 						</P>
 					</ModalBody>
 				);
