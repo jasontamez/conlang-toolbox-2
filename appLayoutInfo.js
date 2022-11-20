@@ -229,12 +229,12 @@ const Credits = {
 	styleOptions: {
 		alignItems: "flex-end",
 		justifyContent: "flex-end",
-		mt: 8,
-		mr: 6
+		pr: 6
 	},
 	alignOptions: {
 		alignItems: "flex-end"
-	}
+	},
+	heightMultiplier: 2
 };
 
 export const appMenuFormat = [

@@ -9,9 +9,10 @@ import {
 	Divider,
 	IconButton,
 	ZStack,
-	View
+	View,
+	ScrollView
 } from 'native-base';
-import { Modal } from 'react-native';
+import { Modal, useWindowDimensions } from 'react-native';
 import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
@@ -30,7 +31,8 @@ const MenuModal = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigator = useNavigate();
-	const [menuSize, subMenuSize, headerSize] = getSizes("sm", "xs", "md")
+	const { height } = useWindowDimensions();
+	const [menuSize, subMenuSize, headerSize] = getSizes("sm", "xs", "md");
 	const lineHeight = {
 		"2xs": "2xs",
 		xs: "2xs",
@@ -74,7 +76,12 @@ const MenuModal = () => {
 			title,
 			url,
 			kids,
-			divider
+			divider,
+			fontOptions = {},
+			styleOptions = {},
+			alignOptions = {},
+			fontAdjustment,
+			heightMultiplier = 1
 		} = item;
 		if(divider) {
 			return (
@@ -258,57 +265,44 @@ const MenuModal = () => {
 			);
 		}
 		// App Section (standalone)
-		const fontOptions = item.fontOptions || {};
-		const fontSize = item.fontAdjustment ? fontSizeAdjustments[item.fontAdjustment] : menuSize;
-		const styleOptions = item.styleOptions || {};
-		const alignOptions = item.alignOptions || {};
 		const isSelected = location.pathname === url;
-		const bgOptions = isSelected ? { bg: "primary.500" } : {};
-		const boxOptions =
-			isSelected ?
-				{ color: "primary.500", ...styleOptions }
-			:
-				{ color: "transparent", ...styleOptions }
-		;
 		const textOptions = {
-			fontSize,
-			...(isSelected ?
-				{ color: "primary.500" }
-			:
-				{}
-			),
+			fontSize: fontAdjustment ? fontSizeAdjustments[fontAdjustment] : menuSize,
+			color: (isSelected ? "primary.500" : undefined),
 			...fontOptions
 		};
+		const itemHeight = menuItemHeight * heightMultiplier;
+		heightMultiplier !== 1 && console.log(menuItemHeight, itemHeight);
 		return (
 			<Pressable
 				onPress={() => navigate(url)}
 				key={id}
-				style={{height: menuItemHeight}}
+				style={{height: itemHeight}}
 				w="full"
 				bg="main.800"
 			>
 				<ZStack>
 					<HStack
-						style={{height: menuItemHeight}}
+						style={{height: itemHeight}}
 						w="full"
-						{...bgOptions}
+						bg={isSelected ? "primary.500" : undefined}
 						opacity={20}
 					/>
 					<HStack
 						w="full"
-						style={{height: menuItemHeight}}
+						style={{height: itemHeight}}
 						alignItems="center"
 						justifyContent="flex-start"
-						{...boxOptions}
+						{...styleOptions}
 					>
-						<VStack
+						{icon && <VStack
 							alignItems="center"
 							justifyContent="center"
 							m={2}
 							minW={6}
 						>
-							{icon ? Icons[icon](textOptions) : <></>}
-						</VStack>
+							{Icons[icon](textOptions)}
+						</VStack>}
 						<VStack
 							alignItems="flex-start"
 							justifyContent="center"
@@ -328,19 +322,16 @@ const MenuModal = () => {
 			<Modal
 				visible={menuOpen}
 				transparent={true}
-				style={{
-					height: "100%",
-					minHeight: "100%",
-					maxHeight: "100%"
-				}}
+				style={{ height }}
 				animationType="fade"
 			>
 				<HStack
 					h="full"
 					minHeight="full"
 					bg="#00000066"
+					safeArea
 				>
-					<VStack bg="main.800">
+					<ScrollView bg="main.800">
 						<VStack
 							mb={3}
 							p={2}
@@ -358,7 +349,7 @@ const MenuModal = () => {
 						>
 							{appMenuFormat.map((page) => renderItem(page))}
 						</VStack>
-					</VStack>
+					</ScrollView>
 					<Pressable
 						h="full"
 						flex={1}
