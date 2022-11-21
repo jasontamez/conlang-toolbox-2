@@ -233,9 +233,6 @@ const ParseMSJSON = (props) => {
 					</Box>
 				);
 			case "Range":
-				const doSetNum = (prop, value) => {
-					dispatch(setNum({prop, value}));
-				};
 				const {
 					start,
 					end,
@@ -243,14 +240,34 @@ const ParseMSJSON = (props) => {
 					max,
 					uncapped
 				} = bit;
-				const Element = uncapped ?
-					(props) => <SliderWithTicksNoCaps {...props} />
-				:
-					(props) => <SliderWithTicks {...props} />
-				;
+				const Element = memo(({
+					uncapped,
+					key,
+					min,
+					max,
+					step,
+					beginLabel,
+					endLabel,
+					fontSize,
+					notFilled,
+					value,
+					sliderProps
+				}) => {
+					const onEnd = useCallback((vv) => {
+						if(vv !== value) {
+							dispatch(setProp(vv));
+						}
+					}, [setProp, value]);
+					if(uncapped) {
+						return <SliderWithTicksNoCaps onEnd={onEnd} {...{sliderProps, key, min, max, step, beginLabel, endLabel, fontSize, notFilled, value}} />;
+					}
+					return <SliderWithTicks onEnd={onEnd} {...{key, min, max, step, beginLabel, endLabel, fontSize, notFilled, value}} />;
+				});
+				const onChangeEnd = useCallback((vv) => dispatch(setProp(vv)), [prop]);
 				return (
 					<Element
-						key={getKey("range")}
+						uncapped={uncapped}
+						key={`${page}:Range/${contentIndex}`}
 						min={0}
 						max={max}
 						step={1}
@@ -258,10 +275,10 @@ const ParseMSJSON = (props) => {
 						endLabel={end}
 						fontSize={smallerSize}
 						notFilled={notFilled}
-						value={synNum[prop] || 0}
+						value={prop || 0}
 						sliderProps={{
 							accessibilityLabel: label,
-							onChangeEnd: (v) => doSetNum(prop, v)
+							onChangeEnd
 						}}
 					/>
 				);

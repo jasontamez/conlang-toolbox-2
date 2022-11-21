@@ -10,12 +10,14 @@ import {
 	VStack,
 	useBreakpointValue,
 	Switch,
-	Slider,
+	Slider as OldSlider,
 	Menu,
 	Button
 } from "native-base";
+import { Slider } from "@miblanchard/react-native-slider";
 
 import { SortEitherIcon } from './icons';
+import { useWindowDimensions } from 'react-native';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -28,6 +30,7 @@ const sliderCapWidths = {
 	lg: 213,
 	xl: 350
 };
+const sliderStyle = {};
 
 export const TextAreaSetting = ({
 	boxProps = {},
@@ -224,7 +227,9 @@ export const SliderWithTicks = ({
 	sliderProps = {},
 	notFilled,
 	value,
-	fontSize
+	fontSize,
+	xPadding = 0,
+	onEnd = () => {}
 }) => {
 	// <SliderWithTicks
 	//    min={default 0}
@@ -243,6 +248,23 @@ export const SliderWithTicks = ({
 	const defaultValue = $v(value, min);
 	const labelW = useBreakpointValue(sliderCapWidths);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
+	const [v, setValue] = useState(min);
+	const { width } = useWindowDimensions();
+	useEffect(() => {
+		v !== defaultValue && setValue(defaultValue);
+	}, []);
+	const sliderWidth =
+		width
+		- (labelW * 2)
+		- 12 // Box margins
+		- 8 // HStack padding
+		- xPadding;
+	const ticks = [min];
+	let x = min;
+	while(x <= max) {
+		x += step;
+		ticks.push(x);
+	}
 	return (
 		<HStack
 			w="full"
@@ -263,34 +285,21 @@ export const SliderWithTicks = ({
 					fontSize={textSize}
 				>{beginLabel}</Text>
 			</Box>
-			<ZStack
-				alignItems="center"
-				justifyContent="center"
-				flexGrow={1}
-				flexShrink={1}
-				flexBasis={labelW * 4}
-				{...stackProps}
-			>
-				<HStack
-					alignItems="center"
-					justifyContent="space-between"
-					w="full"
-					children={makeTicks(min, max, step)}
-				/>
-				<Slider
-					size="sm"
-					minValue={min}
-					maxValue={max}
-					step={step}
-					defaultValue={defaultValue}
-					{...sliderProps}
-				>
-					<Slider.Track>
-						{notFilled ? <></> : <Slider.FilledTrack />}
-					</Slider.Track>
-					<Slider.Thumb />
-				</Slider>
-			</ZStack>
+			<Slider
+				maximumTrackTintColor='#660000'
+				minimumTrackTintColor='#ff0000'
+				step={step}
+				maximumValue={max}
+				minimumValue={min}
+				renderTrackMarkComponent={() => <Tick />}
+				thumbTintColor='#0000ff'
+				trackMarks={ticks}
+				trackStyle={{height: 3, width: sliderWidth, bg: '#cccc00', color: '#00ff00'}}
+				value={v}
+				trackClickable={false}
+				onValueChange={(v) => setValue(v)}
+				onSlidingComplete={(v) => onEnd(v)}
+			/>
 			<Box
 				ml={3}
 				flexGrow={0}
@@ -365,7 +374,7 @@ export const SliderWithTicksNoCaps = ({
 					w="full"
 					children={middleTicks}
 				/>
-				<Slider
+				<OldSlider
 					size="sm"
 					minValue={min}
 					maxValue={max}
@@ -373,11 +382,11 @@ export const SliderWithTicksNoCaps = ({
 					defaultValue={defaultValue}
 					{...sliderProps}
 				>
-					<Slider.Track>
-						{notFilled ? <></> : <Slider.FilledTrack />}
-					</Slider.Track>
-					<Slider.Thumb />
-				</Slider>
+					<OldSlider.Track>
+						{notFilled ? <></> : <OldSlider.FilledTrack />}
+					</OldSlider.Track>
+					<OldSlider.Thumb />
+				</OldSlider>
 			</ZStack>
 		</VStack>
 	);
@@ -423,7 +432,7 @@ export const SliderWithTicksAndValueDisplay = ({
 	useEffect(() => {
 		setCurrentValue(defaultValue);
 		setSliderElement(() => (
-			<Slider
+			<OldSlider
 				key={`${beginLabel}-${reloadTrigger}-${endLabel}`}
 				size="sm"
 				minValue={min}
@@ -433,11 +442,11 @@ export const SliderWithTicksAndValueDisplay = ({
 				onChange={(v) => setCurrentValue(v)}
 				{...sliderProps}
 			>
-				<Slider.Track>
-					{notFilled ? <></> : <Slider.FilledTrack />}
-				</Slider.Track>
-				<Slider.Thumb />
-			</Slider>
+				<OldSlider.Track>
+					{notFilled ? <></> : <OldSlider.FilledTrack />}
+				</OldSlider.Track>
+				<OldSlider.Thumb />
+			</OldSlider>
 		));
 	}, [reloadTrigger]);
 	return (
@@ -536,7 +545,7 @@ export const SliderWithValueDisplay = (({
 	useEffect(() => {
 		setCurrentValue(defaultValue);
 		setSliderElement(() => (
-			<Slider
+			<OldSlider
 				key={`${beginLabel}-${reloadTrigger}-${endLabel}`}
 				size="sm"
 				minValue={min}
@@ -549,11 +558,11 @@ export const SliderWithValueDisplay = (({
 				onChange={(v) => setCurrentValue(v)}
 				{...sliderProps}
 			>
-				<Slider.Track>
-					{notFilled ? <></> : <Slider.FilledTrack />}
-				</Slider.Track>
-				<Slider.Thumb />
-			</Slider>
+				<OldSlider.Track>
+					{notFilled ? <></> : <OldSlider.FilledTrack />}
+				</OldSlider.Track>
+				<OldSlider.Thumb />
+			</OldSlider>
 		));
 	}, [reloadTrigger]);
 	return (
