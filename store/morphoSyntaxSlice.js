@@ -21,46 +21,26 @@ const setDescriptionFunc = (state, action) => {
 };
 const setBoolFunc = (state, action) => {
 	const { prop, value } = action.payload;
-	if(!!value) {
-		state.bool[prop] = true;
-	} else {
-		delete state.bool[prop];
-	}
+	state["BOOL_" + prop] = value;
 	return state;
 };
 const setNumFunc = (state, action) => {
 	const { prop, value } = action.payload;
-	if(value) {
-		state.num[prop] = value;
-	} else {
-		delete state.num[prop];
-	}
+	state["NUM_" + prop] = value;
 	return state;
 };
 const setTextFunc = (state, action) => {
 	const { prop, value } = action.payload;
-	if(value) {
-		state.text[prop] = value;
-	} else {
-		delete state.text[prop];
-	}
+	state["TEXT_" + prop] = value;
 	return state;
 };
 // LOAD INFO and CLEAR ALL
 const loadStateFunc = (state, action) => {
 	// If payload is null (or falsy), then initialState is used
-	const {
-		bool,
-		num,
-		text,
-		...others
-	} = action.payload || initialState;
+	const newState = action.payload || initialState;
 	return {
 		...state,
-		...others,
-		bool: {...bool},
-		num: {...num},
-		text: {...text}
+		...newState
 	};
 };
 // STORED CUSTOM INFO

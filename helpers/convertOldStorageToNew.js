@@ -337,6 +337,9 @@ const convertMS = async (dispatch) => {
 		// Convert info from old format into new format
 		const infoLen = information.length;
 		const final = [];
+		let base = {...blankAppState.morphoSyntax};
+		delete base.storedCustomIDs;
+		delete base.storedCustomInfo;
 		for(let x = 0; x < infoLen; x++) {
 			const [
 				id,
@@ -350,15 +353,30 @@ const convertMS = async (dispatch) => {
 				}
 			] = information[x];
 			let bool = {};
-			boolStrings.forEach(s => bool[s] = true);
+			let newText = {};
+			let newNum = {};
+			boolStrings.forEach(s => bool["BOOL_" + s] = true);
+			Object.keys(text).forEach(prop => {
+				const value = text[prop];
+				if(prop === "case") {
+					newText.TEXT_nCase = value;
+				} else {
+					newText["TEXT_" + prop] = value;
+				}
+			});
+			Object.keys(num).forEach((prop) => {
+				const value = num[prop];
+				newNum["NUM_" + prop] = value;
+			});
 			final.push({
+				...base,
 				id,
 				lastSave,
 				description,
 				title,
-				num,
-				text,
-				bool
+				...bool,
+				...newNum,
+				...newText
 			});
 		}
 		return Promise.all(final.map(info => {
