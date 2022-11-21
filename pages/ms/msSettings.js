@@ -2,9 +2,9 @@ import { Box, Button, IconButton, Text, VStack, Pressable, HStack, Modal, useCon
 //import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
 
 import debounce from '../../helpers/debounce';
+import uuidv4 from '../helpers/uuidv4';
 import { ResettableTextAreaSetting, ResettableTextSetting } from '../../components/inputTags';
 import {
 	setTitle,

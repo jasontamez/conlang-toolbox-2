@@ -25,7 +25,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import escapeRegexp from "escape-string-regexp";
-import { v4 as uuidv4 } from 'uuid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
 import { AnimatePresence, MotiView } from "moti";
 
@@ -40,6 +39,7 @@ import {
 	SaveIcon,
 	SortEitherIcon
 } from "../../components/icons";
+import uuidv4 from '../helpers/uuidv4';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import StandardAlert from "../../components/StandardAlert";

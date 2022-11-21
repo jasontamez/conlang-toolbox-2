@@ -13,7 +13,6 @@ import {
 } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
 import { AnimatePresence, MotiView } from "moti";
 import { useOutletContext } from "react-router-dom";
 import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -36,6 +35,7 @@ import ModalTransformEditingItem from "./ModalTransformEditor";
 import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 import getSizes from "../helpers/getSizes";
 import { fontSizesInPx } from "../store/appStateSlice";
+import uuidv4 from '../helpers/uuidv4';
 
 //direction: both | in | out | double
 const Transformations = ({

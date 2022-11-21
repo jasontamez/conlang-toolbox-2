@@ -272,7 +272,6 @@ const MenuModal = () => {
 			...fontOptions
 		};
 		const itemHeight = menuItemHeight * heightMultiplier;
-		heightMultiplier !== 1 && console.log(menuItemHeight, itemHeight);
 		return (
 			<Pressable
 				onPress={() => navigate(url)}

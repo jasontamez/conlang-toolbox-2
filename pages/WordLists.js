@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-native';
 import WL from '../helpers/wordLists';
-//import { v4 as uuidv4 } from 'uuid';
 import {
 	HStack,
 	Text,
@@ -17,6 +16,7 @@ import {
 	useContrastText
 } from 'native-base';
 
+//import uuidv4 from '../helpers/uuidv4';
 import {
 	toggleDisplayedList,
 	togglePickAndSaveForLexicon,

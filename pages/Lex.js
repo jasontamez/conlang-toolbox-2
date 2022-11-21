@@ -17,9 +17,9 @@ import {
 	useToast,
 	useContrastText
 } from 'native-base';
-import { v4 as uuidv4 } from 'uuid';
 
 import debounce from '../helpers/debounce';
+import uuidv4 from '../helpers/uuidv4';
 import {
 	EditIcon,
 	SortDownIcon,

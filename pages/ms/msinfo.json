@@ -85,7 +85,7 @@
 			"prop": "synthesis",
 			"start": "I\u00ADso\u00ADla\u00ADting",
 			"end": "Po\u00ADly\u00ADsyn\u00ADthe\u00ADtic",
-			"label": "Degree of synthesis, from Iso\u00ADlating to Poly\u00ADsynthetic",
+			"label": "Degree of synthesis, from Isolating to Polysynthetic",
 			"notFilled": true,
 			"uncapped": true,
 			"max": 10

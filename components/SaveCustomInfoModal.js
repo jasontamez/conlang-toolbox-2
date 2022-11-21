@@ -10,7 +10,6 @@ import {
 } from 'native-base';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
 import { AnimatePresence, MotiView } from 'moti';
 import { useWindowDimensions } from 'react-native';
 
@@ -23,6 +22,7 @@ import { LoadingOverlay } from './FullBodyModal';
 import getSizes from '../helpers/getSizes';
 import { flipFlop, maybeAnimate } from '../helpers/motiAnimations';
 import { fontSizesInPx } from '../store/appStateSlice';
+import uuidv4 from '../helpers/uuidv4';
 //import doExport from './ExportServices';
 
 const SaveCustomInfoModal = ({

@@ -13,7 +13,6 @@ import {
 } from "native-base";
 import { Fragment, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
 import { AnimatePresence, MotiView } from 'moti';
 import { useOutletContext } from "react-router-dom";
 
@@ -31,6 +30,7 @@ import {
 } from "../../components/icons";
 import { TextSetting } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
+import uuidv4 from '../helpers/uuidv4';
 import {
 	addSoundChange,
 	deleteSoundChange,

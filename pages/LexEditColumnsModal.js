@@ -10,9 +10,9 @@ import {
 	useContrastText
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
 
 import ExtraChars from '../components/ExtraCharsButton';
+import uuidv4 from '../helpers/uuidv4';
 import {
 	CloseCircleIcon,
 	SaveIcon,
