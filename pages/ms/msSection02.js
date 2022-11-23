@@ -103,7 +103,7 @@ const Section = () => {
 					]}
 					top={0}
 					indent={2}
-					final={"\"I wash the car\" :: **-o** functions as the noun phrase \"I\""}
+					final={<Text>"I wash the car" :: <Text bold>-o</Text> functions as the noun phrase "I"</Text>}
 				/>
 				<P top={2}><T>Both types often differ according to person (3rd/2nd/1st including inclusive/exclusive), number (singular/plural), noun class (gender/animacy), grammatical role (subject/object/ergative/etc), semantic role (Agent/Patient), definiteness and/or specificness (a/the), and honorifics.</T></P>
 				<P><T>English has frequent pronouns that agree with the verb, and may be stressed for emphasis or contrast: "<B>He</B> died" (not her, as expected).</T></P>

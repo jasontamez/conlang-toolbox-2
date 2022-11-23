@@ -176,8 +176,14 @@ export const Tabular = (props) => {
 	const {
 		top,
 		indent,
-		rows
+		rows,
+		final
 	} = props;
+	const [firstRow, ...otherRows] = rows.map((orig) => orig.slice());
+	const columns = firstRow.map((item, i) => {
+		return [item, ...otherRows.map(row => row[i])];
+	});
+	const prop = firstRow.join(',');
 	return (
 		<ScrollView
 			horizontal
@@ -185,7 +191,25 @@ export const Tabular = (props) => {
 			ml={indent * 4}
 			variant="tabular"
 		>
-			{/* TO-DO: Finish this  */}
+			<VStack>
+				<HStack>
+					{columns.map((col, i) => {
+						return (
+							<VStack
+								m={2}
+								alignItems="center"
+								justifyContent="space-between"
+								key={`${prop}:TabularRow/${i}`}
+							>
+								{col.map((c, j) => {
+									return <T key={`${prop}:TabularCol/${i}/${j}`}>{c}</T>;
+								})}
+							</VStack>
+						);
+					})}
+				</HStack>
+				{final && <T>{final}</T>}
+			</VStack>
 		</ScrollView>
 	);
 };
@@ -227,6 +251,7 @@ export const Range = (props) => {
 		return <SliderWithTicks onEnd={onEnd} {...{key, min, max, step, beginLabel, endLabel, fontSize, notFilled, value}} />;
 	};
 	const onChangeEnd = useCallback((vv) => dispatch(setNum({prop, value: vv})), [prop]);
+	return <P><B>Range Element</B></P>
 	return (
 		<Element
 			uncapped={uncapped}

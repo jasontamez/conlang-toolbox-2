@@ -191,8 +191,8 @@ const Section = () => {
 				display={{
 					header: "Which Clause is Inflected?",
 					labels: [
-						"First"
-						,"Last"
+						"First",
+						"Last"
 					],
 					export: {title: "Inflected Clause:"}}}
 			/>
