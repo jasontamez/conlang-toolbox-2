@@ -39,7 +39,7 @@ import {
 	SaveIcon,
 	SortEitherIcon
 } from "../../components/icons";
-import uuidv4 from '../helpers/uuidv4';
+import uuidv4 from '../../helpers/uuidv4';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { fontSizesInPx } from "../../store/appStateSlice";
 import StandardAlert from "../../components/StandardAlert";

@@ -25,14 +25,16 @@ import getTheme from './helpers/theme';
 
 import getStoreInfo from './store/store';
 
-import About from './pages/About.js';
+import AppHeader from './components/Header.js';
+import AppSettings from './pages/AppSettings';
+
 import MS from './pages/MS';
 import MSSection from './pages/ms/msSection';
 import MSSettings from './pages/ms/msSettings';
+
 import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
-import AppHeader from './components/Header.js';
-import AppSettings from './pages/AppSettings';
+import About from './pages/About.js';
 
 import WG from './pages/WG';
 import WGSettings from './pages/wg/wgSettings';

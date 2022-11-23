@@ -30,7 +30,7 @@ import {
 } from "../../components/icons";
 import { TextSetting } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
-import uuidv4 from '../helpers/uuidv4';
+import uuidv4 from '../../helpers/uuidv4';
 import {
 	addSoundChange,
 	deleteSoundChange,

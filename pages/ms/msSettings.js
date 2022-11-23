@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
 import debounce from '../../helpers/debounce';
-import uuidv4 from '../helpers/uuidv4';
+import uuidv4 from '../../helpers/uuidv4';
 import { ResettableTextAreaSetting, ResettableTextSetting } from '../../components/inputTags';
 import {
 	setTitle,
