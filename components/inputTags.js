@@ -14,10 +14,10 @@ import {
 	Menu,
 	Button
 } from "native-base";
-import { Slider } from "@miblanchard/react-native-slider";
+import { useWindowDimensions } from 'react-native';
 
 import { SortEitherIcon } from './icons';
-import { useWindowDimensions } from 'react-native';
+import NewSlider from './NewSlider';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -217,101 +217,127 @@ const makeTicks = (min, max, step) => {
 
 // TO-DO: Investigate Sliders
 //   the ones with Ticks don't seem to work well
-export const SliderWithTicks = ({
+export const RangeSlider = ({
 	min = 0,
 	max = 4,
 	step = 1,
-	beginLabel = "MISSING LABEL",
-	endLabel = "MISSING LABEL",
-	stackProps = {},
-	sliderProps = {},
+	ticked,
+	capped,
+	minimumLabel = "MISSING LABEL",
+	maximumLabel = "MISSING LABEL",
+	fontSize,
 	notFilled,
 	value,
-	fontSize,
-	xPadding = 0,
-	onEnd = () => {}
+//	accessibilityLabel,
+	onSlide,
+	onChange,
+	PreElement,
+	PostElement,
+	showValue,
+	colorScheme,
+	xPadding = 0
 }) => {
-	// <SliderWithTicks
+	// <RangeSlider
 	//    min={default 0}
 	//    max={default 4}
 	//    step={default 1}
-	//    colorScheme={defaults to "secondary"}
+	//    ticked={if true, tick marks will be rendered}
+	//    capped={if true, begin/end labels are put in line w/slider;
+	//            otherwise, labels are put above the slider}
 	//    notFilled={if true, the slider does not fill}
-	//    beginLabel={left of Slider}
-	//    endLabel={right of Slider}
+	//    minimumLabel={left of Slider}
+	//    maximumLabel={right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    stackProps={props for the inner ZStack}
 	//    value={default value for the slider (defaults to `min`)
-	//    sliderProps={optional properties for the slider}
+	//    onSlide={function; continuously updated when slider moves}
+	//    onChange={function; fired when slider stops moving}
+	//    resettable={if true, slider will change when underlying value changes}
+	//    xPadding={extra padding around the slider element; default 0}
 	// />
 	const sizes = useSelector(state => state.appState.sizes);
 	const defaultValue = $v(value, min);
-	const labelW = useBreakpointValue(sliderCapWidths);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
-	const [v, setValue] = useState(min);
 	const { width } = useWindowDimensions();
-	useEffect(() => {
-		v !== defaultValue && setValue(defaultValue);
-	}, []);
-	const sliderWidth =
-		width
-		- (labelW * 2)
-		- 12 // Box margins
-		- 8 // HStack padding
-		- xPadding;
-	const ticks = [min];
-	let x = min;
-	while(x <= max) {
-		x += step;
-		ticks.push(x);
-	}
+	const labelW = width / 6;
+	// 24 = Box margins
+	// 16 = HStack padding
+	const innerPadding = capped ? (24 + (labelW * 2)) : 16;
+	const containerWidth = width - xPadding;
+	// 16 = OuterContainer padding
+	const sliderWidth = containerWidth - 16 - innerPadding;
+	const OuterContainer = ({children, ...props}) => {
+		if(capped && !PreElement) {
+			return <HStack {...props}>{children}</HStack>;
+		}
+		return (
+			<VStack {...props}>
+				{PreElement &&
+					<PreElement />
+				}
+				{capped ||
+					<HStack justifyContent="space-between" w="full">
+						<Text textAlign="left" fontSize={textSize}>{minimumLabel}</Text>
+						<Text textAlign="right" fontSize={textSize}>{maximumLabel}</Text>
+					</HStack>
+				}
+				<HStack w="full" alignItems="center" px={2} py={1}>
+					{children}
+				</HStack>
+				{PostElement &&
+					<PostElement />
+				}
+			</VStack>
+		);
+	};
 	return (
-		<HStack
-			w="full"
+		<OuterContainer
+			style={{width: containerWidth}}
 			bg="darker"
 			px={2}
 			py={1}
 			rounded="md"
 			alignItems="center"
 		>
-			<Box
-				mr={3}
-				flexGrow={0}
-				flexShrink={1}
-				flexBasis={labelW}
-			>
-				<Text
-					textAlign="center"
-					fontSize={textSize}
-				>{beginLabel}</Text>
-			</Box>
-			<Slider
-				maximumTrackTintColor='#660000'
-				minimumTrackTintColor='#ff0000'
-				step={step}
-				maximumValue={max}
-				minimumValue={min}
-				renderTrackMarkComponent={() => <Tick />}
-				thumbTintColor='#0000ff'
-				trackMarks={ticks}
-				trackStyle={{height: 3, width: sliderWidth, bg: '#cccc00', color: '#00ff00'}}
-				value={v}
-				trackClickable={false}
-				onValueChange={(v) => setValue(v)}
-				onSlidingComplete={(v) => onEnd(v)}
+			{capped &&
+				<Box
+					mr={3}
+					style={{width: labelW}}
+				>
+					<Text
+						textAlign="center"
+						fontSize={textSize}
+					>{minimumLabel}</Text>
+				</Box>
+			}
+			<NewSlider
+				value={defaultValue}
+				{...{
+					min,
+					max,
+					step,
+					notFilled,
+					onChange,
+					fontSize,
+					sliderWidth,
+					ticked,
+					capped,
+					showValue,
+					colorScheme
+				}}
+				onSlide={onSlide}
 			/>
-			<Box
-				ml={3}
-				flexGrow={0}
-				flexShrink={1}
-				flexBasis={labelW}
-			>
-				<Text
-					textAlign="center"
-					fontSize={textSize}
-				>{endLabel}</Text>
-			</Box>
-		</HStack>
+			{capped &&
+				<Box
+					ml={3}
+					style={{width: labelW}}
+				>
+					<Text
+						textAlign="center"
+						fontSize={textSize}
+					>{maximumLabel}</Text>
+				</Box>
+			}
+		</OuterContainer>
 	);
 };
 
