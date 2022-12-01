@@ -10,7 +10,7 @@ import {
 	VStack,
 	useBreakpointValue,
 	Switch,
-	Slider as OldSlider,
+	Slider as NativeBaseSlider,
 	Menu,
 	Button
 } from "native-base";
@@ -188,7 +188,7 @@ export const ResettableTextSetting = ({
 		));
 	}, [reloadTrigger]);
 	return (
-		<Box w="full" {...boxProps}>
+		<Box w="full" h={20} {...boxProps}>
 			<Text {...labelProps}>{$v(text, children)}</Text>
 			{[inputElement]}
 		</Box>
@@ -207,8 +207,7 @@ const Tick = () => {
 };
 const makeTicks = (min, max, step) => {
 	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
-	const stepsUntilEnd = (max - min) / step;
-	for (let c = 1; c < stepsUntilEnd; c++) {
+	for (let c = min + step; c < max; c += step) {
 		middleTicks.push(<Tick key={`Tick-${c}`} />);
 	}
 	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
@@ -221,68 +220,78 @@ export const RangeSlider = ({
 	min = 0,
 	max = 4,
 	step = 1,
+	value = min,
 	ticked,
-	capped,
+	capped = true,
+	notFilled,
 	minimumLabel = "MISSING LABEL",
 	maximumLabel = "MISSING LABEL",
 	fontSize,
-	notFilled,
-	value,
 //	accessibilityLabel,
-	onSlide,
 	onChange,
 	PreElement,
 	PostElement,
 	showValue,
+	ValueContainer,
 	colorScheme,
 	xPadding = 0
 }) => {
 	// <RangeSlider
-	//    min={default 0}
-	//    max={default 4}
-	//    step={default 1}
-	//    ticked={if true, tick marks will be rendered}
-	//    capped={if true, begin/end labels are put in line w/slider;
-	//            otherwise, labels are put above the slider}
-	//    notFilled={if true, the slider does not fill}
-	//    minimumLabel={left of Slider}
-	//    maximumLabel={right of Slider}
+	//    min={number; default 0}
+	//    max={number; default 4}
+	//    step={number; default 1}
+	//    value={number; starting value for the slider; defaults to `min`}
+	//    ticked={boolean; if true, tick marks will be rendered; default false}
+	//    capped={boolean; if true, min/max labels are put in line w/slider;
+	//            otherwise, labels are put above the slider; default true}
+	//    notFilled={boolean; if true, the slider does not "fill"; default false}
+	//    minimumLabel={string; left of Slider}
+	//    maximumLabel={string; right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    value={default value for the slider (defaults to `min`)
-	//    onSlide={function; continuously updated when slider moves}
 	//    onChange={function; fired when slider stops moving}
-	//    resettable={if true, slider will change when underlying value changes}
-	//    xPadding={extra padding around the slider element; default 0}
+	//    PreElement={optional, displayed above the slider}
+	//    PostElement={optional, displayed below the slider}
+	//    showValue={integer; if positive, value will be shown always;
+	//               if negative, value will be shown only when active;
+	//               if zero, value is never shown}
+	//    ValueContainer={an Element that will wrap the value when shown;
+	//                    defaults to simple text in the thumb}
+	//    colorScheme={defaults to 'secondary'}
+	//    xPadding={integer; extra padding around the slider element; default 0}
 	// />
 	const sizes = useSelector(state => state.appState.sizes);
-	const defaultValue = $v(value, min);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	const { width } = useWindowDimensions();
 	const labelW = width / 6;
-	// 24 = Box margins
+	// 16 = container Box padding
+	// 24 = cap margins
 	// 16 = HStack padding
-	const innerPadding = capped ? (24 + (labelW * 2)) : 16;
+	const outerPadding = 16;
+	const innerPadding = (capped ? (24 + (labelW * 2)) : 16);
 	const containerWidth = width - xPadding;
 	// 16 = OuterContainer padding
-	const sliderWidth = containerWidth - 16 - innerPadding;
-	const OuterContainer = ({children, ...props}) => {
-		if(capped && !PreElement) {
-			return <HStack {...props}>{children}</HStack>;
+	const sliderWidth = containerWidth - outerPadding - innerPadding;
+//	console.log(width, containerWidth, innerPadding, sliderWidth, labelW);
+	const OuterContainer = ({children, containerStyle, ...props}) => {
+		if(capped && !(PreElement || PostElement)) {
+			return <HStack {...props} {...containerStyle}>{children}</HStack>;
 		}
 		return (
 			<VStack {...props}>
 				{PreElement &&
 					<PreElement />
 				}
-				{capped ||
-					<HStack justifyContent="space-between" w="full">
-						<Text textAlign="left" fontSize={textSize}>{minimumLabel}</Text>
-						<Text textAlign="right" fontSize={textSize}>{maximumLabel}</Text>
+				<Box px={2} py={1} {...containerStyle}>
+					{capped ||
+						<HStack justifyContent="space-between" w="full">
+							<Text textAlign="left" fontSize={textSize}>{minimumLabel}</Text>
+							<Text textAlign="right" fontSize={textSize}>{maximumLabel}</Text>
+						</HStack>
+					}
+					<HStack w="full" alignItems="center" px={2} py={1}>
+						{children}
 					</HStack>
-				}
-				<HStack w="full" alignItems="center" px={2} py={1}>
-					{children}
-				</HStack>
+				</Box>
 				{PostElement &&
 					<PostElement />
 				}
@@ -290,13 +299,16 @@ export const RangeSlider = ({
 		);
 	};
 	return (
-		<OuterContainer
-			style={{width: containerWidth}}
-			bg="darker"
-			px={2}
-			py={1}
-			rounded="md"
+		<Box style={{width: containerWidth}} px={2} py={1}><OuterContainer
 			alignItems="center"
+			justifyContent="center"
+			containerStyle={{
+				bg: "darker",
+				rounded: "md",
+				style: {
+					width: containerWidth - outerPadding
+				}
+			}}
 		>
 			{capped &&
 				<Box
@@ -310,21 +322,21 @@ export const RangeSlider = ({
 				</Box>
 			}
 			<NewSlider
-				value={defaultValue}
 				{...{
 					min,
 					max,
 					step,
+					value,
 					notFilled,
 					onChange,
-					fontSize,
+					fontSize: textSize,
 					sliderWidth,
 					ticked,
 					capped,
 					showValue,
+					ValueContainer,
 					colorScheme
 				}}
-				onSlide={onSlide}
 			/>
 			{capped &&
 				<Box
@@ -337,197 +349,9 @@ export const RangeSlider = ({
 					>{maximumLabel}</Text>
 				</Box>
 			}
-		</OuterContainer>
+		</OuterContainer></Box>
 	);
 };
-
-export const SliderWithTicksNoCaps = ({
-	min = 0,
-	max = 4,
-	step = 1,
-	beginLabel = "MISSING LABEL",
-	endLabel = "MISSING LABEL",
-	stackProps = {},
-	sliderProps = {},
-	notFilled,
-	value,
-	fontSize
-}) => {
-	// <SliderWithTicksNoCaps
-	//    min={default 0}
-	//    max={default 4}
-	//    step={default 1}
-	//    notFilled={if true, the slider does not fill}
-	//    beginLabel={left of Slider}
-	//    endLabel={right of Slider}
-	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    stackProps={props for the inner ZStack}
-	//    value={default value for the slider (defaults to `min`)
-	//    sliderProps={optional properties for the slider}
-	// />
-	const sizes = useSelector(state => state.appState.sizes);
-	const defaultValue = $v(value, min);
-	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
-	const stepsUntilEnd = (max - min) / step;
-	for (let c = 1; c < stepsUntilEnd; c++) {
-		middleTicks.push(<Tick key={`Tick-${c}`} />);
-	}
-	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
-	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
-	return (
-		<VStack
-			w="full"
-			bg="darker"
-			px={2}
-			py={1}
-			rounded="md"
-			alignItems="center"
-		>
-			<HStack justifyContent="space-between" w="full">
-				<Text textAlign="left" fontSize={textSize}>{beginLabel}</Text>
-				<Text textAlign="right" fontSize={textSize}>{endLabel}</Text>
-			</HStack>
-			<ZStack
-				w="5/6"
-				m={3}
-				alignItems="center"
-				justifyContent="center"
-				{...stackProps}
-			>
-				<HStack
-					alignItems="center"
-					justifyContent="space-between"
-					w="full"
-					children={middleTicks}
-				/>
-				<OldSlider
-					size="sm"
-					minValue={min}
-					maxValue={max}
-					step={step}
-					defaultValue={defaultValue}
-					{...sliderProps}
-				>
-					<OldSlider.Track>
-						{notFilled ? <></> : <OldSlider.FilledTrack />}
-					</OldSlider.Track>
-					<OldSlider.Thumb />
-				</OldSlider>
-			</ZStack>
-		</VStack>
-	);
-};
-
-export const SliderWithTicksAndValueDisplay = ({
-	min = 0,
-	max = 4,
-	step = 1,
-	beginLabel = "MISSING LABEL",
-	endLabel = "MISSING LABEL",
-	value,
-	notFilled,
-	Display,
-	stackProps = {},
-	zStackProps = {},
-	fontSize,
-	sliderProps = {},
-	reloadTrigger = 0
-}) => {
-	// <SliderWithTicksAndValueDisplay
-	//    min={default 0}
-	//    max={default 4}
-	//    step={default 1}
-	//    value={starting value of the slider, defaults to `min`}
-	//    notFilled={if true, the slider does not fill}
-	//    beginLabel={left of Slider}
-	//    endLabel={right of Slider}
-	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    stackProps={props for the containing VStack}
-	//    zStackProps={props for the ZStack}
-	//    Display={element that goes above the slider, gets given a
-	//       `value` property}
-	//    sliderProps={optional properties for the slider}
-	//    reloadTrigger={a value that changes when underlying props are modified}
-	// />
-	const sizes = useSelector(state => state.appState.sizes);
-	const defaultValue = $v(value, min);
-	const [currentValue, setCurrentValue] = useState(defaultValue);
-	const labelW = useBreakpointValue(sliderCapWidths);
-	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
-	const [sliderElement, setSliderElement] = useState(() => <Fragment key={`${beginLabel}-${reloadTrigger}-${endLabel}-Frag`} />);
-	useEffect(() => {
-		setCurrentValue(defaultValue);
-		setSliderElement(() => (
-			<OldSlider
-				key={`${beginLabel}-${reloadTrigger}-${endLabel}`}
-				size="sm"
-				minValue={min}
-				maxValue={max}
-				step={step}
-				defaultValue={defaultValue}
-				onChange={(v) => setCurrentValue(v)}
-				{...sliderProps}
-			>
-				<OldSlider.Track>
-					{notFilled ? <></> : <OldSlider.FilledTrack />}
-				</OldSlider.Track>
-				<OldSlider.Thumb />
-			</OldSlider>
-		));
-	}, [reloadTrigger]);
-	return (
-		<VStack {...stackProps}>
-			<Display value={currentValue} />
-			<HStack
-				w="full"
-				bg="darker"
-				px={2}
-				py={1}
-				rounded="md"
-				alignItems="center"
-			>
-				<Box
-					mr={3}
-					flexGrow={0}
-					flexShrink={1}
-					flexBasis={labelW}
-				>
-					<Text
-						textAlign="center"
-						fontSize={textSize}
-					>{beginLabel}</Text>
-				</Box>
-				<ZStack
-					alignItems="center"
-					justifyContent="center"
-					flexGrow={1}
-					flexShrink={1}
-					flexBasis={labelW * 4}
-					{...zStackProps}
-				>
-					<HStack
-						alignItems="center"
-						justifyContent="space-between"
-						w="full"
-						children={makeTicks(min, max, step)}
-					/>
-					{[sliderElement]}
-				</ZStack>
-				<Box
-					ml={3}
-					flexGrow={0}
-					flexShrink={1}
-					flexBasis={labelW}
-				>
-					<Text
-						textAlign="center"
-						fontSize={textSize}
-					>{endLabel}</Text>
-				</Box>
-			</HStack>
-		</VStack>
-	);
-}
 
 // TO-DO: SliderWithValueDisplay doesn't always work
 //   wgSettings: the first slider is ok, the other two have the
@@ -537,8 +361,8 @@ export const SliderWithTicksAndValueDisplay = ({
 export const SliderWithValueDisplay = (({
 	min = 0,
 	max = 4,
-	beginLabel = "MISSING LABEL",
-	endLabel = "MISSING LABEL",
+	minimumLabel = "MISSING LABEL",
+	maximumLabel = "MISSING LABEL",
 	sliderProps = {},
 	value,
 	notFilled,
@@ -552,8 +376,8 @@ export const SliderWithValueDisplay = (({
 	//    max={default 4}
 	//    value={starting value of the slider, defaults to `min`}
 	//    notFilled={if true, the slider does not fill}
-	//    beginLabel={left of Slider}
-	//    endLabel={right of Slider}
+	//    minimumLabel={left of Slider}
+	//    maximumLabel={right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
 	//    sliderProps={props for the Slider}
 	//       NOTE: sliderProps.defaultValue can override `value`
@@ -567,12 +391,12 @@ export const SliderWithValueDisplay = (({
 	const labelW = useBreakpointValue(sliderCapWidths);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	const [currentValue, setCurrentValue] = useState(defaultValue);
-	const [sliderElement, setSliderElement] = useState(() => <Fragment key={`${beginLabel}-${reloadTrigger}-${endLabel}-FRAG`} />);
+	const [sliderElement, setSliderElement] = useState(() => <Fragment key={`${minimumLabel}-${reloadTrigger}-${maximumLabel}-FRAG`} />);
 	useEffect(() => {
 		setCurrentValue(defaultValue);
 		setSliderElement(() => (
-			<OldSlider
-				key={`${beginLabel}-${reloadTrigger}-${endLabel}`}
+			<NativeBaseSlider
+				key={`${minimumLabel}-${reloadTrigger}-${maximumLabel}`}
 				size="sm"
 				minValue={min}
 				maxValue={max}
@@ -584,11 +408,11 @@ export const SliderWithValueDisplay = (({
 				onChange={(v) => setCurrentValue(v)}
 				{...sliderProps}
 			>
-				<OldSlider.Track>
-					{notFilled ? <></> : <OldSlider.FilledTrack />}
-				</OldSlider.Track>
-				<OldSlider.Thumb />
-			</OldSlider>
+				<NativeBaseSlider.Track>
+					{notFilled ? <></> : <NativeBaseSlider.FilledTrack />}
+				</NativeBaseSlider.Track>
+				<NativeBaseSlider.Thumb />
+			</NativeBaseSlider>
 		));
 	}, [reloadTrigger]);
 	return (
@@ -599,7 +423,7 @@ export const SliderWithValueDisplay = (({
 				bg="darker"
 				px={2}
 				py={1}
-				rounded="md"
+				borderRadius="md"
 				alignItems="center"
 				alignSelf="center"
 			>
@@ -609,7 +433,7 @@ export const SliderWithValueDisplay = (({
 					flexShrink={1}
 					flexBasis={labelW}
 				>
-					<Text textAlign="center" fontSize={textSize}>{beginLabel}</Text>
+					<Text textAlign="center" fontSize={textSize}>{minimumLabel}</Text>
 				</Box>
 				{[sliderElement]}
 				<Box
@@ -618,7 +442,7 @@ export const SliderWithValueDisplay = (({
 					flexShrink={1}
 					flexBasis={labelW}
 				>
-					<Text textAlign="center" fontSize={textSize}>{endLabel}</Text>
+					<Text textAlign="center" fontSize={textSize}>{maximumLabel}</Text>
 				</Box>
 			</HStack>
 		</VStack>

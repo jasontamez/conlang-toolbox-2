@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
 	Text,
 	HStack,
 	Box,
-	ScrollView,
+	//ScrollView,
 	Button,
 	useToast
 } from "native-base";
@@ -12,9 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import debounce from '../../helpers/debounce';
 import {
 	TextSetting,
-	SliderWithValueDisplay,
-	SliderWithTicksAndValueDisplay,
-	ToggleSwitch
+	ToggleSwitch,
+	RangeSlider
 } from '../../components/inputTags';
 import {
 	loadState,
@@ -42,6 +41,7 @@ import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
 import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
 import { wgCustomStorage } from "../../helpers/persistentInfo";
 import getSizes from "../../helpers/getSizes";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 const WGSettings = () => {
 	const {
@@ -124,6 +124,7 @@ const WGSettings = () => {
 	const Display = ({pre, post, value}) =>
 		<Text
 			fontSize={textSize}
+			textAlign="center"
 		>{pre || ""}<Text
 				color="primary.500"
 				px={1.5}
@@ -157,7 +158,7 @@ const WGSettings = () => {
 		);
 	};
 	return (
-		<ScrollView>
+		<GestureHandlerRootView><ScrollView>
 			<StandardAlert
 				alertOpen={clearAlertOpen}
 				setAlertOpen={setClearAlertOpen}
@@ -242,60 +243,72 @@ const WGSettings = () => {
 				>Save Current Info</InfoButton>
 			</HStack>
 			<SectionHeader>Word Generation Controls</SectionHeader>
-			<SliderWithValueDisplay
-				max={100}
-				beginLabel="Never"
-				endLabel="Always"
-				fontSize={inputSize}
+			<RangeSlider
 				value={monosyllablesRate}
-				sliderProps={{
-					accessibilityLabel: "Monosyllable Rate",
-					onChangeEnd: (v) => dispatch(setMonosyllablesRate(v))
-				}}
-				Display={({value}) => <Display pre="Rate of monosyllable words: " value={value} post="%" />}
-				stackProps={stackProps}
-				reloadTrigger={resetCounter}
+				label="Monosyllable Rate"
+				minimumLabel="Never"
+				maximumLabel="Always"
+				max={100}
+				PreElement={() => <Text fontSize={textSize} textAlign="center">Rate of monosyllable words</Text>}
+				fontSize={inputSize}
+				onChange={(v) => dispatch(setMonosyllablesRate(v))}
+				showValue={1}
+				ValueContainer={
+					(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+				}
 			/>
-			<SliderWithTicksAndValueDisplay
+			<RangeSlider
+				value={maxSyllablesPerWord}
+				label="Maximum Syllables per Word"
+				minimumLabel="2"
+				maximumLabel="15"
 				min={2}
 				max={15}
-				beginLabel="2"
-				endLabel="15"
+				PreElement={() => <Text fontSize={textSize} textAlign="center">Maximum syllables per word</Text>}
 				fontSize={inputSize}
-				value={maxSyllablesPerWord}
-				sliderProps={{
-					accessibilityLabel: "Maximum Syllables per Word",
-					onChangeEnd: (v) => dispatch(setMaxSyllablesPerWord(v))
-				}}
-				Display={({value}) => <Display pre="Maximum syllables per word: " value={value} />}
-				stackProps={stackProps}
-				reloadTrigger={resetCounter}
+				onChange={(v) => dispatch(setMaxSyllablesPerWord(v))}
+				ticked
+				showValue={1}
+				OldValueContainer={
+					(props) => <Box
+						bg="primary.500"
+						alignItems="center"
+						justifyContent="center"
+						style={{
+							width: 30,
+							height: 30,
+							borderRadius: 9999,
+							transform: [{translateY: -40}]
+						}}><Text textAlign="center" color="amber.400">{props.children}</Text></Box>
+				}
 			/>
-			<SliderWithValueDisplay
+			<RangeSlider
 				max={50}
-				beginLabel={<EquiprobableIcon color="text.50" />}
-				endLabel={<SharpDropoffIcon color="text.50" />}
+				minimumLabel={<EquiprobableIcon color="text.50" />}
+				maximumLabel={<SharpDropoffIcon color="text.50" />}
 				value={characterGroupDropoff}
-				sliderProps={{
-					accessibilityLabel: "Character Group dropoff",
-					onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
-				}}
-				Display={({value}) => <Display pre="Character Group dropoff: " value={value} post="%" />}
-				stackProps={stackProps}
-				reloadTrigger={resetCounter}
+				label="Character Group dropoff"
+				fontSize={inputSize}
+				PreElement={() => <Text fontSize={textSize} textAlign="center">Character Group dropoff rate</Text>}
+				onChange={(v) => dispatch(setCharacterGroupDropoff(v))}
+				showValue={1}
+				ValueContainer={
+					(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+				}
 			/>
-			<SliderWithValueDisplay
+			<RangeSlider
 				max={50}
-				beginLabel={<EquiprobableIcon color="text.50" />}
-				endLabel={<SharpDropoffIcon color="text.50" />}
+				minimumLabel={<EquiprobableIcon color="text.50" />}
+				maximumLabel={<SharpDropoffIcon color="text.50" />}
 				value={syllableBoxDropoff}
-				sliderProps={{
-					accessibilityLabel: "Syllable box dropoff",
-					onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
-				}}
-				Display={({value}) => <Display pre="Syllable box dropoff: " value={value} post="%" />}
-				stackProps={stackProps}
-				reloadTrigger={resetCounter}
+				label="Syllable box dropoff"
+				PreElement={() => <Text fontSize={textSize} textAlign="center">Syllable box dropoff rate</Text>}
+				onChange={(v) => dispatch(setSyllableBoxDropoff(v))}
+				fontSize={inputSize}
+				showValue={1}
+				ValueContainer={
+					(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+				}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>
 			<ToggleSwitch
@@ -335,7 +348,7 @@ const WGSettings = () => {
 				value={exclamatorySentencePost}
 				setter={setExclamatorySentencePost}
 			/>
-		</ScrollView>
+		</ScrollView></GestureHandlerRootView>
 	);
 };
 

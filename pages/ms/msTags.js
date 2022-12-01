@@ -15,7 +15,7 @@ import getSizes from "../../helpers/getSizes";
 import { DotIcon, InfoIcon } from "../../components/icons";
 import FullPageModal from '../../components/FullBodyModal';
 import { fontSizesInPx } from '../../store/appStateSlice';
-import { SliderWithTicks, SliderWithTicksNoCaps, TextAreaSetting } from '../../components/inputTags';
+import { RangeSlider, TextAreaSetting } from '../../components/inputTags';
 import debounce from '../../helpers/debounce';
 import { setNum, setText } from '../../store/morphoSyntaxSlice';
 
@@ -223,50 +223,25 @@ export const Range = (props) => {
 		max,
 		uncapped,
 		prop,
-		label
+		value,
+		label // accessibilityLabel?
 	} = props;
 	const { smallerSize } = textProps();
 	const dispatch = useDispatch();
-	const Element = ({
-		uncapped,
-		key,
-		min,
-		max,
-		step,
-		beginLabel,
-		endLabel,
-		fontSize,
-		notFilled,
-		value,
-		sliderProps
-	}) => {
-		const onEnd = useCallback((vv) => {
-			if(vv !== value) {
-				dispatch(setNum({prop, value: vv}));
-			}
-		}, [prop, value]);
-		if(uncapped) {
-			return <SliderWithTicksNoCaps onEnd={onEnd} {...{sliderProps, key, min, max, step, beginLabel, endLabel, fontSize, notFilled, value}} />;
-		}
-		return <SliderWithTicks onEnd={onEnd} {...{key, min, max, step, beginLabel, endLabel, fontSize, notFilled, value}} />;
-	};
-	const onChangeEnd = useCallback((vv) => dispatch(setNum({prop, value: vv})), [prop]);
-	return <P><B>Range Element</B></P>
 	return (
-		<Element
-			uncapped={uncapped}
+		<RangeSlider
 			min={0}
 			max={max}
 			step={1}
-			beginLabel={start}
-			endLabel={end}
+			value={value}
+			onChange={(vv) => dispatch(setNum({prop, value: vv}))}
+			ticked
+			capped={!uncapped}
 			fontSize={smallerSize}
 			notFilled={notFilled}
-			value={prop || 0}
-			sliderProps={{
-				accessibilityLabel: label,
-				onChangeEnd
-			}}
+			minimumLabel={start}
+			maximumLabel={end}
+			xPadding={32}
 		/>
 	);
 };

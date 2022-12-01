@@ -879,8 +879,8 @@ const WGOutput = () => {
 							min={1}
 							max={100}
 							value={sentencesPerText}
-							beginLabel="1"
-							endLabel="100"
+							minimumLabel="1"
+							maximumLabel="100"
 							fontSize={descSize}
 							notFilled
 							stackProps={{
@@ -891,10 +891,8 @@ const WGOutput = () => {
 									<Text fontSize={textSize}>Sentences per text: <Text px={2.5} bg="lighter">{value}</Text></Text>
 								</Box>
 							)}
-							sliderProps={{
-								accessibilityLabel: "Sentences per pseudo-text",
-								onChangeEnd: (v) => dispatch(setSentencesPerText(v))
-							}}
+							label="Sentences per pseudo-text"
+							onChange={(v) => dispatch(setSentencesPerText(v))}
 						/>
 						<Box
 							bg="darker"
@@ -946,8 +944,8 @@ const WGOutput = () => {
 							min={50}
 							max={1000}
 							value={wordsPerWordlist}
-							beginLabel="50"
-							endLabel="1000"
+							minimumLabel="50"
+							maximumLabel="1000"
 							fontSize={descSize}
 							notFilled
 							Display={({value}) => (
@@ -955,10 +953,8 @@ const WGOutput = () => {
 									<Text fontSize={textSize}>Words per wordlist: <Text px={2.5} bg="lighter">{value}</Text></Text>
 								</Box>
 							)}
-							sliderProps={{
-								accessibilityLabel: "Words per worlist",
-								onChangeEnd: (v) => dispatch(setWordsPerWordlist(v))
-							}}
+							label="Words per worlist"
+							onChange={(v) => dispatch(setWordsPerWordlist(v))}
 							stackProps={{ p: 2 }}
 						/>
 					</Modal.Body>

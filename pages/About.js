@@ -104,6 +104,9 @@ const About = () => {
 			p={3}
 			bg="darker"
 		>
+			<Pressable goto="/we/soundchanges">
+				<SectionHeader SectionIcon={WordEvolveIcon} text={"Word\u00ADEvolve"} />
+			</Pressable>
 			<Pressable otherFunc={() => dispatch(setBaseTextSize("2xl"))} firstElement p={4}><Text fontSize="xl">Embiggen</Text></Pressable>
 			<Pressable otherFunc={() => dispatch(setBaseTextSize("sm"))} firstElement p={6}><Text fontSize="sm">Ensmallen</Text></Pressable>
 			<Pressable goto="/ms" firstElement>

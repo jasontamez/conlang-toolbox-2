@@ -22,7 +22,7 @@ import {
 	SaveIcon,
 	SharpDropoffIcon
 } from "../../components/icons";
-import { SliderWithValueDisplay, TextAreaSetting, ToggleSwitch } from "../../components/inputTags";
+import { RangeSlider, TextAreaSetting, ToggleSwitch } from "../../components/inputTags";
 import {
 	equalityCheck,
 	setSyllableBoxDropoff,
@@ -210,28 +210,18 @@ const WGSyllables = () => {
 											)}
 											key="modalSlider"
 										>
-											<SliderWithValueDisplay
+											<RangeSlider
 												max={50}
-												beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-												endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+												minimumLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+												maximumLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 												value={modalOverrideValue}
-												sliderProps={{
-													accessibilityLabel: "Dropoff rate",
-													onChangeEnd: (v) => setModalOverrideValue(v)
-												}}
-												Display={({value}) => (
-													<Center>
-														<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
-													</Center>
-												)}
-												stackProps={{
-													p: 2,
-													mt: 3,
-													space: 1,
-													borderWidth: 1,
-													borderColor: "primary.600",
-													w: "full"
-												}}
+												label="Dropoff rate"
+												onChange={(v) => setModalOverrideValue(v)}
+												PreElement={() => <Text textAlign="center" fontSize={inputSize}>Dropoff rate</Text>}
+												showValue={1}
+												ValueContainer={
+													(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+												}
 											/>
 										</MotiView>
 									}
@@ -264,16 +254,14 @@ const WGSyllables = () => {
 				</Modal.Content>
 			</Modal>
 			<ScrollView>
-				<SliderWithValueDisplay
+				<RangeSlider
 					max={50}
-					beginLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-					endLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+					minimumLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+					maximumLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
 					value={syllableBoxDropoff}
-					sliderProps={{
-						accessibilityLabel: "Dropoff rate",
-						onChangeEnd: (v) => dispatch(setSyllableBoxDropoff(v))
-					}}
-					Display={({value}) => (
+					label="Dropoff rate"
+					onChange={(v) => dispatch(setSyllableBoxDropoff(v))}
+					PreElement={() => (
 						<Box pb={1}>
 							<HStack
 								justifyContent="space-between"
@@ -281,18 +269,15 @@ const WGSyllables = () => {
 								pb={1}
 							>
 								<Text bold fontSize={textSize}>Dropoff Rate</Text>
-								<Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text>
 							</HStack>
 							<Text fontSize={descSize}>Syllables at the top of a box tend to be picked more often than syllables at the bottom of the box. This slider controls this tendency. A rate of zero is flat, making all syllables equiprobable.</Text>
 						</Box>
 					)}
-					stackProps={{
-						borderBottomWidth: 0.5,
-						borderColor: "main.700",
-						py: 2.5,
-						px: 2,
-						bg: "main.800"
-					}}
+					showValue={1}
+					fontSize={descSize}
+					ValueContainer={
+						(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+					}	
 				/>
 				<ToggleSwitch
 					hProps={{

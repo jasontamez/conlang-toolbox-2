@@ -418,13 +418,11 @@ const CharGroups = ({
 											>
 												<SliderWithValueDisplay
 													max={50}
-													beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
-													endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
+													minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+													maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
 													value={editOverrideValue}
-													sliderProps={{
-														accessibilityLabel: "Dropoff rate",
-														onChangeEnd: (v) => setEditOverrideValue(v)
-													}}
+													label="Dropoff rate"
+													onChange={(v) => setEditOverrideValue(v)}
 													Display={({value}) => (
 														<Center>
 															<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
@@ -568,13 +566,11 @@ const CharGroups = ({
 											>
 											<SliderWithValueDisplay
 													max={50}
-													beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
-													endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
+													minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+													maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
 													value={addOverrideValue}
-													sliderProps={{
-														accessibilityLabel: "Dropoff rate",
-														onChangeEnd: (v) => setAddOverrideValue(v)
-													}}
+													label="Dropoff rate"
+													onChange={(v) => setAddOverrideValue(v)}
 													Display={({value}) => (
 														<Center>
 															<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}</Text></Text>
@@ -633,13 +629,11 @@ const CharGroups = ({
 					<Fragment key={`${selector}-main-display-useDropoff-true`}>
 						<SliderWithValueDisplay
 							max={50}
-							beginLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
-							endLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
+							minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+							maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
 							value={characterGroupDropoff}
-							sliderProps={{
-								accessibilityLabel: "Dropoff rate",
-								onChangeEnd: (v) => dispatch(setCharacterGroupDropoff(v))
-							}}
+							label="Dropoff rate"
+							onChange={(v) => dispatch(setCharacterGroupDropoff(v))}
 							Display={({value}) => (
 								<Box pb={1}>
 									<HStack

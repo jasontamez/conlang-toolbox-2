@@ -23,18 +23,53 @@ const NewSlider = ({
 	onChange,
 	ticked,
 	sliderWidth,
-	showValue,
+	showValue = 0,
+	ValueContainer,
 	colorScheme = "secondary",
 	id
 }) => {
-	const tickRadius = fontSizesInPx[fontSize] / 2;
-	const trackHeight = tickRadius / 2;
-	const thumbRadius = tickRadius * 4;
-	const trackLength = sliderWidth - thumbRadius;
-	const trackPad = thumbRadius / 2;
-	const tickTrackLength = trackLength + tickRadius;
-	const tickTrackPad = (thumbRadius / 2) - (tickRadius / 2);
+
+	// A - trAck height
+	// I - tIck diameter
+	// B - thumB diameter
+	// H - total height
+
+	// total height:
+	//
+	// H
+	// H B
+	// H B
+	// H B
+	// H B I A
+	// H B I
+	// H B
+	// H B
+	// H B
+	// H
+
+	// I = 2A
+	// B = 8A = 4I
+	// H = 10A = 5I = (B + I)
+
+	// H - A = 9A (4.5A for pad)
+	// H - I = 8A = 4I = B (4A, 2I, B/2 for pad)
+	// H - B = I = 2A (A for pad)
+
+	const tickDiameter = fontSizesInPx[fontSize] / 2;
+	const trackHeight = tickDiameter / 2;
+	const thumbDiameter = tickDiameter * 4;
+	const totalHeight = thumbDiameter + tickDiameter;
+	const trackLength = sliderWidth - thumbDiameter;
+	const trackWidthPad = thumbDiameter / 2;
+	const trackHeightPad = trackHeight * 4.5;
 	const stepLength = trackLength / ((max - min) / step);
+
+	console.log(tickDiameter, trackHeight, thumbDiameter, totalHeight, trackLength, trackWidthPad, trackHeightPad, stepLength);
+	const tickTrackLength = trackLength + tickDiameter;
+	const tickTrackWidthPad = (thumbDiameter / 2) - (tickDiameter / 2);
+	const tickTrackHeightPad = tickDiameter * 2;
+	console.log(tickTrackLength, tickTrackWidthPad, tickTrackHeightPad);
+	Number.isNaN(tickDiameter) && console.log(fontSize, fontSizesInPx);
 
 	const colors = useTheme().colors[colorScheme];
 	const thumbColor = colors["400"];
@@ -90,64 +125,78 @@ const NewSlider = ({
 			runOnJS(onChange)(actualValue.value);
 		});
 
-	const containerStyle = {
-		width: sliderWidth,
-		height: thumbRadius * 1.5
-	};
-	const Ticked = () => {
-		const pad = (tickRadius / 2)
-		const Tick = () => <Circle size={`${tickRadius}px`} bg={tickColor} />;
-		const ticks = [];
-		for(let t = min; t <= max; t += step) {
-			ticks.push(<Tick key={`${id}-tick/${t}`} />)
-		}
-		return (
-			<Box><HStack style={containerStyle} alignItems="center" justifyContent="center">
-				<Box style={{width: tickTrackPad}}></Box>
-				<HStack style={{width: tickTrackLength}} alignItems="center" justifyContent="space-between">{ticks}</HStack>
-				<Box style={{width: tickTrackPad}}></Box>
-			</HStack></Box>
-		);
-	};
 	const fillStyle = useAnimatedStyle(() => {
 		return {
-			backgroundColor: notFilled ? trackColor : filledColor,
+			//backgroundColor: notFilled ? trackColor : filledColor,
 			height: trackHeight,
 			width: xPos.value,
-			borderRadius: 9999
+			//borderRadius: 9999
 		};
 	});
 	const thumbStyleAnimated = useAnimatedStyle(() => {
 		return {
-			transform: [ {translateX: xPos.value }, {translateY: thumbRadius / 4}]
+			marginTop: trackHeight,
+			transform: [ {translateX: xPos.value } ]
 		};
 	});
 	//console.log("container style", containerStyle);
 	//console.log("ticky", ticky);
+	const Tick = () => <Circle size={`${tickDiameter}px`} bg={tickColor} />;
+	const ticks = [];
+	for(let t = min; t <= max; t += step) {
+		ticks.push(<Tick key={`${id}-tick/${t}`} />)
+	}
 
 	return (
-			<ZStack style={containerStyle}>
-				<Box><HStack style={containerStyle} alignItems="center" justifyContent="flex-start">
-					<Box style={{width: trackPad}}></Box>
-					<Box borderRadius="full" style={{
-						width: trackLength,
-						height: trackHeight,
-						backgroundColor: trackColor
-					}} />
-					<Box style={{width: trackPad}}></Box>
-				</HStack></Box>
-				{ticked && <Ticked />}
-				<Box><HStack style={containerStyle} alignItems="center" justifyContent="flex-start">
-					<Box style={{width: trackPad}}></Box>
-					<ReAnimated.View style={fillStyle} />
-				</HStack></Box>
-				<Box><GestureDetector gesture={gesture}>
-					<ReAnimated.View style={thumbStyleAnimated}>
-						<Circle size={`${thumbRadius}px`} bg={thumbColor}>
-							{showValue && <Text color={textColor} fontSize={fontSize}>{v}</Text>}
-						</Circle>
-					</ReAnimated.View>
-				</GestureDetector></Box>
+			<ZStack style={{width: sliderWidth, height: totalHeight}} m={0} p={0}>
+				<Box>
+					<Box style={{height: trackHeightPad}}></Box>
+					<HStack alignItems="center" justifyContent="flex-start">
+						<Box style={{width: trackWidthPad}}></Box>
+						<Box borderRadius="full" style={{
+							width: trackLength,
+							height: trackHeight,
+							backgroundColor: trackColor
+						}} />
+						<Box style={{width: trackWidthPad}}></Box>
+					</HStack>
+					<Box style={{height: trackHeightPad}}></Box>
+				</Box>
+				{ticked && (
+					<Box>
+						<Box style={{height: tickTrackHeightPad}} />
+						<HStack style={{height: tickDiameter}} alignItems="center" justifyContent="center">
+							<Box style={{width: tickTrackWidthPad}}></Box>
+							<HStack style={{width: tickTrackLength, height: tickDiameter}} alignItems="center" justifyContent="space-between">{ticks}</HStack>
+							<Box style={{width: tickTrackWidthPad}}></Box>
+						</HStack>
+						<Box style={{height: tickTrackHeightPad}} />
+					</Box>
+				)}
+				<Box>
+					<Box style={{height: trackHeightPad}}></Box>
+					<HStack style={{height: trackHeight}} alignItems="center" justifyContent="flex-start">
+						<Box style={{width: trackWidthPad}}></Box>
+						<ReAnimated.View style={fillStyle}>
+							<Box borderRadius="full" bg={notFilled ? trackColor : filledColor} style={{height: trackHeight}} />
+						</ReAnimated.View>
+					</HStack>
+					<Box style={{height: trackHeightPad}}></Box>
+				</Box>
+				<Box>
+					<GestureDetector gesture={gesture}>
+						<ReAnimated.View style={thumbStyleAnimated}>
+							<Circle size={`${thumbDiameter}px`} bg={thumbColor}>
+								{showValue && ((showValue > 1) || pressed.value) && (
+									ValueContainer ?
+										<ValueContainer>{v}</ValueContainer>
+									:
+										<Text color={textColor} fontSize={fontSize}>{v}</Text>
+								)}
+							</Circle>
+						</ReAnimated.View>
+					</GestureDetector>
+				</Box>
 			</ZStack>
 	);
 };
