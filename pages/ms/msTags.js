@@ -8,7 +8,7 @@ import {
 	ScrollView,
 	Center
 } from 'native-base';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import getSizes from "../../helpers/getSizes";

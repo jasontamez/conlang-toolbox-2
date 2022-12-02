@@ -3,11 +3,12 @@ import {
 	Text,
 	HStack,
 	Box,
-	//ScrollView,
+	ScrollView,
 	Button,
 	useToast
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import debounce from '../../helpers/debounce';
 import {
@@ -41,7 +42,6 @@ import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
 import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
 import { wgCustomStorage } from "../../helpers/persistentInfo";
 import getSizes from "../../helpers/getSizes";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 const WGSettings = () => {
 	const {
@@ -121,15 +121,6 @@ const WGSettings = () => {
 			</Box>
 		);
 	};
-	const Display = ({pre, post, value}) =>
-		<Text
-			fontSize={textSize}
-			textAlign="center"
-		>{pre || ""}<Text
-				color="primary.500"
-				px={1.5}
-				bg="lighter"
-			>{value}{post || ""}</Text></Text>;
 	const TextField = ({text, value, setter}) => (
 		<TextSetting
 			text={text}
@@ -254,8 +245,9 @@ const WGSettings = () => {
 				onChange={(v) => dispatch(setMonosyllablesRate(v))}
 				showValue={1}
 				ValueContainer={
-					(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+					(props) => <Text noOfLines={1} letterSpacing="sm" isTruncated={false} lineHeight={inputSize} sub textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
 				}
+				labelWidth={4}
 			/>
 			<RangeSlider
 				value={maxSyllablesPerWord}
@@ -281,6 +273,7 @@ const WGSettings = () => {
 							transform: [{translateY: -40}]
 						}}><Text textAlign="center" color="amber.400">{props.children}</Text></Box>
 				}
+				labelWidth={2}
 			/>
 			<RangeSlider
 				max={50}
@@ -293,8 +286,9 @@ const WGSettings = () => {
 				onChange={(v) => dispatch(setCharacterGroupDropoff(v))}
 				showValue={1}
 				ValueContainer={
-					(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+					(props) => <Text sub textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
 				}
+				labelWidth={2}
 			/>
 			<RangeSlider
 				max={50}
@@ -307,8 +301,9 @@ const WGSettings = () => {
 				fontSize={inputSize}
 				showValue={1}
 				ValueContainer={
-					(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+					(props) => <Text sub textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
 				}
+				labelWidth={2}
 			/>
 			<SectionHeader>Pseudo-text Controls</SectionHeader>
 			<ToggleSwitch

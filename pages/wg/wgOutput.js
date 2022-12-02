@@ -27,6 +27,7 @@ import { useNavigate, useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
 import { AnimatePresence, MotiView } from "moti";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import {
 	CancelIcon,
@@ -51,7 +52,7 @@ import {
 	setWordsPerWordlist
 } from "../../store/wgSlice";
 import StandardAlert from "../../components/StandardAlert";
-import { DropDown, SliderWithValueDisplay, ToggleSwitch } from "../../components/inputTags";
+import { DropDown, RangeSlider, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 import getSizes from "../../helpers/getSizes";
@@ -839,7 +840,7 @@ const WGOutput = () => {
 							/>
 						</HStack>
 					</Modal.Header>
-					<Modal.Body>
+					<Modal.Body><GestureHandlerRootView>
 						<Box
 							bg="darker"
 							px={2}
@@ -875,7 +876,10 @@ const WGOutput = () => {
 								color="main.600"
 							>Pseudo-Text Controls</Text>
 						</Box>
-						<SliderWithValueDisplay
+						<Box mb={1} pt={2}>
+							<Text fontSize={textSize}>Sentences per text:</Text>
+						</Box>
+						<RangeSlider
 							min={1}
 							max={100}
 							value={sentencesPerText}
@@ -883,16 +887,15 @@ const WGOutput = () => {
 							maximumLabel="100"
 							fontSize={descSize}
 							notFilled
-							stackProps={{
-								p: 2
-							}}
-							Display={({value}) => (
-								<Box mb={1}>
-									<Text fontSize={textSize}>Sentences per text: <Text px={2.5} bg="lighter">{value}</Text></Text>
-								</Box>
-							)}
 							label="Sentences per pseudo-text"
 							onChange={(v) => dispatch(setSentencesPerText(v))}
+							labelWidth={3}
+							showValue={1}
+							xPadding={24}
+							modalPaddingInfo={{
+								maxWidth: 580,
+								sizeRatio: 0.9
+							}}
 						/>
 						<Box
 							bg="darker"
@@ -940,7 +943,10 @@ const WGOutput = () => {
 							switchState={wordlistMultiColumn}
 							switchToggle={() => dispatch(setWordlistMultiColumn(!wordlistMultiColumn))}
 						/>
-						<SliderWithValueDisplay
+						<Box mb={1} pt={2}>
+							<Text fontSize={textSize}>Words per wordlist:</Text>
+						</Box>
+						<RangeSlider
 							min={50}
 							max={1000}
 							value={wordsPerWordlist}
@@ -948,16 +954,20 @@ const WGOutput = () => {
 							maximumLabel="1000"
 							fontSize={descSize}
 							notFilled
-							Display={({value}) => (
-								<Box mb={1}>
-									<Text fontSize={textSize}>Words per wordlist: <Text px={2.5} bg="lighter">{value}</Text></Text>
-								</Box>
-							)}
 							label="Words per worlist"
 							onChange={(v) => dispatch(setWordsPerWordlist(v))}
-							stackProps={{ p: 2 }}
+							ValueContainer={
+								(props) => <Text noOfLines={1} letterSpacing="sm" isTruncated={false} lineHeight={descSize} sub textAlign="center" fontSize={descSize} color="secondary.50">{props.children}</Text>
+							}
+							labelWidth={3}
+							showValue={1}
+							xPadding={24}
+							modalPaddingInfo={{
+								maxWidth: 580,
+								sizeRatio: 0.9
+							}}
 						/>
-					</Modal.Body>
+					</GestureHandlerRootView></Modal.Body>
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" w="full" p={1}>
 							<Button

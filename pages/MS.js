@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import NavBar from '../components/NavBar';
 import { SettingsIcon } from '../components/icons';
 import { fontSizesInPx } from '../store/appStateSlice';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const MS = () => {
 	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
@@ -64,15 +65,14 @@ const MS = () => {
 				style={{marginBottom: buffer}}
 			>
 				<Box
-					flexGrow={2}
-					flexShrink={2}
-					flexBasis="85%"
 					mt={0}
-					mx={4}
+					px={4}
 				>
-					<ScrollView ref={scrollRef} h="full">
-						<Outlet />
-					</ScrollView>
+					<GestureHandlerRootView>
+						<ScrollView ref={scrollRef} h="full">
+							<Outlet />
+						</ScrollView>
+					</GestureHandlerRootView>
 				</Box>
 			</VStack>
 			<NavBar

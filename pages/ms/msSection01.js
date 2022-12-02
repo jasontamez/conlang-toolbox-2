@@ -1,6 +1,4 @@
-import {
-	VStack
-} from 'native-base';
+import { VStack } from 'native-base';
 import { useSelector } from 'react-redux';
 
 import { Header, Modal, Tabular, T, B, I, P, Range, CheckBoxes, TextArea } from './msTags';

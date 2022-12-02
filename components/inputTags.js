@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useLayoutEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import {
 	Box,
@@ -18,6 +18,7 @@ import { useWindowDimensions } from 'react-native';
 
 import { SortEitherIcon } from './icons';
 import NewSlider from './NewSlider';
+import { fontSizesInPx } from '../store/appStateSlice';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -234,7 +235,10 @@ export const RangeSlider = ({
 	showValue,
 	ValueContainer,
 	colorScheme,
-	xPadding = 0
+	xPadding = 0,
+	modalPaddingInfo,
+	labelWidth,
+	containerProps = {}
 }) => {
 	// <RangeSlider
 	//    min={number; default 0}
@@ -245,8 +249,8 @@ export const RangeSlider = ({
 	//    capped={boolean; if true, min/max labels are put in line w/slider;
 	//            otherwise, labels are put above the slider; default true}
 	//    notFilled={boolean; if true, the slider does not "fill"; default false}
-	//    minimumLabel={string; left of Slider}
-	//    maximumLabel={string; right of Slider}
+	//    minimumLabel={string or Element; left of Slider}
+	//    maximumLabel={string or Element; right of Slider}
 	//    fontSize={size of the labels, defaults to 'sizes.sm'}
 	//    onChange={function; fired when slider stops moving}
 	//    PreElement={optional, displayed above the slider}
@@ -258,37 +262,61 @@ export const RangeSlider = ({
 	//                    defaults to simple text in the thumb}
 	//    colorScheme={defaults to 'secondary'}
 	//    xPadding={integer; extra padding around the slider element; default 0}
+	//    labelWidth={number; estimated ems the labels should span}
 	// />
 	const sizes = useSelector(state => state.appState.sizes);
 	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
 	const { width } = useWindowDimensions();
-	const labelW = width / 6;
-	// 16 = container Box padding
-	// 24 = cap margins
-	// 16 = HStack padding
-	const outerPadding = 16;
-	const innerPadding = (capped ? (24 + (labelW * 2)) : 16);
-	const containerWidth = width - xPadding;
-	// 16 = OuterContainer padding
-	const sliderWidth = containerWidth - outerPadding - innerPadding;
-//	console.log(width, containerWidth, innerPadding, sliderWidth, labelW);
-	const OuterContainer = ({children, containerStyle, ...props}) => {
-		if(capped && !(PreElement || PostElement)) {
-			return <HStack {...props} {...containerStyle}>{children}</HStack>;
+	const simpleOutput = capped && !(PreElement || PostElement);
+	const labelW = labelWidth ? fontSizesInPx[textSize] * labelWidth : width / 6;
+	let maybeExtraPadding = 0;
+	if(modalPaddingInfo) {
+		const { maxWidth, sizeRatio } = modalPaddingInfo;
+		const modalSize = Math.min(maxWidth, width * sizeRatio);
+		maybeExtraPadding = width - modalSize;
+	}
+	const containerWidth = width - xPadding - maybeExtraPadding;
+	const outerContainerWidth = containerWidth - 16;
+	const sliderWidth = outerContainerWidth - (capped ? (labelW * 2) + 32 : 16) - 16;
+
+	const OuterContainer = ({children, ...props}) => {
+		if(simpleOutput) {
+			return (
+				<HStack
+					{...props}
+					bg="darker"
+					borderRadius="md"
+					style={{
+						width: outerContainerWidth
+					}}
+				>{children}</HStack>);
 		}
 		return (
-			<VStack {...props}>
+			<VStack {...props} style={{width: outerContainerWidth}}>
 				{PreElement &&
 					<PreElement />
 				}
-				<Box px={2} py={1} {...containerStyle}>
+				<Box
+					bg="darker"
+					borderRadius="md"
+					style={{
+						width: outerContainerWidth
+					}}
+				>
 					{capped ||
-						<HStack justifyContent="space-between" w="full">
+						<HStack justifyContent="space-between" w="full" px={2}>
 							<Text textAlign="left" fontSize={textSize}>{minimumLabel}</Text>
 							<Text textAlign="right" fontSize={textSize}>{maximumLabel}</Text>
 						</HStack>
 					}
-					<HStack w="full" alignItems="center" px={2} py={1}>
+					<HStack
+						w="full"
+						alignItems="center"
+						style={{
+							paddingVertical: 4,
+							paddingHorizontal: 8
+						}}
+					>
 						{children}
 					</HStack>
 				</Box>
@@ -299,21 +327,22 @@ export const RangeSlider = ({
 		);
 	};
 	return (
-		<Box style={{width: containerWidth}} px={2} py={1}><OuterContainer
+		<Box
+			style={{
+				width: containerWidth,
+				paddingHorizontal: 8,
+				paddingVertical: 4
+			}}
+			{...containerProps}
+		><OuterContainer
 			alignItems="center"
 			justifyContent="center"
-			containerStyle={{
-				bg: "darker",
-				rounded: "md",
-				style: {
-					width: containerWidth - outerPadding
-				}
-			}}
 		>
 			{capped &&
 				<Box
-					mr={3}
-					style={{width: labelW}}
+					style={{
+						width: labelW
+					}}
 				>
 					<Text
 						textAlign="center"
@@ -321,7 +350,9 @@ export const RangeSlider = ({
 					>{minimumLabel}</Text>
 				</Box>
 			}
+			<Box style={{width: 8}} />
 			<NewSlider
+				fontSize={textSize}
 				{...{
 					min,
 					max,
@@ -329,7 +360,6 @@ export const RangeSlider = ({
 					value,
 					notFilled,
 					onChange,
-					fontSize: textSize,
 					sliderWidth,
 					ticked,
 					capped,
@@ -338,10 +368,12 @@ export const RangeSlider = ({
 					colorScheme
 				}}
 			/>
+			<Box style={{width: 8}} />
 			{capped &&
 				<Box
-					ml={3}
-					style={{width: labelW}}
+					style={{
+						width: labelW
+					}}
 				>
 					<Text
 						textAlign="center"
@@ -352,102 +384,6 @@ export const RangeSlider = ({
 		</OuterContainer></Box>
 	);
 };
-
-// TO-DO: SliderWithValueDisplay doesn't always work
-//   wgSettings: the first slider is ok, the other two have the
-//     same issues as the Ticked ones
-//   wgOutput: the two (modal) sliders DO NOT SLIDE at all
-//   wgSyllables: same Ticked issue, plus modal sliders DON'T WORK
-export const SliderWithValueDisplay = (({
-	min = 0,
-	max = 4,
-	minimumLabel = "MISSING LABEL",
-	maximumLabel = "MISSING LABEL",
-	sliderProps = {},
-	value,
-	notFilled,
-	Display,
-	stackProps = {},
-	fontSize,
-	reloadTrigger = 0
-}) => {
-	// <SliderWithValueDisplay
-	//    min={default 0}
-	//    max={default 4}
-	//    value={starting value of the slider, defaults to `min`}
-	//    notFilled={if true, the slider does not fill}
-	//    minimumLabel={left of Slider}
-	//    maximumLabel={right of Slider}
-	//    fontSize={size of the labels, defaults to 'sizes.sm'}
-	//    sliderProps={props for the Slider}
-	//       NOTE: sliderProps.defaultValue can override `value`
-	//    stackProps={props for the containing VStack}
-	//    Display={element that goes above the slider, gets given a
-	//       `value` property}
-	//    reloadTrigger={a value that changes when underlying props are modified}
-	// />
-	const sizes = useSelector(state => state.appState.sizes);
-	const defaultValue = $v(value, min);
-	const labelW = useBreakpointValue(sliderCapWidths);
-	const textSize = $v(fontSize, useBreakpointValue(sizes.sm));
-	const [currentValue, setCurrentValue] = useState(defaultValue);
-	const [sliderElement, setSliderElement] = useState(() => <Fragment key={`${minimumLabel}-${reloadTrigger}-${maximumLabel}-FRAG`} />);
-	useEffect(() => {
-		setCurrentValue(defaultValue);
-		setSliderElement(() => (
-			<NativeBaseSlider
-				key={`${minimumLabel}-${reloadTrigger}-${maximumLabel}`}
-				size="sm"
-				minValue={min}
-				maxValue={max}
-				step={1}
-				defaultValue={defaultValue}
-				flexGrow={1}
-				flexShrink={1}
-				flexBasis={labelW * 4}
-				onChange={(v) => setCurrentValue(v)}
-				{...sliderProps}
-			>
-				<NativeBaseSlider.Track>
-					{notFilled ? <></> : <NativeBaseSlider.FilledTrack />}
-				</NativeBaseSlider.Track>
-				<NativeBaseSlider.Thumb />
-			</NativeBaseSlider>
-		));
-	}, [reloadTrigger]);
-	return (
-		<VStack {...stackProps}>
-			<Display value={currentValue} />
-			<HStack
-				w="full"
-				bg="darker"
-				px={2}
-				py={1}
-				borderRadius="md"
-				alignItems="center"
-				alignSelf="center"
-			>
-				<Box
-					mr={3}
-					flexGrow={0}
-					flexShrink={1}
-					flexBasis={labelW}
-				>
-					<Text textAlign="center" fontSize={textSize}>{minimumLabel}</Text>
-				</Box>
-				{[sliderElement]}
-				<Box
-					ml={3}
-					flexGrow={0}
-					flexShrink={1}
-					flexBasis={labelW}
-				>
-					<Text textAlign="center" fontSize={textSize}>{maximumLabel}</Text>
-				</Box>
-			</HStack>
-		</VStack>
-	);
-});
 
 export const ToggleSwitch = ({
 	hProps = {},

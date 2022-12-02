@@ -31,7 +31,7 @@ import {
 	SharpDropoffIcon,
 	TrashIcon
 } from "./icons";
-import { SliderWithValueDisplay, TextSetting, ToggleSwitch } from "./inputTags";
+import { RangeSlider, TextSetting, ToggleSwitch } from "./inputTags";
 import StandardAlert from "./StandardAlert";
 import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
@@ -39,6 +39,7 @@ import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 import { fontSizesInWs } from "../store/appStateSlice";
 import getSizes from "../helpers/getSizes";
 import { fromToZero } from "../helpers/motiAnimations";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const CharGroups = ({
 	useDropoff,
@@ -343,7 +344,7 @@ const CharGroups = ({
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
-						<VStack>
+						<GestureHandlerRootView><VStack>
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
@@ -387,7 +388,7 @@ const CharGroups = ({
 								labelProps={{fontSize: textSize}}
 								onChangeText={(v) => setModifiedRun(v)}
 							/>
-							{useDropoff ?
+							{useDropoff &&
 								<Fragment key={`${selector}-override-switch-modal-useDropoff-true`}>
 									<ToggleSwitch
 										hProps={{ py: 2 }}
@@ -416,20 +417,23 @@ const CharGroups = ({
 													scaleY: 1
 												})}
 											>
-												<SliderWithValueDisplay
+												<RangeSlider
 													max={50}
+													value={editOverrideValue}
 													minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
 													maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
-													value={editOverrideValue}
+													fontSize={smallerSize}
 													label="Dropoff rate"
 													onChange={(v) => setEditOverrideValue(v)}
-													Display={({value}) => (
-														<Center>
-															<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}%</Text></Text>
-														</Center>
-													)}
-													stackProps={{
-														space: 1
+													ValueContainer={
+														(props) => <Text noOfLines={1} letterSpacing="sm" isTruncated={false} lineHeight={smallerSize} sub textAlign="center" fontSize={smallerSize} color="secondary.50">{props.children}%</Text>
+													}
+													labelWidth={3}
+													showValue={1}
+													xPadding={24}
+													modalPaddingInfo={{
+														maxWidth: 580,
+														sizeRatio: 0.9
 													}}
 												/>
 											</MotiView>
@@ -438,10 +442,8 @@ const CharGroups = ({
 										}
 									</AnimatePresence>
 								</Fragment>
-							:
-								<Fragment key={`${selector}-Frag4`} />
 							}
-						</VStack>
+						</VStack></GestureHandlerRootView>
 					</Modal.Body>
 					<Modal.Footer>
 						<HStack justifyContent="space-between" p={1} flexWrap="wrap">
@@ -480,7 +482,7 @@ const CharGroups = ({
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
-						<VStack>
+						<GestureHandlerRootView><VStack>
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
@@ -536,7 +538,7 @@ const CharGroups = ({
 								inputProps={{ mt: 1, ref: refAddRun, fontSize: smallerSize, ...saveOnEnd(setAddRun) }}
 								labelProps={{fontSize: textSize}}
 							/>
-							{useDropoff ?
+							{useDropoff &&
 								<Fragment key={`${selector}-useDropoff-true-modal-add-switch`}>
 									<ToggleSwitch
 										hProps={{ py: 2 }}
@@ -564,24 +566,23 @@ const CharGroups = ({
 													scaleY: 1
 												})}
 											>
-											<SliderWithValueDisplay
+												<RangeSlider
 													max={50}
+													value={addOverrideValue}
 													minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
 													maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
-													value={addOverrideValue}
+													fontSize={smallerSize}
 													label="Dropoff rate"
 													onChange={(v) => setAddOverrideValue(v)}
-													Display={({value}) => (
-														<Center>
-															<Text fontSize={textSize}>Rate: <Text px={2.5} bg="lighter">{value}</Text></Text>
-														</Center>
-													)}
-													stackProps={{
-														p: 2,
-														mt: 3,
-														space: 1,
-														borderWidth: 1,
-														borderColor: "primary.600"
+													ValueContainer={
+														(props) => <Text noOfLines={1} letterSpacing="sm" isTruncated={false} lineHeight={smallerSize} sub textAlign="center" fontSize={smallerSize} color="secondary.50">{props.children}%</Text>
+													}
+													labelWidth={3}
+													showValue={1}
+													xPadding={24}
+													modalPaddingInfo={{
+														maxWidth: 580,
+														sizeRatio: 0.9
 													}}
 												/>
 											</MotiView>
@@ -590,10 +591,8 @@ const CharGroups = ({
 										}
 									</AnimatePresence>
 								</Fragment>
-							:
-								<Fragment key={`${selector}-Frag6`} />
 							}
-						</VStack>
+						</VStack></GestureHandlerRootView>
 					</Modal.Body>
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1} flexWrap="wrap">
@@ -624,43 +623,42 @@ const CharGroups = ({
 				accessibilityLabel="Add Group"
 				onPress={() => setAddGroupOpen(true)}
 			/>
-			<ScrollView bg="main.900">
-				{useDropoff ?
-					<Fragment key={`${selector}-main-display-useDropoff-true`}>
-						<SliderWithValueDisplay
-							max={50}
-							minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
-							maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
-							value={characterGroupDropoff}
-							label="Dropoff rate"
-							onChange={(v) => dispatch(setCharacterGroupDropoff(v))}
-							Display={({value}) => (
-								<Box pb={1}>
-									<HStack
-										justifyContent="space-between"
-										alignItems="flex-end"
-										pb={1}
-									>
-										<Text bold fontSize={textSize}>Dropoff Rate</Text>
-										<Text px={2.5} bg="lighter" fontSize={textSize}>{value}%</Text>
-									</HStack>
-									<Text fontSize={smallerSize}>Characters at the beginning of a group tend to be picked more often than characters at the end of the group. This slider controls this tendency. A rate of zero is flat, making all characters equiprobable.</Text>
-								</Box>
-							)}
-							stackProps={{
-								borderBottomWidth: 0.5,
-								borderColor: "main.700",
-								py: 2.5,
-								px: 2,
-								bg: "main.800"
-							}}
-						/>
-					</Fragment>
-				:
-					<Fragment key={`${selector}-Frag7`} />
+			<GestureHandlerRootView><ScrollView bg="main.900">
+				{useDropoff &&
+					<RangeSlider
+						key={`${selector}-main-display-useDropoff-true`}
+						max={50}
+						value={characterGroupDropoff}
+						minimumLabel={<EquiprobableIcon color="text.50" size={smallerSize} />}
+						maximumLabel={<SharpDropoffIcon color="text.50" size={smallerSize} />}
+						fontSize={smallerSize}
+						label="Dropoff rate"
+						onChange={(v) => dispatch(setCharacterGroupDropoff(v))}
+						showValue={1}
+						ValueContainer={
+							(props) => <Text noOfLines={1} letterSpacing="sm" isTruncated={false} lineHeight={smallerSize} sub textAlign="center" fontSize={smallerSize} color="secondary.50">{props.children}%</Text>
+						}
+						labelWidth={2}
+						PreElement={() => (
+							<Box pb={1}>
+								<HStack
+									alignItems="flex-end"
+									pb={1}
+								>
+									<Text bold fontSize={textSize}>Dropoff Rate</Text>
+								</HStack>
+								<Text fontSize={smallerSize}>Characters at the beginning of a group tend to be picked more often than characters at the end of the group. This slider controls this tendency. A rate of zero is flat, making all characters equiprobable.</Text>
+							</Box>
+						)}
+						containerProps={{
+							borderBottomWidth: 0.5,
+							borderColor: "main.700",
+							bg: "main.800"
+						}}
+					/>
 				}
 				{characterGroups.map(group => renderGroup(group))}
-			</ScrollView>
+			</ScrollView></GestureHandlerRootView>
 		</VStack>
 	);
 };

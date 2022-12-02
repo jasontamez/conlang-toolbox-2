@@ -3,10 +3,8 @@ import {
 	Text,
 	HStack,
 	Box,
-	ScrollView,
 	VStack,
 	useContrastText,
-	Center,
 	IconButton,
 	Modal,
 	Button
@@ -14,6 +12,7 @@ import {
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, MotiView } from "moti";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 import {
 	CloseCircleIcon,
@@ -161,7 +160,7 @@ const WGSyllables = () => {
 							/>
 						</HStack>
 					</Modal.Header>
-					<Modal.Body>
+					<Modal.Body><GestureHandlerRootView>
 						{// The following abomination is because 1) Refs don't work, 2) State makes your cursor jump and skip in a controlled textarea
 						(multipleSyllableTypes ? allBoxes : oneBox).filter(box => box === modalPropName).map(box => (
 							<Box key={`${box}-editor`}>
@@ -217,18 +216,24 @@ const WGSyllables = () => {
 												value={modalOverrideValue}
 												label="Dropoff rate"
 												onChange={(v) => setModalOverrideValue(v)}
-												PreElement={() => <Text textAlign="center" fontSize={inputSize}>Dropoff rate</Text>}
+												PreElement={() => <Text textAlign="center" fontSize={descSize}>Dropoff rate</Text>}
 												showValue={1}
 												ValueContainer={
-													(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
+													(props) => <Text textAlign="center" fontSize={descSize} color="secondary.50">{props.children}%</Text>
 												}
+												labelWidth={2}
+												xPadding={24}
+												modalPaddingInfo={{
+													maxWidth: 580,
+													sizeRatio: 0.9
+												}}
 											/>
 										</MotiView>
 									}
 								</AnimatePresence>
 							</Box>
 						))}
-					</Modal.Body>
+					</GestureHandlerRootView></Modal.Body>
 					<Modal.Footer>
 						<Button
 							colorScheme="success"
@@ -253,7 +258,7 @@ const WGSyllables = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<ScrollView>
+			<GestureHandlerRootView><ScrollView>
 				<RangeSlider
 					max={50}
 					minimumLabel={<EquiprobableIcon color="text.50" size={descSize} />}
@@ -274,10 +279,11 @@ const WGSyllables = () => {
 						</Box>
 					)}
 					showValue={1}
+					labelWidth={2}
 					fontSize={descSize}
 					ValueContainer={
-						(props) => <Text textAlign="center" fontSize={inputSize} color="secondary.50">{props.children}%</Text>
-					}	
+						(props) => <Text textAlign="center" sub fontSize={descSize} color="secondary.50">{props.children}%</Text>
+					}
 				/>
 				<ToggleSwitch
 					hProps={{
@@ -332,7 +338,7 @@ const WGSyllables = () => {
 						</MotiView>
 					}
 				</AnimatePresence>
-			</ScrollView>
+			</ScrollView></GestureHandlerRootView>
 		</VStack>
 	);
 };

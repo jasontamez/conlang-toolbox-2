@@ -64,12 +64,9 @@ const NewSlider = ({
 	const trackHeightPad = trackHeight * 4.5;
 	const stepLength = trackLength / ((max - min) / step);
 
-	console.log(tickDiameter, trackHeight, thumbDiameter, totalHeight, trackLength, trackWidthPad, trackHeightPad, stepLength);
 	const tickTrackLength = trackLength + tickDiameter;
 	const tickTrackWidthPad = (thumbDiameter / 2) - (tickDiameter / 2);
 	const tickTrackHeightPad = tickDiameter * 2;
-	console.log(tickTrackLength, tickTrackWidthPad, tickTrackHeightPad);
-	Number.isNaN(tickDiameter) && console.log(fontSize, fontSizesInPx);
 
 	const colors = useTheme().colors[colorScheme];
 	const thumbColor = colors["400"];
@@ -83,8 +80,6 @@ const NewSlider = ({
 	const xPos = useSharedValue(starting.value);
 	const pressed = useSharedValue(false);
 	const [v, setV] = useState(actualValue.value);
-//	console.log("minmax", min, max, "step", step, "value", actualValue.value);
-//	console.log("track", trackLength, "step", stepLength, "starting", starting.value);
 	const setter = (doSet = pressed.value) => {
 		doSet && setV(actualValue.value);
 	};
@@ -92,12 +87,8 @@ const NewSlider = ({
 	const gesture = Gesture.Pan()
 		.onBegin(() => {
 			pressed.value = true;
-//			console.log("Begins");
 		})
 		.onUpdate((e) => {
-			//const newValue = Math.floor(0.5 + (Math.max(0, Math.min(max - 20, starting.value + e.translationX))))
-			//xPos.value = newValue;
-			//newValue && (newValue % 5 ) || console.log(starting.value, max, newValue)
 			'worklet'
 			const input = e.translationX;
 			const rawX = Math.min(
@@ -107,30 +98,23 @@ const NewSlider = ({
 			const rawValue = rawX / stepLength;
 			const trueValue = Math.floor(rawValue + 0.5);
 			const newValue = Math.floor((trueValue * stepLength) + 0.5);
-			//console.log("input", input, "raw X", rawX, "raw value", rawValue);
-			//console.log("true value", trueValue, "new value", newValue);
 			actualValue.value = trueValue + min;
 			runOnJS(setter)();
-		//	setV(trueValue);
 			xPos.value = newValue;
 		})
 		.onEnd(() => {
 			starting.value = xPos.value;
-//			console.log("saved val", xPos.value)
 		})
 		.onFinalize(() => {
 			pressed.value = false;
 			runOnJS(setter)(true);
-//			console.log("Ended");
 			runOnJS(onChange)(actualValue.value);
 		});
 
 	const fillStyle = useAnimatedStyle(() => {
 		return {
-			//backgroundColor: notFilled ? trackColor : filledColor,
 			height: trackHeight,
-			width: xPos.value,
-			//borderRadius: 9999
+			width: xPos.value
 		};
 	});
 	const thumbStyleAnimated = useAnimatedStyle(() => {
@@ -139,8 +123,6 @@ const NewSlider = ({
 			transform: [ {translateX: xPos.value } ]
 		};
 	});
-	//console.log("container style", containerStyle);
-	//console.log("ticky", ticky);
 	const Tick = () => <Circle size={`${tickDiameter}px`} bg={tickColor} />;
 	const ticks = [];
 	for(let t = min; t <= max; t += step) {
@@ -148,7 +130,7 @@ const NewSlider = ({
 	}
 
 	return (
-			<ZStack style={{width: sliderWidth, height: totalHeight}} m={0} p={0}>
+			<ZStack style={{width: sliderWidth, height: totalHeight}}>
 				<Box>
 					<Box style={{height: trackHeightPad}}></Box>
 					<HStack alignItems="center" justifyContent="flex-start">
@@ -186,8 +168,8 @@ const NewSlider = ({
 				<Box>
 					<GestureDetector gesture={gesture}>
 						<ReAnimated.View style={thumbStyleAnimated}>
-							<Circle size={`${thumbDiameter}px`} bg={thumbColor}>
-								{showValue && ((showValue > 1) || pressed.value) && (
+							<Circle style={{overflow: "visible"}} size={`${thumbDiameter}px`} bg={thumbColor}>
+								{showValue !== 0 && ((showValue > 0) || pressed.value) && (
 									ValueContainer ?
 										<ValueContainer>{v}</ValueContainer>
 									:
