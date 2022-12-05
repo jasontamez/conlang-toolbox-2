@@ -90,7 +90,7 @@ const WGSettings = () => {
 		}
 		setClearAlertOpen(true);
 	};
-	const triggerResets = () => setResetCounter(resetCounter + 1);
+	const triggerResets = () => setResetCounter(currentCounter => currentCounter + 1);
 	const doClearEveything = () => {
 		dispatch(loadState(null));
 		triggerResets();
@@ -261,18 +261,6 @@ const WGSettings = () => {
 				onChange={(v) => dispatch(setMaxSyllablesPerWord(v))}
 				ticked
 				showValue={1}
-				OldValueContainer={
-					(props) => <Box
-						bg="primary.500"
-						alignItems="center"
-						justifyContent="center"
-						style={{
-							width: 30,
-							height: 30,
-							borderRadius: 9999,
-							transform: [{translateY: -40}]
-						}}><Text textAlign="center" color="amber.400">{props.children}</Text></Box>
-				}
 				labelWidth={2}
 			/>
 			<RangeSlider

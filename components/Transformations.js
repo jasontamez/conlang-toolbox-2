@@ -47,7 +47,6 @@ const Transformations = ({
 	rearrangeTransforms,
 }) => {
 	const { transforms } = useSelector(state => state[selector]);
-	const lastTransform = transforms.length - 1;
 	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const toast = useToast();
@@ -605,7 +604,7 @@ const Transformations = ({
 						const { from, to, data } = end;
 						from !== to && dispatch(rearrangeTransforms(data));
 					}}
-					autoscrollThreshold={1}
+					autoscrollThreshold={20}
 					containerStyle={{
 						maxHeight: viewHeight
 					}}
