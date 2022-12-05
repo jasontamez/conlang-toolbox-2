@@ -17,9 +17,6 @@ import {
 import { useRef, useState, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, MotiView } from "moti";
-//TO-DO: consider remove reanimated in favor of Moti
-//   here, LoadCustomInfoModal, Transformations, weOutput,
-//   weSoundChanges, wgOutput, wgSyllables
 
 import {
 	AddIcon,
@@ -59,8 +56,6 @@ const CharGroups = ({
 	const [editingGroup, setEditingGroup] = useState(false);
 	const [modifiedDesc, setModifiedDesc] = useState("");
 	const [modifiedLabel, setModifiedLabel] = useState("");
-	// TO-DO: labels need to be limited to one character on mobile, and the
-	//          "Suggest" button isn't showing up
 	// TO-DO: Error: "no characters assigned to group" when button is pressed
 	//          while in the input box (new group modal)
 	// TO-DO: ALL MODALS need to avoid keyboard

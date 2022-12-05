@@ -214,7 +214,6 @@ export const Tabular = (props) => {
 	);
 };
 
-// TO-DO: Finish/fix this
 export const Range = (props) => {
 	const {
 		start,

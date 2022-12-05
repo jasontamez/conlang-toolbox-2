@@ -197,26 +197,6 @@ export const ResettableTextSetting = ({
 };
 
 
-const Tick = () => {
-	return (
-		<HStack alignItems="center" style={{width: 20, height: 12}} bg="transparent">
-			<Box style={{width: 9, height: 12}} bg="transparent" />
-			<Box style={{width: 2, height: 12}} bg="sliderTickColor" />
-			<Box style={{width: 9, height: 12}} bg="transparent" />
-		</HStack>
-	);
-};
-const makeTicks = (min, max, step) => {
-	let middleTicks = [<Box key="FirstTick" style={{width: 20, height: 12}} bg="transparent" />];
-	for (let c = min + step; c < max; c += step) {
-		middleTicks.push(<Tick key={`Tick-${c}`} />);
-	}
-	middleTicks.push(<Box key="LastTick" style={{width: 20, height: 12}} bg="transparent" />);
-	return middleTicks;
-};
-
-// TO-DO: Investigate Sliders
-//   the ones with Ticks don't seem to work well
 export const RangeSlider = ({
 	min = 0,
 	max = 4,
