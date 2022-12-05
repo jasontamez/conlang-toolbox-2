@@ -3,10 +3,8 @@ import {
 	Box,
 	HStack,
 	ZStack,
-	useTheme,
 	Text,
-	Circle,
-	useContrastText
+	Circle
 } from "native-base";
 import ReAnimated, { runOnJS, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -34,7 +32,7 @@ const NewSlider = ({
 	// B - thumB diameter
 	// H - total height
 
-	// total height:
+	// total Height:
 	//
 	// H
 	// H B
@@ -68,18 +66,13 @@ const NewSlider = ({
 	const tickTrackWidthPad = (thumbDiameter / 2) - (tickDiameter / 2);
 	const tickTrackHeightPad = tickDiameter * 2;
 
-	const colors = useTheme().colors[colorScheme];
-	const thumbColor = colors["400"];
-	const trackColor = colors["700"];
-	const filledColor = colors["500"];
-	const tickColor = colors["600"];
-	const textColor = useContrastText(thumbColor);
+	const _start = (value - min) * stepLength;
 
-	const starting = useSharedValue((value - min) * stepLength);
+	const starting = useSharedValue(_start);
 	const actualValue = useSharedValue(value);
-	const xPos = useSharedValue(starting.value);
+	const xPos = useSharedValue(_start);
 	const pressed = useSharedValue(false);
-	const [v, setV] = useState(actualValue.value);
+	const [v, setV] = useState(value);
 	const setter = (doSet = pressed.value) => {
 		doSet && setV(actualValue.value);
 	};
@@ -123,63 +116,62 @@ const NewSlider = ({
 			transform: [ {translateX: xPos.value } ]
 		};
 	});
-	const Tick = () => <Circle size={`${tickDiameter}px`} bg={tickColor} />;
+	const Tick = () => <Circle size={`${tickDiameter}px`} bg={`${colorScheme}.600`} />;
 	const ticks = [];
 	for(let t = min; t <= max; t += step) {
 		ticks.push(<Tick key={`${id}-tick/${t}`} />)
 	}
 
 	return (
-			<ZStack style={{width: sliderWidth, height: totalHeight}}>
+		<ZStack style={{width: sliderWidth, height: totalHeight}}>
+			<Box>
+				<Box style={{height: trackHeightPad}}></Box>
+				<HStack alignItems="center" justifyContent="flex-start">
+					<Box style={{width: trackWidthPad}}></Box>
+					<Box borderRadius="full" bg={`${colorScheme}.700`} style={{
+						width: trackLength,
+						height: trackHeight
+					}} />
+					<Box style={{width: trackWidthPad}}></Box>
+				</HStack>
+				<Box style={{height: trackHeightPad}}></Box>
+			</Box>
+			{ticked && (
 				<Box>
-					<Box style={{height: trackHeightPad}}></Box>
-					<HStack alignItems="center" justifyContent="flex-start">
-						<Box style={{width: trackWidthPad}}></Box>
-						<Box borderRadius="full" style={{
-							width: trackLength,
-							height: trackHeight,
-							backgroundColor: trackColor
-						}} />
-						<Box style={{width: trackWidthPad}}></Box>
+					<Box style={{height: tickTrackHeightPad}} />
+					<HStack style={{height: tickDiameter}} alignItems="center" justifyContent="center">
+						<Box style={{width: tickTrackWidthPad}}></Box>
+						<HStack style={{width: tickTrackLength, height: tickDiameter}} alignItems="center" justifyContent="space-between">{ticks}</HStack>
+						<Box style={{width: tickTrackWidthPad}}></Box>
 					</HStack>
-					<Box style={{height: trackHeightPad}}></Box>
+					<Box style={{height: tickTrackHeightPad}} />
 				</Box>
-				{ticked && (
-					<Box>
-						<Box style={{height: tickTrackHeightPad}} />
-						<HStack style={{height: tickDiameter}} alignItems="center" justifyContent="center">
-							<Box style={{width: tickTrackWidthPad}}></Box>
-							<HStack style={{width: tickTrackLength, height: tickDiameter}} alignItems="center" justifyContent="space-between">{ticks}</HStack>
-							<Box style={{width: tickTrackWidthPad}}></Box>
-						</HStack>
-						<Box style={{height: tickTrackHeightPad}} />
-					</Box>
-				)}
-				<Box>
-					<Box style={{height: trackHeightPad}}></Box>
-					<HStack style={{height: trackHeight}} alignItems="center" justifyContent="flex-start">
-						<Box style={{width: trackWidthPad}}></Box>
-						<ReAnimated.View style={fillStyle}>
-							<Box borderRadius="full" bg={notFilled ? trackColor : filledColor} style={{height: trackHeight}} />
-						</ReAnimated.View>
-					</HStack>
-					<Box style={{height: trackHeightPad}}></Box>
-				</Box>
-				<Box>
-					<GestureDetector gesture={gesture}>
-						<ReAnimated.View style={thumbStyleAnimated}>
-							<Circle style={{overflow: "visible"}} size={`${thumbDiameter}px`} bg={thumbColor}>
-								{showValue !== 0 && ((showValue > 0) || pressed.value) && (
-									ValueContainer ?
-										<ValueContainer>{v}</ValueContainer>
-									:
-										<Text color={textColor} fontSize={fontSize}>{v}</Text>
-								)}
-							</Circle>
-						</ReAnimated.View>
-					</GestureDetector>
-				</Box>
-			</ZStack>
+			)}
+			<Box>
+				<Box style={{height: trackHeightPad}}></Box>
+				<HStack style={{height: trackHeight}} alignItems="center" justifyContent="flex-start">
+					<Box style={{width: trackWidthPad}}></Box>
+					<ReAnimated.View style={fillStyle}>
+						<Box borderRadius="full" bg={notFilled ? `${colorScheme}.700` : `${colorScheme}.500`} style={{height: trackHeight}} />
+					</ReAnimated.View>
+				</HStack>
+				<Box style={{height: trackHeightPad}}></Box>
+			</Box>
+			<Box>
+				<GestureDetector gesture={gesture}>
+					<ReAnimated.View style={thumbStyleAnimated}>
+						<Circle style={{overflow: "visible"}} size={`${thumbDiameter}px`} bg={`${colorScheme}.400`}>
+							{showValue !== 0 && ((showValue > 0) || pressed.value) && (
+								ValueContainer ?
+									<ValueContainer>{v}</ValueContainer>
+								:
+									<Text fontSize={fontSize}>{v}</Text>
+							)}
+						</Circle>
+					</ReAnimated.View>
+				</GestureDetector>
+			</Box>
+		</ZStack>
 	);
 };
 

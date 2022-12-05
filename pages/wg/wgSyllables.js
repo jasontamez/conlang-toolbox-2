@@ -289,7 +289,7 @@ const WGSyllables = () => {
 					hProps={{
 						px: 2,
 						py: 2.5,
-						borderBottomWidth: 0.5,
+						borderBottomWidth: 1,
 						borderColor: "main.700"
 					}}
 					label="Use multiple syllable types"

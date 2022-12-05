@@ -11,7 +11,7 @@ import {
 	useToast,
 	useTheme
 } from "native-base";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, MotiView } from "moti";
 import { useOutletContext } from "react-router-dom";
@@ -80,6 +80,12 @@ const Transformations = ({
 	const bgColor = colors.primary["500"];
 
 	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
+
+	const [renderNum, setRenderNum] = useState(10);
+	useEffect(() => {
+		const estimatedRow = emSize * 3.5;
+		setRenderNum(Math.ceil(viewHeight / estimatedRow));
+	}, [viewHeight, emSize]);
 
 	// Delete
 	const maybeDeleteTransform = (transform = deletingTransform) => {
@@ -163,33 +169,6 @@ const Transformations = ({
 		}
 	};
 
-	// Reordering Transforms
-	const moveUpInList = (item, i) => {
-		// Do not fire if we're mid-reorder, or if this is the first transform
-		if(reorderState || i === 0) {
-			return;
-		}
-		const pre = transforms.slice(0, i);
-		const post = transforms.slice(i + 1);
-		const moved = pre.pop();
-		setMovedTransform(moved.id);
-		setReorderedTransform(item.id);
-		setReorderedOrder([...pre, item, moved, ...post]);
-		setReorderState(-1);
-	};
-	const moveDownInList = (item, i) => {
-		// Do not fire if we're mid-reorder, or if this is the last transform
-		if(reorderState || i === lastTransform) {
-			return;
-		}
-		const pre = transforms.slice(0, i);
-		const post = transforms.slice(i + 1);
-		const moved = post.shift();
-		setMovedTransform(moved.id);
-		setReorderedTransform(item.id);
-		setReorderedOrder([...pre, moved, item, ...post]);
-		setReorderState(-1);
-	};
 	const triggerReorder = (prop, finished) => {
 		if(prop === "backgroundColor" && finished) {
 			dispatch(rearrangeTransforms(reorderedOrder));
@@ -335,13 +314,9 @@ const Transformations = ({
 					<Unit>{search}</Unit>
 					<Arrow />
 					<Unit>{replace || " "}</Unit>
-					{useDirection ? <Direction direction={direction} /> : <></>}
+					{useDirection && <Direction direction={direction} />}
 				</HStack>
-				{description ?
-					<Text key={`${key}//desc`} italic fontSize={descSize}>{description}</Text>
-				:
-					<React.Fragment key={`${key}//noDesc`}></React.Fragment>
-				}
+				{description && <Text key={`${key}//desc`} italic fontSize={descSize}>{description}</Text>}
 			</VStack>
 		);
 	};
@@ -351,7 +326,13 @@ const Transformations = ({
 		output: "at output only",
 		double: "at input, then again at output"
 	};
-	const renderItem = ({item, index, drag, isActive}) => {
+	// TO-DO: Fix slowness issue
+	// VirtualizedList: You have a large list that is slow to update - make sure
+	//		your renderItem function renders components that follow React performance
+	//		best practices like PureComponent, shouldComponentUpdate
+	// I think I need to change these from icon-actions to Swipeables
+	//		https://github.com/computerjazz/react-native-swipeable-item
+	const renderItem = useCallback(({item, index, drag, isActive}) => {
 		const {id} = item;
 		const onPressIn = reordering ? drag : undefined;
 		return (
@@ -445,7 +426,7 @@ const Transformations = ({
 				</HStack>
 			</TouchableWithoutFeedback>
 		);
-	};
+	}, [reordering, emSize, textSize, iconWidths]);
 	return (
 		<VStack style={{height: viewHeight}} bg="main.900">
 			<StandardAlert
@@ -629,6 +610,7 @@ const Transformations = ({
 						maxHeight: viewHeight
 					}}
 					ListFooterComponent={<Box h={20} />}
+					initialNumToRender={renderNum}
 				/>
 			</GestureHandlerRootView>
 		</VStack>

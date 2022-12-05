@@ -58,7 +58,8 @@ const CharGroups = ({
 	const [modifiedLabel, setModifiedLabel] = useState("");
 	// TO-DO: Error: "no characters assigned to group" when button is pressed
 	//          while in the input box (new group modal)
-	// TO-DO: ALL MODALS need to avoid keyboard
+	// TO-DO: Also affects transforms, using a blank instead of the typed input
+	// TO-DO: ALL MODALS need to avoid keyboard - they should already be doing this
 	const [modifiedRun, setModifiedRun] = useState("");
 	const [editOverrideSwitch, setEditOverrideSwitch] = useState(false);
 	const [editOverrideValue, setEditOverrideValue] = useState(20);
@@ -255,7 +256,7 @@ const CharGroups = ({
 			<HStack
 				justifyContent="space-between"
 				alignItems="center"
-				borderBottomWidth={0.5}
+				borderBottomWidth={1}
 				borderColor="main.700"
 				py={1.5}
 				px={2}
@@ -646,7 +647,7 @@ const CharGroups = ({
 							</Box>
 						)}
 						containerProps={{
-							borderBottomWidth: 0.5,
+							borderBottomWidth: 1,
 							borderColor: "main.700",
 							bg: "main.800"
 						}}
