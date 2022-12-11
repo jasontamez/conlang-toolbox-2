@@ -794,23 +794,20 @@ const Lex = () => {
 											px={2.5}
 											py={1.5}
 										>New Save</Button>
-										{
-											storedCustomIDs.length > 0 ?
-												<Button
-													onPress={() => {
-														setAlertOpen(false);
-														setSaveLexicon(true);
-													}}
-													bg="secondary.500"
-													_text={{
-														color: primaryContrast,
-														fontSize: largeSize
-													}}
-													px={2.5}
-													py={1.5}
-												>Overwrite Previous Save</Button>
-											:
-												<></>
+										{storedCustomIDs.length > 0 &&
+											<Button
+												onPress={() => {
+													setAlertOpen(false);
+													setSaveLexicon(true);
+												}}
+												bg="secondary.500"
+												_text={{
+													color: primaryContrast,
+													fontSize: largeSize
+												}}
+												px={2.5}
+												py={1.5}
+											>Overwrite Previous Save</Button>
 										}
 									</HStack>
 								</VStack>
@@ -1069,7 +1066,7 @@ const Lex = () => {
 							triggerOpen={modalOpen === 'reorder'}
 							clearTrigger={() => setModalOpen('')}
 						/>
-						{deletingMode ?
+						{deletingMode &&
 							<IconButton
 								p={1}
 								px={1.5}
@@ -1080,8 +1077,6 @@ const Lex = () => {
 								flexGrow={0}
 								flexShrink={0}
 							/>
-						:
-							<></>
 						}
 						<Menu
 							placement="bottom right"

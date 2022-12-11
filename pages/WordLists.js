@@ -149,7 +149,7 @@ const WordLists = () => {
 				<SaveSome key="save some" />
 			);
 		}
-		return shown.length === 0 ? <></> : (
+		return shown.length !== 0 && (
 			<HStack
 				borderTopColor="darker"
 				borderTopWidth={1.5}

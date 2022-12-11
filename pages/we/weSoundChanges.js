@@ -319,7 +319,7 @@ const WESoundChanges = () => {
 	);
 	const T = (props) => <Text fontSize={textSize} {...props} />;
 	const ArrowUp = ({index}) => {
-		return reordering ?
+		return reordering &&
 			(
 				<IconButton
 					icon={<UpIcon color={index === 0 ? "transparent" : "primary.400"} size={textSize} />}
@@ -333,12 +333,10 @@ const WESoundChanges = () => {
 					onPress={() => moveUpInList(index)}
 				/>
 			)
-		:
-			<></>
 		;
 	};
 	const ArrowDown = ({index}) => {
-		return reordering ?
+		return reordering &&
 			(
 				<IconButton
 					icon={<DownIcon color={index === lastSC ? "transparent" : "primary.400"} size={textSize} />}
@@ -352,8 +350,6 @@ const WESoundChanges = () => {
 					onPress={() => moveDownInList(index)}
 				/>
 			)
-		:
-			<></>
 		;
 	};
 	const renderSoundChangeOLD = (soundChange, i) => {
@@ -418,14 +414,11 @@ const WESoundChanges = () => {
 							<Unit>{ending}</Unit>
 							<T>/</T>
 							<Unit>{context}</Unit>
-							{
-								exception ?
-									<>
-										<T key={`${id}-exception-point`}>!</T>
-										<Unit key={`${id}-exception`}>{exception}</Unit>
-									</>
-								:
-									<Fragment key={`${id}-no-exception`} />
+							{exception &&
+								<>
+									<T key={`${id}-exception-point`}>!</T>
+									<Unit key={`${id}-exception`}>{exception}</Unit>
+								</>
 							}
 						</HStack>
 						{description && <Text italic key={`${id}//desc`}>{description}</Text>}

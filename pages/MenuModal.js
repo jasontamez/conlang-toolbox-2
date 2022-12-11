@@ -129,7 +129,7 @@ const MenuModal = () => {
 									m={2}
 									minW={6}
 								>
-									{icon ? Icons[icon](textOptions) : <></>}
+									{icon && Icons[icon](textOptions)}
 								</VStack>
 								<VStack
 									alignItems="flex-start"

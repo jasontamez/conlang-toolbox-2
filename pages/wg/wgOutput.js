@@ -1184,7 +1184,7 @@ const WGOutput = () => {
 					/>
 					<Menu
 						placement="bottom right"
-						trigger={(props) => (rawWords.length > 0 ?
+						trigger={(props) => (rawWords.length > 0 && // Only show this button when there are words to save.
 							<MotiView
 								key="saveMenu"
 								animate={
@@ -1218,8 +1218,6 @@ const WGOutput = () => {
 									{...props}
 								/>
 							</MotiView>
-						:
-							<></> // Only show this button when there are words to save.
 						)}
 					>
 						<Menu.Item

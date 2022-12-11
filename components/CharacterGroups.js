@@ -394,7 +394,7 @@ const CharGroups = ({
 										switchToggle={() => setEditOverrideSwitch(!editOverrideSwitch)}
 									/>
 									<AnimatePresence>
-										{editOverrideSwitch ?
+										{editOverrideSwitch &&
 											<MotiView
 												style={{
 													overflow: "hidden",
@@ -433,8 +433,6 @@ const CharGroups = ({
 													}}
 												/>
 											</MotiView>
-										:
-											<Fragment key={`${selector}-Frag3`} />
 										}
 									</AnimatePresence>
 								</Fragment>
@@ -544,7 +542,7 @@ const CharGroups = ({
 										switchToggle={() => setAddOverrideSwitch(!addOverrideSwitch)}
 									/>
 									<AnimatePresence>
-										{addOverrideSwitch ?
+										{addOverrideSwitch &&
 											<MotiView
 												style={{
 													overflow: "hidden",
@@ -582,8 +580,6 @@ const CharGroups = ({
 													}}
 												/>
 											</MotiView>
-										:
-											<Fragment key={`${selector}-Frag5`} />
 										}
 									</AnimatePresence>
 								</Fragment>

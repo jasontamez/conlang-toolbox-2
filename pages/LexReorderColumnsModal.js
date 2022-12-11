@@ -26,20 +26,18 @@ import { fontSizesInPx } from '../store/appStateSlice';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	return (
-		<>
-			<Modal
-				animationType="fade"
-				onRequestClose={() => clearTrigger()}
-				visible={triggerOpen}
-				transparent
-			>
-				<Center flex={1} bg="#000000cc">
-					<LexiconColumnReorderer
-						doClose={clearTrigger}
-					/>
-				</Center>
-			</Modal>
-		</>
+		<Modal
+			animationType="fade"
+			onRequestClose={() => clearTrigger()}
+			visible={triggerOpen}
+			transparent
+		>
+			<Center flex={1} bg="#000000cc">
+				<LexiconColumnReorderer
+					doClose={clearTrigger}
+				/>
+			</Center>
+		</Modal>
 	);
 };
 

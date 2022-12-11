@@ -198,7 +198,7 @@ const SaveCustomInfoModal = ({
 					<Box pb={4}>
 						<Text textAlign="center">This will save {savedInfoString}.</Text>
 					</Box>
-					{storedCustomIDs.length > 0 ?
+					{storedCustomIDs.length > 0 &&
 						<ToggleSwitch
 							key="previousSaveOrOverwrite"
 							label={newSave ? "Making a New Save" : "Overwriting a Previous Save"}
@@ -216,8 +216,6 @@ const SaveCustomInfoModal = ({
 								flexShrink: undefined
 							}}
 						/>
-					:
-						<Fragment key="noPrevSaves" />
 					}
 					<AnimatePresence exitBeforeEnter
 						style={{

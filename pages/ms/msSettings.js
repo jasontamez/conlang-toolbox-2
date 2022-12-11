@@ -365,23 +365,20 @@ const Settings = () => {
 												px={2.5}
 												py={1.5}
 											>New Save</Button>
-											{
-												storedCustomIDs.length > 0 ?
-													<Button
-														onPress={() => {
-															setAlertOpen(false);
-															setOperation(1);
-														}}
-														bg="secondary.500"
-														_text={{
-															color: primaryContrast,
-															fontSize: largerSize
-														}}
-														px={2.5}
-														py={1.5}
-													>Overwrite Previous Save</Button>
-												:
-													<></>
+											{storedCustomIDs.length > 0 &&
+												<Button
+													onPress={() => {
+														setAlertOpen(false);
+														setOperation(1);
+													}}
+													bg="secondary.500"
+													_text={{
+														color: primaryContrast,
+														fontSize: largerSize
+													}}
+													px={2.5}
+													py={1.5}
+												>Overwrite Previous Save</Button>
 											}
 										</HStack>
 									</VStack>
