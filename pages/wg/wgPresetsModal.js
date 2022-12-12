@@ -43,17 +43,17 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "ptkbdg"
 			},
 			{
 				label: "V",
-				title: "Vowels",
+				description: "Vowels",
 				run: "ieaou"
 			},
 			{
 				label: "L",
-				title: "Liquids",
+				description: "Liquids",
 				run: "rl"
 			}
 		],
@@ -75,17 +75,17 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "tpknlrsmʎbdgñfh"
 			},
 			{
 				label: "V",
-				title: "Vowels",
+				description: "Vowels",
 				run: "aieuoāīūēō"
 			},
 			{
 				label: "N",
-				title: "Nasals",
+				description: "Nasals",
 				run: "nŋ"
 			}
 		],
@@ -143,32 +143,32 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "tkpnslrmfbdghvyh"
 			},
 			{
 				label: "V",
-				title: "Vowels 1",
+				description: "Vowels 1",
 				run: "aiueo"
 			},
 			{
 				label: "U",
-				title: "Vowels 2",
+				description: "Vowels 2",
 				run: "aiuàê"
 			},
 			{
 				label: "P",
-				title: "Pre-liquid consonants",
+				description: "Pre-liquid consonants",
 				run: "ptkbdg"
 			},
 			{
 				label: "L",
-				title: "Liquids",
+				description: "Liquids",
 				run: "rl"
 			},
 			{
 				label: "F",
-				title: "Syllable-final consonants",
+				description: "Syllable-final consonants",
 				run: "nsrmltc"
 			}
 		],
@@ -208,27 +208,27 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "ptknlsmšywčhfŋ"
 			},
 			{
 				label: "V",
-				title: "Vowels",
+				description: "Vowels",
 				run: "auieo"
 			},
 			{
 				label: "F",
-				title: "Syllable-Final Consonants",
+				description: "Syllable-Final Consonants",
 				run: "nnŋmktp"
 			},
 			{
 				label: "D",
-				title: "Dipthongs",
+				description: "Dipthongs",
 				run: "io"
 			},
 			{
 				label: "A",
-				title: "Aspirated Consonants",
+				description: "Aspirated Consonants",
 				run: "ptkč"
 			}
 		],
@@ -274,17 +274,17 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "ptknslrmbdgfvwyhšzñxčžŋ"
 			},
 			{
 				label: "V",
-				title: "Vowels",
+				description: "Vowels",
 				run: "aiuoeɛɔâôüö"
 			},
 			{
 				label: "L",
-				title: "Liquids",
+				description: "Liquids",
 				run: "rly"
 			}
 		],
@@ -318,32 +318,32 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "tnsrdlSmTqwfgWypbCcvhPBkjxqz"
 			},
 			{
 				label: "V",
-				title: "Vowels",
+				description: "Vowels",
 				run: "eaoeaoiuOIiEAUuy"
 			},
 			{
 				label: "P",
-				title: "Plosives",
+				description: "Plosives",
 				run: "tpkc"
 			},
 			{
 				label: "L",
-				title: "Liquids",
+				description: "Liquids",
 				run: "rl"
 			},
 			{
 				label: "N",
-				title: "Nasals",
+				description: "Nasals",
 				run: "nmN"
 			},
 			{
 				label: "F",
-				title: "Post-nasal or -liquid Final Consonants",
+				description: "Post-nasal or -liquid Final Consonants",
 				run: "TS"
 			}
 		],
@@ -559,32 +559,32 @@ const wgPresets = [
 		characterGroups: [
 			{
 				label: "C",
-				title: "Consonants",
+				description: "Consonants",
 				run: "kstSplrLnstmTNfh"
 			},
 			{
 				label: "S",
-				title: "Initial consonants",
+				description: "Initial consonants",
 				run: "tspkThfS"
 			},
 			{
 				label: "V",
-				title: "Vowels",
+				description: "Vowels",
 				run: "aoiueAOUE"
 			},
 			{
 				label: "I",
-				title: "Mid-word vowels",
+				description: "Mid-word vowels",
 				run: "aoueAOUE"
 			},
 			{
 				label: "E",
-				title: "Word-ending consonants",
+				description: "Word-ending consonants",
 				run: "sfSnmNktpTh"
 			},
 			{
 				label: "J",
-				title: "Word-final conjugation",
+				description: "Word-final conjugation",
 				run: "1234567890!@#-&=_;:~",
 				dropoff: 0
 			}

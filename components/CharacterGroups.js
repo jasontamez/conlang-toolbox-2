@@ -9,7 +9,6 @@ import {
 	Modal,
 	useContrastText,
 	Button,
-	Center,
 	Input,
 	useToast,
 	useTheme
@@ -17,12 +16,13 @@ import {
 import { useRef, useState, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, MotiView } from "moti";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import SwipeableItem from 'react-native-swipeable-item';
 
 import {
 	AddIcon,
 	SuggestLeftIcon,
 	CloseCircleIcon,
-	EditIcon,
 	EquiprobableIcon,
 	SaveIcon,
 	SharpDropoffIcon,
@@ -36,7 +36,7 @@ import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 import { fontSizesInWs } from "../store/appStateSlice";
 import getSizes from "../helpers/getSizes";
 import { fromToZero } from "../helpers/motiAnimations";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Underlay from "./Underlay";
 
 const CharGroups = ({
 	useDropoff,
@@ -60,6 +60,7 @@ const CharGroups = ({
 	//          while in the input box (new group modal)
 	// TO-DO: Also affects transforms, using a blank instead of the typed input
 	// TO-DO: ALL MODALS need to avoid keyboard - they should already be doing this
+	// TO-DO: Import Groups from WE/WG/DC
 	const [modifiedRun, setModifiedRun] = useState("");
 	const [editOverrideSwitch, setEditOverrideSwitch] = useState(false);
 	const [editOverrideValue, setEditOverrideValue] = useState(20);
@@ -253,47 +254,37 @@ const CharGroups = ({
 	const renderGroup = (group) => {
 		const {label, run, description, dropoff} = group;
 		return (
-			<HStack
-				justifyContent="space-between"
-				alignItems="center"
-				borderBottomWidth={1}
-				borderColor="main.700"
-				py={1.5}
-				px={2}
-				key={`${selector}-${label}`}
-				bg="main.800"
-			>
-				<VStack
-					alignItems="flex-start"
-					justifyContent="center"
+			<Box key={`${selector}-${label}`}>
+				<SwipeableItem
+					renderUnderlayRight={() => <Underlay fontSize={textSize} onPress={() => startEditGroup(group)} />}
+					renderUnderlayLeft={() => <Underlay left fontSize={textSize} onPress={() => maybeDeleteGroup(group)} />}
+					snapPointsLeft={[150]}
+					snapPointsRight={[150]}
+					swipeEnabled={true}
+					activationThreshold={5}
 				>
-					<Text fontSize={textSize} isTruncated><Text bold>{label}</Text>={run}</Text>
-					{description ? <Text key={`${selector}-${label}-Text-Box`} italic fontSize={smallerSize} noOfLines={3}>{description}</Text> : <Fragment key={`${selector}-Frag1`} />}
-				</VStack>
-				<HStack>
-					{dropoff === undefined ?
-						<Fragment key={`${selector}-Frag2`} />
-					:
-						<Text key={`${selector}-${label}-Dropoff-Percent`} bg="lighter" px={1.5} py={1} m={0.5} lineHeight={smallerSize} fontSize={smallerSize} italic>{dropoff}%</Text>
-					}
-					<IconButton
-						icon={<EditIcon color="primary.400" size={smallerSize} />}
-						accessibilityLabel="Edit"
-						bg="transparent"
-						p={1}
-						m={0.5}
-						onPress={() => startEditGroup(group)}
-					/>
-					<IconButton
-						icon={<TrashIcon color="danger.400" size={smallerSize} />}
-						accessibilityLabel="Delete"
-						bg="transparent"
-						p={1}
-						m={0.5}
-						onPress={() => maybeDeleteGroup(group)}
-					/>
-				</HStack>
-			</HStack>
+					<HStack
+						justifyContent="space-between"
+						alignItems="center"
+						borderBottomWidth={1}
+						borderColor="main.700"
+						py={1.5}
+						px={2}
+						bg="main.800"
+					>
+						<VStack
+							alignItems="flex-start"
+							justifyContent="center"
+						>
+							<Text fontSize={textSize} isTruncated><Text bold>{label}</Text>={run}</Text>
+							{description && <Text key={`${selector}-${label}-Text-Box`} italic fontSize={smallerSize} noOfLines={3}>{description}</Text>}
+						</VStack>
+						{dropoff !== undefined &&
+							<Text key={`${selector}-${label}-Dropoff-Percent`} bg="lighter" px={1.5} py={1} m={0.5} lineHeight={smallerSize} fontSize={smallerSize} italic>{dropoff}%</Text>
+						}
+					</HStack>
+				</SwipeableItem>
+			</Box>
 		);
 	};
 	return (
