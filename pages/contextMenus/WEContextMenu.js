@@ -14,10 +14,11 @@ import { useLocation } from "react-router-native";
 import {
 	InfoIcon,
 	CloseCircleIcon,
-	ReorderIcon,
 	GearIcon,
 	SaveIcon,
-	AddCircleIcon
+	AddCircleIcon,
+	EditIcon,
+	TrashIcon
 } from '../../components/icons';
 import getSizes from '../../helpers/getSizes';
 
@@ -71,13 +72,22 @@ const WEContextMenu = () => {
 							these groups in <B>Transformations</B> and <B>Sound Changes</B> to fine-tune the way your
 							language evolves.
 						</P>
-						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<HStack space={2} justifyContent="center">
+							<AddCircleIcon color="secondary.500" size={iconSize} />
+							<EditIcon color="primary.500" size={iconSize} />
+							<TrashIcon color="danger.500" size={iconSize} />
+						</HStack>
 						<P>
-							{'\t'}Click the <B>Add</B> button to add a new group. When you make a group, you must give
-							it a <Em>description</Em> and a one-character <Em>label</Em>. The description is for your
-							own benefit, while the label will be used to refer to this group in the other tabs. The
-							label can be any single character except for these: <B>{"^$\\()[]{}.*+?|"}</B>. The
-							letters/characters in a group are called a <Em>run</Em>.
+							{'\t'}Click the <B color="secondary.500">Add</B> button to add a new character group. Swiping
+							right will reveal the <B color="primary.500">Edit</B> button, while swiping left will reveal
+							the <B color="danger.500">Delete</B> button.
+						</P>
+						<P>
+							{'\t'}When you make a group, you must give it a <Em>description</Em> and a
+							one-character <Em>label</Em>. The label can be any single character except for
+							these: <B letterSpacing="2xl">{"^$\\()[]{}.*+?|"}</B>. The description is for your own benefit,
+							while the label will be used to refer to this group in the other tabs. The letters/characters
+							in a group are called a <Em>run</Em>.
 						</P>
 					</ModalBody>
 				);
@@ -148,16 +158,21 @@ const WEContextMenu = () => {
 							{'\t'}If you have no special rules for where in a word a replacement can happen,
 							just make a <Em>context expression</Em> that's only a single underscore.
 						</P>
-						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<HStack space={2} justifyContent="center">
+							<AddCircleIcon color="tertiary.500" size={iconSize} />
+							<EditIcon color="primary.500" size={iconSize} />
+							<TrashIcon color="danger.500" size={iconSize} />
+						</HStack>
 						<P>
-							{'\t'}Click the <B>Add</B> button to add a new sound-change.
+							{'\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new sound-change.
+							Swiping right on a sound-change reveals the <B color="primary.500">Edit</B> button,
+							and swiping left reveals the <B color="danger.500">Delete</B> button.
 						</P>
-						<Center><ReorderIcon color="text.50" size={iconSize} /></Center>
 						<P>
 							{'\t'}The first sound-change in the list will be run first, the second
-							sound-change second, and so on down the list. This may cause unintended effects,
-							so you can reorganize your sound-changes to avoid them by using the reordering
-							mode.
+							sound-change second, and so on down the list. If this causes unintended effects,
+							you can reorganize your sound-changes to avoid. Long-press a sound-change
+							to drag it to a new position.
 						</P>
 					</ModalBody>
 				);
@@ -219,16 +234,21 @@ const WEContextMenu = () => {
 								expression</Em> before AND after the <B>sound changes</B> are processed.
 							</P>
 						</VStack>
-						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<HStack space={2} justifyContent="center">
+							<AddCircleIcon color="tertiary.500" size={iconSize} />
+							<EditIcon color="primary.500" size={iconSize} />
+							<TrashIcon color="danger.500" size={iconSize} />
+						</HStack>
 						<P>
-							{'\t'}Click the <B>Add</B> button to add a new transformation.
+							{'\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new transformation.
+							Swiping right on a transformation reveals the <B color="primary.500">Edit</B> button,
+							and swiping left reveals the <B color="danger.500">Delete</B> button.
 						</P>
-						<Center><ReorderIcon color="text.50" size={iconSize} /></Center>
 						<P>
 							{'\t'}The first transformation in the list will be run first, the second
-							transformation second, and so on down the list. This may cause unintended effects,
-							so you can reorganize your transformations to avoid them by using the reordering
-							mode.
+							transformation second, and so on down the list. If this causes unintended
+							effects, you can reorganize your transformations to avoid them. Long-press a
+							transformation to drag it to a new position.
 						</P>
 					</ModalBody>
 				);

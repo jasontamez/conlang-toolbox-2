@@ -16,11 +16,12 @@ import { useLocation } from "react-router-native";
 import {
 	InfoIcon,
 	CloseCircleIcon,
-	ReorderIcon,
 	GearIcon,
 	GenerateIcon,
 	SaveIcon,
-	AddCircleIcon
+	AddCircleIcon,
+	EditIcon,
+	TrashIcon
 } from '../../components/icons';
 import getSizes from '../../helpers/getSizes';
 
@@ -81,14 +82,22 @@ const WGContextMenu = () => {
 							consonants <I>lr</I> at the beginning of syllables. So you might choose them as
 							groups, while also putting <I>pbklr</I> in a third group for general consonants.
 						</P>
-						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<HStack space={2} justifyContent="center">
+							<AddCircleIcon color="secondary.500" size={iconSize} />
+							<EditIcon color="primary.500" size={iconSize} />
+							<TrashIcon color="danger.500" size={iconSize} />
+						</HStack>
 						<P>
-							{'\t'}Click the <B>Add</B> button to add a new character group. When you make a
-							group, you must give it a <Em>description</Em> and a one-character <Em>label</Em>.
-							The label can be any single character except for these: <B>{"^$\\()[]{}.*+?|"}</B>.
-							The description is for your own benefit, while the label will be used to refer
-							to this group in the <B>Syllables</B> tab. So you may end up with groups that
-							look like the following:
+							{'\t'}Click the <B color="secondary.500">Add</B> button to add a new character group.
+							Swiping right will reveal the <B color="primary.500">Edit</B> button, while swiping left
+							will reveal the <B color="danger.500">Delete</B> button.
+						</P>
+						<P>
+							{'\t'}When you make a group, you must give it a <Em>description</Em> and a
+							one-character <Em>label</Em>. The label can be any single character except for
+							these: <B letterSpacing="2xl">{"^$\\()[]{}.*+?|"}</B>. The description is for your own
+							benefit, while the label will be used to refer to this group in the <B>Syllables</B> tab.
+							So you may end up with groups that look like the following:
 						</P>
 						<VStack w="full" alignItems="center" space={1}>
 							<C>I=pbk</C>
@@ -98,11 +107,31 @@ const WGContextMenu = () => {
 						</VStack>
 						<P>
 							{'\t'}The letters/characters in your group are called a <Em>run</Em>. The run should be
-							put in a specific order. The first letter is more likely to be used than the second,
-							the second more likely than the third, and so on. This mimics natural languages, which
-							tend to use certain sounds more than others. You can adjust this <Em>dropoff rate</Em>, or
-							eliminate it entirely, at the top of this page or on the <B>Settings</B> tab.
+							put in a specific order. <B>Character Group run dropoff</B> can range from 0% to 50%. At
+							zero (flat), group choices are all equiprobable. Otherwise, the higher the number, the more
+							likely it is that the first characters are used. (This mimics natural languages, which tend
+							to prefer certain sounds and patterns.) This is how it works:
 						</P>
+						<VStack pl={4} space={1}>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>1.</P></Box>
+								<P>A random number is generated from 1 to 100.</P>
+							</HStack>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>2.</P></Box>
+								<P>If the number is lower than the dropoff percentage, the first choice is picked.</P>
+							</HStack>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>3.</P></Box>
+								<P>If not, the generator moves the first choice to the end of the line, then returns
+								to step 1, generating a new number.</P>
+							</HStack>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>4.</P></Box>
+								<P>This cycle continues until a number is generated that is equal to or greater
+								than the dropoff percentage.</P>
+							</HStack>
+						</VStack>
 					</ModalBody>
 				);
 				break;
@@ -136,13 +165,32 @@ const WGContextMenu = () => {
 							of words when needed.
 						</P>
 						<P>
-							{'\t'}The order of syllables in each box makes a difference. The first syllable listed is
-							more likely to be used than the second, the second more likely than the third, and
-							so on. You can adjust this <Em>dropoff rate</Em>, or eliminate it entirely, on
-							the <B>Settings</B> tab. You'll also find options there to determine how
-							often one-syllable words are generated, and put an upper limit on the number of
-							syllables any one word can have.
+							{'\t'}The order of syllables in each box makes a difference. <B>Syllable dropoff</B> can
+							range from 0% to 50%. At zero (flat), syllable choices are all equiprobable. Otherwise,
+							the higher the number, the more likely it is that the first syllables are used. (This
+							mimics natural languages, which tend to prefer certain sounds and patterns.) This is how
+							it works:
 						</P>
+						<VStack pl={4} space={1}>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>1.</P></Box>
+								<P>A random number is generated from 1 to 100.</P>
+							</HStack>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>2.</P></Box>
+								<P>If the number is lower than the dropoff percentage, the first choice is picked.</P>
+							</HStack>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>3.</P></Box>
+								<P>If not, the generator moves the first choice to the end of the line, then returns
+								to step 1, generating a new number.</P>
+							</HStack>
+							<HStack alignItems="flex-start" justifyContent="flex-start">
+								<Box w={4}><P>4.</P></Box>
+								<P>This cycle continues until a number is generated that is equal to or greater
+								than the dropoff percentage.</P>
+							</HStack>
+						</VStack>
 					</ModalBody>
 				);
 				break;
@@ -178,16 +226,21 @@ const WGContextMenu = () => {
 							<Unit>ch</Unit>
 						</HStack>
 						<Divider />
-						<Center><AddCircleIcon color="text.50" size={iconSize} /></Center>
+						<HStack space={2} justifyContent="center">
+							<AddCircleIcon color="tertiary.500" size={iconSize} />
+							<EditIcon color="primary.500" size={iconSize} />
+							<TrashIcon color="danger.500" size={iconSize} />
+						</HStack>
 						<P>
-							{'\t'}Click the Add button to add a new transformation.
+							{'\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new transformation.
+							Swiping right on a transformation reveals the <B color="primary.500">Edit</B> button,
+							and swiping left reveals the <B color="danger.500">Delete</B> button.
 						</P>
-						<Center><ReorderIcon color="text.50" size={iconSize} /></Center>
 						<P>
 							{'\t'}The first transformation in the list will be run first, the second
-							transformation second, and so on down the list. This may cause unintended
-							effects, so you can reorganize your transformations to avoid them by
-							using the reordering mode.
+							transformation second, and so on down the list. If this causes unintended
+							effects, you can reorganize your transformations to avoid them. Long-press a
+							transformation to drag it to a new position.
 						</P>
 						<Divider />
 						<P>
