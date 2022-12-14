@@ -20,18 +20,19 @@ const Headers = {
 	WEContextMenu: <WEContextMenu key="header4" />
 };
 
+const defaultProps = {
+	title: 'Conlang Toolbox',
+	boxProps: {},
+	textProps: {},
+	extraChars: true,
+	rightHeader: []
+};
+
 const AppHeader = () => {
 	const sizes = useSelector(state => state.appState.sizes);
 	const location = useLocation();
 	const here = location.pathname;
 	const currentPage = allMainPages.find(page => here.startsWith(page.url)) || {};
-	const defaultProps = {
-		title: 'Conlang Toolbox',
-		boxProps: {},
-		textProps: {},
-		extraChars: true,
-		rightHeader: []
-	};
 	const {
 		title,
 		boxProps,
@@ -74,7 +75,7 @@ const AppHeader = () => {
 			>
 				<MenuModal />
 				<Box flexGrow={1} flexShrink={0}></Box>
-				{extraChars ? <ExtraChars size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} /> : <></>}
+				{extraChars && <ExtraChars size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />}
 				{rightHeader.map(header => (
 					<React.Fragment key={"Header-" + header}>
 						{Headers[header]}

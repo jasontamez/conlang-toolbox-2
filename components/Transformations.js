@@ -10,7 +10,7 @@ import {
 	Button,
 	useToast
 } from "native-base";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -31,7 +31,83 @@ import { fontSizesInPx } from "../store/appStateSlice";
 import uuidv4 from '../helpers/uuidv4';
 import Underlay from "./Underlay";
 
-//direction: both | in | out | double
+// !!!TO-DO: Change this to a scrollview w/Swipeable from RNGH and some sort of
+//             drag-and-drop solution.
+const Unit = (props) => (
+	<Box
+		borderColor="text.50"
+		borderWidth={1.5}
+		py={1}
+		px={2}
+	>
+		<Text fontFamily="serif" bold {...props} />
+	</Box>
+);
+const Direction = ({direction, fontSize}) => {
+	// input only
+	// output only
+	// input, then reverse at output
+	// input, again at output
+	let msg = "ERROR";
+	switch(direction) {
+		case "input":
+			msg = "[input only]";
+			break;
+		case "output":
+			msg = "[output only]";
+			break;
+		case "both":
+			msg = "[input, then undo]";
+			break;
+		case "double":
+			msg = "[input and output]";
+			break;
+	}
+	return (
+		<Box bg="lighter" mx={1} px={1.5} py={0.5}>
+			<Text fontSize={fontSize}>{msg}</Text>
+		</Box>
+	);
+};
+const Item = ({item, key, fontSize, descSize, useDirection}) => {
+	const { search, replace, description, direction } = item;
+	return (
+		<VStack
+			alignItems="flex-start"
+			justifyContent="center"
+			flexGrow={1}
+			flexShrink={1}
+			overflow="hidden"
+			pl={2}
+		>
+			<HStack
+				alignItems="center"
+				justifyContent="flex-start"
+				overflow="hidden"
+				space={2}
+			>
+				<Unit fontSize={fontSize}>{search}</Unit>
+				<Text fontSize={fontSize}>⟶</Text>
+				<Unit fontSize={fontSize}>{replace || " "}</Unit>
+				{useDirection && <Direction fontSize={descSize} direction={direction} />}
+			</HStack>
+			{!!description && <Text key={`${key}//desc`} italic fontSize={fontSize}>{description}</Text>}
+		</VStack>
+	); // TO-DO: Change Description so that it's one line, scrollable
+};
+const directionTexts = {
+	both: "at input, then undo at output",
+	input: "at input only",
+	output: "at output only",
+	double: "at input, then again at output"
+};
+const directionOptions = Object.keys(directionTexts).map(opt => ({
+	key: `${opt}-AddDirectionChoice`,
+	value: opt,
+	label: directionTexts[opt]
+}));
+
+
 const Transformations = ({
 	useDirection,
 	selector,
@@ -153,79 +229,7 @@ const Transformations = ({
 	};
 
 	// JSX
-	const Unit = (props) => (
-		<Box
-			borderColor="text.50"
-			borderWidth={1.5}
-			py={1}
-			px={2}
-		>
-			<Text fontSize={textSize} fontFamily="serif" bold {...props} />
-		</Box>
-	);
-	const Arrow = (props) => <Text fontSize={textSize} {...props}>⟶</Text>;
-	const Direction = ({direction}) => {
-		// input only
-		// output only
-		// input, then reverse at output
-		// input, again at output
-		if(!useDirection) {
-			return <></>;
-		}
-		let msg = "ERROR";
-		switch(direction) {
-			case "input":
-				msg = "[input only]";
-				break;
-			case "output":
-				msg = "[output only]";
-				break;
-			case "both":
-				msg = "[input, then undo]";
-				break;
-			case "double":
-				msg = "[input and output]";
-				break;
-		}
-		return (
-			<Box bg="lighter" mx={1} px={1.5} py={0.5}>
-				<Text fontSize={descSize}>{msg}</Text>
-			</Box>
-		);
-	};
-	const Item = ({item, key}) => {
-		const { search, replace, description, direction } = item;
-		return (
-			<VStack
-				alignItems="flex-start"
-				justifyContent="center"
-				flexGrow={1}
-				flexShrink={1}
-				overflow="hidden"
-				pl={2}
-			>
-				<HStack
-					alignItems="center"
-					justifyContent="flex-start"
-					overflow="hidden"
-					space={2}
-				>
-					<Unit>{search}</Unit>
-					<Arrow />
-					<Unit>{replace || " "}</Unit>
-					<Direction direction={direction} />
-				</HStack>
-				{description && <Text key={`${key}//desc`} italic fontSize={descSize}>{description}</Text>}
-			</VStack>
-		);
-	};
-	const directionTexts = {
-		both: "at input, then undo at output",
-		input: "at input only",
-		output: "at output only",
-		double: "at input, then again at output"
-	};
-	// !!!TO-DO: Fix slowness issue
+	// !!!TO-DO: Fix slowness issue, ask online?
 	// VirtualizedList: You have a large list that is slow to update - make sure
 	//		your renderItem function renders components that follow React performance
 	//		best practices like PureComponent, shouldComponentUpdate
@@ -260,16 +264,21 @@ const Transformations = ({
 						<Item
 							item={item}
 							key={`${id}-The-Transform`}
+							useDirection={useDirection}
+							fontSize={textSize}
+							descSize={descSize}
 						/>
 					</HStack>
 				</TouchableWithoutFeedback>
 			</SwipeableItem>
 		);
 	}, [textSize]);
-	const MaybeDirection = () => {
+	const MaybeDirection = ({useDirection, direction}) => {
 		if(!useDirection) {
 			return <></>;
 		}
+		const labelFunc = useCallback(() => directionTexts[direction], [direction, directionTexts]);
+		const onChange = useCallback((v) => setAddDirection(v), []);
 		return (
 			<HStack
 				space={1}
@@ -284,17 +293,11 @@ const Transformations = ({
 					bg="lighter"
 					color="text.50"
 					fontSize={textSize}
-					labelFunc={() => directionTexts[addDirection]}
-					onChange={(v) => setAddDirection(v)}
-					defaultValue={addDirection}
+					labelFunc={labelFunc}
+					onChange={onChange}
+					defaultValue={direction}
 					title="When Used?"
-					options={Object.keys(directionTexts).map(opt => {
-						return {
-							key: `${opt}-AddDirectionChoice`,
-							value: opt,
-							label: directionTexts[opt]
-						};
-					})}
+					options={directionOptions}
 					buttonProps={{
 						flex: 1,
 						px: 2,
@@ -312,6 +315,11 @@ const Transformations = ({
 			</HStack>
 		);
 	};
+	const keyExtractor = useCallback((item, index) => `${item.id}-${index}`, []);
+	const dragEnd = useCallback((end) => {
+		const { from, to, data } = end;
+		from !== to && dispatch(rearrangeTransforms(data));
+	}, []);
 	return (
 		<VStack style={{height: viewHeight}} bg="main.900">
 			<StandardAlert
@@ -394,7 +402,7 @@ const Transformations = ({
 								value={addDescription}
 								onChangeText={setAddDescription}
 							/>
-							<MaybeDirection />
+							<MaybeDirection useDirection={useDirection} direction={addDirection} />
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer>
@@ -432,15 +440,10 @@ const Transformations = ({
 				<DraggableFlatList
 					data={transforms}
 					renderItem={renderItem}
-					keyExtractor={(item, index) => `${item.id}-${index}`}
-					onDragEnd={(end) => {
-						const { from, to, data } = end;
-						from !== to && dispatch(rearrangeTransforms(data));
-					}}
+					keyExtractor={keyExtractor}
+					onDragEnd={dragEnd}
 					autoscrollThreshold={20}
-					containerStyle={{
-						maxHeight: viewHeight
-					}}
+					containerStyle={{ maxHeight: viewHeight }}
 					ListFooterComponent={<Box h={20} />}
 					initialNumToRender={renderNum}
 				/>
