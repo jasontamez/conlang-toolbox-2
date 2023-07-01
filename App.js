@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { useWindowDimensions, StatusBar } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
-import { NativeBaseProvider, Box, VStack, Text } from 'native-base';
+import { NativeBaseProvider, Text, VStack, Center } from 'native-base';
 import 'react-native-gesture-handler';
 
 
@@ -61,8 +61,7 @@ const App = () => {
 //	change comments so killSwitch is [true]
 //	comment out everything in "killswitch" above
 //	uncomment useFonts below
-//const killSwitch = [true];
-const killSwitch = false;
+let killSwitch //= [true];
 //const useFonts = () => [true];
 
 const Layout = () => {
@@ -71,20 +70,20 @@ const Layout = () => {
 		//Arimo_400Regular_Italic,
 		//Arimo_700Bold,
 		//Arimo_700Bold_Italic,
-		NotoSans_400Regular,
-		NotoSans_400Regular_Italic,
-		NotoSans_700Bold,
-		NotoSans_700Bold_Italic,
+//		NotoSans_400Regular,
+//		NotoSans_400Regular_Italic,
+//		NotoSans_700Bold,
+//		NotoSans_700Bold_Italic,
 		//NotoSansJP_100Thin,
 		//NotoSansJP_300Light,
 		//NotoSansJP_400Regular,
 		//NotoSansJP_500Medium,
 		//NotoSansJP_700Bold,
 		//NotoSansJP_900Black,
-		NotoSerif_400Regular,
-		NotoSerif_400Regular_Italic,
-		NotoSerif_700Bold,
-		NotoSerif_700Bold_Italic,
+//		NotoSerif_400Regular,
+//		NotoSerif_400Regular_Italic,
+//		NotoSerif_700Bold,
+//		NotoSerif_700Bold_Italic,
 		//NotoSerifJP_200ExtraLight,
 		//NotoSerifJP_300Light,
 		//NotoSerifJP_400Regular,
@@ -113,7 +112,9 @@ const Layout = () => {
 		//Sriracha_400Regular,
 		//'ArTarumianKamar': require('./assets/fonts/ArTarumianKamar-Regular.ttf'),
 		//'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
-		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf')
+		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf'),
+		'Noto Sans': require('./assets/fonts/NotoSans-Regular.ttf'),
+		'Noto Serif': require('./assets/fonts/NotoSerif-Regular.ttf')
 	});
 	const { theme, hasCheckedForOldCustomInfo } = useSelector((state) => state.appState);
 	const themeObject = getTheme(theme);
@@ -147,10 +148,11 @@ const Layout = () => {
 };
 
 const Fontless = () => {
+	const {width, height} = useWindowDimensions();
 	return (
-		<Box bg="main.900" safeArea>
+		<Center safeArea bg="main.900" width={width} height={height}>
 			<Text color="danger.500">Waiting for fonts...</Text>
-		</Box>
+		</Center>
 
 	);
 };

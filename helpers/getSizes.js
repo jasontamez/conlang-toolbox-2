@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 
 const getSizes = (...sizes) => {
 	const sizeObject = useSelector(state => state.appState.sizes);
-	const output = sizes.map(size => {
-		return useBreakpointValue(sizeObject[size]);
-	});
+	const output = sizes.map(size => useBreakpointValue(sizeObject[size]));
 	return output;
 };
 

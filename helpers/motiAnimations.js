@@ -18,7 +18,7 @@ export const fromToZero = (nonZeroProps, dur = 500) => {
 	};
 };
 
-// When you have some initial props are animated to zero while
+// When you have some initial props that animate to zero while
 //    other props start at zero and animate away from it
 export const flipFlop = (initialProps, finalProps, dur = 500) => {
 	let from = {...initialProps};

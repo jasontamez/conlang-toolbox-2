@@ -1,26 +1,33 @@
 import {
-	Modal,
+//	Modal as NBModal,
 	HStack,
 	Text,
 	IconButton,
 	Button,
 	Center,
-	Spinner
+	Spinner,
+	ScrollView,
+	useTheme
 } from 'native-base';
-import { useWindowDimensions } from 'react-native';
+import {
+	useWindowDimensions,
+	Modal,
+	View
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseCircleIcon, OkIcon } from './icons';
 
 // <FullPageModal
 //    modalOpen={boolean} - true when modal is open
 //    closeModal={function} - closes the modal when called
-//    modalProps={object} - additional props for <Modal>
-//    modalContentProps={object} - additional props for <Modal.Content>
-//    modalHeaderProps={object} - additional props for <Modal.Header>
+//    modalStyle={object} - additional props for <Modal>'s style
+//    modalBackdropStyle={object} - additional props for the style of the <View> inside the Modal
+//    modalContentStyle={object} - additional props for the style of the <View> that holds the content
+//    modalHeaderProps={object} - additional props for the <HStack> that holds the header
 //    HeaderOverride={Element} - replaces the default header
 //       * receives modalWidth and modalHeight props
 //    modalTitle={string} - placed in the header
-//    modalBodyProps={object} - additional props for <Modal.Body>
+//    modalBodyProps={object} - additional props for the style of the <ScrollView> that holds the body
 //    BodyContent={Element} - placed in the body
 //       * receives modalWidth and modalHeight props
 //    modalFooterProps={object} - additional props for <Modal.Footer>
@@ -29,51 +36,65 @@ import { CloseCircleIcon, OkIcon } from './icons';
 //    textSize={font size} - size of header/footer elements
 //    headerTextSize={font size} - size of header elements, overrides textSize
 //    footerTextSize={font size} - size of footer elements, overrides textSize
+// />
 const FullPageModal = ({
 	modalOpen,
 	closeModal,
-	modalProps = {},
-	modalContentProps = {},
+	modalStyle = {},
+	modalContentStyle = {},
 	modalHeaderProps = {},
 	HeaderOverride,
 	modalTitle,
 	modalBodyProps = {},
 	BodyContent,
 	modalFooterProps = {},
+	noInnerScrollView = false,
 	FooterOverride,
 	textSize,
 	headerTextSize,
 	footerTextSize
 }) => {
-	const { height, width } = useWindowDimensions();
+	let { height, width } = useWindowDimensions();
 	// Still not sure if these are even useful, but here we go...
-	const {top, bottom, left, right} = useSafeAreaInsets();
-	const style = {
-		paddingTop: 0,
-		height: height - top - bottom,
-		width: width - left - right
-	};
+	const { top, bottom, left, right } = useSafeAreaInsets();
+	width -= left;
+	width -= right;
+	height -= top;
+	height -= bottom;
+	const colors = useTheme().colors;
 	return (
 		<Modal
-			isOpen={modalOpen}
-			onClose={closeModal}
-			size="full"
-			style={style}
-			{...modalProps}
+			animationType="fade"
+			transparent={true}
+			visible={modalOpen}
+			onRequestClose={() => {
+				closeModal();
+			}}
+			{...modalStyle}
 		>
-			<Modal.Content
-				bg="main.800"
-				borderRadius="none"
-				style={style}
-				{...modalContentProps}
-			>
-				<Modal.Header w="full" {...modalHeaderProps}>
+			<View style={{
+				flex: 1,
+				justifyContent: 'center',
+				alignItems: 'center',
+				width,
+				height,
+				backgroundColor: colors.darker || "#00000044",
+				...modalBackdropStyle
+			}}>
+				<View style={{
+					paddingTop: 0,
+					backgroundColor: colors.main["800"],
+					justifyContent: 'space-between',
+					...modalContentStyle
+				}}>
 					{HeaderOverride === undefined ?
 						<HStack
 							w="full"
 							justifyContent="space-between"
 							alignItems="center"
-							pl={1.5}
+							px={1.5}
+							bg="primary.500"
+							{...modalHeaderProps}
 						>
 							<Text
 								textAlign="center"
@@ -81,6 +102,7 @@ const FullPageModal = ({
 								flexGrow={1}
 								flexShrink={1}
 								fontSize={headerTextSize || textSize}
+								color="primary.50"
 							>{modalTitle}</Text>
 							<IconButton
 								icon={<CloseCircleIcon color="primary.50" size={headerTextSize || textSize} />}
@@ -92,28 +114,41 @@ const FullPageModal = ({
 							/>
 						</HStack>
 					:
-						<HeaderOverride modalWidth={style.width} modalHeight={style.height} />
+						<HeaderOverride modalWidth={width} modalHeight={height} />
 					}
-				</Modal.Header>
-				<Modal.Body
-					m={0}
-					{...modalBodyProps}
-				>
-					<BodyContent modalWidth={style.width} modalHeight={style.height} />
-				</Modal.Body>
-				<Modal.Footer p={2} {...modalFooterProps}>
-					{FooterOverride === undefined ?
-						<Button
-							m={0}
-							startIcon={<OkIcon size={footerTextSize || textSize} />}
-							onPress={closeModal}
-							_text={{fontSize: footerTextSize || textSize}}
-						>Done</Button>
+					{noInnerScrollView ? 
+						<BodyContent modalWidth={width} modalHeight={height} />
 					:
-						<FooterOverride modalWidth={style.width} modalHeight={style.height} />
+						<ScrollView {...modalBodyProps}>
+							<BodyContent modalWidth={width} modalHeight={height} />
+						</ScrollView>
 					}
-				</Modal.Footer>
-			</Modal.Content>
+					<ScrollView {...modalBodyProps}>
+						<BodyContent modalWidth={width} modalHeight={height} />
+					</ScrollView>
+					{FooterOverride === undefined ?
+						<HStack
+							w="full"
+							justifyContent="flex-end"
+							alignItems="center"
+							px={1.5}
+							bg="main.700"
+							{...modalFooterProps}
+						>
+							<Button
+								m={0}
+								startIcon={<OkIcon size={footerTextSize || textSize} />}
+								onPress={closeModal}
+								_text={{fontSize: footerTextSize || textSize}}
+								bg="primary.500"
+								color="primary.50"
+							>Done</Button>
+						</HStack>
+					:
+						<FooterOverride modalWidth={width} modalHeight={height} />
+					}
+				</View>
+			</View>
 		</Modal>
 	);
 };
@@ -131,24 +166,8 @@ export const LoadingOverlay = ({
 		closeModal={() => null}
 		HeaderOverride={() => <></>}
 		FooterOverride={() => <></>}
-		modalProps={{
-			bg: "transparent"
-		}}
-		modalContentProps={{
-			bg: "darker"
-		}}
-		modalHeaderProps={{
-			height: 0,
-			borderBottomWidth: 0,
-			bg: "transparent"
-		}}
-		modalFooterProps={{
-			height: 0,
-			borderTopWidth: 0,
-			bg: "transparent"
-		}}
-		modalBodyProps={{
-			bg: "transparent"
+		modalBackdropStyle={{
+			backgroundColor: "transparent"
 		}}
 		BodyContent={({modalHeight, modalWidth}) => (
 			<Center

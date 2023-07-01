@@ -8,7 +8,7 @@ const breakpoints = {
 	xl: 1280
 }
 
-const fontConfig = {
+const fontConfig = { /*
 	Arimo: {
 		400: {
 			normal: "Arimo_400Regular",
@@ -21,14 +21,19 @@ const fontConfig = {
 	},
 	"Noto Sans": {
 		400: {
-			normal: "NotoSans_400Regular",
+			normal: "Noto Sans",
 			italic: "NotoSans_400Regular_Italic"
 		},
 		700: {
 			normal: "NotoSans_700Bold",
 			italic: "NotoSans_700Bold_Italic"
 		}
-	},
+	},*/
+	"Noto Sans": {
+		400: {
+			normal: "Noto Sans"
+		}
+	},/*
 	"Noto Sans JP": {
 		100: {
 			normal: "NotoSansJP_100Thin",
@@ -58,7 +63,12 @@ const fontConfig = {
 			normal: "NotoSerif_700Bold",
 			italic: "NotoSerif_700Bold_Italic"
 		}
-	},
+	},*/
+	"Noto Serif": {
+		400: {
+			normal: "Noto Serif"
+		}
+	},/*
 	"Noto Serif JP": {
 		200: {
 			normal: "NotoSerifJP_200ExtraLight",
@@ -81,7 +91,7 @@ const fontConfig = {
 		900: {
 			normal: "NotoSerifJP_900Black",
 		}
-	},
+	}, */
 	"Source Code Pro": {
 		200: {
 			normal: "SourceCodePro_200ExtraLight",
@@ -115,7 +125,7 @@ const fontConfig = {
 			normal: "SourceCodePro_900Black",
 			italic: "SourceCodePro_900Black_Italic",
 		}
-	},
+	},/*
 	ArTarumianKamar: {
 		500: {
 			normal: "ArTarumianKamar"
@@ -141,7 +151,7 @@ const fontConfig = {
 		700: {
 			normal: "LeelawadeeUI_Bold"
 		}
-	}
+	}*/
 };
 
 const fonts = { // Temporary fix until I figure out how to have fallback fonts (if possible?)
@@ -162,7 +172,7 @@ const mainButton = {
 		},
 		_text: {
 			color: "success.50",
-//			fontFamily: "body",
+			fontFamily: fonts.body,
 			fontWeight: 400,
 			fontStyle: "normal",
 			style: {
@@ -179,7 +189,7 @@ const mainBG = {
 const mainFG = {
 	defaultProps: {
 		color: "text.50",
-//		fontFamily: "body",
+		fontFamily: fonts.body,
 		fontWeight: 400,
 		fontStyle: "normal"
 	}
@@ -187,7 +197,7 @@ const mainFG = {
 const mainHeading = {
 	defaultProps: {
 		color: "text.50",
-//		fontFamily: "heading",
+		fontFamily: fonts.heading,
 		fontWeight: 700,
 		fontStyle: "normal"
 	}
@@ -205,7 +215,7 @@ const mainInput = {
 			bg: "lighter",
 			borderRadius: 0
 		},
-//		fontFamily: "body",
+		fontFamily: fonts.body,
 		fontWeight: 400,
 		fontStyle: "normal"
 	}
@@ -215,7 +225,7 @@ const mainCheckboxesDefaultProps = {
 	borderColor: "text.100",
 	_text: {
 		color: "primaryContrast",
-//		fontFamily: "body",
+		fontFamily: fonts.body,
 		fontWeight: 400,
 		fontStyle: "normal"
 	},
@@ -351,7 +361,7 @@ const components = {
 	Pressable: {...mainFG},
 	Link: {
 		defaultProps: {
-//			fontFamily: "body",
+			fontFamily: fonts.body,
 			fontWeight: 400,
 			fontStyle: "normal"
 		}
@@ -368,7 +378,7 @@ const components = {
 			...mainCheckboxesDefaultProps,
 			_text: {
 				color: "primary.50",
-//				fontFamily: "body",
+				fontFamily: fonts.body,
 				fontWeight: 400,
 				fontStyle: "normal"
 			},

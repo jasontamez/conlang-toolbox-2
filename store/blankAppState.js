@@ -280,6 +280,12 @@ const blankAppState = {/*
 		pickAndSaveForLexicon: false,
 		savingForLexicon: {}
 	},
+	extraCharacters: {
+		faves: [],
+		copyImmediately: false,
+		toCopy: "",
+		showNames: false
+	},
 	appState: {
 		menuToggleName: '',
 		theme: 'Default',

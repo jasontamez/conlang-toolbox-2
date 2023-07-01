@@ -14,6 +14,7 @@ import appStateSlice from './appStateSlice';
 import lexiconSlice from './lexiconSlice';
 import wgSlice from './wgSlice';
 import weSlice from './weSlice';
+import extraCharactersSlice from './extraCharactersSlice';
 import blankAppState from './blankAppState';
 
 //const reconcile = async (incoming, original, reduced) => {
@@ -29,7 +30,8 @@ export default () => {
 		morphoSyntax: morphoSyntaxSlice,
 		appState: appStateSlice,
 		wordLists: wordListsSlice,
-		lexicon: lexiconSlice
+		lexicon: lexiconSlice,
+		extraCharacters: extraCharactersSlice
 	};
 	//const persistConfig = {
 	//	key: 'root',

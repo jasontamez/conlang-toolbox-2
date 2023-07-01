@@ -125,8 +125,8 @@ const WGSettings = () => {
 		<TextSetting
 			text={text}
 			defaultValue={value}
-			onChangeText={(text) => debounce(
-				() => dispatch(setter(text)),
+			onChangeText={(txt) => debounce(
+				() => dispatch(setter(txt)),
 				{ namespace: text }
 			)}
 			boxProps={stackProps}

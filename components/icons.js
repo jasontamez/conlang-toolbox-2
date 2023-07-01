@@ -105,3 +105,7 @@ export const EquiprobableIcon = (props) => (
 		/>
 	</Icon>
 );
+
+// Extra Characters
+export const NamesIcon = (props) => <Icon as={MCI} name="subtitles-outline" {...props} />;
+export const FaveIcon = (props) => <Icon as={MaterialIcons} name="favorite" {...props} />;
