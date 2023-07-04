@@ -19,6 +19,10 @@ const setFavesFunc = (state, action) => {
 	state.faves = action.payload;
 	return state;
 };
+const setNowShowingFunc = (state, action) => {
+	state.nowShowing = action.payload;
+	return state;
+};
 
 const extraCharactersSlice = createSlice({
 	name: 'extraCharacters',
@@ -27,7 +31,8 @@ const extraCharactersSlice = createSlice({
 		toggleCopyImmediately: toggleCopyImmediatelyFunc,
 		toggleShowNames: toggleShowNamesFunc,
 		setToCopy: setToCopyFunc,
-		setFaves: setFavesFunc
+		setFaves: setFavesFunc,
+		setNowShowing: setNowShowingFunc
 	}
 });
 
@@ -35,7 +40,8 @@ export const {
 	toggleCopyImmediately,
 	toggleShowNames,
 	setToCopy,
-	setFaves
+	setFaves,
+	setNowShowing
 } = extraCharactersSlice.actions;
 
 export default extraCharactersSlice.reducer;

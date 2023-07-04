@@ -284,7 +284,8 @@ const blankAppState = {/*
 		faves: [],
 		copyImmediately: false,
 		toCopy: "",
-		showNames: false
+		showNames: false,
+		nowShowing: "Favorites"
 	},
 	appState: {
 		menuToggleName: '',

@@ -297,7 +297,7 @@ const WordLists = () => {
 							onPress={() => dispatch(toggleDisplayedList(list))}
 							{...displayProps}
 						>
-							<Text fontSize={buttonTextSize}>{list}</Text>
+							<Text fontSize={buttonTextSize} color="text.50">{list}</Text>
 						</Button>
 					);
 				})}

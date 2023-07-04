@@ -10,6 +10,7 @@ const doToast = ({
 	placement,
 	duration,
 	boxProps,
+	wrapProps,
 	center,
 	fontSize
 }) => {
@@ -20,10 +21,10 @@ const doToast = ({
 		bg = scheme + ".500";
 		color = scheme + ".50";
 	}
-	const Wrap = (props) => ( center ? <Center w="full" {...props} /> : <Box w="full" {...props} /> );
+	const Wrap = (props) => ( center ? <Center {...props} /> : <Box {...props} /> );
 	toast.show({
 		render: () => override || (
-			<Wrap>
+			<Wrap w="full" {...wrapProps}>
 				<Box
 					bg={bg || "success.500"}
 					borderRadius="sm"

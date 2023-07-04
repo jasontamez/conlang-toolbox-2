@@ -7,7 +7,8 @@ import {
 	Center,
 	Spinner,
 	ScrollView,
-	useTheme
+	useTheme,
+	Box
 } from 'native-base';
 import {
 	useWindowDimensions,
@@ -27,7 +28,8 @@ import { CloseCircleIcon, OkIcon } from './icons';
 //    HeaderOverride={Element} - replaces the default header
 //       * receives modalWidth and modalHeight props
 //    modalTitle={string} - placed in the header
-//    modalBodyProps={object} - additional props for the style of the <ScrollView> that holds the body
+//    noInnerScrollView - if missing or false, <BodyContent> is wrapped in a <ScrollView>
+//    modalBodyProps={object} - additional props for the style of the <ScrollView> (if present)
 //    BodyContent={Element} - placed in the body
 //       * receives modalWidth and modalHeight props
 //    modalFooterProps={object} - additional props for <Modal.Footer>
@@ -41,14 +43,15 @@ const FullPageModal = ({
 	modalOpen,
 	closeModal,
 	modalStyle = {},
+	modalBackdropStyle = {},
 	modalContentStyle = {},
 	modalHeaderProps = {},
 	HeaderOverride,
 	modalTitle,
+	noInnerScrollView = false,
 	modalBodyProps = {},
 	BodyContent,
 	modalFooterProps = {},
-	noInnerScrollView = false,
 	FooterOverride,
 	textSize,
 	headerTextSize,
@@ -61,7 +64,7 @@ const FullPageModal = ({
 	width -= right;
 	height -= top;
 	height -= bottom;
-	const colors = useTheme().colors;
+	const {colors} = useTheme();
 	return (
 		<Modal
 			animationType="fade"
@@ -74,17 +77,28 @@ const FullPageModal = ({
 		>
 			<View style={{
 				flex: 1,
+				zIndex: 5000,
 				justifyContent: 'center',
 				alignItems: 'center',
 				width,
 				height,
 				backgroundColor: colors.darker || "#00000044",
+				marginHorizontal: 0,
+				marginVertical: 0,
+				paddingHorizontal: 0,
+				paddingVertical: 0,
 				...modalBackdropStyle
 			}}>
 				<View style={{
 					paddingTop: 0,
 					backgroundColor: colors.main["800"],
 					justifyContent: 'space-between',
+					width,
+					height,
+					marginHorizontal: 0,
+					marginVertical: 0,
+					paddingHorizontal: 0,
+					paddingVertical: 0,
 					...modalContentStyle
 				}}>
 					{HeaderOverride === undefined ?
@@ -94,6 +108,7 @@ const FullPageModal = ({
 							alignItems="center"
 							px={1.5}
 							bg="primary.500"
+							flexGrow={0}
 							{...modalHeaderProps}
 						>
 							<Text
@@ -119,13 +134,10 @@ const FullPageModal = ({
 					{noInnerScrollView ? 
 						<BodyContent modalWidth={width} modalHeight={height} />
 					:
-						<ScrollView {...modalBodyProps}>
+						<ScrollView {...modalBodyProps} flexGrow={1}>
 							<BodyContent modalWidth={width} modalHeight={height} />
 						</ScrollView>
 					}
-					<ScrollView {...modalBodyProps}>
-						<BodyContent modalWidth={width} modalHeight={height} />
-					</ScrollView>
 					{FooterOverride === undefined ?
 						<HStack
 							w="full"
@@ -134,6 +146,7 @@ const FullPageModal = ({
 							px={1.5}
 							bg="main.700"
 							{...modalFooterProps}
+							flexGrow={0}
 						>
 							<Button
 								m={0}

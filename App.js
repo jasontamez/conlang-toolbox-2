@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { useWindowDimensions, StatusBar } from 'react-native';
+import { useWindowDimensions, StatusBar, Text } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
-import { NativeBaseProvider, Text, VStack, Center } from 'native-base';
+import { NativeBaseProvider, VStack, Center, useTheme } from 'native-base';
 import 'react-native-gesture-handler';
 
 
@@ -149,9 +149,10 @@ const Layout = () => {
 
 const Fontless = () => {
 	const {width, height} = useWindowDimensions();
+	const {colors} = useTheme();
 	return (
 		<Center safeArea bg="main.900" width={width} height={height}>
-			<Text color="danger.500">Waiting for fonts...</Text>
+			<Text style={{color: colors.red["500"]}}>Waiting for fonts...</Text>
 		</Center>
 
 	);
