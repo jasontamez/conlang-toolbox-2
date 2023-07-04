@@ -19,9 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Clipboard from 'expo-clipboard';
 
 import getSizes from '../helpers/getSizes';
-import FullPageModal from './FullBodyModal';
+import FullPageModal from '../components/FullBodyModal';
 import debounce from '../helpers/debounce';
-import { NamesIcon, CopyIcon, FaveIcon, CloseCircleIcon } from './icons';
+import { NamesIcon, CopyIcon, FaveIcon, CloseCircleIcon } from '../components/icons';
 import {
 	toggleCopyImmediately,
 	toggleShowNames,
