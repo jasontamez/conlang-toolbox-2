@@ -78,7 +78,8 @@ const StandardAlert = ({
 					{bodyContent || "Are you sure?"}
 				</AlertDialog.Body>
 				<AlertDialog.Footer
-					p={3}
+					px={3}
+					py={1}
 					borderTopWidth={0}
 					{...(footerProps || {})}
 				>

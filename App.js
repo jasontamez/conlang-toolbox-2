@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { useWindowDimensions, StatusBar, Text } from 'react-native';
+import { useWindowDimensions, StatusBar, Text, BackHandler } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, VStack, Center, useTheme } from 'native-base';
 import 'react-native-gesture-handler';
@@ -21,6 +21,7 @@ import { SourceCodePro_200ExtraLight, SourceCodePro_300Light, SourceCodePro_400R
 //import { Scheherazade_400Regular, Scheherazade_700Bold } from '@expo-google-fonts/scheherazade';
 //import { Sriracha_400Regular } from '@expo-google-fonts/sriracha'
 
+import StandardAlert from './components/StandardAlert';
 import getTheme from './helpers/theme';
 
 import getStoreInfo from './store/store';
@@ -160,8 +161,33 @@ const Fontless = () => {
 
 const AppRoutes = () => {
 	const {width, height} = useWindowDimensions();
+	const [backButtonAlert, setBackButtonAlert] = useState(false);
+	console.log("reload: AppRoutes");
+	useEffect(() => {
+		const backAction = () => {
+			setBackButtonAlert(true);
+			return true;
+		};
+	
+		const backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			backAction,
+		);
+	
+		return () => backHandler.remove();
+	}, [setBackButtonAlert]);
 	return (
 		<NativeRouter>
+			<StandardAlert
+				alertOpen={backButtonAlert}
+				setAlertOpen={setBackButtonAlert}
+				headerProps={{ bg: "danger.500", _text: {color: "danger.50", bold: true} }}
+				bodyContent="Do you want to exit the app?"
+				cancelFunc={() => setBackButtonAlert(false)}
+				continueText="Close App"
+				continueFunc={BackHandler.exitApp}
+				detatchButtons
+			/>
 			<VStack
 				h="full"
 				alignItems="stretch"
