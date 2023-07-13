@@ -7,6 +7,7 @@ import {
 	Pressable,
 	useBreakpointValue
 } from 'native-base';
+import { useDispatch } from 'react-redux';
 
 import TabBar from '../components/TabBar';
 import {
@@ -16,12 +17,13 @@ import {
 	WGSettingsIcon,
 	WGSyllablesIcon
 } from '../components/icons';
-import { fontSizesInPx } from '../store/appStateSlice';
+import { addPageToHistory, fontSizesInPx } from '../store/appStateSlice';
 import getSizes from '../helpers/getSizes';
 
 const WG = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const { width, height } = useWindowDimensions();
 	const [buttonTextSize, iconSize, appHeaderSize] = getSizes("xs", "sm", "lg");
 	const tabBarHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2 - 2;
@@ -40,8 +42,12 @@ const WG = () => {
 	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "main.600";
+		const doNavigate = (where) => {
+			dispatch(addPageToHistory(pathname));
+			navigate(where);
+		};
 		return (
-			<Pressable onPress={() => navigate(link)} overflow="hidden">
+			<Pressable onPress={() => doNavigate(link)} overflow="hidden">
 				<VStack
 					alignItems="center"
 					justifyContent="center"

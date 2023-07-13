@@ -16,7 +16,7 @@ import { Modal, useWindowDimensions } from 'react-native';
 import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
-import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
+import { addPageToHistory, fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuFormat } from '../appLayoutInfo';
 import getSizes from '../helpers/getSizes';
 
@@ -46,6 +46,7 @@ const MenuModal = () => {
 		"-1": subMenuSize,
 		"+1": headerSize
 	};
+	const pathname = location.pathname;
 	useEffect(() => setHasBeenToggled(false), [menuToggleName])
 	const toggleSection = (parentId) => {
 		if(openId === parentId) {
@@ -60,6 +61,8 @@ const MenuModal = () => {
 	const navigate = (url) => {
 		// Close this menu
 		closeMenu();
+		// Add to page history
+		dispatch(addPageToHistory(pathname));
 		// Go to page
 		navigator(url);
 	};
@@ -95,7 +98,7 @@ const MenuModal = () => {
 				/>);
 		} else if (kids) {
 			// App Section w/subpages
-			const isSelected = location.pathname.startsWith(url);
+			const isSelected = pathname.startsWith(url);
 			const bgOptions = isSelected ? { bg: "primary.500" } : {};
 			const textOptions = isSelected ? { color: "primary.500" } : {};
 			const isOpen = id === openId;
@@ -181,7 +184,7 @@ const MenuModal = () => {
 									url,
 									title
 								} = kid;
-								const isSelected = location.pathname === url;
+								const isSelected = pathname === url;
 								const dotOptions =
 									isSelected ?
 										{ color: "primary.500" }
@@ -265,7 +268,7 @@ const MenuModal = () => {
 			);
 		}
 		// App Section (standalone)
-		const isSelected = location.pathname === url;
+		const isSelected = pathname === url;
 		const textOptions = {
 			fontSize: fontAdjustment ? fontSizeAdjustments[fontAdjustment] : menuSize,
 			color: (isSelected ? "primary.500" : undefined),

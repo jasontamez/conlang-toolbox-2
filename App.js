@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { useWindowDimensions, StatusBar, Text, BackHandler } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
@@ -37,6 +38,7 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import About from './pages/About.js';
 
+import { removeLastPageFromHistory } from './store/appStateSlice';
 import WG from './pages/WG';
 import WGSettings from './pages/wg/wgSettings';
 import WGCharacters from './pages/wg/wgCharacterGroups';
@@ -159,13 +161,21 @@ const Fontless = () => {
 	);
 };
 
-const AppRoutes = () => {
-	const {width, height} = useWindowDimensions();
-	const [backButtonAlert, setBackButtonAlert] = useState(false);
-	console.log("reload: AppRoutes");
+const MainOutlet = ({setBackButtonAlert}) => {
+	const location = useLocation();
+	const navigate = useNavigate();
+	const { history } = useSelector((state) => state.appState);
+	const dispatch = useDispatch();
 	useEffect(() => {
 		const backAction = () => {
-			setBackButtonAlert(true);
+			if(history.length > 0) {
+				console.log(`NAV TO: ${history.join(', ')}`);
+				navigate(history[0]);
+				dispatch(removeLastPageFromHistory());
+			} else {
+				console.log("NO NAV");
+				setBackButtonAlert(true);
+			}
 			return true;
 		};
 	
@@ -175,7 +185,18 @@ const AppRoutes = () => {
 		);
 	
 		return () => backHandler.remove();
-	}, [setBackButtonAlert]);
+	}, [setBackButtonAlert, navigate, dispatch, history]);
+	console.log(`CURRENT: ${location.pathname}`);
+	return location.pathname === "/" ?
+		<About />
+	:
+		<Outlet />
+	;
+};
+
+const AppRoutes = () => {
+	const {width, height} = useWindowDimensions();
+	const [backButtonAlert, setBackButtonAlert] = useState(false);
 	return (
 		<NativeRouter>
 			<StandardAlert
@@ -204,34 +225,36 @@ const AppRoutes = () => {
 			>
 				<AppHeader />
 				<Routes>
-					<Route path="/wg/*" element={<WG />}>
-						<Route index element={<WGSettings />} />
-						<Route path="characters" element={<WGCharacters />} />
-						<Route path="syllables" element={<WGSyllables />} />
-						<Route path="transformations" element={<WGTransformations />} />
-						<Route path="output" element={<WGOutput/>} />
+					<Route path="/*" element={<MainOutlet setBackButtonAlert={setBackButtonAlert} />}>
+						<Route path="wg/*" element={<WG />}>
+							<Route index element={<WGSettings />} />
+							<Route path="characters" element={<WGCharacters />} />
+							<Route path="syllables" element={<WGSyllables />} />
+							<Route path="transformations" element={<WGTransformations />}  />
+							<Route path="output" element={<WGOutput/>} />
+						</Route>
+						<Route path="we/*" element={<WE />}>
+							<Route index element={<WEInput />} />
+							<Route path="characters" element={<WECharacters />} />
+							<Route path="transformations" element={<WETransformations />} />
+							<Route path="soundchanges" element={<WESoundChanges />} />
+							<Route path="output" element={<WEOutput/>} />
+						</Route>
+						<Route path="lex" element={<Lexicon />} />
+						<Route path="ms/*" element={<MS />}>
+							<Route index element={<MSSettings />} />
+							<Route path=":msPage" element={<MSSection />} />
+						</Route> { /*
+						<Route path="ph/*" element={<Lexicon />}>
+						</Route>
+						<Route path="dc/*" element={<Lexicon />}>
+						</Route> */}
+						<Route path="settings" element={<AppSettings />} />
+						<Route path="wordlists" element={<WordLists />} />
+						<Route path="extrachars" element={<ExtraCharacters />} />
+						{ /* <Route path="credits" element={<Credits />} />
+						<Route path="about" element={<About />} /> */ }
 					</Route>
-					<Route path="/we/*" element={<WE />}>
-						<Route index element={<WEInput />} />
-						<Route path="characters" element={<WECharacters />} />
-						<Route path="transformations" element={<WETransformations />} />
-						<Route path="soundchanges" element={<WESoundChanges />} />
-						<Route path="output" element={<WEOutput/>} />
-					</Route>
-					<Route path="/lex" element={<Lexicon />} />
-					<Route path="/ms/*" element={<MS />}>
-						<Route index element={<MSSettings />} />
-						<Route path=":msPage" element={<MSSection />} />
-					</Route> { /*
-					<Route path="/ph/*" element={<Lexicon />}>
-					</Route>
-					<Route path="/dc/*" element={<Lexicon />}>
-					</Route> */}
-					<Route path="/settings" element={<AppSettings />} />
-					<Route path="/wordlists" element={<WordLists />} />
-					{ /* <Route path="/credits" element={<Credits />} />
-					<Route path="/about" element={<About />} /> */ }
-					<Route index element={<About />} />
 				</Routes>
 			</VStack>
 		</NativeRouter>

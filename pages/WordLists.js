@@ -29,6 +29,7 @@ import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
 import { DropDown } from '../components/inputTags';
 import getSizes from '../helpers/getSizes';
+import { addPageToHistory } from '../store/appStateSlice';
 
 const WordLists = () => {
 	const {
@@ -213,6 +214,7 @@ const WordLists = () => {
 						mb={1}
 						_text={{color: "success.50", fontSize: textSize}}
 						onPress={() => {
+							dispatch(addPageToHistory("/wordlists"));
 							navigate("/lex");
 							toast.closeAll();
 						}}

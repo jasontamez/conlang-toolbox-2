@@ -49,6 +49,29 @@ const setBaseTextSizeFunc = (state, action) => {
 
 // These are settings that will only be looked at by the app and aren't
 //    directly settable by the user.
+const addPageToHistoryFunc = (state, action) => {
+	// action.payload = 'URL' of page
+	const history = state.history.slice();
+	// history is [newest, ..., oldest]
+	const { payload } = action;
+	if(history[0] !== payload) {
+		console.log(`Adding to history: ${payload}`)
+		// There was a change; if no change, state will not change
+		history.unshift(payload);
+		while(history.length > 50) {
+			history.pop();
+		}
+		state.history = history;
+	}
+	return state;
+};
+const removeLastPageFromHistoryFunc = (state, action) => {
+	// history is [newest, ..., oldest]
+	console.log(`Removing from history: ${state.history.length ? state.history[0] : 'NONE'}`)
+	state.history.shift();
+	return state;
+};
+
 const setHasCheckedForOldCustomInfoFunc = (state, action) => {
 	state.hasCheckedForOldCustomInfo = action.payload;
 	return state;
@@ -62,6 +85,8 @@ const appStateSlice = createSlice({
 		setTheme: setThemeFunc,
 		setDisableConfirms: setDisableConfirmsFunc,
 		setBaseTextSize: setBaseTextSizeFunc,
+		addPageToHistory: addPageToHistoryFunc,
+		removeLastPageFromHistory: removeLastPageFromHistoryFunc,
 		setHasCheckedForOldCustomInfo: setHasCheckedForOldCustomInfoFunc
 	}
 });
@@ -71,6 +96,8 @@ export const {
 	setTheme,
 	setDisableConfirms,
 	setBaseTextSize,
+	addPageToHistory,
+	removeLastPageFromHistory,
 	setHasCheckedForOldCustomInfo
 } = appStateSlice.actions;
 

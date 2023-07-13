@@ -41,7 +41,7 @@ import {
 	SortEitherIcon
 } from "../../components/icons";
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
-import { fontSizesInPx } from "../../store/appStateSlice";
+import { addPageToHistory, fontSizesInPx } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	setCapitalizeWords,
@@ -724,6 +724,7 @@ const WGOutput = () => {
 						mb={1}
 						_text={{color: "success.50"}}
 						onPress={() => {
+							dispatch(addPageToHistory("/wg/output"));
 							navigate("/lex");
 							toast.closeAll();
 						}}

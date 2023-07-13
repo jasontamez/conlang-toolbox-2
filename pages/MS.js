@@ -2,11 +2,11 @@ import { useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
 import { ScrollView, VStack, Box, Button, IconButton, useBreakpointValue } from 'native-base';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import NavBar from '../components/NavBar';
 import { SettingsIcon } from '../components/icons';
-import { fontSizesInPx } from '../store/appStateSlice';
+import { addPageToHistory, fontSizesInPx } from '../store/appStateSlice';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const MS = () => {
@@ -16,12 +16,17 @@ const MS = () => {
 	const pathname = location.pathname;
 	const scrollRef = useRef(null);
 	const sizes = useSelector(state => state.appState.sizes);
+	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.sm);
 	const buffer = fontSizesInPx[textSize] * 3;
 	useEffect(() => {
 		// Scrolls to top of page when we navigate
 		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
 	}, [location]);
+	const doNavigate = (where) => {
+		dispatch(addPageToHistory(pathname));
+		navigate(where);
+	};
 	const NavTab = (props) => {
 		const { isCurrent, icon, link, label } = props;
 		const bg = isCurrent ? "lighter" : "transparent";
@@ -33,7 +38,7 @@ const MS = () => {
 					variant="ghost"
 					bg={bg}
 					color={colorString}
-					onPress={() => navigate(link)}
+					onPress={() => doNavigate(link)}
 					icon={icon}
 					_icon={{color: colorString, size: textSize}}
 				/>
@@ -46,7 +51,7 @@ const MS = () => {
 				bg={bg}
 				color={colorString}
 				_text={{bold: isCurrent, color: colorString, fontSize: textSize}}
-				onPress={() => navigate(link)}
+				onPress={() => doNavigate(link)}
 			>
 				{label}
 			</Button>

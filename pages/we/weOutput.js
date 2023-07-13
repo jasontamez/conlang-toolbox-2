@@ -41,7 +41,7 @@ import {
 } from "../../components/icons";
 import uuidv4 from '../../helpers/uuidv4';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
-import { fontSizesInPx } from "../../store/appStateSlice";
+import { addPageToHistory, fontSizesInPx } from "../../store/appStateSlice";
 import StandardAlert from "../../components/StandardAlert";
 import { DropDown, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
@@ -262,6 +262,7 @@ const WGOutput = () => {
 						mb={1}
 						_text={{color: "success.50"}}
 						onPress={() => {
+							dispatch(addPageToHistory("/we/output"));
 							navigate("/lex");
 							toast.closeAll();
 						}}

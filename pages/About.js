@@ -11,6 +11,7 @@ import {
 	useBreakpointValue
  } from 'native-base';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import packageJson from '../package.json';
 
 import {
@@ -22,8 +23,7 @@ import {
 	WordGenIcon,
 	WordListsIcon
 } from '../components/icons';
-import { setBaseTextSize } from '../store/appStateSlice';
-import {useDispatch} from 'react-redux';
+import { setBaseTextSize, addPageToHistory } from '../store/appStateSlice';
 import getSizes from '../helpers/getSizes';
 
 const About = () => {
@@ -39,7 +39,10 @@ const About = () => {
 	})
 
 	const Pressable = memo(({goto, otherFunc, firstElement, children}) => {
-		const onPress = useCallback(() => navigate(goto), [goto]);
+		const onPress = useCallback(() => {
+			dispatch(addPageToHistory("/"));
+			navigate(goto);
+		}, [goto]);
 		return (
 			<Press
 				bg="main.800"

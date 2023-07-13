@@ -324,6 +324,7 @@ const blankAppState = {/*
 				xl: "5xl"
 			}
 		},
+		history: [],
 		hasCheckedForOldCustomInfo: false
 	},
 	/*
