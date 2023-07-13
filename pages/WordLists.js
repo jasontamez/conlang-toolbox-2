@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-native';
+import { useOutletContext } from 'react-router-native';
 import WL from '../helpers/wordLists';
 import {
 	HStack,
@@ -29,7 +29,6 @@ import { addMultipleItemsAsColumn } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
 import { DropDown } from '../components/inputTags';
 import getSizes from '../helpers/getSizes';
-import { addPageToHistory } from '../store/appStateSlice';
 
 const WordLists = () => {
 	const {
@@ -40,7 +39,7 @@ const WordLists = () => {
 	} = useSelector((state) => state.wordLists, equalityCheck);
 	const columns = useSelector((state) => state.lexicon.columns);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	const [navigate] = useOutletContext();
 	const toast = useToast();
 	const [headerSize, textSize, buttonTextSize] = getSizes("md", "sm", "xs");
 	const [addToLexicon, setAddToLexicon] = useState([]);
@@ -214,7 +213,6 @@ const WordLists = () => {
 						mb={1}
 						_text={{color: "success.50", fontSize: textSize}}
 						onPress={() => {
-							dispatch(addPageToHistory("/wordlists"));
 							navigate("/lex");
 							toast.closeAll();
 						}}

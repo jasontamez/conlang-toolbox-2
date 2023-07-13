@@ -38,7 +38,7 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import About from './pages/About.js';
 
-import { removeLastPageFromHistory } from './store/appStateSlice';
+import { addPageToHistory, removeLastPageFromHistory } from './store/appStateSlice';
 import WG from './pages/WG';
 import WGSettings from './pages/wg/wgSettings';
 import WGCharacters from './pages/wg/wgCharacterGroups';
@@ -163,15 +163,27 @@ const Fontless = () => {
 
 const MainOutlet = ({setBackButtonAlert}) => {
 	const location = useLocation();
+	const { pathname } = location;
 	const navigate = useNavigate();
 	const { history } = useSelector((state) => state.appState);
 	const dispatch = useDispatch();
+	const navigator = (where) => {
+		if(pathname === where) {
+			// Do nothing
+			return;
+		}
+		console.log(`ADD to history: ${pathname}`);
+		// Save to history
+		dispatch(addPageToHistory(pathname));
+		// Navigate
+		return navigate(where);
+	};
 	useEffect(() => {
 		const backAction = () => {
 			if(history.length > 0) {
 				console.log(`NAV TO: ${history.join(', ')}`);
-				navigate(history[0]);
 				dispatch(removeLastPageFromHistory());
+				navigate(history[0]);
 			} else {
 				console.log("NO NAV");
 				setBackButtonAlert(true);
@@ -186,12 +198,8 @@ const MainOutlet = ({setBackButtonAlert}) => {
 	
 		return () => backHandler.remove();
 	}, [setBackButtonAlert, navigate, dispatch, history]);
-	console.log(`CURRENT: ${location.pathname}`);
-	return location.pathname === "/" ?
-		<About />
-	:
-		<Outlet />
-	;
+	console.log(`CURRENT: ${pathname}`);
+	return <Outlet context={[navigator]} />;
 };
 
 const AppRoutes = () => {
@@ -226,6 +234,7 @@ const AppRoutes = () => {
 				<AppHeader />
 				<Routes>
 					<Route path="/*" element={<MainOutlet setBackButtonAlert={setBackButtonAlert} />}>
+						<Route index element={<About />} />
 						<Route path="wg/*" element={<WG />}>
 							<Route index element={<WGSettings />} />
 							<Route path="characters" element={<WGCharacters />} />

@@ -10,7 +10,7 @@ import {
 	ScrollView,
 	useBreakpointValue
  } from 'native-base';
-import { useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import packageJson from '../package.json';
 
@@ -25,10 +25,11 @@ import {
 } from '../components/icons';
 import { setBaseTextSize, addPageToHistory } from '../store/appStateSlice';
 import getSizes from '../helpers/getSizes';
+import ExtraChars from '../pages/ExtraCharacters';
 
 const About = () => {
 	const dispatch = useDispatch();
-	let navigate = useNavigate();
+	const [navigate] = useOutletContext();
 	const [headerSize, textSize, dotSize] = getSizes("xl", "md", "xs");
 	const indentMargin = useBreakpointValue({
 		base: 4,
@@ -40,7 +41,6 @@ const About = () => {
 
 	const Pressable = memo(({goto, otherFunc, firstElement, children}) => {
 		const onPress = useCallback(() => {
-			dispatch(addPageToHistory("/"));
 			navigate(goto);
 		}, [goto]);
 		return (

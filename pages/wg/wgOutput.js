@@ -23,7 +23,7 @@ import React, {
 } from "react";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useOutletContext } from "react-router";
+import { useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
 import { AnimatePresence, MotiView } from "moti";
@@ -41,7 +41,7 @@ import {
 	SortEitherIcon
 } from "../../components/icons";
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
-import { addPageToHistory, fontSizesInPx } from "../../store/appStateSlice";
+import { fontSizesInPx } from "../../store/appStateSlice";
 import {
 	equalityCheck,
 	setCapitalizeWords,
@@ -118,11 +118,10 @@ const WGOutput = () => {
 		giantSize
 	] = getSizes("sm", "xs", "md", "lg", "x2");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
-	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
+	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
 	const toast = useToast();
-	const navigate = useNavigate();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
@@ -724,7 +723,6 @@ const WGOutput = () => {
 						mb={1}
 						_text={{color: "success.50"}}
 						onPress={() => {
-							dispatch(addPageToHistory("/wg/output"));
 							navigate("/lex");
 							toast.closeAll();
 						}}

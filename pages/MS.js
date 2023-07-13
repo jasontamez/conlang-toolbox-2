@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useOutletContext } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
 import { ScrollView, VStack, Box, Button, IconButton, useBreakpointValue } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const MS = () => {
 	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
 	const location = useLocation();
-	const navigate = useNavigate();
+	const [doNavigate] = useOutletContext();
 	const pathname = location.pathname;
 	const scrollRef = useRef(null);
 	const sizes = useSelector(state => state.appState.sizes);
@@ -23,10 +23,6 @@ const MS = () => {
 		// Scrolls to top of page when we navigate
 		scrollRef.current.scrollTo({x: 0, y: 0, animated: false});
 	}, [location]);
-	const doNavigate = (where) => {
-		dispatch(addPageToHistory(pathname));
-		navigate(where);
-	};
 	const NavTab = (props) => {
 		const { isCurrent, icon, link, label } = props;
 		const bg = isCurrent ? "lighter" : "transparent";
@@ -96,14 +92,17 @@ const MS = () => {
 					link="/ms"
 					key="NavTabSettings"
 				/>
-				{range.map((n, i) => (
-					<NavTab
-						isCurrent={pathname === "/ms/ms" + n}
-						label={String(i+1)}
-						link={"ms" + n}
-						key={"Tab"+n}
-					/>
-				))}
+				{range.map((n, i) => {
+					const link = `/ms/ms${n}`;
+					return (
+						<NavTab
+							isCurrent={pathname === link}
+							label={String(i+1)}
+							link={link}
+							key={"Tab"+n}
+						/>
+					)
+				})}
 			</NavBar>
 		</>
 	);

@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useOutletContext } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
 import { useWindowDimensions } from 'react-native';
 import {
@@ -7,7 +7,6 @@ import {
 	Pressable,
 	useBreakpointValue
 } from 'native-base';
-import { useDispatch } from 'react-redux';
 
 import TabBar from '../components/TabBar';
 import {
@@ -17,13 +16,12 @@ import {
 	WGSettingsIcon,
 	WGSyllablesIcon
 } from '../components/icons';
-import { addPageToHistory, fontSizesInPx } from '../store/appStateSlice';
+import { fontSizesInPx } from '../store/appStateSlice';
 import getSizes from '../helpers/getSizes';
 
 const WG = () => {
 	const location = useLocation();
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const [doNavigate] = useOutletContext();
 	const { width, height } = useWindowDimensions();
 	const [buttonTextSize, iconSize, appHeaderSize] = getSizes("xs", "sm", "lg");
 	const tabBarHeight = (fontSizesInPx[iconSize] + fontSizesInPx[buttonTextSize]) * 2 - 2;
@@ -42,10 +40,6 @@ const WG = () => {
 	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";
 		const colorString = isCurrent ? "primary.500" : "main.600";
-		const doNavigate = (where) => {
-			dispatch(addPageToHistory(pathname));
-			navigate(where);
-		};
 		return (
 			<Pressable onPress={() => doNavigate(link)} overflow="hidden">
 				<VStack
@@ -72,7 +66,7 @@ const WG = () => {
 					height: viewHeight
 				}}
 			>
-				<Outlet context={[appHeaderHeight, viewHeight, tabBarHeight]} />
+				<Outlet context={[appHeaderHeight, viewHeight, tabBarHeight, doNavigate]} />
 			</VStack>
 			<TabBar rawHeight={tabBarHeight}>
 				<NavTab

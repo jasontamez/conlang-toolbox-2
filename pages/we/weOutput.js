@@ -22,7 +22,7 @@ import React, {
 } from "react";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useOutletContext } from "react-router";
+import { useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import escapeRegexp from "escape-string-regexp";
 import { setStringAsync as setClipboard } from 'expo-clipboard';
@@ -41,7 +41,7 @@ import {
 } from "../../components/icons";
 import uuidv4 from '../../helpers/uuidv4';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
-import { addPageToHistory, fontSizesInPx } from "../../store/appStateSlice";
+import { fontSizesInPx } from "../../store/appStateSlice";
 import StandardAlert from "../../components/StandardAlert";
 import { DropDown, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
@@ -132,9 +132,8 @@ const WGOutput = () => {
 		giantSize
 	] = getSizes("sm", "xs", "md", "lg", "x2");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
-	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
+	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
 	const toast = useToast();
-	const navigate = useNavigate();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
@@ -262,7 +261,6 @@ const WGOutput = () => {
 						mb={1}
 						_text={{color: "success.50"}}
 						onPress={() => {
-							dispatch(addPageToHistory("/we/output"));
 							navigate("/lex");
 							toast.closeAll();
 						}}
