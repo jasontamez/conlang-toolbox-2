@@ -26,7 +26,8 @@ import {
 	EquiprobableIcon,
 	SaveIcon,
 	SharpDropoffIcon,
-	TrashIcon
+	TrashIcon,
+	DragIndicatorIcon
 } from "./icons";
 import { RangeSlider, TextSetting, ToggleSwitch } from "./inputTags";
 import StandardAlert from "./StandardAlert";
@@ -253,6 +254,9 @@ const CharGroups = ({
 	const smallestWidth = fontSizesInWs[textSize] * 2;
 	const renderGroup = (group) => {
 		const {label, run, description, dropoff} = group;
+		const hasDropoff = (dropoff !== undefined);
+		const dropoffTextProps = hasDropoff ? { px: 1.5, py: 1, m: 0.5, bg: "lighter" } : {};
+		const dropoffText = hasDropoff ? `${dropoff}%` : "";
 		return (
 			<Box key={`${selector}-${label}`}>
 				<SwipeableItem
@@ -271,17 +275,34 @@ const CharGroups = ({
 						py={1.5}
 						px={2}
 						bg="main.800"
+						space={1}
 					>
+						<DragIndicatorIcon
+							size={textSize}
+							flexGrow={0}
+							flexShrink={0}
+						/>
 						<VStack
 							alignItems="flex-start"
 							justifyContent="center"
+							flexGrow={1}
 						>
 							<Text fontSize={textSize} isTruncated><Text bold>{label}</Text>={run}</Text>
 							{description && <Text key={`${selector}-${label}-Text-Box`} italic fontSize={smallerSize} noOfLines={3}>{description}</Text>}
 						</VStack>
-						{dropoff !== undefined &&
-							<Text key={`${selector}-${label}-Dropoff-Percent`} bg="lighter" px={1.5} py={1} m={0.5} lineHeight={smallerSize} fontSize={smallerSize} italic>{dropoff}%</Text>
-						}
+						<Text
+							flexGrow={0}
+							key={`${selector}-${label}-Dropoff-Percent`}
+							{...dropoffTextProps}
+							lineHeight={smallerSize}
+							fontSize={smallerSize}
+							italic
+						>{dropoffText}</Text>
+						<DragIndicatorIcon
+							size={textSize}
+							flexGrow={0}
+							flexShrink={0}
+						/>
 					</HStack>
 				</SwipeableItem>
 			</Box>

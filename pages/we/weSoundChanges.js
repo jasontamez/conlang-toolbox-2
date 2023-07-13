@@ -20,6 +20,7 @@ import {
 	CloseCircleIcon,
 	SaveIcon,
 	TrashIcon,
+	DragIndicatorIcon
 } from "../../components/icons";
 import { TextSetting } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
@@ -302,6 +303,11 @@ const WESoundChanges = () => {
 						bg={isActive ? "main.700" : "main.800"}
 						w="full"
 					>
+						<DragIndicatorIcon
+							size={textSize}
+							flexGrow={0}
+							flexShrink={0}
+						/>
 						<VStack
 							justifyContent="center"
 							alignItems="flex-start"
@@ -328,6 +334,11 @@ const WESoundChanges = () => {
 							</HStack>
 							{description && <Text italic key={`${id}//desc`}>{description}</Text>}
 						</VStack>
+						<DragIndicatorIcon
+							size={textSize}
+							flexGrow={0}
+							flexShrink={0}
+						/>
 					</HStack>
 				</TouchableWithoutFeedback>
 			</SwipeableItem>

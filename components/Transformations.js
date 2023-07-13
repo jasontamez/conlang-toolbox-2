@@ -19,7 +19,8 @@ import SwipeableItem from 'react-native-swipeable-item';
 
 import {
 	AddIcon,
-	CloseCircleIcon
+	CloseCircleIcon,
+	DragIndicatorIcon
 } from "./icons";
 import { DropDown, TextSetting } from "./inputTags";
 import StandardAlert from "./StandardAlert";
@@ -233,8 +234,6 @@ const Transformations = ({
 	// VirtualizedList: You have a large list that is slow to update - make sure
 	//		your renderItem function renders components that follow React performance
 	//		best practices like PureComponent, shouldComponentUpdate
-	// I think I need to change these from icon-actions to Swipeables
-	//		https://github.com/computerjazz/react-native-swipeable-item
 	const renderItem = useCallback(({item, index, drag, isActive}) => {
 		const {id} = item;
 		const rightFunc = useCallback(() => setEditingTransform(item), []);
@@ -248,7 +247,7 @@ const Transformations = ({
 				snapPointsLeft={[150]}
 				snapPointsRight={[150]}
 				swipeEnabled={true}
-				activationThreshold={5}
+				activationThreshold={8}
 			>
 				<TouchableWithoutFeedback onLongPress={drag}>
 					<HStack
@@ -261,12 +260,22 @@ const Transformations = ({
 						bg={isActive ? "main.700" : "main.800"}
 						w="full"
 					>
+						<DragIndicatorIcon
+							size={textSize}
+							flexGrow={0}
+							flexShrink={0}
+						/>
 						<Item
 							item={item}
 							key={`${id}-The-Transform`}
 							useDirection={useDirection}
 							fontSize={textSize}
 							descSize={descSize}
+						/>
+						<DragIndicatorIcon
+							size={textSize}
+							flexGrow={0}
+							flexShrink={0}
 						/>
 					</HStack>
 				</TouchableWithoutFeedback>

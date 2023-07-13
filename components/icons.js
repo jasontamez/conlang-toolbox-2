@@ -74,6 +74,7 @@ export const TrashIcon = (props) => <Icon as={Ionicons} name="trash-outline" {..
 export const CloseCircleIcon = (props) => <Icon as={Ionicons} name="close-circle-outline" {...props} />;
 export const CloseIcon = (props) => <Icon as={Ionicons} name="close-outline" {...props} />;
 export const DragHandleIcon = (props) => <Icon as={MaterialIcons} name="drag-handle" {...props} />;
+export const DragIndicatorIcon = (props) => <Icon as={MaterialIcons} name="drag-indicator" {...props} />;
 export const ImportIcon = (props) => <Icon as={MCI} name="book-arrow-right-outline" {...props} />;
 export const ClearIcon = (props) => <Icon as={Ionicons} name="trash-bin-outline" {...props} />;
 
