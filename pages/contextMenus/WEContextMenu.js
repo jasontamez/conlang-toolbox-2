@@ -30,7 +30,7 @@ const WEContextMenu = () => {
 	const [modalBody, setModalBody] = useState('');
 	const modalRef = useRef(null);
 	const primaryContrast = useContrastText('primary.500');
-	const P = (props) => <Text lineHeight={headerSize} fontSize={textSize} {...props} />;
+	const P = (props) => <Text textAlign="justify" lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const Em = (props) => <P italic {...props} />;
 	const B = (props) => <P bold {...props} />;
 	const S = (props) => <P fontFamily="serif" {...props} />;
@@ -68,7 +68,7 @@ const WEContextMenu = () => {
 				setModalBody(
 					<ModalBody>
 						<P>
-							{'\t'}This is where you define groups of characters representing sounds. You can reference
+							{'\t\t\t'}This is where you define groups of characters representing sounds. You can reference
 							these groups in <B>Transformations</B> and <B>Sound Changes</B> to fine-tune the way your
 							language evolves.
 						</P>
@@ -78,12 +78,12 @@ const WEContextMenu = () => {
 							<TrashIcon color="danger.500" size={iconSize} />
 						</HStack>
 						<P>
-							{'\t'}Click the <B color="secondary.500">Add</B> button to add a new character group. Swiping
+							{'\t\t\t'}Click the <B color="secondary.500">Add</B> button to add a new character group. Swiping
 							right will reveal the <B color="primary.500">Edit</B> button, while swiping left will reveal
 							the <B color="danger.500">Delete</B> button.
 						</P>
 						<P>
-							{'\t'}When you make a group, you must give it a <Em>description</Em> and a
+							{'\t\t\t'}When you make a group, you must give it a <Em>description</Em> and a
 							one-character <Em>label</Em>. The label can be any single character except for
 							these: <B letterSpacing="2xl">{"^$\\()[]{}.*+?|"}</B>. The description is for your own benefit,
 							while the label will be used to refer to this group in the other tabs. The letters/characters
@@ -97,7 +97,7 @@ const WEContextMenu = () => {
 				setModalBody(
 					<ModalBody>
 						<P>
-							{'\t'}This is where you determine how your words evolve. The display follows basic standard
+							{'\t\t\t'}This is where you determine how your words evolve. The display follows basic standard
 							phonological rules for describing sound changes:
 						</P>
 						<HWrap>
@@ -110,18 +110,18 @@ const WEContextMenu = () => {
 							<S>_h</S>
 						</HWrap>
 						<P>
-							{'\t'}The above means that "s" changes to "z" after a "d", but not when it's before an "h".
+							{'\t\t\t'}The above means that "s" changes to "z" after a "d", but not when it's before an "h".
 						</P><P>
-							{'\t'}The first box is the <Em>beginning expression</Em>, the second is the <Em>ending
+							{'\t\t\t'}The first box is the <Em>beginning expression</Em>, the second is the <Em>ending
 							expression</Em>, the third is the <Em>context expression</Em>, and the last is
 							the <Em>exception expression</Em>.
 						</P><P>
-							{'\t'}The <Em>beginning expression</Em> can include plain text or regular expressions. It
+							{'\t\t\t'}The <Em>beginning expression</Em> can include plain text or regular expressions. It
 							can also contain %Group references. (A group reference is something like %G to
 							indicate any character in character group C's run, or !%G to indicate any character
 							that is <Em>not</Em> in that run.)
 						</P><P>
-							{'\t'}The <Em>ending expression</Em> should be plain text. However, it can include
+							{'\t\t\t'}The <Em>ending expression</Em> should be plain text. However, it can include
 							non-negative %Group references <B>if and only if</B> the <Em>beginning
 							expression</Em> does, too. In that case, something special happens: when the
 							evolver matches a character in a group, it will note what position that
@@ -134,13 +134,13 @@ const WEContextMenu = () => {
 							you have unequal numbers of %Groups in
 							the <Em>beginning</Em> and <Em>ending</Em> expressions, errors may occur.
 						</P><P>
-							{'\t'}The <Em>context expression</Em> describes where in the word the <Em>beginning
+							{'\t\t\t'}The <Em>context expression</Em> describes where in the word the <Em>beginning
 							expression</Em> must be before it can be changed into the <Em>ending
 							expression</Em>. The <Em>exception expression</Em> is similar, but it
 							describes where in the world a match <B>can't</B> be made.
 							(The <Em>exception</Em> is optional.)
 						</P><P>
-							{'\t'}There are two characters in <Em>contexts</Em> and <Em>exceptions</Em> that
+							{'\t\t\t'}There are two characters in <Em>contexts</Em> and <Em>exceptions</Em> that
 							have special functions. The underscore _ represents where the <Em>ending
 							expression</Em> is being matched. You <B>must</B> include an
 							underscore. The hash symbol # represents the beginning or end of a word. For
@@ -155,7 +155,7 @@ const WEContextMenu = () => {
 							<S>#_</S>
 						</HWrap>
 						<P>
-							{'\t'}If you have no special rules for where in a word a replacement can happen,
+							{'\t\t\t'}If you have no special rules for where in a word a replacement can happen,
 							just make a <Em>context expression</Em> that's only a single underscore.
 						</P>
 						<HStack space={2} justifyContent="center">
@@ -164,15 +164,16 @@ const WEContextMenu = () => {
 							<TrashIcon color="danger.500" size={iconSize} />
 						</HStack>
 						<P>
-							{'\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new sound-change.
+							{'\t\t\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new sound-change.
 							Swiping right on a sound-change reveals the <B color="primary.500">Edit</B> button,
 							and swiping left reveals the <B color="danger.500">Delete</B> button.
 						</P>
 						<P>
-							{'\t'}The first sound-change in the list will be run first, the second
-							sound-change second, and so on down the list. If this causes unintended effects,
-							you can reorganize your sound-changes to avoid. Long-press a sound-change
-							to drag it to a new position.
+							{'\t\t\t'}The first sound-change in the list will be run first, the second
+							sound-change second, and so on down the list. If this causes unintended
+							effects, you can reorganize your sound-changes to
+							avoid. <B color="warning.500">Long-press</B> a sound-change
+							to <B color="warning.500">drag</B> it to a new position.
 						</P>
 					</ModalBody>
 				);
@@ -182,54 +183,54 @@ const WEContextMenu = () => {
 				setModalBody(
 					<ModalBody>
 						<P>
-							{'\t'}There may be cases when you need to modify the input words before you evolve
+							{'\t\t\t'}There may be cases when you need to modify the input words before you evolve
 							them. A common reason would be to turn a group of characters (such as "sh",
 							"th", or "ng" in English) into a single character that can be targeted
 							more easily.
 						</P><P>
-							{'\t'}When you make a new <Em>transformation</Em>, you provide an <Em>input expression</Em>,
+							{'\t\t\t'}When you make a new <Em>transformation</Em>, you provide an <Em>input expression</Em>,
 							a <Em>transform direction</Em>, an <Em>output expression</Em>, and, optionally,
 							a <Em>transform description</Em> for your own benefit.
 						</P><P>
-							{'\t'}The <Em>transform direction</Em> is either "at input, then undo at output", "at
+							{'\t\t\t'}The <Em>transform direction</Em> is either "at input, then undo at output", "at
 							input and at output", "at input only", or "at output only", and they determine how
 							the two expressions are used.
 						</P>
 						<VStack px={4} space={1}>
-							<P>
-								{'\t'}<B>Input only:</B> Before anything else happens, input words are
+							<P textAlign="left">
+								{'\t\t\t'}<B>Input only:</B> Before anything else happens, input words are
 								searched, and any instances of the <Em>input expression</Em> are replaced with
 								the <Em>output expression</Em>. Regular expressions and %Group references
 								are allowed in the <Em>input expression</Em> only. (A group reference is
 								something like %G to indicate any character in characyer group C's run, or
 								!%G to indicate any character <Em>not</Em> in that run.)
-							</P><P>
-								{'\t'}<B>Output only:</B> After all <B>sound changes</B> are
+							</P><P textAlign="left">
+								{'\t\t\t'}<B>Output only:</B> After all <B>sound changes</B> are
 								processed, any instances of the <Em>input expression</Em> are replaced with
 								the <Em>output expression</Em>. Regular expressions and %Group references
 								are allowed in the <Em>input expression</Em> only.
-							</P><P>
-								{'\t'}<B>At input, then undo at output:</B> Before anything else happens,
+							</P><P textAlign="left">
+								{'\t\t\t'}<B>At input, then undo at output:</B> Before anything else happens,
 								input words are searched, and any instances of the <Em>input
 								expression</Em> are replaced with the <Em>output expression</Em>. After
 								all <B>sound changes</B> are processed, any instances of
 								the <Em>output expression</Em> are replaced with the <Em>input expression</Em>.
-							</P><P>
-								{'\t'}Regular expressions are not allowed, but non-negative %Group references are
+							</P><P textAlign="left">
+								{'\t\t\t'}Regular expressions are not allowed, but non-negative %Group references are
 								allowed if and only if both input and output have them. In that case, something
 								special happens: when the transformer matches a character in a group, it will
 								note what position that character is in the group's run. It will then look at
 								the other expression's group and pick out the character in the same position.
-							</P><P>
-								{'\t'}For example: If %S is being replaced with %Z, and those groups have runs "ptk"
+							</P><P textAlign="left">
+								{'\t\t\t'}For example: If %S is being replaced with %Z, and those groups have runs "ptk"
 								and "bdg", "p" will be replaced with "b", "t" will be replaced with "d", and "k"
 								will be replaced by "g". If the first group has more letters than the second,
 								the second group's run will be repeated until it's long enough to find a match.
-							</P><P>
-								{'\t'}NOTE: If you have unequal numbers of %Groups in the beginning and ending
+							</P><P textAlign="left">
+								{'\t\t\t'}NOTE: If you have unequal numbers of %Groups in the beginning and ending
 								expressions, errors may occur.
-							</P><P>
-								{'\t'}<B>At input and at output:</B> As <Em>at input, then undo at
+							</P><P textAlign="left">
+								{'\t\t\t'}<B>At input and at output:</B> As <Em>at input, then undo at
 								output</Em>, but the <Em>input expression</Em> is replaced with the <Em>output
 								expression</Em> before AND after the <B>sound changes</B> are processed.
 							</P>
@@ -240,15 +241,16 @@ const WEContextMenu = () => {
 							<TrashIcon color="danger.500" size={iconSize} />
 						</HStack>
 						<P>
-							{'\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new transformation.
+							{'\t\t\t'}Tap on the <B color="tertiary.500">Add</B> button to add a new transformation.
 							Swiping right on a transformation reveals the <B color="primary.500">Edit</B> button,
 							and swiping left reveals the <B color="danger.500">Delete</B> button.
 						</P>
 						<P>
-							{'\t'}The first transformation in the list will be run first, the second
+							{'\t\t\t'}The first transformation in the list will be run first, the second
 							transformation second, and so on down the list. If this causes unintended
-							effects, you can reorganize your transformations to avoid them. Long-press a
-							transformation to drag it to a new position.
+							effects, you can reorganize your transformations to avoid
+							them. <B color="warning.500">Long-press</B> a transformation
+							to <B color="warning.500">drag</B> it to a new position.
 						</P>
 					</ModalBody>
 				);
@@ -258,34 +260,34 @@ const WEContextMenu = () => {
 				setModalBody(
 					<ModalBody>
 						<P>
-							{'\t'}This is where the magic happens. Click the <B>Generate</B> button and the
+							{'\t\t\t'}This is where the magic happens. Click the <B>Generate</B> button and the
 							evolver will process all your input words and present your output in the space below.
 						</P>
 							<Center><GearIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Click on the <B>Gear</B> to open a list of options. They should all be
+							{'\t\t\t'}Click on the <B>Gear</B> to open a list of options. They should all be
 							self-explanatory.
 						</P><P>
-							{'\t'}There is a drop-down menu above the <B>Evolve</B> button where you can
+							{'\t\t\t'}There is a drop-down menu above the <B>Evolve</B> button where you can
 							select what to output. The choices are <B>Output only</B>, <B>Output with
 							Rules</B>, <B>Input ⟶ Output</B> and <B>Output, then
 							Input</B>.
 						</P><P>
-							{'\t'}Choosing <B>Output only</B> will display a simple list of evolved words.
+							{'\t\t\t'}Choosing <B>Output only</B> will display a simple list of evolved words.
 						</P><P>
-							{'\t'}<B>Output with Rules</B> displays the most complex output.
+							{'\t\t\t'}<B>Output with Rules</B> displays the most complex output.
 							For every word, it will print the input word, an arrow, and then the evolved word.
 							Below that, it will print an indented list of the <B>Sound Changes</B> that
 							evolved the word, in the format [rule] ⟶ [evolved word]. (If a sound-change
 							didn't affect that word, then it will be omitted from this list.)
 						</P><P>
-							{'\t'}<B>Input ⟶ Output</B>, as you might guess, prints a list in the format
+							{'\t\t\t'}<B>Input ⟶ Output</B>, as you might guess, prints a list in the format
 							[input word] ⟶ [evolved word]. <B>Output ⟵ Input</B> is the same,
 							but the evolved word comes first.
 						</P>
 						<Center><SaveIcon color="text.50" size={iconSize} /></Center>
 						<P>
-							{'\t'}Once you've evolved words, you can save them to the <B>Lexicon</B>. Click
+							{'\t\t\t'}Once you've evolved words, you can save them to the <B>Lexicon</B>. Click
 							the <B>Save</B> button and you're presented with two options. <Em>Save All to
 							Lexicon</Em> will store every single evolved word for the Lexicon. <Em>Choose What
 							to Save</Em> will highlight every evolved word, and you can tap on a word to store
@@ -302,13 +304,13 @@ const WEContextMenu = () => {
 				setModalBody(
 					<ModalBody>
 						<P>
-							{'\t'}This pane has one purpose: determining which words you want to change.
+							{'\t\t\t'}This pane has one purpose: determining which words you want to change.
 						</P><P>
-							{'\t'}The easiest way is to copy-paste a list of words, each on a line by itself. Or, you
+							{'\t\t\t'}The easiest way is to copy-paste a list of words, each on a line by itself. Or, you
 							can use the <B>Import From Lexicon</B> button to pull in words stored in
 							the <B>Lexicon</B>.
 						</P><P>
-							{'\t'}Use the <B>Clear</B> button to empty all words from Input.
+							{'\t\t\t'}Use the <B>Clear</B> button to empty all words from Input.
 						</P>
 					</ModalBody>
 				);
