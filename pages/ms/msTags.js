@@ -92,6 +92,7 @@ export const T = (props) => {
 			borderWidth={0}
 			lineHeight={lineHeights[textSize]}
 			fontSize={textSize}
+			flexShrink={1}
 			{...props}
 		/>
 	);
@@ -156,7 +157,7 @@ export const Modal = (props) => {
 				BodyContent={() => <>{children}</>}
 				textSize={textSize}
 				modalTitle={title}
-				modalBodyProps={{pr: 10}}
+				modalBodyProps={{px: 5}}
 			/>
 			<Button
 				py={1}

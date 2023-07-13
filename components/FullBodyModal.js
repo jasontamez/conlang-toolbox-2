@@ -136,6 +136,7 @@ const FullPageModal = ({
 					:
 						<ScrollView {...modalBodyProps} flexGrow={1}>
 							<BodyContent modalWidth={width} modalHeight={height} />
+							<Box w={2} h={2} />
 						</ScrollView>
 					}
 					{FooterOverride === undefined ?
