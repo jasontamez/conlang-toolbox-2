@@ -72,6 +72,7 @@ const MS = () => {
 					<GestureHandlerRootView>
 						<ScrollView ref={scrollRef} h="full">
 							<Outlet />
+							<Box w={2} h={2} />
 						</ScrollView>
 					</GestureHandlerRootView>
 				</Box>
