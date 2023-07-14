@@ -1,6 +1,9 @@
 import { IconButton } from "native-base";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import { ExtraCharactersIcon } from "./icons";
-import { useState } from 'react';
+import { addPageToHistory } from "../store/appStateSlice";
 
 const ExtraChars = ({
 	iconProps = {},
@@ -8,12 +11,25 @@ const ExtraChars = ({
 	color = "text.50",
 	size
 }) => {
-	const [openModal, setOpenModal] = useState(false);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const navigator = (url) => {
+		// Close this menu
+		closeMenu();
+		// Add to page history
+		dispatch(addPageToHistory(pathname));
+		// Go to page
+		navigator(url);
+	};
+	const { pathname } = useLocation();
 	return (
 		<IconButton
 			variant="ghost"
 			icon={<ExtraCharactersIcon color={color} size={size} {...iconProps} />}
-			onPress={() => setOpenModal(true)}
+			onPress={() => {
+				dispatch(addPageToHistory(pathname));
+				navigate('/extrachars');
+			}}
 			{...buttonProps}
 		/>
 	);

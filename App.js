@@ -52,6 +52,8 @@ import WECharacters from './pages/we/weCharacterGroups';
 import WETransformations from './pages/we/weTransformations';
 import WESoundChanges from './pages/we/weSoundChanges';
 import WEOutput from './pages/we/weOutput';
+import Credits from './pages/Credits'
+import ExtraCharacters from './pages/ExtraCharacters';
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();

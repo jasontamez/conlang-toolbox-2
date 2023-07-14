@@ -152,7 +152,7 @@ const About = () => {
 				<Indented>Contains the Swadesh-100, -207 and other variants</Indented>
 				<Indented>Also contains Dogolposky, Leipzig-Jakarta, and ASJP lists</Indented>
 			</Pressable>
-			<Pressable>
+			<Pressable goto="/extrachars">
 				<SectionHeader SectionIcon={ExtraCharactersIcon} text={"Extra Cha\u00ADrac\u00ADters"} />
 				<Highlight>On many pages, you'll see the Extra Characters icon at the top of the page.</Highlight>
 				<Indented>Contains hundreds of characters that may not appear on your mobile keyboard,

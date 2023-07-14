@@ -8,30 +8,26 @@ import {
 	HStack,
 	Pressable,
 	useToast,
-	Center,
 	Stack,
 	Box
 } from 'native-base';
-import { useState } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { memo, useState, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useWindowDimensions } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 
 import getSizes from '../helpers/getSizes';
-import FullPageModal from '../components/FullBodyModal';
 import debounce from '../helpers/debounce';
-import { NamesIcon, CopyIcon, FaveIcon, CloseCircleIcon } from '../components/icons';
+import { NamesIcon, CopyIcon, FaveIcon, OkIcon } from '../components/icons';
 import {
 	toggleCopyImmediately,
 	toggleShowNames,
-	setToCopy,
 	setFaves,
 	setNowShowing
 } from '../store/extraCharactersSlice';
-import { fontSizesInPx } from '../store/appStateSlice';
+import { fontSizesInPx, removeLastPageFromHistory } from '../store/appStateSlice';
 import doToast from "../helpers/toast";
-import { setText } from '../store/morphoSyntaxSlice';
 
 const ExtraChars = ({
 	/*isOpen,
@@ -44,10 +40,24 @@ const ExtraChars = ({
 		showNames,
 		nowShowing
 	} = useSelector(state => state.extraCharacters)
-	const [isOpen, setOpen] = useState(false);
+	const { history } = useSelector(state => state.appState);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { width, height } = useWindowDimensions();
 	const [settingFaves, setSettingFaves] = useState(false);
 	const [inputText, setInputText] = useState(toCopy);
 	const [buttonTextSize, textSize, titleSize, boxSize] = getSizes("xs", "sm", "md", "lg");
+	// Height calculations
+	const appHeaderHeight = fontSizesInPx[boxSize] * 2.5;
+	const mainHeight = height - appHeaderHeight;
+	const bottomBarHeight = (fontSizesInPx[textSize] + fontSizesInPx[buttonTextSize]) * 2 - 2;
+	const scrollHeight = mainHeight - bottomBarHeight;
+	// Width calculations
+	const characterBoxWidth = fontSizesInPx[boxSize] * 2;
+	const scrollWidth = width - 8;
+	const innerWidth = scrollWidth - 16;
+	const nameWidth = innerWidth - characterBoxWidth - 16;
+	// Toast props
 	const toastProps = {
 		toast: useToast(),
 		placement: "bottom",
@@ -56,130 +66,229 @@ const ExtraChars = ({
 			zIndex: 6000
 		}
 	};
-	const dispatch = useDispatch();
-	const { height, width } = useWindowDimensions();
-	// Still not sure if these are even useful, but here we go...
-	const {top, bottom, left, right} = useSafeAreaInsets();
-	const openModal = () => {
-		console.log("Opening modal...")
-		setOpen(true);
-	}
-	const closeModal = () => {
-		console.log("CLOSING modal...");
-		debounce(
-			() => dispatch(setToCopy(inputText)),
-			{ namespace: "extra characters modal" }
-		)
-		setOpen(false);
-	}
-	const bodyProps = {
-		buttonTextSize,
-		textSize,
-		titleSize,
-		boxSize,
-		height,
-		width,
-		settingFaves,
-		setSettingFaves,
-		dispatch,
-		faves,
-		toCopy,
-		copyImmediately,
-		showNames,
-		nowShowing,
-		closeModal,
-		toastProps,
-		inputText,
-		setInputText
-	}
-	return (
-		<>
-			<FullPageModal
-				modalOpen={isOpen}
-				closeModal={closeModal}
-				modalTitle="Extra Characters"
-				HeaderOverride={(props) => <HeaderOverride {...bodyProps} {...props} />}
-				BodyContent={(props) => <BodyContent {...bodyProps} {...props} />}
-				textSize={textSize}
-			/>
-			<Text>
-				<Button onPress={openModal}>Press</Button>
-			</Text>
-		</>
-	);
-};
 
-// HEADER element
-const HeaderOverride = ({
-	modalHeight,
-	modalWidth,
-	buttonTextSize,
-	textSize,
-	titleSize,
-	boxSize,
-	height,
-	width,
-	settingFaves,
-	setSettingFaves,
-	dispatch,
-	faves,
-	toCopy,
-	copyImmediately,
-	showNames,
-	nowShowing,
-	closeModal,
-	toastProps,
-	inputText,
-	setInputText
-}) => {
+	// TO-DO:
+	//   remove consoles
+	//   Add "header" buttons to main body, or make menu
+	//   SET UP NAVIGATION
+
+	// Character Info
+	const allGroups = {
+		Favorites: {
+			title: "Favorites",
+			content: faves
+		},
+		...charData
+	};
+	const faveString = faves.map(f => f.character).join('');
+	const groupNames = Object.keys(allGroups);
+	const textProps = {
+		textAlign: "center",
+		fontFamily: "Noto Sans",
+		fontSize: textSize
+	};
+
+	// When we tap on a character...
+	const characterTapped = useCallback(async (info) => {
+		// Add character to Input or Clipboard
+		//
+		// useSelector to get/set longnames and clipboard
+		if(settingFaves) {
+			// Do stuff to faves
+			const {description, character} = info;
+			let found = false;
+			const newFaves = faves.filter(f => {
+				if(!found && f.description === description && f.character === character) {
+					// Found it
+					found = true;
+					return false;
+				}
+				return true;
+			});
+			console.log((found ? "Removing " : "Adding ") + character)
+			if(!found) {
+				// Add to faves
+				newFaves.push(info);
+			}
+			// Save
+			debounce(
+				() => dispatch(setFaves(newFaves)),
+				{ namespace: "extra characters faves" }
+			);
+		} else if (copyImmediately) {
+			// Copy now
+			console.log("Copying " + info.character);
+			await Clipboard.setStringAsync(info.character);
+			doToast({
+				...toastProps,
+				placement: "top",
+				msg: "Copied to Clipboard"
+			});
+		} else {
+			// Add to Input
+			setInputText(inputText + info.character);
+			console.log(`ADDING ${info.description}`)
+		}
+	}, [inputText]);
+
 	// Toggle buttons
-	const toggleFavorites = () => {
+	const toggleFavorites = useCallback(() => {
 		const msg = settingFaves ? "No longer saving favorites." : "Now saving to favorites."; 
 		setSettingFaves(!settingFaves);
 		doToast({
 			...toastProps,
 			msg
 		});
-	};
-	const toggleCopying = () => {
+	}, [setSettingFaves, doToast, toastProps]);
+	const toggleCopying = useCallback(() => {
 		const msg = copyImmediately ? "Stopped copying directly to clipboard." : "Now copying directly to clipboard.";
 		dispatch(toggleCopyImmediately());
 		doToast({
 			...toastProps,
 			msg
 		});
-	};
-	const toggleShowingNames = () => {
+	}, [dispatch, toggleCopyImmediately, doToast, toastProps]);
+	const toggleShowingNames = useCallback(() => {
 		dispatch(toggleShowNames());
-	};
+	}, [dispatch, toggleShowNames]);
 
-	return (
-		<>
-			<HStack
-				w="full"
-				justifyContent="space-between"
-				alignItems="center"
-				px={1.5}
-				bg="primary.500"
-				flexGrow={0}
+	// Memoized elements
+	const MakeName = memo(({keyName, description, nameWidth, textProps}) => {
+		return (
+			<Box
+				key={keyName}
+				px={2}
+				flexShrink={1}
+				style={{maxWidth: nameWidth}}
+			>
+				<Text color="text.50" flexShrink={1} {...textProps}>{description}</Text>
+			</Box>
+		);
+	});
+	const CharBox = memo(({isFavorite, characterBoxWidth, character, textProps}) => {
+		const color = isFavorite ? "secondary.50" : "text.50";
+		return (
+			<Box
+				borderWidth={1}
+				borderColor={color}
+				mx={1}
+				style={{width: characterBoxWidth}}
 			>
 				<Text
-					textAlign="center"
-					bold
-					flexGrow={1}
+					color={color}
 					flexShrink={1}
-					fontSize={textSize}
-					color="primary.50"
-				>Extra Characters</Text>
-				<IconButton
-					icon={<CloseCircleIcon color="primary.50" size={textSize} />}
-					onPress={closeModal}
-					variant="ghost"
-					flexGrow={0}
-					flexShrink={0}
-					px={0}
-				/>
-			</HStack>
+					{...textProps}
+				>{character}</Text>
+			</Box>
+		);
+	});
+	const Item = memo(({
+		innerWidth,
+		faveString,
+		showNames,
+		characterBoxWidth,
+		textProps,
+		nameWidth,
+		c
+	}) => {
+		const isFavorite = faveString.indexOf(c) >= 0;
+		const bg = isFavorite ? "secondary.800" : "lighter";
+		const {description, character} = c;
+		const charBoxProps = {
+			isFavorite,
+			characterBoxWidth,
+			character,
+			textProps
+		};
+		const nameProps = {
+			description,
+			nameWidth,
+			textProps
+		};
+		function tappingNow () {
+			characterTapped(c);
+		};
+		return (
+			<Pressable
+				onPress={tappingNow}
+			>
+				<HStack
+					alignItems="center"
+					justifyContent="center"
+					m={1}
+					px={1.5}
+					py={1}
+					bg={bg}
+					style={{maxWidth: innerWidth}}
+					space={0}
+				>
+					{showNames && <MakeName {...nameProps} />}
+					<CharBox {...charBoxProps} />
+				</HStack>
+			</Pressable>
+		);
+	});
+	const DisplayGroup = memo(({ group, showNames }) => {
+		console.log("Displaying " + group);
+		const { title, content } = allGroups[group];
+		const stackProps = showNames ? {
+			direction: "column",
+			flexWrap: "nowrap"
+		} : {
+			direction: "row",
+			flexWrap: "wrap"
+		};
+		const itemProps = {
+			innerWidth,
+			faveString,
+			showNames,
+			characterBoxWidth,
+			textProps,
+			nameWidth
+		};
+		return (
+			<VStack key={`${title}-Group`} justifyContent="center" alignItems="center" style={{maxWidth: innerWidth}}>
+				<Stack justifyContent="center" alignItems="center" {...stackProps}>
+					{content.map((c, i) => <Item
+						key={`character-${title}-${i}`}
+						c={c}
+						{...itemProps}
+					/>)}
+				</Stack>
+			</VStack>
+		);
+	});
+	
+	const getGroupButton = useCallback((g) => {
+		const doSetNowShowing = useCallback(() => dispatch(setNowShowing(g)));
+		const displayProps = nowShowing === g ? {
+			variant: "solid",
+			borderWidth: 1,
+			borderColor: "primary.500"
+		} : {
+			opacity: 75,
+			variant: "outline"
+		};
+		return (
+			<Button
+				colorScheme="primary"
+				key={`Button-${g}`}
+				size="xs"
+				borderRadius="full"
+				pt={0}
+				pb={0.5}
+				m={1}
+				onPress={doSetNowShowing}
+				{...displayProps}
+			>
+				<Text color="text.50" fontSize={buttonTextSize} fontFamily="Noto Sans">{g}</Text>
+			</Button>
+		);
+	});
+
+	// Main JSX
+	return (
+		<VStack style={{height: mainHeight}}>
 			<HStack flexGrow={0}>
 				<IconButton
 					variant="solid"
@@ -222,196 +331,33 @@ const HeaderOverride = ({
 					m={0.5}
 				/>
 			</HStack>
-		</>
-	);
-};
-
-// BODY element
-const BodyContent = ({
-	modalWidth,
-	modalHeight,
-	buttonTextSize,
-	textSize,
-	titleSize,
-	boxSize,
-	height,
-	width,
-	settingFaves,
-	setSettingFaves,
-	dispatch,
-	faves,
-	toCopy,
-	copyImmediately,
-	showNames,
-	nowShowing,
-	closeModal,
-	toastProps,
-	inputText,
-	setInputText
-}) => {
-	// Options should include whether or not to copy directly to Clipboard and if Unicode names should be shown.
-	// We can also add a help icon for explanations
-	// And a way to add/remove favorites
-
-	// [fave] [copy] [INPUT] [subtitle]
-	// (labels) (labels) (labels)
-
-	// TO-DO:
-	//   remove consoles
-	//   CHANGE THIS TO A PAGE: fixes most issues
-console.log(boxSize);
-
-	// Character Info
-	const allGroups = {
-		Favorites: {
-			title: "Favorites",
-			content: faves
-		},
-		...charData
-	};
-	const faveString = faves.map(f => f.character).join('');
-	const groupNames = Object.keys(allGroups);
-	const DisplayGroup = (props) => {
-		const { group } = props;
-		console.log("Displaying " + group);
-	//	console.log(JSON.stringify(allGroups[group]));
-		const { title, content } = allGroups[group];
-		const textProps = {
-			textAlign: "center",
-			fontFamily: "Noto Sans",
-			fontSize: textSize
-		};
-		const stackProps = showNames ? {
-			direction: "column",
-			flexWrap: "nowrap"
-		} : {
-			direction: "row",
-			flexWrap: "wrap"
-		};
-		return (
-			<VStack key={`${title}-Group`} justifyContent="center" alignItems="center">
-				<Box m={3}>
-					<Text fontSize={titleSize} color="text.50" bold>{title}</Text>
-				</Box>
-				<Stack justifyContent="center" alignItems="center" {...stackProps}>
-					{content.map((c, i) => {
-						const {description, character} = c;
-						const isFavorite = settingFaves && (faveString.indexOf(character) >= 0);
-						const Name = (props) => {
-							if(showNames) {
-								return (
-									<Box style={{maxWidth: modalWidth - (fontSizesInPx[boxSize] * 3)}} px={2} {...props}>
-										<Text color="text.50" {...textProps}>{description}</Text>
-									</Box>
-								);
-							}
-							return <></>;
-						};
-						return (
-							<Pressable
-								mx={1}
-								my={1}
-								onPress={() => characterTapped(c)}
-								px={1.5}
-								py={1}
-								bg={isFavorite ? "secondary.800" : "lighter"}
-								key={`character-${title}-${i}`}
-							>
-								<HStack alignItems="center">
-									<Name />
-									<Box
-										borderWidth={1}
-										borderColor={isFavorite ? "secondary.50" : "text.50"}
-										mx={1}
-										style={{width: fontSizesInPx[boxSize] * 2}}
-									>
-										<Text
-											color={isFavorite ? "secondary.50" : "text.50"}
-											{...textProps}
-										>{character}</Text>
-									</Box>
-								</HStack>
-							</Pressable>
-						);
-					})}
-				</Stack>
-			</VStack>
-		);
-	};
-
-	// When we tap on a character...
-	const characterTapped = async (info) => {
-		// Add character to Input or Clipboard
-		//
-		// useSelector to get/set longnames and clipboard
-		if(settingFaves) {
-			// Do stuff to faves
-			const {description, character} = info;
-			let found = false;
-			const newFaves = faves.filter(f => {
-				if(!found && f.description === description && f.character === character) {
-					// Found it
-					found = true;
-					return false;
-				}
-				return true;
-			});
-			console.log((found ? "Removing " : "Adding ") + character)
-			if(!found) {
-				// Add to faves
-				newFaves.push(info);
-			}
-			// Save
-			debounce(
-				() => dispatch(setFaves(newFaves)),
-				{ namespace: "extra characters faves" }
-			);
-		} else if (copyImmediately) {
-			// Copy now
-			console.log("Copying " + info.character);
-			await Clipboard.setStringAsync(info.character);
-			doToast({
-				...toastProps,
-				placement: "top",
-				msg: "Copied to Clipboard"
-			});
-		} else {
-			// Add to Input
-			setInputText(inputText + info.character);
-		}
-	};
-
-	// Main JSX
-	return (
-		<VStack justifyContent="flex-start" flexGrow={1}>
-			<HStack bg="main.900" borderRadius="lg" m={2} flexWrap="wrap" justifyContent="center">
-				{groupNames.map(g => {
-					const displayProps = nowShowing === g ? {
-						variant: "solid",
-						borderWidth: 1,
-						borderColor: "primary.500"
-					} : {
-						opacity: 75,
-						variant: "outline"
-					};
-					return (
-						<Button
-							colorScheme="primary"
-							key={`Button-${g}`}
-							size="xs"
-							borderRadius="full"
-							pt={0}
-							pb={0.5}
-							m={1}
-							onPress={() => dispatch(setNowShowing(g))}
-							{...displayProps}
-						>
-							<Text color="text.50" fontSize={buttonTextSize} fontFamily="Noto Sans">{g}</Text>
-						</Button>
-					);
-				})}
+			<ScrollView flexGrow={1} px={4} style={{height: scrollHeight, width: scrollWidth}}>
+				<HStack bg="main.900" borderRadius="lg" m={2} flexWrap="wrap" justifyContent="center">
+					{groupNames.map(g => getGroupButton(g))}
+				</HStack>
+				<DisplayGroup group={nowShowing} showNames={showNames} />
+			</ScrollView>
+			<HStack
+				w="full"
+				justifyContent="flex-end"
+				alignItems="center"
+				px={1.5}
+				bg="main.700"
+				flexGrow={0}
+				style={{height:bottomBarHeight}}
+			>
+				<Button
+					m={0}
+					startIcon={<OkIcon size={textSize} />}
+					onPress={() => {
+						navigate(history[0]);
+						dispatch(removeLastPageFromHistory());
+					}}
+					_text={{fontSize: textSize}}
+					bg="primary.500"
+					color="primary.50"
+				>Done</Button>
 			</HStack>
-			<DisplayGroup group={nowShowing} />
 		</VStack>
 	);
 };

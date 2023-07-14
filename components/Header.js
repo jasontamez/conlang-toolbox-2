@@ -11,21 +11,26 @@ import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
 import WEContextMenu from '../pages/contextMenus/WEContextMenu';
+import ExtraCharsHeaderButton from '../pages/contextMenus/ExtraCharactersHeaderButton';
 import { fontSizesInPx } from "../store/appStateSlice";
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
 	LexiconContextMenu: <LexiconContextMenu key="header2" />,
 	WGContextMenu: <WGContextMenu key="header3" />,
-	WEContextMenu: <WEContextMenu key="header4" />
+	WEContextMenu: <WEContextMenu key="header4" />,
+	ExtraCharsHeaderButton: <ExtraCharsHeaderButton key="header5" />
 };
 
 const defaultProps = {
 	title: 'Conlang Toolbox',
 	boxProps: {},
+	textBoxProps: {},
 	textProps: {},
+	buttonsBoxProps: {},
 	extraChars: true,
-	rightHeader: []
+	rightHeader: [],
+	pretendModal: false
 };
 
 const AppHeader = () => {
@@ -36,9 +41,12 @@ const AppHeader = () => {
 	const {
 		title,
 		boxProps,
+		textBoxProps,
 		textProps,
+		buttonsBoxProps,
 		extraChars,
-		rightHeader
+		rightHeader,
+		pretendModal
 	} = {...defaultProps, ...currentPage};
 	const textSize = useBreakpointValue(sizes.lg);
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
@@ -51,12 +59,15 @@ const AppHeader = () => {
 			w="full"
 			justifyContent="center"
 			alignItems="center"
+			{...boxProps}
 		>
 			<HStack
 				w="full"
 				justifyContent="center"
 				style={style}
 				alignItems="center"
+				{...textBoxProps}
+				{ /* THIS CENTERS THE HEADER PROPERLY! */ ...{}}
 			>
 				<Text
 					isTruncated
@@ -71,9 +82,9 @@ const AppHeader = () => {
 				w="full"
 				style={style}
 				alignItems="center"
-				{...boxProps}
+				{...buttonsBoxProps}
 			>
-				<MenuModal />
+				{pretendModal || <MenuModal />}
 				<Box flexGrow={1} flexShrink={0}></Box>
 				{extraChars && <ExtraChars size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />}
 				{rightHeader.map(header => (

@@ -216,6 +216,22 @@ const About = {
 	id: "About",
 	extraChars: false
 };
+const ExtraCharacters = {
+	title: "Extra Characters",
+	url: "/extrachars",
+	icon: "ExtraCharactersIcon",
+	sectionId: "--notShown--",
+	id: "ExtraChars",
+	boxProps: {
+		bg: "primary.500"
+	},
+	textProps: {
+		color: 'primaryContrast'
+	},
+	extraChars: false,
+	rightHeader: [ "ExtraCharsHeaderButton" ],
+	pretendModal: true
+};
 const Credits = {
 	title: "Credits",
 	url: "/credits",
@@ -245,4 +261,5 @@ export const appMenuFormat = [
 	{id: "divider", divider: true},
 	AppSettings, About, Credits
 ];
-export const allMainPages = [MS, WG, WE, DC, PG, LX, WL, AppSettings, About, Credits];
+// About must ALWAYS be at the end of the list, or it'll match too early
+export const allMainPages = [MS, WG, WE, DC, PG, LX, WL, AppSettings, Credits, ExtraCharacters, About];
