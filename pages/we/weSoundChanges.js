@@ -33,7 +33,6 @@ import {
 } from "../../store/weSlice";
 import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
-import { ensureEnd, saveOnEnd } from "../../helpers/saveTextInput";
 import getSizes from "../../helpers/getSizes";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -95,7 +94,6 @@ const WESoundChanges = () => {
 	// add soundChange
 	const addNewSoundChange = (closeAfterAdd) => {
 		// attempts to add the modal info as a new soundChange
-		ensureEnd([refAddBeginning, refAddEnding, refAddContext, refAddException]);
 		const beginning = addBeginning.trim();
 		const ending = addEnding.trim();
 		const context = addContext.trim() || "_";
@@ -477,7 +475,8 @@ const WESoundChanges = () => {
 							<TextSetting
 								text="Beginning Expression"
 								placeholder="(what to replace)"
-								inputProps={{ mt: 1, ref: refAddBeginning, fontSize: smallerSize, ...saveOnEnd(setAddBeginning) }}
+								inputProps={{ mt: 1, ref: refAddBeginning, fontSize: smallerSize }}
+								onChangeText={setAddBeginning}
 								labelProps={{ fontSize: textSize }}
 								boxProps={{ pb: 2 }}
 							/>
@@ -485,27 +484,31 @@ const WESoundChanges = () => {
 								text="Ending Expression"
 								placeholder="(what to replace with)"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddEnding, fontSize: smallerSize, ...saveOnEnd(setAddEnding) }}
+								inputProps={{ mt: 1, ref: refAddEnding, fontSize: smallerSize }}
+								onChangeText={setAddEnding}
 								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting
 								text="Context"
 								placeholder="(where to replace)"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddContext, fontSize: smallerSize, ...saveOnEnd(setAddContext) }}
+								inputProps={{ mt: 1, ref: refAddContext, fontSize: smallerSize }}
+								onChangeText={setAddContext}
 								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting
 								text="Exception"
 								placeholder="(where not to replace; optional)"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddException, fontSize: smallerSize, ...saveOnEnd(setAddException) }}
+								inputProps={{ mt: 1, ref: refAddException, fontSize: smallerSize }}
+								onChangeText={setAddException}
 								labelProps={{ fontSize: textSize }}
 							/>
 							<TextSetting
 								text="Description"
 								placeholder="(optional)"
-								inputProps={{ mt: 1, ref: refAddDesc, fontSize: smallerSize, ...saveOnEnd(setAddDesc) }}
+								inputProps={{ mt: 1, ref: refAddDesc, fontSize: smallerSize }}
+								onChangeText={setAddDesc}
 								labelProps={{ fontSize: textSize }}
 								boxProps={{ pb: 2 }}
 							/>

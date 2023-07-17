@@ -3,6 +3,8 @@
 // saveOnEnd(func) returns an object with two properties that can be used on text inputs
 //
 // ensureEnd can be called to trigger any/all text inputs
+//
+// // // NOTICE: THESE ARE NO LONGER USED. Not very useful, after all.
 
 export const saveOnEnd = (func) => {
 	// <SomeInput {...saveOnEnd(Function)} />

@@ -33,7 +33,6 @@ import { RangeSlider, TextSetting, ToggleSwitch } from "./inputTags";
 import StandardAlert from "./StandardAlert";
 import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
-import { ensureEnd, saveOnEnd } from "../helpers/saveTextInput";
 import { fontSizesInWs } from "../store/appStateSlice";
 import getSizes from "../helpers/getSizes";
 import { fromToZero } from "../helpers/motiAnimations";
@@ -60,7 +59,6 @@ const CharGroups = ({
 	// TO-DO: Error: "no characters assigned to group" when button is pressed
 	//          while in the input box (new group modal)
 	// TO-DO: Also affects transforms, using a blank instead of the typed input
-	// TO-DO: ALL MODALS need to avoid keyboard - they should already be doing this
 	// TO-DO: Import Groups from WE/WG/DC
 	const [modifiedRun, setModifiedRun] = useState("");
 	const [editOverrideSwitch, setEditOverrideSwitch] = useState(false);
@@ -78,7 +76,6 @@ const CharGroups = ({
 	// add group
 	const addNewGroup = (closeAfterAdd) => {
 		// attempts to add the modal info as a new group
-		ensureEnd([refAddDesc, refAddRun]);
 		const description = addDesc.trim();
 		const label = addLabel.trim();
 		const run = addRun.trim();
@@ -492,7 +489,8 @@ const CharGroups = ({
 							<TextSetting
 								text="Title/Description"
 								placeholder="Type description here"
-								inputProps={{ mt: 1, ref: refAddDesc, fontSize: smallerSize, ...saveOnEnd(setAddDesc) }}
+								inputProps={{ mt: 1, ref: refAddDesc, fontSize: smallerSize }}
+								onChangeText={setAddDesc}
 								labelProps={{fontSize: textSize}}
 								boxProps={{ pb: 2 }}
 								key={`${selector}-title-description-add-group`}
@@ -541,8 +539,9 @@ const CharGroups = ({
 								text="Letters/Characters"
 								placeholder="Enter characters in group here"
 								boxProps={{ py: 2 }}
-								inputProps={{ mt: 1, ref: refAddRun, fontSize: smallerSize, ...saveOnEnd(setAddRun) }}
+								inputProps={{ mt: 1, ref: refAddRun, fontSize: smallerSize }}
 								labelProps={{fontSize: textSize}}
+								onChangeText={setAddRun}
 							/>
 							{useDropoff &&
 								<Fragment key={`${selector}-useDropoff-true-modal-add-switch`}>
