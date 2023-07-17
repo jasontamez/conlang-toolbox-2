@@ -1,16 +1,14 @@
-import { Fragment, useEffect, useState, useLayoutEffect, useRef } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
 	Box,
 	HStack,
-	ZStack,
 	Input,
 	Text,
 	TextArea,
 	VStack,
 	useBreakpointValue,
 	Switch,
-	Slider as NativeBaseSlider,
 	Menu,
 	Button
 } from "native-base";

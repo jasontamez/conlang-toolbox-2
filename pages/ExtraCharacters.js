@@ -14,7 +14,6 @@ import {
 import React, { memo, useState, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useWindowDimensions } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 
 import getSizes from '../helpers/getSizes';
@@ -67,10 +66,7 @@ const ExtraChars = ({
 		}
 	};
 
-	// TO-DO:
-	//   remove consoles
-	//   Add "header" buttons to main body, or make menu
-	//   SET UP NAVIGATION
+	// TO-DO: remove consoles
 
 	// Character Info
 	const allGroups = {

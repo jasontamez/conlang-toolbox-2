@@ -10,7 +10,7 @@ import {
 	Button,
 	useToast
 } from "native-base";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { GestureHandlerRootView, TouchableWithoutFeedback } from "react-native-gesture-handler";
@@ -32,8 +32,6 @@ import { fontSizesInPx } from "../store/appStateSlice";
 import uuidv4 from '../helpers/uuidv4';
 import Underlay from "./Underlay";
 
-// !!!TO-DO: Change this to a scrollview w/Swipeable from RNGH and some sort of
-//             drag-and-drop solution.
 const Unit = (props) => (
 	<Box
 		borderColor="text.50"
