@@ -390,11 +390,20 @@ const Lex = () => {
 	//
 	//
 	const displayPreviousSaves = () => {
-		return storedCustomIDs.map(info => {
+		return storedCustomIDs.map((info, index) => {
 			const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
 			const time = new Date(lastSave);
 			const color = loadChosen === info ? primaryContrast : "text.50"
 			const timeString = time.toLocaleString();
+			const striping = !(index % 2) ? {
+				// odd rows (0-indexed!)
+				borderColor: loadChosen === info ? "primary.500" : "darker",
+				bg: "darker"
+			} : {
+				// even rows
+				borderColor: loadChosen === info ? "primary.500" : "lighter",
+				bg: "lighter"
+			};
 			// TO-DO: Determine if time.toLocaleString() is going to work
 			//    or if we need to use Moment.js or something else
 			return (
@@ -403,6 +412,9 @@ const Lex = () => {
 					alignItems="center"
 					justifyContent="space-between"
 					space={3}
+					borderWidth={1}
+					borderRadius="md"
+					{...striping}
 				>
 					<Pressable
 						onPress={() => setLoadChosen(info)}
@@ -411,12 +423,9 @@ const Lex = () => {
 						<HStack
 							justifyContent="space-between"
 							alignItems="center"
-							borderWidth={1}
-							borderColor={loadChosen === info ? "primary.500" : "darker"}
-							borderRadius="xs"
-							bg={loadChosen === info ? "primary.800" : "main.800"}
 							px={1.5}
 							py={1}
+							space={3}
 						>
 							<VStack
 								alignItems="flex-start"
@@ -425,7 +434,7 @@ const Lex = () => {
 								<Text color={color} fontSize={textSize}>{title}</Text>
 								<Text color={color} fontSize={smallerSize}>[{lexNumber} words]</Text>
 							</VStack>
-							<Text color={color} italic fontSize={smallerSize}>Saved: {timeString}</Text>
+							<Text flexShrink={1} color={color} italic fontSize={smallerSize} textAlign="center">Saved: {timeString}</Text>
 						</HStack>
 					</Pressable>
 					<IconButton
@@ -847,6 +856,20 @@ const Lex = () => {
 					</Modal.Header>
 					<Modal.Body>
 						{displayPreviousSaves()}
+						<HStack justifyContent="center" alignItems="center">
+							<Text flexShrink={1} textAlign="right" italic>How to Load:</Text>
+							<DropDownMenu
+								placement="top left"
+								fontSize={textSize}
+								menuSize={smallerSize}
+								titleSize={smallerSize}
+								labelFunc={() => loadingMethods[loadingMethod].desc}
+								options={loadingMethods}
+								title="How to Load Lexicon"
+								buttonProps={{mx: 4, my: 2, flexShrink: 1}}
+								isMarked={(key) => loadingMethods[loadingMethod].key === key}
+							/>
+						</HStack>
 					</Modal.Body>
 					<Modal.Footer
 						borderTopWidth={0}
@@ -862,17 +885,6 @@ const Lex = () => {
 								m={2}
 								onPress={() => setLoadLexicon(false)}
 							>Cancel</Button>
-							<DropDownMenu
-								placement="top left"
-								fontSize={textSize}
-								menuSize={smallerSize}
-								titleSize={smallerSize}
-								labelFunc={() => loadingMethods[loadingMethod].desc}
-								options={loadingMethods}
-								title="How to Load Lexicon"
-								buttonProps={{mx: 4, my: 2}}
-								isMarked={(key) => loadingMethods[loadingMethod].key === key}
-							/>
 							<Button
 								startIcon={<LoadIcon color="success.50" m={0} size={textSize} />}
 								bg={loadChosen ? "success.500" : "muted.800"}
