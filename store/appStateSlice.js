@@ -55,7 +55,6 @@ const addPageToHistoryFunc = (state, action) => {
 	// history is [newest, ..., oldest]
 	const { payload } = action;
 	if(history[0] !== payload) {
-		console.log(`Adding to history: ${payload}`)
 		// There was a change; if no change, state will not change
 		history.unshift(payload);
 		while(history.length > 50) {
@@ -67,7 +66,6 @@ const addPageToHistoryFunc = (state, action) => {
 };
 const removeLastPageFromHistoryFunc = (state, action) => {
 	// history is [newest, ..., oldest]
-	console.log(`Removing from history: ${state.history.length ? state.history[0] : 'NONE'}`)
 	state.history.shift();
 	return state;
 };

@@ -25,11 +25,10 @@ const Credits = () => {
 	let fractional = 1.0;
 	// Keep at least 25px margins
 	const minimum = Math.min(width - 50, Math.floor(width * 2 / 3))
-	while(fractional > 0 &&minimum < bannerWidth) {
+	while(fractional > 0 && minimum < bannerWidth) {
 		fractional -= 0.1;
 		bannerWidth = originalWidth * fractional;
 		bannerHeight = originalHeight * fractional;
-		console.log(bannerWidth);
 	}
 
 	// return JSX

@@ -101,7 +101,6 @@ const ExtraChars = ({
 			);
 		} else if (copyImmediately) {
 			// Copy now
-			console.log("Copying " + character);
 			await Clipboard.setStringAsync(character);
 			doToast({
 				...toastProps,
@@ -111,7 +110,6 @@ const ExtraChars = ({
 		} else {
 			// Add to Input
 			setInputText(inputText + character);
-			console.log(`ADDING ${description}`)
 		}
 	}
 
@@ -190,7 +188,6 @@ const ExtraChars = ({
 		);
 	});
 	const DisplayGroup = memo(({ group, showNames }) => {
-		console.log("Displaying " + group);
 		const test = useCallback((x) => {
 			if(group === "Favorites") {
 				return x.isFavorite;
