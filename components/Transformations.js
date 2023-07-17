@@ -90,9 +90,9 @@ const Item = ({item, key, fontSize, descSize, useDirection}) => {
 				<Unit fontSize={fontSize}>{replace || " "}</Unit>
 				{useDirection && <Direction fontSize={descSize} direction={direction} />}
 			</HStack>
-			{!!description && <Text key={`${key}//desc`} italic fontSize={fontSize}>{description}</Text>}
+			{!!description && <Text key={`${key}//desc`} italic fontSize={fontSize} noOfLines={1}>{description}</Text>}
 		</VStack>
-	); // TO-DO: Change Description so that it's one line, scrollable
+	);
 };
 const directionTexts = {
 	both: "at input, then undo at output",

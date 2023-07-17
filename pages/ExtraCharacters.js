@@ -1,3 +1,4 @@
+import { TouchableOpacity, useWindowDimensions } from 'react-native';
 import {
 	Text,
 	ScrollView,
@@ -6,7 +7,6 @@ import {
 	IconButton,
 	VStack,
 	HStack,
-	Pressable,
 	useToast,
 	Stack,
 	Box
@@ -69,15 +69,10 @@ const ExtraChars = ({
 	// TO-DO: remove consoles
 
 	// Character Info
-	const allGroups = {
-		Favorites: {
-			title: "Favorites",
-			content: faves
-		},
-		...charData
-	};
 	const faveString = faves.map(f => f.character).join('');
-	const groupNames = Object.keys(allGroups);
+	const characters = allCharacters.map(characterObject =>
+		faveString.indexOf(characterObject.character) >=0 ? {...characterObject, favorite: true} : characterObject
+	);
 	const textProps = {
 		textAlign: "center",
 		fontFamily: "Noto Sans",
@@ -85,27 +80,20 @@ const ExtraChars = ({
 	};
 
 	// When we tap on a character...
-	const characterTapped = useCallback(async (info) => {
+	async function characterTapped (tapped) {
+		const {character, description, favorite} = tapped;
 		// Add character to Input or Clipboard
 		//
 		// useSelector to get/set longnames and clipboard
 		if(settingFaves) {
 			// Do stuff to faves
-			const {description, character} = info;
-			let found = false;
-			const newFaves = faves.filter(f => {
-				if(!found && f.description === description && f.character === character) {
-					// Found it
-					found = true;
-					return false;
-				}
-				return true;
-			});
-			console.log((found ? "Removing " : "Adding ") + character)
-			if(!found) {
+			const newFaves = favorite ?
+				// Remove from faves
+				faves.filter(f => f !== character)
+			:
 				// Add to faves
-				newFaves.push(info);
-			}
+				faves.slice().push(character)
+			;
 			// Save
 			debounce(
 				() => dispatch(setFaves(newFaves)),
@@ -113,8 +101,8 @@ const ExtraChars = ({
 			);
 		} else if (copyImmediately) {
 			// Copy now
-			console.log("Copying " + info.character);
-			await Clipboard.setStringAsync(info.character);
+			console.log("Copying " + character);
+			await Clipboard.setStringAsync(character);
 			doToast({
 				...toastProps,
 				placement: "top",
@@ -122,31 +110,10 @@ const ExtraChars = ({
 			});
 		} else {
 			// Add to Input
-			setInputText(inputText + info.character);
-			console.log(`ADDING ${info.description}`)
+			setInputText(inputText + character);
+			console.log(`ADDING ${description}`)
 		}
-	}, [inputText]);
-
-	// Toggle buttons
-	const toggleFavorites = useCallback(() => {
-		const msg = settingFaves ? "No longer saving favorites." : "Now saving to favorites."; 
-		setSettingFaves(!settingFaves);
-		doToast({
-			...toastProps,
-			msg
-		});
-	}, [setSettingFaves, doToast, toastProps]);
-	const toggleCopying = useCallback(() => {
-		const msg = copyImmediately ? "Stopped copying directly to clipboard." : "Now copying directly to clipboard.";
-		dispatch(toggleCopyImmediately());
-		doToast({
-			...toastProps,
-			msg
-		});
-	}, [dispatch, toggleCopyImmediately, doToast, toastProps]);
-	const toggleShowingNames = useCallback(() => {
-		dispatch(toggleShowNames());
-	}, [dispatch, toggleShowNames]);
+	}
 
 	// Memoized elements
 	const MakeName = memo(({keyName, description, nameWidth, textProps}) => {
@@ -161,8 +128,8 @@ const ExtraChars = ({
 			</Box>
 		);
 	});
-	const CharBox = memo(({isFavorite, characterBoxWidth, character, textProps}) => {
-		const color = isFavorite ? "secondary.50" : "text.50";
+	const CharBox = memo(({favorite, characterBoxWidth, character, textProps}) => {
+		const color = favorite ? "secondary.50" : "text.50";
 		return (
 			<Box
 				borderWidth={1}
@@ -180,20 +147,18 @@ const ExtraChars = ({
 	});
 	const Item = memo(({
 		innerWidth,
-		faveString,
 		showNames,
 		characterBoxWidth,
 		textProps,
 		nameWidth,
-		c
+		characterObject
 	}) => {
-		const isFavorite = faveString.indexOf(c) >= 0;
-		const bg = isFavorite ? "secondary.800" : "lighter";
-		const {description, character} = c;
+		const {description, character, favorite} = characterObject;
+		const bg = favorite ? "secondary.800" : "lighter";
 		const charBoxProps = {
-			isFavorite,
 			characterBoxWidth,
 			character,
+			favorite,
 			textProps
 		};
 		const nameProps = {
@@ -202,10 +167,10 @@ const ExtraChars = ({
 			textProps
 		};
 		function tappingNow () {
-			characterTapped(c);
+			characterTapped(characterObject);
 		};
 		return (
-			<Pressable
+			<TouchableOpacity
 				onPress={tappingNow}
 			>
 				<HStack
@@ -221,12 +186,17 @@ const ExtraChars = ({
 					{showNames && <MakeName {...nameProps} />}
 					<CharBox {...charBoxProps} />
 				</HStack>
-			</Pressable>
+			</TouchableOpacity>
 		);
 	});
 	const DisplayGroup = memo(({ group, showNames }) => {
 		console.log("Displaying " + group);
-		const { title, content } = allGroups[group];
+		const test = useCallback((x) => {
+			if(group === "Favorites") {
+				return x.isFavorite;
+			}
+			return x.group === group;
+		}, [group]);
 		const stackProps = showNames ? {
 			direction: "column",
 			flexWrap: "nowrap"
@@ -236,28 +206,25 @@ const ExtraChars = ({
 		};
 		const itemProps = {
 			innerWidth,
-			faveString,
 			showNames,
 			characterBoxWidth,
 			textProps,
 			nameWidth
 		};
 		return (
-			<VStack key={`${title}-Group`} justifyContent="center" alignItems="center" style={{maxWidth: innerWidth}}>
-				<Stack justifyContent="center" alignItems="center" {...stackProps}>
-					{content.map((c, i) => <Item
-						key={`character-${title}-${i}`}
-						c={c}
-						{...itemProps}
-					/>)}
-				</Stack>
-			</VStack>
+			<Stack justifyContent="center" alignItems="center" {...stackProps}>
+				{characters.filter(test).map((characterObject) => <Item
+					key={`character-${characterObject.description}`}
+					characterObject={characterObject}
+					{...itemProps}
+				/>)}
+			</Stack>
 		);
 	});
-	
-	const getGroupButton = useCallback((g) => {
-		const doSetNowShowing = useCallback(() => dispatch(setNowShowing(g)));
-		const displayProps = nowShowing === g ? {
+
+	const GroupButton = memo(({title, isShowing, buttonTextSize}) => {
+		const doSetNowShowing = useCallback(() => dispatch(setNowShowing(title)), [dispatch, setNowShowing]);
+		const displayProps = isShowing ? {
 			variant: "solid",
 			borderWidth: 1,
 			borderColor: "primary.500"
@@ -268,7 +235,7 @@ const ExtraChars = ({
 		return (
 			<Button
 				colorScheme="primary"
-				key={`Button-${g}`}
+				key={`Button-${title}`}
 				size="xs"
 				borderRadius="full"
 				pt={0}
@@ -277,7 +244,7 @@ const ExtraChars = ({
 				onPress={doSetNowShowing}
 				{...displayProps}
 			>
-				<Text color="text.50" fontSize={buttonTextSize} fontFamily="Noto Sans">{g}</Text>
+				<Text color="text.50" fontSize={buttonTextSize} fontFamily="Noto Sans">{title}</Text>
 			</Button>
 		);
 	});
@@ -293,7 +260,14 @@ const ExtraChars = ({
 					icon={<FaveIcon size={textSize} color={"secondary." + (settingFaves ? "50" : "900")} />}
 					flexGrow={0}
 					flexShrink={0}
-					onPress={toggleFavorites}
+					onPress={() => {
+						const msg = settingFaves ? "No longer saving favorites." : "Now saving to favorites."; 
+						setSettingFaves(!settingFaves);
+						doToast({
+							...toastProps,
+							msg
+						});
+					}}
 					m={0.5}
 				/>
 				<IconButton
@@ -303,13 +277,20 @@ const ExtraChars = ({
 					icon={<CopyIcon size={textSize} color={"secondary." + (copyImmediately ? "50" : "900")} />}
 					flexGrow={0}
 					flexShrink={0}
-					onPress={toggleCopying}
+					onPress={() => {
+						const msg = copyImmediately ? "Stopped copying directly to clipboard." : "Now copying directly to clipboard.";
+						dispatch(toggleCopyImmediately());
+						doToast({
+							...toastProps,
+							msg
+						});
+					}}
 					m={0.5}
 				/>
 				<Input
 					value={inputText}
 					placeholder="Tap characters to add them here"
-					onChangeText={(text) => setInputText(text)}
+					onChangeText={setInputText}
 					fontSize={textSize}
 					disabled={settingFaves}
 					flexShrink={0}
@@ -323,15 +304,30 @@ const ExtraChars = ({
 					icon={<NamesIcon size={textSize} color={"secondary." + (showNames ? "50" : "900")} />}
 					flexGrow={0}
 					flexShrink={0}
-					onPress={toggleShowingNames}
+					onPress={() => dispatch(toggleShowNames())}
 					m={0.5}
 				/>
 			</HStack>
 			<ScrollView flexGrow={1} px={4} style={{height: scrollHeight, width: scrollWidth}}>
 				<HStack bg="main.900" borderRadius="lg" m={2} flexWrap="wrap" justifyContent="center">
-					{groupNames.map(g => getGroupButton(g))}
+					<GroupButton buttonTextSize={buttonTextSize} title="Favorites" isShowing={nowShowing === "Favorites"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Latin" isShowing={nowShowing === "Latin"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="IPA" isShowing={nowShowing === "IPA"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Greek" isShowing={nowShowing === "Greek"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Coptic" isShowing={nowShowing === "Coptic"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Cyrillic" isShowing={nowShowing === "Cyrillic"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Armenian" isShowing={nowShowing === "Armenian"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Hebrew" isShowing={nowShowing === "Hebrew"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Arabic" isShowing={nowShowing === "Arabic"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Thai" isShowing={nowShowing === "Thai"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Lao" isShowing={nowShowing === "Lao"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Hiragana" isShowing={nowShowing === "Hiragana"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Katakana" isShowing={nowShowing === "Katakana"} />
+					<GroupButton buttonTextSize={buttonTextSize} title="Bopomofo" isShowing={nowShowing === "Bopomofo"} />
 				</HStack>
-				<DisplayGroup group={nowShowing} showNames={showNames} />
+				<VStack justifyContent="center" alignItems="center" style={{maxWidth: innerWidth}}>
+					<DisplayGroup group={nowShowing} showNames={showNames} />
+				</VStack>
 			</ScrollView>
 			<HStack
 				w="full"
@@ -10844,7 +10840,7 @@ const Bopomofo = {
 	]
 }
 
-const charData = {
+const allCharacters = [].concat(...[
 	Latin,
 	IPA,
 	Greek,
@@ -10858,7 +10854,33 @@ const charData = {
 	Hiragana,
 	Katakana,
 	Bopomofo
-};
+].map(data => {
+	const { title, content } = data;
+	return content.map(info => {
+		return {
+			...info,
+			group: title,
+			isFavorite: false
+		};
+	});
+}));
+
+const groupTitles = [
+	Latin,
+	IPA,
+	Greek,
+	Coptic,
+	Cyrillic,
+	Armenian,
+	Hebrew,
+	Arabic,
+	Thai,
+	Lao,
+	Hiragana,
+	Katakana,
+	Bopomofo
+].map(group => group.title);
+
 
 /*
 const All = [
