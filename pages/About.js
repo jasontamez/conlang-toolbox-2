@@ -9,7 +9,7 @@ import {
 	Text,
 	ScrollView,
 	useBreakpointValue
- } from 'native-base';
+} from 'native-base';
 import { useOutletContext } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import packageJson from '../package.json';

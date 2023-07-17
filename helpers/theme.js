@@ -358,14 +358,18 @@ const components = {
 	},
 	Heading: {...mainHeading},
 	Text: {...mainFG},
-	Pressable: {...mainFG},
 	Link: {
 		defaultProps: {
-			fontFamily: fonts.body,
-			fontWeight: 400,
-			fontStyle: "normal"
+			_text: {
+				color: "primary.500",
+				fontFamily: fonts.body,
+				fontWeight: 400,
+				fontStyle: "normal",
+				textDecoration: "underline"
+			}
 		}
 	},
+	Pressable: {...mainFG},
 	Input: {...mainInput},
 	TextArea: {...mainInput},
 	Checkbox: {

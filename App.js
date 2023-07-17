@@ -262,9 +262,8 @@ const AppRoutes = () => {
 						</Route> */}
 						<Route path="settings" element={<AppSettings />} />
 						<Route path="wordlists" element={<WordLists />} />
+						<Route path="credits" element={<Credits />} />
 						<Route path="extrachars" element={<ExtraCharacters />} />
-						{ /* <Route path="credits" element={<Credits />} />
-						<Route path="about" element={<About />} /> */ }
 					</Route>
 				</Routes>
 			</VStack>
