@@ -1,21 +1,4 @@
-const blankAppState = {/*
-	currentVersion: packageJson.version,
-	wordevolveCharacters: {
-		map: [],
-		editing: null
-	},
-	wordevolveTransformations: {
-		list: [],
-		editing: null
-	},
-	wordevolveSoundChanges: {
-		list: [],
-		editing: null
-	},
-	wordevolveInput: [],
-	wordevolveSettings: {
-		output: "outputOnly"
-	}*/
+const blankAppState = {
 	we: {
 		input: "",
 		characterGroups: [],
@@ -326,66 +309,7 @@ const blankAppState = {/*
 		},
 		history: [],
 		hasCheckedForOldCustomInfo: false
-	},
-	/*
-	modalState: {
-		loadingPage: false,
-		menuToggle: false,
-		AppTheme: false,
-		AddCategory: false,
-		EditCategory: false,
-		AddTransform: false,
-		EditTransform: false,
-		PresetPopup: false,
-		WGOutputOptions: false,
-		ManageCustomInfo: false,
-		AddCategoryWE: false,
-		EditCategoryWE: false,
-		AddTransform: false,
-		EditTransform: false,
-		AddSoundChange: false,
-		EditSoundChange: false,
-		LexiconEllipsis: undefined,
-		EditLexiconItem: false,
-		EditLexiconOrder: false,
-		LoadLexicon: false,
-		DeleteLexicon: false,
-		WGSaveToLexicon: undefined,
-		PickAndSaveWG: false,
-		WEPresetPopup: false,
-		WEOutputOptions: false,
-		PickAndSaveWE: false,
-		ManageCustomInfoWE: false,
-		WESaveToLexicon: undefined,
-		InfoModal: false,
-		ExtraCharacters: false,
-		ExtraCharactersEllipsis: undefined,
-		ExportLexicon: false,
-		WordListsEllipsis: undefined,
-		PickAndSaveWL: false,
-		LoadMS: false,
-		DeleteMS: false,
-		ExportMS: false
-	},
-	viewState: {
-		wg: 'characters',
-		we: 'characters',
-		wl: 'home',
-		ms: 'syntax',
-		ph: 'home',
-		lastSection: ''
-	},
-	extraCharactersState: {
-		display: null,
-		saved: [],
-		copyImmediately: false,
-		copyLater: "",
-		adding: false,
-		deleting: false,
-		showNames: false,
-		showHelp: false
-	},
-	temporaryInfo: undefined*/
+	}
 };
 
 export default blankAppState;

@@ -9,12 +9,15 @@ import {
 	Divider,
 	Box,
 	Button,
-	Center
+	Center,
+	useToast
 } from 'native-base';
 import { useLocation } from "react-router-native";
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
 	InfoIcon,
+	CopyIcon,
 	CloseCircleIcon,
 	GearIcon,
 	GenerateIcon,
@@ -24,14 +27,20 @@ import {
 	TrashIcon
 } from '../../components/icons';
 import getSizes from '../../helpers/getSizes';
+import doToast from "../../helpers/toast";
+import { copyCharacterGroupsFromElsewhere } from '../../store/wgSlice';
 
 const WGContextMenu = () => {
 	const { pathname } = useLocation();
-	const [iconSize, textSize, headerSize] = getSizes("lg", "sm", "md")
+	const dispatch = useDispatch();
+	const { characterGroups } = useSelector(state => state.we);
+	const toast = useToast();
+	const [iconSize, textSize, headerSize, smallerSize] = getSizes("lg", "sm", "md", "xs");
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
-	const [modalTitle, setModalTitle] = useState("TITLE");
-	const [modalBody, setModalBody] = useState('');
-	const modalRef = useRef(null);
+	const [infoModalTitle, setInfoModalTitle] = useState("TITLE");
+	const [infoModalBody, setInfoModalBody] = useState('');
+	const infoModalRef = useRef(null);
+	const [copyModalOpen, setCopyModalOpen] = useState(false);
 	const primaryContrast = useContrastText('primary.500');
 	const P = (props) => <Text textAlign="justify" lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const I = (props) => <P bg="darker" px={0.5} >/{props.children}/</P>;
@@ -53,7 +62,7 @@ const WGContextMenu = () => {
 		"7xl": 64
 	}[textSize] || 4;
 	const ModalBody = (props) => (
-		<Modal.Body _scrollview={{ref: modalRef}}>
+		<Modal.Body _scrollview={{ref: infoModalRef}}>
 			<VStack
 				space={space}
 				justifyContent="space-between"
@@ -62,7 +71,7 @@ const WGContextMenu = () => {
 		</Modal.Body>
 	);
 	useEffect(() => {
-		// Since modalRef isn't working, use this hack to
+		// Since infoModalRef isn't working, use this hack to
 		//   make it scroll to the top.
 		if(!infoModalOpen) {
 			return;
@@ -70,8 +79,8 @@ const WGContextMenu = () => {
 		// END OF HACK (remove infoModalOpen from [list] at end, too)
 		switch (pathname) {
 			case "/wg/characters":
-				setModalTitle("Character Groups");
-				setModalBody(
+				setInfoModalTitle("Character Groups");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This is where you define groups of sounds. The two simplest groupings
@@ -119,8 +128,8 @@ const WGContextMenu = () => {
 				);
 				break;
 			case "/wg/syllables":
-				setModalTitle("Syllables");
-				setModalBody(
+				setInfoModalTitle("Syllables");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This is where you determine how your syllables are formed. You use the <Em>labels</Em> to
@@ -162,8 +171,8 @@ const WGContextMenu = () => {
 				);
 				break;
 			case "/wg/transformations":
-				setModalTitle("Transformations");
-				setModalBody(
+				setInfoModalTitle("Transformations");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}There may be cases when you need to fine-tune the words that get generated
@@ -256,8 +265,8 @@ const WGContextMenu = () => {
 				);
 				break;
 			case "/wg/output":
-				setModalTitle("Output");
-				setModalBody(
+				setInfoModalTitle("Output");
+				setInfoModalBody(
 					<ModalBody>
 						<Center><GenerateIcon color="text.50" size={iconSize} /></Center>
 						<P>
@@ -313,8 +322,8 @@ const WGContextMenu = () => {
 			case "/wg":
 			case "/wg/":
 			case "/wg/settings":
-				setModalTitle("Settings");
-				setModalBody(
+				setInfoModalTitle("Settings");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This final pane fine-tunes the output. These can make a huge difference in
@@ -376,19 +385,80 @@ const WGContextMenu = () => {
 				);
 				break;
 			default:
-				setModalTitle("TITLE");
-				setModalBody(<Text>Display Error</Text>);
+				setInfoModalTitle("TITLE");
+				setInfoModalBody(<Text>Display Error</Text>);
 		}
 	}, [pathname, infoModalOpen]);
 	return (
 		<>
+			{pathname === "/wg/characters" && (characterGroups.length > 0) && (
+				<IconButton
+					accessibilityLabel="Copy from WordEvolve"
+					flexGrow={0}
+					flexShrink={0}
+					icon={<CopyIcon size={textSize} />}
+					onPress={() => {
+						//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
+						setCopyModalOpen(true);
+					}}
+				/>			
+			)}
+			<Modal isOpen={copyModalOpen} closeOnOverlayClick={true}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+						px={3}
+					>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={headerSize}>Copy {characterGroups.length} Groups from WordEvolve?</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								onPress={() => setCopyModalOpen(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						<Text fontSize={textSize}>Do you want to copy all character groups from WordEvolve to here? If any current groups have the same label as an incoming group, the current group will be overwritten. This cannot be undone. Do you want to do this?</Text>
+					</Modal.Body>
+					<Modal.Footer p={2}>
+						<HStack justifyContent="space-between" alignItems="center" w="full">
+							<Button
+								onPress={() => setCopyModalOpen(false)}
+								py={1}
+								px={2}
+								colorScheme="warning"
+								_text={{fontSize: textSize}}
+							>Cancel</Button>
+							<Button
+								onPress={() => {
+									setCopyModalOpen(false);
+									dispatch(copyCharacterGroupsFromElsewhere(characterGroups));
+									doToast({
+										toast,
+										placement: "top",
+										msg: "Character Groups copied",
+										fontSize: smallerSize
+									});																
+								}}
+								py={1}
+								px={2}
+								colorScheme="success"
+								_text={{fontSize: textSize}}
+							>Copy</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
 			<IconButton
 				accessibilityLabel="Information"
 				flexGrow={0}
 				flexShrink={0}
 				icon={<InfoIcon size={textSize} />}
 				onPress={() => {
-					//modalRef.current.scrollTo({x: 0, y: 0, animated: false});
+					//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
 					setInfoModalOpen(true);
 				}}
 			/>
@@ -400,7 +470,7 @@ const WGContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>{modalTitle}</Text>
+							<Text color={primaryContrast} fontSize={headerSize}>{infoModalTitle}</Text>
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}
@@ -409,7 +479,7 @@ const WGContextMenu = () => {
 							/>
 						</HStack>
 					</Modal.Header>
-					{modalBody}
+					{infoModalBody}
 					<Modal.Footer p={2}>
 						<Button
 							onPress={() => setInfoModalOpen(false)}

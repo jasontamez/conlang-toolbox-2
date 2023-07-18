@@ -124,14 +124,25 @@ export const MultiAlert = (props) => {
 	// setAlertOpen = state setter
 	// sharedProps = object of properties to be added to each StandardAlert
 	// passedProps = Array of objects, each object being:
-	//    {id: string, properties: object}
+	//    {id: string, properties: object of peoperties}
 	//
 	// Makes one StandardAlert for every object in passedProps.
 	//   Each StandardAlert opens when alertOpen === id.
 	//
 	// NOTE:
 	//   sharedProps can override alertOpen and setAlertOpen
-	//   passedProps can override sharedProps, alertOpen, and setAlertOpen
+	//   passedProps's properties can override sharedProps, alertOpen, and setAlertOpen
+	//
+	// EXAMPLE:
+	//   <MultiAlert
+	//     alertOpen={var}
+	//     setAlertOpen={setVar}
+	//     sharedProps={{headerContent: "Warning", continueFunc: () => console.log("alerted")}}
+	//     passedProps={[
+	//       {id: "alertOne", properties: {headerContent: "Alert"}},
+	//       {id: "alertTwo", properties: {continueFunc: () => console.log("whatever")}}
+	//     ]}
+	//   />
 	const {alertOpen, setAlertOpen, sharedProps, passedProps} = props;
 	return passedProps.map(({id, properties}) => {
 		const mergedProps = merge(sharedProps, properties);

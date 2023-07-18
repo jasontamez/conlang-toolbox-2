@@ -7,12 +7,15 @@ import {
 	HStack,
 	IconButton,
 	Button,
-	Center
+	Center,
+	useToast
 } from 'native-base';
 import { useLocation } from "react-router-native";
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
 	InfoIcon,
+	CopyIcon,
 	CloseCircleIcon,
 	GearIcon,
 	SaveIcon,
@@ -21,14 +24,20 @@ import {
 	TrashIcon
 } from '../../components/icons';
 import getSizes from '../../helpers/getSizes';
+import doToast from "../../helpers/toast";
+import { copyCharacterGroupsFromElsewhere } from '../../store/weSlice';
 
 const WEContextMenu = () => {
 	const { pathname } = useLocation();
-	const [textSize, headerSize, iconSize] = getSizes("sm", "md", "lg");
+	const dispatch = useDispatch();
+	const { characterGroups } = useSelector(state => state.wg);
+	const toast = useToast();
+	const [textSize, headerSize, iconSize, smallerSize] = getSizes("sm", "md", "lg", "xs");
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
-	const [modalTitle, setModalTitle] = useState("TITLE");
-	const [modalBody, setModalBody] = useState('');
-	const modalRef = useRef(null);
+	const [infoModalTitle, setInfoModalTitle] = useState("TITLE");
+	const [infoModalBody, setInfoModalBody] = useState('');
+	const infoModalRef = useRef(null);
+	const [copyModalOpen, setCopyModalOpen] = useState(false);
 	const primaryContrast = useContrastText('primary.500');
 	const P = (props) => <Text textAlign="justify" lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const Em = (props) => <P italic {...props} />;
@@ -47,7 +56,7 @@ const WEContextMenu = () => {
 		"7xl": 64
 	}[textSize] || 4;
 	const ModalBody = (props) => (
-		<Modal.Body _scrollview={{ref: modalRef}}>
+		<Modal.Body _scrollview={{ref: infoModalRef}}>
 			<VStack
 				space={space}
 				justifyContent="space-between"
@@ -56,7 +65,7 @@ const WEContextMenu = () => {
 		</Modal.Body>
 	);
 	useEffect(() => {
-		// Since modalRef isn't working, use this hack to
+		// Since infoModalRef isn't working, use this hack to
 		//   make it scroll to the top.
 		if(!infoModalOpen) {
 			return;
@@ -64,8 +73,8 @@ const WEContextMenu = () => {
 		// END OF HACK (remove infoModalOpen from [list] at end, too)
 		switch (pathname) {
 			case "/we/characters":
-				setModalTitle("Character Groups");
-				setModalBody(
+				setInfoModalTitle("Character Groups");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This is where you define groups of characters representing sounds. You can reference
@@ -93,8 +102,8 @@ const WEContextMenu = () => {
 				);
 				break;
 			case "/we/soundchanges":
-				setModalTitle("Sound Changes");
-				setModalBody(
+				setInfoModalTitle("Sound Changes");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This is where you determine how your words evolve. The display follows basic standard
@@ -179,8 +188,8 @@ const WEContextMenu = () => {
 				);
 				break;
 			case "/we/transformations":
-				setModalTitle("Transformations");
-				setModalBody(
+				setInfoModalTitle("Transformations");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}There may be cases when you need to modify the input words before you evolve
@@ -256,8 +265,8 @@ const WEContextMenu = () => {
 				);
 				break;
 			case "/we/output":
-				setModalTitle("Output");
-				setModalBody(
+				setInfoModalTitle("Output");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This is where the magic happens. Click the <B>Generate</B> button and the
@@ -300,8 +309,8 @@ const WEContextMenu = () => {
 			case "/we":
 			case "/we/":
 			case "/we/input":
-				setModalTitle("Input");
-				setModalBody(
+				setInfoModalTitle("Input");
+				setInfoModalBody(
 					<ModalBody>
 						<P>
 							{'\t\t\t'}This pane has one purpose: determining which words you want to change.
@@ -316,12 +325,73 @@ const WEContextMenu = () => {
 				);
 				break;
 			default:
-				setModalTitle("TITLE");
-				setModalBody(<Text>Display Error</Text>);
+				setInfoModalTitle("TITLE");
+				setInfoModalBody(<Text>Display Error</Text>);
 		}
 	}, [pathname, infoModalOpen]);
 	return (
 		<>
+			{pathname === "/we/characters" && (characterGroups.length > 0) && (
+				<IconButton
+					accessibilityLabel="Copy from WordGen"
+					flexGrow={0}
+					flexShrink={0}
+					icon={<CopyIcon size={textSize} />}
+					onPress={() => {
+						//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
+						setCopyModalOpen(true);
+					}}
+				/>			
+			)}
+			<Modal isOpen={copyModalOpen} closeOnOverlayClick={true}>
+				<Modal.Content>
+					<Modal.Header
+						bg="primary.500"
+						borderBottomWidth={0}
+						px={3}
+					>
+						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
+							<Text color={primaryContrast} fontSize={headerSize}>Copy {characterGroups.length} Groups from WordGen?</Text>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								onPress={() => setCopyModalOpen(false)}
+								variant="ghost"
+								px={0}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						<Text fontSize={textSize}>Do you want to copy all character groups from WordGen to here? If any current groups have the same label as an incoming group, the current group will be overwritten. This cannot be undone. Do you want to do this?</Text>
+					</Modal.Body>
+					<Modal.Footer p={2}>
+					<HStack justifyContent="space-between" alignItems="center" w="full">
+							<Button
+								onPress={() => setCopyModalOpen(false)}
+								py={1}
+								px={2}
+								colorScheme="warning"
+								_text={{fontSize: textSize}}
+							>Cancel</Button>
+							<Button
+								onPress={() => {
+									setCopyModalOpen(false);
+									dispatch(copyCharacterGroupsFromElsewhere(characterGroups));
+									doToast({
+										toast,
+										placement: "top",
+										msg: "Character Groups copied",
+										fontSize: smallerSize
+									});																
+								}}
+								py={1}
+								px={2}
+								colorScheme="success"
+								_text={{fontSize: textSize}}
+							>Copy</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
 			<IconButton
 				accessibilityLabel="Information"
 				flexGrow={0}
@@ -339,7 +409,7 @@ const WEContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>{modalTitle}</Text>
+							<Text color={primaryContrast} fontSize={headerSize}>{infoModalTitle}</Text>
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}
@@ -348,7 +418,7 @@ const WEContextMenu = () => {
 							/>
 						</HStack>
 					</Modal.Header>
-					{modalBody}
+					{infoModalBody}
 					<Modal.Footer p={2}>
 						<Button
 							onPress={() => setInfoModalOpen(false)}

@@ -50,16 +50,12 @@ const CharGroups = ({
 	const { disableConfirms } = useSelector(state => state.appState);
 	const dispatch = useDispatch();
 	const [alertOpenError, setAlertOpenError] = useState(false);
-	const [saveGroupError, setSaveGroupError] = useState('');
+	const [saveGroupError, setSaveGroupError] = useState("");
 	const [deletingGroup, setDeletingGroup] = useState(false);
 	const [groupDeletingString, setGroupDeletingString] = useState("");
 	const [editingGroup, setEditingGroup] = useState(false);
 	const [modifiedDesc, setModifiedDesc] = useState("");
 	const [modifiedLabel, setModifiedLabel] = useState("");
-	// TO-DO: Error: "no characters assigned to group" when button is pressed
-	//          while in the input box (new group modal)
-	// TO-DO: Also affects transforms, using a blank instead of the typed input
-	// TO-DO: Import Groups from WE/WG/DC
 	const [modifiedRun, setModifiedRun] = useState("");
 	const [editOverrideSwitch, setEditOverrideSwitch] = useState(false);
 	const [editOverrideValue, setEditOverrideValue] = useState(20);
@@ -343,7 +339,7 @@ const CharGroups = ({
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize}  />}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => setEditingGroup(false)}
 							/>
 						</HStack>

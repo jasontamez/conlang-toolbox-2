@@ -29,6 +29,36 @@ const editCharacterGroupFunc = (state, action) => {
 	state.characterGroups = state.characterGroups.map(group => group.label === label ? edited : group);
 	return state;
 };
+const copyCharacterGroupsFromElsewhereFunc = (state, action) => {
+	const newCharacterGroups = action.payload;
+	const { characterGroups } = state;
+	let incoming = {};
+	newCharacterGroups.forEach(cg => {
+		incoming[cg.label] = cg;
+	});
+	const final = [];
+	characterGroups.forEach(cg => {
+		const {label} = cg;
+		// Check for replacement
+		if(incoming[label]) {
+			// Use replacement
+			final.push(incoming[label]);
+			delete incoming[label];
+		} else {
+			// Use original
+			final.push(cg);
+		}
+	});
+	newCharacterGroups.forEach(cg => {
+		const {label} = cg;
+		// Only save if we haven't used this to replace an old one
+		if(incoming[label]) {
+			final.push(cg);
+		}
+	});
+	state.characterGroups = final;
+	return state;
+};
 
 // TRANSFORMS
 const addTransformFunc = (state, action) => {
@@ -128,6 +158,7 @@ const weSlice = createSlice({
 		addCharacterGroup: addCharacterGroupFunc,
 		deleteCharacterGroup: deleteCharacterGroupFunc,
 		editCharacterGroup: editCharacterGroupFunc,
+		copyCharacterGroupsFromElsewhere: copyCharacterGroupsFromElsewhereFunc,
 		addTransform: addTransformFunc,
 		deleteTransform: deleteTransformFunc,
 		editTransform: editTransformFunc,
@@ -148,6 +179,7 @@ export const {
 	addCharacterGroup,
 	deleteCharacterGroup,
 	editCharacterGroup,
+	copyCharacterGroupsFromElsewhere,
 	addTransform,
 	deleteTransform,
 	editTransform,
