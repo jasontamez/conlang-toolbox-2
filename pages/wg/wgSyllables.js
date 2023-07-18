@@ -29,7 +29,6 @@ import {
 	setSyllableOverride,
 	setSyllables
 } from "../../store/wgSlice";
-import ExtraChars from "../../components/ExtraCharsButton";
 import getSizes from "../../helpers/getSizes";
 import { flipFlop, fromToZero, maybeAnimate } from "../../helpers/motiAnimations";
 import { fontSizesInPx } from "../../store/appStateSlice";
@@ -151,7 +150,6 @@ const WGSyllables = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center" w="full">
 							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{modalTitle}</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 								onPress={() => setModalOpen(false)}

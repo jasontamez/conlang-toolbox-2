@@ -31,7 +31,6 @@ import {
 	editSoundChange,
 	rearrangeSoundChanges
 } from "../../store/weSlice";
-import ExtraChars from "../../components/ExtraCharsButton";
 import doToast from "../../helpers/toast";
 import getSizes from "../../helpers/getSizes";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -376,7 +375,6 @@ const WESoundChanges = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Sound Change</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
@@ -461,7 +459,6 @@ const WESoundChanges = () => {
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Sound Change</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}

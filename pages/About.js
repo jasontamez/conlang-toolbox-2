@@ -15,7 +15,6 @@ import { useDispatch } from 'react-redux';
 import packageJson from '../package.json';
 
 import {
-	DotIcon,
 	ExtraCharactersIcon,
 	LexiconIcon,
 	MorphoSyntaxIcon,
@@ -23,9 +22,8 @@ import {
 	WordGenIcon,
 	WordListsIcon
 } from '../components/icons';
-import { setBaseTextSize, addPageToHistory } from '../store/appStateSlice';
+import { setBaseTextSize } from '../store/appStateSlice';
 import getSizes from '../helpers/getSizes';
-import ExtraChars from '../pages/ExtraCharacters';
 
 const About = () => {
 	const dispatch = useDispatch();
@@ -159,8 +157,7 @@ const About = () => {
 				<Indented>Contains hundreds of characters that may not appear on your mobile keyboard,
 					organized according to groups such as Latin, Cyrillic, Arabic and Katakana</Indented>
 				<Indented>All IPA (International Phonetic Alphabet) characters grouped together</Indented>
-				<Indented>Tap characters and add them to the clipboard</Indented>
-				<Indented>Save your often-used characters to the Favorites bar for easy access</Indented>
+				<Indented>Save your often-used characters as Favorites bar for easy access</Indented>
 			</Pressable>
 			<VStack
 				mt={20}

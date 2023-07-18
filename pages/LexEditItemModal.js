@@ -10,7 +10,6 @@ import {
 	useContrastText
 } from 'native-base';
 
-import ExtraChars from '../components/ExtraCharsButton';
 import {
 	CloseCircleIcon,
 	TrashIcon,
@@ -81,20 +80,13 @@ const ModalLexiconEditingItem = ({
 						>
 							Edit Lexicon Item
 						</Text>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars
-								color={primaryContrast}
-								size={textSize}
-								buttonProps={{p: 1, m: 0}}
-							/>
-							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
-								p={1}
-								m={0}
-								variant="ghost"
-								onPress={() => doClose()}
-							/>
-						</HStack>
+						<IconButton
+							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							p={1}
+							m={0}
+							variant="ghost"
+							onPress={() => doClose()}
+						/>
 					</HStack>
 				</Modal.Header>
 				<Modal.Body m={0} p={0}>

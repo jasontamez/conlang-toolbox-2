@@ -1,18 +1,18 @@
 import React from "react";
-import { Text, HStack, Box, useBreakpointValue, ZStack } from "native-base";
-import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Text, HStack, Box, useBreakpointValue, ZStack, IconButton } from "native-base";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //import { openModal } from '../store/dFuncs';
 import MenuModal from "../pages/MenuModal";
 import { allMainPages } from '../appLayoutInfo';
-import ExtraChars from './ExtraCharsButton';
 import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
 import WEContextMenu from '../pages/contextMenus/WEContextMenu';
 import ExtraCharsHeaderButton from '../pages/contextMenus/ExtraCharactersHeaderButton';
-import { fontSizesInPx } from "../store/appStateSlice";
+import { addPageToHistory, fontSizesInPx } from "../store/appStateSlice";
+import { ExtraCharactersIcon } from "./icons";
 
 const Headers = {
 	WordListsContextMenu: <WordListsContextMenu key="header1" />,
@@ -34,10 +34,11 @@ const defaultProps = {
 };
 
 const AppHeader = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const sizes = useSelector(state => state.appState.sizes);
-	const location = useLocation();
-	const here = location.pathname;
-	const currentPage = allMainPages.find(page => here.startsWith(page.url)) || {};
+	const { pathname } = useLocation();
+	const currentPage = allMainPages.find(page => pathname.startsWith(page.url)) || {};
 	const {
 		title,
 		boxProps,
@@ -86,7 +87,16 @@ const AppHeader = () => {
 			>
 				{pretendModal || <MenuModal />}
 				<Box flexGrow={1} flexShrink={0}></Box>
-				{extraChars && <ExtraChars size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />}
+				{extraChars && <IconButton
+					variant="ghost"
+					icon={<ExtraCharactersIcon color={"text.50"} size={textSize} />}
+					onPress={() => {
+						dispatch(addPageToHistory(pathname));
+						navigate('/extrachars');
+					}}
+					flexGrow={0}
+					flexShrink={0}
+				/>}
 				{rightHeader.map(header => (
 					<React.Fragment key={"Header-" + header}>
 						{Headers[header]}

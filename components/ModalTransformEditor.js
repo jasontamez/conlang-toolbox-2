@@ -11,7 +11,6 @@ import {
 	useToast
 } from 'native-base';
 
-import ExtraChars from './ExtraCharsButton';
 import {
 	CloseCircleIcon,
 	TrashIcon,
@@ -143,7 +142,6 @@ const ModalTransformEditingItem = ({
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
-						<ExtraChars size={headerSize} color={primaryContrast} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 						<IconButton
 							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 							onPress={() => endEditingFunc()}

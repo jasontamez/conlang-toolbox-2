@@ -13,7 +13,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { AnimatePresence, MotiView } from 'moti';
 import { useWindowDimensions } from 'react-native';
 
-import ExtraChars from './ExtraCharsButton';
 import { CloseCircleIcon, SaveIcon } from './icons';
 import StandardAlert from './StandardAlert';
 import { DropDown, TextSetting, ToggleSwitch } from './inputTags';
@@ -178,20 +177,13 @@ const SaveCustomInfoModal = ({
 							fontSize={textSize}
 							bold
 						>Save Custom Info</Text>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars
-								color={primaryContrast}
-								size={textSize}
-								buttonProps={{p: 1, m: 0}}
-							/>
-							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
-								p={1}
-								m={0}
-								variant="ghost"
-								onPress={closeModal}
-							/>
-						</HStack>
+						<IconButton
+							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							p={1}
+							m={0}
+							variant="ghost"
+							onPress={closeModal}
+						/>
 					</HStack>
 				</Modal.Header>
 				<Modal.Body m={0} p={4}>

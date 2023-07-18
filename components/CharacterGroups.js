@@ -31,7 +31,6 @@ import {
 } from "./icons";
 import { RangeSlider, TextSetting, ToggleSwitch } from "./inputTags";
 import StandardAlert from "./StandardAlert";
-import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
 import { fontSizesInWs } from "../store/appStateSlice";
 import getSizes from "../helpers/getSizes";
@@ -335,7 +334,6 @@ const CharGroups = ({
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Character Group</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
@@ -471,7 +469,6 @@ const CharGroups = ({
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Character Group</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}

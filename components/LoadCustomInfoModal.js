@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
-import ExtraChars from './ExtraCharsButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from './icons';
 import StandardAlert from './StandardAlert';
 import doToast from '../helpers/toast';
@@ -166,20 +165,13 @@ const LoadCustomInfoModal = ({
 							fontSize={textSize}
 							bold
 						>Load Saved Info</Text>
-						<HStack justifyContent="flex-end" space={2}>
-							<ExtraChars
-								color={primaryContrast}
-								size={textSize}
-								buttonProps={{p: 1, m: 0}}
-							/>
-							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
-								p={1}
-								m={0}
-								variant="ghost"
-								onPress={closeModal}
-							/>
-						</HStack>
+						<IconButton
+							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							p={1}
+							m={0}
+							variant="ghost"
+							onPress={closeModal}
+						/>
 					</HStack>
 				</Modal.Header>
 				<Modal.Body m={0} p={0}>

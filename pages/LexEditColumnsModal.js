@@ -11,7 +11,6 @@ import {
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
-import ExtraChars from '../components/ExtraCharsButton';
 import uuidv4 from '../helpers/uuidv4';
 import {
 	CloseCircleIcon,
@@ -218,21 +217,14 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 								fontSize={textSize}
 								bold
 							>Edit Lexicon Columns</Text>
-							<HStack justifyContent="flex-end">
-								<ExtraChars
-									color={primaryContrast}
-									size={textSize}
-									buttonProps={{p: 1, flexGrow: 0, flexShrink: 0}}
-								/>
-								<IconButton
-									icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
-									p={1}
-									variant="ghost"
-									onPress={doClose}
-									flexGrow={0}
-									flexShrink={0}
-								/>
-							</HStack>
+							<IconButton
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								p={1}
+								variant="ghost"
+								onPress={doClose}
+								flexGrow={0}
+								flexShrink={0}
+							/>
 						</HStack>
 					</Modal.Header>
 					<Modal.Body m={0} p={0}>

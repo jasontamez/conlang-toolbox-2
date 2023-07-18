@@ -24,7 +24,6 @@ import {
 } from "./icons";
 import { DropDown, TextSetting } from "./inputTags";
 import StandardAlert from "./StandardAlert";
-import ExtraChars from "./ExtraCharsButton";
 import doToast from "../helpers/toast";
 import ModalTransformEditingItem from "./ModalTransformEditor";
 import getSizes from "../helpers/getSizes";
@@ -371,7 +370,6 @@ const Transformations = ({
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Add Transform</Text>
-							<ExtraChars color={primaryContrast} size={textSize} buttonProps={{flexGrow: 0, flexShrink: 0}} />
 							<IconButton
 								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
 								onPress={() => closeAddTransform()}
