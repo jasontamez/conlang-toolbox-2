@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import getSizes from "../../helpers/getSizes";
-import { DotIcon, InfoIcon } from "../../components/icons";
+import { InfoIcon } from "../../components/icons";
 import FullPageModal from '../../components/FullBodyModal';
 import { fontSizesInPx } from '../../store/appStateSlice';
 import { RangeSlider, TextAreaSetting } from '../../components/inputTags';
@@ -35,13 +35,12 @@ const margins = {
 };
 const textProps = () => {
 	const [
-		dotSize,
 		smallerSize,
 		textSize,
 		lgSize,
 		xlSize,
 		x2Size
-	] = getSizes("xs", "sm", "md", "lg", "xl", "x2");
+	] = getSizes("sm", "md", "lg", "xl", "x2");
 	const headings = {
 		0: x2Size,
 		1: xlSize,
@@ -49,38 +48,13 @@ const textProps = () => {
 		3: textSize,
 		4: smallerSize
 	};
-	const dotProps = {
-		size: dotSize,
-		m: 0,
-		p: 0,
-		mt: {
-			"2xs": 1,
-			xs: 1,
-			sm: 1.5,
-			md: 1.5,
-			lg: 2.5,
-			xl: 3.5,
-			"2xl": 4
-		}[dotSize],
-		mr: {
-			"2xs": 1.5,
-			xs: 2,
-			sm: 2.5,
-			md: 2.5,
-			lg: 3,
-			xl: 3.5,
-			"2xl": 4
-		}[dotSize]
-	};
 	return {
-		dotSize,
 		smallerSize,
 		textSize,
 		lgSize,
 		xlSize,
 		x2Size,
-		headings,
-		dotProps
+		headings
 	};
 };
 export const T = (props) => {
@@ -109,7 +83,7 @@ export const P = (props) => {
 		children,
 		noDot = false
 	} = props;
-	const { dotProps } = textProps();
+	const { textSize } = textProps();
 	return (
 		<HStack
 			mt={top === 2 ? 6 : top ? 2 : 0}
@@ -117,7 +91,7 @@ export const P = (props) => {
 			alignItems="flex-start"
 			justifyContent="flex-start"
 		>
-			{noDot || <DotIcon {...dotProps} />}
+			{noDot || <Text fontSize={textSize} lineHeight={lineHeights[textSize]}>{`\u25CF `}</Text>}
 			{children}
 		</HStack>
 	);

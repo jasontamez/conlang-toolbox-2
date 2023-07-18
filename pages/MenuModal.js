@@ -185,12 +185,6 @@ const MenuModal = () => {
 									title
 								} = kid;
 								const isSelected = pathname === url;
-								const dotOptions =
-									isSelected ?
-										{ color: "primary.500" }
-									:
-										{ color: "transparent" }
-								;
 								const textOptions = isSelected ? { color: "primary.500" } : {};
 								const bgOptions = isSelected ? { bg: "primary.500" } : {};
 								const offScreen = -500;
@@ -254,7 +248,12 @@ const MenuModal = () => {
 														minW={4}
 														ml={0}
 													>
-														<Icons.DotIcon {...dotOptions}/>
+														<Text
+															textAlign="left"
+															fontSize={menuSize}
+															{...textOptions}
+															color={isSelected ? "primary.500" : "transparent"}
+														>{`\u25CF`}</Text>
 													</VStack>
 												</HStack>
 											</ZStack>

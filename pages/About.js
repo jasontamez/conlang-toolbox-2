@@ -74,8 +74,9 @@ const About = () => {
 				mx={indentMargin}
 				justifyContent="flex-start"
 				alignItems="flex-start"
+				space={1}
 			>
-				<DotIcon m={1} size={dotSize} />
+				<Text fontSize={textSize}>{`\u25CF`}</Text>
 				<Text fontSize={textSize}>{children}</Text>
 			</HStack>
 		)

@@ -1,6 +1,6 @@
 import { Icon } from 'native-base';
 import { Polygon } from 'react-native-svg';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+//import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FAFive from '@expo/vector-icons/FontAwesome5';
 import MCI from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -26,9 +26,6 @@ export const SettingsIcon = (props) => <Icon as={Ionicons} name="settings-sharp"
 export const MenuIcon = (props) => <Icon as={Entypo} name="menu" {...props} />;
 export const DotsIcon = (props) => <Icon as={Ionicons} name="ellipsis-vertical" {...props} />
 export const ExtraCharactersIcon = (props) => <Icon as={Ionicons} name="globe-outline" {...props} />;
-
-// MS and About pages
-export const DotIcon = (props) => <Icon as={FontAwesome} name="circle" {...props} />;
 
 // Lexicon page
 export const SortDownIcon = (props) => <Icon as={FAFive} name="sort-amount-down-alt" {...props} />;
