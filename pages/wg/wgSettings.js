@@ -90,7 +90,7 @@ const WGSettings = () => {
 		}
 		setClearAlertOpen(true);
 	};
-	const triggerResets = () => setResetCounter(currentCounter => currentCounter + 1);
+	const triggerResets = () => setResetCounter(resetCounter + 1);
 	const doClearEveything = () => {
 		dispatch(loadState(null));
 		triggerResets();
@@ -121,7 +121,8 @@ const WGSettings = () => {
 			</Box>
 		);
 	};
-	const TextField = ({text, value, setter}) => (
+	// Text field needs to be in a function() instead of an <Element> to keep the keyboard from hiding while typing.
+	const textField = (text, value, setter) => (
 		<TextSetting
 			text={text}
 			defaultValue={value}
@@ -215,6 +216,7 @@ const WGSettings = () => {
 				flexWrap="wrap"
 				borderBottomWidth={0.5}
 				borderColor="main.700"
+				thisPropDoesNothingIJustNeedToUseThisVariable={resetCounter}
 			>
 				<InfoButton
 					colorScheme="primary"
@@ -301,36 +303,12 @@ const WGSettings = () => {
 				switchState={capitalizeSentences}
 				switchToggle={() => dispatch(setCapitalizeSentences(!capitalizeSentences))}
 			/>
-			<TextField
-				text="Declarative sentence beginning"
-				value={declarativeSentencePre}
-				setter={setDeclarativeSentencePre}
-			/>
-			<TextField
-				text="Declarative sentence ending"
-				value={declarativeSentencePost}
-				setter={setDeclarativeSentencePost}
-			/>
-			<TextField
-				text="Interrogative sentence beginning"
-				value={interrogativeSentencePre}
-				setter={setInterrogativeSentencePre}
-			/>
-			<TextField
-				text="Interrogative sentence ending"
-				value={interrogativeSentencePost}
-				setter={setInterrogativeSentencePost}
-			/>
-			<TextField
-				text="Exclamatory sentence beginning"
-				value={exclamatorySentencePre}
-				setter={setExclamatorySentencePre}
-			/>
-			<TextField
-				text="Exclamatory sentence ending"
-				value={exclamatorySentencePost}
-				setter={setExclamatorySentencePost}
-			/>
+			{ textField("Declarative sentence beginning", declarativeSentencePre, setDeclarativeSentencePre) }
+			{ textField("Declarative sentence ending", declarativeSentencePost, setDeclarativeSentencePost) }
+			{ textField("Interrogative sentence beginning", interrogativeSentencePre, setInterrogativeSentencePre) }
+			{ textField("Interrogative sentence ending", interrogativeSentencePost, setInterrogativeSentencePost) }
+			{ textField("Exclamatory sentence beginning", exclamatorySentencePre, setExclamatorySentencePre) }
+			{ textField("Exclamatory sentence ending", exclamatorySentencePost, setExclamatorySentencePost) }
 		</ScrollView></GestureHandlerRootView>
 	);
 };
