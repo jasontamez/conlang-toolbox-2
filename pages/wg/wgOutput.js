@@ -1202,7 +1202,7 @@ const WGOutput = () => {
 								}
 								transition={{
 									type: "timing",
-									duration: 600
+									duration: 300
 								}}
 								style={{
 									overflow: "hidden"

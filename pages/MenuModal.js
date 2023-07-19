@@ -155,7 +155,7 @@ const MenuModal = () => {
 									}}
 									transition={{
 										type: 'timing',
-										duration: 300
+										duration: 200
 									}}
 									style={{
 										display: "flex",
@@ -208,7 +208,7 @@ const MenuModal = () => {
 										}}
 										transition={{
 											type: 'timing',
-											duration: 800
+											duration: 300
 										}}
 									>
 										<Pressable
