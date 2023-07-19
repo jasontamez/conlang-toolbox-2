@@ -6,12 +6,12 @@ import { setStoredCustomInfo as setStoredCustomInfoWE } from '../store/weSlice';
 import { setStoredCustomInfo as setStoredCustomInfoLex } from '../store/lexiconSlice';
 import { setStoredCustomInfo as setStoredCustomInfoMS } from '../store/morphoSyntaxSlice';
 import {
-	OldCustomStorageWE,
 	OldCustomStorageWG,
+	wgCustomStorage,
+	OldCustomStorageWE,
+	weCustomStorage,
 	OldLexiconStorage,
 	lexCustomStorage,
-	weCustomStorage,
-	wgCustomStorage,
 	OldMorphoSyntaxStorage,
 	msCustomStorage
 } from './persistentInfo';
@@ -36,6 +36,7 @@ const convertWG = async (dispatch) => {
 	let ids = {};
 	// Get all info
 	return OldCustomStorageWG.iterate((value, key) => {
+		console.log(`>>${key}`);
 		information.push([key, value]);
 		return; // Blank return keeps the loop going
 	}).then(() => {
@@ -355,19 +356,16 @@ const convertMS = async (dispatch) => {
 			let bool = {};
 			let newText = {};
 			let newNum = {};
-			boolStrings.forEach(s => bool["BOOL_" + s] = true);
+			boolStrings.forEach(prop => (bool[`BOOL_${prop}`] = true));
 			Object.keys(text).forEach(prop => {
 				const value = text[prop];
 				if(prop === "case") {
 					newText.TEXT_nCase = value;
 				} else {
-					newText["TEXT_" + prop] = value;
+					newText[`TEXT_${prop}`] = value;
 				}
 			});
-			Object.keys(num).forEach((prop) => {
-				const value = num[prop];
-				newNum["NUM_" + prop] = value;
-			});
+			Object.keys(num).forEach(prop => (newNum[`NUM_${prop}`] = num[prop]));
 			final.push({
 				...base,
 				id,

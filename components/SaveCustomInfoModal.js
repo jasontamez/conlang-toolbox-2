@@ -8,12 +8,13 @@ import {
 	useContrastText,
 	useToast
 } from 'native-base';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { AnimatePresence, MotiView } from 'moti';
 import { useWindowDimensions } from 'react-native';
+import { StorageAccessFramework } from 'expo-file-system';
 
-import { CloseCircleIcon, SaveIcon } from './icons';
+import { CloseCircleIcon, ExportIcon, SaveIcon } from './icons';
 import StandardAlert from './StandardAlert';
 import { DropDown, TextSetting, ToggleSwitch } from './inputTags';
 import doToast from '../helpers/toast';
@@ -107,6 +108,67 @@ const SaveCustomInfoModal = ({
 			closeModal();
 		});
 	};
+	const maybeExportInfo = () => {
+		let label = saveName.trim();
+		setSaveName(label);
+		// Warning if blank title
+		if(label === "") {
+			return setMissingLabelAlert(true);
+		}
+		// Go ahead and save
+		try {
+			const directory = StorageAccessFramework.getUriForDirectoryInRoot(".");
+			closeModal();
+			StorageAccessFramework.requestDirectoryPermissionsAsync(directory).then((result) => {
+				const { directoryUri, granted } = result;
+				doToast({
+					toast,
+					msg: "Requested: " + JSON.stringify(`${granted}: "${directoryUri}"`),
+					position: "top",
+					duration: 10000
+				});
+				StorageAccessFramework.createFileAsync(directoryUri, label, "text/json").then((x) => {
+					doToast({
+						toast,
+						msg: "Created: " + JSON.stringify(x),
+						position: "top",
+						duration: 10000
+					});
+					StorageAccessFramework.writeAsStringAsync(`${directoryUri}/${label}.json`, JSON.stringify(saveableObject), {}).then((x) => {
+						doToast({
+							toast,
+							msg: "Written: " + JSON.stringify(x),
+							position: "top",
+							duration: 10000
+						});
+					}).catch((x) => {
+						doToast({
+							toast,
+							msg: "Not Written:",
+							position: "top",
+							duration: 10000
+						});
+						Object.keys(x).forEach(z => console.log(`"${z}": ${JSON.stringify(x[z])}`));
+					});
+				}).catch((x) => {
+					doToast({
+						toast,
+						msg: "Did not create",
+						position: "top",
+						duration: 10000
+					});
+					console.log(JSON.stringify(x));
+				});
+			});
+		} catch(err) {
+			console.log(err);
+			doToast({
+				toast,
+				msg: `ERROR`,
+				position: "top"
+			});
+		}
+	};
 	//const maybeExportInfo = () => {
 	//	let title = ($i("currentInfoExportName").value).trim();
 	//	if(title === "") {
@@ -125,8 +187,7 @@ const SaveCustomInfoModal = ({
 	//};
 	// TO-DO: Export Current Info to File
 	//   name input
-	return (
-		<>
+	return (<>
 		<LoadingOverlay
 			overlayOpen={isSaving}
 			contents={<Text fontSize={largeText} color={tertiaryContrast} textAlign="center">Saving "{saveName}"...</Text>}
@@ -296,29 +357,34 @@ const SaveCustomInfoModal = ({
 					</AnimatePresence>
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
-					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
+					<HStack justifyContent="space-between" w="full" flexWrap="wrap" px={2} py={1}>
 						<Button
 							bg="darker"
 							onPress={closeModal}
 							_text={{color: primaryContrast, fontSize: textSize}}
-							p={1}
-							m={2}
+							py={1}
+							px={2}
 						>Cancel</Button>
 						<Button
-							onPress={() => {
-								newSave ? maybeSaveNewInfo() : maybeOverwriteSave()
-							}}
+							onPress={maybeExportInfo}
+							_text={{fontSize: textSize}}
+							startIcon={<ExportIcon size={textSize} color="tertiary.50" />}
+							bg="tertiary.500"
+							py={1}
+							px={2}
+						>Export</Button>
+						<Button
+							onPress={newSave ? maybeSaveNewInfo : maybeOverwriteSave}
 							_text={{fontSize: textSize}}
 							startIcon={<SaveIcon size={textSize} />}
-							p={1}
-							m={2}
+							py={1}
+							px={2}
 						>Save</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>
 		</Modal>
-		</>
-	);
+	</>);
 };
 
 export default SaveCustomInfoModal;
