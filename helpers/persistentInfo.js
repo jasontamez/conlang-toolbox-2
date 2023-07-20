@@ -57,6 +57,13 @@ export const weCustomStorage = makeAsyncStorageObject("WordEvolve", errHandle);
 export const lexCustomStorage = makeAsyncStorageObject("Lexicon", errHandle);
 export const msCustomStorage = makeAsyncStorageObject("MorphoSyntax", errHandle);
 
+export const allStorageObjects = [
+	wgCustomStorage,
+	weCustomStorage,
+	lexCustomStorage,
+	msCustomStorage
+];
+
 
 //export const StateStorage = localForage.createInstance({
 //	name: 'Conlang Toolbox',
