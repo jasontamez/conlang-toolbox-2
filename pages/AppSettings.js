@@ -229,6 +229,7 @@ const AppSettings = () => {
 					)}
 				>
 					<Menu.OptionGroup
+						title="Text size:"
 						defaultValue={sizeName}
 						type="radio"
 						onChange={(newSize) => dispatch(setBaseTextSize(newSize))}
@@ -263,6 +264,7 @@ const AppSettings = () => {
 					)}
 				>
 					<Menu.OptionGroup
+						title="Theme:"
 						defaultValue={theme}
 						type="radio"
 						onChange={(newTheme) => dispatch(setTheme(newTheme))}

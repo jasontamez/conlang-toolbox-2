@@ -31,12 +31,16 @@ const LoadCustomInfoModal = ({
 }) => {
 	const dispatch = useDispatch();
 	const { disableConfirms } = useSelector(state => state.appState);
-	// state variable for holding saved custom info keys
+	// Info chosen
 	const [customInfoChosen, setCustomInfoChosen] = useState(null);
 	const [customLabelChosen, setCustomLabelChosen] = useState(null);
+	// Controlling alerts
 	const [overwriteWarningOpen, setOverwriteWarningOpen] = useState(false);
 	const [deleteWarningOpen, setDeleteWarningOpen] = useState(false);
+	// Controlling loading/deleting overlay
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+	const [textOnLoadingScreen, setTextOnLoadingScreen] = useState(false);
+
 	const [textSize, largeText] = getSizes("sm", "xl");
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
@@ -63,6 +67,7 @@ const LoadCustomInfoModal = ({
 	};
 	const fetchInfo = async () => {
 		// open overlay
+		setTextOnLoadingScreen(`Loading "${customLabelChosen}"...`);
 		setLoadingOverlayOpen(true);
 		return await customStorage.getItem(customInfoChosen).then((result) => {
 			// close overlay
@@ -96,6 +101,8 @@ const LoadCustomInfoModal = ({
 		setDeleteWarningOpen(true);
 	};
 	const doDeleteInfo = async () => {
+		setTextOnLoadingScreen(`Deleting "${customLabelChosen}"...`);
+		setLoadingOverlayOpen(true);
 		return await customStorage.removeItem(customInfoChosen).then(() => {
 			let deleted = {...storedCustomInfo};
 			// Dispatch the new info to store
@@ -112,13 +119,15 @@ const LoadCustomInfoModal = ({
 		}).catch((err) => {
 			console.log("ERROR in getting custom info");
 			console.log(err);
+		}).finally(() => {
+			setLoadingOverlayOpen(false);
 		});
 	};
 	return (
 		<><LoadingOverlay
 			overlayOpen={loadingOverlayOpen}
 			colorFamily="secondary"
-			contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">Loading "{customLabelChosen}"...</Text>}
+			contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">{textOnLoadingScreen}</Text>}
 		/>
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}

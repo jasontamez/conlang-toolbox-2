@@ -10,7 +10,7 @@ import {
 } from 'native-base';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { AnimatePresence, MotiView } from 'moti';
+import { MotiView } from 'moti';
 import { useWindowDimensions } from 'react-native';
 
 import { CloseCircleIcon, SaveIcon } from './icons';
@@ -22,7 +22,6 @@ import getSizes from '../helpers/getSizes';
 import { flipFlop, maybeAnimate } from '../helpers/motiAnimations';
 import { fontSizesInPx } from '../store/appStateSlice';
 import uuidv4 from '../helpers/uuidv4';
-//import doExport from './ExportServices';
 
 const SaveCustomInfoModal = ({
 	modalOpen,
@@ -34,16 +33,22 @@ const SaveCustomInfoModal = ({
 	storedCustomIDs,
 	savedInfoString
 }) => {
-	const dispatch = useDispatch();
-	const { disableConfirms } = useSelector(state => state.appState);
-	// state variable for holding saved custom info keys
+	// Name/Label for the save
 	const [saveName, setSaveName] = useState("");
-	const [isSaving, setIsSaving] = useState(false);
-	const [newSave, setNewSave] = useState(true);
+	// Shows loading screen
+	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+	const [textOnLoadingScreen, setTextOnLoadingScreen] = useState(false);
+	// Are we making a new save (as opposed to overwriting a save)?
+	const [makingANewSave, setMakingANewSave] = useState(true);
+	// The ID and label of a save we want to overwrite
 	const [overwriteSaveID, setOverwriteSaveID] = useState(null);
 	const [overwriteSaveLabel, setOverwriteSaveLabel] = useState(null);
-	const [missingLabelAlert, setMissingLabelAlert] = useState(false);
-	const [overwriteAlert, setOverwriteAlert] = useState(false);
+	// Controlling alerts
+	const [missingLabelAlertOpen, setMissingLabelAlertOpen] = useState(false);
+	const [overwriteAlertOpen, setOverwriteAlertOpen] = useState(false);
+
+	const dispatch = useDispatch();
+	const { disableConfirms } = useSelector(state => state.appState);
 	const [textSize, largeText] = getSizes("sm", "xl");
 	const primaryContrast = useContrastText("primary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
@@ -70,7 +75,7 @@ const SaveCustomInfoModal = ({
 		setSaveName(label);
 		// Warning if blank title
 		if(label === "") {
-			return setMissingLabelAlert(true);
+			return setMissingLabelAlertOpen(true);
 		}
 		// Go ahead and save
 		const id = uuidv4();
@@ -82,7 +87,7 @@ const SaveCustomInfoModal = ({
 			return doOverwriteSave();
 		}
 		// open the alert box
-		setOverwriteAlert(true);
+		setOverwriteAlertOpen(true);
 	};
 	const doOverwriteSave = () => doSaving(overwriteSaveID, overwriteSaveLabel);
 	const doSaving = (id, label) => {
@@ -90,7 +95,8 @@ const SaveCustomInfoModal = ({
 			label,
 			info: saveableObject
 		};
-		setIsSaving(true);
+		setTextOnLoadingScreen(`Saving "${label}"...`);
+		setShowLoadingScreen(true);
 		customStorage.setItem(id, JSON.stringify(save)).then(() => {
 			let newStoredInfo = {...storedCustomInfo};
 			newStoredInfo[id] = label;
@@ -103,31 +109,31 @@ const SaveCustomInfoModal = ({
 			setSaveName("");
 			labelTextRef.current && labelTextRef.current.clear && labelTextRef.current.clear();
 		}).finally(() => {
-			setIsSaving(false);
+			setShowLoadingScreen(false);
 			closeModal();
 		});
 	};
 	return (<>
 		<LoadingOverlay
-			overlayOpen={isSaving}
-			contents={<Text fontSize={largeText} color={tertiaryContrast} textAlign="center">Saving "{saveName}"...</Text>}
+			overlayOpen={showLoadingScreen}
+			contents={<Text fontSize={largeText} color={tertiaryContrast} textAlign="center">{textOnLoadingScreen}</Text>}
 			colorFamily="tertiary"
 		/>
 		<Modal isOpen={modalOpen} size="md">
 			<StandardAlert
-				alertOpen={overwriteAlert}
-				setAlertOpen={setOverwriteAlert}
+				alertOpen={overwriteAlertOpen}
+				setAlertOpen={setOverwriteAlertOpen}
 				bodyContent={`Are you sure you want to overwrite "${overwriteSaveLabel}"? This cannot be undone.`}
 				continueText="Yes"
 				continueFunc={() => {
-					setOverwriteAlert(false);
+					setOverwriteAlertOpen(false);
 					doOverwriteSave();
 				}}
 				fontSize={textSize}
 			/>
 			<StandardAlert
-				alertOpen={missingLabelAlert}
-				setAlertOpen={setMissingLabelAlert}
+				alertOpen={missingLabelAlertOpen}
+				setAlertOpen={setMissingLabelAlertOpen}
 				headerContent="Cannot Save"
 				headerProps={{
 					bg: "error.500"
@@ -135,7 +141,7 @@ const SaveCustomInfoModal = ({
 				bodyContent="Please enter a title for this save."
 				overrideButtons={[
 					({leastDestructiveRef}) => <Button
-						onPress={() => setMissingLabelAlert(false)}
+						onPress={() => setMissingLabelAlertOpen(false)}
 						ref={leastDestructiveRef}
 						py={1}
 						px={2}
@@ -174,107 +180,97 @@ const SaveCustomInfoModal = ({
 					{storedCustomIDs.length > 0 &&
 						<ToggleSwitch
 							key="previousSaveOrOverwrite"
-							label={newSave ? "Making a New Save" : "Overwriting a Previous Save"}
+							label={makingANewSave ? "Making a New Save" : "Overwriting a Previous Save"}
 							labelSize={textSize}
-							switchState={newSave}
-							switchToggle={() => setNewSave(!newSave)}
-							hProps={{
-								justifyContent: "center",
-								space: 2,
-								borderRadius: "sm",
-								bg: "darker"
-							}}
+							labelProps={{textAlign: "center"}}
+							switchState={makingANewSave}
+							switchToggle={() => setMakingANewSave(!makingANewSave)}
 							vProps={{
-								flexGrow: undefined,
-								flexShrink: undefined
+								ml: 1,
+								mr: 1,
+								borderRadius: "sm",
+								bg: "darker",
+								py: 1,
+								px: 2
 							}}
 						/>
 					}
-					<AnimatePresence exitBeforeEnter
-						style={{
-							overflow: "hidden",
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "center"
-						}}
-					>
-						{newSave ?
-							<MotiView
-								{...maybeAnimate(
-									storedCustomIDs.length > 0,
-									flipFlop,
-									{
-										translateX: width / 3,
-									},
-									{
-										opacity: 1
-									},
-									100
-								)}
-								key="makingANewSave"
-								style={{
-									overflow: "hidden",
-									height
+					{makingANewSave ?
+						<MotiView
+							{...maybeAnimate(
+								storedCustomIDs.length > 0,
+								flipFlop,
+								{
+									translateX: width / 3,
+								},
+								{
+									opacity: 1
+								},
+								100
+							)}
+							key="makingANewSave"
+							style={{
+								overflow: "hidden",
+								height
+							}}
+						>
+							<TextSetting
+								text="Give this save a title"
+								placeholder=""
+								onChangeText={(v) => setSaveName(v)}
+								defaultValue=""
+								inputProps={{ref: labelTextRef}}
+								boxProps={{pt: 4}}
+							/>
+						</MotiView>
+					:
+						<MotiView
+							{...flipFlop(
+								{
+									translateX: 0 - width / 3,
+								},
+								{
+									opacity: 1
+								},
+								100
+							)}
+							style={{
+								overflow: "hidden",
+								display: "flex",
+								flexDirection: "column",
+								justifyContent: "center",
+								height
+							}}
+							key="overwritingAnOldSave"
+						>
+							<DropDown
+								buttonProps={{
+									ml: 0,
+									mr: 0,
+									mt: 4,
+									mb: 2,
+									flexShrink: 2
 								}}
-							>
-								<TextSetting
-									text="Give this save a title"
-									placeholder=""
-									onChangeText={(v) => setSaveName(v)}
-									defaultValue=""
-									inputProps={{ref: labelTextRef}}
-									boxProps={{pt: 4}}
-								/>
-							</MotiView>
-						:
-							<MotiView
-								{...flipFlop(
-									{
-										translateX: 0 - width / 3,
-									},
-									{
-										opacity: 1
-									},
-									100
-								)}
-								style={{
-									overflow: "hidden",
-									display: "flex",
-									flexDirection: "column",
-									justifyContent: "center",
-									height
+								fontSize={textSize}
+								labelFunc={() => overwriteSaveLabel}
+								onChange={(id) => {
+									setOverwriteSaveID(id);
+									setOverwriteSaveLabel(storedCustomInfo[id]);
 								}}
-								key="overwritingAnOldSave"
-							>
-								<DropDown
-									buttonProps={{
-										ml: 0,
-										mr: 0,
-										mt: 4,
-										mb: 2,
-										flexShrink: 2
-									}}
-									fontSize={textSize}
-									labelFunc={() => overwriteSaveLabel}
-									onChange={(id) => {
-										setOverwriteSaveID(id);
-										setOverwriteSaveLabel(storedCustomInfo[id]);
-									}}
-									defaultValue={overwriteSaveID}
-									title="Display:"
-									options={storedCustomIDs.map((id) => {
-										return {
-											key: `${id}-Sorting`,
-											value: id,
-											label: storedCustomInfo[id]
-										};
-									})}
-									bg="tertiary.500"
-									color="tertiary.50"
-								/>
-							</MotiView>
-						}
-					</AnimatePresence>
+								defaultValue={overwriteSaveID}
+								title="Save:"
+								options={storedCustomIDs.map((id) => {
+									return {
+										key: `${id}-Sorting`,
+										value: id,
+										label: storedCustomInfo[id]
+									};
+								})}
+								bg="tertiary.500"
+								color="tertiary.50"
+							/>
+						</MotiView>
+					}
 				</Modal.Body>
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap" px={2} py={1}>
@@ -286,7 +282,7 @@ const SaveCustomInfoModal = ({
 							px={2}
 						>Cancel</Button>
 						<Button
-							onPress={newSave ? maybeSaveNewInfo : maybeOverwriteSave}
+							onPress={makingANewSave ? maybeSaveNewInfo : maybeOverwriteSave}
 							_text={{fontSize: textSize}}
 							startIcon={<SaveIcon size={textSize} />}
 							py={1}
