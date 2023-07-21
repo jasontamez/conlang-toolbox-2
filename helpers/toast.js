@@ -1,18 +1,24 @@
 import { Box, Center, Text } from "native-base";
 
 const doToast = ({
-	toast,
-	msg,
-	override,
-	bg,
-	color,
-	scheme,
-	placement,
-	duration,
-	boxProps,
-	wrapProps,
-	center,
-	fontSize
+	toast,         // From useToast
+	placement,     // Where the toast is placed
+	duration,      // How long it appears, defaults to 2500ms
+
+	override,      // Element; optional: completely overrides the toast content and everything else below
+
+	msg,           // Text of toast
+	fontSize,      // Size of the toast text
+	color,         // Text color; default success.50
+	textProps = {},// Extra properties for the text; can override 'color' and 'fontSize'
+
+	bg,            // Background color; default success.500
+	boxProps = {}, // Properties of the inner <Box> that holds the text; can override 'bg'
+
+	scheme,        // Color scheme (overrides bg and color with 'scheme'.500 and 'scheme'.50)
+
+	center,        // If true, wraps <Box> in <Center> and centers text; otherwise, <Box> is wrapped in another <Box>
+	wrapProps = {} // Properties for the <Center> or outer <Box>; this defaults to a fullscreen width
 }) => {
 	if(duration === undefined) {
 		duration = 2500;
@@ -32,7 +38,7 @@ const doToast = ({
 					py={1}
 					{...(boxProps || {})}
 				>
-					<Text fontSize={fontSize} color={color || "success.50"} textAlign={center ? "center" : undefined}>
+					<Text fontSize={fontSize} color={color || "success.50"} textAlign={center ? "center" : undefined} {...textProps}>
 						{msg}
 					</Text>
 				</Box>
