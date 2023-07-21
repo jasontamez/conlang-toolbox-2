@@ -325,6 +325,11 @@ const setDisableBlankConfirmsFunc = (state, action) => {
 	state.disableBlankConfirms = action.payload;
 	return state;
 };
+const setMinimizedInfoFunc = (state, action) => {
+	//setMinimizedInfo(boolean)
+	state.minimizedInfo = action.payload;
+	return state;
+};
 const setMaxColumnsFunc = (state, action) => {
 	//setMaxColumns(number)
 	state.maxColumns = action.payload;
@@ -362,6 +367,7 @@ const lexiconSlice = createSlice({
 		toggleSortDir: toggleSortDirFunc,
 		setTruncate: setTruncateFunc,
 		setDisableBlankConfirms: setDisableBlankConfirmsFunc,
+		setMinimizedInfo: setMinimizedInfoFunc,
 		setMaxColumns: setMaxColumnsFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
@@ -384,6 +390,7 @@ export const {
 	toggleSortDir,
 	setTruncate,
 	setDisableBlankConfirms,
+	setMinimizedInfo,
 	setMaxColumns,
 	setStoredCustomInfo
 } = lexiconSlice.actions;
@@ -409,6 +416,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const sortDirA = stateA.sortDir;
 	const sortPatternA = stateA.sortPattern;
 	const disableBlankConfirmsA = stateA.disableBlankConfirms;
+	const minimizedInfoA = stateA.minimizedInfo;
 	const maxColumnsA = stateA.maxColumns;
 	const storedCustomInfoA = stateA.storedCustomInfo;
 	const storedCustomIDsA = stateA.storedCustomIDs;
@@ -421,6 +429,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const sortDirB = stateB.sortDir;
 	const sortPatternB = stateB.sortPattern;
 	const disableBlankConfirmsB = stateB.disableBlankConfirms;
+	const minimizedInfoB = stateB.minimizedInfo;
 	const maxColumnsB = stateB.maxColumns;
 	const storedCustomInfoB = stateB.storedCustomInfo;
 	const storedCustomIDsB = stateB.storedCustomIDs;
@@ -430,6 +439,7 @@ export const equalityCheck = (stateA, stateB) => {
 		|| truncateColumnsA !== truncateColumnsB
 		|| sortDirA !== sortDirB
 		|| disableBlankConfirmsA !== disableBlankConfirmsB
+		|| minimizedInfoA !== minimizedInfoB
 		|| maxColumnsA !== maxColumnsB
 		|| storedCustomInfoA !== storedCustomInfoB
 		|| String(sortPatternA) !== String(sortPatternB)

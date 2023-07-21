@@ -253,6 +253,7 @@ const blankAppState = {
 		],
 		lexicon: [],
 		disableBlankConfirms: false,
+		minimizedInfo: false,
 		maxColumns: 10,
 		storedCustomInfo: {},
 		storedCustomIDs: []

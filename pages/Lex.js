@@ -3,7 +3,6 @@ import { useWindowDimensions  } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	Input,
-	ScrollView,
 	Text as Tx,
 	VStack,
 	FlatList,
@@ -17,6 +16,7 @@ import {
 	useToast,
 	useContrastText
 } from 'native-base';
+import { AnimatePresence, MotiScrollView } from 'moti';
 
 import debounce from '../helpers/debounce';
 import uuidv4 from '../helpers/uuidv4';
@@ -33,7 +33,9 @@ import {
 	CloseCircleIcon,
 	LoadIcon,
 	LoadSaveIcon,
-	ExportIcon
+	ExportIcon,
+	RestoreIcon,
+	MinimizeIcon
 } from '../components/icons';
 import { MultiAlert } from '../components/StandardAlert';
 import {
@@ -50,6 +52,7 @@ import {
 	setLastSave,
 	setID,
 	setStoredCustomInfo,
+	setMinimizedInfo,
 	consts
 } from '../store/lexiconSlice';
 import doToast from '../helpers/toast';
@@ -68,6 +71,7 @@ import blankAppState from '../store/blankAppState';
 import { LoadingOverlay } from '../components/FullBodyModal';
 import { lexCustomStorage } from '../helpers/persistentInfo';
 import getSizes from '../helpers/getSizes';
+import { fromToZero, maybeAnimate } from '../helpers/motiAnimations';
 
 const Lex = () => {
 	//
@@ -76,6 +80,7 @@ const Lex = () => {
 	//
 	//
 	const dispatch = useDispatch();
+	const { disableConfirms } = useSelector((state) => state.appState);
 	const {
 		id,
 		lastSave,
@@ -87,16 +92,17 @@ const Lex = () => {
 		sortDir,
 		sortPattern,
 		disableBlankConfirms,
+		minimizedInfo,
 		maxColumns,
 		storedCustomInfo,
 		storedCustomIDs
 	} = useSelector((state) => state.lexicon, equalityCheck);
+	const { width, height } = useWindowDimensions();
 	const titleRef = useRef(null);
 	const descRef = useRef(null);
-	const { disableConfirms } = useSelector((state) => state.appState);
 	const extraData = [truncateColumns, columns];
 	const { absoluteMaxColumns } = consts;
-	const [smallerSize, textSize, largeSize, bigTextSize] = getSizes("sm", "md", "lg", "x2")
+	const [miniSize, smallerSize, textSize, largeSize, bigTextSize] = getSizes("xs", "sm", "md", "lg", "x2")
 	const Text = (props) => {
 		return <Tx fontSize={textSize} {...props} />;
 	};
@@ -126,6 +132,8 @@ const Lex = () => {
 	const [saveLexicon, setSaveLexicon] = useState(false);
 
 	const [reloadTrigger, setReloadTrigger] = useState(0);
+
+	const [usedButton, setUsedButton] = useState(false);
 
 	const primaryContrast = useContrastText('primary.500');
 	const secondaryContrast = useContrastText('secondary.500');
@@ -594,7 +602,6 @@ const Lex = () => {
 	//
 	//
 	const ListEmpty = <Box><Text>Nothing here yet.</Text></Box>;
-	const { width, height } = useWindowDimensions();
 	const getBoxSize = (size) => {
 		if(size === "s") {
 			return "lexSm";
@@ -603,9 +610,6 @@ const Lex = () => {
 		}
 		return "lexMd";
 	};
-	//const [] = useBreakpointValue({
-	//	base: [1, 3],
-	//});
 	// Calculate dimensions of the upper area so they are readable
 	const calculateInfoHeight = () => {
 		// Base height is 1/4 the area
@@ -781,44 +785,38 @@ const Lex = () => {
 									justifyContent="center"
 									alignItems="center"
 									w="full"
+									space={4}
+									flex={1}
+									m={2}
 								>
-									<HStack
-										flexWrap="wrap"
-										justifyContent="space-between"
-										flex={1}
-										my={2}
-										mx={2}
-										space={2}
-									>
+									<Button
+										onPress={() => {
+											setAlertOpen(false);
+											doSaveNewLexicon();
+										}}
+										bg="primary.500"
+										_text={{
+											color: primaryContrast,
+											fontSize: largeSize
+										}}
+										px={2.5}
+										py={1.5}
+									>New Save</Button>
+									{storedCustomIDs.length > 0 &&
 										<Button
 											onPress={() => {
 												setAlertOpen(false);
-												doSaveNewLexicon();
+												setSaveLexicon(true);
 											}}
-											bg="primary.500"
+											bg="secondary.500"
 											_text={{
 												color: primaryContrast,
 												fontSize: largeSize
 											}}
 											px={2.5}
 											py={1.5}
-										>New Save</Button>
-										{storedCustomIDs.length > 0 &&
-											<Button
-												onPress={() => {
-													setAlertOpen(false);
-													setSaveLexicon(true);
-												}}
-												bg="secondary.500"
-												_text={{
-													color: primaryContrast,
-													fontSize: largeSize
-												}}
-												px={2.5}
-												py={1.5}
-											>Overwrite Previous Save</Button>
-										}
-									</HStack>
+										>Overwrite Previous Save</Button>
+									}
 								</VStack>
 							),
 							overrideButtons: [
@@ -974,37 +972,71 @@ const Lex = () => {
 				colorFamily="secondary"
 				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading Lexicon...</Text>}
 			/>
-			<ScrollView height={infoHeight} flexGrow={0} flexShrink={0}>
-				<VStack m={3} mb={0}>
-					<ResettableTextSetting
-						text="Lexicon Title:"
-						defaultValue={title}
-						onChangeText={(v) => debounce(
-							() => dispatch(setTitle(v)),
-							{ namespace: "LexTitle" }
-						)}
-						labelProps={{fontSize: textSize}}
-						inputProps={{mt: 2, fontSize: smallerSize, ref: titleRef}}
-						placeholder="Usually the language name."
-						reloadTrigger={reloadTrigger}
+			<HStack alignItems="flex-start" justifyContent="flex-end">
+				<AnimatePresence>
+					{ minimizedInfo || (
+						<MotiScrollView
+							style={{ overflow: "hidden", flexGrow: 1, flexShrink: 0}}
+							{...maybeAnimate(
+								usedButton,
+								fromToZero,
+								{
+									height: infoHeight
+								},
+								150
+							)}
+							key="scrolly"
+						>
+							<VStack mt={3} ml={3} mr={1} mb={0}>
+								<ResettableTextSetting
+									text="Lexicon Title:"
+									defaultValue={title}
+									onChangeText={(v) => debounce(
+										() => dispatch(setTitle(v)),
+										{ namespace: "LexTitle" }
+									)}
+									labelProps={{fontSize: textSize}}
+									inputProps={{mt: 2, fontSize: smallerSize, ref: titleRef}}
+									placeholder="Usually the language name."
+									reloadTrigger={reloadTrigger}
+								/>
+							</VStack>
+							<VStack ml={3} mt={2} mr={1} mb={3}>
+								<ResettableTextAreaSetting
+									text="Description:"
+									defaultValue={description}
+									onChangeText={(v) => debounce(
+										() => dispatch(setDesc(v)),
+										{ namespace: "LexDesc" }
+									)}
+									labelProps={{fontSize: textSize}}
+									inputProps={{mt: 2, fontSize: smallerSize, ref: descRef}}
+									rows={3}
+									placeholder="A short description of this lexicon."
+									reloadTrigger={reloadTrigger}
+								/>
+							</VStack>
+						</MotiScrollView>
+					)}
+					<IconButton
+						colorScheme="primary"
+						variant="solid"
+						icon={minimizedInfo ? <RestoreIcon /> : <MinimizeIcon />}
+						_icon={{color: primaryContrast, size: miniSize}}
+						onPress={() => {
+							setUsedButton(true);
+							dispatch(setMinimizedInfo(!minimizedInfo));
+						}}
+						flexGrow={0}
+						flexShrink={1}
+						mt={3}
+						mb={1}
+						mr={3}
+						p={1}
+						size={miniSize}
 					/>
-				</VStack>
-				<VStack m={3} mt={2}>
-					<ResettableTextAreaSetting
-						text="Description:"
-						defaultValue={description}
-						onChangeText={(v) => debounce(
-							() => dispatch(setDesc(v)),
-							{ namespace: "LexDesc" }
-						)}
-						labelProps={{fontSize: textSize}}
-						inputProps={{mt: 2, fontSize: smallerSize, ref: descRef}}
-						rows={3}
-						placeholder="A short description of this lexicon."
-						reloadTrigger={reloadTrigger}
-					/>
-				</VStack>
-			</ScrollView>
+				</AnimatePresence>
+			</HStack>
 			<VStack
 				flex={1}
 				justifyContent="flex-start"
@@ -1196,6 +1228,7 @@ const Lex = () => {
 								</Menu.Item>
 								<Menu.Item onPress={() => {
 									if(!title) {
+										dispatch(setMinimizedInfo(false));
 										return doToast({
 											toast,
 											msg: "Please create a title for your Lexicon before saving.",
@@ -1217,6 +1250,7 @@ const Lex = () => {
 								</Menu.Item>
 								<Menu.Item onPress={() => {
 									if(!title) {
+										dispatch(setMinimizedInfo(false));
 										return doToast({
 											toast,
 											msg: "Please create a title for your Lexicon before exporting.",
@@ -1225,7 +1259,7 @@ const Lex = () => {
 											fontSize: textSize
 										});
 									}
-									setAlertOpen('howToSaveLexicon');
+									setAlertOpen('TO-DO: Add exporter');
 								}}>
 									<HStack
 										space={4}
