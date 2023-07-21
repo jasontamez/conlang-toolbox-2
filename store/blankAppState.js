@@ -274,7 +274,7 @@ const blankAppState = {
 		menuToggleName: '',
 		theme: 'Default',
 		disableConfirms: false,
-		sizeName: "md",
+		sizeName: "sm",
 		sizes: {
 			xs: {
 				base: "sm",
