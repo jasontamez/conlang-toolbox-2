@@ -12,7 +12,7 @@ import {
 	msCustomStorage
 } from "../helpers/persistentInfo";
 import ExportImportModal from "../components/ExportImportModal";
-import sendFile from "../helpers/exportTools";
+import doExport from "../helpers/exportTools";
 import doToast from "../helpers/toast";
 
 
@@ -151,13 +151,14 @@ const AppSettings = () => {
 		// Create filename
 		const now = new Date(Date.now());
 		const num = (number) => {
-			if(num < 10) {
-				return `0${num}`;
+			if(number < 10) {
+				return `0${number}`;
 			}
-			return num;
+			return number;
 		};
-		const filename = `Conlang Toolbox Backup ${now.getFullYear()}-${num(now.getMonth() + 1)}-${num(now.getDate())}-${num(now.getHours())}:${num(now.getMinutes())}:${num(now.getSeconds())}.json`;
-		sendFile(filename, JSON.stringify(toExport)).then((result) => {
+		const filename = `Conlang Toolbox Backup ${now.getFullYear()}y-${num(now.getMonth() + 1)}m-${num(now.getDate())}d--${num(now.getHours())}h-${num(now.getMinutes())}m-${num(now.getSeconds())}s.json`;
+		console.log(JSON.stringify(filename));
+		doExport(JSON.stringify(toExport), filename).then((result) => {
 			const {
 				fail,
 				filename

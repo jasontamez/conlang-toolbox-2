@@ -2,24 +2,31 @@ import {
 	documentDirectory,
 	//EncodingType,
 	writeAsStringAsync,
-	getInfoAsync
+	getInfoAsync,
+	StorageAccessFramework
 } from "expo-file-system";
 import sanitize from 'sanitize-filename';
-import { StorageAccessFramework } from 'expo-file-system';
 
-export const sendFile = async (filename, filecontents, overwriteOk = false) => {
+const doExport = async(filecontents, filename, encoding = "text/json") => {
 	const truefilename = (sanitize(filename) || "defaultfilename.txt");
-	const file = documentDirectory + truefilename;
-	let result = {
+	if(StorageAccessFramework && StorageAccessFramework.requestDirectoryPermissionsAsync) {
+		return newStyleExport(filecontents, truefilename, encoding);
+	}
+	return oldStyleExport(filecontents, truefilename);
+};
+
+const oldStyleExport = async (filecontents, filename) => {
+	const file = documentDirectory + filename;
+	const result = {
 		fail: false,
-		filename: truefilename
+		filename
 	};
 	return getInfoAsync(file).then(({exists, isDirectory}) => {
 		if(isDirectory) {
 			console.log("ERROR: File is a directory");
 			result.fail = "Attempted to save file to a directory.";
 			return result;
-		} else if (exists && !overwriteOk) {
+		} else if (exists) {
 			console.log(`ERROR: Already exists`);
 			result.fail = "File already exists.";
 			return result;
@@ -39,8 +46,12 @@ export const sendFile = async (filename, filecontents, overwriteOk = false) => {
 	});
 };
 
-export const doExport = async (saveableString, filename, encoding = "text/json") => {
+const newStyleExport = async (saveableString, filename, encoding) => {
 	const directory = StorageAccessFramework.getUriForDirectoryInRoot(".");
+	const outcome = {
+		fail: false,
+		filename
+	};
 	return StorageAccessFramework.requestDirectoryPermissionsAsync(directory).then((result) => {
 		const { directoryUri, granted } = result;
 		console.log("Requested: " + JSON.stringify(`${granted}: "${directoryUri}"`));
@@ -50,13 +61,13 @@ export const doExport = async (saveableString, filename, encoding = "text/json")
 		return StorageAccessFramework.writeAsStringAsync(result, saveableString, { /* No props */ });
 	}).then((...x) => {
 		console.log("Written: " + JSON.stringify(x));
-		return { written: true };
+		return outcome;
 	}).catch((...error) => {
 		console.log("---ERROR");
 		Object.keys(error).forEach(z => console.log(`"${z}": ${JSON.stringify(x[z])}`));
-		return { written: false, error };
+		outcome.fail = JSON.stringify(error);
+		return outcome;
 	});
 };
 
-
-export default sendFile;
+export default doExport;
