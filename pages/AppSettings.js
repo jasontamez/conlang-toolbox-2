@@ -1,18 +1,26 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { HStack, Menu, Pressable, ScrollView, Text, VStack } from 'native-base';
+import { HStack, Menu, Pressable, ScrollView, Text, VStack, useToast } from 'native-base';
+
 import { setTheme, setDisableConfirms, setBaseTextSize } from '../store/appStateSlice';
 import { ToggleSwitch } from "../components/inputTags";
 import getSizes from "../helpers/getSizes";
-import { allStorageObjects } from "../helpers/persistentInfo";
+import {
+	wgCustomStorage,
+	weCustomStorage,
+	lexCustomStorage,
+	msCustomStorage
+} from "../helpers/persistentInfo";
 import ExportImportModal from "../components/ExportImportModal";
+import sendFile from "../helpers/exportTools";
+import doToast from "../helpers/toast";
 
 
 const AppSettings = () => {
 	const dispatch = useDispatch();
 	const {
-		we,
-		wg,
+		we: wordEvolve,
+		wg: wordGen,
 		morphoSyntax,
 		lexicon,
 		wordLists,
@@ -25,9 +33,10 @@ const AppSettings = () => {
 		sizeName,
 		hasCheckedForOldCustomInfo
 	} = appState;
+	const toast = useToast();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [importing, setImporting] = useState(false);
-	const [titleSize, textSize] = getSizes("md", "xs");
+	const [titleSize, toastSize, descSize] = getSizes("md", "sm", "xs");
 	const pressableProps = {
 		px: 2,
 		py: 1,
@@ -38,65 +47,138 @@ const AppSettings = () => {
 	// TO-DO: Figure out why text size setting is wrong
 
 	// Export Info
-	const assembleStoredInfo = () => {
-		const {
-			centerTheDisplayedWords,
-			listsDisplayed
-		} = wordLists;
-		const {
-			faves,
-			copyImmediately,
-			showNames
-		} = extraCharacters;
-		return {
-			morphoSyntax: {...morphoSyntax},
-			wg: {...wg}, // TO-DO: Fix these to remove the saved ids and such
-			we: {...we},
-			lexicon: {...lexicon},
-			wordLists: {
+	const getStoredInfo = async ({
+		wg,
+		we,
+		ms,
+		lex,
+		wl,
+		ec,
+		app,
+		wgStoredInfo,
+		weStoredInfo,
+		msStoredInfo,
+		lexStoredInfo
+	}) => {
+		const toExport = {};
+		if(wg) {
+			const _wg = {...wordGen};
+			delete _wg.storedCustomInfo;
+			delete _wg.storedCustomIDs;
+			toExport.wg = _wg;	
+		}
+		if(we) {
+			const _we = {...wordEvolve};
+			delete _we.storedCustomInfo;
+			delete _we.storedCustomIDs;
+			toExport.we = _we;	
+		}
+		if(ms) {
+			const _ms = {...morphoSyntax};
+			delete _ms.storedCustomInfo;
+			delete _ms.storedCustomIDs;
+			toExport.morphoSyntax = _ms;
+		}
+		if(lex) {
+			const _lex = {...lexicon};
+			delete _lex.storedCustomInfo;
+			delete _lex.storedCustomIDs;
+			toExport.lexicon = _lex;
+		}
+		if(wl) {
+			const {
 				centerTheDisplayedWords,
 				listsDisplayed
-			},
-			extraCharacters: {
+			} = wordLists;
+			toExport.wordLists = {
+				centerTheDisplayedWords,
+				listsDisplayed
+			};
+		}
+		if(ec) {
+			const {
 				faves,
 				copyImmediately,
 				showNames
-			},
-			appState: {
+			} = extraCharacters;
+			toExport.extraCharacters = {
+				faves,
+				copyImmediately,
+				showNames
+			};
+		}
+		if(app) {
+			toExport.appState = {
 				disableConfirms,
 				theme,
 				sizeName,
 				hasCheckedForOldCustomInfo
-			}
+			};
+		}
+		const checkStorage = async (storage) => {
+			const all = await storage.getAllKeys();
+			const output = {};
+			const saved = all.map(key => storage.getItem(key));
+			await Promise.all(saved);
+			all.forEach((key, i) => {
+				output[key] = saved[i];
+			});
+			return output;
 		};
+		if(wgStoredInfo) {
+			toExport.wgStoredInfo = await checkStorage(wgCustomStorage);
+		}
+		if(weStoredInfo) {
+			toExport.weStoredInfo = await checkStorage(weCustomStorage);
+		}
+		if(msStoredInfo) {
+			toExport.msStoredInfo = await checkStorage(msCustomStorage);
+		}
+		if(lexStoredInfo) {
+			toExport.lexStoredInfo = await checkStorage(lexCustomStorage);
+		}
+		return toExport;
 	};
-	const importExportInfo = (info) => {
+	const importExportInfo = async (info) => {
 		// TO-DO: Export/Import certain bits of info
-		// WordGen
-		//  Saved Info
-		// WordEvolve
-		//  Saved Info
-		// MorphoSyntax
-		//  Saved Info
-		// Lexicon
-		//  Saved Info
-		// WordList
-		// Extra Characters
-		// App Settings
 		console.log("Returned: " + JSON.stringify(info));
-		const {
-			wg,
-			we,
-			ms,
-			lex,
-			wl,
-			ec,
-			app,
-			wgStoredInfo,
-			weStoredInfo,
-			msStoredInfo,
-			lexStoredInfo
-		} = info;
+		if(importing) {
+			// Handle import
+			return; //TO-DO: importing
+		}
+		// Handle export
+		const toExport = await getStoredInfo(info);
+		// Create filename
+		const now = new Date(Date.now());
+		const num = (number) => {
+			if(num < 10) {
+				return `0${num}`;
+			}
+			return num;
+		};
+		const filename = `Conlang Toolbox Backup ${now.getFullYear()}-${num(now.getMonth() + 1)}-${num(now.getDate())}-${num(now.getHours())}:${num(now.getMinutes())}:${num(now.getSeconds())}.json`;
+		sendFile(filename, JSON.stringify(toExport)).then((result) => {
+			const {
+				fail,
+				filename
+			} = result;
+			// Interpret result
+			if(fail) {
+				// Failure
+			}
+			else {
+				// Success
+			}
+			doToast({
+				toast,
+				scheme: fail ? "danger" : "success",
+				msg: fail || `Saved file "${filename}"`,
+				center: true,
+				position: "top",
+				duration: fail ? 4000 : 3000,
+				fontSize: toastSize
+			});
+		});
 	};
 
 	// Return JSX
@@ -111,7 +193,7 @@ const AppSettings = () => {
 				label="Disable Confirmation Prompts"
 				labelSize={titleSize}
 				desc="Eliminates yes/no prompts when deleting or overwriting data."
-				descSize={textSize}
+				descSize={descSize}
 				descProps={{ color: "main.500" }}
 				switchState={disableConfirms}
 				switchToggle={() => dispatch(setDisableConfirms(!disableConfirms))}
@@ -211,7 +293,7 @@ const AppSettings = () => {
 					borderBottomColor="main.900"
 				>
 					<Text fontSize={titleSize}>Export App Info</Text>
-					<Text fontSize={textSize} color="main.500">Save a copy to your device for backup or transfer to a different device.</Text>
+					<Text fontSize={descSize} color="main.500">Save a copy to your device for backup or transfer to a different device.</Text>
 				</VStack>
 			</Pressable>
 			<Pressable _pressed={{bg: "lighter"}} onPress={() => {
@@ -227,7 +309,7 @@ const AppSettings = () => {
 					borderBottomColor="main.900"
 				>
 					<Text fontSize={titleSize}>Import App Info</Text>
-					<Text fontSize={textSize} color="main.500">Import a copy of a previous backup, or from a different device.</Text>
+					<Text fontSize={descSize} color="main.500">Import a copy of a previous backup, or from a different device.</Text>
 				</VStack>
 			</Pressable>
 		</ScrollView>

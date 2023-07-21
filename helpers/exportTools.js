@@ -11,9 +11,7 @@ export const sendFile = async (filename, filecontents, overwriteOk = false) => {
 	const truefilename = (sanitize(filename) || "defaultfilename.txt");
 	const file = documentDirectory + truefilename;
 	let result = {
-		success: false,
 		fail: false,
-		exists: false,
 		filename: truefilename
 	};
 	return getInfoAsync(file).then(({exists, isDirectory}) => {
@@ -22,12 +20,12 @@ export const sendFile = async (filename, filecontents, overwriteOk = false) => {
 			result.fail = "Attempted to save file to a directory.";
 			return result;
 		} else if (exists && !overwriteOk) {
-			result.exists = true;
+			console.log(`ERROR: Already exists`);
+			result.fail = "File already exists.";
 			return result;
 		}
 		return writeAsStringAsync(file, filecontents).then((...x) => {
-			console.log(x);
-			result.success = true;
+			console.log(`SUCESS: ${JSON.stringify(x)}`);
 			return result;
 		}).catch((err) => {
 			console.log(err);
@@ -35,50 +33,28 @@ export const sendFile = async (filename, filecontents, overwriteOk = false) => {
 			return result;
 		});
 	}).catch((err) => {
-		console.log(err);
+		console.log(`ERROR: ${JSON.stringify(err)}`);
 		result.fail = `${err}`;
 		return result;
 	});
 };
 
-export const doExportInfo = (filename, saveableObject, doToast, toast) => {
+export const doExport = async (saveableString, filename, encoding = "text/json") => {
 	const directory = StorageAccessFramework.getUriForDirectoryInRoot(".");
-	StorageAccessFramework.requestDirectoryPermissionsAsync(directory).then((result) => {
+	return StorageAccessFramework.requestDirectoryPermissionsAsync(directory).then((result) => {
 		const { directoryUri, granted } = result;
-		doToast({
-			toast,
-			msg: "Requested: " + JSON.stringify(`${granted}: "${directoryUri}"`),
-			position: "top",
-			duration: 10000
-		});
 		console.log("Requested: " + JSON.stringify(`${granted}: "${directoryUri}"`));
-		return StorageAccessFramework.createFileAsync(directoryUri, `${filename}.json`, "text/json");
+		return StorageAccessFramework.createFileAsync(directoryUri, filename, encoding);
 	}).then((result) => {
-		doToast({
-			toast,
-			msg: "Created: " + JSON.stringify(result),
-			position: "top",
-			duration: 10000
-		});
 		console.log("Created: " + JSON.stringify(result));
-		return StorageAccessFramework.writeAsStringAsync(result, JSON.stringify(saveableObject), {});
+		return StorageAccessFramework.writeAsStringAsync(result, saveableString, { /* No props */ });
 	}).then((...x) => {
-		doToast({
-			toast,
-			msg: "Written: " + JSON.stringify(x),
-			position: "top",
-			duration: 10000
-		});
 		console.log("Written: " + JSON.stringify(x));
-	}).catch((x) => {
-		doToast({
-			toast,
-			msg: "Error encountered",
-			position: "top",
-			duration: 10000
-		});
+		return { written: true };
+	}).catch((...error) => {
 		console.log("---ERROR");
-		Object.keys(x).forEach(z => console.log(`"${z}": ${JSON.stringify(x[z])}`));
+		Object.keys(error).forEach(z => console.log(`"${z}": ${JSON.stringify(x[z])}`));
+		return { written: false, error };
 	});
 };
 
