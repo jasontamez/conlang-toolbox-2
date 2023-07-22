@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo-google-fonts/arimo": "^0.2.2",
@@ -35,6 +36,7 @@
     "merge-anything": "^5.0.4",
     "moti": "^0.20.0",
     "native-base": "^3.4.6",
+    "patch-package": "^7.0.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.8",
