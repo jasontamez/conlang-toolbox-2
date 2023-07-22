@@ -65,13 +65,13 @@ const AppSettings = () => {
 			const _wg = {...wordGen};
 			delete _wg.storedCustomInfo;
 			delete _wg.storedCustomIDs;
-			toExport.wg = _wg;	
+			toExport.wg = _wg;
 		}
 		if(we) {
 			const _we = {...wordEvolve};
 			delete _we.storedCustomInfo;
 			delete _we.storedCustomIDs;
-			toExport.we = _we;	
+			toExport.we = _we;
 		}
 		if(ms) {
 			const _ms = {...morphoSyntax};
@@ -181,6 +181,8 @@ const AppSettings = () => {
 			});
 		});
 	};
+
+	// TO-DO: Import info
 
 	// Return JSX
 	return (

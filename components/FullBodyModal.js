@@ -131,7 +131,7 @@ const FullPageModal = ({
 					:
 						<HeaderOverride modalWidth={width} modalHeight={height} />
 					}
-					{noInnerScrollView ? 
+					{noInnerScrollView ?
 						<BodyContent modalWidth={width} modalHeight={height} />
 					:
 						<ScrollView {...modalBodyProps} flexGrow={1}>

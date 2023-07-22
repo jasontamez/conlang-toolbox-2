@@ -258,7 +258,7 @@ const ExtraChars = ({
 					flexGrow={0}
 					flexShrink={0}
 					onPress={() => {
-						const msg = settingFaves ? "No longer saving favorites." : "Now saving to favorites."; 
+						const msg = settingFaves ? "No longer saving favorites." : "Now saving to favorites.";
 						setSettingFaves(!settingFaves);
 						doToast({
 							...toastProps,

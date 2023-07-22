@@ -341,7 +341,7 @@ const WEContextMenu = () => {
 						//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
 						setCopyModalOpen(true);
 					}}
-				/>			
+				/>
 			)}
 			<Modal isOpen={copyModalOpen} closeOnOverlayClick={true}>
 				<Modal.Content>
@@ -381,7 +381,7 @@ const WEContextMenu = () => {
 										placement: "top",
 										msg: "Character Groups copied",
 										fontSize: smallerSize
-									});																
+									});
 								}}
 								py={1}
 								px={2}
