@@ -153,17 +153,16 @@ const handleRange = (msInfo, md, min, max, prop, start, end, notFilled) => {
 	// This is a spectrum between two endpoints
 	const beginning = cleanText(start || "[MISSING]");
 	const ending = cleanText(end || "[MISSING]");
-	let counter = min;
-	let rangefinder = '';
-	while(counter <= max) {
+	let rangefinder = [];
+	for(let counter = min; counter <= max; counter++) {
 		if(counter === value) {
-			rangefinder += md ? ` **(${counter})**` : ` (${counter})`;
+			rangefinder.push(md ? `**(${counter})**` : `(${counter})`);
 		} else {
-			rangefinder += ` ${counter}`;
+			rangefinder.push(String(counter));
 		}
 	}
 	if(md) {
-		return `**${beginning}** ${rangefinder.trim()} **${ending}**`;
+		return `**${beginning}** ${rangefinder.join(' ')} **${ending}**`;
 	}
 	return `${beginning}${rangefinder} ${ending}`;
 };
