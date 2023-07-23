@@ -1,4 +1,4 @@
-const doXML = (msInfo) => {
+const doXML = async (msInfo) => {
 	let XML =
 			'<?xml version="1.0" encoding="UTF-8"?>'
 			+ "\n<MorphoSyntaxObject>\n\t<Title>"
@@ -10,7 +10,7 @@ const doXML = (msInfo) => {
 	const num = [];
 	const text = [];
 	Object.keys(msInfo).forEach(property => {
-		const [pref, prop] = property.split("");
+		const [pref, prop] = property.split("_");
 		switch(pref) {
 			case "BOOL":
 				msInfo[property] && bool.push(prop);
@@ -22,15 +22,15 @@ const doXML = (msInfo) => {
 				text.push([prop, msInfo[property]]);
 		}
 	});
-	Object.keys(bool).forEach((prop) => {
+	bool.forEach((prop) => {
 		XML += `\t\t<Item prop=\"${prop}\"></Item>\n`;
 	});
 	XML += "\t</Bool>\n\t<Num>\n";
-	Object.keys(num).forEach(([prop, value]) => {
+	num.forEach(([prop, value]) => {
 		XML += `\t\t<Item prop=\"${prop}\">${value}</Item>\n`;
 	});
 	XML += "\t</Num>\n\t<Text>\n";
-	Object.keys(mst).forEach(([prop, value]) => {
+	text.forEach(([prop, value]) => {
 		XML += `\t\t<Item prop=\"${prop}\">${value}</Item>\n`;
 	});
 	return XML + "\t</Text>\n</MorphoSyntaxObject>";

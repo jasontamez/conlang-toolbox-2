@@ -1,16 +1,16 @@
 import {
 	documentDirectory,
-	//EncodingType,
+	EncodingType,
 	writeAsStringAsync,
 	getInfoAsync,
 	StorageAccessFramework
 } from "expo-file-system";
 import sanitize from 'sanitize-filename';
 
-const doExport = async(filecontents, filename, encoding = "text/json") => {
+const doExport = async(filecontents, filename, encoding = "text/json", base64 = false) => {
 	const truefilename = (sanitize(filename) || "defaultfilename.txt");
 	if(StorageAccessFramework && StorageAccessFramework.requestDirectoryPermissionsAsync) {
-		return newStyleExport(filecontents, truefilename, encoding);
+		return newStyleExport(filecontents, truefilename, encoding, base64);
 	}
 	return oldStyleExport(filecontents, truefilename);
 };
@@ -46,7 +46,7 @@ const oldStyleExport = async (filecontents, filename) => {
 	});
 };
 
-const newStyleExport = async (saveableString, filename, encoding) => {
+const newStyleExport = async (saveableString, filename, encoding, base64) => {
 	const directory = StorageAccessFramework.getUriForDirectoryInRoot(".");
 	const outcome = {
 		fail: false,
@@ -58,13 +58,13 @@ const newStyleExport = async (saveableString, filename, encoding) => {
 		return StorageAccessFramework.createFileAsync(directoryUri, filename, encoding);
 	}).then((result) => {
 		console.log("Created: " + JSON.stringify(result));
-		return StorageAccessFramework.writeAsStringAsync(result, saveableString, { /* No props */ });
+		return StorageAccessFramework.writeAsStringAsync(result, saveableString, base64 ? { encoding: EncodingType.Base64 } : {});
 	}).then((...x) => {
 		console.log("Written: " + JSON.stringify(x));
 		return outcome;
 	}).catch((...error) => {
 		console.log("---ERROR");
-		Object.keys(error).forEach(z => console.log(`"${z}": ${JSON.stringify(x[z])}`));
+		Object.keys(error).forEach(z => console.log(`"${z}": ${JSON.stringify(error[z])}`));
 		outcome.fail = JSON.stringify(error);
 		return outcome;
 	});

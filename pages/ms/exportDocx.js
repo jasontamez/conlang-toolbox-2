@@ -11,9 +11,9 @@ import {
 	TextRun,
 	WidthType
 } from "docx";
-import ms from './ms.json';
+import ms from './msinfo.json';
 
-const doDocx = (msInfo) => {
+const doDocx = async (msInfo) => {
 	const msSections = ms.sections;
 	const sections = [];
 	const spacing = {
@@ -38,15 +38,14 @@ const doDocx = (msInfo) => {
 			} = item;
 			switch(tag) {
 				case "Header":
-					let head = ("HEADING_" + String(level));
 					children.push(new Paragraph({
 						text: content,
-						heading: HeadingLevel[head],
+						heading: HeadingLevel[`HEADING_${level}`],
 						spacing
 					}))
 					break;
 				case "Range":
-					children.push(handleRange(msInfo, min, max, prop, start, end, notFilled));
+					children.push(handleRange(msInfo, min, max, prop, start, end, notFilled, spacing));
 					break;
 				case "Text":
 					children.push(new Paragraph({
@@ -73,7 +72,7 @@ const doDocx = (msInfo) => {
 					});
 					break;
 				case "Checkboxes":
-					children.push(handleCheckboxes(msInfo, display, boxes.slice()));
+					children.push(handleCheckboxes(msInfo, display, boxes.slice(), spacing));
 			}
 		});
 		sections.push({
@@ -92,11 +91,11 @@ const doDocx = (msInfo) => {
 
 export default doDocx;
 
-const handleRange = (msInfo, min, max, prop, start, end, notFilled) => {
+const handleRange = (msInfo, min, max, prop, start, end, notFilled, spacing) => {
 	const value = msInfo[`NUM_${prop}`] || min;
 	const paragraph = [];
 	const cleanText = (input) => {
-		return input.replace("\u00AD", "");
+		return input.replace(/\u00AD/g, "");
 	};
 	if(notFilled) {
 		// This is a percentage between 0 and 100
@@ -145,10 +144,11 @@ const handleRange = (msInfo, min, max, prop, start, end, notFilled) => {
 	});
 };
 
-const handleCheckboxes = (msInfo, disp, boxes) => {
+const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 	if(!disp) {
 		return new Paragraph({ text: "CHECKBOX DISPLAY ERROR", spacing });
 	}
+	// TO-DO: Figure out weird column situations
 	const {
 		export: expo,
 		boxesPerRow: perRow = 1,
@@ -159,7 +159,6 @@ const handleCheckboxes = (msInfo, disp, boxes) => {
 	const labels = disp.labels ? disp.labels.slice() : [];
 	temp = expo.labelOverrideDocx ? (expo.labels || labels) : disp.rowLabels;
 	const rowLabels = temp ? temp.slice() : [];
-	const cells = [];
 	const rows = [];
 	const output = [];
 	const colWidths = [];
@@ -192,7 +191,7 @@ const handleCheckboxes = (msInfo, disp, boxes) => {
 		color: "000000"
 	}
 	rows.forEach((row) => {
-		// cell[s] [label] rowLabel
+		const cells = [];
 		let cols = colWidths.slice();
 		leftover = 100;
 		row.forEach((cell) => {
@@ -242,9 +241,9 @@ const handleCheckboxes = (msInfo, disp, boxes) => {
 			children: cells,
 			cantSplit: true
 		}));
-		cells = [];
 	});
 	if(inlineHeaders) {
+		const cells = [];
 		leftover = 100;
 		let cols = colWidths.slice();
 		inlineHeaders.forEach((cell) => {

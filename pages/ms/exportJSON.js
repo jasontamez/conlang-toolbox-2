@@ -1,3 +1,3 @@
-const doJSON = (info) => JSON.stringify(info);
+const doJSON = async (info) => JSON.stringify(info);
 
 export default doJSON;

@@ -4,7 +4,7 @@ import ms from './msinfo.json';
 // TO-DO: Send export info off to actually be exported
 
 // doText({user data}, BOOLEAN: we want MarkDown, not plaintext)
-const doText = (msInfo, md = false) => {
+const doText = async (msInfo, md = false) => {
 	const lines = [];
 	const sections = ms.sections;
 	sections.forEach((sec) => {
@@ -139,7 +139,7 @@ export default doText;
 const handleRange = (msInfo, md, min, max, prop, start, end, notFilled) => {
 	const value = msInfo[`NUM_${prop}`] || min;
 	const cleanText = (input) => {
-		return input.replace("\u00AD", "");
+		return input.replace(/\u00AD/g, "");
 	};
 	if(notFilled) {
 		// This is a percentage between 0 and 100
