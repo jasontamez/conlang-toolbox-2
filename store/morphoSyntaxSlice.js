@@ -21,7 +21,7 @@ const setDescriptionFunc = (state, action) => {
 };
 const setBoolFunc = (state, action) => {
 	const { prop, value } = action.payload;
-	state["BOOL_" + prop] = value;
+	state[prop] = value;
 	return state;
 };
 const setNumFunc = (state, action) => {

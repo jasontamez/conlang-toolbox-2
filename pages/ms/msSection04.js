@@ -71,6 +71,13 @@ const Section = () => {
 					BOOL_numPaucal,
 					BOOL_numPlural
 				]}
+				properties={[
+					"BOOL_numSing",
+					"BOOL_numDual",
+					"BOOL_numTrial",
+					"BOOL_numPaucal",
+					"BOOL_numPlural"
+				]}
 				display={{
 					header: "Which Distinctions Are Marked in the Noun Phrase?",
 					labels: [
@@ -158,6 +165,13 @@ const Section = () => {
 					BOOL_classFunction,
 					BOOL_classOther
 				]}
+				properties={[
+					"BOOL_classGen",
+					"BOOL_classAnim",
+					"BOOL_classShape",
+					"BOOL_classFunction",
+					"BOOL_classOther"
+				]}
 				display={{
 					header: "Which Class Distinctions Exist?",
 					labels: [
@@ -184,6 +198,11 @@ const Section = () => {
 					BOOL_dimAugYes,
 					BOOL_dimAugObligatory,
 					BOOL_dimAugProductive
+				]}
+				properties={[
+					"BOOL_dimAugYes",
+					"BOOL_dimAugObligatory",
+					"BOOL_dimAugProductive"
 				]}
 				display={{
 					labels: [

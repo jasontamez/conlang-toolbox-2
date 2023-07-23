@@ -101,6 +101,16 @@ const Section = () => {
 					BOOL_infixMost,
 					BOOL_infixLess
 				]}
+				properties={[
+					"BOOL_prefixMost",
+					"BOOL_prefixLess",
+					"BOOL_suffixMost",
+					"BOOL_suffixLess",
+					"BOOL_circumfixMost",
+					"BOOL_circumfixLess",
+					"BOOL_infixMost",
+					"BOOL_infixLess"
+				]}
 				display={{
 					multiBoxes: 2,
 					centering: [true,true,false],

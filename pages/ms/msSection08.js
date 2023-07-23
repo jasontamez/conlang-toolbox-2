@@ -91,6 +91,12 @@ const Section = () => {
 					BOOL_modeMorph,
 					BOOL_otherMorph
 				]}
+				properties={[
+					"BOOL_tenseMorph",
+					"BOOL_aspectMorph",
+					"BOOL_modeMorph",
+					"BOOL_otherMorph"
+				]}
 				display={{
 					header: "Morphology Exists For:",
 					labels: [

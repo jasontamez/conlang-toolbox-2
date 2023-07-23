@@ -51,6 +51,10 @@ const Section = () => {
 					BOOL_nomAcc,
 					BOOL_ergAbs
 				]}
+				properties={[
+					"BOOL_nomAcc",
+					"BOOL_ergAbs"
+				]}
 				display={{
 					header: "Primary Alignment System",
 					labels: [

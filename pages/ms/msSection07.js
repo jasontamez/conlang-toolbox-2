@@ -242,6 +242,12 @@ const Section = () => {
 					BOOL_verbAgreeInv,
 					BOOL_wordOrderChange
 				]}
+				properties={[
+					"BOOL_markInv",
+					"BOOL_markDirInv",
+					"BOOL_verbAgreeInv",
+					"BOOL_wordOrderChange"
+				]}
 				display={{
 					labels: [
 						"Marked inverse only",

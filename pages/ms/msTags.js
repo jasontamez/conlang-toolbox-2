@@ -17,7 +17,7 @@ import FullPageModal from '../../components/FullBodyModal';
 import { fontSizesInPx } from '../../store/appStateSlice';
 import { RangeSlider, TextAreaSetting } from '../../components/inputTags';
 import debounce from '../../helpers/debounce';
-import { setNum, setText } from '../../store/morphoSyntaxSlice';
+import { setBool, setNum, setText } from '../../store/morphoSyntaxSlice';
 
 const lineHeights = {
 	xs: "xs",
@@ -242,8 +242,7 @@ export const TextArea = ({rows, prop, value, children}) => {
 	);
 };
 
-export const CheckBoxes = (props) => {
-	const { boxes, display } = props;
+export const CheckBoxes = ({ boxes, display, properties }) => {
 	const dispatch = useDispatch();
 	if(!display) {
 		return (
@@ -252,9 +251,7 @@ export const CheckBoxes = (props) => {
 			</Box>
 		);
 	}
-	const doSetBool = (setter, value) => {
-		dispatch(setter(value));
-	};
+	console.log("Reloading checkboxes w/" + properties[0]);
 	const {
 		multiBoxes,
 		header,
@@ -263,6 +260,7 @@ export const CheckBoxes = (props) => {
 	} = display;
 	const { smallerSize, textSize } = textProps();
 	const boxing = boxes.slice();
+	const props = properties.slice();
 	//const setters = (bit.setters || []).slice();
 	const rowDescriptions = (display.rowDescriptions || []);
 	const labels = (display.labels || []).slice();
@@ -282,22 +280,21 @@ export const CheckBoxes = (props) => {
 		// Iterate over the boxes until none remain
 		while(boxing.length > 0) {
 			let counter = 0;
-			let row = [];
+			const row = [];
 			while(counter < multiBoxes) {
 				const box = boxing.shift();
-				const setter = 0 //setters.shift();
+				const prop = props.shift();
 				const label = (
 					accessibilityLabels.shift() || "MISSING LABEL"
 				);
-				const rl = row.length;
 				row.push(
 					<Checkbox
 						mx="auto"
 						value={box}
-						onChange={() => doSetBool(setter, !box)}
+						onChange={() => dispatch(setBool({prop, value: !box}))}
 						defaultIsChecked={box}
 						accessibilityLabel={label}
-						key={`${id}-CheckboxMulti/${counter}/${rl}`}
+						key={`${id}-CheckboxMulti/${counter}/${prop}`}
 					/>
 				);
 				counter++;
@@ -307,7 +304,7 @@ export const CheckBoxes = (props) => {
 	} else {
 		boxing.forEach((box, i) => {
 			const label = labels.shift() || "MISSING LABEL";
-			const setter = i //setters[i];
+			const prop = props[i];
 			let textProps = {fontSize: smallerSize};
 			if(isCentered[0]) {
 				textProps.textAlign = "center";
@@ -316,9 +313,9 @@ export const CheckBoxes = (props) => {
 			checkBoxDisplayRow.push([
 				<Checkbox
 					value={box}
-					onChange={() => doSetBool(setter, !box)}
+					onChange={() => dispatch(setBool({prop, value: !box}))}
 					defaultIsChecked={box}
-					key={`${id}:CheckBox/${i}`}
+					key={`${id}:CheckBox/${prop}`}
 				>
 					<Box flex={1} style={{marginLeft: emSize}}>
 						<T {...textProps}>{label}</T>

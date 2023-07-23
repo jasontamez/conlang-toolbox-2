@@ -5,6 +5,10 @@ import ms from './msinfo.json';
 
 // doText({user data}, BOOLEAN: we want MarkDown, not plaintext)
 const doText = async (msInfo, md = false) => {
+	const {
+		title,
+		description
+	} = msInfo;
 	const lines = [];
 	const sections = ms.sections;
 	sections.forEach((sec) => {
@@ -27,7 +31,8 @@ const doText = async (msInfo, md = false) => {
 			switch(tag) {
 				case "Header":
 					if(md) {
-						info = " " + content;
+						// Start with one extra level, since the document title will have rank 1
+						info = "# " + content;
 						for(let c = level; c > 0; c--) {
 							info = "#" + info;
 						}
@@ -60,7 +65,6 @@ const doText = async (msInfo, md = false) => {
 					}
 					break;
 				case "Checkboxes":
-					//const value = bool[item.prop as keyof MorphoSyntaxBoolObject];
 					const expo = disp.export;
 					const output = expo.output;
 					if(output) {
@@ -104,6 +108,7 @@ const doText = async (msInfo, md = false) => {
 						while(boxSlices.length > 0) {
 							const box = boxSlices.shift();
 							const label = labels.shift();
+							console.log(`Checking BOOL_${box}: ${msInfo[`BOOL_${box}`]}`)
 							if(msInfo[`BOOL_${box}`]) {
 								found.push(label || "[ERROR]");
 							}
@@ -113,6 +118,12 @@ const doText = async (msInfo, md = false) => {
 						} else if (found.length === 1) {
 							result = md ? `*${found[0]}*` : found[0];
 						} else if (found.length === 2) {
+							if(md) {
+								result = `*${found[0]}* and *${found[1]}*`;
+							} else {
+								result = `${found[0]} and ${found[1]}`;
+							}
+						} else {
 							const final = found.pop();
 							if(md) {
 								result = `*${found.join("*, *")}*, and *${final}*`;
@@ -125,12 +136,8 @@ const doText = async (msInfo, md = false) => {
 			}
 		});
 	});
-	const {
-		title,
-		description = "[NO DESCRIPTION PROVIDED]"
-	} = msInfo;
 	const em = md ? "*" : "";
-	const output = `${md ? "# " : ""}${title}\n\n${em}${description}${em}\n\n${lines.join("\n\n")}\n`;
+	const output = `${md ? "# " : ""}${title}\n\n${em}${description || "[NO DESCRIPTION PROVIDED]"}${em}\n\n${lines.join("\n\n")}\n`;
 	return output;
 };
 
@@ -146,7 +153,7 @@ const handleRange = (msInfo, md, min, max, prop, start, end, notFilled) => {
 		const div = 100 / (max - min);
 		const lesser = Math.floor(((value - min) * div) + 0.5);
 		if(md) {
-			return `**${lesser}%** ${cleanText(start || "[MISSING]")}  \n**${100 - lesser}% ${cleanText(end || "[MISSING]")}`;
+			return `**${lesser}%** ${cleanText(start || "[MISSING]")}  \n**${100 - lesser}%** ${cleanText(end || "[MISSING]")}`;
 		}
 		return `${lesser}% ${cleanText(start || "[MISSING]")}  \n${100 - lesser}% ${cleanText(end || "[MISSING]")}`;
 	}

@@ -567,21 +567,21 @@
 					"title": "Verb Types that are handled in a special way:",
 					"labelOverrideDocx": true,
 					"labels": [
-						"Agent affects Patient.",
-						"Agent only.",
-						"In English, these require a dummy Agent (\"_It_ is raining\"); this is not the case in many other languages!",
-						"be hot, be broken, be frozen, etc; may be predicate-bound",
-						"He grew; It broke; They died; etc.",
-						"cough, sweat, bleed, cry, etc.",
-						"go, float, proceed, etc.",
-						"sit, stand, hang, etc.",
-						"Something comes into being: e.g. build, form, ignite, create; rarely treated differently than Actions",
-						"know, suspect, forget etc.",
-						"hear, see, taste, etc.",
-						"be happy, be afraid, be mellow, etc.",
-						"say, yell, murmur, declare, chat, etc.",
-						"force, urge, cause, let, permit, allow, compel, etc.",
-						"(you might have a distinction different from those already listed)"
+						"Actions (Agent affects Patient)",
+						"Action-Processes (Agent only)",
+						"Weather Verbs (in English, these require a dummy Agent [\"_It_ is raining\"]; this is not the case in many other languages!)",
+						"States (be hot, be broken, be frozen, etc; may be predicate-bound)",
+						"Involuntary Processes (He grew; It broke; They died; etc.)",
+						"Bodily Functions (cough, sweat, bleed, cry, etc.)",
+						"Motion (go, float, proceed, etc.)",
+						"Position (sit, stand, hang, etc.)",
+						"Factive (Something comes into being: e.g. build, form, ignite, create; rarely treated differently than Actions)",
+						"Cognition (know, suspect, forget etc.)",
+						"Sensation (hear, see, taste, etc.)",
+						"Emotion (be happy, be afraid, be mellow, etc.)",
+						"Utterance (say, yell, murmur, declare, chat, etc.)",
+						"Manipulation (force, urge, cause, let, permit, allow, compel, etc.)",
+						"Other Verb Classes (you might have a distinction different from those already listed)"
 					]
 				}
 			}

@@ -188,6 +188,10 @@ const Section = () => {
 					BOOL_chainFirst,
 					BOOL_chainLast
 				]}
+				properties={[
+					"BOOL_chainFirst",
+					"BOOL_chainLast"
+				]}
 				display={{
 					header: "Which Clause is Inflected?",
 					labels: [
@@ -201,6 +205,11 @@ const Section = () => {
 					BOOL_chainN,
 					BOOL_chainV,
 					BOOL_chainCj
+				]}
+				properties={[
+					"BOOL_chainN",
+					"BOOL_chainV",
+					"BOOL_chainCj"
 				]}
 				display={{
 					header: "Which Element is Marked?",
@@ -219,6 +228,13 @@ const Section = () => {
 					BOOL_chainPer,
 					BOOL_chainNum,
 					BOOL_chainOther
+				]}
+				properties={[
+					"BOOL_chainT",
+					"BOOL_chainA",
+					"BOOL_chainPer",
+					"BOOL_chainNum",
+					"BOOL_chainOther"
 				]}
 				display={{
 					header: "What Other Information Does the Marker Encode?",
@@ -459,6 +475,12 @@ const Section = () => {
 					BOOL_relInternal,
 					BOOL_relHeadless
 				]}
+				properties={[
+					"BOOL_relPre",
+					"BOOL_relPost",
+					"BOOL_relInternal",
+					"BOOL_relHeadless"
+				]}
 				display={{
 					header: "Types of Relative Clauses",
 					labels: [
@@ -592,6 +614,11 @@ const Section = () => {
 					BOOL_coordMid,
 					BOOL_coordTwo,
 					BOOL_coordLast
+				]}
+				properties={[
+					"BOOL_coordMid",
+					"BOOL_coordTwo",
+					"BOOL_coordLast"
 				]}
 				display={{
 					header: "Coordinating Conjunction Positions",

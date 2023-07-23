@@ -146,6 +146,23 @@ const Section = () => {
 					BOOL_manipulation,
 					BOOL_otherVerbClass
 				]}
+				properties={[
+					"BOOL_actions",
+					"BOOL_actionProcesses",
+					"BOOL_weather",
+					"BOOL_states",
+					"BOOL_involuntaryProcesses",
+					"BOOL_bodyFunctions",
+					"BOOL_motion",
+					"BOOL_position",
+					"BOOL_factive",
+					"BOOL_cognition",
+					"BOOL_sensation",
+					"BOOL_emotion",
+					"BOOL_utterance",
+					"BOOL_manipulation",
+					"BOOL_otherVerbClass"
+				]}
 				display={{
 					striped: true,
 					inlineHeaders: ["Special?","Description"],
@@ -249,6 +266,13 @@ const Section = () => {
 					BOOL_lexVorN,
 					BOOL_adjectives
 				]}
+				properties={[
+					"BOOL_lexVerb",
+					"BOOL_lexNoun",
+					"BOOL_lexVN",
+					"BOOL_lexVorN",
+					"BOOL_adjectives"
+				]}
 				display={{
 					header: "Different Ways Property Concepts Are Handled in Human Language",
 					labels: [
@@ -317,6 +341,12 @@ const Section = () => {
 					BOOL_baseTwenty,
 					BOOL_baseOther
 				]}
+				properties={[
+					"BOOL_baseFive",
+					"BOOL_baseTen",
+					"BOOL_baseTwenty",
+					"BOOL_baseOther"
+				]}
 				display={{
 					header: "Number Base",
 					labels: [
@@ -342,6 +372,11 @@ const Section = () => {
 					BOOL_numLG,
 					BOOL_numNone
 				]}
+				properties={[
+					"BOOL_numGL",
+					"BOOL_numLG",
+					"BOOL_numNone"
+				]}
 				display={{
 					header: "Number Format",
 					labels: [
@@ -363,6 +398,10 @@ const Section = () => {
 				boxes={[
 					BOOL_multiNumSets,
 					BOOL_inflectNum
+				]}
+				properties={[
+					"BOOL_multiNumSets",
+					"BOOL_inflectNum"
 				]}
 				display={{
 					header: "Other Properties",

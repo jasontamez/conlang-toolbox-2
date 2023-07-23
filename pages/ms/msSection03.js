@@ -39,6 +39,14 @@ const Section = () => {
 					BOOL_PAV,
 					BOOL_PVA
 				]}
+				properties={[
+					"BOOL_APV",
+					"BOOL_AVP",
+					"BOOL_VAP",
+					"BOOL_VPA",
+					"BOOL_PAV",
+					"BOOL_PVA"
+				]}
 				display={{
 					inlineHeaders: ["Primary Order?","Example"],
 					labels: [
@@ -100,6 +108,11 @@ const Section = () => {
 					BOOL_preP,
 					BOOL_postP,
 					BOOL_circumP
+				]}
+				properties={[
+					"BOOL_preP",
+					"BOOL_postP",
+					"BOOL_circumP"
 				]}
 				display={{
 					labels: [
