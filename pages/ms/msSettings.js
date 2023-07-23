@@ -28,10 +28,16 @@ import { MultiAlert } from "../../components/StandardAlert";
 import doToast from "../../helpers/toast";
 import { msCustomStorage } from "../../helpers/persistentInfo";
 import { LoadingOverlay } from "../../components/FullBodyModal";
+import doText from "./exportText";
+import doJSON from "./exportJSON";
+import doXML from "./exportXML";
+import doDocx from "./exportDocx";
+import doExport from "../../helpers/exportTools";
 
 const Settings = () => {
 	//const { msPage } = useParams();
 	//const pageName = "s" + msPage.slice(-2);
+	const msInfo = useSelector(state => state.morphoSyntax);
 	const {
 		id,
 		lastSave,
@@ -42,7 +48,7 @@ const Settings = () => {
 		text,
 		storedCustomInfo,
 		storedCustomIDs
-	} = useSelector((state) => state.morphoSyntax);
+	} = msInfo;
 	const { disableConfirms } = useSelector((state) => state.appState);
 	const dispatch = useDispatch();
 	const [textSize, inputSize, largerSize] = getSizes("md", "sm", "lg");
@@ -52,6 +58,7 @@ const Settings = () => {
 	const [chosenSave, setChosenSave] = useState(storedCustomIDs && storedCustomIDs.length > 0 && storedCustomIDs[0]);
 	const [operation, setOperation] = useState(0);
 	const [loadingOverlayOpen, setLoadingOverlayOpen] = useState(false);
+	const [loadingMsg, setLoadingMsg] = useState("Loading MorphoSyntax...");
 
 	const [destroyingMS, setDestroyingMS] = useState({});
 
@@ -78,6 +85,7 @@ const Settings = () => {
 		setAlertOpen("loadMS");
 	};
 	const doLoadMS = () => {
+		setLoadingMsg("Loading MorphoSyntax...");
 		setLoadingOverlayOpen(true);
 		msCustomStorage.getItem(chosenSave).then(savedInfo => {
 			const newMS = JSON.parse(savedInfo);
@@ -212,7 +220,55 @@ const Settings = () => {
 	};
 
 	// Export MS
-	//const maybeExport
+	const exportButtons = [
+		{
+			text: "Plain Text",
+			info: async () => doText(msInfo),
+			extension: "txt",
+			encoding: "text/plain",
+			bg: "secondary.500",
+			color: "secondary.50"
+		},
+		{
+			text: "MarkDown Text",
+			info: async () => doText(msInfo, true),
+			extension: "md",
+			encoding: "text/markdown",
+			bg: "tertiary.500",
+			color: "tertiary.50"
+		},
+		{
+			text: "JSON file",
+			info: async () => doJSON(msInfo),
+			extension: "json",
+			encoding: "text/json",
+			bg: "secondary.500",
+			color: "secondary.50"
+		},
+		{
+			text: "XML Document",
+			info: async () => doXML(msInfo),
+			extension: "xml",
+			encoding: "text/xml",
+			bg: "tertiary.500",
+			color: "tertiary.50"
+		},
+		{
+			text: "Docx Document",
+			info: async () => {
+				const info = await doDocx(msInfo).then((result) => {
+					console.log(JSON.stringify(result));
+					return result;
+				});
+				return info;
+			},
+			extension: "docx",
+			encoding: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			bg: "secondary.500",
+			color: "secondary.50",
+			isBase64: true
+		}
+	];
 
 	// JSX
 	const StoredInfoButton = ({onPress, bg, icon, text}) => {
@@ -263,7 +319,7 @@ const Settings = () => {
 				<LoadingOverlay
 					overlayOpen={loadingOverlayOpen}
 					colorFamily="secondary"
-					contents={<Text fontSize={largerSize} color={useContrastText("secondary.500")} textAlign="center">Loading MorphoSyntax...</Text>}
+					contents={<Text fontSize={largerSize} color={useContrastText("secondary.500")} textAlign="center">{loadingMsg}</Text>}
 				/>
 				<MultiAlert
 					alertOpen={alertOpen}
@@ -381,6 +437,76 @@ const Settings = () => {
 												>Overwrite Previous Save</Button>
 											}
 										</HStack>
+									</VStack>
+								),
+								overrideButtons: [
+									({leastDestructiveRef}) => <Button
+										onPress={() => {
+											setAlertOpen(false);
+										}}
+										bg="darker"
+										ref={leastDestructiveRef}
+										_text={{fontSize: textSize}}
+										px={2}
+										py={1}
+									>Cancel</Button>
+								]
+							}
+						},
+						{
+							id: "exportMS",
+							properties: {
+								fontSize: textSize,
+								detatchButtons: true,
+								headerProps: {
+									bg: "primary.500",
+									_text: {
+										color: primaryContrast
+									}
+								},
+								headerContent: "Choose an Export Format",
+								bodyContent: (
+									<VStack
+										justifyContent="center"
+										alignItems="center"
+										w="full"
+										space={3}
+									>
+										{exportButtons.map(({text, info, extension, encoding, bg, color, isBase64 = false}) => (
+											<Button
+												key={`button - ${text}`}
+												onPress={async () => {
+													setAlertOpen(false);
+													setLoadingMsg("Exporting MorphoSyntax...");
+													setLoadingOverlayOpen(true);
+													info().then(async (result) => {
+														return doExport(result, `MorphoSyntax - ${title}.${extension}`, encoding, isBase64).then((result) => {
+															const {
+																fail,
+																filename
+															} = result || { fail: true };
+															doToast({
+																toast,
+																msg: fail || `Exported as "${filename}"`,
+																scheme: fail ? "error" : "success",
+																placement: "bottom",
+																fontSize: textSize
+															});
+														}).finally(() => {
+															setLoadingOverlayOpen(false);
+														});
+													});
+												}}
+												bg={bg}
+												_text={{
+													color,
+													fontSize: inputSize,
+													textAlign: "center"
+												}}
+												px={2.5}
+												py={1.5}
+											>Save as {text}</Button>
+										))}
 									</VStack>
 								),
 								overrideButtons: [
@@ -571,7 +697,18 @@ const Settings = () => {
 				<StoredInfoButton
 					bg="lighter"
 					icon={<ExportIcon size={textSize} />}
-					onPress={() => 2222}
+					onPress={() => {
+						if(!title) {
+							return doToast({
+								toast,
+								msg: "Please create a title for your MorphoSyntax before exporting.",
+								scheme: "error",
+								placement: "top",
+								fontSize: textSize
+							});
+						}
+						setAlertOpen("exportMS");
+					}}
 					text="Export MorphoSyntax Info"
 				/>
 			</VStack>
