@@ -148,7 +148,6 @@ const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 	if(!disp) {
 		return new Paragraph({ text: "CHECKBOX DISPLAY ERROR", spacing });
 	}
-	// TO-DO: Figure out weird column situations
 	const cleanText = (input) => {
 		return input.replace(/\u00AD/g, "");
 	};

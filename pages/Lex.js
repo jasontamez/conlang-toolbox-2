@@ -72,6 +72,7 @@ import { LoadingOverlay } from '../components/FullBodyModal';
 import { lexCustomStorage } from '../helpers/persistentInfo';
 import getSizes from '../helpers/getSizes';
 import { fromToZero, maybeAnimate } from '../helpers/motiAnimations';
+import doExport from '../helpers/exportTools';
 
 const Lex = () => {
 	//
@@ -367,7 +368,7 @@ const Lex = () => {
 		setLoadingColumnsPicker(true);
 	};
 	const doLoadLexicon = (columnConversion) => {
-		setLoadingOverlayOpen(true);
+		setLoadingOverlayOpen("Loading Lexicon...");
 		lexCustomStorage.getItem(loadChosen).then(savedInfo => {
 			const newLex = JSON.parse(savedInfo);
 			dispatch(loadState({
@@ -595,6 +596,80 @@ const Lex = () => {
 			fontSize: textSize
 		});
 	};
+
+
+	//
+	//
+	// EXPORT LEXICON
+	//
+	//
+	const doText = () => {};
+	const doCSV = () => {};
+	const doXML = () => {};
+	const doJSON = () => {};
+	const exportFormats = [
+		{
+			text: "Text, Tabbed",
+			getInfo: [doText, "\t"]
+		},
+		{
+			text: "Text, Semicolons",
+			getInfo: [doText, "; "],
+			scheme: "tertiary"
+		},
+		{
+			text: "Text, Newlines",
+			getInfo: [doText, "\n", "\n\n"]
+		},
+		{
+			text: "CSV File",
+			getInfo: [doCSV, true],
+			extension: "csv",
+			encoding: "csv",
+			scheme: "tertiary"
+		},
+		{
+			text: "CSV File, no title/description",
+			getInfo: [doCSV],
+			extension: "csv",
+			encoding: "csv"
+		},
+		{
+			text: "JSON File",
+			getInfo: [doJSON],
+			extension: "json",
+			encoding: "json",
+			scheme: "tertiary"
+		},
+		{
+			text: "XML File",
+			getInfo: [doXML],
+			extension: "xml",
+			encoding: "xml"
+		}
+	];
+	const doExportLexicon = async () => {
+		setAlertOpen(false);
+		setLoadingOverlayOpen("Exporting Lexicon...");
+		info().then(async (result) => {
+			return doExport(result, `Lexicon - ${title}.${extension}`, encoding).then((result) => {
+				const {
+					fail,
+					filename
+				} = result || { fail: true };
+				doToast({
+					toast,
+					msg: fail || `Exported as "${filename}"`,
+					scheme: fail ? "error" : "success",
+					placement: "bottom",
+					fontSize: textSize
+				});
+			}).finally(() => {
+				setLoadingOverlayOpen(false);
+			});
+		});
+	};
+
 
 	//
 	//
@@ -832,6 +907,72 @@ const Lex = () => {
 								>Cancel</Button>
 							]
 						}
+					},
+					{
+						id: "exportLexicon",
+						properties: {
+							fontSize: textSize,
+							detatchButtons: true,
+							headerProps: {
+								bg: "primary.500",
+								_text: {
+									color: primaryContrast
+								}
+							},
+							headerContent: "Choose an Export Format",
+							bodyContent: (
+								<VStack
+									justifyContent="center"
+									alignItems="center"
+									w="full"
+									space={3}
+								>
+									{exportFormats.map(({text, getInfo, extension = "txt", encoding = "plain", scheme = "secondary"}) => (
+										<Button
+											key={`button - ${text}`}
+											onPress={async () => {
+												const [info, ...args] = getInfo;
+												setAlertOpen(false);
+												setLoadingOverlayOpen("Exporting Lexicon...");
+												return doExportLexicon(info(...args), `Lexicon - ${title}.${extension}`, `text/${encoding}`).then((result) => {
+													const {
+														fail,
+														filename
+													} = result || { fail: true };
+													doToast({
+														toast,
+														msg: fail || `Exported as "${filename}"`,
+														scheme: fail ? "error" : "success",
+														placement: "bottom",
+														fontSize: textSize
+													});
+												}).finally(() => {
+													setLoadingOverlayOpen(false);
+												});
+											}}
+											bg={`${scheme}.500`}
+											_text={{
+												color: `${scheme}.50`,
+												fontSize: miniSize,
+												textAlign: "center"
+											}}
+											px={2.5}
+											py={1.5}
+										>Export as {text}</Button>
+									))}
+								</VStack>
+							),
+							overrideButtons: [
+								({leastDestructiveRef}) => <Button
+									onPress={() => setAlertOpen(false)}
+									bg="darker"
+									ref={leastDestructiveRef}
+									_text={{fontSize: textSize}}
+									px={2}
+									py={1}
+								>Cancel</Button>
+							]
+						}
 					}
 				]}
 			/>
@@ -970,7 +1111,7 @@ const Lex = () => {
 			<LoadingOverlay
 				overlayOpen={loadingOverlayOpen}
 				colorFamily="secondary"
-				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">Loading Lexicon...</Text>}
+				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">{loadingOverlayOpen}</Text>}
 			/>
 			<HStack alignItems="flex-start" justifyContent="flex-end">
 				<AnimatePresence>
@@ -1259,7 +1400,7 @@ const Lex = () => {
 											fontSize: textSize
 										});
 									}
-									setAlertOpen('TO-DO: Add exporter');
+									setAlertOpen('exportLexicon');
 								}}>
 									<HStack
 										space={4}

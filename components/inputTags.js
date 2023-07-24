@@ -216,7 +216,8 @@ export const RangeSlider = ({
 	xPadding = 0,
 	modalPaddingInfo,
 	labelWidth,
-	containerProps = {}
+	containerProps = {},
+	id
 }) => {
 	// <RangeSlider
 	//    min={number; default 0}
@@ -331,6 +332,7 @@ export const RangeSlider = ({
 			<Box style={{width: 8}} />
 			<NewSlider
 				fontSize={textSize}
+				id={id || `${minimumLabel}/${maximumLabel}:${min}/${max}/${step}`}
 				{...{
 					min,
 					max,

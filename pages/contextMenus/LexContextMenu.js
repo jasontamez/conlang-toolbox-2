@@ -8,11 +8,11 @@ import {
 	Modal,
 	VStack,
 	Box,
-	Slider,
 	Button,
 	useToast,
 	useContrastText,
-	IconButton
+	IconButton,
+	Input
 } from 'native-base';
 
 import {
@@ -46,6 +46,8 @@ const LexiconContextMenu = () => {
 	const [columnsRangeOpen, setColumnsRangeOpen] = useState(false);
 
 	const [cols, setCols] = useState(maxColumns);
+	const [errMsg, setErrMsg] = useState(false);
+	const minimum = sortPattern.length || 1;
 	useEffect(() => {
 		setCheckboxOptions([
 			...(truncateColumns ? ["truncateColumns"] : []),
@@ -173,22 +175,25 @@ const LexiconContextMenu = () => {
 						</HStack>
 					</Modal.Header>
 					<Modal.Body>
-						<VStack>
-							<Box><Text fontSize={textSize}>Maximum columns: {cols}</Text></Box>
-							<Slider
-								size="sm"
-								minValue={sortPattern.length || 1 /* Set by current amount of columns. */}
-								maxValue={absoluteMaxColumns}
-								step={1}
-								defaultValue={cols}
-								accessibilityLabel={"Set the maximum number of columns per lexicon entry"}
-								onChange={(v) => setCols(v)}
-							>
-								<Slider.Track>
-									<Slider.FilledTrack />
-								</Slider.Track>
-								<Slider.Thumb />
-							</Slider>
+						<VStack alignItems="center" justifyContent="center" space={2} pb={2} px={2}>
+							<Text
+								textAlign="right"
+								flexShrink={1}
+								flexGrow={0}
+								color="text.50"
+								fontSize={textSize}
+							>Choose a number between {minimum} and {absoluteMaxColumns}:</Text>
+							<Input
+								defaultValue={String(maxColumns)}
+								onChangeText={(v) => setCols(Number(v))}
+								size={textSize}
+								flexShrink={0}
+								flexGrow={0}
+								width={16}
+								_input={{textAlign: "center", p: 0, m: 0}}
+								p={0}
+							/>
+							{errMsg && <Text color="danger.500" bold textAlign="center">{errMsg}</Text>}
 						</VStack>
 					</Modal.Body>
 					<Modal.Footer
@@ -199,7 +204,7 @@ const LexiconContextMenu = () => {
 							w="full"
 						>
 							<Button
-								bg="lighter"
+								bg="darker"
 								_text={{color: "text.50", fontSize: textSize}}
 								p={1}
 								m={2}
@@ -212,13 +217,17 @@ const LexiconContextMenu = () => {
 								p={1}
 								m={2}
 								onPress={() => {
-									setColumnsRangeOpen(false);
-									newColumnsChosenFunc(cols);
-									doToast({
-										toast,
-										fontSize: textSize,
-										msg: `Saved: ${cols} columns`
-									});
+									if(cols < minimum || cols > absoluteMaxColumns || parseInt(cols) !== cols) {
+										setErrMsg(`Please use a whole number between ${minimum} and ${absoluteMaxColumns}`);
+									} else {
+										setColumnsRangeOpen(false);
+										newColumnsChosenFunc(cols);
+										doToast({
+											toast,
+											fontSize: textSize,
+											msg: `Saved: ${cols} columns`
+										});
+									}
 								}}
 							>Save</Button>
 						</HStack>

@@ -330,7 +330,7 @@ export const CheckBoxes = ({ boxes, display, properties }) => {
 			textProps.textAlign = "center";
 		}
 		row.push(
-			<T key={`CheckBox-${id}-rowDesc/${i}`} {...textProps}>{rDesc}</T>
+			<T key={`${id}:CheckBox-rowDesc/${i}`} {...textProps}>{rDesc}</T>
 		);
 	});
 	// Add inlineheaders, if any, to the tops of the existing columns
@@ -342,7 +342,7 @@ export const CheckBoxes = ({ boxes, display, properties }) => {
 				textProps.textAlign = "center";
 			}
 			row.push(
-				<B key={`CheckBox-${id}-inlineHeader/${i}`} {...textProps}>{ih}</B>
+				<B key={`${id}:CheckBox-inlineHeader/${i}`} {...textProps}>{ih}</B>
 			);
 		});
 		checkBoxDisplayRow.unshift(row);
