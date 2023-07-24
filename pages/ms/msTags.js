@@ -251,7 +251,6 @@ export const CheckBoxes = ({ boxes, display, properties }) => {
 			</Box>
 		);
 	}
-	console.log("Reloading checkboxes w/" + properties[0]);
 	const {
 		multiBoxes,
 		header,
@@ -261,7 +260,6 @@ export const CheckBoxes = ({ boxes, display, properties }) => {
 	const { smallerSize, textSize } = textProps();
 	const boxing = boxes.slice();
 	const props = properties.slice();
-	//const setters = (bit.setters || []).slice();
 	const rowDescriptions = (display.rowDescriptions || []);
 	const labels = (display.labels || []).slice();
 	const accessibilityLabels = (display.accessibilityLabels || []).slice();

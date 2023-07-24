@@ -95,14 +95,14 @@ const doText = async (msInfo, md = false) => {
 					} else {
 						const {
 							labels: dLabels,
-							rowLabels
+							rowDescriptions
 						} = disp;
 						const {
 							title = "",
 							labels: eLabels
 						} = expo;
 						const boxSlices = boxes.slice();
-						const labels = (eLabels || dLabels || rowLabels || boxSlices).slice();
+						const labels = (eLabels || dLabels || rowDescriptions || boxSlices).slice();
 						let result = "";
 						const found = [];
 						while(boxSlices.length > 0) {
@@ -153,9 +153,9 @@ const handleRange = (msInfo, md, min, max, prop, start, end, notFilled) => {
 		const div = 100 / (max - min);
 		const lesser = Math.floor(((value - min) * div) + 0.5);
 		if(md) {
-			return `**${lesser}%** ${cleanText(start || "[MISSING]")}  \n**${100 - lesser}%** ${cleanText(end || "[MISSING]")}`;
+			return `**${100 - lesser}%** ${cleanText(start || "[MISSING]")}  \n**${lesser}%** ${cleanText(end || "[MISSING]")}`;
 		}
-		return `${lesser}% ${cleanText(start || "[MISSING]")}  \n${100 - lesser}% ${cleanText(end || "[MISSING]")}`;
+		return `${100 - lesser}% ${cleanText(start || "[MISSING]")}  \n${lesser}% ${cleanText(end || "[MISSING]")}`;
 	}
 	// This is a spectrum between two endpoints
 	const beginning = cleanText(start || "[MISSING]");

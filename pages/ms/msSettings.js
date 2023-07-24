@@ -255,13 +255,7 @@ const Settings = () => {
 		},
 		{
 			text: "Docx Document",
-			info: async () => {
-				const info = await doDocx(msInfo).then((result) => {
-					console.log(JSON.stringify(result));
-					return result;
-				});
-				return info;
-			},
+			info: async () => doDocx(msInfo),
 			extension: "docx",
 			encoding: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 			bg: "secondary.500",

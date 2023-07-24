@@ -103,10 +103,10 @@ const handleRange = (msInfo, min, max, prop, start, end, notFilled, spacing) => 
 		const lesser = Math.floor(((value - min) * div) + 0.5);
 		paragraph.push(
 			new TextRun({
-				text: `${lesser}% ${cleanText(start) || "[MISSING]"}`
+				text: `${100 - lesser}% ${cleanText(start) || "[MISSING]"}`
 			}),
 			new TextRun({
-				text: `${100 - lesser}% ${cleanText(end) || "[MISSING]"}`,
+				text: `${lesser}% ${cleanText(end) || "[MISSING]"}`,
 				break: 1
 			})
 		);
@@ -149,37 +149,59 @@ const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 		return new Paragraph({ text: "CHECKBOX DISPLAY ERROR", spacing });
 	}
 	// TO-DO: Figure out weird column situations
+	const cleanText = (input) => {
+		return input.replace(/\u00AD/g, "");
+	};
 	const {
 		export: expo,
-		boxesPerRow: perRow = 1,
+		multiBoxes: boxesPerRow = 1,
 		header,
-		inlineHeaders
+		inlineHeaders,
+		rowDescriptions
 	} = disp;
 	let temp;
-	const labels = disp.labels ? disp.labels.slice() : [];
-	temp = expo.labelOverrideDocx ? (expo.labels || labels) : disp.rowLabels;
-	const rowLabels = temp ? temp.slice() : [];
+	const labels = disp.labels ? disp.labels.map(label => cleanText(label)) : [];
+	const labelsForRow = (
+		expo.labelOverrideDocx ? (expo.labels || labels).slice() : rowDescriptions && rowDescriptions.map(label => cleanText(label))
+	) || [];
 	const rows = [];
 	const output = [];
 	const colWidths = [];
 	let count = 0;
 	let colCount = 0;
-	let allColumns = 6;
-	for(let x = 0; x < perRow; x++) {
+	let allColumns = 0;
+	// Determine ratio of columns to each other
+	for(let x = 0; x < boxesPerRow; x++) {
 		colWidths.push(1);
 		allColumns++;
 	}
 	if(labels.length > 0) {
+		// Labels are longer, and should have 4x the width of a normal column
 		colWidths.push(4);
 		allColumns = allColumns + 4;
 	}
-	let leftover = 100;
-	const portion = 100 / allColumns;
+	if(labelsForRow.length > 0) {
+		// These labels are even longer, and should have 6x the width of a normal column
+		colWidths.push(6);
+		allColumns = allColumns + 6;
+	}
+	// Recalculate column widths
+	const singleColumnPercentage = 100 / allColumns;
+	temp = 100;
+	const columnPercentages = colWidths.map(col => {
+		const percentage = Math.floor(col * singleColumnPercentage);
+		temp -= percentage;
+		return percentage;
+	});
+	if(temp !== 0) {
+		const last = columnPercentages.pop();
+		columnPercentages.push(last + temp);
+	}
 	temp = [];
 	boxes.forEach((box) => {
 		count++;
 		temp.push(box || "Error");
-		if(count >= perRow) {
+		if(count >= boxesPerRow) {
 			count = 0;
 			rows.push(temp);
 			temp = [];
@@ -192,15 +214,12 @@ const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 	}
 	rows.forEach((row) => {
 		const cells = [];
-		let cols = colWidths.slice();
-		leftover = 100;
+		let cols = columnPercentages.slice();
 		row.forEach((cell) => {
-			const percent = Math.floor(cols.shift() * portion);
-			leftover -= percent;
 			cells.push(new TableCell({
 				borders: border,
 				width: {
-					size: percent,
+					size: cols.shift(),
 					type: WidthType.PERCENTAGE
 				},
 				children: [new Paragraph({
@@ -209,13 +228,11 @@ const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 			}));
 		});
 		if(labels.length > 0) {
-			const percent = Math.floor(cols.shift() * portion);
-			leftover -= percent;
 			cells.push(
 				new TableCell({
 					borders: border,
 					width: {
-						size: percent,
+						size: cols.shift(),
 						type: WidthType.PERCENTAGE
 					},
 					children: [new Paragraph({
@@ -224,18 +241,20 @@ const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 				})
 			);	
 		}
-		cells.push(
-			new TableCell({
-				borders: border,
-				width: {
-					size: leftover,
-					type: WidthType.PERCENTAGE
-				},
-				children: [new Paragraph({
-					text: rowLabels.shift() || ""
-				})]
-			})
-		);
+		if (labelsForRow.length > 0) {
+			cells.push(
+				new TableCell({
+					borders: border,
+					width: {
+						size: cols.shift(),
+						type: WidthType.PERCENTAGE
+					},
+					children: [new Paragraph({
+						text: labelsForRow.shift() || ""
+					})]
+				})
+			);
+		}
 		colCount = Math.max(colCount, cells.length);
 		output.push(new TableRow({
 			children: cells,
@@ -244,19 +263,16 @@ const handleCheckboxes = (msInfo, disp, boxes, spacing) => {
 	});
 	if(inlineHeaders) {
 		const cells = [];
-		leftover = 100;
-		let cols = colWidths.slice();
+		let cols = columnPercentages.slice();
 		inlineHeaders.forEach((cell) => {
-			const percent = cols.length > 0 ? Math.floor(cols.shift() * portion) : leftover;
-			leftover -= percent;
 			cells.push(new TableCell({
 				borders: border,
 				width: {
-					size: percent,
+					size: cols.shift(),
 					type: WidthType.PERCENTAGE
 				},
 				children: [new Paragraph({
-					text: cell
+					text: cleanText(cell)
 				})]
 			}));
 			colCount = Math.max(colCount, cells.length);
