@@ -603,73 +603,103 @@ const Lex = () => {
 	// EXPORT LEXICON
 	//
 	//
-	const doText = () => {};
-	const doCSV = () => {};
-	const doXML = () => {};
-	const doJSON = () => {};
+	const doText = (spacer, separator = "\n") => {
+		return `${title}\n${description}\n\n${columns.map(col => col.label).join(spacer)}${separator}`
+			+ lexicon.map(lex => lex.columns.join(spacer)).join(separator) + "\n";
+	};
+	const doCSV = (showAll = false) => {
+		let extraSep = "";
+		const quotify = (input) => JSON.stringify(input).replace(/\\"/g, "\"\"");
+		let beginning = "";
+		if(showAll) {
+			const limit = columns.length;
+			if(limit < 2) {
+				extraSep = ",";
+			}
+			let filler = "";
+			if(limit >= 2) {
+				for(let x = 2; x < limit; x++) {
+					filler += ",";
+				}
+			}
+			beginning = `"TITLE",${quotify(title)}${filler}\n"DESCRIPTION",${quotify(description)}${filler}\n`;
+		}
+		return beginning + [
+			columns.map(col => quotify(col.label)).join(","),
+			...lexicon.map(lex => lex.columns.map((title) => quotify(title)).join(",") + extraSep)
+		].join("\n") + "\n";
+	};
+	const doXML = () => {
+		return (
+			`<?xml version="1.0" encoding="UTF-8"?>`
+			+ `\n<Lexicon>\n\t<Title>${title}</Title>\n\t<Description>${description}</Description>\n\t<Headers>\n`
+			+ columns.map((col, ind) => {
+				return `\t\t<Column${ind+1}>${col.label}</Column${ind+1}>`;
+			}).join("\n")
+			+ "\n\t</Headers>\n\t<Content>\n"
+			+ lexicon.map((lex) => {
+				return `\t\t<Item>\n`
+					+ lex.columns.map((info, i) => `\t\t\t<Column${i+1}>${info}</Column${i+1}>`).join("\n")
+					+ `\n\t\t</Item>`;
+			}).join("\n")
+			+ "\n\t</Content>\n</Lexicon>"
+		);
+	};
+	const doJSON = () => {
+		return JSON.stringify({
+			title,
+			description,
+			content: lexicon.map(lex => {
+				const lexItemColumns = lex.columns;
+				const output = {};
+				columns.forEach((col, i) => {
+					output[col.label] = lexItemColumns[i];
+				});
+				return output;
+			})
+		});
+	};
 	const exportFormats = [
 		{
 			text: "Text, Tabbed",
-			getInfo: [doText, "\t"]
+			getInfo: () => doText("\t")
 		},
 		{
 			text: "Text, Semicolons",
-			getInfo: [doText, "; "],
+			getInfo: () => doText("; "),
 			scheme: "tertiary"
 		},
 		{
 			text: "Text, Newlines",
-			getInfo: [doText, "\n", "\n\n"]
+			getInfo: () => doText("\n", "\n\n")
 		},
 		{
 			text: "CSV File",
-			getInfo: [doCSV, true],
+			getInfo: () => doCSV(true),
 			extension: "csv",
 			encoding: "csv",
 			scheme: "tertiary"
 		},
 		{
 			text: "CSV File, no title/description",
-			getInfo: [doCSV],
+			getInfo: () => doCSV(),
 			extension: "csv",
 			encoding: "csv"
 		},
 		{
 			text: "JSON File",
-			getInfo: [doJSON],
+			getInfo: () => doJSON(),
 			extension: "json",
 			encoding: "json",
 			scheme: "tertiary"
 		},
 		{
 			text: "XML File",
-			getInfo: [doXML],
+			getInfo: () => doXML(),
 			extension: "xml",
 			encoding: "xml"
 		}
 	];
-	const doExportLexicon = async () => {
-		setAlertOpen(false);
-		setLoadingOverlayOpen("Exporting Lexicon...");
-		info().then(async (result) => {
-			return doExport(result, `Lexicon - ${title}.${extension}`, encoding).then((result) => {
-				const {
-					fail,
-					filename
-				} = result || { fail: true };
-				doToast({
-					toast,
-					msg: fail || `Exported as "${filename}"`,
-					scheme: fail ? "error" : "success",
-					placement: "bottom",
-					fontSize: textSize
-				});
-			}).finally(() => {
-				setLoadingOverlayOpen(false);
-			});
-		});
-	};
-
 
 	//
 	//
@@ -931,10 +961,9 @@ const Lex = () => {
 										<Button
 											key={`button - ${text}`}
 											onPress={async () => {
-												const [info, ...args] = getInfo;
 												setAlertOpen(false);
 												setLoadingOverlayOpen("Exporting Lexicon...");
-												return doExportLexicon(info(...args), `Lexicon - ${title}.${extension}`, `text/${encoding}`).then((result) => {
+												return doExport(getInfo(), `Lexicon - ${title}.${extension}`, `text/${encoding}`).then((result) => {
 													const {
 														fail,
 														filename
@@ -953,7 +982,7 @@ const Lex = () => {
 											bg={`${scheme}.500`}
 											_text={{
 												color: `${scheme}.50`,
-												fontSize: miniSize,
+												fontSize: smallerSize,
 												textAlign: "center"
 											}}
 											px={2.5}
@@ -1109,7 +1138,7 @@ const Lex = () => {
 				incomingColumns={loadChosen ? storedCustomInfo[loadChosen][3] : []}
 			/>
 			<LoadingOverlay
-				overlayOpen={loadingOverlayOpen}
+				overlayOpen={loadingOverlayOpen !== false}
 				colorFamily="secondary"
 				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">{loadingOverlayOpen}</Text>}
 			/>
