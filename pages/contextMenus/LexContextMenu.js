@@ -24,6 +24,7 @@ import {
 	setDisableBlankConfirms,
 	setMaxColumns,
 	setTruncate,
+	setFontType,
 	consts
 } from "../../store/lexiconSlice";
 import doToast from '../../helpers/toast';
@@ -34,9 +35,10 @@ const LexiconContextMenu = () => {
 		sortPattern,
 		truncateColumns,
 		maxColumns,
+		fontType,
 		disableBlankConfirms
 	} = useSelector((state) => state.lexicon, shallowEqual);
-	const { absoluteMaxColumns } = consts;
+	const { absoluteMaxColumns, fontsMap } = consts;
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const primaryContrast = useContrastText('primary.500');
@@ -127,6 +129,15 @@ const LexiconContextMenu = () => {
 							<Text>Lines</Text>
 						</HStack>
 					</Menu.ItemOption>
+				</Menu.OptionGroup>
+				<Menu.OptionGroup
+					title="Display Font"
+					_title={{ fontSize: smallerSize }}
+					defaultValue={fontType}
+					type="radio"
+					onChange={(v) => dispatch(setFontType(v))}
+				>
+					{fontsMap.map(([label, value]) => <Menu.ItemOption key={label} value={value}>{label}</Menu.ItemOption>)}
 				</Menu.OptionGroup>
 				<Divider my={2} mx="auto" w="5/6" bg="main.50" opacity={25} />
 				<Menu.Group

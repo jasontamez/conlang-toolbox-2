@@ -335,6 +335,12 @@ const setMaxColumnsFunc = (state, action) => {
 	state.maxColumns = action.payload;
 	return state;
 };
+const setFontTypeFunc = (state, action) => {
+	//setFontType("Noto Serif" | "Noto Sans" | "Source Code Pro")
+	//  SEE: consts.fontsMap
+	state.fontType = action.payload;
+	return state;
+};
 const setStoredCustomInfoFunc = (state, action) => {
 	//setStoredCustomInfo({
 	//  id: [title, lastSave, lexicon-length, columns],
@@ -369,6 +375,7 @@ const lexiconSlice = createSlice({
 		setDisableBlankConfirms: setDisableBlankConfirmsFunc,
 		setMinimizedInfo: setMinimizedInfoFunc,
 		setMaxColumns: setMaxColumnsFunc,
+		setFontType: setFontTypeFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
@@ -392,6 +399,7 @@ export const {
 	setDisableBlankConfirms,
 	setMinimizedInfo,
 	setMaxColumns,
+	setFontType,
 	setStoredCustomInfo
 } = lexiconSlice.actions;
 
@@ -399,7 +407,12 @@ export default lexiconSlice.reducer;
 
 // Constants are not changeable.
 export const consts = {
-	absoluteMaxColumns: 30
+	absoluteMaxColumns: 30,
+	fontsMap: [
+		["Serif", "Noto Serif"],
+		["Sans-Serif", "Noto Sans"],
+		["Monospace", "Source Code Pro"]
+	]
 };
 
 // An equality-check function
@@ -418,6 +431,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const disableBlankConfirmsA = stateA.disableBlankConfirms;
 	const minimizedInfoA = stateA.minimizedInfo;
 	const maxColumnsA = stateA.maxColumns;
+	const fontTypeA = stateA.fontType;
 	const storedCustomInfoA = stateA.storedCustomInfo;
 	const storedCustomIDsA = stateA.storedCustomIDs;
 	// stateB
@@ -431,6 +445,7 @@ export const equalityCheck = (stateA, stateB) => {
 	const disableBlankConfirmsB = stateB.disableBlankConfirms;
 	const minimizedInfoB = stateB.minimizedInfo;
 	const maxColumnsB = stateB.maxColumns;
+	const fontTypeB = stateB.fontType;
 	const storedCustomInfoB = stateB.storedCustomInfo;
 	const storedCustomIDsB = stateB.storedCustomIDs;
 	if (
@@ -441,6 +456,7 @@ export const equalityCheck = (stateA, stateB) => {
 		|| disableBlankConfirmsA !== disableBlankConfirmsB
 		|| minimizedInfoA !== minimizedInfoB
 		|| maxColumnsA !== maxColumnsB
+		|| fontTypeA !== fontTypeB
 		|| storedCustomInfoA !== storedCustomInfoB
 		|| String(sortPatternA) !== String(sortPatternB)
 		|| String(storedCustomIDsA) !== String(storedCustomIDsB)

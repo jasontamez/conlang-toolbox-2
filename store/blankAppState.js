@@ -255,6 +255,7 @@ const blankAppState = {
 		disableBlankConfirms: false,
 		minimizedInfo: false,
 		maxColumns: 10,
+		fontType: "Noto Serif",
 		storedCustomInfo: {},
 		storedCustomIDs: []
 	},

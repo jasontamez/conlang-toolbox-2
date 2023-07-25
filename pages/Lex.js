@@ -95,6 +95,7 @@ const Lex = () => {
 		disableBlankConfirms,
 		minimizedInfo,
 		maxColumns,
+		fontType,
 		storedCustomInfo,
 		storedCustomIDs
 	} = useSelector((state) => state.lexicon, equalityCheck);
@@ -752,7 +753,7 @@ const Lex = () => {
 				{cols.map(
 					(text, i) =>
 						<Box px={1} size={getBoxSize(columns[i].size)} key={`${id}-Column-${i}`}>
-							<Text fontSize={smallerSize} isTruncated={truncateColumns}>{text}</Text>
+							<Text fontSize={smallerSize} isTruncated={truncateColumns} fontFamily={fontType}>{text}</Text>
 						</Box>
 					)
 				}
