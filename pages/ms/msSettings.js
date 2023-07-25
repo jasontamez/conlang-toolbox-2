@@ -1,5 +1,4 @@
 import { Box, Button, IconButton, Text, VStack, Pressable, HStack, Modal, useContrastText, useToast } from "native-base";
-//import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
@@ -28,15 +27,10 @@ import { MultiAlert } from "../../components/StandardAlert";
 import doToast from "../../helpers/toast";
 import { msCustomStorage } from "../../helpers/persistentInfo";
 import { LoadingOverlay } from "../../components/FullBodyModal";
-import doText from "./exportText";
-import doJSON from "./exportJSON";
-import doXML from "./exportXML";
-import doDocx from "./exportDocx";
+import { doText, doJSON, doDocx } from "./exportFuncs";
 import doExport from "../../helpers/exportTools";
 
 const Settings = () => {
-	//const { msPage } = useParams();
-	//const pageName = "s" + msPage.slice(-2);
 	const msInfo = useSelector(state => state.morphoSyntax);
 	const {
 		id,
@@ -246,20 +240,12 @@ const Settings = () => {
 			color: "secondary.50"
 		},
 		{
-			text: "XML Document",
-			info: async () => doXML(msInfo),
-			extension: "xml",
-			encoding: "text/xml",
-			bg: "tertiary.500",
-			color: "tertiary.50"
-		},
-		{
 			text: "Docx Document",
 			info: async () => doDocx(msInfo),
 			extension: "docx",
 			encoding: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-			bg: "secondary.500",
-			color: "secondary.50",
+			bg: "tertiary.500",
+			color: "tertiary.50",
 			isBase64: true
 		}
 	];

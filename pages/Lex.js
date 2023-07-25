@@ -630,22 +630,6 @@ const Lex = () => {
 			...lexicon.map(lex => lex.columns.map((title) => quotify(title)).join(",") + extraSep)
 		].join("\n") + "\n";
 	};
-	const doXML = () => {
-		return (
-			`<?xml version="1.0" encoding="UTF-8"?>`
-			+ `\n<Lexicon>\n\t<Title>${title}</Title>\n\t<Description>${description}</Description>\n\t<Headers>\n`
-			+ columns.map((col, ind) => {
-				return `\t\t<Column${ind+1}>${col.label}</Column${ind+1}>`;
-			}).join("\n")
-			+ "\n\t</Headers>\n\t<Content>\n"
-			+ lexicon.map((lex) => {
-				return `\t\t<Item>\n`
-					+ lex.columns.map((info, i) => `\t\t\t<Column${i+1}>${info}</Column${i+1}>`).join("\n")
-					+ `\n\t\t</Item>`;
-			}).join("\n")
-			+ "\n\t</Content>\n</Lexicon>"
-		);
-	};
 	const doJSON = () => {
 		return JSON.stringify({
 			title,
@@ -693,12 +677,6 @@ const Lex = () => {
 			extension: "json",
 			encoding: "json",
 			scheme: "tertiary"
-		},
-		{
-			text: "XML File",
-			getInfo: () => doXML(),
-			extension: "xml",
-			encoding: "xml"
 		}
 	];
 
