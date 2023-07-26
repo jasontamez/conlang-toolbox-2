@@ -119,8 +119,17 @@ const Layout = () => {
 		//'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
 		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf'),
 		'Noto Sans': require('./assets/fonts/NotoSans-Regular.ttf'),
+		'Noto Sans Italic': require('./assets/fonts/NotoSans-Italic.ttf'),
+		'Noto Sans Bold': require('./assets/fonts/NotoSans-Bold.ttf'),
+		'Noto Sans Bold Italic': require('./assets/fonts/NotoSans-BoldItalic.ttf'),
 		'Noto Serif': require('./assets/fonts/NotoSerif-Regular.ttf'),
-		'Source Code Pro': require('./assets/fonts/SourceCodePro-Regular.ttf')
+		'Noto Serif Italic': require('./assets/fonts/NotoSerif-Italic.ttf'),
+		'Noto Serif Bold': require('./assets/fonts/NotoSerif-Bold.ttf'),
+		'Noto Serif Bold Italic': require('./assets/fonts/NotoSerif-BoldItalic.ttf'),
+		'Source Code Pro': require('./assets/fonts/SourceCodePro-Regular.ttf'),
+		'Source Code Pro Italic': require('./assets/fonts/SourceCodePro-Italic.ttf'),
+		'Source Code Pro Bold': require('./assets/fonts/SourceCodePro-Bold.ttf'),
+		'Source Code Pro Bold Italic': require('./assets/fonts/SourceCodePro-BoldItalic.ttf')
 	});
 	const { theme, hasCheckedForOldCustomInfo } = useSelector((state) => state.appState);
 	const themeObject = getTheme(theme);

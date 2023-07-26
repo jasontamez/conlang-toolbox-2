@@ -256,6 +256,7 @@ const Settings = () => {
 			<Pressable
 				onPress={onPress}
 				mx={4}
+				_pressed={{ opacity: 50 }}
 			>
 				<HStack
 					bg={bg}

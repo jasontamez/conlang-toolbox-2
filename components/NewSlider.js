@@ -160,7 +160,7 @@ const NewSlider = ({
 			<Box>
 				<GestureDetector gesture={gesture}>
 					<ReAnimated.View style={thumbStyleAnimated}>
-						<Circle style={{overflow: "visible"}} size={`${thumbDiameter}px`} bg={`${colorScheme}.400`}>
+						<Circle style={{overflow: "visible"}} borderColor={`${colorScheme}.${pressed.value ? 200 : 400}`} borderWidth={showValue ? 0 : 5} borderRadius="full" size={`${thumbDiameter}px`} bg={`${colorScheme}.${showValue && pressed.value ? 900 : 400}`}>
 							{showValue !== 0 && ((showValue > 0) || pressed.value) && (
 								ValueContainer ?
 									<ValueContainer>{v}</ValueContainer>

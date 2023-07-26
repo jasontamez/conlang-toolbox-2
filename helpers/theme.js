@@ -31,7 +31,12 @@ const fontConfig = { /*
 	},*/
 	"Noto Sans": {
 		400: {
-			normal: "Noto Sans"
+			normal: "Noto Sans",
+			italic: "Noto Sans Italic"
+		},
+		700: {
+			normal: "Noto Sans Bold",
+			italic: "Noto Sans Bold Italic"
 		}
 	},/*
 	"Noto Sans JP": {
@@ -66,7 +71,12 @@ const fontConfig = { /*
 	},*/
 	"Noto Serif": {
 		400: {
-			normal: "Noto Serif"
+			normal: "Noto Serif",
+			italic: "Noto Serif Italic"
+		},
+		700: {
+			normal: "Noto Serif Bold",
+			italic: "Noto Serif Bold Italic"
 		}
 	},/*
 	"Noto Serif JP": {
@@ -92,6 +102,16 @@ const fontConfig = { /*
 			normal: "NotoSerifJP_900Black",
 		}
 	}, */
+	"Source Code Pro": {
+		400: {
+			normal: "Source Code Pro",
+			italic: "Source Code Pro Italic",
+		},
+		700: {
+			normal: "Source Code Pro Bold",
+			italic: "Source Code Pro Bold Italic",
+		},
+	},/*
 	"Source Code Pro": {
 		200: {
 			normal: "SourceCodePro_200ExtraLight",
@@ -125,7 +145,7 @@ const fontConfig = { /*
 			normal: "SourceCodePro_900Black",
 			italic: "SourceCodePro_900Black_Italic",
 		}
-	},/*
+	},
 	ArTarumianKamar: {
 		500: {
 			normal: "ArTarumianKamar"
