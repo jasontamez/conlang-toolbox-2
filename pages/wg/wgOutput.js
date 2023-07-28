@@ -28,6 +28,7 @@ import { FlatGrid } from 'react-native-super-grid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
 import { AnimatePresence, MotiView } from "moti";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 import {
 	CancelIcon,
@@ -91,10 +92,11 @@ const WGOutput = () => {
 	const [alertCannotGenerate, setAlertCannotGenerate] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
 
+	const [nextAnimations, setNextAnimations] = useState(false);
+
 	const [displayedWords, setDisplayedWords] = useState([]);
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
-	const [displayedText, setDisplayedText] = useState(false);
-	const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+	const [displayedText, setDisplayedText] = useState([]);
 	const [rawWords, setRawWords] = useState([]);
 	const [output, setOutput] = useState("text");
 	const [buttonWidth, setButtonWidth] = useState(0);
@@ -110,6 +112,7 @@ const WGOutput = () => {
 	const [transformsWithRegExps, setTransformsWithRegExps] = useState([]);
 
 	const [openSettings, setOpenSettings] = useState(false);
+
 	const [
 		textSize,
 		descSize,
@@ -127,6 +130,31 @@ const WGOutput = () => {
 	const tertiaryContrast = useContrastText("tertiary.500");
 	const saveToLexRef = useRef(null);
 
+	const loadingOpacity = useSharedValue(0);
+	const textTranslateX = useSharedValue(width / 2);
+	const textScale = useSharedValue(0);
+	const textOpacity = useSharedValue(0);
+	const wordsTranslateX = useSharedValue(width * -1);
+	const wordsOpacity = useSharedValue(0);
+	const [textVisible, setTextVisible] = useState(false);
+	const [wordsVisible, setWordsVisible] = useState(false);
+
+	const loadingTransforms = useAnimatedStyle(() => ({
+		opacity: loadingOpacity.value
+	}));
+	const textTransforms = useAnimatedStyle(() => ({
+		transform: [
+			{ translateX: textTranslateX.value },
+			{ scale: textScale.value }
+		],
+		opacity: textOpacity.value
+	}));
+	const wordsTransforms = useAnimatedStyle(() => ({
+		transform: [
+			{ translateX: wordsTranslateX.value }
+		],
+		opacity: wordsOpacity.value
+	}));
 
 	// // //
 	// Convenience Variables
@@ -163,6 +191,153 @@ const WGOutput = () => {
 	const wordInitialArray = wordInitial.split(/\n/);
 	const wordMiddleArray = wordMiddle.split(/\n/);
 	const wordFinalArray = wordFinal.split(/\n/);
+
+
+	// // //
+	// Juggle Animations
+	// // //
+	useEffect(() => {
+		// When nextAnimations changes, trigger the next set of animations
+		if(!nextAnimations) {
+			return;
+		}
+		const [callback, ...sequence] = nextAnimations;
+		console.log("SEQUENCE: " + JSON.stringify(sequence));
+		while(sequence.length > 0) {
+			const next = sequence.shift();
+			console.log(">>"+next);
+			const {
+				duration,
+				delay,
+				easing,
+				changes
+			} = animationFunctions[next]();
+			const options = { duration, easing };
+			console.log(`duration:${duration}, delay:${delay}, changes:${JSON.stringify(changes)}`);
+			while(changes.length > 0) {
+				const [variable, value] = changes.shift();
+				let func;
+				// Drop callback into last change of last sequence
+				if(callback && sequence.length === 0 && changes.length === 0) {
+					func = withTiming(value, options, () => runOnJS(animationCallbacks[callback])());
+					console.log("=timing w/callback");
+				} else {
+					func = withTiming(value, options);
+					console.log("=timing");
+				}
+				// Add delay if needed
+				if(delay) {
+					func = withDelay(delay, func);
+					console.log("=delay "+String(delay));
+				}
+				variable.value = func;
+			}
+		}
+		// callback should result in a change of nextAnimations (if needed)
+	}, [nextAnimations])
+	const staticProperties = {
+//		position: "absolute",
+//		top: 0,
+//		left: 0
+	};
+	const doAnimationSequence = (phase, what) => {
+		const sequence = [];
+		if(phase === "begin") {
+			// mark callback
+			sequence.push(what);
+			// check for anything visible
+			if(textOpacity.value > 0) {
+				// Currently showing text
+				sequence.push("blankText");
+			} else if(wordsOpacity.value > 0) {
+				// Currently showing words
+				sequence.push("blankWords");
+			}
+			// show loading
+			sequence.push("showLoading");
+		} else if (phase === "continue") {
+			sequence.push(
+				"clear",       // callback to remove the stored info
+				"hideLoading", // hide loading
+				what           // show section
+			);
+		} else {
+			console.log("BAD PHASE: " + phase);
+			sequence.push(false);
+		}
+		// set up state
+		console.log("! ! ! "+JSON.stringify(sequence));
+		setNextAnimations(sequence);
+	};
+	const animationFunctions = {
+		showLoading: () => {
+			return {
+				duration: 100,
+				easing: Easing.inOut(Easing.quad),
+				changes: [
+					[loadingOpacity, 1]
+				]
+			};
+		},
+		hideLoading: () => {
+			return {
+				duration: 100,
+				easing: Easing.inOut(Easing.quad),
+				changes: [
+					[loadingOpacity, 0]
+				]
+			};
+		},
+		blankText: () => {
+			return {
+				duration: 250,
+				easing: Easing.out(Easing.quad),
+				changes: [
+					[textTranslateX, width / 2],
+					[textScale, 0],
+					[textOpacity, 0]
+				]
+			};
+		},
+		text: () => {
+			return {
+				duration: 250,
+				easing: Easing.in(Easing.quad),
+				changes: [
+					[textTranslateX, 0],
+					[textScale, 1],
+					[textOpacity, 1]
+				]
+			};
+		},
+		blankWords: () => {
+			return {
+				duration: 250,
+				easing: Easing.out(Easing.quad),
+				changes: [
+					[wordsTranslateX, width * -1],
+					[wordsOpacity, 0]
+				]
+			};
+		},
+		words: () => {
+			return {
+				duration: 250,
+				delay: 100,
+				easing: Easing.in(Easing.quad),
+				changes: [
+					[wordsTranslateX, 0],
+					[wordsOpacity, 1]
+				]
+			};
+		}
+	};
+	const animationCallbacks = {
+		text: () => generatePseudoText(),
+		syllables: () => generateEverySyllable(),
+		wordlist: () => generateWordList(),
+		clear: () => setNextAnimations(false)
+	};
 
 
 	// // //
@@ -260,6 +435,7 @@ const WGOutput = () => {
 		});
 	};
 
+
 	// // //
 	// Generate Output!
 	// // //
@@ -288,6 +464,10 @@ const WGOutput = () => {
 			setAlertCannotGenerate(true);
 			return;
 		}
+		// Send off to begin the process
+		console.log("BEGIN ANIMATION");
+		doAnimationSequence("begin", output);
+		/*
 		// Set up loading screen, clear any old info, etc
 		setDisplayedText(false);
 		setDisplayedWords([]);
@@ -302,6 +482,7 @@ const WGOutput = () => {
 				generateWordList();
 			}
 		}, 500);
+		*/
 	};
 
 
@@ -376,14 +557,17 @@ const WGOutput = () => {
 				text.push(end);
 			}
 		}
-		setShowLoadingScreen(false);
 		setDisplayedText(text);
 		setRawWords(rawWords);
+		setTextVisible(true);
+		setWordsVisible(false);
 		// mark that we've evolved
 		if (!showSaveButton) {
 			setShowSaveButton(true);
 		}
+		doAnimationSequence("continue", "text");
 	};
+
 
 	// // //
 	// Generate Syllables
@@ -439,6 +623,7 @@ const WGOutput = () => {
 		});
 		return result;
 	};
+
 
 	// // //
 	// Generate One Word
@@ -502,6 +687,7 @@ const WGOutput = () => {
 		return word;
 	};
 
+
 	// // //
 	// Generate Every Possible Syllable
 	// // //
@@ -553,7 +739,6 @@ const WGOutput = () => {
 //			everySyllable.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 			everySyllable.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "variant" }));
 		}
-		setShowLoadingScreen(false);
 		determineColumnSize(everySyllable);
 		setDisplayedWords(everySyllable.map(syl => {
 			return {
@@ -561,11 +746,15 @@ const WGOutput = () => {
 				rawWord: syl
 			};
 		}));
+		console.log("***>" + everySyllable[everySyllable.length - 1]);
 		setRawWords(everySyllable);
 		// mark that we've evolved
 		if (!showSaveButton) {
 			setShowSaveButton(true);
 		}
+		setTextVisible(false);
+		setWordsVisible(true);
+		doAnimationSequence("continue", "words");
 	};
 	const recurseSyllables = async (previous, toGo) => {
 		const current = toGo.charAt(0);
@@ -579,6 +768,7 @@ const WGOutput = () => {
 		}
 		return { results, next };
 	};
+
 
 	// // //
 	// Wordlist
@@ -612,15 +802,21 @@ const WGOutput = () => {
 //			words.sort(new Intl.Collator("en", { sensitivity: "variant" }).compare);
 			words.sort((a, b) => a.rawWord.localeCompare(b.rawWord, "en", { sensitivity: "variant" }));
 		}
-		setShowLoadingScreen(false);
 		determineColumnSize(words.map(w => w.text));
 		setDisplayedWords(words);
 		setRawWords(raws);
+		const sorty = [...raws];
+		sorty.sort();
+		console.log("***>" + sorty.pop());
 		// mark that we've evolved
 		if (!showSaveButton) {
 			setShowSaveButton(true);
 		}
+		setTextVisible(false);
+		setWordsVisible(true);
+		doAnimationSequence("continue", "words");
 	};
+
 
 	// // //
 	// Determine number of columns from given array of words
@@ -741,33 +937,6 @@ const WGOutput = () => {
 	// // //
 	// JSX
 	// // //
-	const LoadingScreen = memo(({size}) => {
-		return (
-			<MotiView
-				{...fromToZero(
-					{
-						opacity: 1
-					},
-					100
-				)}
-				style={{flex: 1, width}}
-			>
-				<HStack
-					flexWrap="wrap"
-					alignItems="center"
-					justifyContent="center"
-					space={10}
-					py={4}
-					w="full"
-					bg="lighter"
-				>
-					<Text fontSize={size}>Generating...</Text>
-					<Spinner size="lg" color="primary.500" />
-				</HStack>
-			</MotiView>
-		);
-	});
-
 	const outputOptions = [
 		{
 			key: "text",
@@ -1117,7 +1286,7 @@ const WGOutput = () => {
 							ml: 0,
 							mr: 0
 						}}
-						onChange={(v) => setOutput(v)}
+						onChange={(v) => {nextAnimations || setOutput(v)}}
 						defaultValue={output}
 						title="Display:"
 						options={outputOptions}
@@ -1139,7 +1308,9 @@ const WGOutput = () => {
 						}
 						colorScheme={savingToLexicon ? "success" : "primary"}
 						onPress={() => {
-							if(savingToLexicon) {
+							if(nextAnimations) {
+								return;
+							} else if(savingToLexicon) {
 								const words = findWordsToSave();
 								if(words.length > 0) {
 									// Open modal to choose where to save.
@@ -1155,134 +1326,143 @@ const WGOutput = () => {
 						}}
 					>{savingToLexicon ? "SAVE" : "GENERATE"}</Button>
 				</VStack>
-				<HStack flexWrap="wrap">
-					<IconButton
-						colorScheme="secondary"
-						variant="solid"
-						icon={<GearIcon size={textSize} />}
-						px={3.5}
-						py={1}
-						mr={2}
-						onPress={() => setOpenSettings(true)}
-					/>
-					<IconButton
-						colorScheme="secondary"
-						variant="solid"
-						icon={<CopyIcon size={textSize} />}
-						px={3.5}
-						py={1}
-						mr={2}
-						onPress={copyAllToClipboard}
-						onLayout={(event) => {
-							// This sets up the width of the button that appears later
-							if(!buttonWidth) {
-								const {width} = event.nativeEvent.layout;
-								setButtonWidth(width);
-							}
-						}}
-					/>
-					<Menu
-						placement="bottom right"
-						trigger={(props) => (rawWords.length > 0 && // Only show this button when there are words to save.
-							<MotiView
-								key="saveMenu"
-								animate={
-									showSaveButton ?
-										{
-											width: buttonWidth,
-											translateX: 0,
-											rotateY: "0deg"
-										}
-									:
-										{
-											width: 0,
-											translateX: buttonWidth,
-											rotateY: "90deg"
-										}
-								}
-								transition={{
-									type: "timing",
-									duration: 300
-								}}
-								style={{
-									overflow: "hidden"
-								}}
-							>
-								<IconButton
-									colorScheme="secondary"
-									variant="solid"
-									icon={<SaveIcon size={textSize} />}
-									px={3.5}
-									py={1}
-									{...props}
-								/>
-							</MotiView>
-						)}
-					>
-						<Menu.Item
-							onPress={() => setChooseWhereToSaveInLex(true)}
-						>Save All to Lexicon</Menu.Item>
-						<Menu.Item
-							onPress={() => toggleSaveSomeToLex()}
-						>Choose What to Save</Menu.Item>
-					</Menu>
-				</HStack>
-			</HStack>
-			<AnimatePresence exitBeforeEnter>
-				{(showLoadingScreen &&
-					<LoadingScreen key="loadingScreen" size={giantSize} />
-				)}
-				{(displayedText &&
-					<MotiView
-						{...flipFlop(
-							{
-								translateX: width / 2
-							},
-							{
-								scaleY: 1,
-								opacity: 1
-							},
-							250
-						)}
-						style={{flex: 1}}
-					>
-						<ScrollView>
-							<PseudoText
-								text={displayedText}
-								saving={savingToLexicon}
-								fontSize={textSize}
-								lineHeight={headerSize}
-							/>
-						</ScrollView>
-					</MotiView>
-				)}
-				{(displayedWords.length > 0 &&
-					<MotiView
-						{...flipFlop(
-							{
-								translateX: width / -2
-							},
-							{
-								opacity: 1
-							},
-							250
-						)}
-						style={{flex: 1}}
-					>
-						<FlatGrid
-							renderItem={renderItem}
-							data={displayedWords}
-							itemDimension={longestWordSizeEstimate}
-							keyExtractor={makeKey}
-							style={{
-								paddingVertical: 0,
-								paddingHorizontal: 16
-							}}
-							spacing={emSize}
+				<VStack
+					alignItems="flex-end"
+					justifyContent="space-between"
+					flex={1}
+					space={4}
+				>
+					<HStack flexWrap="wrap">
+						<IconButton
+							colorScheme="secondary"
+							variant="solid"
+							icon={<GearIcon size={textSize} />}
+							px={3.5}
+							py={1}
+							mr={2}
+							onPress={() => setOpenSettings(true)}
 						/>
-					</MotiView>
-				)}
-			</AnimatePresence>
+						<IconButton
+							colorScheme="secondary"
+							variant="solid"
+							icon={<CopyIcon size={textSize} />}
+							px={3.5}
+							py={1}
+							mr={2}
+							onPress={copyAllToClipboard}
+							onLayout={(event) => {
+								// This sets up the width of the button that appears later
+								if(!buttonWidth) {
+									const {width} = event.nativeEvent.layout;
+									setButtonWidth(width);
+								}
+							}}
+						/>
+						<Menu
+							placement="bottom right"
+							trigger={(props) => (rawWords.length > 0 && // Only show this button when there are words to save.
+								<MotiView
+									key="saveMenu"
+									animate={
+										showSaveButton ?
+											{
+												width: buttonWidth,
+												translateX: 0,
+												rotateY: "0deg"
+											}
+										:
+											{
+												width: 0,
+												translateX: buttonWidth,
+												rotateY: "90deg"
+											}
+									}
+									transition={{
+										type: "timing",
+										duration: 300
+									}}
+									style={{
+										overflow: "hidden"
+									}}
+								>
+									<IconButton
+										colorScheme="secondary"
+										variant="solid"
+										icon={<SaveIcon size={textSize} />}
+										px={3.5}
+										py={1}
+										{...props}
+									/>
+								</MotiView>
+							)}
+						>
+							<Menu.Item
+								onPress={() => setChooseWhereToSaveInLex(true)}
+							>Save All to Lexicon</Menu.Item>
+							<Menu.Item
+								onPress={() => toggleSaveSomeToLex()}
+							>Choose What to Save</Menu.Item>
+						</Menu>
+					</HStack>
+					<Animated.View style={{
+						...loadingTransforms,
+						...staticProperties
+					}}>
+						<HStack
+							flexWrap="wrap"
+							alignItems="center"
+							justifyContent="center"
+							space={2}
+							py={2}
+							px={4}
+							bg="lighter"
+							borderRadius="md"
+						>
+							<Spinner size="sm" color="primary.500" />
+						</HStack>
+					</Animated.View>
+				</VStack>
+			</HStack>
+			<Box flexGrow={1}>
+				<Animated.ScrollView style={{
+					flexGrow: 1,
+					...textTransforms,
+					...staticProperties
+				}}>
+					<Box
+						flexGrow={1}
+						h={textVisible ? undefined : 0}
+					>
+						<PseudoText
+							text={displayedText}
+							saving={savingToLexicon}
+							fontSize={textSize}
+							lineHeight={headerSize}
+						/>
+						<Box h={16}></Box>
+					</Box>
+				</Animated.ScrollView>
+				<Animated.View style={{
+					flexGrow: 1,
+					...wordsTransforms,
+					...staticProperties
+				}}>
+					<FlatGrid
+						renderItem={renderItem}
+						data={displayedWords}
+						itemDimension={longestWordSizeEstimate}
+						keyExtractor={makeKey}
+						style={{
+							paddingVertical: 0,
+							paddingHorizontal: 16,
+							flexGrow: 1,
+							height: wordsVisible ? undefined : 0
+						}}
+						spacing={emSize}
+					/>
+						<Box h={16}></Box>
+				</Animated.View>
+			</Box>
 		</VStack>
 	);
 };
