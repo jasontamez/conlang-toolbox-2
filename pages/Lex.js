@@ -429,6 +429,7 @@ const Lex = () => {
 					<Pressable
 						onPress={() => setLoadChosen(info)}
 						flex={1}
+						_pressed={{bg: "lighter"}}
 					>
 						<HStack
 							justifyContent="space-between"
@@ -605,10 +606,13 @@ const Lex = () => {
 	//
 	//
 	const doText = (spacer, separator = "\n") => {
+		// 'spacer' separates columns of an entry
+		// 'separator' separates entries from each other
 		return `${title}\n${description}\n\n${columns.map(col => col.label).join(spacer)}${separator}`
 			+ lexicon.map(lex => lex.columns.join(spacer)).join(separator) + "\n";
 	};
 	const doCSV = (showAll = false) => {
+		// if 'showAll' is true, add the title and description to the top of the document
 		let extraSep = "";
 		const quotify = (input) => JSON.stringify(input).replace(/\\"/g, "\"\"");
 		let beginning = "";

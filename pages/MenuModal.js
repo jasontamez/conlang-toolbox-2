@@ -185,9 +185,54 @@ const MenuModal = () => {
 									title
 								} = kid;
 								const isSelected = pathname === url;
-								const textOptions = isSelected ? { color: "primary.500" } : {};
 								const bgOptions = isSelected ? { bg: "primary.500" } : {};
 								const offScreen = -500;
+								const Inner = ({isPressed}) => {
+									const textOptions = isSelected || isPressed ? { color: "primary.500" } : {};
+									return (
+										<ZStack>
+											<HStack
+												w="full"
+												{...bgOptions}
+												opacity={10}
+											/>
+											<HStack
+												w="full"
+												alignItems="center"
+												justifyContent="flex-end"
+											>
+												<VStack
+													alignItems="flex-end"
+													justifyContent="center"
+													flex={1}
+													m={2}
+													ml={4}
+												>
+													<Text
+														textAlign="right"
+														fontSize={subMenuSize}
+														{...textOptions}
+														isTruncated
+													>{title}</Text>
+												</VStack>
+												<VStack
+													alignItems="center"
+													justifyContent="center"
+													m={2}
+													minW={4}
+													ml={0}
+												>
+													<Text
+														textAlign="left"
+														fontSize={menuSize}
+														{...textOptions}
+														color={isSelected ? "primary.500" : "transparent"}
+													>{`\u25CF`}</Text>
+												</VStack>
+											</HStack>
+										</ZStack>
+									);
+								};
 								return (
 									<MotiView
 										key={id}
@@ -215,49 +260,8 @@ const MenuModal = () => {
 											onPress={() => navigate(url)}
 											style={{height: subMenuItemHeight}}
 											key={`${id}-pressable`}
-										>
-											<ZStack>
-												<HStack
-													w="full"
-													{...bgOptions}
-													opacity={10}
-												/>
-												<HStack
-													w="full"
-													alignItems="center"
-													justifyContent="flex-end"
-												>
-													<VStack
-														alignItems="flex-end"
-														justifyContent="center"
-														flex={1}
-														m={2}
-														ml={4}
-													>
-														<Text
-															textAlign="right"
-															fontSize={subMenuSize}
-															{...textOptions}
-															isTruncated
-														>{title}</Text>
-													</VStack>
-													<VStack
-														alignItems="center"
-														justifyContent="center"
-														m={2}
-														minW={4}
-														ml={0}
-													>
-														<Text
-															textAlign="left"
-															fontSize={menuSize}
-															{...textOptions}
-															color={isSelected ? "primary.500" : "transparent"}
-														>{`\u25CF`}</Text>
-													</VStack>
-												</HStack>
-											</ZStack>
-										</Pressable>
+											children={(props) => <Inner {...props} />}
+										/>
 									</MotiView>
 								);
 							})}
@@ -268,25 +272,19 @@ const MenuModal = () => {
 		}
 		// App Section (standalone)
 		const isSelected = pathname === url;
-		const textOptions = {
-			fontSize: fontAdjustment ? fontSizeAdjustments[fontAdjustment] : menuSize,
-			color: (isSelected ? "primary.500" : undefined),
-			...fontOptions
-		};
 		const itemHeight = menuItemHeight * heightMultiplier;
-		return (
-			<Pressable
-				onPress={() => navigate(url)}
-				key={id}
-				style={{height: itemHeight}}
-				w="full"
-				bg="main.800"
-			>
+		const Inner = ({isPressed}) => {
+			const textOptions = {
+				fontSize: fontAdjustment ? fontSizeAdjustments[fontAdjustment] : menuSize,
+				color: (isSelected || isPressed ? "primary.500" : undefined),
+				...fontOptions
+			};
+			return (
 				<ZStack>
 					<HStack
 						style={{height: itemHeight}}
 						w="full"
-						bg={isSelected ? "primary.500" : undefined}
+						bg={isSelected || isPressed ? "primary.500" : undefined}
 						opacity={20}
 					/>
 					<HStack
@@ -315,7 +313,17 @@ const MenuModal = () => {
 						</VStack>
 					</HStack>
 				</ZStack>
-			</Pressable>
+			);
+		};
+		return (
+			<Pressable
+				onPress={() => navigate(url)}
+				key={id}
+				style={{height: itemHeight}}
+				w="full"
+				bg="main.800"
+				children={(props) => <Inner {...props} />}
+			/>
 		);
 	};
 	return (
@@ -354,7 +362,7 @@ const MenuModal = () => {
 					<Pressable
 						h="full"
 						flex={1}
-						onPress={() => closeMenu()}
+						onPress={closeMenu}
 					></Pressable>
 				</HStack>
 			</Modal>

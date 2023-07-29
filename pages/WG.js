@@ -39,9 +39,9 @@ const WG = () => {
 	});
 	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";
-		const colorString = isCurrent ? "primary.500" : "main.600";
-		return (
-			<Pressable onPress={() => doNavigate(link)} overflow="hidden">
+		const Inner = ({isPressed}) => {
+			const colorString = isCurrent || isPressed ? "primary.500" : "main.600";
+			return (
 				<VStack
 					alignItems="center"
 					justifyContent="center"
@@ -54,7 +54,10 @@ const WG = () => {
 					<TabIcon color={colorString} size={iconSize} />
 					<ButtonLabel color={colorString} label={label} />
 				</VStack>
-			</Pressable>
+			)
+		};
+		return (
+			<Pressable onPress={() => doNavigate(link)} overflow="hidden" children={(props) => <Inner {...props} />} />
 		);
 	};
 	return (
