@@ -72,7 +72,7 @@ const WE = () => {
 			>
 				<Outlet context={[appHeaderHeight, viewHeight, tabBarHeight, doNavigate]} />
 			</VStack>
-			<TabBar rawHeight={tabBarHeight}>
+			<TabBar rawHeight={tabBarHeight} boxProps={{zIndex: 5, bg: "main.800"}}>
 				<NavTab
 					isCurrent={pathname === "/we"}
 					TabIcon={(props) => <WEInputIcon {...props} />}

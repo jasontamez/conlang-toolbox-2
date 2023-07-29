@@ -5,7 +5,6 @@ import {
 	Spinner,
 	Button,
 	IconButton,
-	Pressable,
 	useContrastText,
 	Modal,
 	Box,
@@ -27,6 +26,7 @@ import { FlatGrid } from 'react-native-super-grid';
 import escapeRegexp from "escape-string-regexp";
 import { setStringAsync as setClipboard } from 'expo-clipboard';
 import { AnimatePresence, MotiView } from "moti";
+import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 import {
 	CancelIcon,
@@ -46,13 +46,8 @@ import StandardAlert from "../../components/StandardAlert";
 import { DropDown, ToggleSwitch } from "../../components/inputTags";
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
-import { loadState, setFlag, setOutput, setStoredCustomInfo } from "../../store/weSlice";
-import WEPresetsModal from "./wePresetsModal";
-import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
-import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
-import { weCustomStorage } from "../../helpers/persistentInfo";
+import { setFlag, setOutput } from "../../store/weSlice";
 import getSizes from "../../helpers/getSizes";
-import { flipFlop } from "../../helpers/motiAnimations";
 
 const WGOutput = () => {
 	const {
@@ -60,8 +55,6 @@ const WGOutput = () => {
 		characterGroups,
 		transforms,
 		soundChanges,
-		storedCustomInfo,
-		storedCustomIDs,
 		settings: {
 			outputStyle,
 			multicolumn,
@@ -73,7 +66,8 @@ const WGOutput = () => {
 	const dispatch = useDispatch();
 	const [alertCannotEvolve, setAlertCannotEvolve] = useState(false);
 	const [alertMsg, setAlertMsg] = useState("");
-	const [showGenerationInProgressMessage, setShowGenerationInProgressMessage] = useState(false);
+
+	const [nextAnimations, setNextAnimations] = useState(false);
 
 	const [longestWordSizeEstimate, setLongestWordSizeEstimate] = useState(undefined);
 	const [longestEvolvedWordSizeEstimate, setLongestEvolvedWordSizeEstimate] = useState(undefined);
@@ -99,10 +93,10 @@ const WGOutput = () => {
 			label: "Output ⟵ Input"
 		}
 	];
-	const [evolvedWords, setEvolvedWords] = useState(false);
-	const [originalEvolvedWords, setOriginalEvolvedWords] = useState(false);
-	const [evolvedOriginalWords, setEvolvedOriginalWords] = useState(false);
-	const [originalEvolvedRulesWords, setOriginalEvolvedRulesWords] = useState(false);
+	const [outputWords, setOutputWords] = useState([]);
+	const [inputOutputWords, setInputOutputWords] = useState([]);
+	const [outputInputWords, setOutputInputWords] = useState([]);
+	const [rulesWords, setRulesWords] = useState([]);
 	const [saveableWords, setSaveableWords] = useState([]);
 	const [showSaveButton, setShowSaveButton] = useState(false);
 	const [buttonWidth, setButtonWidth] = useState(0);
@@ -119,20 +113,40 @@ const WGOutput = () => {
 
 	const [openSettings, setOpenSettings] = useState(false);
 
-	const [clearAlertOpen, setClearAlertOpen] = useState(false);
-	const [openPresetModal, setOpenPresetModal] = useState(false);
-	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
-	const [openSaveCustomInfoModal, setOpenSaveCustomInfoModal] = useState(false);
-
 	const [
 		textSize,
 		descSize,
 		headerSize,
-		largeSize,
-		giantSize
-	] = getSizes("sm", "xs", "md", "lg", "x2");
+		largeSize
+	] = getSizes("sm", "xs", "md", "lg");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
+	const spinnerSize = fontSizesInPx[largeSize] || fontSizesInPx.lg;
+	const headerHeight =
+		36 // Combination of padding
+		+ (fontSizesInPx[textSize] || fontSizesInPx.sm)
+		+ (fontSizesInPx[largeSize] || fontSizesInPx.lg)
+		+ 64 // Extra padding;
 	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
+	const lowerHeight = viewHeight - headerHeight;
+	const { width } = useWindowDimensions();
+
+	const loadingOpacity = useSharedValue(0);
+	const inputOutputTranslateX = useSharedValue(width / 2);
+	const inputOutputScale = useSharedValue(0);
+	const inputOutputOpacity = useSharedValue(0);
+	const outputInputTranslateX = useSharedValue(width / -2);
+	const outputInputScale = useSharedValue(0);
+	const outputInputOpacity = useSharedValue(0);
+	const rulesTranslateX = useSharedValue(width / 2);
+	const rulesScale = useSharedValue(0);
+	const rulesOpacity = useSharedValue(0);
+	const outputTranslateY = useSharedValue(headerHeight);
+	const outputOpacity = useSharedValue(0);
+	const [inputOutputVisible, setInputOutputVisible] = useState(false);
+	const [outputInputVisible, setOutputInputVisible] = useState(false);
+	const [rulesVisible, setRulesVisible] = useState(false);
+	const [outputVisible, setOutputVisible] = useState(false);
+
 	const toast = useToast();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
@@ -140,25 +154,24 @@ const WGOutput = () => {
 	const saveToLexInitialRef = useRef(null);
 	const arrowLR = "⟶";
 	const arrowRL = "⟵";
-	const { width } = useWindowDimensions();
 
 	const copyAllToClipboard = () => {
 		const info = [];
-		if(evolvedWords) {
-			info.push(...evolvedWords.map(ew => ew[0]));
-		} else if(originalEvolvedRulesWords) {
-			originalEvolvedRulesWords.forEach(oerw => {
+		if(outputWords) {
+			info.push(...outputWords.map(ew => ew[0]));
+		} else if(rulesWords) {
+			rulesWords.forEach(oerw => {
 				const [o, e, i, se, r] = oerw;
 				info.push(`${o} ${arrowLR} ${e}`);
 				r.forEach(rr => {
 					const [newWord, search, arrow, replace, ...others] = rr;
-					info.push("\t" + `${search}${arrow}${replace}${others.join("")} ${arrowLR} ${newWord}`);
+					info.push(`\t${search}${arrow}${replace}${others.join("")} ${arrowLR} ${newWord}`);
 				});
 			});
-		} else if(evolvedOriginalWords) {
-			info.push(...evolvedOriginalWords.map(eow => `${eow[0]} ${arrowRL} ${eow[1]}`));
-		} else if(originalEvolvedWords) {
-			info.push(...originalEvolvedWords.map(eow => `${eow[0]} ${arrowLR} ${eow[1]}`));
+		} else if(outputInputWords) {
+			info.push(...outputInputWords.map(eow => `${eow[0]} ${arrowRL} ${eow[1]}`));
+		} else if(inputOutputWords) {
+			info.push(...inputOutputWords.map(eow => `${eow[0]} ${arrowLR} ${eow[1]}`));
 		} else {
 			// Nothing to copy
 			return doToast({
@@ -274,6 +287,224 @@ const WGOutput = () => {
 		setChooseWhereToSaveInLex(false);
 		setSavingToLexicon(false);
 	};
+	// TO-DO: Set up a modal to select words to send to Lexicon
+
+	// // //
+	// Juggle Animations
+	// // //
+	useEffect(() => {
+		// When nextAnimations changes, trigger the next set of animations
+		if(!nextAnimations) {
+			return;
+		}
+		const [callback, ...sequence] = nextAnimations;
+		while(sequence.length > 0) {
+			const next = sequence.shift();
+			const {
+				duration,
+				delay,
+				easing,
+				changes
+			} = animationFunctions[next]();
+			const options = { duration, easing };
+			while(changes.length > 0) {
+				const [variable, value] = changes.shift();
+				let func;
+				// Drop callback into last change of last sequence
+				if(callback && sequence.length === 0 && changes.length === 0) {
+					func = withTiming(value, options, () => runOnJS(animationCallbacks[callback])());
+				} else {
+					func = withTiming(value, options);
+				}
+				// Add delay if needed
+				if(delay) {
+					func = withDelay(delay, func);
+				}
+				variable.value = func;
+			}
+		}
+		// callback should result in a change of nextAnimations (if needed)
+	}, [nextAnimations])
+	const doAnimationSequence = (phase, what) => {
+		const sequence = [];
+		if(phase === "begin") {
+			// mark callback
+			sequence.push("doTheEvolution");
+			// check for anything visible
+			if(inputOutputOpacity.value > 0) {
+				// Currently showing text
+				sequence.push("blankInputOutput");
+			} else if(outputInputOpacity.value > 0) {
+				// Currently showing words
+				sequence.push("blankOutputInput");
+			} else if(rulesOpacity.value > 0) {
+				// Currently showing words
+				sequence.push("blankRules");
+			} else if(outputOpacity.value > 0) {
+				// Currently showing words
+				sequence.push("blankOutput");
+			}
+			// show loading
+			sequence.push("showLoading");
+		} else if (phase === "continue") {
+			sequence.push(
+				"clear",       // callback to remove the stored info
+				"hideLoading", // hide loading
+				what           // show section
+			);
+		} else {
+			console.log("BAD PHASE: " + phase);
+			sequence.push(false);
+		}
+		// set up state
+		setNextAnimations(sequence);
+	};
+	const animationFunctions = {
+		showLoading: () => {
+			return {
+				duration: 100,
+				easing: Easing.inOut(Easing.quad),
+				changes: [
+					[loadingOpacity, 1]
+				]
+			};
+		},
+		hideLoading: () => {
+			return {
+				duration: 300,
+				easing: Easing.inOut(Easing.quad),
+				changes: [
+					[loadingOpacity, 0]
+				]
+			};
+		},
+		blankInputOutput: () => {
+			return {
+				duration: 250,
+				easing: Easing.out(Easing.quad),
+				changes: [
+					[inputOutputTranslateX, width / 2],
+					[inputOutputScale, 0],
+					[inputOutputOpacity, 0]
+				]
+			};
+		},
+		inputoutput: () => {
+			return {
+				duration: 250,
+				delay: 50,
+				easing: Easing.in(Easing.quad),
+				changes: [
+					[inputOutputTranslateX, 0],
+					[inputOutputScale, 1],
+					[inputOutputOpacity, 1]
+				]
+			};
+		},
+		blankOutputInput: () => {
+			return {
+				duration: 250,
+				easing: Easing.out(Easing.quad),
+				changes: [
+					[outputInputTranslateX, width / -2],
+					[outputInputScale, 0],
+					[outputInputOpacity, 0]
+				]
+			};
+		},
+		outputinput: () => {
+			return {
+				duration: 250,
+				delay: 50,
+				easing: Easing.in(Easing.quad),
+				changes: [
+					[outputInputTranslateX, 0],
+					[outputInputScale, 1],
+					[outputInputOpacity, 1]
+				]
+			};
+		},
+		blankRules: () => {
+			return {
+				duration: 250,
+				easing: Easing.out(Easing.quad),
+				changes: [
+					[rulesTranslateX, width / 2],
+					[rulesScale, 0],
+					[rulesOpacity, 0]
+				]
+			};
+		},
+		rules: () => {
+			return {
+				duration: 250,
+				delay: 50,
+				easing: Easing.in(Easing.quad),
+				changes: [
+					[rulesTranslateX, 0],
+					[rulesScale, 1],
+					[rulesOpacity, 1]
+				]
+			};
+		},
+		blankOutput: () => {
+			return {
+				duration: 250,
+				easing: Easing.out(Easing.quad),
+				changes: [
+					[outputTranslateY, lowerHeight],
+					[outputOpacity, 0]
+				]
+			};
+		},
+		output: () => {
+			return {
+				duration: 250,
+				delay: 50,
+				easing: Easing.in(Easing.quad),
+				changes: [
+					[outputTranslateY, 0],
+					[outputOpacity, 1]
+				]
+			};
+		}
+	};
+	const animationCallbacks = {
+		clear: () => setNextAnimations(false),
+		doTheEvolution: () => doTheEvolution()
+	};
+
+	const loadingTransforms = useAnimatedStyle(() => ({
+		opacity: loadingOpacity.value
+	}));
+	const inputOutputTransforms = useAnimatedStyle(() => ({
+		transform: [
+			{ translateX: inputOutputTranslateX.value },
+			{ scale: inputOutputScale.value }
+		],
+		opacity: inputOutputOpacity.value
+	}));
+	const outputInputTransforms = useAnimatedStyle(() => ({
+		transform: [
+			{ translateX: outputInputTranslateX.value },
+			{ scale: outputInputScale.value }
+		],
+		opacity: outputInputOpacity.value
+	}));
+	const rulesTransforms = useAnimatedStyle(() => ({
+		transform: [
+			{ translateX: rulesTranslateX.value },
+			{ scale: rulesScale.value }
+		],
+		opacity: rulesOpacity.value
+	}));
+	const outputTransforms = useAnimatedStyle(() => ({
+		transform: [
+			{ translateY: outputTranslateY.value }
+		],
+		opacity: outputOpacity.value
+	}));
+
 
 	// // //
 	// Convenience Variables
@@ -528,12 +759,11 @@ const WGOutput = () => {
 			setAlertCannotEvolve(true);
 			return;
 		}
-
-		setShowGenerationInProgressMessage(true);
-		setEvolvedWords(false);
-		setOriginalEvolvedWords(false);
-		setEvolvedOriginalWords(false);
-		setOriginalEvolvedRulesWords(false);
+		// Send off to begin the process
+		doAnimationSequence("begin");
+	};
+	const doTheEvolution = () => {
+		let rawInput = input.split(/\n/);
 		// lowercase option
 		if(inputLower) {
 			rawInput = rawInput.map(word => word.toLowerCase());
@@ -545,13 +775,16 @@ const WGOutput = () => {
 		const changedWords = changeTheWords(rawInput);
 		const output = [];
 		const changed = [];
-
 		switch(outputStyle) {
 			case "output":
 				// format will be a simple array of strings
 				// but we need to set up keys
-				setEvolvedWords(changedWords.map((word, i) => [word, i]));
+				setOutputWords(changedWords.map((word, i) => [word, i]));
 				changed.push(...changedWords);
+				setOutputVisible(true);
+				setOutputInputVisible(false);
+				setInputOutputVisible(false);
+				setRulesVisible(false);
 				break;
 			case "outputinput":
 				// format will be an array of two-string arrays
@@ -561,7 +794,11 @@ const WGOutput = () => {
 					output.push([evolved, original, i]);
 					changed.push(evolved);
 				});
-				setEvolvedOriginalWords(output);
+				setOutputInputWords(output);
+				setOutputVisible(false);
+				setOutputInputVisible(true);
+				setInputOutputVisible(false);
+				setRulesVisible(false);
 				break;
 			case "inputoutput":
 				// format will be an array of two-string arrays
@@ -571,7 +808,11 @@ const WGOutput = () => {
 					output.push([original, evolved, i]);
 					changed.push(evolved);
 				});
-				setOriginalEvolvedWords(output);
+				setInputOutputWords(output);
+				setOutputVisible(false);
+				setOutputInputVisible(false);
+				setInputOutputVisible(true);
+				setRulesVisible(false);
 				break;
 			case "rules":
 				// [original, word, ...[[rule, new word]...]]
@@ -580,7 +821,11 @@ const WGOutput = () => {
 					output.push([original, evolved, i, rules]);
 					changed.push(evolved);
 				});
-				setOriginalEvolvedRulesWords(output);
+				setRulesWords(output);
+				setOutputVisible(false);
+				setOutputInputVisible(false);
+				setInputOutputVisible(false);
+				setRulesVisible(true);
 				break;
 			default:
 				console.log("Unknown error occurred.");
@@ -601,7 +846,7 @@ const WGOutput = () => {
 			testing[word] = true;
 			return true;
 		}));
-		setShowGenerationInProgressMessage(false);
+		doAnimationSequence("continue", outputStyle)
 	};
 	// Take an array of strings and apply each sound change rule
 	//  to each string one at a time, then return an array
@@ -892,154 +1137,97 @@ const WGOutput = () => {
 
 
 	// // //
-	// Buttons
-	// // //
-	const maybeClearEverything = () => {
-		if(disableConfirms) {
-			doClearEveything();
-		}
-		setClearAlertOpen(true);
-	};
-	const doClearEveything = () => {
-		dispatch(loadState(null));
-		doToast({
-			toast,
-			msg: "Info has been cleared.",
-			scheme: "danger",
-			placement: "bottom"
-		})
-	};
-	const maybeSaveInfo = () => setOpenSaveCustomInfoModal(true);
-	const maybeLoadPreset = () => setOpenPresetModal(true);
-
-
-
-
-	// // //
 	// JSX
 	// // //
-	const GenerationInProgressMessage = memo(({size}) => {
+	const Simple = memo((props) => <Text selectable fontSize={textSize} lineHeight={headerSize} {...props} />);
+	const renderInputOutput = useCallback(({item}) => {
+		// inputOutputWords (flat list)
+		const [original, evolved, i] = item;
+		const halfish = (width - 32) / 2;
 		return (
-			<MotiView
-				from={{
-					scaleY: 0,
-					scaleX: 0.25,
-					translateY: 50,
-					opacity: 0.5
-				}}
-				animate={{
-					scaleY: 1,
-					scaleX: 1,
-					translateY: 0,
-					opacity: 1
-				}}
-				exit={{
-					scaleY: 0,
-					scaleX: 0.25,
-					translateY: 50,
-					opacity: 0.5
-				}}
-				transition={{
-					type: "timing",
-					duration: 800
-				}}
-				style={{
-					flex: 1,
-					width: "100%"
-				}}
+			<HStack
+				justifyContent="center"
+				alignItems="center"
+				flexWrap="wrap"
+				py={2}
+				w="full"
+				bg={i % 2 ? "lighter" : "transparent"}
 			>
 				<HStack
-					flexWrap="wrap"
+					justifyContent="flex-end"
 					alignItems="center"
-					justifyContent="center"
-					space={10}
-					py={4}
-					w="full"
-					bg="lighter"
+					style={{width:halfish}}
+					pl={2}
 				>
-					<Text fontSize={size}>Generating...</Text>
-					<Spinner size="lg" color="primary.500" />
+					<Simple selectable textAlign="right">{original}</Simple>
 				</HStack>
-			</MotiView>
+				<HStack
+					justifyContent="center"
+					alignItems="center"
+					style={{width: 32}}
+				>
+					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
+				</HStack>
+				<HStack 
+					justifyContent="flex-start"
+					alignItems="center"
+					style={{width:halfish}}
+					pr={2}
+				>
+					<Simple selectable textAlign="left">{evolved}</Simple>
+				</HStack>
+			</HStack>
 		);
-	});
-	const Simple = memo((props) => <Text selectable fontSize={textSize} lineHeight={headerSize} {...props} />);
-	const renderOriginalEvolved = useCallback(({item}) => {
-		// originalEvolvedWords (flat list)
-		const [a, b, i] = item;
-		const original = <Simple fontSize={textSize} lineHeight={headerSize}>{a}</Simple>;
-		const evolved = savingToLexicon ?
-			<SaveableElement text={b} index={i} wordsToSave={wordsToSave} />
-		:
-			<Simple fontSize={textSize} lineHeight={headerSize}>{b}</Simple>
-		;
+	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
+	const renderOutputInput = useCallback(({item}) => {
+		// outputInputWords (flat list)
+		const [evolved, original, i] = item;
+		const halfish = (width - 32) / 2;
 		return (
 			<HStack
 				justifyContent="center"
 				alignItems="center"
-				space={1.5}
 				flexWrap="wrap"
 				py={2}
+				w="full"
+				bg={i % 2 ? "lighter" : "transparent"}
 			>
-				<Box style={{
-					flexGrow: 0,
-					flexShrink: 0,
-					flexBasis: longestEvolvedWordSizeEstimate
-				}}>
-					<Text selectable textAlign="right" fontSize={textSize}>{original}</Text>
-				</Box>
-				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
-				<Box flex={1}>
-					<Text selectable textAlign="left" fontSize={textSize}>{evolved}</Text>
-				</Box>
+				<HStack 
+					justifyContent="flex-end"
+					alignItems="center"
+					style={{width:halfish}}
+					pl={2}
+				>
+					<Simple selectable textAlign="right">{evolved}</Simple>
+				</HStack>
+				<HStack
+					justifyContent="center"
+					alignItems="center"
+					style={{width: 32}}
+				>
+					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowRL}</Simple>
+				</HStack>
+				<HStack
+					justifyContent="flex-start"
+					alignItems="center"
+					style={{width:halfish}}
+					pr={2}
+				>
+					<Simple selectable textAlign="left">{original}</Simple>
+				</HStack>
 			</HStack>
 		);
 	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
-	const renderEvolvedOriginal = useCallback(({item}) => {
-		// evolvedOriginalWords (flat list)
-		const [a, b, i] = item;
-		const evolved = savingToLexicon ?
-			<SaveableElement text={a} index={i} wordsToSave={wordsToSave} />
-		:
-			<Simple fontSize={textSize} lineHeight={headerSize}>{a}</Simple>
-		;
-		const original = <Simple fontSize={textSize} lineHeight={headerSize}>{b}</Simple>;
-		return (
-			<HStack
-				justifyContent="center"
-				alignItems="center"
-				space={1.5}
-				flexWrap="wrap"
-				py={2}
-			>
-				<Box style={{
-					flexGrow: 0,
-					flexShrink: 0,
-					flexBasis: longestEvolvedWordSizeEstimate
-				}} flexShrink={0} flexGrow={0}>
-					<Text selectable textAlign="right" fontSize={textSize}>{evolved}</Text>
-				</Box>
-				<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowRL}</Simple>
-				<Box flex={1}>
-					<Text selectable textAlign="left" fontSize={textSize}>{original}</Text>
-				</Box>
-			</HStack>
-		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
-	const renderOriginalEvolvedRules = useCallback(({item}) => {
-		// originalEvolvedRulesWords (flat list)
+	const renderRules = useCallback(({item}) => {
+		// rulesWords (flat list)
 		const [original, evolved, i, rules] = item;
-		const evolvedOutput = savingToLexicon ?
-			<SaveableElement text={evolved} index={i} wordsToSave={wordsToSave} />
-		:
-			<Simple textAlign="left" lineHeight={headerSize}>{evolved}</Simple>
-		;
 		return (
 			<VStack
 				justifyContent="flex-start"
 				alignItems="flex-start"
 				py={2}
 				style={{width}}
+				bg={i % 2 ? "lighter" : "transparent"}
 			>
 				<HStack
 					justifyContent="flex-start"
@@ -1049,14 +1237,28 @@ const WGOutput = () => {
 					w="full"
 					flexWrap="wrap"
 				>
-					<Box style={{
-						flexGrow: 0,
-						flexShrink: 0,
-					}}>
-						<Simple textAlign="left" lineHeight={headerSize}>{original}</Simple>
-					</Box>
-					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
-					<Box flex={1}>{evolvedOutput}</Box>
+					<HStack
+						justifyContent="flex-end"
+						alignItems="center"
+						pl={2}
+					>
+						<Simple selectable textAlign="right">{original}</Simple>
+					</HStack>
+					<HStack
+						justifyContent="center"
+						alignItems="center"
+						style={{width: 32}}
+					>
+						<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
+					</HStack>
+					<HStack 
+						justifyContent="flex-start"
+						alignItems="center"
+						pr={2}
+						flex={1}
+					>
+						<Simple selectable textAlign="left">{evolved}</Simple>
+					</HStack>
 				</HStack>
 				{rules.map(r => {
 					const [newWord, search, arrow, replace, ...others] = r;
@@ -1065,12 +1267,14 @@ const WGOutput = () => {
 					return (
 						<HStack
 							key={key}
-							ml={5}
+							ml={10}
 							flexWrap="wrap"
 						>
 							<HStack
 								flexWrap="wrap"
 								ml={1.5}
+								justifyContent="center"
+								alignItems="center"
 							>
 								<Text selectable textAlign="left" fontSize={textSize}>{search}{arrow}{replace}</Text>
 								{others.map((ar, i) => (
@@ -1081,10 +1285,15 @@ const WGOutput = () => {
 								flexShrink={0}
 								flexGrow={0}
 								mx={1.5}
+								justifyContent="center"
+								alignItems="center"
 							>
 								<Text selectable textAlign="center" fontSize={textSize}>{arrowLR}</Text>
 							</Box>
-							<Box>
+							<Box
+								justifyContent="center"
+								alignItems="center"
+							>
 								<Text selectable fontSize={textSize}>{newWord}</Text>
 							</Box>
 						</HStack>
@@ -1093,53 +1302,11 @@ const WGOutput = () => {
 			</VStack>
 		);
 	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
-	const renderEvolved = useCallback(({item}) => {
-		// evolvedWords (grid)
+	const renderOutput = useCallback(({item}) => {
+		// outputWords (grid)
 		const [word, i] = item;
-		if(savingToLexicon) {
-			return <SaveableElement text={word} index={i} wordsToSave={wordsToSave} />;
-		}
-		return <Simple fontSize={textSize} lineHeight={headerSize}>{word}</Simple>;
+		return <Simple>{word}</Simple>;
 	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
-	const SaveableElement = memo(({text, index, wordsToSave}) => {
-		const saved = wordsToSave[text];
-		const onPressWord = useCallback(() => {
-			let newSave = {...wordsToSave};
-			newSave[text] = !wordsToSave[text];
-			setWordsToSave(newSave);
-		}, [text, wordsToSave]);
-		const Item = memo(({text, index, saved, onPress}) => {
-			let bg = "secondary.500",
-				color = secondaryContrast;
-			if(saved) {
-				bg = "primary.500";
-				color = primaryContrast;
-			}
-			return (
-				<Pressable
-					onPress={onPress}
-					key={`Pressable${index}/${text}`}
-					bg={bg}
-				><Simple color={color}>{text}</Simple></Pressable>
-			);
-		});
-		return <Item text={text} index={index} onPress={onPressWord} saved={saved} />;
-	});
-
-	const InfoButton = (props) => {
-		return (
-			<Button
-				borderRadius="full"
-				_text={{
-					fontSize: textSize
-				}}
-				py={0.5}
-				px={3}
-				m={1}
-				{...props}
-			/>
-		);
-	};
 
 	return (
 		<VStack
@@ -1357,83 +1524,24 @@ const WGOutput = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<StandardAlert
-				alertOpen={clearAlertOpen}
-				setAlertOpen={setClearAlertOpen}
-				bodyContent="This will erase every Character Group, Syllable and Transform currently loaded in the app, and reset the settings on this page to their initial values. Are you sure you want to do this?"
-				continueText="Yes, Do It"
-				continueFunc={() => doClearEveything()}
-				fontSize={textSize}
-			/>
-			<WEPresetsModal
-				modalOpen={openPresetModal}
-				setModalOpen={setOpenPresetModal}
-				loadState={loadState}
-			/>
-			<LoadCustomInfoModal
-				modalOpen={openLoadCustomInfoModal}
-				closeModal={() => setOpenLoadCustomInfoModal(false)}
-				customStorage={weCustomStorage}
-				loadState={loadState}
-				setStoredCustomInfo={setStoredCustomInfo}
-				storedCustomIDs={storedCustomIDs}
-				storedCustomInfo={storedCustomInfo}
-				overwriteMessage={"all current Character Groups, Transformations, and Sound Changes"}
-			/>
-			<SaveCustomInfoModal
-				modalOpen={openSaveCustomInfoModal}
-				closeModal={() => setOpenSaveCustomInfoModal(false)}
-				customStorage={weCustomStorage}
-				saveableObject={{
-					characterGroups,
-					transforms,
-					soundChanges
-				}}
-				setStoredCustomInfo={setStoredCustomInfo}
-				storedCustomInfo={storedCustomInfo}
-				storedCustomIDs={storedCustomIDs}
-				savedInfoString="all current Character Groups, Transformations, and Sound Changes"
-			/>
-			<HStack
-				py={1.5}
-				px={2}
-				alignItems="center"
-				justifyContent="center"
-				alignContent="space-between"
-				flexWrap="wrap"
-				borderBottomWidth={0.5}
-				borderColor="main.700"
-			>
-				<InfoButton
-					colorScheme="primary"
-					onPress={() => maybeLoadPreset()}
-				>Load a Preset</InfoButton>
-				<InfoButton
-					colorScheme="danger"
-					onPress={() => maybeClearEverything()}
-				>Reset All Fields</InfoButton>
-				<InfoButton
-					colorScheme="secondary"
-					onPress={() => setOpenLoadCustomInfoModal(true)}
-				>Load Saved Info</InfoButton>
-				<InfoButton
-					colorScheme="tertiary"
-					onPress={() => maybeSaveInfo()}
-				>Save Current Info</InfoButton>
-			</HStack>
 			<HStack
 				justifyContent="space-between"
-				alignItems="flex-start"
+				alignItems="center"
 				maxW="full"
-				maxH="full"
 				p={6}
 				space={2}
 				bg="main.800"
+				style={{
+					height: headerHeight
+				}}
 			>
 				<VStack
 					alignItems="flex-start"
-					justifyContent="flex-start"
+					justifyContent="center"
 					space={4}
+					style={{
+						height: headerHeight
+					}}
 				>
 					<DropDown
 						fontSize={textSize}
@@ -1452,11 +1560,10 @@ const WGOutput = () => {
 							py: 1,
 							pr: 3,
 							pl: 2,
-							flexShrink: 2,
 							ml: 0,
 							mr: 0
 						}}
-						onChange={(v) => dispatch(setOutput(v))}
+						onChange={(v) => { nextAnimations || dispatch(setOutput(v)) }}
 						defaultValue={outputStyle}
 						title="Display:"
 						options={outputStyles}
@@ -1478,7 +1585,9 @@ const WGOutput = () => {
 						}
 						colorScheme={savingToLexicon ? "success" : "primary"}
 						onPress={() => {
-							if(savingToLexicon) {
+							if(nextAnimations) {
+								return;
+							} else if(savingToLexicon) {
 								const words = findWordsToSave();
 								if(words.length > 0) {
 									// Open modal to choose where to save.
@@ -1494,195 +1603,164 @@ const WGOutput = () => {
 						}}
 					>{savingToLexicon ? "SAVE" : "EVOLVE"}</Button>
 				</VStack>
-				<HStack
-					flexWrap="wrap"
-					justifyContent="flex-end"
-					alignItems="center"
+				<VStack
+					alignItems="flex-end"
+					justifyContent="center"
+					flex={1}
+					space={4}
+					style={{
+						height: headerHeight
+					}}
 				>
-					<AnimatePresence>
-						<IconButton
-							colorScheme="secondary"
-							variant="solid"
-							icon={<GearIcon size={textSize} />}
-							px={3.5}
-							py={1}
-							mr={2}
-							onPress={() => setOpenSettings(true)}
-							key="settingsGearIcon"
-						/>
-						<IconButton
-							colorScheme="secondary"
-							variant="solid"
-							icon={<CopyIcon size={textSize} />}
-							px={3.5}
-							py={1}
-							mr={2}
-							onPress={copyAllToClipboard}
-							key="copyButton"
-							onLayout={(event) => {
-								// This sets up the width of the button that appears later
-								if(!buttonWidth) {
-									const {width} = event.nativeEvent.layout;
-									setButtonWidth(width);
-								}
-							}}
-						/>
-						<Menu
-							placement="bottom right"
-							trigger={(props) => (
-								<MotiView
-									key="saveMenu"
-									animate={
-										showSaveButton ?
-											{
-												width: buttonWidth,
-												translateX: 0,
-												rotateY: "0deg"
-											}
-										:
-											{
-												width: 0,
-												translateX: buttonWidth,
-												rotateY: "90deg"
-											}
+					<HStack flexWrap="wrap">
+						<AnimatePresence>
+							<IconButton
+								colorScheme="secondary"
+								variant="solid"
+								icon={<GearIcon size={textSize} />}
+								px={3.5}
+								py={1}
+								mr={2}
+								onPress={() => setOpenSettings(true)}
+								key="settingsGearIcon"
+							/>
+							<IconButton
+								colorScheme="secondary"
+								variant="solid"
+								icon={<CopyIcon size={textSize} />}
+								px={3.5}
+								py={1}
+								mr={2}
+								onPress={copyAllToClipboard}
+								key="copyButton"
+								onLayout={(event) => {
+									// This sets up the width of the button that appears later
+									if(!buttonWidth) {
+										const {width} = event.nativeEvent.layout;
+										setButtonWidth(width);
 									}
-									transition={{
-										type: "timing",
-										duration: 600
-									}}
-									style={{
-										overflow: "hidden"
-									}}
-								>
-									<IconButton
-										colorScheme="secondary"
-										variant="solid"
-										icon={<SaveIcon size={textSize} />}
-										px={3.5}
-										py={1}
-										{...props}
-									/>
-								</MotiView>
-							)}
+								}}
+							/>
+							<Menu
+								placement="bottom right"
+								trigger={(props) => (
+									<MotiView
+										key="saveMenu"
+										animate={
+											showSaveButton ?
+												{
+													width: buttonWidth,
+													translateX: 0,
+													rotateY: "0deg"
+												}
+											:
+												{
+													width: 0,
+													translateX: buttonWidth,
+													rotateY: "90deg"
+												}
+										}
+										transition={{
+											type: "timing",
+											duration: 600
+										}}
+										style={{
+											overflow: "hidden"
+										}}
+									>
+										<IconButton
+											colorScheme="secondary"
+											variant="solid"
+											icon={<SaveIcon size={textSize} />}
+											px={3.5}
+											py={1}
+											{...props}
+										/>
+									</MotiView>
+								)}
+							>
+								<Menu.Item
+									onPress={() => setChooseWhereToSaveInLex(true)}
+								>Save All to Lexicon</Menu.Item>
+								<Menu.Item
+									onPress={() => toggleSaveSomeToLex()}
+								>Choose What to Save</Menu.Item>
+							</Menu>
+						</AnimatePresence>
+					</HStack>
+					<Animated.View style={{
+						...loadingTransforms
+					}}>
+						<HStack
+							flexWrap="wrap"
+							alignItems="center"
+							justifyContent="center"
+							space={2}
+							py={2}
+							px={4}
+							bg="lighter"
+							borderRadius="md"
 						>
-							<Menu.Item
-								onPress={() => setChooseWhereToSaveInLex(true)}
-							>Save All to Lexicon</Menu.Item>
-							<Menu.Item
-								onPress={() => toggleSaveSomeToLex()}
-							>Choose What to Save</Menu.Item>
-						</Menu>
-					</AnimatePresence>
-				</HStack>
+							<Spinner size={spinnerSize} color="primary.500" />
+						</HStack>
+					</Animated.View>
+				</VStack>
 			</HStack>
-			<AnimatePresence exitBeforeEnter>
-				{showGenerationInProgressMessage &&
-					<GenerationInProgressMessage key="loadingScreen" size={giantSize} />
-				}
-				{originalEvolvedWords &&
-					<MotiView
-						{...flipFlop({
-							translateX: width / 2
-						},
-						{
-							scale: 1,
-							opacity: 1
-						},
-						200)}
-						key="originalEvolvedWords"
+			<Box flexGrow={1}>
+				<Animated.View style={{ flexGrow: 1, ...inputOutputTransforms }}>
+					<FlatList
+						data={inputOutputWords || []}
+						renderItem={renderInputOutput}
+						keyExtractor={(item) => item.join("-")}
 						style={{
-							flex: 1,
+							flexGrow: 1,
+							overflow: "hidden",
+							height: inputOutputVisible ? lowerHeight : 0
+						}}
+					/>
+				</Animated.View>
+				<Animated.View style={{ flexGrow: 1, ...outputInputTransforms }}>
+					<FlatList
+						data={outputInputWords || []}
+						renderItem={renderOutputInput}
+						keyExtractor={(item) => item.join("-")}
+						style={{
+							flexGrow: 1,
+							overflow: "hidden",
+							height: outputInputVisible ? lowerHeight : 0
+						}}
+					/>
+				</Animated.View>
+				<Animated.View style={{ flexGrow: 1, ...rulesTransforms }}>
+					<FlatList
+						data={rulesWords || []}
+						renderItem={renderRules}
+						keyExtractor={(item) => item.slice(0, 3).join("-")}
+						style={{
+							paddingVertical: 0,
 							paddingHorizontal: 16,
-							paddingVertical: 8,
-							overflow: "hidden"
+							flexGrow: 1,
+							overflow: "hidden",
+							height: rulesVisible ? lowerHeight : 0
 						}}
-					>
-						<FlatList
-							data={originalEvolvedWords}
-							renderItem={renderOriginalEvolved}
-							keyExtractor={(item) => item.join("-")}
-						/>
-					</MotiView>
-				}
-				{evolvedOriginalWords &&
-					<MotiView
-						{...flipFlop({
-							translateX: width / -2
-						},
-						{
-							scale: 1,
-							opacity: 1
-						},
-						200)}
-						key="evolvedOriginalWords"
+					/>
+				</Animated.View>
+				<Animated.View style={{ flexGrow: 1, ...outputTransforms }}>
+					<FlatGrid
+						renderItem={renderOutput}
+						data={outputWords || []}
+						itemDimension={multicolumn ? longestWordSizeEstimate : width - 32}
+						keyExtractor={(item) => item.join("-")}
 						style={{
-							flex: 1,
+							paddingVertical: 0,
 							paddingHorizontal: 16,
-							paddingVertical: 8,
-							overflow: "hidden"
+							flexGrow: 1,
+							height: outputVisible ? lowerHeight : 0
 						}}
-					>
-						<FlatList
-							data={evolvedOriginalWords}
-							renderItem={renderEvolvedOriginal}
-							keyExtractor={(item) => item.join("-")}
-						/>
-					</MotiView>
-				}
-				{originalEvolvedRulesWords &&
-					<MotiView
-						{...flipFlop({
-							translateX: width / 2
-						},
-						{
-							scale: 1,
-							opacity: 1
-						},
-						200)}
-						key="originalEvolvedRulesWords"
-						style={{
-							flex: 1,
-							paddingHorizontal: 16,
-							paddingVertical: 8,
-							overflow: "hidden"
-						}}
-					>
-						<FlatList
-							data={originalEvolvedRulesWords}
-							renderItem={renderOriginalEvolvedRules}
-							keyExtractor={(item) => item.slice(0, 3).join("-")}
-						/>
-					</MotiView>
-				}
-				{evolvedWords &&
-					<MotiView
-						{...flipFlop({
-							translateX: width / -2
-						},
-						{
-							opacity: 1
-						},
-						200)}
-						style={{
-							flex: 1,
-							overflow: "hidden"
-						}}
-						key="evolvedWords"
-					>
-						<FlatGrid
-							renderItem={renderEvolved}
-							data={evolvedWords}
-							itemDimension={multicolumn ? longestWordSizeEstimate : width - 32}
-							keyExtractor={(item) => item.join("-")}
-							style={{
-								paddingVertical: 0,
-								paddingHorizontal: 16
-							}}
-							spacing={emSize}
-						/>
-					</MotiView>
-				}
-			</AnimatePresence>
+						spacing={emSize}
+					/>
+				</Animated.View>
+			</Box>
 		</VStack>
 	);
 };

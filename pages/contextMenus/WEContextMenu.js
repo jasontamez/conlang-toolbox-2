@@ -8,7 +8,8 @@ import {
 	IconButton,
 	Button,
 	Center,
-	useToast
+	useToast,
+	Menu
 } from 'native-base';
 import { useLocation } from "react-router-native";
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,16 +22,33 @@ import {
 	SaveIcon,
 	AddCircleIcon,
 	EditIcon,
-	TrashIcon
+	TrashIcon,
+	DotsIcon
 } from '../../components/icons';
 import getSizes from '../../helpers/getSizes';
 import doToast from "../../helpers/toast";
-import { copyCharacterGroupsFromElsewhere } from '../../store/weSlice';
+import {
+	copyCharacterGroupsFromElsewhere,
+	loadState,
+	setStoredCustomInfo
+} from "../../store/weSlice";
+import WEPresetsModal from "../we/wePresetsModal";
+import LoadCustomInfoModal from "../../components/LoadCustomInfoModal";
+import SaveCustomInfoModal from "../../components/SaveCustomInfoModal";
+import { weCustomStorage } from "../../helpers/persistentInfo";
+import StandardAlert from '../../components/StandardAlert';
 
 const WEContextMenu = () => {
 	const { pathname } = useLocation();
 	const dispatch = useDispatch();
 	const { characterGroups } = useSelector(state => state.wg);
+	const {
+		transforms,
+		soundChanges,
+		storedCustomInfo,
+		storedCustomIDs
+	} = useSelector(state => state.we);
+	const { disableConfirms } = useSelector(state => state.appState);
 	const toast = useToast();
 	const [textSize, headerSize, iconSize, smallerSize] = getSizes("sm", "md", "lg", "xs");
 	const [infoModalOpen, setInfoModalOpen] = useState(false);
@@ -39,6 +57,28 @@ const WEContextMenu = () => {
 	const infoModalRef = useRef(null);
 	const [copyModalOpen, setCopyModalOpen] = useState(false);
 	const primaryContrast = useContrastText('primary.500');
+
+	const [clearAlertOpen, setClearAlertOpen] = useState(false);
+	const [openPresetModal, setOpenPresetModal] = useState(false);
+	const [openLoadCustomInfoModal, setOpenLoadCustomInfoModal] = useState(false);
+	const [openSaveCustomInfoModal, setOpenSaveCustomInfoModal] = useState(false);
+
+	const maybeClearEverything = () => {
+		if(disableConfirms) {
+			doClearEveything();
+		}
+		setClearAlertOpen(true);
+	};
+	const doClearEveything = () => {
+		dispatch(loadState(null));
+		doToast({
+			toast,
+			msg: "Info has been cleared.",
+			scheme: "danger",
+			placement: "bottom"
+		})
+	};
+
 	const P = (props) => <Text textAlign="justify" lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const Em = (props) => <P italic {...props} />;
 	const B = (props) => <P bold {...props} />;
@@ -329,6 +369,75 @@ const WEContextMenu = () => {
 				setInfoModalBody(<Text>Display Error</Text>);
 		}
 	}, [pathname, infoModalOpen]);
+
+	const WEOutputMenu = () => {
+		return (<>
+			<StandardAlert
+				alertOpen={clearAlertOpen}
+				setAlertOpen={setClearAlertOpen}
+				bodyContent="This will erase every Character Group, Syllable and Transform currently loaded in the app, and reset the settings on this page to their initial values. Are you sure you want to do this?"
+				continueText="Yes, Do It"
+				continueFunc={() => doClearEveything()}
+				fontSize={textSize}
+			/>
+			<WEPresetsModal
+				modalOpen={openPresetModal}
+				setModalOpen={setOpenPresetModal}
+				loadState={loadState}
+			/>
+			<LoadCustomInfoModal
+				modalOpen={openLoadCustomInfoModal}
+				closeModal={() => setOpenLoadCustomInfoModal(false)}
+				customStorage={weCustomStorage}
+				loadState={loadState}
+				setStoredCustomInfo={setStoredCustomInfo}
+				storedCustomIDs={storedCustomIDs}
+				storedCustomInfo={storedCustomInfo}
+				overwriteMessage={"all current Character Groups, Transformations, and Sound Changes"}
+			/>
+			<SaveCustomInfoModal
+				modalOpen={openSaveCustomInfoModal}
+				closeModal={() => setOpenSaveCustomInfoModal(false)}
+				customStorage={weCustomStorage}
+				saveableObject={{
+					characterGroups,
+					transforms,
+					soundChanges
+				}}
+				setStoredCustomInfo={setStoredCustomInfo}
+				storedCustomInfo={storedCustomInfo}
+				storedCustomIDs={storedCustomIDs}
+				savedInfoString="all current Character Groups, Transformations, and Sound Changes"
+			/>
+			<Menu
+				placement="bottom right"
+				trigger={(triggerProps) => (
+					<IconButton
+						m="auto"
+						accessibilityLabel="More options menu"
+						icon={<DotsIcon size={headerSize} />}
+						{...triggerProps}
+						flexGrow={0}
+						flexShrink={0}
+					/>
+				)}
+			>
+				<Menu.Item
+					onPress={() => setOpenPresetModal(true)}
+				>Load a Preset</Menu.Item>
+				<Menu.Item
+					onPress={() => maybeClearEverything()}
+				>Reset All Fields</Menu.Item>
+				<Menu.Item
+					onPress={() => setOpenLoadCustomInfoModal(true)}
+				>Load Saved Info</Menu.Item>
+				<Menu.Item
+					onPress={() => setOpenSaveCustomInfoModal(true)}
+				>Save Current Info</Menu.Item>
+			</Menu>
+		</>);
+	};
+
 	return (
 		<>
 			{pathname === "/we/characters" && (characterGroups.length > 0) && (
@@ -430,6 +539,7 @@ const WEContextMenu = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
+			{pathname === "/we/output" && <WEOutputMenu />}
 		</>
 	);
 };

@@ -234,11 +234,6 @@ const WGOutput = () => {
 		}
 		// callback should result in a change of nextAnimations (if needed)
 	}, [nextAnimations])
-	const staticProperties = {
-//		position: "absolute",
-//		top: 0,
-//		left: 0
-	};
 	const doAnimationSequence = (phase, what) => {
 		const sequence = [];
 		if(phase === "begin") {
@@ -345,13 +340,6 @@ const WGOutput = () => {
 	const doCap = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 	const Simple = memo((props) => <Text fontSize={textSize} lineHeight={headerSize} {...props} />);
 	const makeKey = useCallback((item, i) => `${item.rawWord}/${item.text}/${i}`, []);
-	const renderItem = useCallback(({item}) => {
-		const {text, rawWord} = item;
-		if(savingToLexicon) {
-			return <SaveableElement text={text} rawWord={rawWord} wordsToSave={wordsToSave} />;
-		}
-		return <Simple fontSize={textSize} lineHeight={headerSize}>{text}</Simple>;
-	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
 	const PseudoText = memo(({text, saving, fontSize, lineHeight}) => {
 		const stuff = text.map((word, i) => {
 			// Add trailing space to every word.
@@ -370,10 +358,10 @@ const WGOutput = () => {
 			return (
 				<Fragment
 					key={`GeneratedWord-Simple-${i}:[${raw}]`}
-				><Simple>{text}</Simple>{" "}</Fragment>
+				><Simple selectable>{text}</Simple>{" "}</Fragment>
 			);
 		});
-		return <Text fontSize={fontSize} lineHeight={lineHeight}>{stuff}</Text>;
+		return <Text selectable fontSize={fontSize} lineHeight={lineHeight}>{stuff}</Text>;
 	});
 	const SaveableElement = memo(({text, rawWord, wordsToSave}) => {
 		const saved = wordsToSave[rawWord];
@@ -389,16 +377,31 @@ const WGOutput = () => {
 				bg = "primary.500";
 				color = primaryContrast;
 			}
+			const Inner = ({isPressed}) => {
+				return (
+					<Box bg={isPressed ? "darker" : "transparent"} px={2} borderColor="main.900" borderWidth={0.5}>
+						<Simple color={color}>{text}</Simple>
+					</Box>
+				);
+			};
 			return (
 				<Pressable
 					onPress={onPress}
 					key={`Pressable${raw}/${text}`}
 					bg={bg}
-				><Simple color={color}>{text}</Simple></Pressable>
+					children={(props) => <Inner {...props} />}
+				/>
 			);
 		});
 		return <Item text={text} raw={rawWord} onPress={onPressWord} saved={saved} />;
 	});
+	const renderItem = useCallback(({item}) => {
+		const {text, rawWord} = item;
+		if(savingToLexicon) {
+			return <SaveableElement text={text} rawWord={rawWord} wordsToSave={wordsToSave} />;
+		}
+		return <Simple selectable fontSize={textSize} lineHeight={headerSize}>{text}</Simple>;
+	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
 
 
 	// // //
@@ -1406,8 +1409,7 @@ const WGOutput = () => {
 						</Menu>
 					</HStack>
 					<Animated.View style={{
-						...loadingTransforms,
-						...staticProperties
+						...loadingTransforms
 					}}>
 						<HStack
 							flexWrap="wrap"
@@ -1425,11 +1427,7 @@ const WGOutput = () => {
 				</VStack>
 			</HStack>
 			<Box flexGrow={1}>
-				<Animated.View style={{
-					flexGrow: 1,
-					...textTransforms,
-					...staticProperties
-				}}>
+				<Animated.View style={{ flexGrow: 1, ...textTransforms }}>
 					<ScrollView
 						flexGrow={1}
 						style={{height: textVisible ? lowerHeight : 0}}
@@ -1445,11 +1443,7 @@ const WGOutput = () => {
 						<Box h={4} />
 					</ScrollView>
 				</Animated.View>
-				<Animated.View style={{
-					flexGrow: 1,
-					...wordsTransforms,
-					...staticProperties
-				}}>
+				<Animated.View style={{ flexGrow: 1, ...wordsTransforms }}>
 					<FlatGrid
 						renderItem={renderItem}
 						data={displayedWords}
