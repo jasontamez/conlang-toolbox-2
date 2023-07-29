@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useOutletContext } from "react-router";
 import { FlatGrid } from 'react-native-super-grid';
 import { setStringAsync as setClipboard } from 'expo-clipboard';
-import { AnimatePresence, MotiView } from "moti";
+import { MotiView } from "moti";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
@@ -57,7 +57,6 @@ import { DropDown, RangeSlider, ToggleSwitch } from "../../components/inputTags"
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 import getSizes from "../../helpers/getSizes";
-import { flipFlop, fromToZero } from "../../helpers/motiAnimations";
 
 const WGOutput = () => {
 	const {
@@ -117,11 +116,17 @@ const WGOutput = () => {
 		textSize,
 		descSize,
 		headerSize,
-		largeSize,
-		giantSize
-	] = getSizes("sm", "xs", "md", "lg", "x2");
+		largeSize
+	] = getSizes("sm", "xs", "md", "lg");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
+	const spinnerSize = fontSizesInPx[largeSize] || fontSizesInPx.lg;
+	const headerHeight =
+		36 // Combination of padding
+		+ (fontSizesInPx[textSize] || fontSizesInPx.sm)
+		+ (fontSizesInPx[largeSize] || fontSizesInPx.lg)
+		+ 64 // Extra padding;
 	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
+	const lowerHeight = viewHeight - headerHeight;
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
 	const toast = useToast();
@@ -202,10 +207,8 @@ const WGOutput = () => {
 			return;
 		}
 		const [callback, ...sequence] = nextAnimations;
-		console.log("SEQUENCE: " + JSON.stringify(sequence));
 		while(sequence.length > 0) {
 			const next = sequence.shift();
-			console.log(">>"+next);
 			const {
 				duration,
 				delay,
@@ -213,22 +216,18 @@ const WGOutput = () => {
 				changes
 			} = animationFunctions[next]();
 			const options = { duration, easing };
-			console.log(`duration:${duration}, delay:${delay}, changes:${JSON.stringify(changes)}`);
 			while(changes.length > 0) {
 				const [variable, value] = changes.shift();
 				let func;
 				// Drop callback into last change of last sequence
 				if(callback && sequence.length === 0 && changes.length === 0) {
 					func = withTiming(value, options, () => runOnJS(animationCallbacks[callback])());
-					console.log("=timing w/callback");
 				} else {
 					func = withTiming(value, options);
-					console.log("=timing");
 				}
 				// Add delay if needed
 				if(delay) {
 					func = withDelay(delay, func);
-					console.log("=delay "+String(delay));
 				}
 				variable.value = func;
 			}
@@ -266,7 +265,6 @@ const WGOutput = () => {
 			sequence.push(false);
 		}
 		// set up state
-		console.log("! ! ! "+JSON.stringify(sequence));
 		setNextAnimations(sequence);
 	};
 	const animationFunctions = {
@@ -281,7 +279,7 @@ const WGOutput = () => {
 		},
 		hideLoading: () => {
 			return {
-				duration: 100,
+				duration: 300,
 				easing: Easing.inOut(Easing.quad),
 				changes: [
 					[loadingOpacity, 0]
@@ -302,6 +300,7 @@ const WGOutput = () => {
 		text: () => {
 			return {
 				duration: 250,
+				delay: 50,
 				easing: Easing.in(Easing.quad),
 				changes: [
 					[textTranslateX, 0],
@@ -323,7 +322,7 @@ const WGOutput = () => {
 		words: () => {
 			return {
 				duration: 250,
-				delay: 100,
+				delay: 50,
 				easing: Easing.in(Easing.quad),
 				changes: [
 					[wordsTranslateX, 0],
@@ -465,7 +464,6 @@ const WGOutput = () => {
 			return;
 		}
 		// Send off to begin the process
-		console.log("BEGIN ANIMATION");
 		doAnimationSequence("begin", output);
 		/*
 		// Set up loading screen, clear any old info, etc
@@ -746,7 +744,6 @@ const WGOutput = () => {
 				rawWord: syl
 			};
 		}));
-		console.log("***>" + everySyllable[everySyllable.length - 1]);
 		setRawWords(everySyllable);
 		// mark that we've evolved
 		if (!showSaveButton) {
@@ -805,9 +802,6 @@ const WGOutput = () => {
 		determineColumnSize(words.map(w => w.text));
 		setDisplayedWords(words);
 		setRawWords(raws);
-		const sorty = [...raws];
-		sorty.sort();
-		console.log("***>" + sorty.pop());
 		// mark that we've evolved
 		if (!showSaveButton) {
 			setShowSaveButton(true);
@@ -956,7 +950,7 @@ const WGOutput = () => {
 	];
 
 	return (
-		<VStack h="full" alignContent="flex-start" bg="main.900">
+		<VStack style={{height: viewHeight}} alignContent="flex-start" bg="main.900">
 			<StandardAlert
 				alertOpen={alertCannotGenerate}
 				setAlertOpen={setAlertCannotGenerate}
@@ -1253,17 +1247,22 @@ const WGOutput = () => {
 			</Modal>
 			<HStack
 				justifyContent="space-between"
-				alignItems="flex-start"
+				alignItems="center"
 				maxW="full"
-				maxH="full"
-				p={6}
 				space={2}
 				bg="main.800"
+				px={6}
+				style={{
+					height: headerHeight
+				}}
 			>
 				<VStack
 					alignItems="flex-start"
-					justifyContent="flex-start"
+					justifyContent="center"
 					space={4}
+					style={{
+						height: headerHeight
+					}}
 				>
 					<DropDown
 						fontSize={textSize}
@@ -1282,7 +1281,6 @@ const WGOutput = () => {
 							py: 1,
 							pr: 3,
 							pl: 2,
-							flexShrink: 2,
 							ml: 0,
 							mr: 0
 						}}
@@ -1328,9 +1326,12 @@ const WGOutput = () => {
 				</VStack>
 				<VStack
 					alignItems="flex-end"
-					justifyContent="space-between"
+					justifyContent="center"
 					flex={1}
 					space={4}
+					style={{
+						height: headerHeight
+					}}
 				>
 					<HStack flexWrap="wrap">
 						<IconButton
@@ -1418,30 +1419,32 @@ const WGOutput = () => {
 							bg="lighter"
 							borderRadius="md"
 						>
-							<Spinner size="sm" color="primary.500" />
+							<Spinner size={spinnerSize} color="primary.500" />
 						</HStack>
 					</Animated.View>
 				</VStack>
 			</HStack>
 			<Box flexGrow={1}>
-				<Animated.ScrollView style={{
+				<Animated.View style={{
 					flexGrow: 1,
 					...textTransforms,
 					...staticProperties
 				}}>
-					<Box
+					<ScrollView
 						flexGrow={1}
-						h={textVisible ? undefined : 0}
+						style={{height: textVisible ? lowerHeight : 0}}
+						px={3}
 					>
+						<Box h={2} />
 						<PseudoText
 							text={displayedText}
 							saving={savingToLexicon}
 							fontSize={textSize}
 							lineHeight={headerSize}
 						/>
-						<Box h={16}></Box>
-					</Box>
-				</Animated.ScrollView>
+						<Box h={4} />
+					</ScrollView>
+				</Animated.View>
 				<Animated.View style={{
 					flexGrow: 1,
 					...wordsTransforms,
@@ -1456,11 +1459,10 @@ const WGOutput = () => {
 							paddingVertical: 0,
 							paddingHorizontal: 16,
 							flexGrow: 1,
-							height: wordsVisible ? undefined : 0
+							height: wordsVisible ? lowerHeight : 0
 						}}
 						spacing={emSize}
 					/>
-						<Box h={16}></Box>
 				</Animated.View>
 			</Box>
 		</VStack>
