@@ -7,6 +7,7 @@ import {
 	IconButton,
 	useContrastText,
 	Modal,
+	Pressable,
 	Box,
 	Menu,
 	FlatList,
@@ -152,6 +153,7 @@ const WGOutput = () => {
 	const secondaryContrast = useContrastText("secondary.500");
 	const tertiaryContrast = useContrastText("tertiary.500");
 	const saveToLexInitialRef = useRef(null);
+	const choosingWhatToSaveInitialRef = useRef(null);
 	const arrowLR = "⟶";
 	const arrowRL = "⟵";
 
@@ -196,34 +198,17 @@ const WGOutput = () => {
 		});
 	};
 
-	const toggleSaveSomeToLex = () => {
-		let scheme = "success";
-		let msg = "Tap on a word to mark it for saving. Click the giant Save button when you're done.";
-		let duration = 5000;
-		if(savingToLexicon) {
-			// set toast options differently
-			msg = "No longer saving.";
-			scheme = "warning";
-			duration = undefined;
-			setWordsToSave({});
-		} else {
+	const toggleSaveToLex = (flag = !savingToLexicon) => {
+		if(flag) {
 			// we're beginning to save, so set up wordsToSave
-			let rawObj = {};
+			const rawObj = {};
 			saveableWords.forEach(word => rawObj[word] = false);
 			setWordsToSave(rawObj);
+		} else {
+			// Remove any saved words
+			setWordsToSave({});
 		}
-		setSavingToLexicon(!savingToLexicon);
-		doToast({
-			toast,
-			scheme,
-			msg,
-			placement: "top-right",
-			duration,
-			boxProps: {
-				maxWidth: (width * 2 / 5)
-			},
-			center: true
-		});
+		setSavingToLexicon(flag);
 	};
 	const findWordsToSave = () => {
 		if(savingToLexicon) {
@@ -232,6 +217,23 @@ const WGOutput = () => {
 		}
 		// Return all values
 		return saveableWords;
+	};
+	const maybeSaveToLex = () => {
+		const words = findWordsToSave();
+		if(words.length > 0) {
+			setChooseWhereToSaveInLex(true);
+		} else {
+			setSavingToLexicon(false);
+			doToast({
+				toast,
+				placement: "top",
+				durarion: 350,
+				msg: "You didn't choose any words to save.",
+				fontSize: textSize,
+				scheme: "error",
+				center: true
+			})
+		}
 	};
 	const doSaveToLex = () => {
 		const words = findWordsToSave();
@@ -284,10 +286,36 @@ const WGOutput = () => {
 			duration: 5000
 		});
 		setWordsToSave({});
-		setChooseWhereToSaveInLex(false);
 		setSavingToLexicon(false);
+		setChooseWhereToSaveInLex(false);
 	};
-	// TO-DO: Set up a modal to select words to send to Lexicon
+	const renderWordToSave = (word, i) => {
+		const flag = wordsToSave[word];
+		const toggle = () => {
+			const newWords = {...wordsToSave};
+			newWords[word] = !flag;
+			setWordsToSave(newWords);
+		};
+		const bg = flag ? "success.500" : "secondary.500";
+		const fg = flag ? "success.50" : secondaryContrast;
+		const Inner = ({isPressed}) => {
+			const color = isPressed ? "main.900" : fg;
+			return (
+				<Box
+					bg={bg}
+					px={2}
+					py={1}
+					mx={2}
+					my={1}
+				>
+					<Text textAlign="center" color={color} fontSize={textSize}>{word}</Text>
+				</Box>
+			);
+		};
+		return <Pressable onPress={toggle} key={`saveable/${word}/${i}`} children={(props) => <Inner {...props} />} />;
+	};
+
+	// TO-DO: Figure out why text isn't selectable!!!!
 
 	// // //
 	// Juggle Animations
@@ -1178,7 +1206,7 @@ const WGOutput = () => {
 				</HStack>
 			</HStack>
 		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
+	}, [headerSize, textSize, longestEvolvedWordSizeEstimate]);
 	const renderOutputInput = useCallback(({item}) => {
 		// outputInputWords (flat list)
 		const [evolved, original, i] = item;
@@ -1217,7 +1245,7 @@ const WGOutput = () => {
 				</HStack>
 			</HStack>
 		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize, longestEvolvedWordSizeEstimate]);
+	}, [headerSize, textSize, longestEvolvedWordSizeEstimate]);
 	const renderRules = useCallback(({item}) => {
 		// rulesWords (flat list)
 		const [original, evolved, i, rules] = item;
@@ -1301,12 +1329,12 @@ const WGOutput = () => {
 				})}
 			</VStack>
 		);
-	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
+	}, [headerSize, textSize]);
 	const renderOutput = useCallback(({item}) => {
 		// outputWords (grid)
 		const [word, i] = item;
 		return <Simple>{word}</Simple>;
-	}, [savingToLexicon, wordsToSave, headerSize, textSize]);
+	}, [headerSize, textSize]);
 
 	return (
 		<VStack
@@ -1418,6 +1446,55 @@ const WGOutput = () => {
 								py={1}
 								onPress={() => setOpenSettings(false)}
 							>Done</Button>
+						</HStack>
+					</Modal.Footer>
+				</Modal.Content>
+			</Modal>
+			<Modal isOpen={savingToLexicon} initialFocusRef={choosingWhatToSaveInitialRef}>
+				<Modal.Content>
+					<Modal.Header bg="primary.500">
+						<HStack justifyContent="flex-end" alignItems="center">
+							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Save to Lexicon</Text>
+							<IconButton
+								flex={0}
+								mr={3}
+								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								onPress={() => toggleSaveToLex(false)}
+							/>
+						</HStack>
+					</Modal.Header>
+					<Modal.Body>
+						<VStack alignItems="center" justifyContent="center" space={2}>
+							<Text textAlign="center" fontSize={textSize}>Tap the words you want to save</Text>
+							<HStack flexWrap="wrap" justifyContent="center" alignItems="center" alignContent="center">
+								{saveableWords.map((word, i) => renderWordToSave(word, i))}
+							</HStack>
+						</VStack>
+					</Modal.Body>
+					<Modal.Footer>
+						<HStack
+							justifyContent="space-between"
+							w="full"
+							p={1}
+							flexWrap="wrap"
+							alignContent="center"
+						>
+							<Button
+								startIcon={<CancelIcon size={textSize} />}
+								bg="darker"
+								_text={{ color: "text.50", fontSize: textSize }}
+								px={2}
+								py={1}
+								onPress={() => toggleSaveToLex(false)}
+								ref={choosingWhatToSaveInitialRef}
+							>Cancel</Button>
+							<Button
+								startIcon={<SaveIcon size={textSize} />}
+								_text={{fontSize: textSize}}
+								px={2}
+								py={1}
+								onPress={maybeSaveToLex}
+							>Save</Button>
 						</HStack>
 					</Modal.Footer>
 				</Modal.Content>
@@ -1578,30 +1655,17 @@ const WGOutput = () => {
 						pl={5}
 						pr={4}
 						py={1.5}
-						endIcon={savingToLexicon ?
-							<SaveIcon ml={1} size={largeSize} />
-						:
-							<GenerateIcon ml={1} size={largeSize} />
-						}
-						colorScheme={savingToLexicon ? "success" : "primary"}
+						endIcon={<GenerateIcon ml={1} size={largeSize} />}
+						colorScheme="primary"
 						onPress={() => {
 							if(nextAnimations) {
 								return;
-							} else if(savingToLexicon) {
-								const words = findWordsToSave();
-								if(words.length > 0) {
-									// Open modal to choose where to save.
-									setChooseWhereToSaveInLex(true)
-								} else {
-									// Open an Alert
-									setAlertNothingToSave(true)
-								}
 							} else {
 								// Generate!
 								evolveOutput();
 							}
 						}}
-					>{savingToLexicon ? "SAVE" : "EVOLVE"}</Button>
+					>EVOLVE</Button>
 				</VStack>
 				<VStack
 					alignItems="flex-end"
@@ -1683,7 +1747,7 @@ const WGOutput = () => {
 									onPress={() => setChooseWhereToSaveInLex(true)}
 								>Save All to Lexicon</Menu.Item>
 								<Menu.Item
-									onPress={() => toggleSaveSomeToLex()}
+									onPress={() => toggleSaveToLex(true)}
 								>Choose What to Save</Menu.Item>
 							</Menu>
 						</AnimatePresence>
