@@ -1167,85 +1167,38 @@ const WGOutput = () => {
 	// // //
 	// JSX
 	// // //
-	const Simple = memo((props) => <Text selectable fontSize={textSize} lineHeight={headerSize} {...props} />);
 	const renderInputOutput = useCallback(({item}) => {
 		// inputOutputWords (flat list)
 		const [original, evolved, i] = item;
-		const halfish = (width - 32) / 2;
 		return (
 			<HStack
 				justifyContent="center"
 				alignItems="center"
 				flexWrap="wrap"
-				py={2}
+				p={2}
 				w="full"
 				bg={i % 2 ? "lighter" : "transparent"}
 			>
-				<HStack
-					justifyContent="flex-end"
-					alignItems="center"
-					style={{width:halfish}}
-					pl={2}
-				>
-					<Simple selectable textAlign="right">{original}</Simple>
-				</HStack>
-				<HStack
-					justifyContent="center"
-					alignItems="center"
-					style={{width: 32}}
-				>
-					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
-				</HStack>
-				<HStack 
-					justifyContent="flex-start"
-					alignItems="center"
-					style={{width:halfish}}
-					pr={2}
-				>
-					<Simple selectable textAlign="left">{evolved}</Simple>
-				</HStack>
+				<Text selectable fontSize={textSize} lineHeight={headerSize} textAlign="left">{original} {arrowRL} {evolved}</Text>
 			</HStack>
 		);
-	}, [headerSize, textSize, longestEvolvedWordSizeEstimate]);
+	}, [headerSize, textSize]);
 	const renderOutputInput = useCallback(({item}) => {
 		// outputInputWords (flat list)
 		const [evolved, original, i] = item;
-		const halfish = (width - 32) / 2;
 		return (
 			<HStack
 				justifyContent="center"
 				alignItems="center"
 				flexWrap="wrap"
-				py={2}
+				p={2}
 				w="full"
 				bg={i % 2 ? "lighter" : "transparent"}
 			>
-				<HStack 
-					justifyContent="flex-end"
-					alignItems="center"
-					style={{width:halfish}}
-					pl={2}
-				>
-					<Simple selectable textAlign="right">{evolved}</Simple>
-				</HStack>
-				<HStack
-					justifyContent="center"
-					alignItems="center"
-					style={{width: 32}}
-				>
-					<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowRL}</Simple>
-				</HStack>
-				<HStack
-					justifyContent="flex-start"
-					alignItems="center"
-					style={{width:halfish}}
-					pr={2}
-				>
-					<Simple selectable textAlign="left">{original}</Simple>
-				</HStack>
+				<Text selectable fontSize={textSize} lineHeight={headerSize} textAlign="left">{evolved} {arrowRL} {original}</Text>
 			</HStack>
 		);
-	}, [headerSize, textSize, longestEvolvedWordSizeEstimate]);
+	}, [headerSize, textSize]);
 	const renderRules = useCallback(({item}) => {
 		// rulesWords (flat list)
 		const [original, evolved, i, rules] = item;
@@ -1254,86 +1207,36 @@ const WGOutput = () => {
 				justifyContent="flex-start"
 				alignItems="flex-start"
 				py={2}
+				px={2}
 				style={{width}}
 				bg={i % 2 ? "lighter" : "transparent"}
 			>
-				<HStack
-					justifyContent="flex-start"
-					alignItems="center"
-					space={1.5}
-					pb={1}
-					w="full"
-					flexWrap="wrap"
-				>
-					<HStack
-						justifyContent="flex-end"
-						alignItems="center"
-						pl={2}
-					>
-						<Simple selectable textAlign="right">{original}</Simple>
-					</HStack>
-					<HStack
-						justifyContent="center"
-						alignItems="center"
-						style={{width: 32}}
-					>
-						<Simple textAlign="center" flexShrink={0} flexGrow={0}>{arrowLR}</Simple>
-					</HStack>
-					<HStack 
-						justifyContent="flex-start"
-						alignItems="center"
-						pr={2}
-						flex={1}
-					>
-						<Simple selectable textAlign="left">{evolved}</Simple>
-					</HStack>
-				</HStack>
-				{rules.map(r => {
-					const [newWord, search, arrow, replace, ...others] = r;
-					const etc = others.join("");
-					const key = `${original}->${evolved}:${i}:${search}${arrow}${replace}${etc}/${newWord}`;
-					return (
-						<HStack
-							key={key}
-							ml={10}
-							flexWrap="wrap"
-						>
-							<HStack
-								flexWrap="wrap"
-								ml={1.5}
-								justifyContent="center"
-								alignItems="center"
-							>
-								<Text selectable textAlign="left" fontSize={textSize}>{search}{arrow}{replace}</Text>
-								{others.map((ar, i) => (
-									<Text selectable key={`${key} :: ${i}`} textAlign="left" fontSize={textSize}>{ar}</Text>
-								))}
-							</HStack>
-							<Box
-								flexShrink={0}
-								flexGrow={0}
-								mx={1.5}
-								justifyContent="center"
-								alignItems="center"
-							>
-								<Text selectable textAlign="center" fontSize={textSize}>{arrowLR}</Text>
-							</Box>
-							<Box
-								justifyContent="center"
-								alignItems="center"
-							>
-								<Text selectable fontSize={textSize}>{newWord}</Text>
-							</Box>
-						</HStack>
-					);
-				})}
+				<Text
+					selectable
+					textAlign="left"
+					fontSize={textSize}
+					lineHeight={headerSize}
+				>{original} {arrowLR} {evolved}</Text>
+				{rules.length > 0 &&
+					<Box ml={10} flexWrap="wrap">
+						<Text
+							selectable
+							textAlign="left"
+							fontSize={textSize}
+							lineHeight={headerSize}
+						>{rules.map(r => {
+							const [newWord, search, arrow, replace, ...others] = r;
+							return `${search}${arrow}${replace}${others.join("")} ${arrowLR} ${newWord}`;
+						}).join("\n")}</Text>
+					</Box>
+				}
 			</VStack>
 		);
 	}, [headerSize, textSize]);
 	const renderOutput = useCallback(({item}) => {
 		// outputWords (grid)
 		const [word, i] = item;
-		return <Simple>{word}</Simple>;
+		return <Text selectable fontSize={textSize} lineHeight={headerSize}>{word}</Text>;
 	}, [headerSize, textSize]);
 
 	return (
