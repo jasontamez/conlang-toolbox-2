@@ -669,8 +669,10 @@ const Lex = () => {
 	};
 	// Calculate dimensions of the upper area so they are readable
 	const calculateInfoHeight = () => {
+		// Header height is based on the 'lg' font
+		const headerHeight = fontSizesInPx[largeSize] * 2.5;
 		// Base height is 1/4 the area
-		const base = (height - 40) / 4;
+		const base = (height - headerHeight) / 4;
 		// Max height is 1/2 the area
 		const max = base * 2;
 		// fontSize is an estimate of the amount of space the font takes up
@@ -680,10 +682,9 @@ const Lex = () => {
 		return Math.min(max, Math.max(base, fontSize * 10));
 	};
 	const infoHeight = calculateInfoHeight();
-	const renderList = ({item, index}) => {
+	const renderList = ({item}) => {
 		const id = item.id;
 		const cols = item.columns;
-		const bg = index % 2 ? "main.800" : "main.900";
 		return (
 			<SwipeableItem
 				renderUnderlayRight={() => <Underlay fontSize={textSize} onPress={() => startEditingFunc(item)} />}
@@ -692,8 +693,16 @@ const Lex = () => {
 				snapPointsRight={[150]}
 				swipeEnabled={true}
 				activationThreshold={5}
+				key={id}
 			>
-				<HStack key={id} py={3.5} px={0} bg={bg} alignItems="center">
+				<HStack
+					py={3.5}
+					px={0}
+					alignItems="center"
+					borderBottomWidth={1}
+					borderColor="main.700"
+					bg="main.800"
+				>
 					<Box size="lexXs">
 						<DragIndicatorIcon
 							size={smallerSize}
@@ -1141,6 +1150,9 @@ const Lex = () => {
 						mr={3}
 						p={1}
 						size={miniSize}
+						style={{
+							height: fontSizesInPx[textSize] + 8 // padding
+						}}
 					/>
 				</AnimatePresence>
 			</HStack>
@@ -1357,7 +1369,6 @@ const Lex = () => {
 				</HStack>
 				<VStack
 					flex={1}
-					style={{maxHeight: height - 40}}
 					alignItems="stretch"
 					justifyContent="flex-start"
 				>
@@ -1382,10 +1393,14 @@ const Lex = () => {
 						}
 						<Box size="lexXs"></Box>
 					</HStack>
-					<HStack alignItems="center" mx={1.5}
-						mb={1}
+					<HStack
+						alignItems="center"
+						px={1.5}
+						pb={1}
 						flexGrow={0}
 						flexShrink={0}
+						borderBottomWidth={1}
+						borderColor="main.700"
 					>
 						<Box size="lexXxs"></Box>
 						{columns.map((col, i) => (
@@ -1416,7 +1431,7 @@ const Lex = () => {
 							/>
 						</Box>
 					</HStack>
-					<GestureHandlerRootView>
+					<GestureHandlerRootView flex={1}>
 						<FlatList
 							m={0}
 							mb={1}
