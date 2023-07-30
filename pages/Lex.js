@@ -17,11 +17,12 @@ import {
 	useContrastText
 } from 'native-base';
 import { AnimatePresence, MotiScrollView } from 'moti';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SwipeableItem from 'react-native-swipeable-item';
 
 import debounce from '../helpers/debounce';
 import uuidv4 from '../helpers/uuidv4';
 import {
-	EditIcon,
 	SortDownIcon,
 	SortUpIcon,
 	AddIcon,
@@ -35,7 +36,8 @@ import {
 	LoadSaveIcon,
 	ExportIcon,
 	RestoreIcon,
-	MinimizeIcon
+	MinimizeIcon,
+	DragIndicatorIcon
 } from '../components/icons';
 import { MultiAlert } from '../components/StandardAlert';
 import {
@@ -43,7 +45,6 @@ import {
 	setDesc,
 	addLexiconItem,
 	deleteLexiconItem,
-	deleteMultipleLexiconItems,
 	changeSortOrder,
 	toggleSortDir,
 	equalityCheck,
@@ -73,6 +74,7 @@ import { lexCustomStorage } from '../helpers/persistentInfo';
 import getSizes from '../helpers/getSizes';
 import { fromToZero, maybeAnimate } from '../helpers/motiAnimations';
 import doExport from '../helpers/exportTools';
+import Underlay from '../components/Underlay';
 
 const Lex = () => {
 	//
@@ -118,8 +120,7 @@ const Lex = () => {
 	const [newLexiconItemColumns, setNewLexiconItemColumns] = useState([]);
 	const [blankLexiconItemColumns, setBlankLexiconItemColumns] = useState([]);
 	const [labels, setLabels] = useState([]);
-	const [deletingMode, setDeletingMode] = useState(false);
-	const [itemsToDelete, setItemsToDelete] = useState([]);
+	const [deletingItem, setDeletingItem] = useState(false);
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState('');
 
@@ -209,6 +210,26 @@ const Lex = () => {
 	};
 	//
 	//
+	// DELETE ITEM FROM LEXICON
+	//
+	//
+	const maybeDeleteItemFunc = (item) => {
+		const {id, columns} = item;
+		const text = labels.map((col, i) => `${col}: ${columns[i]}`).join("\n");
+		setDeletingItem({id, columns, text});
+		setAlertOpen("willDeleteItem");
+	};
+	const doDeleteItemFunc = () => {
+		dispatch(deleteLexiconItem(deletingItem.id));
+		setDeletingItem(false);
+		setAlertOpen(false);
+	};
+	const cancelDeleteFunc = () => {
+		setAlertOpen(false);
+		setDeletingItem(false);
+	};
+	//
+	//
 	// ADD ITEM TO LEXICON
 	//
 	//
@@ -239,58 +260,6 @@ const Lex = () => {
 			newCols[i] = text;
 			setNewLexiconItemColumns(newCols)			;
 		}, {namespace: String(i)});
-	};
-	//
-	//
-	// MASS DELETE
-	//
-	//
-	const toggleDeletingMode = (force = false) => {
-		if(!force && deletingMode && itemsToDelete.length > 0) {
-			// Ask if they want to delete the marked ones before they go
-			return setAlertOpen('pendingDeleteQueue');
-		}
-		// Toggle the mode
-		setItemsToDelete([]);
-		setDeletingMode(!deletingMode);
-	};
-	const maybeMassDelete = () => {
-		if(itemsToDelete.length === 0) {
-			return doToast({
-				toast,
-				placement: "top",
-				scheme: "info",
-				msg: "You haven't marked anything for deletion yet."
-			});
-		} else if (!disableConfirms) {
-			return setAlertOpen('willMassDelete');
-		}
-		// We're ok to go
-		doMassDelete();
-	};
-	const doMassDelete = () => {
-		const amount = itemsToDelete.length;
-		// Delete from lexicon
-		dispatch(deleteMultipleLexiconItems([...itemsToDelete]));
-		// Reset everything else
-		setItemsToDelete([]);
-		setDeletingMode(false);
-		doToast({
-			toast,
-			placement: "top",
-			scheme: "danger",
-			msg: `${amount} item${maybePlural(amount)} deleted`
-		});
-	};
-	const toggleMarkedForDeletion = (id) => {
-		// Remove the ID from the list, if it's there.
-		const newItemsToDelete = itemsToDelete.filter(item => item !== id);
-		if(itemsToDelete.length === newItemsToDelete.length) {
-			// The ID was not in the list already, so add it.
-			newItemsToDelete.push(id);
-		}
-		// Save to state
-		setItemsToDelete(newItemsToDelete);
 	};
 	//
 	//
@@ -714,40 +683,42 @@ const Lex = () => {
 	const renderList = ({item, index}) => {
 		const id = item.id;
 		const cols = item.columns;
-		const bg = index % 2 ? "lighter" : "darker";
-		const buttonProps =
-			deletingMode ?
-				{
-					icon: <TrashIcon size={smallerSize} color="danger.50" />,
-					accessibilityLabel: "Mark for Deletion",
-					bg: "danger." + (itemsToDelete.findIndex(itd => itd === id) >= 0 ? "400" : "700"),
-					onPress: () => toggleMarkedForDeletion(id)
-				}
-			:
-				{
-					icon: <EditIcon size={smallerSize} color="primary.400" />,
-					accessibilityLabel: "Edit",
-					bg: "transparent",
-					onPress: () => startEditingFunc(item)
-				};
+		const bg = index % 2 ? "main.800" : "main.900";
 		return (
-			<HStack key={id} py={3.5} px={1.5} bg={bg}>
-				{cols.map(
-					(text, i) =>
-						<Box px={1} size={getBoxSize(columns[i].size)} key={`${id}-Column-${i}`}>
-							<Text fontSize={smallerSize} isTruncated={truncateColumns} fontFamily={fontType}>{text}</Text>
-						</Box>
-					)
-				}
-				<Box size="lexXs">
-					<IconButton
-						py={1}
-						px={2}
-						m={0.5}
-						{...buttonProps}
-					/>
-				</Box>
-			</HStack>
+			<SwipeableItem
+				renderUnderlayRight={() => <Underlay fontSize={textSize} onPress={() => startEditingFunc(item)} />}
+				renderUnderlayLeft={() => <Underlay left fontSize={textSize} onPress={() => maybeDeleteItemFunc(item)} />}
+				snapPointsLeft={[150]}
+				snapPointsRight={[150]}
+				swipeEnabled={true}
+				activationThreshold={5}
+			>
+				<HStack key={id} py={3.5} px={0} bg={bg} alignItems="center">
+					<Box size="lexXs">
+						<DragIndicatorIcon
+							size={smallerSize}
+							flexGrow={0}
+							flexShrink={0}
+							color="primary.600"
+						/>
+					</Box>
+					{cols.map(
+						(text, i) =>
+							<Box px={1} size={getBoxSize(columns[i].size)} key={`${id}-Column-${i}`}>
+								<Text fontSize={smallerSize} isTruncated={truncateColumns} fontFamily={fontType}>{text}</Text>
+							</Box>
+						)
+					}
+					<Box size="lexXs">
+						<DragIndicatorIcon
+							size={smallerSize}
+							flexGrow={0}
+							flexShrink={0}
+							color="primary.600"
+						/>
+					</Box>
+				</HStack>
+			</SwipeableItem>
 		);
 	}
 	//
@@ -789,30 +760,13 @@ const Lex = () => {
 						}
 					},
 					{
-						id: "pendingDeleteQueue",
+						id: "willDeleteItem",
 						properties: {
-							continueText: "No, Don't Delete",
-							continueFunc: () => toggleDeletingMode(true),
-							leastDestructiveContinue: true,
-							cancelText: "Yes, Delete Them",
-							cancelFunc: doMassDelete,
-							cancelProps: {
-								bg: "danger.500"
-							},
-							bodyContent: `You have marked ${itemsToDelete.length} item${maybePlural(itemsToDelete.length)} for deletion. Do you want to delete them?`
-						}
-					},
-					{
-						id: "willMassDelete",
-						properties: {
-							continueText: "Yes",
-							continueFunc: doMassDelete,
-							continueProps: {
-								bg: "danger.500"
-							},
-							bodyContent: (
-								<Text>You are about to delete <Text bold>{itemsToDelete.length}</Text> word{maybePlural(itemsToDelete.length)}. Are you sure? This cannot be undone.</Text>
-							)
+							continueText: "Yes, Delete It",
+							continueFunc: doDeleteItemFunc,
+							cancelText: "No, Don't Delete",
+							cancelFunc: cancelDeleteFunc,
+							bodyContent: `${deletingItem && deletingItem.text}\n\nDo you want to delete this? It cannot be undone.`
 						}
 					},
 					{
@@ -1263,18 +1217,6 @@ const Lex = () => {
 							triggerOpen={modalOpen === 'reorder'}
 							clearTrigger={() => setModalOpen('')}
 						/>
-						{deletingMode &&
-							<IconButton
-								p={1}
-								px={1.5}
-								ml={2}
-								icon={<TrashIcon color="danger.50" size={smallerSize} />}
-								bg="danger.500"
-								onPress={() => maybeMassDelete()}
-								flexGrow={0}
-								flexShrink={0}
-							/>
-						}
 						<Menu
 							placement="bottom right"
 							closeOnSelect={true}
@@ -1306,20 +1248,6 @@ const Lex = () => {
 									<Text>Reorder Columns</Text>
 								</Menu.Item>
 							</Menu.Group>
-							<Menu.OptionGroup
-								title="Lexicon Entries"
-								_title={{fontSize: smallerSize}}
-								type="checkbox"
-								value={deletingMode ? ["mass delete"] : []}
-							>
-								<Menu.ItemOption
-									_text={{fontSize: textSize}}
-									onPress={() => toggleDeletingMode()}
-									value="mass delete"
-								>
-									<Text>Mass Delete Mode</Text>
-								</Menu.ItemOption>
-							</Menu.OptionGroup>
 						</Menu>
 						<Menu
 							placement="bottom right"
@@ -1440,6 +1368,7 @@ const Lex = () => {
 						flexGrow={0}
 						flexShrink={0}
 					>
+						<Box size="lexXxs"></Box>
 						{
 							columns.map(col => (
 								<Box
@@ -1458,6 +1387,7 @@ const Lex = () => {
 						flexGrow={0}
 						flexShrink={0}
 					>
+						<Box size="lexXxs"></Box>
 						{columns.map((col, i) => (
 							<Box
 								px={0.5}
@@ -1486,15 +1416,17 @@ const Lex = () => {
 							/>
 						</Box>
 					</HStack>
-					<FlatList
-						m={0}
-						mb={1}
-						data={lexicon}
-						keyExtractor={(word) => word.id}
-						ListEmptyComponent={ListEmpty}
-						extraData={extraData}
-						renderItem={renderList}
-					/>
+					<GestureHandlerRootView>
+						<FlatList
+							m={0}
+							mb={1}
+							data={lexicon}
+							keyExtractor={(word) => word.id}
+							ListEmptyComponent={ListEmpty}
+							extraData={extraData}
+							renderItem={renderList}
+						/>
+					</GestureHandlerRootView>
 				</VStack>
 			</VStack>
 		</>

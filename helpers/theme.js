@@ -416,23 +416,28 @@ const components = {
 	NativeBaseProvider: {...mainBG},
 	Box: {
 		sizes: {
-			lexXs: {
+			lexXxs: {
 				flexGrow: 1,
+				flexShrink: 2,
+				flexBasis: 10
+			},
+			lexXs: {
+				flexGrow: 2,
 				flexShrink: 1,
 				flexBasis: 20
 			},
 			lexSm: {
-				flexGrow: 3,
+				flexGrow: 6,
 				flexShrink: 1,
 				flexBasis: 40
 			},
 			lexMd: {
-				flexGrow: 9,
+				flexGrow: 18,
 				flexShrink: 1,
 				flexBasis: 96
 			},
 			lexLg: {
-				flexGrow: 15,
+				flexGrow: 30,
 				flexShrink: 1,
 				flexBasis: 200
 			}
