@@ -56,12 +56,6 @@ export const WESoundChangesIcon = (props) => <Icon as={MCI} name="transfer" {...
 export const WETransformationsIcon = (props) => <Icon as={MaterialIcons} name="transform" {...props} />;
 export const WEOutputIcon = (props) => <Icon as={Ionicons} name="exit-outline" {...props} />;
 
-// Reordering controls
-export const ReorderIcon = (props) => <Icon as={MCI} name="swap-vertical-circle" {...props} />;
-export const StopIcon = (props) => <Icon as={MCI} name="stop" {...props} />;
-export const UpIcon = (props) => <Icon as={Entypo} name="arrow-bold-up" {...props} />;
-export const DownIcon = (props) => <Icon as={Entypo} name="arrow-bold-down" {...props} />;
-
 // Add/Delete/Edit controls
 export const AddIcon = (props) => <Icon as={Ionicons} name="add" {...props} />;
 export const AddCircleIcon = (props) => <Icon as={Ionicons} name="add-circle-outline" {...props} />;

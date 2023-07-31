@@ -3,66 +3,61 @@ import { useSwipeableItemParams } from "react-native-swipeable-item";
 import { EditIcon, TrashIcon } from "./icons";
 
 
-const Underlay = ({left, fontSize, onPress}) => {
-	return left ?
-		<UnderlayLeft fontSize={fontSize} onPress={onPress} />
-	:
-		<UnderlayRight fontSize={fontSize} onPress={onPress} />
-	;
+const Underlay = ({left, fontSize, onPress, leaveOpen = false}) => {
+	let props = {
+		fontSize,
+		onPress,
+		leaveOpen
+	};
+	if(left) {
+		props = {
+			...props,
+			buttonProps: {
+				endIcon: <TrashIcon color="danger.400" size={fontSize} />,
+				bg: "danger.900"
+			},
+			justifyContent: "flex-end",
+			color: "danger.400",
+			text: "Delete"
+		}
+	} else {
+		props = {
+			...props,
+			buttonProps: {
+				startIcon: <EditIcon color="primary.400" size={fontSize} />,
+				bg: "main.900"
+			},
+			justifyContent: "flex-start",
+			color: "primary.400",
+			text: "Edit"
+		}
+	}
+	return <UnderlayBase {...props} />;
 };
-const UnderlayRight = ({fontSize, onPress}) => {
+const UnderlayBase = ({fontSize, onPress, leaveOpen, buttonProps, justifyContent, color, text}) => {
 	const { close } = useSwipeableItemParams();
 	return (
-		<HStack alignItems="center" justifyContent="flex-start" px={2.5} h="full" bg="lighter">
+		<HStack alignItems="center" justifyContent={justifyContent} px={2.5} h="full" bg="lighter">
 			<Button
-				startIcon={<EditIcon color="primary.400" size={fontSize} />}
 				py={1}
 				px={2}
 				flexShrink={0}
 				flexGrow={0}
 				onPress={() => {
 					onPress();
-					close();
+					leaveOpen || close();
 				}}
-				bg="main.900"
 				_stack={{
 					alignItems: "center",
-					justifyContent: "flex-start"
+					justifyContent
 				}}
 				_text={{
 					fontSize,
-					color: "primary.400",
+					color,
 					bold: true
 				}}
-			>Edit</Button>
-		</HStack>
-	);
-};
-const UnderlayLeft = ({fontSize, onPress}) => {
-	const { close } = useSwipeableItemParams();
-	return (
-		<HStack alignItems="center" justifyContent="flex-end" px={2.5} h="full" bg="lighter">
-			<Button
-				endIcon={<TrashIcon color="danger.400" size={fontSize} />}
-				py={1}
-				px={2}
-				flexShrink={0}
-				flexGrow={0}
-				onPress={() => {
-					onPress();
-					close();
-				}}
-				bg="danger.900"
-				_stack={{
-					alignItems: "center",
-					justifyContent: "flex-end"
-				}}
-				_text={{
-					fontSize,
-					color: "danger.400",
-					bold: true
-				}}
-			>Delete</Button>
+				{...buttonProps}
+			>{text}</Button>
 		</HStack>
 	);
 };

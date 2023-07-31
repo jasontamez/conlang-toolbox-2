@@ -273,6 +273,7 @@ const CharGroups = ({
 							size={textSize}
 							flexGrow={0}
 							flexShrink={0}
+							color="primary.600"
 						/>
 						<VStack
 							alignItems="flex-start"
@@ -294,6 +295,7 @@ const CharGroups = ({
 							size={textSize}
 							flexGrow={0}
 							flexShrink={0}
+							color="primary.600"
 						/>
 					</HStack>
 				</SwipeableItem>

@@ -261,6 +261,7 @@ const Transformations = ({
 							size={textSize}
 							flexGrow={0}
 							flexShrink={0}
+							color="primary.600"
 						/>
 						<Item
 							item={item}
@@ -273,6 +274,7 @@ const Transformations = ({
 							size={textSize}
 							flexGrow={0}
 							flexShrink={0}
+							color="primary.600"
 						/>
 					</HStack>
 				</TouchableWithoutFeedback>
