@@ -109,7 +109,9 @@ export const TextSetting = ({
 export const ResettableTextAreaSetting = ({
 	boxProps = {},
 	labelProps = {},
+	labelSize,
 	inputProps = {},
+	inputSize,
 	text,
 	children,
 	defaultValue,
@@ -130,7 +132,19 @@ export const ResettableTextAreaSetting = ({
 	//    inputProps={other props for TextArea}
 	// />
 	const [inputElement, setInputElement] = useState(() => <Fragment key={`TextAreaInput-Frag-${id}-${reloadTrigger}`} />);
+	const innerSizeEstimate = fontSizesInPx[inputSize || "sm"] * (rows + 0.2);
+	const sizeEstimate = innerSizeEstimate + fontSizesInPx[labelSize || "md"];
 	useEffect(() => {
+		if(inputProps.style) {
+			inputProps.style = {
+				height: innerSizeEstimate,
+				...inputProps.style
+			};
+		} else {
+			inputProps.style = {
+				height: innerSizeEstimate
+			};
+		}
 		setInputElement(() => (
 			<TextArea
 				key={`TextAreaInput-${id}-${reloadTrigger}`}
@@ -139,13 +153,26 @@ export const ResettableTextAreaSetting = ({
 				placeholder={placeholder}
 				totalLines={rows}
 				onChangeText={onChangeText}
+				fontSize={inputSize}
+				alignItems="flex-start"
+				justifyContent="flex-start"
 				{...inputProps}
 			/>
 		));
-	}, [reloadTrigger]);
+	}, [reloadTrigger, innerSizeEstimate]);
+	if(boxProps.style) {
+		boxProps.style = {
+			minHeight: sizeEstimate,
+			...boxProps.style
+		}
+	} else {
+		boxProps.style = {
+			minHeight: sizeEstimate
+		}
+	}
 	return (
 		<Box w="full" {...boxProps}>
-			{text === null ? <></> : <Text {...labelProps}>{$v(text, children)}</Text>}
+			{text === null ? <></> : <Text fontSize={labelSize} {...labelProps}>{$v(text, children)}</Text>}
 			{[inputElement]}
 		</Box>
 	);
@@ -155,7 +182,9 @@ export const ResettableTextAreaSetting = ({
 export const ResettableTextSetting = ({
 	boxProps = {},
 	labelProps = {},
+	labelSize,
 	inputProps = {},
+	inputSize,
 	text,
 	children,
 	defaultValue,
@@ -182,13 +211,25 @@ export const ResettableTextSetting = ({
 				defaultValue={defaultValue}
 				placeholder={placeholder}
 				onChangeText={onChangeText}
+				fontSize={inputSize}
 				{...inputProps}
 			/>
 		));
 	}, [reloadTrigger]);
+	const sizeEstimate = fontSizesInPx[inputSize || "sm"] + fontSizesInPx[labelSize || "md"];
+	if(boxProps.style) {
+		boxProps.style = {
+			minHeight: sizeEstimate,
+			...boxProps
+		}
+	} else {
+		boxProps.style = {
+			minHeight: sizeEstimate
+		}
+	}
 	return (
-		<Box w="full" h={20} {...boxProps}>
-			<Text {...labelProps}>{$v(text, children)}</Text>
+		<Box w="full" {...boxProps}>
+			<Text fontSize={labelSize} {...labelProps}>{$v(text, children)}</Text>
 			{[inputElement]}
 		</Box>
 	);

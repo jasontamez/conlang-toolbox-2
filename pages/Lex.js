@@ -674,12 +674,12 @@ const Lex = () => {
 		// Base height is 1/4 the area
 		const base = (height - headerHeight) / 4;
 		// Max height is 1/2 the area
-		const max = base * 2;
+		const max = (height / 2) - headerHeight;
 		// fontSize is an estimate of the amount of space the font takes up
 		const fontSize = fontSizesInPx[textSize];
 		// return a value at least `base`, but modified by `fontSize`
 		//    to a point no greater than `max`
-		return Math.min(max, Math.max(base, fontSize * 10));
+		return Math.min(max, Math.max(base, fontSize * 12));
 	};
 	const infoHeight = calculateInfoHeight();
 	const renderList = ({item}) => {
@@ -1089,7 +1089,7 @@ const Lex = () => {
 				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">{loadingOverlayOpen}</Text>}
 			/>
 			<HStack alignItems="flex-start" justifyContent="flex-end">
-				<AnimatePresence>
+				<AnimatePresence style={{flex: 1, alignItems: "flex-start", justifyContent: "flex-end"}}>
 					{ minimizedInfo || (
 						<MotiScrollView
 							style={{ overflow: "hidden", flexGrow: 1, flexShrink: 0}}
@@ -1103,7 +1103,7 @@ const Lex = () => {
 							)}
 							key="scrolly"
 						>
-							<VStack mt={3} ml={3} mr={1} mb={0}>
+							<VStack pt={3} pl={3} pr={1} pb={0}>
 								<ResettableTextSetting
 									text="Lexicon Title:"
 									defaultValue={title}
@@ -1111,13 +1111,14 @@ const Lex = () => {
 										() => dispatch(setTitle(v)),
 										{ namespace: "LexTitle" }
 									)}
-									labelProps={{fontSize: textSize}}
-									inputProps={{mt: 2, fontSize: smallerSize, ref: titleRef}}
+									labelSize={textSize}
+									inputProps={{mt: 2, ref: titleRef}}
+									inputSize={smallerSize}
 									placeholder="Usually the language name."
 									reloadTrigger={reloadTrigger}
 								/>
 							</VStack>
-							<VStack ml={3} mt={2} mr={1} mb={3}>
+							<VStack pl={3} pt={2} pr={1} pb={3}>
 								<ResettableTextAreaSetting
 									text="Description:"
 									defaultValue={description}
@@ -1125,8 +1126,9 @@ const Lex = () => {
 										() => dispatch(setDesc(v)),
 										{ namespace: "LexDesc" }
 									)}
-									labelProps={{fontSize: textSize}}
-									inputProps={{mt: 2, fontSize: smallerSize, ref: descRef}}
+									labelSize={textSize}
+									inputProps={{mt: 2, ref: descRef}}
+									inputSize={smallerSize}
 									rows={3}
 									placeholder="A short description of this lexicon."
 									reloadTrigger={reloadTrigger}
@@ -1151,7 +1153,8 @@ const Lex = () => {
 						p={1}
 						size={miniSize}
 						style={{
-							height: fontSizesInPx[textSize] + 8 // padding
+							height: fontSizesInPx[textSize] + 8, // padding
+							width: fontSizesInPx[textSize] + 8
 						}}
 					/>
 				</AnimatePresence>
@@ -1189,6 +1192,8 @@ const Lex = () => {
 						flexWrap="wrap"
 						flexGrow={0}
 						flexShrink={1}
+						alignContent="center"
+						justifyContent="flex-end"
 					>
 						<DropDown
 							placement="top right"

@@ -229,6 +229,8 @@ const mainInput = {
 		borderRadius: 0,
 		placeholderTextColor: "text.200",
 		borderColor: "transparent",
+		px: 2,
+		py: 0.5,
 		_focus: {
 			borderColor: "main.500",
 			color: "text.50",

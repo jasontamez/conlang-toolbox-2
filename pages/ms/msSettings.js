@@ -280,8 +280,8 @@ const Settings = () => {
 					{ namespace: "msName" }
 				)}
 				text="MorphoSyntax Title:"
-				labelProps={{fontSize: textSize}}
-				inputProps={{fontSize: inputSize}}
+				labelSize={textSize}
+				inputSize={inputSize}
 				reloadTrigger={reloadTrigger}
 			/>
 			<ResettableTextAreaSetting
@@ -292,8 +292,8 @@ const Settings = () => {
 					{ namespace: "msDesc" }
 				)}
 				text="Description:"
-				labelProps={{fontSize: textSize}}
-				inputProps={{fontSize: inputSize}}
+				labelSize={textSize}
+				inputSize={inputSize}
 				reloadTrigger={reloadTrigger}
 			/>
 			<VStack alignSelf="flex-end">
