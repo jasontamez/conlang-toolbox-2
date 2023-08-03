@@ -302,7 +302,7 @@ const WGSyllables = () => {
 					title={multipleSyllableTypes ? "Single-Word Syllables" : "Syllables"}
 					propName="singleWord"
 					syllablesValue={singleWord}
-			/>
+				/>
 				<AnimatePresence>
 					{multipleSyllableTypes &&
 						<MotiView

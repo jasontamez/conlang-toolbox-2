@@ -7,12 +7,14 @@ import {
 	Button,
 	Modal,
 	Center,
-	useContrastText
+	useContrastText,
+	TextArea
 } from 'native-base';
 
 import {
 	CloseCircleIcon,
-	ExportIcon
+	ExportIcon,
+	ImportIcon
 } from './icons';
 import getSizes from '../helpers/getSizes';
 import { ToggleSwitch } from './inputTags';
@@ -23,17 +25,25 @@ const ExportImportModal = ({
 	closeModal,
 	isImport = false // Import or Export
 }) => {
-	const [wg, setWG] = useState(true);
-	const [we, setWE] = useState(true);
-	const [ms, setMS] = useState(true);
-	const [lex, setLex] = useState(true);
-	const [wl, setWL] = useState(true);
-	const [ec, setEC] = useState(true);
-	const [app, setApp] = useState(true);
-	const [wgStoredInfo, setWGStoredInfo] = useState(true);
-	const [weStoredInfo, setWEStoredInfo] = useState(true);
-	const [msStoredInfo, setMSStoredInfo] = useState(true);
-	const [lexStoredInfo, setLexStoredInfo] = useState(true);
+	const getStartingValue = (prop) => {
+		if(!isImport) {
+			// export
+			return true;
+		}
+		return isImport[prop] === undefined ? null : true;
+	};
+	const [wg, setWG] = useState(getStartingValue("wg"));
+	const [we, setWE] = useState(getStartingValue("we"));
+	const [ms, setMS] = useState(getStartingValue("morphoSyntax"));
+	const [lex, setLex] = useState(getStartingValue("lexicon"));
+	const [wl, setWL] = useState(getStartingValue("wordLists"));
+	const [ec, setEC] = useState(getStartingValue("extraCharacters"));
+	const [app, setApp] = useState(getStartingValue("appState"));
+	// TO-DO: Finish the below
+	const [wgStoredInfo, setWGStoredInfo] = useState(getStartingValue(""));
+	const [weStoredInfo, setWEStoredInfo] = useState(getStartingValue(""));
+	const [msStoredInfo, setMSStoredInfo] = useState(getStartingValue(""));
+	const [lexStoredInfo, setLexStoredInfo] = useState(getStartingValue(""));
 
 	const [textSize, headerSize] = getSizes("sm", "md");
 	const primaryContrast = useContrastText('primary.500');
@@ -111,88 +121,88 @@ const ExportImportModal = ({
 						<Center borderBottomWidth={1.5} borderBottomColor="main.900" pb={3}>
 							<Text italic textAlign="center" fontSize={headerSize}>Choose which elements you wish to {isImport ? "im" : "ex"}port.</Text>
 						</Center>
-						<ToggleSwitch
+						{ms !== null && <ToggleSwitch
 							label="MorphoSyntax"
 							desc="Currently loaded data"
 							switchState={ms}
 							switchToggle={() => setMS(!ms)}
 							{...masterToggleProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{msStoredInfo !== null && <ToggleSwitch
 							label="MorphoSyntax Storage"
 							desc="Any/all stored morphosyntax documents"
 							switchState={msStoredInfo}
 							switchToggle={() => setMSStoredInfo(!msStoredInfo)}
 							{...toggleProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{wg !== null && <ToggleSwitch
 							label="WordGen"
 							desc="Currently loaded data"
 							switchState={wg}
 							switchToggle={() => setWG(!wg)}
 							{...masterToggleProps}
 							{...alternateProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{wgStoredInfo !== null && <ToggleSwitch
 							label="WordGen Storage"
 							desc="Any/all stored settings"
 							switchState={wgStoredInfo}
 							switchToggle={() => setWGStoredInfo(!wgStoredInfo)}
 							{...toggleProps}
 							{...alternateProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{we !== null && <ToggleSwitch
 							label="WordEvolve"
 							desc="Currently loaded data"
 							switchState={we}
 							switchToggle={() => setWE(!we)}
 							{...masterToggleProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{weStoredInfo !== null && <ToggleSwitch
 							label="WordEvolve Storage"
 							desc="Any/all stored settings"
 							switchState={weStoredInfo}
 							switchToggle={() => setWEStoredInfo(!weStoredInfo)}
 							{...toggleProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{lex !== null && <ToggleSwitch
 							label="Lexicon"
 							desc="Currently loaded data"
 							switchState={lex}
 							switchToggle={() => setLex(!lex)}
 							{...masterToggleProps}
 							{...alternateProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{lexStoredInfo !== null && <ToggleSwitch
 							label="Lexicon Storage"
 							desc="Any/all stored lexicons"
 							switchState={lexStoredInfo}
 							switchToggle={() => setLexStoredInfo(!lexStoredInfo)}
 							{...toggleProps}
 							{...alternateProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{wl !== null && <ToggleSwitch
 							label="WordList Settings"
 							desc="Current options"
 							switchState={wl}
 							switchToggle={() => setWL(!wl)}
 							{...toggleProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{ec !== null && <ToggleSwitch
 							label="ExtraCharacters Settings"
 							desc="Current faves and other options"
 							switchState={ec}
 							switchToggle={() => setEC(!ec)}
 							{...toggleProps}
 							{...alternateProps}
-						/>
-						<ToggleSwitch
+						/>}
+						{app !== null && <ToggleSwitch
 							label="App Settings"
 							desc="All current settings"
 							switchState={app}
 							switchToggle={() => setApp(!app)}
 							{...toggleProps}
-						/>
+						/>}
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer>
@@ -220,3 +230,136 @@ const ExportImportModal = ({
 };
 
 export default ExportImportModal;
+
+export const ExportHowModal = ({
+	modalOpen,
+	closeModal,
+	exportToFile,
+	info,
+	isLoading
+}) => {
+	const closeAndExport = () => {
+		closeModal();
+		exportToFile();
+	};
+	return (
+		<Modal isOpen={!!modalOpen}>
+			<Modal.Content>
+				<Modal.Header bg="primary.500">
+					<HStack justifyContent="flex-end" alignItems="center">
+						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Export</Text>
+						<IconButton
+							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+							onPress={closeModal}
+							flexGrow={0}
+							flexShrink={0}
+						/>
+					</HStack>
+				</Modal.Header>
+				<Modal.Body>
+					<VStack>
+						<Center borderBottomWidth={1.5} borderBottomColor="main.900" pb={3}>
+							<Text textAlign="center" fontSize={headerSize}>You can copy this info to a note or file.</Text>
+							<Text italic textAlign="center" fontSize={textSize}>Or you can save it to a file on your device with the button below.</Text>
+						</Center>
+						<TextArea
+							mt={2}
+							value={isLoading ? "loading..." : info}
+							totalLines={12}
+							h={64}
+							w="full"
+						/>
+					</VStack>
+				</Modal.Body>
+				<Modal.Footer>
+					<HStack justifyContent="flex-end" p={1} space={4} flexWrap="wrap">
+						<Button
+							startIcon={<ExportIcon size={textSize} />}
+							px={2}
+							py={1}
+							onPress={closeAndExport}
+							_text={{ fontSize: textSize }}
+							disabled={isLoading}
+						>Export to File</Button>
+						<Button
+							bg="success"
+							px={2}
+							py={1}
+							mx={1}
+							onPress={closeModal}
+							_text={{ fontSize: textSize, color: "success.50" }}
+						>Done</Button>
+					</HStack>
+				</Modal.Footer>
+			</Modal.Content>
+		</Modal>
+	);
+};
+
+
+export const ImportHowModal = ({
+	modalOpen,
+	closeModal,
+	importFromFile,
+	importFromText
+}) => {
+	const [toImport, setToImport] = useState("");
+	return (
+		<Modal isOpen={!!modalOpen}>
+			<Modal.Content>
+				<Modal.Header bg="primary.500">
+					<HStack justifyContent="flex-end" alignItems="center">
+						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Import</Text>
+						<IconButton
+							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+							onPress={closeModal}
+							flexGrow={0}
+							flexShrink={0}
+						/>
+					</HStack>
+				</Modal.Header>
+				<Modal.Body>
+					<VStack>
+						<Center borderBottomWidth={1.5} borderBottomColor="main.900" pb={3}>
+							<Text textAlign="center" fontSize={headerSize}>Paste your stored information here.</Text>
+							<Text italic textAlign="center" fontSize={textSize}>Or you can import it from a file on your device with the button below.</Text>
+						</Center>
+						<TextArea
+							mt={2}
+							value={toImport}
+							totalLines={12}
+							h={64}
+							w="full"
+							onChangeText={(text) => setToImport(text)}
+						/>
+					</VStack>
+				</Modal.Body>
+				<Modal.Footer>
+					<HStack justifyContent="flex-end" p={1} space={4} flexWrap="wrap">
+						<Button
+							startIcon={<ImportIcon size={textSize} />}
+							px={2}
+							py={1}
+							onPress={() => {
+								closeModal();
+								importFromFile();
+							}}
+							_text={{ fontSize: textSize }}
+						>Import From File</Button>
+						<Button
+							bg="success"
+							px={2}
+							py={1}
+							mx={1}
+							onPress={() => {
+								closeModal();
+								importFromText(toImport);
+							}}
+							_text={{ fontSize: textSize, color: "success.50" }}
+						>Import</Button>
+					</HStack>
+				</Modal.Footer>
+			</Modal.Content>
+		</Modal>
+	);
+};

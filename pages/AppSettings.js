@@ -11,9 +11,10 @@ import {
 	lexCustomStorage,
 	msCustomStorage
 } from "../helpers/persistentInfo";
-import ExportImportModal from "../components/ExportImportModal";
+import ExportImportModal, { ExportHowModal, ImportHowModal } from "../components/ExportImportModal";
 import doExport from "../helpers/exportTools";
 import doToast from "../helpers/toast";
+import { parseImportInfo } from "../helpers/importTools";
 
 
 const AppSettings = () => {
@@ -36,6 +37,11 @@ const AppSettings = () => {
 	const toast = useToast();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [importing, setImporting] = useState(false);
+	const [exportMethodOpen, setExportMethodOpen] = useState(false);
+	const [exportedInfo, setExportedInfo] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [importMethodOpen, setImportMethodOpen] = useState(false);
+	const [importedInfo, setImportedInfo] = useState(null);
 	const [titleSize, toastSize, descSize] = getSizes("md", "sm", "xs");
 	const pressableProps = {
 		px: 2,
@@ -44,7 +50,6 @@ const AppSettings = () => {
 			bg: "lighter"
 		}
 	};
-	// TO-DO: Figure out why text size setting is wrong
 
 	// Export Info
 	const getStoredInfo = async ({
@@ -139,15 +144,21 @@ const AppSettings = () => {
 		}
 		return toExport;
 	};
-	const importExportInfo = async (info) => {
+	const importExportInfo = async (format) => {
 		// TO-DO: Export/Import certain bits of info
-		console.log("Returned: " + JSON.stringify(info));
+		console.log("Returned: " + JSON.stringify(format));
 		if(importing) {
 			// Handle import
 			return; //TO-DO: importing
 		}
-		// Handle export
-		const toExport = await getStoredInfo(info);
+		getStoredInfo(format).then((result) => {
+			setExportedInfo(JSON.stringify(result));
+			setIsLoading(false);
+		});
+		setExportMethodOpen(true);
+		setIsLoading(true);
+	};
+	const exportToFile = () => {
 		// Create filename
 		const now = new Date(Date.now());
 		const num = (number) => {
@@ -158,7 +169,7 @@ const AppSettings = () => {
 		};
 		const filename = `Conlang Toolbox Backup ${now.getFullYear()}y-${num(now.getMonth() + 1)}m-${num(now.getDate())}d--${num(now.getHours())}h-${num(now.getMinutes())}m-${num(now.getSeconds())}s.json`;
 		console.log(JSON.stringify(filename));
-		doExport(JSON.stringify(toExport), filename).then((result) => {
+		doExport(exportedInfo, filename).then((result) => {
 			const {
 				fail,
 				filename
@@ -183,6 +194,40 @@ const AppSettings = () => {
 	};
 
 	// TO-DO: Import info
+	const importFromFile = () => {
+		// TO-DO: Import file picker
+	};
+	const importFromText = (info) => {
+		// examine text
+		setImportedInfo(JSON.parse(info));
+		// Attempt to convert info
+		let errorMsg = false;
+		let parsed;
+		try {
+			parsed = JSON.parse(info.replace(/[\r\n]/g, "").trim());
+		} catch (error) {
+			errorMsg = error;
+		}
+		if(!errorMsg) {
+			// do some checks on the info, see what it has
+			const [flag, reParsed] = parseImportInfo(parsed);
+			if(!flag) {
+				errorMsg = reParsed;
+			} else {
+				parsed = reParsed;
+			}
+		}
+		if(errorMsg) {
+			// handle error message
+			return;
+		}
+
+		// save info
+		setImportedInfo(parsed);
+		// info is ready to go
+		setImporting(true);
+		setModalOpen(true);
+	};
 
 	// Return JSX
 	return (
@@ -285,6 +330,22 @@ const AppSettings = () => {
 				closeModal={() => setModalOpen(false)}
 				isImport={importing}
 			/>
+			<ExportHowModal
+				modalOpen={exportMethodOpen}
+				closeModal={() => {
+					setExportMethodOpen(false);
+					setExportedInfo("loading...");
+				}}
+				info={exportedInfo}
+				exportToFile={exportToFile}
+				isLoading={isLoading}
+			/>
+			<ImportHowModal
+				modalOpen={importMethodOpen}
+				closeModal={() => setImportMethodOpen(false)}
+				importFromFile={importFromFile}
+				importFromText={importFromText}
+			/>
 			<Pressable _pressed={{bg: "lighter"}} onPress={() => {
 				setImporting(false);
 				setModalOpen(true);
@@ -302,8 +363,7 @@ const AppSettings = () => {
 				</VStack>
 			</Pressable>
 			<Pressable _pressed={{bg: "lighter"}} onPress={() => {
-				setImporting(true);
-				setModalOpen(true);
+				setImportMethodOpen(true);
 			}}>
 				<VStack
 					w="full"
