@@ -75,6 +75,13 @@ const setHasCheckedForOldCustomInfoFunc = (state, action) => {
 	return state;
 };
 
+const loadStateFunc = (state, action) => {
+	return {
+		...state,
+		...action.payload
+	}
+};
+
 const appStateSlice = createSlice({
 	name: 'appState',
 	initialState,
@@ -85,7 +92,8 @@ const appStateSlice = createSlice({
 		setBaseTextSize: setBaseTextSizeFunc,
 		addPageToHistory: addPageToHistoryFunc,
 		removeLastPageFromHistory: removeLastPageFromHistoryFunc,
-		setHasCheckedForOldCustomInfo: setHasCheckedForOldCustomInfoFunc
+		setHasCheckedForOldCustomInfo: setHasCheckedForOldCustomInfoFunc,
+		loadStateAppSettings: loadStateFunc
 	}
 });
 
@@ -96,7 +104,8 @@ export const {
 	setBaseTextSize,
 	addPageToHistory,
 	removeLastPageFromHistory,
-	setHasCheckedForOldCustomInfo
+	setHasCheckedForOldCustomInfo,
+	loadStateAppSettings
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

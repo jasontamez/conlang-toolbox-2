@@ -17,7 +17,7 @@ import {
 	RangeSlider
 } from '../../components/inputTags';
 import {
-	loadState,
+	loadStateWG as loadState,
 	setMonosyllablesRate,
 	setMaxSyllablesPerWord,
 	setCharacterGroupDropoff,

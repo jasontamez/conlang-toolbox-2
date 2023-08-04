@@ -11,7 +11,7 @@ import {
 	setLastSave,
 	setID,
 	setStoredCustomInfo,
-	loadState
+	loadStateMS as loadState
 } from "../../store/morphoSyntaxSlice";
 import {
 	AddCircleIcon,

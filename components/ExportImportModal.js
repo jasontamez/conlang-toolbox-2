@@ -20,17 +20,17 @@ import getSizes from '../helpers/getSizes';
 import { ToggleSwitch } from './inputTags';
 
 const ExportImportModal = ({
-	returnSettings, // give the info back to the main page
+	returnChoices, // give the info back to the main page
 	modalOpen,
 	closeModal,
-	isImport = false // Import or Export
+	importedInfo = false // false if Export, an object if Import
 }) => {
 	const getStartingValue = (prop) => {
-		if(!isImport) {
+		if(!importedInfo) {
 			// export
 			return true;
 		}
-		return isImport[prop] === undefined ? null : true;
+		return importedInfo[prop] === undefined ? null : true;
 	};
 	const [wg, setWG] = useState(getStartingValue("wg"));
 	const [we, setWE] = useState(getStartingValue("we"));
@@ -77,7 +77,7 @@ const ExportImportModal = ({
 		setMSStoredInfo(true);
 		setLexStoredInfo(true);
 		// Send everything back to page
-		doReturn && returnSettings(info);
+		doReturn && returnChoices(info);
 	};
 	const toggleProps = {
 		hProps: {
@@ -107,7 +107,7 @@ const ExportImportModal = ({
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
-						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{isImport ? "Im" : "Ex"}port Options</Text>
+						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{importedInfo ? "Im" : "Ex"}port Options</Text>
 						<IconButton
 							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
 							onPress={() => exitModal()}
@@ -119,7 +119,7 @@ const ExportImportModal = ({
 				<Modal.Body>
 					<VStack>
 						<Center borderBottomWidth={1.5} borderBottomColor="main.900" pb={3}>
-							<Text italic textAlign="center" fontSize={headerSize}>Choose which elements you wish to {isImport ? "im" : "ex"}port.</Text>
+							<Text italic textAlign="center" fontSize={headerSize}>Choose which elements you wish to {importedInfo ? "im" : "ex"}port.</Text>
 						</Center>
 						{ms !== null && <ToggleSwitch
 							label="MorphoSyntax"
@@ -238,6 +238,8 @@ export const ExportHowModal = ({
 	info,
 	isLoading
 }) => {
+	const [textSize, headerSize] = getSizes("sm", "md");
+	const primaryContrast = useContrastText('primary.500');
 	const closeAndExport = () => {
 		closeModal();
 		exportToFile();
@@ -258,7 +260,7 @@ export const ExportHowModal = ({
 				</Modal.Header>
 				<Modal.Body>
 					<VStack>
-						<Center borderBottomWidth={1.5} borderBottomColor="main.900" pb={3}>
+						<Center pb={3}>
 							<Text textAlign="center" fontSize={headerSize}>You can copy this info to a note or file.</Text>
 							<Text italic textAlign="center" fontSize={textSize}>Or you can save it to a file on your device with the button below.</Text>
 						</Center>
@@ -282,7 +284,7 @@ export const ExportHowModal = ({
 							disabled={isLoading}
 						>Export to File</Button>
 						<Button
-							bg="success"
+							bg="darker"
 							px={2}
 							py={1}
 							mx={1}
@@ -304,6 +306,8 @@ export const ImportHowModal = ({
 	importFromText
 }) => {
 	const [toImport, setToImport] = useState("");
+	const [textSize, headerSize] = getSizes("sm", "md");
+	const primaryContrast = useContrastText('primary.500');
 	return (
 		<Modal isOpen={!!modalOpen}>
 			<Modal.Content>
@@ -320,7 +324,7 @@ export const ImportHowModal = ({
 				</Modal.Header>
 				<Modal.Body>
 					<VStack>
-						<Center borderBottomWidth={1.5} borderBottomColor="main.900" pb={3}>
+						<Center pb={3}>
 							<Text textAlign="center" fontSize={headerSize}>Paste your stored information here.</Text>
 							<Text italic textAlign="center" fontSize={textSize}>Or you can import it from a file on your device with the button below.</Text>
 						</Center>
@@ -347,7 +351,7 @@ export const ImportHowModal = ({
 							_text={{ fontSize: textSize }}
 						>Import From File</Button>
 						<Button
-							bg="success"
+							bg="darker"
 							px={2}
 							py={1}
 							mx={1}

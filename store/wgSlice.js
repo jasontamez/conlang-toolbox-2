@@ -253,7 +253,7 @@ const wgSlice = createSlice({
 		setSortWordlist: setSortWordlistFunc,
 		setWordlistMultiColumn: setWordlistMultiColumnFunc,
 		setWordsPerWordlist: setWordsPerWordlistFunc,
-		loadState: loadStateFunc,
+		loadStateWG: loadStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
@@ -288,7 +288,7 @@ export const {
 	setSortWordlist,
 	setWordlistMultiColumn,
 	setWordsPerWordlist,
-	loadState,
+	loadStateWG,
 	setStoredCustomInfo
 } = wgSlice.actions;
 

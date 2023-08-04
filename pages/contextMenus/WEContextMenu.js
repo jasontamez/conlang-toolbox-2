@@ -29,7 +29,7 @@ import getSizes from '../../helpers/getSizes';
 import doToast from "../../helpers/toast";
 import {
 	copyCharacterGroupsFromElsewhere,
-	loadState,
+	loadStateWE as loadState,
 	setStoredCustomInfo
 } from "../../store/weSlice";
 import WEPresetsModal from "../we/wePresetsModal";

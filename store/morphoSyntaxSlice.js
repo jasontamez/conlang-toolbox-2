@@ -62,7 +62,7 @@ const morphoSyntaxSlice = createSlice({
 		setBool: setBoolFunc,
 		setNum: setNumFunc,
 		setText: setTextFunc,
-		loadState: loadStateFunc,
+		loadStateMS: loadStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
@@ -75,7 +75,7 @@ export const {
 	setBool,
 	setNum,
 	setText,
-	loadState,
+	loadStateMS,
 	setStoredCustomInfo
 } = morphoSyntaxSlice.actions;
 

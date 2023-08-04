@@ -360,7 +360,7 @@ const lexiconSlice = createSlice({
 	reducers: {
 		setID: setIDFunc,
 		setLastSave: setLastSaveFunc,
-		loadState: loadStateFunc,
+		loadStateLex: loadStateFunc,
 		setTitle: setTitleFunc,
 		setDesc: setDescFunc,
 		addLexiconItem: addLexiconItemFunc,
@@ -383,7 +383,7 @@ const lexiconSlice = createSlice({
 export const {
 	setID,
 	setLastSave,
-	loadState,
+	loadStateLex,
 	setTitle,
 	setDesc,
 	addLexiconItem,

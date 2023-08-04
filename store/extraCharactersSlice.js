@@ -23,6 +23,12 @@ const setNowShowingFunc = (state, action) => {
 	state.nowShowing = action.payload;
 	return state;
 };
+const loadStateFunc = (state, action) => {
+	return {
+		...state,
+		...action.payload
+	};
+};
 
 const extraCharactersSlice = createSlice({
 	name: 'extraCharacters',
@@ -32,7 +38,8 @@ const extraCharactersSlice = createSlice({
 		toggleShowNames: toggleShowNamesFunc,
 		setToCopy: setToCopyFunc,
 		setFaves: setFavesFunc,
-		setNowShowing: setNowShowingFunc
+		setNowShowing: setNowShowingFunc,
+		loadStateEC: loadStateFunc
 	}
 });
 
@@ -41,7 +48,8 @@ export const {
 	toggleShowNames,
 	setToCopy,
 	setFaves,
-	setNowShowing
+	setNowShowing,
+	loadStateEC
 } = extraCharactersSlice.actions;
 
 export default extraCharactersSlice.reducer;

@@ -49,7 +49,7 @@ import {
 	toggleSortDir,
 	equalityCheck,
 	editLexiconItem,
-	loadState,
+	loadStateLex as loadState,
 	setLastSave,
 	setID,
 	setStoredCustomInfo,

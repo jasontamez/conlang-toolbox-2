@@ -169,7 +169,7 @@ const weSlice = createSlice({
 		rearrangeSoundChanges: rearrangeSoundChangesFunc,
 		setOutput: setOutputFunc,
 		setFlag: setFlagFunc,
-		loadState: loadStateFunc,
+		loadStateWE: loadStateFunc,
 		setStoredCustomInfo: setStoredCustomInfoFunc
 	}
 });
@@ -190,7 +190,7 @@ export const {
 	rearrangeSoundChanges,
 	setOutput,
 	setFlag,
-	loadState,
+	loadStateWE,
 	setStoredCustomInfo
 } = weSlice.actions;
 

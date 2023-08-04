@@ -20,14 +20,16 @@ import {
 const doConvert = async (dispatch) => {
 	// Convert WG info
 	// TO-DO: chain in other converters as needed
+	console.log(">>converting");
 	return Promise.allSettled([
 		convertWG(dispatch),
 		convertWE(dispatch),
 		convertLexicon(dispatch),
 		convertMS(dispatch)
 	]).then((values) => {
-		return values.every(v => v.status === "fulfilled") && dispatch(setHasCheckedForOldCustomInfo(true));
+		return values.every(v => v.status === "fulfilled") ? dispatch(setHasCheckedForOldCustomInfo(true)) : console.log(">>convert failed");
 	}).catch((err) => {
+		console.log(">>doConvert error:");
 		console.log(err);
 	});
 };
@@ -52,8 +54,8 @@ const convertWG = async (dispatch) => {
 	}).then(() => {
 		dispatch(setStoredCustomInfoWG(ids));
 	}).catch((err) => {
-		console.log("WG Error");
-		console.log(err);
+		console.log(`WG Error: <${JSON.stringify(err)}>`);
+		console.log(">>WE>>", err);
 	});
 };
 const convertWE = async (dispatch) => {
@@ -76,8 +78,8 @@ const convertWE = async (dispatch) => {
 	}).then(() => {
 		dispatch(setStoredCustomInfoWE(ids));
 	}).catch((err) => {
-		console.log("WE Error");
-		console.log(err);
+		console.log(`WE Error: <${JSON.stringify(err)}>`);
+		console.log(">>WE>>", err);
 	});
 };
 const convertLexicon = async (dispatch) => {
@@ -105,8 +107,8 @@ const convertLexicon = async (dispatch) => {
 	}).then(() => {
 		dispatch(setStoredCustomInfoLex(ids));
 	}).catch((err) => {
-		console.log("Lex Error");
-		console.log(err);
+		console.log(`LEX Error: <${JSON.stringify(err)}>`);
+		console.log(">>LEX>>", err);
 	});
 };
 const convertMS = async (dispatch) => {
@@ -127,8 +129,8 @@ const convertMS = async (dispatch) => {
 	}).then(() => {
 		dispatch(setStoredCustomInfoMS(ids));
 	}).catch((err) => {
-		console.log("MS Error");
-		console.log(err);
+		console.log(`MS Error: <${JSON.stringify(err)}>`);
+		console.log(">>MS>>", err);
 	});
 };
 

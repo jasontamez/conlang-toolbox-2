@@ -14,7 +14,7 @@ import {
 import ExportImportModal, { ExportHowModal, ImportHowModal } from "../components/ExportImportModal";
 import doExport from "../helpers/exportTools";
 import doToast from "../helpers/toast";
-import { parseImportInfo } from "../helpers/importTools";
+import { doImports, parseImportInfo } from "../helpers/importTools";
 
 
 const AppSettings = () => {
@@ -52,7 +52,7 @@ const AppSettings = () => {
 	};
 
 	// Export Info
-	const getStoredInfo = async ({
+	const getStoredInfoForExport = async ({
 		wg,
 		we,
 		ms,
@@ -144,14 +144,14 @@ const AppSettings = () => {
 		}
 		return toExport;
 	};
-	const importExportInfo = async (format) => {
+	const importOrExportInfo = async (format) => {
 		// TO-DO: Export/Import certain bits of info
 		console.log("Returned: " + JSON.stringify(format));
 		if(importing) {
 			// Handle import
-			return; //TO-DO: importing
+			return doImports(dispatch, importedInfo, format);
 		}
-		getStoredInfo(format).then((result) => {
+		getStoredInfoForExport(format).then((result) => {
 			setExportedInfo(JSON.stringify(result));
 			setIsLoading(false);
 		});
@@ -325,10 +325,10 @@ const AppSettings = () => {
 				</Menu>
 			</HStack>
 			<ExportImportModal
-				returnSettings={importExportInfo}
+				returnChoices={importOrExportInfo}
 				modalOpen={modalOpen}
 				closeModal={() => setModalOpen(false)}
-				isImport={importing}
+				importedInfo={importing}
 			/>
 			<ExportHowModal
 				modalOpen={exportMethodOpen}

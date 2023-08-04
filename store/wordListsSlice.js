@@ -53,6 +53,12 @@ const setSavingForLexiconFunc = (state, action) => {
 	state.savingForLexicon = action.payload;
 	return state;
 };
+const loadStateFunc = (state, action) => {
+	return {
+		...state,
+		...action.payload
+	};
+};
 
 const wordListsSlice = createSlice({
 	name: 'wordLists',
@@ -62,7 +68,8 @@ const wordListsSlice = createSlice({
 		toggleDisplayedList: toggleDisplayedListFunc,
 		togglePickAndSaveForLexicon: togglePickAndSaveForLexiconFunc,
 		toggleSavedForLexicon: toggleSavedForLexiconFunc,
-		setSavingForLexicon: setSavingForLexiconFunc
+		setSavingForLexicon: setSavingForLexiconFunc,
+		loadStateWL: loadStateFunc
 	}
 });
 
@@ -71,7 +78,8 @@ export const {
 	toggleDisplayedList,
 	togglePickAndSaveForLexicon,
 	toggleSavedForLexicon,
-	setSavingForLexicon
+	setSavingForLexicon,
+	loadStateWL
 } = wordListsSlice.actions;
 
 export default wordListsSlice.reducer;
