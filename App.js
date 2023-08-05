@@ -45,7 +45,7 @@ import WGCharacters from './pages/wg/wgCharacterGroups';
 import WGSyllables from './pages/wg/wgSyllables';
 import WGTransformations from './pages/wg/wgTransformations';
 import WGOutput from './pages/wg/wgOutput';
-import doConvert from './helpers/convertOldStorageToNew';
+import doConvertOldStorageToNew from './helpers/convertOldStorageToNew';
 import WE from './pages/WE';
 import WEInput from './pages/we/weInput';
 import WECharacters from './pages/we/weCharacterGroups';
@@ -140,7 +140,7 @@ const Layout = () => {
 		if(!oldInfoCheckDispatched) {
 			setOldInfoCheckDispatched(true);
 			// Convert old storage to new storage (if needed)
-			hasCheckedForOldCustomInfo || doConvert(dispatch);
+			hasCheckedForOldCustomInfo || doConvertOldStorageToNew(dispatch);
 		}
 		setOkToProceed(hasCheckedForOldCustomInfo && fontsloaded);
 	}, [

@@ -15,19 +15,18 @@ import ExportImportModal, { ExportHowModal, ImportHowModal } from "../components
 import doExport from "../helpers/exportTools";
 import doToast from "../helpers/toast";
 import { doImports, parseImportInfo } from "../helpers/importTools";
+import packageJson from '../package.json';
 
 
 const AppSettings = () => {
 	const dispatch = useDispatch();
-	const {
-		we: wordEvolve,
-		wg: wordGen,
-		morphoSyntax,
-		lexicon,
-		wordLists,
-		extraCharacters,
-		appState
-	} = useSelector((state) => state);
+	const wordEvolve = useSelector(state => state.we);
+	const wordGen = useSelector(state => state.wg);
+	const morphoSyntax = useSelector(state => state.morphoSyntax);
+	const lexicon = useSelector(state => state.lexicon);
+	const wordLists = useSelector(state => state.wordLists);
+	const extraCharacters = useSelector(state => state.extraCharacters);
+	const appState = useSelector(state => state.appState);
 	const {
 		disableConfirms,
 		theme,
@@ -65,7 +64,9 @@ const AppSettings = () => {
 		msStoredInfo,
 		lexStoredInfo
 	}) => {
-		const toExport = {};
+		const toExport = {
+			currentVersion: packageJson.version
+		};
 		if(wg) {
 			const _wg = {...wordGen};
 			delete _wg.storedCustomInfo;
@@ -116,18 +117,25 @@ const AppSettings = () => {
 			toExport.appState = {
 				disableConfirms,
 				theme,
-				sizeName,
-				hasCheckedForOldCustomInfo
+				sizeName
 			};
 		}
 		const checkStorage = async (storage) => {
 			const all = await storage.getAllKeys();
+			const length = all.length;
 			const output = {};
-			const saved = all.map(key => storage.getItem(key));
-			await Promise.all(saved);
-			all.forEach((key, i) => {
-				output[key] = saved[i];
-			});
+			for(let x = 0; x < length; x++) {
+				const key = all[x];
+				const result = await storage.getItem(key).then(result => result);
+				try {
+					const parsed = JSON.parse(result);
+					output[key] = parsed;
+				} catch(error) {
+					console.log(`Unable to parse result from ${storage.name} storage under key [${key}].`);
+					console.log(result);
+					//console.log(error);
+				}
+			}
 			return output;
 		};
 		if(wgStoredInfo) {
@@ -149,7 +157,32 @@ const AppSettings = () => {
 		console.log("Returned: " + JSON.stringify(format));
 		if(importing) {
 			// Handle import
-			return doImports(dispatch, importedInfo, format);
+			doImports(dispatch, importedInfo, format).then((result) => {
+				let englishResult;
+				let scheme = "success";
+				let msg;
+				let duration = 5000;
+				if(result.length === 0) {
+					// no import
+					scheme = "error";
+					msg = "Nothing imported.";
+					duration = 2500;
+				} else if (result.length === 1) {
+					englishResult = result[0];
+				} else if (result.length === 2) {
+					englishResult = result.join(" and ");
+				} else {
+					const final = result.pop();
+					englishResult = final.join(", ") + ", and " + final;
+				}
+				doToast({
+					toast,
+					placement: "top",
+					duration,
+					msg: msg || `Imported ${englishResult}.`,
+					scheme
+				})
+			});
 		}
 		getStoredInfoForExport(format).then((result) => {
 			setExportedInfo(JSON.stringify(result));

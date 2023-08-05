@@ -1,5 +1,6 @@
 import DocumentPicker from "expo-document-picker";
 
+import { lexCustomStorage, msCustomStorage, weCustomStorage, wgCustomStorage } from "./persistentInfo";
 import { lexConversion, msConversion, weConversion, wgConversion } from "./convertOldStorageToNew";
 import { loadStateWG } from "../store/wgSlice";
 import { loadStateWE } from "../store/weSlice";
@@ -62,6 +63,9 @@ export const parseImportInfo = (obj) => {
 					delete final.storages;
 				}
 				break;
+			case "1.0.0":
+				// No conversion needed
+				break;
 			default:
 				// Bad info
 				return [false, `Invalid version "${obj.currentVersion}"`];
@@ -83,7 +87,7 @@ export const filePicker = () => {
 	})
 };
 
-export const doImports = (dispatch, importedInfo, mapOfDesiredInfo) => {
+export const doImports = async (dispatch, importedInfo, mapOfDesiredInfo) => {
 	const {
 		wg,
 		we,
@@ -97,41 +101,54 @@ export const doImports = (dispatch, importedInfo, mapOfDesiredInfo) => {
 		msStoredInfo,
 		lexStoredInfo
 	} = mapOfDesiredInfo;
-	if(wg) {
+	const loaded = [];
+	if(wg && importedInfo.wg) {
+		loaded.push("WordGen");
 		dispatch(loadStateWG(importedInfo.wg));
 	}
-	if(we) {
+	if(we && importedInfo.we) {
+		loaded.push("WordEvolve");
 		dispatch(loadStateWE(importedInfo.we));
 	}
-	if(ms) {
+	if(ms && importedInfo.morphoSyntax) {
+		loaded.push("MorphoSyntax");
 		dispatch(loadStateMS(importedInfo.morphoSyntax));
 	}
-	if(lex) {
+	if(lex && importedInfo.lex) {
+		loaded.push("Lexicon");
 		dispatch(loadStateLex({
 			method: "overwrite",
 			columnConversion: null,
 			lexicon: importedInfo.lex
 		}));
 	}
-	if(wl) {
+	if(wl && importedInfo.wordLists) {
+		loaded.push("WordLists");
 		dispatch(loadStateWL(importedInfo.wordLists));
 	}
-	if(ec) {
+	if(ec && importedInfo.extraCharacters) {
+		loaded.push("ExtraCharacters");
 		dispatch(loadStateEC(importedInfo.extraCharacters));
 	}
-	if(app) {
+	if(wgStoredInfo && importedInfo.wgStoredInfo) {
+		loaded.push("WordGen saves");
+		await wgCustomStorage.multiSet(importedInfo.wgStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+	}
+	if(weStoredInfo && importedInfo.weStoredInfo) {
+		loaded.push("WordEvolve saves");
+		await weCustomStorage.multiSet(importedInfo.weStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+	}
+	if(msStoredInfo && importedInfo.msStoredInfo) {
+		loaded.push("MorphoSyntax saves");
+		await msCustomStorage.multiSet(importedInfo.msStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+	}
+	if(lexStoredInfo && importedInfo.lexStoredInfo) {
+		loaded.push("Lexicon saves");
+		await lexCustomStorage.multiSet(importedInfo.lexStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+	}
+	if(app && importedInfo.appState) {
+		loaded.push("app settings");
 		dispatch(loadStateAppSettings(importedInfo.appState));
 	}
-	if(wgStoredInfo) {
-		// TO-DO
-	}
-	if(weStoredInfo) {
-		// TO-DO
-	}
-	if(msStoredInfo) {
-		// TO-DO
-	}
-	if(lexStoredInfo) {
-		// TO-DO
-	}
+	return loaded;
 };

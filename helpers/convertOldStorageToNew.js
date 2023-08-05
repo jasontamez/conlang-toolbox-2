@@ -17,7 +17,7 @@ import {
 } from './persistentInfo';
 
 
-const doConvert = async (dispatch) => {
+const doConvertOldStorageToNew = async (dispatch) => {
 	// Convert WG info
 	// TO-DO: chain in other converters as needed
 	console.log(">>converting");
@@ -29,7 +29,7 @@ const doConvert = async (dispatch) => {
 	]).then((values) => {
 		return values.every(v => v.status === "fulfilled") ? dispatch(setHasCheckedForOldCustomInfo(true)) : console.log(">>convert failed");
 	}).catch((err) => {
-		console.log(">>doConvert error:");
+		console.log(">>doConvertOldStorageToNew error:");
 		console.log(err);
 	});
 };
@@ -56,6 +56,24 @@ const convertWG = async (dispatch) => {
 	}).catch((err) => {
 		console.log(`WG Error: <${JSON.stringify(err)}>`);
 		console.log(">>WE>>", err);
+	}).finally(() => {
+		// Refresh stored info
+		const info = {};
+		wgCustomStorage.getAllKeys().then(async keys => {
+			const length = keys.length;
+			for(let x = 1; x < length; x++) {
+				const key = keys[x];
+				await wgCustomStorage.getItem(key).then((result) => {
+					try {
+						const parsed = JSON.parse(result);
+						info[key] = parsed.label;
+					} catch (e) {
+						// Ignore
+					}
+				});
+			}
+			dispatch(setStoredCustomInfoWG(info));
+		});
 	});
 };
 const convertWE = async (dispatch) => {
@@ -80,6 +98,24 @@ const convertWE = async (dispatch) => {
 	}).catch((err) => {
 		console.log(`WE Error: <${JSON.stringify(err)}>`);
 		console.log(">>WE>>", err);
+	}).finally(() => {
+		// Refresh stored info
+		const info = {};
+		weCustomStorage.getAllKeys().then(async keys => {
+			const length = keys.length;
+			for(let x = 1; x < length; x++) {
+				const key = keys[x];
+				await weCustomStorage.getItem(key).then((result) => {
+					try {
+						const parsed = JSON.parse(result);
+						info[key] = parsed.label;
+					} catch (e) {
+						// Ignore
+					}
+				});
+			}
+			dispatch(setStoredCustomInfoWE(info));
+		});
 	});
 };
 const convertLexicon = async (dispatch) => {
@@ -109,6 +145,29 @@ const convertLexicon = async (dispatch) => {
 	}).catch((err) => {
 		console.log(`LEX Error: <${JSON.stringify(err)}>`);
 		console.log(">>LEX>>", err);
+	}).finally(() => {
+		// Refresh stored info
+		const info = {};
+		lexCustomStorage.getAllKeys().then(async keys => {
+			const length = keys.length;
+			for(let x = 1; x < length; x++) {
+				const key = keys[x];
+				await lexCustomStorage.getItem(key).then((result) => {
+					try {
+						const { title, lastSave, lexicon, columns } = JSON.parse(result);
+						info[key] = [
+							title,
+							lastSave,
+							lexicon.length,
+							columns
+						];
+					} catch (e) {
+						// Ignore
+					}
+				});
+			}
+			dispatch(setStoredCustomInfoLex(info));
+		});
 	});
 };
 const convertMS = async (dispatch) => {
@@ -131,11 +190,29 @@ const convertMS = async (dispatch) => {
 	}).catch((err) => {
 		console.log(`MS Error: <${JSON.stringify(err)}>`);
 		console.log(">>MS>>", err);
+	}).finally(() => {
+		// Refresh stored info
+		const info = {};
+		msCustomStorage.getAllKeys().then(async keys => {
+			const length = keys.length;
+			for(let x = 1; x < length; x++) {
+				const key = keys[x];
+				await msCustomStorage.getItem(key).then((result) => {
+					try {
+						const { title, lastSave } = JSON.parse(result);
+						info[key] = [title, lastSave];
+					} catch (e) {
+						// Ignore
+					}
+				});
+			}
+			dispatch(setStoredCustomInfoMS(info));
+		});
 	});
 };
 
 
-export default doConvert;
+export default doConvertOldStorageToNew;
 
 
 export const wgConversion = (input) => {

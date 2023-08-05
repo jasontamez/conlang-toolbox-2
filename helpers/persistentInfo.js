@@ -3,6 +3,7 @@ import localForage from 'localforage';
 
 const makeAsyncStorageObject = (prefix, errorHandler) => {
 	return {
+		name: prefix,
 		getItem: async (item) => {
 			try {
 				return await AsyncStorage.getItem(`@${prefix}/${item}`);
@@ -40,9 +41,20 @@ const makeAsyncStorageObject = (prefix, errorHandler) => {
 				errorHandler("getAllKeys", prefix, e);
 				return null;
 			}
+		},
+		multiSet: async (map) => {
+			const convertedMap = [];
+			map.forEach(([id, item]) => {
+				convertedMap.push([`@${prefix}/${id}`, item]);
+			});
+			try {
+				return await AsyncStorage.multiSet(convertedMap);
+			} catch(e) {
+				errorHandler("getAllKeys", prefix, e);
+				return null;
+			}
 		}
 		// multiGet?
-		// multiSet?
 		// mergeItem?
 	};
 };
@@ -56,21 +68,6 @@ export const wgCustomStorage = makeAsyncStorageObject("WordGen", errHandle);
 export const weCustomStorage = makeAsyncStorageObject("WordEvolve", errHandle);
 export const lexCustomStorage = makeAsyncStorageObject("Lexicon", errHandle);
 export const msCustomStorage = makeAsyncStorageObject("MorphoSyntax", errHandle);
-
-export const allStorageObjects = [
-	wgCustomStorage,
-	weCustomStorage,
-	lexCustomStorage,
-	msCustomStorage
-];
-
-
-//export const StateStorage = localForage.createInstance({
-//	name: 'Conlang Toolbox',
-//	storeName: 'stateStorage',
-//	version: 1,
-//	description: 'Stores state information for the next time we load.'
-//});
 
 export const OldLexiconStorage = localForage.createInstance({
 	name: 'Conlang Toolbox',
@@ -93,7 +90,6 @@ export const OldCustomStorageWE = localForage.createInstance({
 	description: 'Stores WordEvolve custom information.'
 });
 
-//TO-DO: Mine this for old info
 export const OldMorphoSyntaxStorage = localForage.createInstance({
 	name: 'Conlang Toolbox',
 	storeName: 'morphoSyntaxStorage',
