@@ -120,7 +120,6 @@ export const doText = async (msInfo, md = false) => {
 						while(boxSlices.length > 0) {
 							const box = boxSlices.shift();
 							const label = labels.shift();
-							console.log(`Checking BOOL_${box}: ${msInfo[`BOOL_${box}`]}`)
 							if(msInfo[`BOOL_${box}`]) {
 								found.push(label || "[ERROR]");
 							}

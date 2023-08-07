@@ -274,17 +274,18 @@ export const ExportHowModal = ({
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer>
-					<HStack justifyContent="flex-end" p={1} space={4} flexWrap="wrap">
+					<HStack justifyContent="space-between" p={1} space={4} w="full" flexWrap="wrap">
 						<Button
-							startIcon={<ExportIcon size={textSize} />}
+							bg="info.500"
+							startIcon={<ExportIcon size={textSize} color="info.50" />}
 							px={2}
 							py={1}
 							onPress={closeAndExport}
-							_text={{ fontSize: textSize }}
+							_text={{ fontSize: textSize, color: "info.50" }}
 							disabled={isLoading}
 						>Export to File</Button>
 						<Button
-							bg="darker"
+							bg="success.500"
 							px={2}
 							py={1}
 							mx={1}
@@ -297,7 +298,6 @@ export const ExportHowModal = ({
 		</Modal>
 	);
 };
-
 
 export const ImportHowModal = ({
 	modalOpen,
@@ -339,19 +339,20 @@ export const ImportHowModal = ({
 					</VStack>
 				</Modal.Body>
 				<Modal.Footer>
-					<HStack justifyContent="flex-end" p={1} space={4} flexWrap="wrap">
+					<HStack justifyContent="space-between" p={1} space={4} w="full" flexWrap="wrap">
 						<Button
-							startIcon={<ImportIcon size={textSize} />}
+							bg="info.500"
+							startIcon={<ImportIcon size={textSize} color="info.50" />}
 							px={2}
 							py={1}
 							onPress={() => {
 								closeModal();
 								importFromFile();
 							}}
-							_text={{ fontSize: textSize }}
+							_text={{ fontSize: textSize, color: "info.50" }}
 						>Import From File</Button>
 						<Button
-							bg="darker"
+							bg="success.500"
 							px={2}
 							py={1}
 							mx={1}
@@ -360,7 +361,7 @@ export const ImportHowModal = ({
 								importFromText(toImport);
 							}}
 							_text={{ fontSize: textSize, color: "success.50" }}
-						>Import</Button>
+						>Import Text</Button>
 					</HStack>
 				</Modal.Footer>
 			</Modal.Content>

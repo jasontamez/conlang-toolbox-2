@@ -452,9 +452,9 @@ export const lexConversion = (input) => {
 };
 
 export const msConversion = (input) => {
-	let base = {...blankAppState.morphoSyntax};
-	delete base.storedCustomIDs;
-	delete base.storedCustomInfo;
+	let blankStateMS = {...blankAppState.morphoSyntax};
+	delete blankStateMS.storedCustomIDs;
+	delete blankStateMS.storedCustomInfo;
 	const final = [];
 	input.forEach(save => {
 		const [
@@ -482,7 +482,7 @@ export const msConversion = (input) => {
 		});
 		Object.keys(num).forEach(prop => (newNum[`NUM_${prop}`] = num[prop]));
 		final.push({
-			...base,
+			...blankStateMS,
 			id,
 			lastSave,
 			description,

@@ -1,4 +1,5 @@
-import DocumentPicker from "expo-document-picker";
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
 
 import { lexCustomStorage, msCustomStorage, weCustomStorage, wgCustomStorage } from "./persistentInfo";
 import { lexConversion, msConversion, weConversion, wgConversion } from "./convertOldStorageToNew";
@@ -76,15 +77,39 @@ export const parseImportInfo = (obj) => {
 	return [success, output];
 };
 
-export const filePicker = () => {
-	// TO-DO: Finish file picker
-	DocumentPicker.getDocumentAsync({
+export const getInfoFromFile = async () => {
+	let success = false;
+	let output;
+	await DocumentPicker.getDocumentAsync({
 		copyToCacheDirectory: true,
 		type: [
 			"text/json",
+			"application/json",
 			"text/plain"
 		]
-	})
+	}).then(result => {
+		const { type, assets, uri } = result;
+		if(type === "cancel" || assets === null) {
+			// Nothing to do.
+			output = "Action cancelled.";
+			return;
+		}
+		let fileLocation = uri;
+		if(!uri) {
+			// Assume there is only one asset, if any were returned.
+			if(assets && Array.isArray(assets) && assets.length > 0) {
+				fileLocation = assets[0].uri;
+			} else {
+				output = "Unknown error: no URI or assets returned."
+				return;
+			}
+		}
+		return FileSystem.readAsStringAsync(fileLocation, {}).then((result) => {
+			output = result;
+			success = true;
+		});
+	});
+	return [success, output];
 };
 
 export const doImports = async (dispatch, importedInfo, mapOfDesiredInfo) => {
@@ -114,12 +139,12 @@ export const doImports = async (dispatch, importedInfo, mapOfDesiredInfo) => {
 		loaded.push("MorphoSyntax");
 		dispatch(loadStateMS(importedInfo.morphoSyntax));
 	}
-	if(lex && importedInfo.lex) {
+	if(lex && importedInfo.lexicon) {
 		loaded.push("Lexicon");
 		dispatch(loadStateLex({
 			method: "overwrite",
 			columnConversion: null,
-			lexicon: importedInfo.lex
+			lexicon: importedInfo.lexicon
 		}));
 	}
 	if(wl && importedInfo.wordLists) {
@@ -132,23 +157,27 @@ export const doImports = async (dispatch, importedInfo, mapOfDesiredInfo) => {
 	}
 	if(wgStoredInfo && importedInfo.wgStoredInfo) {
 		loaded.push("WordGen saves");
-		await wgCustomStorage.multiSet(importedInfo.wgStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+		await doMultiSet(wgCustomStorage, importedInfo.wgStoredInfo);
 	}
 	if(weStoredInfo && importedInfo.weStoredInfo) {
 		loaded.push("WordEvolve saves");
-		await weCustomStorage.multiSet(importedInfo.weStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+		await doMultiSet(weCustomStorage, importedInfo.weStoredInfo);
 	}
 	if(msStoredInfo && importedInfo.msStoredInfo) {
 		loaded.push("MorphoSyntax saves");
-		await msCustomStorage.multiSet(importedInfo.msStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+		await doMultiSet(msCustomStorage, importedInfo.msStoredInfo);
 	}
 	if(lexStoredInfo && importedInfo.lexStoredInfo) {
 		loaded.push("Lexicon saves");
-		await lexCustomStorage.multiSet(importedInfo.lexStoredInfo.map(o => [o.id, JSON.stringify(o)]));
+		await doMultiSet(lexCustomStorage, importedInfo.lexStoredInfo);
 	}
 	if(app && importedInfo.appState) {
 		loaded.push("app settings");
 		dispatch(loadStateAppSettings(importedInfo.appState));
 	}
 	return loaded;
+};
+
+const doMultiSet = async (storage, info) => {
+	return storage.multiSet(Object.keys(info).map(key => [key, JSON.stringify(info[key])]));
 };

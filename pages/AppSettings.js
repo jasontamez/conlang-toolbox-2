@@ -14,7 +14,7 @@ import {
 import ExportImportModal, { ExportHowModal, ImportHowModal } from "../components/ExportImportModal";
 import doExport from "../helpers/exportTools";
 import doToast from "../helpers/toast";
-import { doImports, parseImportInfo } from "../helpers/importTools";
+import { doImports, getInfoFromFile, parseImportInfo } from "../helpers/importTools";
 import packageJson from '../package.json';
 
 
@@ -153,11 +153,9 @@ const AppSettings = () => {
 		return toExport;
 	};
 	const importOrExportInfo = async (format) => {
-		// TO-DO: Export/Import certain bits of info
-		console.log("Returned: " + JSON.stringify(format));
 		if(importing) {
 			// Handle import
-			doImports(dispatch, importedInfo, format).then((result) => {
+			return doImports(dispatch, importedInfo, format).then((result) => {
 				let englishResult;
 				let scheme = "success";
 				let msg;
@@ -181,9 +179,10 @@ const AppSettings = () => {
 					duration,
 					msg: msg || `Imported ${englishResult}.`,
 					scheme
-				})
+				});
 			});
 		}
+		// Handle export
 		getStoredInfoForExport(format).then((result) => {
 			setExportedInfo(JSON.stringify(result));
 			setIsLoading(false);
@@ -201,19 +200,12 @@ const AppSettings = () => {
 			return number;
 		};
 		const filename = `Conlang Toolbox Backup ${now.getFullYear()}y-${num(now.getMonth() + 1)}m-${num(now.getDate())}d--${num(now.getHours())}h-${num(now.getMinutes())}m-${num(now.getSeconds())}s.json`;
-		console.log(JSON.stringify(filename));
 		doExport(exportedInfo, filename).then((result) => {
 			const {
 				fail,
 				filename
 			} = result;
-			// Interpret result
-			if(fail) {
-				// Failure
-			}
-			else {
-				// Success
-			}
+			// Display result to user
 			doToast({
 				toast,
 				scheme: fail ? "danger" : "success",
@@ -227,17 +219,27 @@ const AppSettings = () => {
 	};
 
 	// TO-DO: Import info
-	const importFromFile = () => {
-		// TO-DO: Import file picker
+	const importFromFile = async (info) => {
+		const [success, output] = await getInfoFromFile();
+		if(success) {
+			return importFromText(output);
+		}
+		doToast({
+			toast,
+			scheme: "error",
+			msg: output,
+			center: true,
+			position: "top",
+			duration: 4000,
+			fontSize: toastSize
+		});
 	};
 	const importFromText = (info) => {
-		// examine text
-		setImportedInfo(JSON.parse(info));
 		// Attempt to convert info
 		let errorMsg = false;
 		let parsed;
 		try {
-			parsed = JSON.parse(info.replace(/[\r\n]/g, "").trim());
+			parsed = JSON.parse(info.replace(/[\r\n]/g, '').trim());
 		} catch (error) {
 			errorMsg = error;
 		}
@@ -252,9 +254,19 @@ const AppSettings = () => {
 		}
 		if(errorMsg) {
 			// handle error message
+			doToast({
+				toast,
+				scheme: "error",
+				msg: errorMsg,
+				center: true,
+				position: "top",
+				duration: 4000,
+				fontSize: toastSize
+			});
 			return;
 		}
-
+		// close modal
+		setImportMethodOpen(false);
 		// save info
 		setImportedInfo(parsed);
 		// info is ready to go
