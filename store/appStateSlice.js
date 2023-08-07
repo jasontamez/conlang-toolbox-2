@@ -76,10 +76,17 @@ const setHasCheckedForOldCustomInfoFunc = (state, action) => {
 };
 
 const loadStateFunc = (state, action) => {
-	return {
-		...state,
-		...action.payload
+	let { payload } = action;
+	let newState = {...state};
+	if(payload.sizeName) {
+		newState = setBaseTextSizeFunc(newState, { payload: payload.sizeName });
+		delete payload.sizeName;
 	}
+	delete payload.sizes;
+	return {
+		...newState,
+		...action.payload
+	};
 };
 
 const appStateSlice = createSlice({
