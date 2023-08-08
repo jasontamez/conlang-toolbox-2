@@ -71,9 +71,7 @@ const Layout = () => {
 	});
 	const { theme, hasCheckedForOldCustomInfo } = useSelector((state) => state.appState);
 	const themeObject = getTheme(theme);
-	const [okToProceed, setOkToProceed] = useState(hasCheckedForOldCustomInfo);
 	const [oldInfoCheckDispatched, setOldInfoCheckDispatched] = useState(false);
-	const [delayFinished, setDelayFinished] = useState(0);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if(!oldInfoCheckDispatched) {
@@ -81,18 +79,12 @@ const Layout = () => {
 			// Convert old storage to new storage (if needed)
 			hasCheckedForOldCustomInfo || doConvertOldStorageToNew(dispatch);
 		}
-		if(delayFinished === 0) {
-			setDelayFinished(false);
-			new Promise(resolve => setTimeout(resolve, 1000)).then(() => setDelayFinished(true));
-		}
-		if(hasCheckedForOldCustomInfo && fontsloaded && delayFinished) {
+		if(hasCheckedForOldCustomInfo && fontsloaded) {
 			SplashScreen.hideAsync();
-			setOkToProceed(true);
 		}
 	}, [
 		fontsloaded,
-		hasCheckedForOldCustomInfo,
-		delayFinished
+		hasCheckedForOldCustomInfo
 	]);
 	return (
 		<NativeBaseProvider
@@ -104,7 +96,7 @@ const Layout = () => {
 				backgroundColor={themeObject.colors.main["900"]}
 				barStyle={theme.indexOf("Light") === -1 ? "light-content" : "dark-content"}
 			/>
-			{okToProceed && <AppRoutes />}
+			<AppRoutes />
 		</NativeBaseProvider>
 	);
 };
