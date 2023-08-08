@@ -3,24 +3,14 @@ import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { useWindowDimensions, StatusBar, Text, BackHandler } from 'react-native';
+import { useWindowDimensions, StatusBar, BackHandler } from 'react-native';
 //import { PersistGate } from 'redux-persist/integration/react';
-import { NativeBaseProvider, VStack, Center, useTheme } from 'native-base';
+import { NativeBaseProvider, VStack } from 'native-base';
 import 'react-native-gesture-handler';
+import * as SplashScreen from 'expo-splash-screen';
 
 
-// KILLSWITCH
 import { useFonts } from 'expo-font';
-import { NotoSans_400Regular, NotoSans_400Regular_Italic, NotoSans_700Bold, NotoSans_700Bold_Italic } from '@expo-google-fonts/noto-sans';
-import { NotoSerif_400Regular, NotoSerif_400Regular_Italic, NotoSerif_700Bold, NotoSerif_700Bold_Italic } from '@expo-google-fonts/noto-serif';
-import { SourceCodePro_200ExtraLight, SourceCodePro_300Light, SourceCodePro_400Regular, SourceCodePro_500Medium, SourceCodePro_600SemiBold, SourceCodePro_700Bold, SourceCodePro_800ExtraBold, SourceCodePro_900Black, SourceCodePro_200ExtraLight_Italic, SourceCodePro_300Light_Italic, SourceCodePro_400Regular_Italic, SourceCodePro_500Medium_Italic, SourceCodePro_600SemiBold_Italic, SourceCodePro_700Bold_Italic, SourceCodePro_800ExtraBold_Italic, SourceCodePro_900Black_Italic } from '@expo-google-fonts/source-code-pro';
-// KILLSWITCH
-
-//import { Arimo_400Regular, Arimo_400Regular_Italic, Arimo_700Bold, Arimo_700Bold_Italic } from '@expo-google-fonts/arimo';
-//import { NotoSansJP_100Thin, NotoSansJP_300Light, NotoSansJP_400Regular, NotoSansJP_500Medium, NotoSansJP_700Bold, NotoSansJP_900Black } from '@expo-google-fonts/noto-sans-jp';
-//import { NotoSerifJP_200ExtraLight, NotoSerifJP_300Light, NotoSerifJP_400Regular, NotoSerifJP_500Medium, NotoSerifJP_600SemiBold, NotoSerifJP_700Bold, NotoSerifJP_900Black } from '@expo-google-fonts/noto-serif-jp';
-//import { Scheherazade_400Regular, Scheherazade_700Bold } from '@expo-google-fonts/scheherazade';
-//import { Sriracha_400Regular } from '@expo-google-fonts/sriracha'
 
 import StandardAlert from './components/StandardAlert';
 import getTheme from './helpers/theme';
@@ -55,6 +45,8 @@ import WEOutput from './pages/we/weOutput';
 import Credits from './pages/Credits'
 import ExtraCharacters from './pages/ExtraCharacters';
 
+SplashScreen.preventAutoHideAsync();
+
 const App = () => {
 	const {store, persistor} = getStoreInfo();
 	return (
@@ -62,62 +54,8 @@ const App = () => {
 	);
 };
 
-// For when the font thingie keeps messing up:
-//	change comments so killSwitch is [true]
-//	comment out everything in "killswitch" above
-//	uncomment useFonts below
-let killSwitch //= [true];
-//const useFonts = () => [true];
-
 const Layout = () => {
-	const [fontsloaded] = killSwitch || useFonts({
-		//Arimo_400Regular,
-		//Arimo_400Regular_Italic,
-		//Arimo_700Bold,
-		//Arimo_700Bold_Italic,
-//		NotoSans_400Regular,
-//		NotoSans_400Regular_Italic,
-//		NotoSans_700Bold,
-//		NotoSans_700Bold_Italic,
-		//NotoSansJP_100Thin,
-		//NotoSansJP_300Light,
-		//NotoSansJP_400Regular,
-		//NotoSansJP_500Medium,
-		//NotoSansJP_700Bold,
-		//NotoSansJP_900Black,
-//		NotoSerif_400Regular,
-//		NotoSerif_400Regular_Italic,
-//		NotoSerif_700Bold,
-//		NotoSerif_700Bold_Italic,
-		//NotoSerifJP_200ExtraLight,
-		//NotoSerifJP_300Light,
-		//NotoSerifJP_400Regular,
-		//NotoSerifJP_500Medium,
-		//NotoSerifJP_600SemiBold,
-		//NotoSerifJP_700Bold,
-		//NotoSerifJP_900Black,
-//		SourceCodePro_200ExtraLight,
-//		SourceCodePro_300Light,
-//		SourceCodePro_400Regular,
-//		SourceCodePro_500Medium,
-//		SourceCodePro_600SemiBold,
-//		SourceCodePro_700Bold,
-//		SourceCodePro_800ExtraBold,
-//		SourceCodePro_900Black,
-//		SourceCodePro_200ExtraLight_Italic,
-//		SourceCodePro_300Light_Italic,
-//		SourceCodePro_400Regular_Italic,
-//		SourceCodePro_500Medium_Italic,
-//		SourceCodePro_600SemiBold_Italic,
-//		SourceCodePro_700Bold_Italic,
-//		SourceCodePro_800ExtraBold_Italic,
-//		SourceCodePro_900Black_Italic,
-		//Scheherazade_400Regular,
-		//Scheherazade_700Bold,
-		//Sriracha_400Regular,
-		//'ArTarumianKamar': require('./assets/fonts/ArTarumianKamar-Regular.ttf'),
-		//'LeelawadeeUI': require('./assets/fonts/LeelawadeeUI.ttf'),
-		//'LeelawadeeUI_Bold': require('./assets/fonts/LeelawadeeUI-Bold.ttf'),
+	const [fontsloaded] = useFonts({
 		'Noto Sans': require('./assets/fonts/NotoSans-Regular.ttf'),
 		'Noto Sans Italic': require('./assets/fonts/NotoSans-Italic.ttf'),
 		'Noto Sans Bold': require('./assets/fonts/NotoSans-Bold.ttf'),
@@ -135,6 +73,7 @@ const Layout = () => {
 	const themeObject = getTheme(theme);
 	const [okToProceed, setOkToProceed] = useState(hasCheckedForOldCustomInfo);
 	const [oldInfoCheckDispatched, setOldInfoCheckDispatched] = useState(false);
+	const [delayFinished, setDelayFinished] = useState(0);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		if(!oldInfoCheckDispatched) {
@@ -142,10 +81,18 @@ const Layout = () => {
 			// Convert old storage to new storage (if needed)
 			hasCheckedForOldCustomInfo || doConvertOldStorageToNew(dispatch);
 		}
-		setOkToProceed(hasCheckedForOldCustomInfo && fontsloaded);
+		if(delayFinished === 0) {
+			setDelayFinished(false);
+			new Promise(resolve => setTimeout(resolve, 1000)).then(() => setDelayFinished(true));
+		}
+		if(hasCheckedForOldCustomInfo && fontsloaded && delayFinished) {
+			SplashScreen.hideAsync();
+			setOkToProceed(true);
+		}
 	}, [
 		fontsloaded,
-		hasCheckedForOldCustomInfo
+		hasCheckedForOldCustomInfo,
+		delayFinished
 	]);
 	return (
 		<NativeBaseProvider
@@ -157,19 +104,8 @@ const Layout = () => {
 				backgroundColor={themeObject.colors.main["900"]}
 				barStyle={theme.indexOf("Light") === -1 ? "light-content" : "dark-content"}
 			/>
-			{okToProceed ? <AppRoutes /> : <Fontless />}
+			{okToProceed && <AppRoutes />}
 		</NativeBaseProvider>
-	);
-};
-
-const Fontless = () => {
-	const {width, height} = useWindowDimensions();
-	const {colors} = useTheme();
-	return (
-		<Center safeArea bg="main.900" width={width} height={height}>
-			<Text style={{color: colors.red["500"]}}>Waiting for fonts...</Text>
-		</Center>
-
 	);
 };
 
@@ -184,7 +120,6 @@ const MainOutlet = ({setBackButtonAlert}) => {
 			// Do nothing
 			return;
 		}
-		console.log(`ADD to history: ${pathname}`);
 		// Save to history
 		dispatch(addPageToHistory(pathname));
 		// Navigate
@@ -193,11 +128,9 @@ const MainOutlet = ({setBackButtonAlert}) => {
 	useEffect(() => {
 		const backAction = () => {
 			if(history.length > 0) {
-				console.log(`NAV TO: ${history.join(', ')}`);
 				dispatch(removeLastPageFromHistory());
 				navigate(history[0]);
 			} else {
-				console.log("NO NAV");
 				setBackButtonAlert(true);
 			}
 			return true;
@@ -210,7 +143,6 @@ const MainOutlet = ({setBackButtonAlert}) => {
 
 		return () => backHandler.remove();
 	}, [setBackButtonAlert, navigate, dispatch, history]);
-	console.log(`CURRENT: ${pathname}`);
 	return <Outlet context={[navigator]} />;
 };
 
