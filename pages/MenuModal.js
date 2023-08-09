@@ -16,7 +16,8 @@ import { Modal, useWindowDimensions } from 'react-native';
 import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
-import { addPageToHistory, fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
+import { addPageToHistory } from '../store/historySlice';
+import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuFormat } from '../appLayoutInfo';
 import getSizes from '../helpers/getSizes';
 

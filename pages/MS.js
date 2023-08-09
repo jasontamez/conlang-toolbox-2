@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import NavBar from '../components/NavBar';
 import { SettingsIcon } from '../components/icons';
-import { addPageToHistory, fontSizesInPx } from '../store/appStateSlice';
+import { fontSizesInPx } from '../store/appStateSlice';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const MS = () => {

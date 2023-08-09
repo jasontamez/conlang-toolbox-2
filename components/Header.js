@@ -11,7 +11,8 @@ import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
 import WGContextMenu from '../pages/contextMenus/WGContextMenu';
 import WEContextMenu from '../pages/contextMenus/WEContextMenu';
 import ExtraCharsHeaderButton from '../pages/contextMenus/ExtraCharactersHeaderButton';
-import { addPageToHistory, fontSizesInPx } from "../store/appStateSlice";
+import { fontSizesInPx } from "../store/appStateSlice";
+import { addPageToHistory } from "../store/historySlice";
 import { ExtraCharactersIcon } from "./icons";
 
 const Headers = {

@@ -179,5 +179,6 @@ export const doImports = async (dispatch, importedInfo, mapOfDesiredInfo) => {
 };
 
 const doMultiSet = async (storage, info) => {
-	return storage.multiSet(Object.keys(info).map(key => [key, JSON.stringify(info[key])]));
+	const map = Object.keys(info).map(key => [key, JSON.stringify(info[key])]);
+	return map.length && storage.multiSet(map);
 };

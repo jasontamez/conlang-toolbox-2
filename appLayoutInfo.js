@@ -209,7 +209,7 @@ const AppSettings = {
 	extraChars: false
 };
 const About = {
-	title: "About",
+	title: "Conlang Toolbox",
 	url: "/",
 	icon: "AboutIcon",
 	sectionId: "settingsEtc",

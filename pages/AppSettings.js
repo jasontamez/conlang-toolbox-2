@@ -159,19 +159,19 @@ const AppSettings = () => {
 				let englishResult;
 				let scheme = "success";
 				let msg;
-				let duration = 5000;
-				if(result.length === 0) {
+				const length = result.length || 0;
+				const duration = 2500 + (500 * length);
+				if(!result || length === 0) {
 					// no import
 					scheme = "error";
 					msg = "Nothing imported.";
-					duration = 2500;
-				} else if (result.length === 1) {
+				} else if (length === 1) {
 					englishResult = result[0];
-				} else if (result.length === 2) {
+				} else if (length === 2) {
 					englishResult = result.join(" and ");
 				} else {
 					const final = result.pop();
-					englishResult = final.join(", ") + ", and " + final;
+					englishResult = result.join(", ") + ", and " + final;
 				}
 				doToast({
 					toast,

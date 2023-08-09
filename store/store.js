@@ -1,10 +1,16 @@
 //import AsyncStorage from '@react-native-async-storage/async-storage';
-////import ExpoFileSystemStorage from 'redux-persist-expo-filesystem';
-//import { createStore, applyMiddleware } from "redux";
-//import { reducer, blankAppState } from "./ducks";
-////import { persistStore, persistReducer } from 'redux-persist';
-//import thunk from 'redux-thunk';
-import { configureStore } from '@reduxjs/toolkit';
+import ExpoFileSystemStorage from 'redux-persist-expo-filesystem';
+import {
+	persistStore,
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+ } from 'redux-persist';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 //import packageJson from '../package.json';
@@ -15,57 +21,13 @@ import lexiconSlice from './lexiconSlice';
 import wgSlice from './wgSlice';
 import weSlice from './weSlice';
 import extraCharactersSlice from './extraCharactersSlice';
+import historySlice from './historySlice';
 import blankAppState from './blankAppState';
 
-//const reconcile = async (incoming, original, reduced) => {
-//	// Nothing for now.
-//	return autoMergeLevel2(incoming, original, reduced);
-//};
-
-export default () => {
-	const reducer = {
-		// SLICES here
-		we: weSlice,
-		wg: wgSlice,
-		morphoSyntax: morphoSyntaxSlice,
-		appState: appStateSlice,
-		wordLists: wordListsSlice,
-		lexicon: lexiconSlice,
-		extraCharacters: extraCharactersSlice
-	};
-	//const persistConfig = {
-	//	key: 'root',
-	//	storage: ExpoFileSystemStorage,
-	//	version: 0,
-	//	stateReconciler: reconcile
-	//}
-	//const persistedReducer = persistReducer(persistConfig, reducer);
-	const store = configureStore({
-		reducer: /* persistedReducer  */ reducer,
-		preloadedState: initialAppState
-	});
-	const persistor = /* persistStore(store); */ null;
-	return { store, persistor };
-};
-
-//export const original = () => {
-//	const persistConfig = {
-//		key: 'root',
-//		storage: ExpoFileSystemStorage,
-//		version: 0,
-//		stateReconciler: reconcile
-//	}
-//	//let store = createStore(persistedReducer(reducer), blankAppState, applyMiddleware(thunk));
-//	const persistedReducer = persistReducer(persistConfig, reducer);
-//	let store = configureStore({
-//		reducer: persistedReducer(reducer),
-//		preloadedState: blankAppState
-//	});
-//	let persistor = persistStore(store);
-//	return { store, persistor };
-//};
-
-// USE THIS to put in temporary changes for testing.
+//
+//
+//
+// ----- USE THIS to put in temporary changes for testing.
 let initialAppState = {...blankAppState};
 initialAppState.wg = {
 	...initialAppState.wg,
@@ -675,3 +637,44 @@ initialAppState.lexicon = {
 		},
 	]
 };
+// ----- END
+//
+//
+
+const getStoreInfo = () => {
+	const reducerConfig = {
+		// SLICES here
+		appState: appStateSlice,
+		we: weSlice,
+		wg: wgSlice,
+		morphoSyntax: morphoSyntaxSlice,
+		wordLists: wordListsSlice,
+		lexicon: lexiconSlice,
+		extraCharacters: extraCharactersSlice,
+		history: historySlice
+	};
+	const reducer = combineReducers(reducerConfig);
+	const persistConfig = {
+		key: 'root',
+		storage: ExpoFileSystemStorage,
+		version: 0,
+		stateReconciler: autoMergeLevel2,
+		blacklist: [ 'history' ]
+	}
+	const persistedReducer = persistReducer(persistConfig, reducer);
+	const store = configureStore({
+		reducer: persistedReducer,
+		preloadedState: initialAppState,
+		middleware: (getDefaultMiddleware) => {
+			return getDefaultMiddleware({
+				serializableCheck: {
+					ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+				}
+			});
+		}
+	});
+	const persistor = persistStore(store);
+	return { store, persistor };
+};
+
+export default getStoreInfo;

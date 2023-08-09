@@ -4,12 +4,10 @@ import { Route, Routes } from 'react-router';
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { useWindowDimensions, StatusBar, BackHandler } from 'react-native';
-//import { PersistGate } from 'redux-persist/integration/react';
+import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, VStack } from 'native-base';
 import 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
-
-
 import { useFonts } from 'expo-font';
 
 import StandardAlert from './components/StandardAlert';
@@ -28,7 +26,7 @@ import Lexicon from './pages/Lex';
 import WordLists from './pages/WordLists';
 import About from './pages/About.js';
 
-import { addPageToHistory, removeLastPageFromHistory } from './store/appStateSlice';
+import { addPageToHistory, removeLastPageFromHistory } from './store/historySlice';
 import WG from './pages/WG';
 import WGSettings from './pages/wg/wgSettings';
 import WGCharacters from './pages/wg/wgCharacterGroups';
@@ -50,7 +48,11 @@ SplashScreen.preventAutoHideAsync();
 const App = () => {
 	const {store, persistor} = getStoreInfo();
 	return (
-		<Provider store={store}><Layout /></Provider>
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
+				<Layout />
+			</PersistGate>
+		</Provider>
 	);
 };
 
@@ -96,7 +98,7 @@ const Layout = () => {
 				backgroundColor={themeObject.colors.main["900"]}
 				barStyle={theme.indexOf("Light") === -1 ? "light-content" : "dark-content"}
 			/>
-			<AppRoutes />
+			{ hasCheckedForOldCustomInfo && fontsloaded && <AppRoutes /> }
 		</NativeBaseProvider>
 	);
 };
@@ -105,7 +107,7 @@ const MainOutlet = ({setBackButtonAlert}) => {
 	const location = useLocation();
 	const { pathname } = location;
 	const navigate = useNavigate();
-	const { history } = useSelector((state) => state.appState);
+	const { history } = useSelector((state) => state.history);
 	const dispatch = useDispatch();
 	const navigator = (where) => {
 		if(pathname === where) {

@@ -25,7 +25,8 @@ import {
 	setFaves,
 	setNowShowing
 } from '../store/extraCharactersSlice';
-import { fontSizesInPx, removeLastPageFromHistory } from '../store/appStateSlice';
+import { removeLastPageFromHistory } from '../store/historySlice';
+import { fontSizesInPx } from '../store/appStateSlice';
 import doToast from "../helpers/toast";
 
 const ExtraChars = ({
@@ -39,7 +40,7 @@ const ExtraChars = ({
 		showNames,
 		nowShowing
 	} = useSelector(state => state.extraCharacters)
-	const { history } = useSelector(state => state.appState);
+	const { history } = useSelector(state => state.history);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { width, height } = useWindowDimensions();

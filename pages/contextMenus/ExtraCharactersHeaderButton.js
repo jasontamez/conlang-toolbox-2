@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import { CloseCircleIcon } from '../../components/icons';
 import getSizes from "../../helpers/getSizes";
-import { removeLastPageFromHistory } from "../../store/appStateSlice";
+import { removeLastPageFromHistory } from "../../store/historySlice";
 
 const ExtraCharactersContextMenu = () => {
-	const { history } = useSelector(state => state.appState);
+	const { history } = useSelector(state => state.history);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [headerSize] = getSizes("md");
