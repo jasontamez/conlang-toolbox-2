@@ -43,10 +43,6 @@ const MenuModal = () => {
 	const menuItemHeight = (fontSizesInPx[menuSize] * 3);
 	const subMenuItemHeight = (fontSizesInPx[subMenuSize] * 2.5);
 	const Text = (props) => <Tx lineHeight={lineHeight} {...props} />;
-	const fontSizeAdjustments = {
-		"-1": subMenuSize,
-		"+1": headerSize
-	};
 	const pathname = location.pathname;
 	useEffect(() => setHasBeenToggled(false), [menuToggleName])
 	const toggleSection = (parentId) => {
@@ -78,13 +74,14 @@ const MenuModal = () => {
 			icon,
 			id,
 			title,
+			menuTitle,
 			url,
 			kids,
 			divider,
 			fontOptions = {},
 			styleOptions = {},
 			alignOptions = {},
-			fontAdjustment,
+			fontAdjustment = 0,
 			heightMultiplier = 1
 		} = item;
 		if(divider) {
@@ -96,7 +93,8 @@ const MenuModal = () => {
 					w="5/6"
 					bg="text.50"
 					opacity={25}
-				/>);
+				/>
+			);
 		} else if (kids) {
 			// App Section w/subpages
 			const isSelected = pathname.startsWith(url);
@@ -146,7 +144,7 @@ const MenuModal = () => {
 										isTruncated
 										fontSize={menuSize}
 										{...textOptions}
-									>{title}</Text>
+									>{menuTitle || title}</Text>
 								</VStack>
 								<MotiView
 									animate={{
@@ -183,7 +181,8 @@ const MenuModal = () => {
 								const {
 									id,
 									url,
-									title
+									title,
+									menuTitle
 								} = kid;
 								const isSelected = pathname === url;
 								const bgOptions = isSelected ? { bg: "primary.500" } : {};
@@ -214,7 +213,7 @@ const MenuModal = () => {
 														fontSize={subMenuSize}
 														{...textOptions}
 														isTruncated
-													>{title}</Text>
+													>{menuTitle || title}</Text>
 												</VStack>
 												<VStack
 													alignItems="center"
@@ -276,7 +275,7 @@ const MenuModal = () => {
 		const itemHeight = menuItemHeight * heightMultiplier;
 		const Inner = ({isPressed}) => {
 			const textOptions = {
-				fontSize: fontAdjustment ? fontSizeAdjustments[fontAdjustment] : menuSize,
+				fontSize: [subMenuSize, menuSize, headerSize][1 + fontAdjustment],
 				color: (isSelected || isPressed ? "primary.500" : undefined),
 				...fontOptions
 			};
@@ -310,7 +309,7 @@ const MenuModal = () => {
 							m={2}
 							{...alignOptions}
 						>
-							<Text fontSize={menuSize} {...textOptions}>{title}</Text>
+							<Text fontSize={menuSize} {...textOptions}>{menuTitle || title}</Text>
 						</VStack>
 					</HStack>
 				</ZStack>
@@ -348,10 +347,8 @@ const MenuModal = () => {
 							w="full"
 							mr={5}
 						>
-							<Text fontSize={menuSize}>
-								<Tx bold fontSize={headerSize}>Conlang Toolbox</Tx>{"\n"}
-								<Tx color="primary.200">tools for language invention</Tx>
-							</Text>
+							<Tx bold fontSize={headerSize} lineHeight={subMenuSize}>Conlang Toolbox</Tx>
+							<Tx fontSize={menuSize} lineHeight={subMenuSize} color="primary.200">tools for language invention</Tx>
 						</VStack>
 						<VStack
 							m={0}

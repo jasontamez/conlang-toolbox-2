@@ -210,6 +210,7 @@ const AppSettings = {
 };
 const About = {
 	title: "Conlang Toolbox",
+	menuTitle: "About",
 	url: "/",
 	icon: "AboutIcon",
 	sectionId: "settingsEtc",
@@ -238,7 +239,7 @@ const Credits = {
 	sectionId: "settingsEtc",
 	id: "Credits",
 	extraChars: false,
-	fontAdjustment: "-1",
+	fontAdjustment: -1,
 	fontOptions: {
 		fontFamily: "mono"
 	},
@@ -257,9 +258,10 @@ export const appMenuFormat = [
 	MS,
 	WG,
 	WE,
-	DC, PG, LX, WL,
+	/*DC, PG,*/
+	LX, WL,
 	{id: "divider", divider: true},
 	AppSettings, About, Credits
 ];
 // About must ALWAYS be at the end of the list, or it'll match too early
-export const allMainPages = [MS, WG, WE, DC, PG, LX, WL, AppSettings, Credits, ExtraCharacters, About];
+export const allMainPages = [MS, WG, WE, /*DC, PG,*/ LX, WL, AppSettings, Credits, ExtraCharacters, About];

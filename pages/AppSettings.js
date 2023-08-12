@@ -30,8 +30,7 @@ const AppSettings = () => {
 	const {
 		disableConfirms,
 		theme,
-		sizeName,
-		hasCheckedForOldCustomInfo
+		sizeName
 	} = appState;
 	const toast = useToast();
 	const [modalOpen, setModalOpen] = useState(false);
