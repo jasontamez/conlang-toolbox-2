@@ -6,8 +6,7 @@ import {
 	Pressable,
 	Center,
 	Box,
-	useBreakpointValue,
-	useContrastText
+	useBreakpointValue
 } from 'native-base';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { Modal, useWindowDimensions } from 'react-native';
@@ -103,7 +102,6 @@ const LexiconColumnReorderer = ({doClose}) => {
 			</Pressable>
 		);
 	}, [lineHeight, rowHeight, textSize]);
-	const primaryContrast = useContrastText('primary.500');
 	const modalHeight = (rowHeight * newColumns.length) + 10 // drag area
 		+ headerHeight + footerHeight;
 	return (
@@ -130,7 +128,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 			>
 				<Text
 					bold
-					color={primaryContrast}
+					color="primary.50"
 					fontSize={textSize}
 					isTruncated
 				>Reorder Columns</Text>

@@ -9,7 +9,6 @@ import {
 	VStack,
 	Box,
 	useToast,
-	useContrastText,
 	Input
 } from 'native-base';
 
@@ -41,7 +40,6 @@ const LexiconContextMenu = () => {
 	const { absoluteMaxColumns, fontsMap } = consts;
 	const dispatch = useDispatch();
 	const toast = useToast();
-	const primaryContrast = useContrastText('primary.500');
 	const [textSize, smallerSize] = getSizes("md", "sm");
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [checkboxOptions, setCheckboxOptions] = useState([]);
@@ -177,7 +175,7 @@ const LexiconContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={textSize}>Set Max Columns</Text>
+							<Text color="primary.50" fontSize={textSize}>Set Max Columns</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setColumnsRangeOpen(false)}

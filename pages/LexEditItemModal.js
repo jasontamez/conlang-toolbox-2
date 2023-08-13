@@ -4,8 +4,7 @@ import {
 	Text,
 	VStack,
 	HStack,
-	Modal,
-	useContrastText
+	Modal
 } from 'native-base';
 
 import {
@@ -45,7 +44,6 @@ const ModalLexiconEditingItem = ({
 	useEffect(() => {
 		setNewFields([...columns]);
 	}, [columns]);
-	const primaryContrast = useContrastText('primary.500');
 	return (
 		<Modal
 			isOpen={isEditing}
@@ -72,7 +70,7 @@ const ModalLexiconEditingItem = ({
 						bg="primary.500"
 					>
 						<Text
-							color={primaryContrast}
+							color="primary.50"
 							fontSize={textSize}
 							bold
 						>

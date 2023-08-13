@@ -1,4 +1,4 @@
-import { Box, Text, VStack, Pressable, HStack, Modal, useContrastText, useToast } from "native-base";
+import { Box, Text, VStack, Pressable, HStack, Modal, useToast } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
@@ -48,7 +48,6 @@ const Settings = () => {
 	const { disableConfirms } = useSelector((state) => state.appState);
 	const dispatch = useDispatch();
 	const [textSize, inputSize, largerSize] = getSizes("md", "sm", "lg");
-	const primaryContrast = useContrastText("primary.500");
 	const [alertOpen, setAlertOpen] = useState(false);
 	const toast = useToast();
 	const [chosenSave, setChosenSave] = useState(storedCustomIDs && storedCustomIDs.length > 0 && storedCustomIDs[0]);
@@ -298,7 +297,7 @@ const Settings = () => {
 				<LoadingOverlay
 					overlayOpen={loadingOverlayOpen}
 					colorFamily="secondary"
-					contents={<Text fontSize={largerSize} color={useContrastText("secondary.500")} textAlign="center">{loadingMsg}</Text>}
+					contents={<Text fontSize={largerSize} color="secondary.50" textAlign="center">{loadingMsg}</Text>}
 				/>
 				<MultiAlert
 					alertOpen={alertOpen}
@@ -307,7 +306,7 @@ const Settings = () => {
 						headerProps: {
 							_text: {
 								fontSize: largerSize,
-								color: useContrastText("warning.500")
+								color: "warning.50"
 							}
 						},
 						fontSize: textSize
@@ -363,7 +362,7 @@ const Settings = () => {
 								headerProps: {
 									bg: "primary.500",
 									_text: {
-										color: primaryContrast
+										color: "primary.50"
 									}
 								},
 								headerContent: "Where to Save?",
@@ -430,7 +429,7 @@ const Settings = () => {
 								headerProps: {
 									bg: "primary.500",
 									_text: {
-										color: primaryContrast
+										color: "primary.50"
 									}
 								},
 								headerContent: "Choose an Export Format",
@@ -503,7 +502,7 @@ const Settings = () => {
 							px={3}
 						>
 							<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-								<Text color={primaryContrast} fontSize={textSize}>{operation < 0 ? "Load" : "Save"} MorphoSyntax</Text>
+								<Text color="primary.50" fontSize={textSize}>{operation < 0 ? "Load" : "Save"} MorphoSyntax</Text>
 								<IconButton
 									icon={<CloseCircleIcon size={textSize} />}
 									onPress={() => setOperation(0)}
@@ -517,7 +516,7 @@ const Settings = () => {
 							{storedCustomIDs.map(info => {
 								const [title, lastSave] = storedCustomInfo[info];
 								const time = new Date(lastSave);
-								const color = chosenSave === info ? primaryContrast : "text.50"
+								const color = chosenSave === info ? "primary.50" : "text.50"
 								const timeString = time.toLocaleString();
 								// TO-DO: Determine if time.toLocaleString() is going to work
 								//    or if we need to use Moment.js or something else

@@ -5,7 +5,6 @@ import {
 	HStack,
 	Modal,
 	Center,
-	useContrastText,
 	TextArea
 } from 'native-base';
 
@@ -46,7 +45,6 @@ const ExportImportModal = ({
 	const [lexStoredInfo, setLexStoredInfo] = useState(getStartingValue(""));
 
 	const [textSize, headerSize] = getSizes("sm", "md");
-	const primaryContrast = useContrastText('primary.500');
 	const exitModal = (doReturn = false) => {
 		// Save info
 		const info = {
@@ -107,7 +105,7 @@ const ExportImportModal = ({
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
-						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{importedInfo ? "Im" : "Ex"}port Options</Text>
+						<Text flex={1} px={3} fontSize={headerSize} color="primary.50" textAlign="left" isTruncated>{importedInfo ? "Im" : "Ex"}port Options</Text>
 						<IconButton
 							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={() => exitModal()}
@@ -242,7 +240,6 @@ export const ExportHowModal = ({
 	isLoading
 }) => {
 	const [textSize, headerSize] = getSizes("sm", "md");
-	const primaryContrast = useContrastText('primary.500');
 	const closeAndExport = () => {
 		closeModal();
 		exportToFile();
@@ -252,7 +249,7 @@ export const ExportHowModal = ({
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
-						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Export</Text>
+						<Text flex={1} px={3} fontSize={headerSize} color="primary.50" textAlign="left" isTruncated>Export</Text>
 						<IconButton
 							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={closeModal}
@@ -310,13 +307,12 @@ export const ImportHowModal = ({
 }) => {
 	const [toImport, setToImport] = useState("");
 	const [textSize, headerSize] = getSizes("sm", "md");
-	const primaryContrast = useContrastText('primary.500');
 	return (
 		<Modal isOpen={!!modalOpen}>
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
-						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Import</Text>
+						<Text flex={1} px={3} fontSize={headerSize} color="primary.50" textAlign="left" isTruncated>Import</Text>
 						<IconButton
 							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={closeModal}

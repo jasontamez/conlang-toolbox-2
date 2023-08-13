@@ -3,7 +3,6 @@ import {
 	Text,
 	HStack,
 	VStack,
-	useContrastText,
 	Modal,
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,7 +36,6 @@ const WEInput = () => {
 	const [cols, setCols] = useState(null);
 	const [importDisabled, setImportDisabled] = useState(false);
 	const [buttonSize, textSize, inputSize] = getSizes("lg", "md", "sm");
-	const primaryContrast = useContrastText("primary.500");
 	useEffect(() => {
 		if(input && clearDisabled) {
 			setClearDisabled(false);
@@ -111,7 +109,7 @@ const WEInput = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Character Group</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50">Add Character Group</Text>
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}

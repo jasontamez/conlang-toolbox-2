@@ -135,7 +135,6 @@ const Transformations = ({
 
 	const [textSize, fabSize, descSize] = getSizes("sm", "md", "xs");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
-	const primaryContrast = useContrastText("primary.500");
 
 	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
 
@@ -370,7 +369,7 @@ const Transformations = ({
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Add Transform</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Add Transform</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => closeAddTransform()}

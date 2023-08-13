@@ -3,7 +3,6 @@ import {
 	Text,
 	HStack,
 	Spinner,
-	useContrastText,
 	Modal,
 	Pressable,
 	Box,
@@ -149,8 +148,6 @@ const WGOutput = () => {
 	const [outputVisible, setOutputVisible] = useState(false);
 
 	const toast = useToast();
-	const primaryContrast = useContrastText("primary.500");
-	const secondaryContrast = useContrastText("secondary.500");
 	const saveToLexInitialRef = useRef(null);
 	const choosingWhatToSaveInitialRef = useRef(null);
 	const arrowLR = "⟶";
@@ -297,7 +294,7 @@ const WGOutput = () => {
 			setWordsToSave(newWords);
 		};
 		const bg = flag ? "success.500" : "secondary.500";
-		const fg = flag ? "success.50" : secondaryContrast;
+		const fg = flag ? "success.50" : "secondary.50";
 		const Inner = ({isPressed}) => {
 			const color = isPressed ? "main.900" : fg;
 			return (
@@ -1283,7 +1280,7 @@ const WGOutput = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Output Settings</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Output Settings</Text>
 							<IconButton
 								flex={0}
 								mr={3}
@@ -1354,7 +1351,7 @@ const WGOutput = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Save to Lexicon</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Save to Lexicon</Text>
 							<IconButton
 								flex={0}
 								mr={3}
@@ -1405,7 +1402,7 @@ const WGOutput = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Save to Lexicon</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Save to Lexicon</Text>
 							<IconButton
 								flex={0}
 								mr={3}

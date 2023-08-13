@@ -4,7 +4,6 @@ import {
 	Text,
 	HStack,
 	Modal,
-	useContrastText,
 	Radio,
 	useToast
 } from 'native-base';
@@ -27,7 +26,6 @@ const PresetsModal = ({
 }) => {
 	const { disableConfirms } = useSelector(state => state.appState);
 	const [textSize, inputSize] = getSizes("sm", "xs");
-	const primaryContrast = useContrastText('primary.500');
 	const [presetChosen, setPresetChosen] = useState("");
 	const [alertOpen, setAlertOpen] = useState(false);
 	const dispatch = useDispatch();
@@ -75,7 +73,7 @@ const PresetsModal = ({
 						bg="primary.500"
 					>
 						<Text
-							color={primaryContrast}
+							color="primary.50"
 							fontSize={textSize}
 							bold
 						>Load Preset</Text>

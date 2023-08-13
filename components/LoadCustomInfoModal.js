@@ -3,7 +3,6 @@ import {
 	HStack,
 	Modal,
 	Text,
-	useContrastText,
 	useToast
 } from 'native-base';
 import { useEffect, useState } from 'react';
@@ -42,8 +41,6 @@ const LoadCustomInfoModal = ({
 	const [textOnLoadingScreen, setTextOnLoadingScreen] = useState(false);
 
 	const [textSize, largeText] = getSizes("sm", "xl");
-	const primaryContrast = useContrastText("primary.500");
-	const secondaryContrast = useContrastText("secondary.500");
 	const toast = useToast();
 	useEffect(() => {
 		if(storedCustomIDs.length > 0) {
@@ -127,7 +124,7 @@ const LoadCustomInfoModal = ({
 		<><LoadingOverlay
 			overlayOpen={loadingOverlayOpen}
 			colorFamily="secondary"
-			contents={<Text fontSize={largeText} color={secondaryContrast} textAlign="center">{textOnLoadingScreen}</Text>}
+			contents={<Text fontSize={largeText} color="secondary.50" textAlign="center">{textOnLoadingScreen}</Text>}
 		/>
 		<StandardAlert
 			alertOpen={overwriteWarningOpen}
@@ -165,7 +162,7 @@ const LoadCustomInfoModal = ({
 						bg="primary.500"
 					>
 						<Text
-							color={primaryContrast}
+							color="primary.50"
 							fontSize={textSize}
 							bold
 						>Load Saved Info</Text>

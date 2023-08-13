@@ -3,7 +3,6 @@ import {
 	VStack,
 	Text,
 	Modal,
-	useContrastText,
 	HStack,
 	Divider,
 	Box,
@@ -41,7 +40,6 @@ const WGContextMenu = () => {
 	const [infoModalBody, setInfoModalBody] = useState('');
 	const infoModalRef = useRef(null);
 	const [copyModalOpen, setCopyModalOpen] = useState(false);
-	const primaryContrast = useContrastText('primary.500');
 	const P = (props) => <Text textAlign="justify" lineHeight={headerSize} fontSize={textSize} {...props} />;
 	const I = (props) => <P bg="darker" px={0.5} >/{props.children}/</P>;
 	const Em = (props) => <P italic {...props} />;
@@ -412,9 +410,9 @@ const WGContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>Copy {characterGroups.length} Groups from WordEvolve?</Text>
+							<Text color="primary.50" fontSize={headerSize}>Copy {characterGroups.length} Groups from WordEvolve?</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon color="primary.50" size={headerSize} />}
 								onPress={() => setCopyModalOpen(false)}
 								variant="ghost"
 								px={0}
@@ -474,7 +472,7 @@ const WGContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>{infoModalTitle}</Text>
+							<Text color="primary.50" fontSize={headerSize}>{infoModalTitle}</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}

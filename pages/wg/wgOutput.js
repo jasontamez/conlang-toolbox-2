@@ -5,7 +5,6 @@ import {
 	HStack,
 	Spinner,
 	Pressable,
-	useContrastText,
 	Modal,
 	Box,
 	Menu,
@@ -130,8 +129,6 @@ const WGOutput = () => {
 	const getRandomPercentage = (max = 100) => Math.random() * max;
 	const { width } = useWindowDimensions();
 	const toast = useToast();
-	const primaryContrast = useContrastText("primary.500");
-	const secondaryContrast = useContrastText("secondary.500");
 	const saveToLexRef = useRef(null);
 
 	const loadingOpacity = useSharedValue(0);
@@ -371,10 +368,10 @@ const WGOutput = () => {
 		}, [rawWord, wordsToSave]);
 		const Item = memo(({text, raw, saved, onPress}) => {
 			let bg = "secondary.500",
-				color = secondaryContrast;
+				color = "secondary.50";
 			if(saved) {
 				bg = "primary.500";
-				color = primaryContrast;
+				color = "primary.50";
 			}
 			const Inner = ({isPressed}) => {
 				return (
@@ -990,11 +987,11 @@ const WGOutput = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Output Settings</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Output Settings</Text>
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color="primary.50" size={textSize} />}
 								onPress={() => setOpenSettings(false)}
 							/>
 						</HStack>
@@ -1144,11 +1141,11 @@ const WGOutput = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Save to Lexicon</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Save to Lexicon</Text>
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon color="primary.50" size={textSize} />}
 								onPress={() => setChooseWhereToSaveInLex(false)}
 							/>
 						</HStack>

@@ -5,7 +5,6 @@ import {
 	VStack,
 	HStack,
 	Modal,
-	useContrastText,
 	useToast
 } from 'native-base';
 
@@ -57,7 +56,6 @@ const ModalTransformEditingItem = ({
 		(dRef.current || dummy).value = description || "";
 		setModifiedDirection(direction || "both");
 	}, [transform]);
-	const primaryContrast = useContrastText('primary.500');
 	const maybeSaveEditedTransform = () => {
 		const modSearch = modifiedSearch.trim();
 		if(!modSearch) {
@@ -142,7 +140,7 @@ const ModalTransformEditingItem = ({
 			<Modal.Content>
 				<Modal.Header bg="primary.500">
 					<HStack justifyContent="flex-end" alignItems="center">
-						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
+						<Text flex={1} px={3} fontSize={headerSize} color="primary.50" textAlign="left" isTruncated>Edit Transformation</Text>
 						<IconButton
 							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={() => endEditingFunc()}

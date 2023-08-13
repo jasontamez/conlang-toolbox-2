@@ -4,8 +4,7 @@ import {
 	VStack,
 	HStack,
 	Text,
-	Modal,
-	useContrastText
+	Modal
 } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -32,7 +31,6 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const [savedIndex, setSavedIndex] = useState(null);
 	const dispatch = useDispatch();
 	const [smallerSize, textSize] = getSizes("sm", "md");
-	const primaryContrast = useContrastText('primary.500');
 	useEffect(() => {
 		// Load column info when mounted or when columns change.
 		setNewColumns(columns.map(c => {return {...c}}));
@@ -215,7 +213,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							bg="primary.500"
 						>
 							<Text
-								color={primaryContrast}
+								color="primary.50"
 								fontSize={textSize}
 								bold
 							>Edit Lexicon Columns</Text>

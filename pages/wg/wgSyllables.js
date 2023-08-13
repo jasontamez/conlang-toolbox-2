@@ -4,7 +4,6 @@ import {
 	HStack,
 	Box,
 	VStack,
-	useContrastText,
 	Modal
 } from "native-base";
 import { useWindowDimensions } from "react-native";
@@ -53,7 +52,6 @@ const WGSyllables = () => {
 	const [modalOverrideValue, setModalOverrideValue] = useState(0);
 	const [modalTempInfo, setModalTempInfo] = useState("");
 	const [hasNotToggled, setHasNotToggled] = useState(true);
-	const primaryContrast = useContrastText('primary.500');
 	const [headerSize, textSize, descSize] = getSizes("md", "sm", "xs");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const { width } = useWindowDimensions();
@@ -149,7 +147,7 @@ const WGSyllables = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center" w="full">
-							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{modalTitle}</Text>
+							<Text flex={1} px={3} fontSize={headerSize} color="primary.50" textAlign="left" isTruncated>{modalTitle}</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setModalOpen(false)}

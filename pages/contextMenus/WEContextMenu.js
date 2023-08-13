@@ -3,7 +3,6 @@ import {
 	VStack,
 	Text,
 	Modal,
-	useContrastText,
 	HStack,
 	Center,
 	useToast,
@@ -56,7 +55,6 @@ const WEContextMenu = () => {
 	const [infoModalBody, setInfoModalBody] = useState('');
 	const infoModalRef = useRef(null);
 	const [copyModalOpen, setCopyModalOpen] = useState(false);
-	const primaryContrast = useContrastText('primary.500');
 
 	const [clearAlertOpen, setClearAlertOpen] = useState(false);
 	const [openPresetModal, setOpenPresetModal] = useState(false);
@@ -462,7 +460,7 @@ const WEContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>Copy {characterGroups.length} Groups from WordGen?</Text>
+							<Text color="primary.50" fontSize={headerSize}>Copy {characterGroups.length} Groups from WordGen?</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setCopyModalOpen(false)}
@@ -523,7 +521,7 @@ const WEContextMenu = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>{infoModalTitle}</Text>
+							<Text color="primary.50" fontSize={headerSize}>{infoModalTitle}</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}

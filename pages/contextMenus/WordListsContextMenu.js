@@ -6,7 +6,6 @@ import {
 	Text,
 	Divider,
 	Modal,
-	useContrastText,
 	HStack
 } from 'native-base';
 import Button from "../../components/Button";
@@ -36,7 +35,6 @@ const WordListsContextMenu = () => {
 		doMenuClose();
 		setInfoModalOpen(true);
 	};
-	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<Menu
@@ -102,7 +100,7 @@ const WordListsContextMenu = () => {
 						p={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={headerSize}>About the Lists</Text>
+							<Text color="primary.50" fontSize={headerSize}>About the Lists</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}

@@ -21,7 +21,7 @@ const LoadingColumnsPickerModal = ({
 	currentColumns,
 	incomingColumns,
 	textSizes,
-	primaryContrast,
+	color,
 	endingFunc
 }) => {
 	const [unusedIncoming, setUnusedIncoming] = useState([]);
@@ -50,7 +50,7 @@ const LoadingColumnsPickerModal = ({
 					px={3}
 				>
 					<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-						<Text color={primaryContrast} fontSize={textSize}>Organize Columns</Text>
+						<Text color={color} fontSize={textSize}>Organize Columns</Text>
 						<IconButton
 							icon={<CloseCircleIcon size={textSize} />}
 							onPress={closeModal}

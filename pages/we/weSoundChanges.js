@@ -5,7 +5,6 @@ import {
 	VStack,
 	Fab,
 	Modal,
-	useContrastText,
 	useToast
 } from "native-base";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -77,10 +76,6 @@ const WESoundChanges = () => {
 	const [fabSize, textSize, smallerSize] = getSizes("md", "sm", "xs");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const toast = useToast();
-	const primaryContrast = useContrastText("primary.500");
-	const secondaryContrast = useContrastText("secondary.500");
-	const tertiaryContrast = useContrastText("tertiary.500");
-	const dangerContrast = useContrastText("danger.500");
 
 	const [appHeaderHeight, viewHeight, tabBarHeight] = useOutletContext();
 
@@ -374,7 +369,7 @@ const WESoundChanges = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Sound Change</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Edit Sound Change</Text>
 							<IconButton
 								flexGrow={0}
 								scheme="primary"
@@ -459,7 +454,7 @@ const WESoundChanges = () => {
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Sound Change</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50">Add Sound Change</Text>
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
@@ -538,7 +533,7 @@ const WESoundChanges = () => {
 			<Fab
 				bg="tertiary.500"
 				renderInPortal={false}
-				icon={<AddIcon color={tertiaryContrast} size={fabSize} />}
+				icon={<AddIcon color="tertiary.50" size={fabSize} />}
 				accessibilityLabel="Add Sound Change"
 				onPress={() => {
 					setAddSoundChangeOpen(true);

@@ -10,8 +10,7 @@ import {
 	ScrollView,
 	Modal,
 	VStack,
-	useToast,
-	useContrastText
+	useToast
 } from 'native-base';
 
 //import uuidv4 from '../helpers/uuidv4';
@@ -256,7 +255,6 @@ const WordLists = () => {
 			</Pressable>
 		);
 	};
-	const primaryContrast = useContrastText('primary.500');
 	return (
 		<>
 			<HStack
@@ -325,7 +323,7 @@ const WordLists = () => {
 							justifyContent="space-between"
 							alignItems="center"
 						>
-							<Text color={primaryContrast} fontSize={headerSize}>Add to Lexicon</Text>
+							<Text color="primary.50" fontSize={headerSize}>Add to Lexicon</Text>
 							<IconButton
 								variant="ghost"
 								scheme="primary"

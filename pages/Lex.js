@@ -11,8 +11,7 @@ import {
 	Menu,
 	Modal,
 	Pressable,
-	useToast,
-	useContrastText
+	useToast
 } from 'native-base';
 import { AnimatePresence, MotiScrollView } from 'moti';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -137,10 +136,6 @@ const Lex = () => {
 	const [reloadTrigger, setReloadTrigger] = useState(0);
 
 	const [usedButton, setUsedButton] = useState(false);
-
-	const primaryContrast = useContrastText('primary.500');
-	const secondaryContrast = useContrastText('secondary.500');
-	const warningContrast = useContrastText('warning.500');
 
 	// Have to introduce a hard limit of 30 columns. (absoluteMaxColumns)
 	// We have to create the exact same number of Refs each time we render.
@@ -372,7 +367,7 @@ const Lex = () => {
 		return storedCustomIDs.map((info, index) => {
 			const [title, lastSave, lexNumber, columns] = storedCustomInfo[info];
 			const time = new Date(lastSave);
-			const color = loadChosen === info ? primaryContrast : "text.50"
+			const color = loadChosen === info ? "primary.50" : "text.50"
 			const timeString = time.toLocaleString();
 			const striping = !(index % 2) ? {
 				// odd rows (0-indexed!)
@@ -756,7 +751,7 @@ const Lex = () => {
 				sharedProps={{
 					headerProps: {
 						_text: {
-							color: warningContrast,
+							color: "warning.50",
 							fontSize: largeSize
 						}
 					}
@@ -825,7 +820,7 @@ const Lex = () => {
 							headerProps: {
 								bg: "primary.500",
 								_text: {
-									color: primaryContrast
+									color: "primary.50"
 								}
 							},
 							headerContent: "Where to Save?",
@@ -890,7 +885,7 @@ const Lex = () => {
 							headerProps: {
 								bg: "primary.500",
 								_text: {
-									color: primaryContrast
+									color: "primary.50"
 								}
 							},
 							headerContent: "Choose an Export Format",
@@ -958,7 +953,7 @@ const Lex = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={textSize}>Load Lexicon</Text>
+							<Text color="primary.50" fontSize={textSize}>Load Lexicon</Text>
 							<IconButton
 								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setLoadLexicon(false)}
@@ -1022,7 +1017,7 @@ const Lex = () => {
 						px={3}
 					>
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
-							<Text color={primaryContrast} fontSize={textSize}>Save Lexicon</Text>
+							<Text color="primary.50" fontSize={textSize}>Save Lexicon</Text>
 							<IconButton
 								scheme="primary"
 								icon={<CloseCircleIcon size={textSize} />}
@@ -1081,7 +1076,7 @@ const Lex = () => {
 			<LoadingColumnsPickerModal
 				modalOpen={loadingColumnsPicker}
 				textSizes={[smallerSize, textSize]}
-				primaryContrast={primaryContrast}
+				color="primary.50"
 				closeModal={() => setLoadingColumnsPicker(false)}
 				endingFunc={doLoadLexicon}
 				currentColumns={columns}
@@ -1090,7 +1085,7 @@ const Lex = () => {
 			<LoadingOverlay
 				overlayOpen={loadingOverlayOpen !== false}
 				colorFamily="secondary"
-				contents={<Text fontSize={largeSize} color={secondaryContrast} textAlign="center">{loadingOverlayOpen}</Text>}
+				contents={<Text fontSize={largeSize} color="secondary.50" textAlign="center">{loadingOverlayOpen}</Text>}
 			/>
 			<HStack alignItems="flex-start" justifyContent="flex-end">
 				<AnimatePresence style={{flex: 1, alignItems: "flex-start", justifyContent: "flex-end"}}>

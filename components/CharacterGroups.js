@@ -6,7 +6,6 @@ import {
 	VStack,
 	Fab,
 	Modal,
-	useContrastText,
 	Input,
 	useToast,
 	useTheme
@@ -67,7 +66,6 @@ const CharGroups = ({
 	const [addOverrideSwitch, setAddOverrideSwitch] = useState(false);
 	const [addOverrideValue, setAddOverrideValue] = useState(characterGroupDropoff);
 	const toast = useToast();
-	const primaryContrast = useContrastText("primary.500");
 	// add group
 	const addNewGroup = (closeAfterAdd) => {
 		// attempts to add the modal info as a new group
@@ -333,7 +331,7 @@ const CharGroups = ({
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Character Group</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50" textAlign="left">Edit Character Group</Text>
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
@@ -469,7 +467,7 @@ const CharGroups = ({
 				<Modal.Content>
 					<Modal.Header bg="primary.500">
 						<HStack justifyContent="flex-end" alignItems="center">
-							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast}>Add Character Group</Text>
+							<Text flex={1} px={3} fontSize={textSize} color="primary.50">Add Character Group</Text>
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}

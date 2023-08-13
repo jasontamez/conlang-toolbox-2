@@ -3,7 +3,6 @@ import {
 	HStack,
 	Modal,
 	Text,
-	useContrastText,
 	useToast
 } from 'native-base';
 import { useEffect, useRef, useState } from 'react';
@@ -50,8 +49,6 @@ const SaveCustomInfoModal = ({
 	const dispatch = useDispatch();
 	const { disableConfirms } = useSelector(state => state.appState);
 	const [textSize, largeText] = getSizes("sm", "xl");
-	const primaryContrast = useContrastText("primary.500");
-	const tertiaryContrast = useContrastText("tertiary.500");
 	const toast = useToast();
 	const labelTextRef = useRef(null);
 	const { width } = useWindowDimensions();
@@ -116,7 +113,7 @@ const SaveCustomInfoModal = ({
 	return (<>
 		<LoadingOverlay
 			overlayOpen={showLoadingScreen}
-			contents={<Text fontSize={largeText} color={tertiaryContrast} textAlign="center">{textOnLoadingScreen}</Text>}
+			contents={<Text fontSize={largeText} color="tertiary.50" textAlign="center">{textOnLoadingScreen}</Text>}
 			colorFamily="tertiary"
 		/>
 		<Modal isOpen={modalOpen} size="md">
@@ -160,7 +157,7 @@ const SaveCustomInfoModal = ({
 						bg="primary.500"
 					>
 						<Text
-							color={primaryContrast}
+							color="primary.50"
 							fontSize={textSize}
 							bold
 						>Save Custom Info</Text>
