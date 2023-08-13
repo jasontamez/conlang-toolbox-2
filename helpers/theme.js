@@ -41,22 +41,22 @@ const fontConfig = { /*
 	},/*
 	"Noto Sans JP": {
 		100: {
-			normal: "NotoSansJP_100Thin",
+			normal: "NotoSansJP_100Thin"
 		},
 		300: {
-			normal: "NotoSansJP_300Light",
+			normal: "NotoSansJP_300Light"
 		},
 		400: {
-			normal: "NotoSansJP_400Regular",
+			normal: "NotoSansJP_400Regular"
 		},
 		500: {
-			normal: "NotoSansJP_500Medium",
+			normal: "NotoSansJP_500Medium"
 		},
 		700: {
-			normal: "NotoSansJP_700Bold",
+			normal: "NotoSansJP_700Bold"
 		},
 		900: {
-			normal: "NotoSansJP_900Black",
+			normal: "NotoSansJP_900Black"
 		}
 	},
 	"Noto Serif": {
@@ -81,69 +81,69 @@ const fontConfig = { /*
 	},/*
 	"Noto Serif JP": {
 		200: {
-			normal: "NotoSerifJP_200ExtraLight",
+			normal: "NotoSerifJP_200ExtraLight"
 		},
 		300: {
-			normal: "NotoSerifJP_300Light",
+			normal: "NotoSerifJP_300Light"
 		},
 		400: {
-			normal: "NotoSerifJP_400Regular",
+			normal: "NotoSerifJP_400Regular"
 		},
 		500: {
-			normal: "NotoSerifJP_500Medium",
+			normal: "NotoSerifJP_500Medium"
 		},
 		600: {
-			normal: "NotoSerifJP_600SemiBold",
+			normal: "NotoSerifJP_600SemiBold"
 		},
 		700: {
-			normal: "NotoSerifJP_700Bold",
+			normal: "NotoSerifJP_700Bold"
 		},
 		900: {
-			normal: "NotoSerifJP_900Black",
+			normal: "NotoSerifJP_900Black"
 		}
 	}, */
 	"Source Code Pro": {
 		400: {
 			normal: "Source Code Pro",
-			italic: "Source Code Pro Italic",
+			italic: "Source Code Pro Italic"
 		},
 		700: {
 			normal: "Source Code Pro Bold",
-			italic: "Source Code Pro Bold Italic",
-		},
+			italic: "Source Code Pro Bold Italic"
+		}
 	},/*
 	"Source Code Pro": {
 		200: {
 			normal: "SourceCodePro_200ExtraLight",
-			italic: "SourceCodePro_200ExtraLight_Italic",
+			italic: "SourceCodePro_200ExtraLight_Italic"
 		},
 		300: {
 			normal: "SourceCodePro_300Light",
-			italic: "SourceCodePro_300Light_Italic",
+			italic: "SourceCodePro_300Light_Italic"
 		},
 		400: {
 			normal: "SourceCodePro_400Regular",
-			italic: "SourceCodePro_400Regular_Italic",
+			italic: "SourceCodePro_400Regular_Italic"
 		},
 		500: {
 			normal: "SourceCodePro_500Medium",
-			italic: "SourceCodePro_500Medium_Italic",
+			italic: "SourceCodePro_500Medium_Italic"
 		},
 		600: {
 			normal: "SourceCodePro_600SemiBold",
-			italic: "SourceCodePro_600SemiBold_Italic",
+			italic: "SourceCodePro_600SemiBold_Italic"
 		},
 		700: {
 			normal: "SourceCodePro_700Bold",
-			italic: "SourceCodePro_700Bold_Italic",
+			italic: "SourceCodePro_700Bold_Italic"
 		},
 		800: {
 			normal: "SourceCodePro_800ExtraBold",
-			italic: "SourceCodePro_800ExtraBold_Italic",
+			italic: "SourceCodePro_800ExtraBold_Italic"
 		},
 		900: {
 			normal: "SourceCodePro_900Black",
-			italic: "SourceCodePro_900Black_Italic",
+			italic: "SourceCodePro_900Black_Italic"
 		}
 	},
 	ArTarumianKamar: {
@@ -153,10 +153,10 @@ const fontConfig = { /*
 	},
 	Scherherazade: {
 		400: {
-			normal: "Scheherazade_400Regular",
+			normal: "Scheherazade_400Regular"
 		},
 		700: {
-			normal: "Scheherazade_700Bold",
+			normal: "Scheherazade_700Bold"
 		}
 	},
 	Sriracha: {
@@ -198,6 +198,9 @@ const mainButton = {
 			style: {
 				fontVariant: ["small-caps"]
 			}
+		},
+		_pressed: {
+			bg: "success.900"
 		}
 	}
 };
@@ -246,13 +249,13 @@ const mainCheckboxesDefaultProps = {
 	bg: "lighter",
 	borderColor: "text.100",
 	_text: {
-		color: "primaryContrast",
+		color: "primary.50",
 		fontFamily: fonts.body,
 		fontWeight: 400,
 		fontStyle: "normal"
 	},
 	_icon: {
-		color: "primaryContrast"
+		color: "primary.50"
 	},
 	_checked: {
 		borderColor: "primary.500",
@@ -263,24 +266,24 @@ const mainCheckboxesDefaultProps = {
 			_disabled: {
 				borderColor: "gray.500",
 				bg: "gray.900"
-			},
+			}
 		},
 		_pressed: {
 			borderColor: "primary.300",
-			bg: "primary.300",
+			bg: "primary.300"
 		}
 	},
 	_hover: {
 		borderColor: "primary.400",
 		_disabled: {
-			borderColor: "gray.500",
+			borderColor: "gray.500"
 		}
 	},
 	_pressed: {
-		borderColor: "primary.300",
+		borderColor: "primary.300"
 	},
 	_invalid: {
-		borderColor: "error.500",
+		borderColor: "error.500"
 	},
 	_disabled: {
 		borderColor: "gray.500",
@@ -304,7 +307,7 @@ const mainModalHeader = {
 		shadowColor: "main.900",
 		shadowOffset: {
 			width: 0,
-			height: 5,
+			height: 5
 		},
 		shadowOpacity: 0.34,
 		shadowRadius: 6.27,
@@ -321,7 +324,7 @@ const mainModalFooter = {
 		shadowColor: "main.900",
 		shadowOffset: {
 			width: 0,
-			height: -5,
+			height: -5
 		},
 		shadowOpacity: 0.34,
 		shadowRadius: 6.27,
@@ -410,7 +413,7 @@ const components = {
 			},
 			_icon: {
 				color: "primary.50"
-			},
+			}
 		}
 	},
 	Select: {...mainInput},
@@ -558,10 +561,16 @@ const components = {
 			bg: "main.900"
 		}
 	},
+	MenuGroup: {
+		_title: {
+			color: "primary.500",
+			fontSize: "md"
+		}
+	},
 	MenuItem: {
 		defaultProps: {
 			_text: {
-				color: "main.50",
+				color: "text.50",
 				fontSize: "sm"
 			},
 			d: "flex",
@@ -582,7 +591,7 @@ const components = {
 	MenuItemOption: {
 		defaultProps: {
 			_text: {
-				color: "main.50",
+				color: "text.50",
 				fontSize: "sm"
 			},
 			_icon: {
@@ -605,7 +614,7 @@ const themes = {
 				600: "#007f80",
 				700: "#004d4e",
 				800: "#001b1d",
-				900: "#000304",
+				900: "#000304"
 			},
 			emerald: {
 				50: "#e7f9f4",
@@ -617,7 +626,7 @@ const themes = {
 				600: "#427874",
 				700: "#2e5554",
 				800: "#193434",
-				900: "#001211",
+				900: "#001211"
 			},
 			red: {
 				50: "#ffe2e2",
@@ -629,7 +638,7 @@ const themes = {
 				600: "#b30000",
 				700: "#810000",
 				800: "#4f0000",
-				900: "#200000",
+				900: "#200000"
 			},
 			purple: {
 				50: "#f2e5ff",
@@ -641,7 +650,7 @@ const themes = {
 				600: "#5a0cda",
 				700: "#4608aa",
 				800: "#32057b",
-				900: "#1e024c",
+				900: "#1e024c"
 			},
 			blue: {
 				50: "#f0f0ff",
@@ -653,7 +662,7 @@ const themes = {
 				600: "#0514e5",
 				700: "#000a81",
 				800: "#000550",
-				900: "#000120",
+				900: "#000120"
 			},
 			lime: {
 				50: "#ebfbe4",
@@ -665,7 +674,7 @@ const themes = {
 				600: "#4b8829",
 				700: "#34611c",
 				800: "#1d3b0e",
-				900: "#051500",
+				900: "#051500"
 			},
 			yellow: {
 				50: "#fff9da",
@@ -677,7 +686,7 @@ const themes = {
 				600: "#b38600",
 				700: "#805f00",
 				800: "#4e3900",
-				900: "#1d1300",
+				900: "#1d1300"
 			},
 			green: {
 				50: "#e5ffff",
@@ -689,14 +698,12 @@ const themes = {
 				600: "#3bb082",
 				700: "#297e57",
 				800: "#154c2f",
-				900: "#001a0b",
+				900: "#001a0b"
 			},
 			lighter: "#ffffff11",
 			darker: "#00000033",
 			white: "#f8f8f8",
-			black: "#070707",
-			sliderTickColor: "#7425f3", // purple 400
-			primaryContrast: "#001211" // emerald 900
+			black: "#070707"
 		}
 	},
 	"Solarized Dark": {
@@ -711,79 +718,79 @@ const themes = {
 				600: "#218db0",
 				700: "#13667e",
 				800: "#003d4d",
-				900: "#00151d",
+				900: "#00151d"
 			},
-			orange: {
-				50: "#ffebe0",
-				100: "#fdcbb6",
-				200: "#f5a98a",
-				300: "#ef885d",
-				400: "#e96630",
+			orange: { // primary
+				50: "#f5eeea",
+				100: "#f0ded6",
+				200: "#e5bba8",
+				300: "#de9372",
+				400: "#dc6c3d",
 				500: "#cb4b16",
-				600: "#a23b10",
-				700: "#742a0a",
-				800: "#471702",
-				900: "#1e0600",
+				600: "#97401B",
+				700: "#6c3219",
+				800: "#472415",
+				900: "#21130D"
 			},
-			indigo: {
-				50: "#ececff",
-				100: "#c7caee",
-				200: "#a3a7dc",
-				300: "#8084cd",
-				400: "#7b79c7",
+			indigo: { // secondary
+				50: "#edeefd",
+				100: "#dcdef9",
+				200: "#bcbff0",
+				300: "#9fa3e5",
+				400: "#8387d8",
 				500: "#6c71c4",
-				600: "#4247a4",
-				700: "#323780",
-				800: "#24285d",
-				900: "#14183b",
+				600: "#3b41ba",
+				700: "#282d90",
+				800: "#161a64",
+				900: "#090b34"
 			},
-			cyan: {
-				50: "#bce7f2",
-				100: "#98d5e5",
-				200: "#72c4da",
-				300: "#4db4ce",
-				400: "#359ab5",
+			cyan: { // tertiary
+				50: "#ecf2f3",
+				100: "#d7e6ea",
+				200: "#a7ced7",
+				300: "#77baca",
+				400: "#41a5be",
 				500: "#288198",
-				600: "#175666",
-				700: "#04343f",
-				800: "#001319",
-				900: "#000607",
+				600: "#276372",
+				700: "#214a55",
+				800: "#182f35",
+				900: "#0e181b"
 			},
-			lime: {
-				50: "#fbffdc",
-				100: "#f5ffaf",
-				200: "#eeff7f",
-				300: "#e8ff4d",
-				400: "#e1ff1f",
-				500: "#c8e608",
-				600: "#9bb300",
-				700: "#6f8000",
-				800: "#414d00",
-				900: "#151b00",
+			lime: { // success
+				50: "#f8fcdf",
+				100: "#f2fabd",
+				200: "#e7f877",
+				300: "#ddf830",
+				400: "#bfdc04",
+				500: "#859900",
+				600: "#687802",
+				700: "#4d5903",
+				800: "#333a03",
+				900: "#191c02"
 			},
-			amber: {
-				50: "#fff9db",
-				100: "#ffecaf",
-				200: "#ffe07f",
-				300: "#ffd44d",
-				400: "#ffc71e",
-				500: "#e6ae06",
-				600: "#b38700",
-				700: "#806100",
-				800: "#4e3a00",
-				900: "#1d1300",
+			amber: { // warning
+				50: "#f8f4e7",
+				100: "#f3e9c8",
+				200: "#eed58c",
+				300: "#edc44a",
+				400: "#e7b10d",
+				500: "#b58900",
+				600: "#876708",
+				700: "#614c0a",
+				800: "#3e3109",
+				900: "#1d1806"
 			},
-			red: {
-				50: "#ffe5e5",
-				100: "#f9bcbc",
-				200: "#ef9291",
-				300: "#e66765",
-				400: "#de3d3b",
-				500: "#c42421",
-				600: "#9a1b19",
-				700: "#6e1211",
-				800: "#440808",
-				900: "#1e0000",
+			red: { // danger/error
+				50: "#f6efef",
+				100: "#efdddc",
+				200: "#e4b9b9",
+				300: "#dc8f8e",
+				400: "#d86664",
+				500: "#dc322f",
+				600: "#ac2d2b",
+				700: "#792625",
+				800: "#4e1e1d",
+				900: "#231110"
 			},
 			yellow: {
 				50: "#fdf7e7",
@@ -795,89 +802,88 @@ const themes = {
 				600: "#a5471e",
 				700: "#762c15",
 				800: "#46170c",
-				900: "#180502",
+				900: "#180502"
 			},
 			lighter: "#ffffff22",
 			darker: "#00000033",
 			white: "#f8f8f8",
-			black: "#070707",
-			sliderTickColor: "#323780", // indigo 600
-			primaryContrast: "#defbff" // lightBlue 50
+			black: "#070707"
 		}
 	},
 	"Solarized Light": {
 		colors: {
-			orange: {
-				900: "#fdcbb6",
-				800: "#f5a98a",
-				700: "#ef885d",
-				600: "#e96630",
+			orange: { // primary
+				50: "#f4eeec",
+				100: "#eedfd8",
+				200: "#e3bcab",
+				300: "#db9476",
+				400: "#da6d3f",
 				500: "#cb4b16",
-				400: "#b84414",
-				300: "#a23b10",
-				200: "#742a0a",
-				100: "#471702",
-				50: "#1e0600",
+				600: "#95411D",
+				700: "#69331C",
+				800: "#452517",
+				900: "#20130E"
 			},
-			indigo: {
-				900: "#ececff",
-				800: "#c7caee",
-				700: "#a3a7dc",
-				600: "#8084cd",
-				500: "#7b79c7",
-				400: "#6c71c4",
-				300: "#4247a4",
-				200: "#323780",
-				100: "#24285d",
-				50: "#14183b",
+			indigo: { // secondary
+				50: "#f0f1f9",
+				100: "#e2e3f3",
+				200: "#c5c7e8",
+				300: "#a8aadc",
+				400: "#8b8ed0",
+				500: "#6c71c4",
+				600: "#464baf",
+				700: "#353983",
+				800: "#232657",
+				900: "#12132C"
 			},
-			lime: {
-				900: "#f5ffaf",
-				800: "#eeff7f",
-				700: "#e8ff4d",
-				600: "#e1ff1f",
+			lime: { // tertiary
+				50: "#f3f5e5",
+				100: "#eaf0c7",
+				200: "#dce986",
+				300: "#d1e740",
+				400: "#b8d20f",
 				500: "#859900",
-				400: "#9bb300",
-				300: "#6f8000",
-				200: "#414d00",
-				100: "#151b00",
-				50: "#060700"
+				600: "#647208",
+				700: "#48520A",
+				800: "#2e3409",
+				900: "#161806"
 			},
-			teal: {
-				900: "#98e5df",
-				800: "#71dad2",
-				700: "#4dd0c5",
-				600: "#34b6ac",
-				500: "#258e86",
-				400: "#2c7a75",
-				300: "#16655f",
-				200: "#043e39",
-				100: "#001614",
-				50: "#000807"
+			teal: { // success
+				50: "#eff0f0",
+				100: "#dbe5e5",
+				200: "#b1d3d0",
+				300: "#82c5bf",
+				400: "#4dbcb3",
+				500: "#2aa198",
+				600: "#2c7771",
+				700: "#275450",
+				800: "#1e3432",
+				900: "#111817"
 			},
-			yellow: {
-				900: "#ffe07f",
-				800: "#ffd44d",
-				700: "#ffc71e",
-				600: "#e6ae06",
-				500: "#b38700",
-				400: "#9f7400",
-				300: "#806100",
-				200: "#4e3a00",
-				100: "#322000",
-				50: "#1d1300",
+			yellow: { // warning
+				50: "#f7f3e9",
+				100: "#f1e7cb",
+				200: "#ead48f",
+				300: "#e9c24e",
+				400: "#e5b010",
+				500: "#b58900",
+				600: "#866609",
+				700: "#5f4a0c",
+				800: "#3c300b",
+				900: "#1c1707",
+				950: "#0f0d06"
 			},
-			pink: {
-				900: "#ffe6f5",
-				800: "#f5bed9",
-				700: "#ea95bf",
-				600: "#e06ca4",
-				500: "#d6438a",
-				400: "#bc2970",
-				300: "#931e57",
-				200: "#6b143e",
-				100: "#420a25",
-				50: "#1c010e",
+			red: { // danger/error
+				50: "#f4f0f0",
+				100: "#eddede",
+				200: "#e2bcbb",
+				300: "#d99291",
+				400: "#d66866",
+				500: "#dc322f",
+				600: "#a92f2d",
+				700: "#762928",
+				800: "#4b2120",
+				900: "#211212"
 			},
 			amber: {
 				900: "#fdf7e7",
@@ -889,7 +895,7 @@ const themes = {
 				300: "#a57d1e",
 				200: "#765915",
 				100: "#46360c",
-				50: "#181202",
+				50: "#181202"
 			},
 			cyan: {
 				900: "#f0ffff",
@@ -906,9 +912,7 @@ const themes = {
 			lighter: "#ffffff66",
 			darker: "#00000033",
 			white: "#f8f8f8",
-			black: "#070707",
-			sliderTickColor: "#323780", // indigo 500
-			primaryContrast: "#181202" // amber 50
+			black: "#070707"
 		}
 	},
 	"Dark": {
@@ -923,79 +927,80 @@ const themes = {
 				600: "#595959",
 				700: "#404040",
 				800: "#262626",
-				900: "#121212",
+				900: "#121212"
 			},
-			fuchsia: {
-				50: "#f5e5ff",
-				100: "#c6dcff",
-				200: "#d8b3ff",
-				300: "#d0a4fe",
-				400: "#c695fd",
+			fuchsia: { // primary
+				50: "#f9f5ff",
+				100: "#f1e6fe",
+				200: "#e3cdfe",
+				300: "#d5b4fd",
+				400: "#caa0fd",
 				500: "#bb86fc",
-				600: "#a576de",
-				700: "#9e21f7",
-				800: "#930ade",
-				900: "#7e05ad",
+				600: "#923dfa",
+				700: "#6806e0",
+				800: "#450495",
+				900: "#23024B"
 			},
-			blue: {
-				50: "#e4e5ff",
-				100: "#b2b5ff",
-				200: "#7f84ff",
-				300: "#6a75ff",
-				400: "#565fff",
+			blue: { // secondary
+				50: "#ebebff",
+				100: "#dbdcff",
+				200: "#b3b5ff",
+				300: "#8f93ff",
+				400: "#666bff",
 				500: "#4249ff",
-				600: "#1d23fe",
-				700: "#050ae5",
-				800: "#0007b3",
-				900: "#000581"
+				600: "#0008ff",
+				700: "#0006c2",
+				800: "#000480",
+				900: "#000242"
 			},
-			teal: {
-				50: "#d8fffe",
-				100: "#abfff8",
-				200: "#7bfef1",
-				300: "#4afdec",
-				400: "#1dfce6",
-				500: "#03dac5",
-				600: "#00b09f",
-				700: "#007f72",
-				800: "#004c44",
-				900: "#001b18",
+			teal: { // tertiary
+				50: "#dcfffb",
+				100: "#bdfef8",
+				200: "#7cfef1",
+				300: "#3afde9",
+				400: "#03f2da",
+				500: "#02b09f",
+				600: "#028d7f",
+				700: "#016a5f",
+				800: "#014740",
+				900: "#002320"
 			},
-			green: {
-				50: "#e4fee0",
-				100: "#bff7b7",
-				200: "#9cf08c",
-				300: "#79eb60",
-				400: "#5ae534",
-				500: "#35cb1a",
-				600: "#1f9e12",
-				700: "#0c710b",
-				800: "#044508",
-				900: "#001908",
+			green: { // success
+				50: "#edfce8",
+				100: "#d7f9cd",
+				200: "#aef29c",
+				300: "#8aec6f",
+				400: "#62e63d",
+				500: "#42d01b",
+				600: "#35a716",
+				700: "#287e10",
+				800: "#1a510b",
+				900: "#0d2905"
 			},
-			amber: {
-				50: "#fff5dd",
-				100: "#fae5b4",
-				200: "#f5d888",
-				300: "#f2cf5a",
-				400: "#eeb42d",
-				500: "#d48e15",
-				600: "#a5640d",
-				700: "#763f07",
-				800: "#482001",
-				900: "#1b0800",
+			amber: { // warning
+				50: "#f6f3ea",
+				100: "#f0e9d1",
+				200: "#e7d7a2",
+				300: "#e2c66a",
+				400: "#e1b833",
+				500: "#c69c10",
+				600: "#977917",
+				700: "#6a5715",
+				800: "#453912",
+				900: "#1f1a0a"
 			},
-			pink: {
-				50: "#ffe9ef",
-				100: "#f1c4cf",
-				200: "#e29dac",
-				300: "#d47788",
-				400: "#c7516e",
-				500: "#ae385c",
-				600: "#882b4e",
-				700: "#621d3c",
-				800: "#3c1027",
-				900: "#1b0210",
+			red: { // error/danger
+				50: "#f8e7ea",
+				100: "#f4cdd4",
+				200: "#f099a9",
+				300: "#ef5d77",
+				400: "#f22148",
+				500: "#d80028",
+				600: "#a40a26",
+				700: "#740b1f",
+				800: "#4b0b17",
+				900: "#22070C",
+				950: "#100507"
 			},
 			trueGray: {
 				50: "#d9d9d9",
@@ -1012,84 +1017,82 @@ const themes = {
 			lighter: "#ffffff22",
 			darker: "#00000033",
 			white: "#f8f8f8",
-			black: "#070707",
-			sliderTickColor: "#4249ff", // blue 500
-			primaryContrast: "#121212" // gray 900
+			black: "#070707"
 		}
 	},
 	"Light": {
 		colors: {
-			cyan: {
-				900: "#ddfdff",
-				800: "#8ce4f1",
-				700: "#3bcfe2",
-				600: "#25b5c9",
+			cyan: { // tertiary
+				900: "#052024",
+				800: "#0a4148",
+				700: "#0e5d67",
+				600: "#137d8b",
 				500: "#189daf",
-				400: "#0f8290",
-				300: "#066571",
-				200: "#03595b",
-				100: "#003d45",
-				50: "#00161a",
+				400: "#23cbe1",
+				300: "#59d8e8",
+				200: "#93e5f0",
+				100: "#c9f2f8",
+				50: "#e4f9fb"
 			},
-			indigo: {
-				900: '#eee4ff',
-				800: '#cab2ff',
-				700: '#b9a7ff',
-				600: '#a780ff',
-				500: '#9566ff',
-				400: '#834dff',
-				300: '#4802e5',
-				200: '#270081',
-				100: '#17004f',
-				50: '#09001f',
+			indigo: { // secondary
+				900: '#0b0024',
+				800: '#150047',
+				700: '#20006b',
+				600: '#2b008f',
+				500: '#3700b3',
+				400: '#4900f5',
+				300: '#7438ff',
+				200: '#a27aff',
+				100: '#d1bdff',
+				50: '#eae0ff'
 			},
-			blue: {
-				900: '#d9fdff',
-				800: '#adf1ff',
-				700: '#7fe7fb',
-				600: '#50dcf8',
-				500: '#24d2f5',
-				400: '#0ab9db',
-				300: '#0090ab',
-				200: '#00677c',
-				100: '#003f4c',
-				50: '#00171c',
+			blue: { // primary/info
+				900: '#ff0000',
+				800: '#03036d',
+				700: '#05059e',
+				600: '#0707d5',
+				500: '#1b1bf8',
+				400: '#4848f9',
+				300: '#7474fb',
+				200: '#a6a6fc',
+				100: '#d2d2fe',
+				50: '#e6e6fe'
 			},
-			red: {
-				900: "#ffe2e2",
-				800: "#ffb3b3",
-				700: "#fd8282",
-				600: "#fb5151",
-				500: "#f82020",
-				400: "#df0707",
-				300: "#ae0204",
-				200: "#7d0002",
-				100: "#4d0000",
-				50: "#200000",
+			red: { // danger/error
+				900: "#680303",
+				800: "#990505",
+				700: "#b70606",
+				600: "#cb0606",
+				500: "#e40707",
+				400: "#fb7070",
+				300: "#fca6a6",
+				200: "#fdc9c9",
+				100: "#fee6e6",
+				50: "#fff5f5"
 			},
-			green: {
-				900: "#b1feb1",
-				800: "#80db81",
-				700: "#50ca51",
-				600: "#20a420",
-				500: "#019001",
-				400: "#007701",
-				300: "#005500",
-				200: "#003b00",
-				100: "#001b00",
-				50: "#000000"
+			green: { // success
+				900: "#012c01",
+				800: "#035403",
+				700: "#048004",
+				600: "#06a806",
+				500: "#07d507",
+				400: "#1cf71c",
+				300: "#57f957",
+				200: "#8dfb8d",
+				100: "#c9fdc9",
+				50: "#e1fee1"
 			},
-			yellow: {
-				900: "#fffadb",
-				800: "#fef7ad",
-				700: "#fef67e",
-				600: "#fdf74c",
-				500: "#fdfd1c",
-				400: "#e3d402",
-				300: "#b19a00",
-				200: "#7e6500",
-				100: "#4c3900",
-				50: "#1a1100",
+			orange: { // warning
+				900: "#69420C",
+				800: "#975f11",
+				700: "#b77315",
+				600: "#ce8218",
+				500: "#e5901c",
+				400: "#ecaf5a",
+				300: "#f2c88d",
+				200: "#f7deba",
+				100: "#fbedda",
+				50: "#fdf8f1"
 			},
 			trueGray: {
 				900: "#f2f2f2",
@@ -1101,7 +1104,7 @@ const themes = {
 				300: "#595959",
 				200: "#404040",
 				100: "#262626",
-				50: "#0d0d0d",
+				50: "#0d0d0d"
 			},
 			gray: {
 				900: "#f2f2f2",
@@ -1113,14 +1116,12 @@ const themes = {
 				300: "#595959",
 				200: "#404040",
 				100: "#262626",
-				50: "#0d0d0d",
+				50: "#0d0d0d"
 			},
 			lighter: "#ffffff66",
 			darker: "#00000016",
 			white: "#f8f8f8",
-			black: "#070707",
-			sliderTickColor: "#601bfe", // indigo 500
-			primaryContrast: "#f2f2f2" // gray 900
+			black: "#070707"
 		}
 	}
 };
@@ -1141,11 +1142,11 @@ const mappings = {
 		primary: "orange",
 		info: "orange",
 		secondary: "indigo",
-		tertiary: "lime",
-		success: "teal",
+		tertiary: "teal",
+		success: "lime",
 		warning: "yellow",
-		danger: "pink",
-		error: "pink",
+		danger: "red",
+		error: "red",
 		main: "amber",
 		text: "cyan"
 	},
@@ -1169,15 +1170,15 @@ const mappings = {
 		main: "gray",
 		text: "trueGray",
 		success: "green",
-		warning: "yellow",
+		warning: "orange",
 		error: "red",
 		danger: "red"
 	},
 	"Dark": {
 		main: "gray",
 		text: "trueGray",
-		error: "pink",
-		danger: "pink",
+		error: "red",
+		danger: "red",
 		success: "green",
 		warning: "amber",
 		info: "fuchsia",
