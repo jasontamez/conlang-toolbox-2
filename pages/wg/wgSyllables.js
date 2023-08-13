@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
 	Text,
 	HStack,
 	Box,
 	VStack,
-	Modal
+	TextArea,
+	Center
 } from "native-base";
-import { useWindowDimensions } from "react-native";
+import { Keyboard, useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, MotiView } from "moti";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 import {
-	CloseCircleIcon,
 	EditIcon,
 	EquiprobableIcon,
 	SaveIcon,
-	SharpDropoffIcon
+	SharpDropoffIcon,
+	CloseIcon
 } from "../../components/icons";
-import { RangeSlider, TextAreaSetting, ToggleSwitch } from "../../components/inputTags";
+import { RangeSlider, ToggleSwitch } from "../../components/inputTags";
 import {
 	equalityCheck,
 	setSyllableBoxDropoff,
@@ -31,7 +32,9 @@ import { flipFlop, fromToZero, maybeAnimate } from "../../helpers/motiAnimations
 import { fontSizesInPx } from "../../store/appStateSlice";
 import Button from "../../components/Button";
 import IconButton from "../../components/IconButton";
-
+import FullPageModal from "../../components/FullBodyModal";
+import { useOutletContext } from "react-router-dom";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 const WGSyllables = () => {
 	const {
@@ -44,36 +47,194 @@ const WGSyllables = () => {
 		wordFinal
 	} = useSelector(state => state.wg, equalityCheck);
 	const dispatch = useDispatch();
-	const [modalOpen, setModalOpen] = useState(false);
-	const [modalTitle, setModalTitle] = useState("");
-	const [modalSyllables, setModalSyllables] = useState("");
-	const [modalPropName, setModalPropName] = useState("");
-	const [modalOverrideFlag, setModalOverrideFlag] = useState(false);
-	const [modalOverrideValue, setModalOverrideValue] = useState(0);
-	const [modalTempInfo, setModalTempInfo] = useState("");
 	const [hasNotToggled, setHasNotToggled] = useState(true);
 	const [headerSize, textSize, descSize] = getSizes("md", "sm", "xs");
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
-	const { width } = useWindowDimensions();
-	const oneBox = [
-		"singleWord"
-	];
-	const allBoxes = [
-		"singleWord",
-		"wordInitial",
-		"wordMiddle",
-		"wordFinal"
-	];
-	const SyllableBox = ({
-		title,
-		syllablesValue,
-		propName
-	}) => (
+	const { width, height } = useWindowDimensions();
+	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
+	useEffect(() => {
+		console.log(`height: ${height}`);
+	}, [height])
+	const SyllableBox = ({ title, syllablesValue, propName }) => {
+		const [modalOpen, setModalOpen] = useState(false);
+		const baseHeight = (height - (appHeaderHeight * 1.75) - 8);
+		const bodyHeight = useSharedValue(baseHeight);
+		const topPadding = useSharedValue(0);
+		const toggleOpacity = useSharedValue(1);
+		const toggleHeight = useSharedValue(appHeaderHeight * 3);
+		const handleKeyboardShow = useCallback(({endCoordinates}) => {
+			console.log(endCoordinates.height);
+			bodyHeight.value = withTiming(baseHeight - endCoordinates.height / 2, { duration: 50 });
+			topPadding.value = withTiming(endCoordinates.height / 2 - appHeaderHeight * 0.75, { duration: 50 });
+			toggleOpacity.value = withTiming(0, { duration: 50 });
+			toggleHeight.value = withTiming(0, { duration: 50});
+		}, [baseHeight, bodyHeight, toggleOpacity, toggleHeight])
+		const handleKeyboardHide = useCallback(({endCoordinates}) => {
+			console.log(endCoordinates.height);
+			bodyHeight.value = withTiming(baseHeight - endCoordinates.height / 2, { duration: 50 });
+			topPadding.value = withTiming(endCoordinates.height / 2 - appHeaderHeight * 0.75, { duration: 50 });
+			toggleOpacity.value = withTiming(1, { duration: 50 });
+			toggleHeight.value = withTiming(appHeaderHeight * 3, { duration: 50 });
+		}, [baseHeight, bodyHeight, toggleOpacity, toggleHeight])
+		useEffect(() => {
+			const listener = Keyboard.addListener("keyboardDidShow", handleKeyboardShow);
+			return () => listener.remove();
+		}, [handleKeyboardShow]);
+		useEffect(() => {
+			const listener = Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+			return () => listener.remove();
+		}, [handleKeyboardHide]);
+		const mainAnimatedStyle = useAnimatedStyle(() => ({
+			height: bodyHeight.value,
+			paddingTop: topPadding.value
+		}));
+		const toggleAnimatedStyle = useAnimatedStyle(() => ({
+			opacity: toggleOpacity.value,
+			height: toggleHeight.value,
+			overflow: "hidden"
+		}));
+		const Body = () => {
+			const rows = Math.max(3, syllablesValue.split(/\n/).length);
+			const [modalOverrideFlag, setModalOverrideFlag] = useState(syllableDropoffOverrides[propName] !== null);
+			const [modalOverrideValue, setModalOverrideValue] = useState(syllableDropoffOverrides[propName] !== null ? syllableDropoffOverrides[propName] : syllableBoxDropoff);
+			const [modalTempInfo, setModalTempInfo] = useState(syllablesValue);
+			const saveAndClose = () => {
+				dispatch(setSyllables({
+					syllables: propName,
+					value: modalTempInfo
+				}));
+				dispatch(setSyllableOverride({
+					override: propName,
+					value: modalOverrideFlag ? modalOverrideValue : null
+				}));
+				setModalOpen(false);
+			};
+			return (
+				<GestureHandlerRootView>
+					<Animated.View style={mainAnimatedStyle}>
+						<Center px={5} py={2} alignItems="center" h="full" justifyContent="flex-start">
+							<TextArea
+								defaultValue={syllablesValue}
+								totalLines={rows}
+								onChangeText={(text) => setModalTempInfo(text)}
+								fontSize={descSize}
+								w="full"
+								flexGrow={5}
+								flexShrink={1}
+							/>
+							<Animated.View style={toggleAnimatedStyle}>
+								<ToggleSwitch
+									hProps={{
+										space: 2.5,
+										py: 2,
+										justifyContent: "center",
+										flexWrap: "wrap",
+										width
+									}}
+									vProps={{
+										flexGrow: 0,
+										flexShrink: 0,
+										mr: 0
+									}}
+									label="Use separate dropoff rate"
+									labelSize={textSize}
+									switchState={modalOverrideFlag}
+									switchToggle={() =>  setModalOverrideFlag(!modalOverrideFlag)}
+								/>
+								<AnimatePresence>
+									{modalOverrideFlag &&
+										<MotiView
+											{...fromToZero(
+												{
+													opacity: 1,
+													scaleY: 1
+												},
+												500
+											)}
+											key="modalSlider"
+										>
+											<RangeSlider
+												max={50}
+												minimumLabel={<EquiprobableIcon color="text.50" size={descSize} />}
+												maximumLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
+												value={modalOverrideValue}
+												label="Dropoff rate"
+												onChange={(v) => setModalOverrideValue(v)}
+												PreElement={() => <Text textAlign="center" fontSize={descSize}>Dropoff rate</Text>}
+												showValue={1}
+												ValueContainer={
+													(props) => <Text textAlign="center" fontSize={descSize} color="secondary.50">{props.children}%</Text>
+												}
+												labelWidth={2}
+												xPadding={24}
+												containerProps={{style: {width}, alignItems: "center", justifyContent: "center"}}
+											/>
+										</MotiView>
+									}
+								</AnimatePresence>
+							</Animated.View>
+						</Center>
+					</Animated.View>
+					<HStack
+						w="full"
+						justifyContent="space-between"
+						alignItems="center"
+						px={1.5}
+						flexGrow={0}
+						style={{height: appHeaderHeight}}
+					>
+						<Button
+							m={0}
+							startIcon={<CloseIcon size={textSize} />}
+							onPress={() => setModalOpen(false)}
+							_text={{fontSize: textSize}}
+							scheme="warning"
+						>Cancel</Button>
+						<Button
+							m={0}
+							startIcon={<SaveIcon size={textSize} />}
+							onPress={saveAndClose}
+							_text={{fontSize: textSize}}
+						>Save</Button>
+					</HStack>
+				</GestureHandlerRootView>
+			);
+		};
+		const Header = () => {
+			return (
+				<HStack
+					w="full"
+					justifyContent="center"
+					alignItems="center"
+					px={1.5}
+					bg="primary.500"
+					flexGrow={0}
+					style={{height: appHeaderHeight * 0.75}}
+				>
+					<Text
+						textAlign="center"
+						bold
+						flexGrow={1}
+						flexShrink={1}
+						fontSize={headerSize}
+						color="primary.50"
+					>{title}</Text>
+				</HStack>
+			);
+		};
+		return (
 		<VStack
 			py={2.5}
 			px={2}
 			space={2}
 		>
+			<FullPageModal
+				modalOpen={modalOpen}
+				closeModal={() => setModalOpen(false)}
+				HeaderOverride={() => <Header />}
+				BodyContent={(props) => (<Body {...props} />)}
+				FooterOverride={() => <></>}
+			/>
 			<HStack
 				w="full"
 				alignItems="flex-start"
@@ -119,142 +280,16 @@ const WGSyllables = () => {
 				<IconButton
 					flexShrink={0}
 					alignSelf="center"
-					onPress={() => {
-						setModalTitle(title);
-						setModalSyllables(syllablesValue);
-						setModalTempInfo(syllablesValue);
-						setModalPropName(propName);
-						const override = syllableDropoffOverrides[propName];
-						if(override === null) {
-							setModalOverrideFlag(false);
-							setModalOverrideValue(syllableBoxDropoff);
-						} else {
-							setModalOverrideFlag(true);
-							setModalOverrideValue(override);
-						}
-						setModalOpen(true);
-					}}
+					onPress={() => setModalOpen(true)}
 					p={1}
 					variant="ghost"
 					icon={<EditIcon color="primary.400" size={textSize} />}
 				/>
 			</HStack>
 		</VStack>
-	);
+	)};
 	return (
 		<VStack h="full">
-			<Modal isOpen={modalOpen}>
-				<Modal.Content>
-					<Modal.Header bg="primary.500">
-						<HStack justifyContent="flex-end" alignItems="center" w="full">
-							<Text flex={1} px={3} fontSize={headerSize} color="primary.50" textAlign="left" isTruncated>{modalTitle}</Text>
-							<IconButton
-								icon={<CloseCircleIcon size={headerSize} />}
-								onPress={() => setModalOpen(false)}
-								flexGrow={0}
-								flexShrink={0}
-								scheme="primary"
-							/>
-						</HStack>
-					</Modal.Header>
-					<Modal.Body><GestureHandlerRootView>
-						{// The following abomination is because 1) Refs don't work, 2) State makes your cursor jump and skip in a controlled textarea
-						(multipleSyllableTypes ? allBoxes : oneBox).filter(box => box === modalPropName).map(box => (
-							<Box key={`${box}-editor`}>
-								<TextAreaSetting
-									rows={Math.max(3, modalSyllables.split(/\n/).length)}
-									defaultValue={modalSyllables}
-									onChangeText={(text) => setModalTempInfo(text)}
-									text={null}
-									boxProps={{
-										w: "full",
-										alignItems: "center"
-									}}
-									inputProps={{
-										maxW: "5/6",
-										minW: 32,
-										fontSize: descSize
-									}}
-								/>
-								<ToggleSwitch
-									hProps={{
-										space: 2.5,
-										py: 2,
-										justifyContent: "center",
-										flexWrap: "wrap"
-									}}
-									vProps={{
-										flexGrow: undefined,
-										flexShrink: undefined,
-										mr: 0
-									}}
-									label="Use separate dropoff rate"
-									labelSize={textSize}
-									switchState={modalOverrideFlag}
-									switchToggle={() =>  setModalOverrideFlag(!modalOverrideFlag)}
-								/>
-								<AnimatePresence>
-									{modalOverrideFlag &&
-										<MotiView
-											{...fromToZero(
-												{
-													opacity: 1,
-													maxHeight: emSize * 6,
-													scaleY: 1
-												},
-												500
-											)}
-											key="modalSlider"
-										>
-											<RangeSlider
-												max={50}
-												minimumLabel={<EquiprobableIcon color="text.50" size={descSize} />}
-												maximumLabel={<SharpDropoffIcon color="text.50" size={descSize} />}
-												value={modalOverrideValue}
-												label="Dropoff rate"
-												onChange={(v) => setModalOverrideValue(v)}
-												PreElement={() => <Text textAlign="center" fontSize={descSize}>Dropoff rate</Text>}
-												showValue={1}
-												ValueContainer={
-													(props) => <Text textAlign="center" fontSize={descSize} color="secondary.50">{props.children}%</Text>
-												}
-												labelWidth={2}
-												xPadding={24}
-												modalPaddingInfo={{
-													maxWidth: 580,
-													sizeRatio: 0.9
-												}}
-											/>
-										</MotiView>
-									}
-								</AnimatePresence>
-							</Box>
-						))}
-					</GestureHandlerRootView></Modal.Body>
-					<Modal.Footer>
-						<Button
-							scheme="success"
-							startIcon={<SaveIcon size={textSize} />}
-							_text={{fontSize: textSize}}
-							px={2}
-							py={1}
-							mx={2}
-							my={1.5}
-							onPress={() => {
-								dispatch(setSyllables({
-									syllables: modalPropName,
-									value: modalTempInfo
-								}));
-								dispatch(setSyllableOverride({
-									override: modalPropName,
-									value: modalOverrideFlag ? modalOverrideValue : null
-								}));
-								setModalOpen(false);
-							}}
-						>Save</Button>
-					</Modal.Footer>
-				</Modal.Content>
-			</Modal>
 			<GestureHandlerRootView><ScrollView>
 				<RangeSlider
 					max={50}
