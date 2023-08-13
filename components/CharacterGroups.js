@@ -4,11 +4,9 @@ import {
 	Box,
 	ScrollView,
 	VStack,
-	IconButton,
 	Fab,
 	Modal,
 	useContrastText,
-	Button,
 	Input,
 	useToast,
 	useTheme
@@ -29,6 +27,8 @@ import {
 	TrashIcon,
 	DragIndicatorIcon
 } from "./icons";
+import Button from "./Button";
+import IconButton from "./IconButton";
 import { RangeSlider, TextSetting, ToggleSwitch } from "./inputTags";
 import StandardAlert from "./StandardAlert";
 import doToast from "../helpers/toast";
@@ -309,9 +309,7 @@ const CharGroups = ({
 				setAlertOpen={setDeletingGroup}
 				bodyContent={<Text fontSize={textSize}>Are you sure you want to delete the character group <Text bold>{groupDeletingString}</Text>? This cannot be undone.</Text>}
 				continueText="Yes, Delete It"
-				continueProps={{
-					bg: "danger.500",
-				}}
+				continueProps={{ scheme: "danger" }}
 				continueFunc={() => doDeleteGroup(deletingGroup)}
 				fontSize={textSize}
 			/>
@@ -339,8 +337,9 @@ const CharGroups = ({
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setEditingGroup(false)}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -447,13 +446,13 @@ const CharGroups = ({
 					<Modal.Footer>
 						<HStack justifyContent="space-between" p={1} flexWrap="wrap">
 							<Button
-								startIcon={<TrashIcon color="danger.50" size={textSize} />}
-								bg="danger.500"
+								startIcon={<TrashIcon size={textSize} />}
 								px={2}
 								py={1}
 								mx={1}
 								onPress={() => maybeDeleteGroup(editingGroup)}
 								_text={{fontSize: textSize}}
+								scheme="danger"
 							>Delete</Button>
 							<Button
 								startIcon={<SaveIcon size={textSize} />}
@@ -474,8 +473,9 @@ const CharGroups = ({
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => closeAddGroup()}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -517,14 +517,9 @@ const CharGroups = ({
 									/>
 								</HStack>
 								<Button
-									startIcon={
-										<SuggestLeftIcon
-											size={smallerSize}
-											color={primaryContrast}
-										/>
-									}
+									startIcon={ <SuggestLeftIcon size={smallerSize} /> }
 									py={1}
-									bg="primary.500"
+									scheme="primary"
 									_text={{ fontSize: smallerSize }}
 									_stack={{ space: 0.5 }}
 									onPress={suggestLabel}
@@ -595,8 +590,8 @@ const CharGroups = ({
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1} flexWrap="wrap">
 							<Button
-								startIcon={<AddIcon color="secondary.50" size={textSize} />}
-								bg="secondary.500"
+								startIcon={<AddIcon size={textSize} />}
+								scheme="secondary"
 								px={2}
 								py={1}
 								mx={1}

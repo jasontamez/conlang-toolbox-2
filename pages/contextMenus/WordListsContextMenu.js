@@ -2,15 +2,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from 'react';
 import {
 	Menu,
-	IconButton,
 	VStack,
 	Text,
 	Divider,
 	Modal,
-	Button,
 	useContrastText,
 	HStack
 } from 'native-base';
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 import { CloseCircleIcon, DotsIcon, HelpIcon } from '../../components/icons';
 import { setCenterTheDisplayedWords } from '../../store/wordListsSlice';
 import getSizes from "../../helpers/getSizes";
@@ -46,6 +46,7 @@ const WordListsContextMenu = () => {
 				trigger={(triggerProps) => (
 					<IconButton
 						m="auto"
+						variant="ghost"
 						accessibilityLabel="More options menu"
 						icon={<DotsIcon size={headerSize} />}
 						{...triggerProps}
@@ -103,9 +104,10 @@ const WordListsContextMenu = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={headerSize}>About the Lists</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}
 								variant="ghost"
+								scheme="primary"
 								px={0}
 							/>
 						</HStack>
@@ -174,7 +176,7 @@ const WordListsContextMenu = () => {
 							onPress={() => setInfoModalOpen(false)}
 							py={1}
 							px={2}
-							colorScheme="info"
+							scheme="info"
 							_text={{fontSize: textSize}}
 						>OK</Button>
 					</Modal.Footer>

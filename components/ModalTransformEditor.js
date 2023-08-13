@@ -4,8 +4,6 @@ import {
 	Text,
 	VStack,
 	HStack,
-	IconButton,
-	Button,
 	Modal,
 	useContrastText,
 	useToast
@@ -16,6 +14,8 @@ import {
 	TrashIcon,
 	SaveIcon
 } from './icons';
+import Button from './Button';
+import IconButton from './IconButton';
 import { DropDown, TextSetting } from './inputTags';
 import doToast from '../helpers/toast';
 import getSizes from '../helpers/getSizes';
@@ -107,6 +107,7 @@ const ModalTransformEditingItem = ({
 					placement="top right"
 					bg="lighter"
 					color="text.50"
+					pressedBg="darker"
 					fontSize={textSize}
 					labelFunc={() => directionTexts[modifiedDirection]}
 					onChange={(v) => setModifiedDirection(v)}
@@ -143,10 +144,11 @@ const ModalTransformEditingItem = ({
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Edit Transformation</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={() => endEditingFunc()}
 							flexGrow={0}
 							flexShrink={0}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -185,8 +187,8 @@ const ModalTransformEditingItem = ({
 				<Modal.Footer>
 					<HStack justifyContent="space-between" p={1} flexWrap="wrap">
 						<Button
-							startIcon={<TrashIcon color="danger.50" size={textSize} />}
-							bg="danger.500"
+							startIcon={<TrashIcon size={textSize} />}
+							scheme="danger"
 							px={2}
 							py={1}
 							mx={1}

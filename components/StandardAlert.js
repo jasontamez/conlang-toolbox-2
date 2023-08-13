@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { AlertDialog, Button, useContrastText } from "native-base";
+import { AlertDialog, Button as Btn, useContrastText } from "native-base";
 import { merge } from 'merge-anything';
+import Button from "./Button";
 
 const StandardAlert = ({
 	alertOpen, setAlertOpen,
@@ -51,7 +52,6 @@ const StandardAlert = ({
 		setAlertOpen(false);
 		continueFunc && continueFunc();
 	};
-	const contrastingText = useContrastText((continueProps && continueProps.bg) || "success.50");
 	return (
 		<AlertDialog
 			zIndex={100}
@@ -83,24 +83,25 @@ const StandardAlert = ({
 					borderTopWidth={0}
 					{...(footerProps || {})}
 				>
-					<Button.Group isAttached={!detatchButtons}>
+					<Btn.Group isAttached={!detatchButtons}>
 						{overrideButtons ?
 							overrideButtons.map((B, i) => <B key={`Button ${i}`} leastDestructiveRef={buttonRef} />)
 						:
 							<>
 								<Button
 									bg="darker"
+									color="text.50"
+									pressedBg="lighter"
 									ref={leastDestructiveContinue ? undefined : buttonRef}
-									_text={{color: "text.50", fontSize}}
+									_text={{fontSize}}
 									{...(cancelProps || {})}
 									onPress={() => doCancel()}
 								>
 									{cancelText || "Cancel"}
 								</Button>
 								<Button
-									bg="success.500"
 									ref={leastDestructiveContinue ? buttonRef : undefined}
-									_text={{color: contrastingText, fontSize}}
+									_text={{fontSize}}
 									{...(continueProps || {})}
 									onPress={() => doContinue()}
 								>
@@ -108,7 +109,7 @@ const StandardAlert = ({
 								</Button>
 							</>
 						}
-					</Button.Group>
+					</Btn.Group>
 				</AlertDialog.Footer>
 			</AlertDialog.Content>
 		</AlertDialog>

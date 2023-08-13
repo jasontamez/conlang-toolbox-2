@@ -1,7 +1,7 @@
-import { Button, HStack } from "native-base";
+import { HStack } from "native-base";
 import { useSwipeableItemParams } from "react-native-swipeable-item";
 import { EditIcon, TrashIcon } from "./icons";
-
+import Button from "./Button";
 
 const Underlay = ({left, fontSize, onPress, leaveOpen = false}) => {
 	let props = {
@@ -13,28 +13,30 @@ const Underlay = ({left, fontSize, onPress, leaveOpen = false}) => {
 		props = {
 			...props,
 			buttonProps: {
-				endIcon: <TrashIcon color="danger.400" size={fontSize} />,
-				bg: "danger.900"
+				endIcon: <TrashIcon size={fontSize} />,
+				bg: "danger.900",
+				color: "danger.400",
+				scheme: "danger"
 			},
 			justifyContent: "flex-end",
-			color: "danger.400",
 			text: "Delete"
 		}
 	} else {
 		props = {
 			...props,
 			buttonProps: {
-				startIcon: <EditIcon color="primary.400" size={fontSize} />,
-				bg: "main.900"
+				startIcon: <EditIcon size={fontSize} />,
+				bg: "main.900",
+				color: "primary.400",
+				scheme: "primary"
 			},
 			justifyContent: "flex-start",
-			color: "primary.400",
 			text: "Edit"
 		}
 	}
 	return <UnderlayBase {...props} />;
 };
-const UnderlayBase = ({fontSize, onPress, leaveOpen, buttonProps, justifyContent, color, text}) => {
+const UnderlayBase = ({fontSize, onPress, leaveOpen, buttonProps, justifyContent, text}) => {
 	const { close } = useSwipeableItemParams();
 	return (
 		<HStack alignItems="center" justifyContent={justifyContent} px={2.5} h="full" bg="lighter">
@@ -53,7 +55,6 @@ const UnderlayBase = ({fontSize, onPress, leaveOpen, buttonProps, justifyContent
 				}}
 				_text={{
 					fontSize,
-					color,
 					bold: true
 				}}
 				{...buttonProps}

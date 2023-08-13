@@ -8,9 +8,7 @@ import {
 	FlatList,
 	HStack,
 	Box,
-	IconButton,
 	Menu,
-	Button,
 	Modal,
 	Pressable,
 	useToast,
@@ -39,6 +37,8 @@ import {
 	MinimizeIcon,
 	DragIndicatorIcon
 } from '../components/icons';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 import { MultiAlert } from '../components/StandardAlert';
 import {
 	setTitle,
@@ -418,8 +418,10 @@ const Lex = () => {
 						</HStack>
 					</Pressable>
 					<IconButton
-						icon={<TrashIcon color="danger.500" size={smallerSize} />}
+						icon={<TrashIcon size={smallerSize} />}
+						_icon={{color: "danger.500"}}
 						variant="ghost"
+						scheme="danger"
 						onPress={() => maybeDeleteLexicon(info, title, timeString, lexNumber)}
 					/>
 				</HStack>
@@ -783,9 +785,7 @@ const Lex = () => {
 						properties: {
 							continueText: "Yes",
 							continueFunc: doClearLexicon,
-							continueProps: {
-								bg: "danger.500"
-							},
+							continueProps: { scheme: "danger" },
 							bodyContent: (
 								<Text>This will erase the Title, Description, and every item in the Lexicon. It cannot be undone. Are you sure you want to do this?</Text>
 							)
@@ -796,9 +796,7 @@ const Lex = () => {
 						properties: {
 							continueText: "Yes",
 							continueFunc: destroyingLexicon.func,
-							continueProps: {
-								bg: "danger.500"
-							},
+							continueProps: { scheme: "danger" },
 							bodyContent: (
 								<VStack
 									alignItems="center"
@@ -845,9 +843,8 @@ const Lex = () => {
 											setAlertOpen(false);
 											doSaveNewLexicon();
 										}}
-										bg="primary.500"
+										scheme="primary"
 										_text={{
-											color: primaryContrast,
 											fontSize: largeSize
 										}}
 										px={2.5}
@@ -859,9 +856,8 @@ const Lex = () => {
 												setAlertOpen(false);
 												setSaveLexicon(true);
 											}}
-											bg="secondary.500"
+											scheme="secondary"
 											_text={{
-												color: primaryContrast,
 												fontSize: largeSize
 											}}
 											px={2.5}
@@ -877,6 +873,8 @@ const Lex = () => {
 									}}
 									bg="darker"
 									ref={leastDestructiveRef}
+									color="text.50"
+									_pressed={{bg: "lighter"}}
 									_text={{fontSize: textSize}}
 									px={2}
 									py={1}
@@ -925,9 +923,8 @@ const Lex = () => {
 													setLoadingOverlayOpen(false);
 												});
 											}}
-											bg={`${scheme}.500`}
+											scheme={scheme}
 											_text={{
-												color: `${scheme}.50`,
 												fontSize: smallerSize,
 												textAlign: "center"
 											}}
@@ -943,6 +940,8 @@ const Lex = () => {
 									bg="darker"
 									ref={leastDestructiveRef}
 									_text={{fontSize: textSize}}
+									color="text.50"
+									_pressed={{bg: "lighter"}}
 									px={2}
 									py={1}
 								>Cancel</Button>
@@ -961,9 +960,10 @@ const Lex = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={textSize}>Load Lexicon</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setLoadLexicon(false)}
 								variant="ghost"
+								scheme="primary"
 								px={0}
 							/>
 						</HStack>
@@ -997,12 +997,14 @@ const Lex = () => {
 								_text={{color: "text.50", fontSize: textSize}}
 								p={1}
 								m={2}
+								_pressed={{bg: "darker"}}
 								onPress={() => setLoadLexicon(false)}
 							>Cancel</Button>
 							<Button
-								startIcon={<LoadIcon color="success.50" m={0} size={textSize} />}
+								startIcon={<LoadIcon m={0} size={textSize} />}
 								bg={loadChosen ? "success.500" : "muted.800"}
-								_text={{color: "success.50", fontSize: textSize}}
+								scheme="success"
+								_text={{fontSize: textSize}}
 								p={1}
 								m={2}
 								disabled={!loadChosen}
@@ -1022,7 +1024,8 @@ const Lex = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={textSize}>Save Lexicon</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								scheme="primary"
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setSaveLexicon(false)}
 								variant="ghost"
 								px={0}
@@ -1045,12 +1048,13 @@ const Lex = () => {
 								_text={{color: "text.50", fontSize: textSize}}
 								p={1}
 								m={2}
+								_pressed={{bg: "darker"}}
 								onPress={() => setSaveLexicon(false)}
 							>Cancel</Button>
 							<Button
-								startIcon={<SaveIcon color={primaryContrast} m={0} size={textSize} />}
-								bg="primary.500"
-								_text={{color: primaryContrast, fontSize: textSize}}
+								startIcon={<SaveIcon m={0} size={textSize} />}
+								scheme="primary"
+								_text={{fontSize: textSize}}
 								p={1}
 								m={2}
 								onPress={() => {
@@ -1059,9 +1063,9 @@ const Lex = () => {
 								}}
 							>New Save</Button>
 							<Button
-								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
-								bg="success.500"
-								_text={{color: "success.50", fontSize: textSize}}
+								startIcon={<SaveIcon m={0} size={textSize} />}
+								_text={{fontSize: textSize}}
+								scheme="success"
 								p={1}
 								m={2}
 								disabled={!loadChosen || storedCustomIDs.length === 0}
@@ -1137,10 +1141,10 @@ const Lex = () => {
 						</MotiScrollView>
 					)}
 					<IconButton
-						colorScheme="primary"
+						scheme="primary"
 						variant="solid"
 						icon={minimizedInfo ? <RestoreIcon /> : <MinimizeIcon />}
-						_icon={{color: primaryContrast, size: miniSize}}
+						_icon={{size: miniSize}}
 						onPress={() => {
 							setUsedButton(true);
 							dispatch(setMinimizedInfo(!minimizedInfo));
@@ -1220,8 +1224,7 @@ const Lex = () => {
 							onPress={() => dispatch(toggleSortDir())}
 							icon={sortDir ? <SortUpIcon size={smallerSize} /> : <SortDownIcon size={smallerSize} />}
 							p={1}
-							_icon={{color: "secondary.50"}}
-							bg="secondary.500"
+							scheme="secondary"
 							accessibilityLabel="Change sort direction."
 							flexGrow={0}
 							flexShrink={0}
@@ -1242,8 +1245,8 @@ const Lex = () => {
 									p={1}
 									px={1.5}
 									ml={2}
-									icon={<SettingsIcon color="tertiary.50" name="settings" size={smallerSize} />}
-									bg="tertiary.500"
+									icon={<SettingsIcon name="settings" size={smallerSize} />}
+									scheme="tertiary"
 									flexGrow={0}
 									flexShrink={0}
 									{...props}
@@ -1274,8 +1277,8 @@ const Lex = () => {
 									p={1}
 									px={1.5}
 									ml={2}
-									icon={<LoadSaveIcon color="tertiary.50" size={smallerSize} />}
-									bg="tertiary.500"
+									icon={<LoadSaveIcon size={smallerSize} />}
+									scheme="tertiary"
 									flexGrow={0}
 									flexShrink={0}
 									{...props}
@@ -1429,9 +1432,9 @@ const Lex = () => {
 							<IconButton
 								p={1}
 								m={0.5}
-								icon={<AddIcon size={smallerSize} color="success.50" />}
+								icon={<AddIcon size={smallerSize} />}
 								accessibilityLabel="Add to Lexicon"
-								bg="success.500"
+								scheme="success"
 								onPress={() => addToLexicon()}
 							/>
 						</Box>

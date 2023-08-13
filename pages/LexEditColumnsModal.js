@@ -3,8 +3,6 @@ import {
 	Input,
 	VStack,
 	HStack,
-	IconButton,
-	Button,
 	Text,
 	Modal,
 	useContrastText
@@ -21,6 +19,8 @@ import {
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 import { MultiAlert } from '../components/StandardAlert';
 import getSizes from '../helpers/getSizes';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 
 const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const {columns, maxColumns, disableBlankConfirms} = useSelector((state) => state.lexicon, equalityCheck);
@@ -48,10 +48,10 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 	const AddColumnButton = () => {
 		return newColumns.length === maxColumns ? <></> : (
 			<Button
-				startIcon={<AddCircleIcon color="tertiary.50" m={0} size={smallerSize} />}
-				bg="tertiary.700"
+				startIcon={<AddCircleIcon m={0} size={smallerSize} />}
+				scheme="tertiary"
 				onPress={() => addNewColumnFunc()}
-				_text={{color: "tertiary.50", fontSize: textSize}}
+				_text={{fontSize: textSize}}
 				p={1}
 				m={2}
 			>Add</Button>
@@ -122,9 +122,8 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 		const variation = size === value ? {
 			bg: "primary.600"
 		} : {
-			borderColor: "primary.600",
-			borderWidth: 1,
-			bg: "transparent"
+			variant: "outline",
+			color: "primary.500"
 		};
 		return (
 			<Button
@@ -139,7 +138,9 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				}}
 				px={2}
 				py={1}
-				_text={{color: "primary.50", fontSize: smallerSize}}
+				_text={{fontSize: smallerSize}}
+				scheme="primary"
+				variant="solid"
 				{...variation}
 			>{props.children}</Button>
 		);
@@ -157,6 +158,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 				bg="main.800"
 				key={`${id}-Editable-${i}`}
 				maxW="full"
+				space={2}
 			>
 				<VStack maxW="5/6">
 					<Input
@@ -191,8 +193,8 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 						alignSelf="flex-start"
 						p={1}
 						mt={1}
-						icon={<TrashIcon color="danger.50" size={smallerSize} />}
-						bg="danger.500"
+						icon={<TrashIcon size={smallerSize} />}
+						scheme="danger"
 						onPress={() => maybeDeleteColumn(col, i)}
 					/>
 				</VStack>
@@ -218,9 +220,10 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 								bold
 							>Edit Lexicon Columns</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								p={1}
 								variant="ghost"
+								scheme="primary"
 								onPress={doClose}
 								flexGrow={0}
 								flexShrink={0}
@@ -248,12 +251,11 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 					>
 						<AddColumnButton />
 						<Button
-							startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
-							bg="success.500"
+							startIcon={<SaveIcon m={0} size={textSize} />}
 							onPress={() => {
 								maybeSaveColumns()
 							}}
-							_text={{color: "success.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 						>Save</Button>
@@ -272,9 +274,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 						properties: {
 							continueText: "Yes",
 							continueFunc: () => doDeleteColumn(savedIndex),
-							continueProps: {
-								bg: "danger.500"
-							},
+							continueProps: { scheme: "danger" },
 							bodyContent: "Deleting a column will destroy all data in the Lexicon associated with that column. Are you sure you want to do this?"
 						}
 					},
@@ -291,9 +291,7 @@ const LexiconColumnEditor = ({triggerOpen, clearTrigger}) => {
 							headerContent: "Final Warning",
 							continueFunc: doSaveColumns,
 							continueText: "Yes, I am sure",
-							continueProps: {
-								bg: "danger.500"
-							},
+							continueProps: { scheme: "danger" },
 							bodyContent: "Remember, you will be deleting all data associated with the column" +
 								((columnLabelsToBeDeleted.length > 1)
 									?

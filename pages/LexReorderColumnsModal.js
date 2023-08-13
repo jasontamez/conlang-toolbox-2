@@ -3,8 +3,6 @@ import {
 	Text,
 	VStack,
 	HStack,
-	IconButton,
-	Button,
 	Pressable,
 	Center,
 	Box,
@@ -23,6 +21,8 @@ import {
 } from '../components/icons';
 import { equalityCheck, modifyLexiconColumns } from '../store/lexiconSlice';
 import { fontSizesInPx } from '../store/appStateSlice';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 
 const LexiconColumnReorderingShell = ({triggerOpen, clearTrigger}) => {
 	return (
@@ -97,7 +97,6 @@ const LexiconColumnReorderer = ({doClose}) => {
 							color="text.50"
 							fontSize={textSize}
 							isTruncated={true}
-							lineHeight={lineHeight}
 						>{item.label}</Text>
 					</HStack>
 				</HStack>
@@ -136,10 +135,11 @@ const LexiconColumnReorderer = ({doClose}) => {
 					isTruncated
 				>Reorder Columns</Text>
 				<IconButton
-					icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+					icon={<CloseCircleIcon size={textSize} />}
 					p={1}
 					m={0}
 					variant="ghost"
+					scheme="primary"
 					onPress={() => doClose()}
 				/>
 			</HStack>
@@ -155,7 +155,7 @@ const LexiconColumnReorderer = ({doClose}) => {
 						marginTop: 5,
 						marginBottom: 5,
 						width: minWidth,
-						maxHeight: ((rowHeight * 1.5) * 10) + 10 // ten rows
+						maxHeight: ((rowHeight * 1.5) * 10) + 10 // ten rows + margins
 					}}
 				>
 					<DraggableFlatList
@@ -176,11 +176,10 @@ const LexiconColumnReorderer = ({doClose}) => {
 				borderBottomRadius="lg"
 			>
 				<Button
-					startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
-					bg="success.500"
+					startIcon={<SaveIcon m={0} size={textSize} />}
 					disabled={newColumns.length === 0}
 					onPress={() => doSaveColumns()}
-					_text={{color: "success.50", fontSize: textSize}}
+					_text={{fontSize: textSize}}
 					px={1}
 					py={0.5}
 					mr={2}

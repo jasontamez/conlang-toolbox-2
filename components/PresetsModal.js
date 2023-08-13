@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	Text,
 	HStack,
-	IconButton,
-	Button,
 	Modal,
 	useContrastText,
 	Radio,
 	useToast
 } from 'native-base';
 
+import Button from './Button';
+import IconButton from './IconButton';
 import { CloseCircleIcon, LoadIcon } from './icons';
 import StandardAlert from './StandardAlert';
 import doToast from '../helpers/toast';
@@ -80,11 +80,12 @@ const PresetsModal = ({
 							bold
 						>Load Preset</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							icon={<CloseCircleIcon size={textSize} />}
 							p={1}
 							m={0}
 							variant="ghost"
 							onPress={() => setModalOpen(false)}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -116,16 +117,18 @@ const PresetsModal = ({
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
 						<Button
 							bg="darker"
+							color="text.50"
+							pressedBg="lighter"
 							onPress={() => setModalOpen(false)}
-							_text={{color: "text.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 						>Cancel</Button>
 						<Button
-							startIcon={<LoadIcon color="tertiary.50" size={textSize} m={0} />}
-							bg="tertiary.500"
+							startIcon={<LoadIcon size={textSize} m={0} />}
+							scheme="tertiary"
 							onPress={() => maybeLoadPreset()}
-							_text={{color: "tertiary.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 						>Load</Button>

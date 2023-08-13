@@ -1,9 +1,11 @@
-import { Box, Button, IconButton, Text, VStack, Pressable, HStack, Modal, useContrastText, useToast } from "native-base";
+import { Box, Text, VStack, Pressable, HStack, Modal, useContrastText, useToast } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
 import debounce from '../../helpers/debounce';
 import uuidv4 from '../../helpers/uuidv4';
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 import { ResettableTextAreaSetting, ResettableTextSetting } from '../../components/inputTags';
 import {
 	setTitle,
@@ -220,32 +222,28 @@ const Settings = () => {
 			info: async () => doText(msInfo),
 			extension: "txt",
 			encoding: "text/plain",
-			bg: "secondary.500",
-			color: "secondary.50"
+			scheme: "secondary"
 		},
 		{
 			text: "MarkDown Text",
 			info: async () => doText(msInfo, true),
 			extension: "md",
 			encoding: "text/markdown",
-			bg: "tertiary.500",
-			color: "tertiary.50"
+			scheme: "tertiary"
 		},
 		{
 			text: "JSON file",
 			info: async () => doJSON(msInfo),
 			extension: "json",
 			encoding: "text/json",
-			bg: "secondary.500",
-			color: "secondary.50"
+			scheme: "secondary"
 		},
 		{
 			text: "Docx Document",
 			info: async () => doDocx(msInfo),
 			extension: "docx",
 			encoding: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-			bg: "tertiary.500",
-			color: "tertiary.50",
+			scheme: "tertiary",
 			isBase64: true
 		}
 	];
@@ -256,7 +254,7 @@ const Settings = () => {
 			<Pressable
 				onPress={onPress}
 				mx={4}
-				_pressed={{ opacity: 50 }}
+				_pressed={{ opacity: 50, bg: "primary.400" }}
 			>
 				<HStack
 					bg={bg}
@@ -320,9 +318,7 @@ const Settings = () => {
 							properties: {
 								continueText: "Yes",
 								continueFunc: doClearMS,
-								continueProps: {
-									bg: "danger.500"
-								},
+								continueProps: { scheme: "danger" },
 								bodyContent: "This will erase the Title, Description, every text box in the MorphoSyntax, and reset everything else to its default value. This cannot be undone. Are you sure you want to continue?"
 							}
 						},
@@ -331,9 +327,7 @@ const Settings = () => {
 							properties: {
 								continueText: "Yes",
 								continueFunc: doLoadMS,
-								continueProps: {
-									bg: "danger.500"
-								},
+								continueProps: { scheme: "danger" },
 								bodyContent: "This will overwrite the current Title, Description, and everything else in the MorphoSyntax. It cannot be undone. Are you sure you want to continue?"
 							}
 						},
@@ -342,9 +336,7 @@ const Settings = () => {
 							properties: {
 								continueText: "Yes",
 								continueFunc: destroyingMS.func,
-								continueProps: {
-									bg: "danger.500"
-								},
+								continueProps: { scheme: "danger" },
 								bodyContent: (
 									<VStack
 										alignItems="center"
@@ -394,11 +386,8 @@ const Settings = () => {
 													setAlertOpen(false);
 													doSaveNewMS();
 												}}
-												bg="primary.500"
-												_text={{
-													color: primaryContrast,
-													fontSize: largerSize
-												}}
+												scheme="primary"
+												_text={{ fontSize: largerSize }}
 												px={2.5}
 												py={1.5}
 											>New Save</Button>
@@ -408,11 +397,8 @@ const Settings = () => {
 														setAlertOpen(false);
 														setOperation(1);
 													}}
-													bg="secondary.500"
-													_text={{
-														color: primaryContrast,
-														fontSize: largerSize
-													}}
+													scheme="secondary"
+													_text={{ fontSize: largerSize }}
 													px={2.5}
 													py={1.5}
 												>Overwrite Previous Save</Button>
@@ -426,6 +412,8 @@ const Settings = () => {
 											setAlertOpen(false);
 										}}
 										bg="darker"
+										pressedBg="lighter"
+										color="text.50"
 										ref={leastDestructiveRef}
 										_text={{fontSize: textSize}}
 										px={2}
@@ -453,7 +441,7 @@ const Settings = () => {
 										w="full"
 										space={3}
 									>
-										{exportButtons.map(({text, info, extension, encoding, bg, color, isBase64 = false}) => (
+										{exportButtons.map(({text, info, extension, encoding, scheme, isBase64 = false}) => (
 											<Button
 												key={`button - ${text}`}
 												onPress={async () => {
@@ -478,9 +466,8 @@ const Settings = () => {
 														});
 													});
 												}}
-												bg={bg}
+												scheme={scheme}
 												_text={{
-													color,
 													fontSize: inputSize,
 													textAlign: "center"
 												}}
@@ -496,6 +483,8 @@ const Settings = () => {
 											setAlertOpen(false);
 										}}
 										bg="darker"
+										color="text.50"
+										pressedBg="lighter"
 										ref={leastDestructiveRef}
 										_text={{fontSize: textSize}}
 										px={2}
@@ -516,9 +505,10 @@ const Settings = () => {
 							<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 								<Text color={primaryContrast} fontSize={textSize}>{operation < 0 ? "Load" : "Save"} MorphoSyntax</Text>
 								<IconButton
-									icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+									icon={<CloseCircleIcon size={textSize} />}
 									onPress={() => setOperation(0)}
 									variant="ghost"
+									scheme="primary"
 									px={0}
 								/>
 							</HStack>
@@ -562,9 +552,10 @@ const Settings = () => {
 											</HStack>
 										</Pressable>
 										<IconButton
-											icon={<TrashIcon color="danger.500" size={inputSize} />}
+											icon={<TrashIcon size={inputSize} />}
 											variant="ghost"
 											onPress={() => maybeDeleteMS(info, title)}
+											scheme="danger"
 										/>
 									</HStack>
 								);
@@ -580,7 +571,9 @@ const Settings = () => {
 							>
 								<Button
 									bg="lighter"
-									_text={{color: "text.50", fontSize: textSize}}
+									color="text.50"
+									pressedBg="darker"
+									_text={{fontSize: textSize}}
 									p={1}
 									m={2}
 									onPress={() => setOperation(0)}
@@ -588,9 +581,9 @@ const Settings = () => {
 								{ operation < 0 ? [
 									<Button
 										key="load1"
-										startIcon={<LoadIcon color="success.50" m={0} size={textSize} />}
+										startIcon={<LoadIcon m={0} size={textSize} />}
 										bg={chosenSave ? "success.500" : "muted.800"}
-										_text={{color: "success.50", fontSize: textSize}}
+										_text={{fontSize: textSize}}
 										p={1}
 										m={2}
 										disabled={!chosenSave}
@@ -602,9 +595,9 @@ const Settings = () => {
 								] : [
 									<Button
 										key="save1"
-										startIcon={<SaveIcon color={primaryContrast} m={0} size={textSize} />}
-										bg="primary.500"
-										_text={{color: primaryContrast, fontSize: textSize}}
+										startIcon={<SaveIcon m={0} size={textSize} />}
+										scheme="primary"
+										_text={{fontSize: textSize}}
 										p={1}
 										m={2}
 										onPress={() => {
@@ -614,9 +607,8 @@ const Settings = () => {
 									>New Save</Button>,
 									<Button
 										key="save2"
-										startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
-										bg="success.500"
-										_text={{color: "success.50", fontSize: textSize}}
+										startIcon={<SaveIcon m={0} size={textSize} />}
+										_text={{fontSize: textSize}}
 										p={1}
 										m={2}
 										disabled={!chosenSave || storedCustomIDs.length === 0}

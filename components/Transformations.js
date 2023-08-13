@@ -3,11 +3,9 @@ import {
 	HStack,
 	Box,
 	VStack,
-	IconButton,
 	Fab,
 	Modal,
 	useContrastText,
-	Button,
 	useToast
 } from "native-base";
 import React, { useEffect, useRef, useState, useCallback } from "react";
@@ -22,6 +20,8 @@ import {
 	CloseCircleIcon,
 	DragIndicatorIcon
 } from "./icons";
+import Button from "./Button";
+import IconButton from "./IconButton";
 import { DropDown, TextSetting } from "./inputTags";
 import StandardAlert from "./StandardAlert";
 import doToast from "../helpers/toast";
@@ -300,6 +300,7 @@ const Transformations = ({
 					placement="top right"
 					bg="lighter"
 					color="text.50"
+					pressedBg="darker"
 					fontSize={textSize}
 					labelFunc={labelFunc}
 					onChange={onChange}
@@ -337,9 +338,7 @@ const Transformations = ({
 					<Text fontSize={textSize}>Are you sure you want to delete the transform <Text bold>{transformDeleteString}</Text>? This cannot be undone.</Text>
 				}
 				continueText="Yes, Delete It"
-				continueProps={{
-					bg: "danger.500",
-				}}
+				continueProps={{ scheme: "danger" }}
 				continueFunc={() => doDeleteTransform(deletingTransform)}
 				fontSize={textSize}
 			/>
@@ -373,10 +372,11 @@ const Transformations = ({
 						<HStack justifyContent="flex-end" alignItems="center">
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Add Transform</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => closeAddTransform()}
 								flexGrow={0}
 								flexShrink={0}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -415,9 +415,9 @@ const Transformations = ({
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1} flexWrap="wrap">
 							<Button
-								startIcon={<AddIcon color="secondary.50" size={textSize} />}
+								startIcon={<AddIcon size={textSize} />}
 								_text={{fontSize: textSize}}
-								bg="secondary.500"
+								scheme="secondary"
 								px={2}
 								py={1}
 								mx={1}

@@ -3,8 +3,6 @@ import {
 	Text,
 	HStack,
 	Spinner,
-	Button,
-	IconButton,
 	useContrastText,
 	Modal,
 	Pressable,
@@ -40,6 +38,8 @@ import {
 	SaveIcon,
 	SortEitherIcon
 } from "../../components/icons";
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 import uuidv4 from '../../helpers/uuidv4';
 import calculateCharacterGroupReferenceRegex from "../../helpers/calculateCharacterGroupReferenceRegex";
 import { fontSizesInPx } from "../../store/appStateSlice";
@@ -151,7 +151,6 @@ const WGOutput = () => {
 	const toast = useToast();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
-	const tertiaryContrast = useContrastText("tertiary.500");
 	const saveToLexInitialRef = useRef(null);
 	const choosingWhatToSaveInitialRef = useRef(null);
 	const arrowLR = "⟶";
@@ -256,8 +255,9 @@ const WGOutput = () => {
 					<IconButton
 						alignSelf="flex-end"
 						onPress={() => toast.closeAll()}
-						bg="transparent"
-						icon={<CloseIcon color="success.50" size={descSize} />}
+						variant="ghost"
+						scheme="success"
+						icon={<CloseIcon size={descSize} />}
 						p={1}
 						m={0}
 					/>
@@ -274,7 +274,7 @@ const WGOutput = () => {
 						px={2}
 						py={1}
 						mb={1}
-						_text={{color: "success.50"}}
+						scheme="success"
 						onPress={() => {
 							navigate("/lex");
 							toast.closeAll();
@@ -1257,6 +1257,7 @@ const WGOutput = () => {
 					({leastDestructiveRef}) => <Button
 						onPress={() => setAlertCannotEvolve(false)}
 						ref={leastDestructiveRef}
+						scheme="info"
 					>Ok</Button>
 				]}
 			/>
@@ -1268,12 +1269,7 @@ const WGOutput = () => {
 					bg: "error.500"
 				}}
 				bodyContent="There is nothing to save."
-				continueProps={{
-					bg: "danger.500",
-					_text: {
-						color: "danger.50"
-					}
-				}}
+				continueProps={{ scheme: "danger" }}
 				continueFunc={() => {
 					setSavingToLexicon(false);
 					setWordsToSave({});
@@ -1291,8 +1287,9 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setOpenSettings(false)}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -1361,8 +1358,9 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => toggleSaveToLex(false)}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -1389,6 +1387,7 @@ const WGOutput = () => {
 								px={2}
 								py={1}
 								onPress={() => toggleSaveToLex(false)}
+								scheme="primary"
 								ref={choosingWhatToSaveInitialRef}
 							>Cancel</Button>
 							<Button
@@ -1410,7 +1409,8 @@ const WGOutput = () => {
 							<IconButton
 								flex={0}
 								mr={3}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								scheme="primary"
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setChooseWhereToSaveInLex(false)}
 							/>
 						</HStack>
@@ -1432,7 +1432,6 @@ const WGOutput = () => {
 								<DropDown
 									fontSize={textSize}
 									labelFunc={() => whereToSaveInLex.label}
-									color={secondaryContrast}
 									onChange={(v) => setWhereToSaveInLex(v)}
 									defaultValue={whereToSaveInLex}
 									title="Output Display:"
@@ -1448,7 +1447,6 @@ const WGOutput = () => {
 										<SortEitherIcon
 											mx={1}
 											size={descSize}
-											color={secondaryContrast}
 											flexGrow={0}
 											flexShrink={0}
 										/>
@@ -1476,7 +1474,7 @@ const WGOutput = () => {
 								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
-								colorScheme="danger"
+								scheme="danger"
 								onPress={() => {
 									setChooseWhereToSaveInLex(false);
 									setSavingToLexicon(false);
@@ -1485,9 +1483,11 @@ const WGOutput = () => {
 								}}
 							>Quit Saving</Button>
 							<Button
-								startIcon={<CloseCircleIcon color="text.50" size={textSize} />}
+								startIcon={<CloseCircleIcon size={textSize} />}
 								bg="darker"
-								_text={{ color: "text.50", fontSize: textSize }}
+								_text={{ fontSize: textSize }}
+								color="text.50"
+								scheme="primary"
 								px={2}
 								py={1}
 								onPress={() => setChooseWhereToSaveInLex(false)}
@@ -1547,8 +1547,7 @@ const WGOutput = () => {
 						defaultValue={outputStyle}
 						title="Display:"
 						options={outputStyles}
-						bg="tertiary.500"
-						color={tertiaryContrast}
+						scheme="tertiary"
 					/>
 					<Button
 						_text={{
@@ -1559,7 +1558,7 @@ const WGOutput = () => {
 						pr={4}
 						py={1.5}
 						endIcon={<GenerateIcon ml={1} size={largeSize} />}
-						colorScheme="primary"
+						scheme="primary"
 						onPress={() => {
 							if(nextAnimations) {
 								return;
@@ -1582,7 +1581,7 @@ const WGOutput = () => {
 					<HStack flexWrap="wrap">
 						<AnimatePresence>
 							<IconButton
-								colorScheme="secondary"
+								scheme="secondary"
 								variant="solid"
 								icon={<GearIcon size={textSize} />}
 								px={3.5}
@@ -1592,7 +1591,7 @@ const WGOutput = () => {
 								key="settingsGearIcon"
 							/>
 							<IconButton
-								colorScheme="secondary"
+								scheme="secondary"
 								variant="solid"
 								icon={<CopyIcon size={textSize} />}
 								px={3.5}
@@ -1636,7 +1635,7 @@ const WGOutput = () => {
 										}}
 									>
 										<IconButton
-											colorScheme="secondary"
+											scheme="secondary"
 											variant="solid"
 											icon={<SaveIcon size={textSize} />}
 											px={3.5}

@@ -1,8 +1,6 @@
 import {
 	Box,
-	Button,
 	HStack,
-	IconButton,
 	Modal,
 	Text,
 	useContrastText,
@@ -22,6 +20,8 @@ import getSizes from '../helpers/getSizes';
 import { flipFlop, maybeAnimate } from '../helpers/motiAnimations';
 import { fontSizesInPx } from '../store/appStateSlice';
 import uuidv4 from '../helpers/uuidv4';
+import Button from './Button';
+import IconButton from './IconButton';
 
 const SaveCustomInfoModal = ({
 	modalOpen,
@@ -165,11 +165,12 @@ const SaveCustomInfoModal = ({
 							bold
 						>Save Custom Info</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							icon={<CloseCircleIcon size={textSize} />}
 							p={1}
 							m={0}
 							variant="ghost"
 							onPress={closeModal}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -266,8 +267,7 @@ const SaveCustomInfoModal = ({
 										label: storedCustomInfo[id]
 									};
 								})}
-								bg="tertiary.500"
-								color="tertiary.50"
+								scheme="tertiary"
 							/>
 						</MotiView>
 					}
@@ -276,8 +276,10 @@ const SaveCustomInfoModal = ({
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap" px={2} py={1}>
 						<Button
 							bg="darker"
+							pressedBg="lighter"
+							color="text.50"
 							onPress={closeModal}
-							_text={{color: primaryContrast, fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							py={1}
 							px={2}
 						>Cancel</Button>

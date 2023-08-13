@@ -4,13 +4,13 @@ import {
 	HStack,
 	Box,
 	ScrollView,
-	Button,
 	useToast
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import debounce from '../../helpers/debounce';
+import Button from "../../components/Button";
 import {
 	TextSetting,
 	ToggleSwitch,
@@ -219,19 +219,19 @@ const WGSettings = () => {
 				thisPropDoesNothingIJustNeedToUseThisVariable={resetCounter}
 			>
 				<InfoButton
-					colorScheme="primary"
+					scheme="primary"
 					onPress={() => maybeLoadPreset()}
 				>Load a Preset</InfoButton>
 				<InfoButton
-					colorScheme="danger"
+					scheme="danger"
 					onPress={() => maybeClearEverything()}
 				>Reset All Fields</InfoButton>
 				<InfoButton
-					colorScheme="secondary"
+					scheme="secondary"
 					onPress={() => setOpenLoadCustomInfoModal(true)}
 				>Load Saved Info</InfoButton>
 				<InfoButton
-					colorScheme="tertiary"
+					scheme="tertiary"
 					onPress={() => maybeSaveInfo()}
 				>Save Current Info</InfoButton>
 			</HStack>

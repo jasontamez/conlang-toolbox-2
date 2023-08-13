@@ -4,8 +4,6 @@ import {
 	Text,
 	HStack,
 	Spinner,
-	Button,
-	IconButton,
 	Pressable,
 	useContrastText,
 	Modal,
@@ -57,6 +55,8 @@ import { DropDown, RangeSlider, ToggleSwitch } from "../../components/inputTags"
 import { addMultipleItemsAsColumn } from "../../store/lexiconSlice";
 import doToast from "../../helpers/toast";
 import getSizes from "../../helpers/getSizes";
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 
 const WGOutput = () => {
 	const {
@@ -132,7 +132,6 @@ const WGOutput = () => {
 	const toast = useToast();
 	const primaryContrast = useContrastText("primary.500");
 	const secondaryContrast = useContrastText("secondary.500");
-	const tertiaryContrast = useContrastText("tertiary.500");
 	const saveToLexRef = useRef(null);
 
 	const loadingOpacity = useSharedValue(0);
@@ -977,12 +976,7 @@ const WGOutput = () => {
 					bg: "error.500"
 				}}
 				bodyContent="There is nothing to save."
-				continueProps={{
-					bg: "danger.500",
-					_text: {
-						color: "danger.50"
-					}
-				}}
+				continueProps={{ scheme: "danger" }}
 				continueFunc={() => {
 					setSavingToLexicon(false);
 					setWordsToSave({});
@@ -1176,7 +1170,6 @@ const WGOutput = () => {
 								<DropDown
 									fontSize={textSize}
 									labelFunc={() => whereToSaveInLex.label}
-									color={secondaryContrast}
 									onChange={(v) => setWhereToSaveInLex(v)}
 									defaultValue={whereToSaveInLex}
 									title="Choose a Column:"
@@ -1192,7 +1185,6 @@ const WGOutput = () => {
 										<SortEitherIcon
 											mx={1}
 											size={descSize}
-											color={secondaryContrast}
 											flexGrow={0}
 											flexShrink={0}
 										/>
@@ -1220,7 +1212,7 @@ const WGOutput = () => {
 								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
-								colorScheme="danger"
+								scheme="danger"
 								onPress={() => {
 									setChooseWhereToSaveInLex(false);
 									setSavingToLexicon(false);
@@ -1291,8 +1283,7 @@ const WGOutput = () => {
 						defaultValue={output}
 						title="Display:"
 						options={outputOptions}
-						bg="tertiary.500"
-						color={tertiaryContrast}
+						scheme="tertiary"
 					/>
 					<Button
 						_text={{
@@ -1307,7 +1298,7 @@ const WGOutput = () => {
 						:
 							<GenerateIcon ml={1} size={largeSize} />
 						}
-						colorScheme={savingToLexicon ? "success" : "primary"}
+						scheme={savingToLexicon ? "success" : "primary"}
 						onPress={() => {
 							if(nextAnimations) {
 								return;
@@ -1338,7 +1329,7 @@ const WGOutput = () => {
 				>
 					<HStack flexWrap="wrap">
 						<IconButton
-							colorScheme="secondary"
+							scheme="secondary"
 							variant="solid"
 							icon={<GearIcon size={textSize} />}
 							px={3.5}
@@ -1347,7 +1338,7 @@ const WGOutput = () => {
 							onPress={() => setOpenSettings(true)}
 						/>
 						<IconButton
-							colorScheme="secondary"
+							scheme="secondary"
 							variant="solid"
 							icon={<CopyIcon size={textSize} />}
 							px={3.5}
@@ -1390,7 +1381,7 @@ const WGOutput = () => {
 									}}
 								>
 									<IconButton
-										colorScheme="secondary"
+										scheme="secondary"
 										variant="solid"
 										icon={<SaveIcon size={textSize} />}
 										px={3.5}

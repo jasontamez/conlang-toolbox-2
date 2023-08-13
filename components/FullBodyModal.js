@@ -2,8 +2,6 @@ import {
 //	Modal as NBModal,
 	HStack,
 	Text,
-	IconButton,
-	Button,
 	Center,
 	Spinner,
 	ScrollView,
@@ -17,6 +15,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseCircleIcon, OkIcon } from './icons';
+import Button from './Button';
+import IconButton from './IconButton';
 
 // <FullPageModal
 //    modalOpen={boolean} - true when modal is open
@@ -120,9 +120,10 @@ const FullPageModal = ({
 								color="primary.50"
 							>{modalTitle}</Text>
 							<IconButton
-								icon={<CloseCircleIcon color="primary.50" size={headerTextSize || textSize} />}
+								icon={<CloseCircleIcon size={headerTextSize || textSize} />}
 								onPress={closeModal}
 								variant="ghost"
+								scheme="primary"
 								flexGrow={0}
 								flexShrink={0}
 								px={0}
@@ -154,8 +155,7 @@ const FullPageModal = ({
 								startIcon={<OkIcon size={footerTextSize || textSize} />}
 								onPress={closeModal}
 								_text={{fontSize: footerTextSize || textSize}}
-								bg="primary.500"
-								color="primary.50"
+								scheme="primary"
 							>Done</Button>
 						</HStack>
 					:

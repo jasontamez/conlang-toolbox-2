@@ -1,7 +1,6 @@
 import {
 	Box,
 	Text,
-	Button,
 	HStack,
 	Checkbox,
 	VStack,
@@ -12,6 +11,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import getSizes from "../../helpers/getSizes";
+import Button from '../../components/Button';
 import { InfoIcon } from "../../components/icons";
 import FullPageModal from '../../components/FullBodyModal';
 import { fontSizesInPx } from '../../store/appStateSlice';
@@ -84,14 +84,15 @@ export const P = (props) => {
 		noDot = false
 	} = props;
 	const { textSize } = textProps();
+	const color = ((indent % 2) ? "secondary" : "tertiary") + ".500";
 	return (
 		<HStack
-			mt={top === 2 ? 6 : top ? 2 : 0}
+			mt={top === 2 ? 6 : (top ? 2 : 0)}
 			ml={indent * 4}
 			alignItems="flex-start"
 			justifyContent="flex-start"
 		>
-			{noDot || <Text fontSize={textSize} lineHeight={lineHeights[textSize]}>{`\u25CF `}</Text>}
+			{noDot || <Text fontSize={textSize} color={color} lineHeight={lineHeights[textSize]}>{`\u25CF `}</Text>}
 			{children}
 		</HStack>
 	);
@@ -137,7 +138,7 @@ export const Modal = (props) => {
 				py={1}
 				px={2}
 				ml={4}
-				colorScheme="primary"
+				scheme="primary"
 				size="sm"
 				startIcon={<InfoIcon size={smallerSize} />}
 				onPress={() => setOpen(true)}

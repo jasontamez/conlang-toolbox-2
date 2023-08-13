@@ -5,10 +5,8 @@ import {
 	Modal,
 	useContrastText,
 	HStack,
-	IconButton,
 	Divider,
 	Box,
-	Button,
 	Center,
 	useToast
 } from 'native-base';
@@ -26,6 +24,8 @@ import {
 	EditIcon,
 	TrashIcon
 } from '../../components/icons';
+import Button from '../../components/Button';;
+import IconButton from '../../components/IconButton';
 import getSizes from '../../helpers/getSizes';
 import doToast from "../../helpers/toast";
 import { copyCharacterGroupsFromElsewhere } from '../../store/wgSlice';
@@ -401,6 +401,7 @@ const WGContextMenu = () => {
 						//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
 						setCopyModalOpen(true);
 					}}
+					variant="ghost"
 				/>
 			)}
 			<Modal isOpen={copyModalOpen} closeOnOverlayClick={true}>
@@ -429,7 +430,7 @@ const WGContextMenu = () => {
 								onPress={() => setCopyModalOpen(false)}
 								py={1}
 								px={2}
-								colorScheme="warning"
+								scheme="warning"
 								_text={{fontSize: textSize}}
 							>Cancel</Button>
 							<Button
@@ -445,7 +446,7 @@ const WGContextMenu = () => {
 								}}
 								py={1}
 								px={2}
-								colorScheme="success"
+								scheme="success"
 								_text={{fontSize: textSize}}
 							>Copy</Button>
 						</HStack>
@@ -457,10 +458,13 @@ const WGContextMenu = () => {
 				flexGrow={0}
 				flexShrink={0}
 				icon={<InfoIcon size={textSize} />}
+				color="text.50"
 				onPress={() => {
 					//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
 					setInfoModalOpen(true);
 				}}
+				variant="ghost"
+				scheme="primary"
 			/>
 			<Modal isOpen={infoModalOpen} closeOnOverlayClick={true}>
 				<Modal.Content>
@@ -472,9 +476,10 @@ const WGContextMenu = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={headerSize}>{infoModalTitle}</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}
 								variant="ghost"
+								scheme="primary"
 								px={0}
 							/>
 						</HStack>
@@ -485,7 +490,7 @@ const WGContextMenu = () => {
 							onPress={() => setInfoModalOpen(false)}
 							py={1}
 							px={2}
-							colorScheme="info"
+							scheme="info"
 							_text={{fontSize: textSize}}
 						>OK</Button>
 					</Modal.Footer>

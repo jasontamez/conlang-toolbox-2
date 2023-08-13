@@ -8,10 +8,8 @@ import {
 	Modal,
 	VStack,
 	Box,
-	Button,
 	useToast,
 	useContrastText,
-	IconButton,
 	Input
 } from 'native-base';
 
@@ -20,6 +18,8 @@ import {
 	DotsIcon,
 	SaveIcon
 } from '../../components/icons';
+import IconButton from '../../components/IconButton';
+import Button from '../../components/Button';
 import {
 	setDisableBlankConfirms,
 	setMaxColumns,
@@ -90,7 +90,8 @@ const LexiconContextMenu = () => {
 						accessibilityLabel="More options menu"
 						flexGrow={0}
 						flexShrink={0}
-						icon={<DotsIcon size={smallerSize} />}
+						icon={<DotsIcon size={smallerSize} color="text.50" />}
+						variant="ghost"
 						{...triggerProps}
 					/>
 				)}
@@ -178,9 +179,10 @@ const LexiconContextMenu = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={textSize}>Set Max Columns</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setColumnsRangeOpen(false)}
 								variant="ghost"
+								scheme="primary"
 								px={0}
 							/>
 						</HStack>
@@ -216,15 +218,16 @@ const LexiconContextMenu = () => {
 						>
 							<Button
 								bg="darker"
+								_pressed={{bg: "lighter"}}
 								_text={{color: "text.50", fontSize: textSize}}
 								p={1}
 								m={2}
 								onPress={() => setColumnsRangeOpen(false)}
 							>Cancel</Button>
 							<Button
-								startIcon={<SaveIcon color="success.50" m={0} size={textSize} />}
-								bg="success.500"
-								_text={{color: "success.50", fontSize: textSize}}
+								startIcon={<SaveIcon m={0} size={textSize} />}
+								scheme="success"
+								_text={{fontSize: textSize}}
 								p={1}
 								m={2}
 								onPress={() => {

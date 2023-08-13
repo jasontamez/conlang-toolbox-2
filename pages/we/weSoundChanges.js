@@ -3,11 +3,9 @@ import {
 	HStack,
 	Box,
 	VStack,
-	IconButton,
 	Fab,
 	Modal,
 	useContrastText,
-	Button,
 	useToast
 } from "native-base";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -25,6 +23,8 @@ import {
 import { TextSetting } from "../../components/inputTags";
 import StandardAlert from "../../components/StandardAlert";
 import uuidv4 from '../../helpers/uuidv4';
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 import {
 	addSoundChange,
 	deleteSoundChange,
@@ -350,9 +350,7 @@ const WESoundChanges = () => {
 				setAlertOpen={setDeletingSoundChange}
 				bodyContent={<Text fontSize={textSize}>Are you sure you want to delete the sound change <Text bold>{soundChangeDeletingString}</Text>? This cannot be undone.</Text>}
 				continueText="Yes, Delete It"
-				continueProps={{
-					bg: "danger.500",
-				}}
+				continueProps={{ scheme: "danger" }}
 				continueFunc={() => doDeleteSoundChange(deletingSoundChange)}
 				fontSize={textSize}
 			/>
@@ -379,8 +377,9 @@ const WESoundChanges = () => {
 							<Text flex={1} px={3} fontSize={textSize} color={primaryContrast} textAlign="left">Edit Sound Change</Text>
 							<IconButton
 								flexGrow={0}
+								scheme="primary"
 								flexShrink={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize}  />}
+								icon={<CloseCircleIcon  size={textSize}  />}
 								onPress={() => setEditingSoundChange(false)}
 							/>
 						</HStack>
@@ -437,8 +436,8 @@ const WESoundChanges = () => {
 					<Modal.Footer>
 						<HStack justifyContent="space-between" p={1} flexWrap="wrap">
 							<Button
-								startIcon={<TrashIcon color={dangerContrast} size={textSize} />}
-								bg="danger.500"
+								startIcon={<TrashIcon size={textSize} />}
+								scheme="danger"
 								px={2}
 								py={1}
 								mx={1}
@@ -464,7 +463,8 @@ const WESoundChanges = () => {
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								scheme="primary"
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => closeAddSoundChange()}
 							/>
 						</HStack>
@@ -516,8 +516,8 @@ const WESoundChanges = () => {
 					<Modal.Footer>
 						<HStack justifyContent="flex-end" p={1} flexWrap="wrap">
 							<Button
-								startIcon={<AddIcon color={secondaryContrast} size={textSize} />}
-								bg="secondary.500"
+								startIcon={<AddIcon size={textSize} />}
+								scheme="secondary"
 								px={2}
 								py={1}
 								mx={1}

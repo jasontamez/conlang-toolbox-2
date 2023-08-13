@@ -5,8 +5,6 @@ import {
 	Modal,
 	useContrastText,
 	HStack,
-	IconButton,
-	Button,
 	Center,
 	useToast,
 	Menu
@@ -25,6 +23,8 @@ import {
 	TrashIcon,
 	DotsIcon
 } from '../../components/icons';
+import Button from '../../components/Button';
+import IconButton from '../../components/IconButton';
 import getSizes from '../../helpers/getSizes';
 import doToast from "../../helpers/toast";
 import {
@@ -419,6 +419,7 @@ const WEContextMenu = () => {
 						{...triggerProps}
 						flexGrow={0}
 						flexShrink={0}
+						variant="ghost"
 					/>
 				)}
 			>
@@ -445,6 +446,7 @@ const WEContextMenu = () => {
 					accessibilityLabel="Copy from WordGen"
 					flexGrow={0}
 					flexShrink={0}
+					variant="ghost"
 					icon={<CopyIcon size={textSize} />}
 					onPress={() => {
 						//infoModalRef.current.scrollTo({x: 0, y: 0, animated: false});
@@ -462,9 +464,10 @@ const WEContextMenu = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={headerSize}>Copy {characterGroups.length} Groups from WordGen?</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setCopyModalOpen(false)}
 								variant="ghost"
+								scheme="primary"
 								px={0}
 							/>
 						</HStack>
@@ -473,12 +476,12 @@ const WEContextMenu = () => {
 						<Text fontSize={textSize}>Do you want to copy all character groups from WordGen to here? If any current groups have the same label as an incoming group, the current group will be overwritten. This cannot be undone. Do you want to do this?</Text>
 					</Modal.Body>
 					<Modal.Footer p={2}>
-					<HStack justifyContent="space-between" alignItems="center" w="full">
+						<HStack justifyContent="space-between" alignItems="center" w="full">
 							<Button
 								onPress={() => setCopyModalOpen(false)}
 								py={1}
 								px={2}
-								colorScheme="warning"
+								scheme="warning"
 								_text={{fontSize: textSize}}
 							>Cancel</Button>
 							<Button
@@ -494,7 +497,7 @@ const WEContextMenu = () => {
 								}}
 								py={1}
 								px={2}
-								colorScheme="success"
+								scheme="success"
 								_text={{fontSize: textSize}}
 							>Copy</Button>
 						</HStack>
@@ -505,6 +508,8 @@ const WEContextMenu = () => {
 				accessibilityLabel="Information"
 				flexGrow={0}
 				flexShrink={0}
+				color="text.50"
+				variant="ghost"
 				icon={<InfoIcon size={textSize} />}
 				onPress={() => {
 					setInfoModalOpen(true);
@@ -520,9 +525,10 @@ const WEContextMenu = () => {
 						<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 							<Text color={primaryContrast} fontSize={headerSize}>{infoModalTitle}</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setInfoModalOpen(false)}
 								variant="ghost"
+								scheme="primary"
 								px={0}
 							/>
 						</HStack>
@@ -533,7 +539,7 @@ const WEContextMenu = () => {
 							onPress={() => setInfoModalOpen(false)}
 							py={1}
 							px={2}
-							colorScheme="info"
+							scheme="info"
 							_text={{fontSize: textSize}}
 						>OK</Button>
 					</Modal.Footer>

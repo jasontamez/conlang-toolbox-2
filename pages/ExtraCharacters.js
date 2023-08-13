@@ -3,8 +3,6 @@ import {
 	Text,
 	ScrollView,
 	Input,
-	Button,
-	IconButton,
 	VStack,
 	HStack,
 	useToast,
@@ -19,6 +17,8 @@ import * as Clipboard from 'expo-clipboard';
 import getSizes from '../helpers/getSizes';
 import debounce from '../helpers/debounce';
 import { NamesIcon, CopyIcon, FaveIcon, OkIcon } from '../components/icons';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 import {
 	toggleCopyImmediately,
 	toggleShowNames,
@@ -223,16 +223,17 @@ const ExtraChars = ({
 	const GroupButton = memo(({title, isShowing, buttonTextSize}) => {
 		const doSetNowShowing = useCallback(() => dispatch(setNowShowing(title)), [dispatch, setNowShowing]);
 		const displayProps = isShowing ? {
-			variant: "solid",
-			borderWidth: 1,
-			borderColor: "primary.500"
+			variant: "solid"
 		} : {
 			opacity: 75,
-			variant: "outline"
+			variant: "outline",
+			_pressed: {
+				bg: "primary.200"
+			}
 		};
+		const textProps = isShowing ? {} : { color: "text.50" }
 		return (
 			<Button
-				colorScheme="primary"
 				key={`Button-${title}`}
 				size="xs"
 				borderRadius="full"
@@ -240,10 +241,17 @@ const ExtraChars = ({
 				pb={0.5}
 				m={1}
 				onPress={doSetNowShowing}
+				_text={{
+					fontSize: buttonTextSize,
+					fontFamily: "Noto Sans",
+					style: {
+						fontVariant: ["normal"]
+					},
+					...textProps
+				}}
+				scheme="primary"
 				{...displayProps}
-			>
-				<Text color="text.50" fontSize={buttonTextSize} fontFamily="Noto Sans">{title}</Text>
-			</Button>
+			>{title}</Button>
 		);
 	});
 
@@ -254,8 +262,9 @@ const ExtraChars = ({
 				<IconButton
 					variant="solid"
 					size={textSize}
-					colorScheme="secondary"
-					icon={<FaveIcon size={textSize} color={"secondary." + (settingFaves ? "50" : "900")} />}
+					scheme="secondary"
+					icon={<FaveIcon size={textSize} />}
+					iconColor={settingFaves ? "secondary.50" : "lighter"}
 					flexGrow={0}
 					flexShrink={0}
 					onPress={() => {
@@ -271,8 +280,9 @@ const ExtraChars = ({
 				<IconButton
 					variant="solid"
 					size={textSize}
-					colorScheme="secondary"
-					icon={<CopyIcon size={textSize} color={"secondary." + (copyImmediately ? "50" : "900")} />}
+					scheme="secondary"
+					icon={<CopyIcon size={textSize} />}
+					iconColor={copyImmediately ? "secondary.50" : "lighter"}
 					flexGrow={0}
 					flexShrink={0}
 					onPress={() => {
@@ -298,8 +308,9 @@ const ExtraChars = ({
 				<IconButton
 					variant="solid"
 					size={textSize}
-					colorScheme="secondary"
-					icon={<NamesIcon size={textSize} color={"secondary." + (showNames ? "50" : "900")} />}
+					scheme="secondary"
+					icon={<NamesIcon size={textSize} />}
+					iconColor={showNames ? "secondary.50" : "lighter"}
 					flexGrow={0}
 					flexShrink={0}
 					onPress={() => dispatch(toggleShowNames())}
@@ -344,8 +355,7 @@ const ExtraChars = ({
 						dispatch(removeLastPageFromHistory());
 					}}
 					_text={{fontSize: textSize}}
-					bg="primary.500"
-					color="primary.50"
+					scheme="primary"
 				>Done</Button>
 			</HStack>
 		</VStack>

@@ -1,13 +1,15 @@
 import { useRef, useEffect } from 'react';
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { Outlet } from 'react-router-native';
-import { ScrollView, VStack, Box, Button, IconButton, useBreakpointValue } from 'native-base';
+import { ScrollView, VStack, Box, useBreakpointValue } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 
 import NavBar from '../components/NavBar';
 import { SettingsIcon } from '../components/icons';
 import { fontSizesInPx } from '../store/appStateSlice';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 
 const MS = () => {
 	//const msPage = useSelector((state) => state.viewState.ms, shallowEqual) || "msSettings";
@@ -16,7 +18,6 @@ const MS = () => {
 	const pathname = location.pathname;
 	const scrollRef = useRef(null);
 	const sizes = useSelector(state => state.appState.sizes);
-	const dispatch = useDispatch();
 	const textSize = useBreakpointValue(sizes.sm);
 	const buffer = fontSizesInPx[textSize] * 3;
 	useEffect(() => {
@@ -34,9 +35,10 @@ const MS = () => {
 					variant="ghost"
 					bg={bg}
 					color={colorString}
+					pressedBg="darker"
 					onPress={() => doNavigate(link)}
 					icon={icon}
-					_icon={{color: colorString, size: textSize}}
+					_icon={{size: textSize}}
 				/>
 			);
 		}
@@ -46,7 +48,8 @@ const MS = () => {
 				variant="ghost"
 				bg={bg}
 				color={colorString}
-				_text={{bold: isCurrent, color: colorString, fontSize: textSize}}
+				pressedBg="darker"
+				_text={{bold: isCurrent, fontSize: textSize}}
 				onPress={() => doNavigate(link)}
 			>
 				{label}

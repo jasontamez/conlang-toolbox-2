@@ -1,8 +1,6 @@
 import {
-	Button,
 	Center,
 	HStack,
-	IconButton,
 	Modal,
 	Text,
 	useContrastText,
@@ -11,6 +9,8 @@ import {
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 
+import Button from './Button';
+import IconButton from './IconButton';
 import { CloseCircleIcon, LoadIcon, TrashIcon } from './icons';
 import StandardAlert from './StandardAlert';
 import doToast from '../helpers/toast';
@@ -150,12 +150,7 @@ const LoadCustomInfoModal = ({
 				setDeleteWarningOpen(false);
 				doDeleteInfo();
 			}}
-			continueProps={{
-				bg: "danger.500",
-				_text: {
-					color: "danger.50"
-				}
-			}}
+			continueProps={{ scheme: "danger" }}
 			fontSize={textSize}
 		/>
 		<Modal isOpen={modalOpen} size="sm">
@@ -175,10 +170,11 @@ const LoadCustomInfoModal = ({
 							bold
 						>Load Saved Info</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							icon={<CloseCircleIcon size={textSize} />}
 							p={1}
 							m={0}
 							variant="ghost"
+							scheme="primary"
 							onPress={closeModal}
 						/>
 					</HStack>
@@ -227,25 +223,27 @@ const LoadCustomInfoModal = ({
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
 						<Button
-							bg="danger.500"
 							onPress={maybeDeleteInfo}
-							_text={{color: "danger.50", fontSize: textSize}}
-							startIcon={<TrashIcon color="danger.50" size={textSize} />}
+							_text={{fontSize: textSize}}
+							startIcon={<TrashIcon size={textSize} />}
 							p={1}
 							m={2}
+							scheme="danger"
 						>Delete</Button>
 						<Button
 							bg="darker"
+							pressedBg="lighter"
+							color="text.50"
 							onPress={closeModal}
-							_text={{color: "text.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 						>Cancel</Button>
 						<Button
-							bg="tertiary.500"
+							scheme="tertiary"
 							onPress={maybeLoadInfo}
-							_text={{color: "tertiary.50", fontSize: textSize}}
-							startIcon={<LoadIcon color="tertiary.50" size={textSize} />}
+							_text={{fontSize: textSize}}
+							startIcon={<LoadIcon size={textSize} />}
 							p={1}
 							m={2}
 						>Load</Button>

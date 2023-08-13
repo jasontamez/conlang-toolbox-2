@@ -5,9 +5,7 @@ import {
 	Box,
 	VStack,
 	useContrastText,
-	IconButton,
-	Modal,
-	Button
+	Modal
 } from "native-base";
 import { useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +30,8 @@ import {
 import getSizes from "../../helpers/getSizes";
 import { flipFlop, fromToZero, maybeAnimate } from "../../helpers/motiAnimations";
 import { fontSizesInPx } from "../../store/appStateSlice";
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 
 
 const WGSyllables = () => {
@@ -137,7 +137,7 @@ const WGSyllables = () => {
 						setModalOpen(true);
 					}}
 					p={1}
-					bg="transparent"
+					variant="ghost"
 					icon={<EditIcon color="primary.400" size={textSize} />}
 				/>
 			</HStack>
@@ -151,10 +151,11 @@ const WGSyllables = () => {
 						<HStack justifyContent="flex-end" alignItems="center" w="full">
 							<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{modalTitle}</Text>
 							<IconButton
-								icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setModalOpen(false)}
 								flexGrow={0}
 								flexShrink={0}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -234,8 +235,8 @@ const WGSyllables = () => {
 					</GestureHandlerRootView></Modal.Body>
 					<Modal.Footer>
 						<Button
-							colorScheme="success"
-							startIcon={<SaveIcon color="success.50" size={textSize} />}
+							scheme="success"
+							startIcon={<SaveIcon size={textSize} />}
 							_text={{fontSize: textSize}}
 							px={2}
 							py={1}

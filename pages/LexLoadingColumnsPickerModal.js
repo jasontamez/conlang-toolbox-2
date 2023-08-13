@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	HStack,
-	IconButton,
-	Button,
 	Modal,
 	Text,
 	Box
@@ -14,6 +12,8 @@ import {
 	ResetIcon
 } from '../components/icons';
 import { DropDown } from '../components/inputTags';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 
 const LoadingColumnsPickerModal = ({
 	modalOpen,
@@ -52,10 +52,11 @@ const LoadingColumnsPickerModal = ({
 					<HStack w="full" justifyContent="space-between" alignItems="center" pl={1.5}>
 						<Text color={primaryContrast} fontSize={textSize}>Organize Columns</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							icon={<CloseCircleIcon size={textSize} />}
 							onPress={closeModal}
 							variant="ghost"
 							px={0}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -158,23 +159,25 @@ const LoadingColumnsPickerModal = ({
 					>
 						<Button
 							bg="lighter"
-							_text={{color: "text.50", fontSize: textSize}}
+							color="text.50"
+							pressedBg="darker"
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 							onPress={closeModal}
 						>Cancel</Button>
 						<Button
-							startIcon={<ResetIcon color="warning.50" m={0} size={textSize} />}
-							bg="warning.500"
-							_text={{color: "warning.50", fontSize: textSize}}
+							startIcon={<ResetIcon m={0} size={textSize} />}
+							scheme="warning"
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 							onPress={resetAll}
 						>Reset</Button>
 						<Button
-							startIcon={<LoadIcon color="success.50" m={0} size={textSize} />}
+							startIcon={<LoadIcon m={0} size={textSize} />}
 							bg={nothingChosen ? "muted.800" : "success.500"}
-							_text={{color: "success.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 							disabled={

@@ -4,8 +4,6 @@ import {
 	Text,
 	VStack,
 	HStack,
-	IconButton,
-	Button,
 	Modal,
 	useContrastText
 } from 'native-base';
@@ -17,6 +15,8 @@ import {
 } from '../components/icons';
 import StandardAlert from '../components/StandardAlert';
 import getSizes from '../helpers/getSizes';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 
 
 const ModalLexiconEditingItem = ({
@@ -58,9 +58,7 @@ const ModalLexiconEditingItem = ({
 				bodyContent="Are you sure you want to delete this Lexicon entry? This cannot be undone."
 				continueText="Yes"
 				continueFunc={deleteEditingItemFunc}
-				continueProps={{
-					bg: "danger.500"
-				}}
+				continueProps={{ scheme: "danger" }}
 				fontSize={textSize}
 			/>
 			<Modal.Content>
@@ -81,10 +79,11 @@ const ModalLexiconEditingItem = ({
 							Edit Lexicon Item
 						</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+							icon={<CloseCircleIcon size={textSize} />}
 							p={1}
 							m={0}
 							variant="ghost"
+							scheme="primary"
 							onPress={() => doClose()}
 						/>
 					</HStack>
@@ -113,18 +112,18 @@ const ModalLexiconEditingItem = ({
 				<Modal.Footer borderTopWidth={0}>
 					<HStack justifyContent="space-between" w="full" flexWrap="wrap">
 						<Button
-							startIcon={<TrashIcon color="danger.50" size={textSize} m={0} />}
-							bg="danger.500"
+							startIcon={<TrashIcon size={textSize} m={0} />}
+							scheme="danger"
 							onPress={() => (disableConfirms ? deleteEditingItemFunc() : setAlertOpen(true))}
-							_text={{color: "danger.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 						>Delete</Button>
 						<Button
-							startIcon={<SaveIcon color="tertiary.50" size={textSize} m={0} />}
-							bg="tertiary.500"
+							startIcon={<SaveIcon size={textSize} m={0} />}
+							scheme="tertiary"
 							onPress={() => saveItemFunc([...newFields])}
-							_text={{color: "tertiary.50", fontSize: textSize}}
+							_text={{fontSize: textSize}}
 							p={1}
 							m={2}
 						>Save</Button>

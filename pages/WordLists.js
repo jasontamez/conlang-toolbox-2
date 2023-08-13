@@ -5,18 +5,18 @@ import WL from '../helpers/wordLists';
 import {
 	HStack,
 	Text,
-	Button,
 	Box,
 	Pressable,
 	ScrollView,
 	Modal,
 	VStack,
 	useToast,
-	IconButton,
 	useContrastText
 } from 'native-base';
 
 //import uuidv4 from '../helpers/uuidv4';
+import Button from '../components/Button';
+import IconButton from '../components/IconButton';
 import {
 	toggleDisplayedList,
 	togglePickAndSaveForLexicon,
@@ -95,45 +95,41 @@ const WordLists = () => {
 		}
 		const SaveAll = () => (
 			<Button
-				bg="secondary.500"
+				scheme="secondary"
 				m={1.5}
 				py={1}
 				px={1.5}
-				_text={{color: "secondary.50"}}
-				startIcon={<SaveIcon color="secondary.50" size={textSize} />}
+				startIcon={<SaveIcon size={textSize} />}
 				onPress={saveAllFunc}
 			>Save All to Lexicon</Button>
 		);
 		const SaveSome = () => (
 			<Button
-				bg="tertiary.500"
+				scheme="tertiary"
 				m={1.5}
 				py={1}
 				px={1.5}
-				_text={{color: "tertiary.50"}}
-				startIcon={<SaveIcon color="tertiary.50" size={textSize} />}
+				startIcon={<SaveIcon size={textSize} />}
 				onPress={beginSaveSome}
 			>Save Some to Lexicon</Button>
 		);
 		const Cancel = () => (
 			<Button
-				bg="danger.500"
+				scheme="danger"
 				m={1.5}
 				py={1}
 				px={1.5}
-				_text={{color: "danger.50"}}
-				startIcon={<CloseCircleIcon color="danger.50" size={textSize} />}
+				startIcon={<CloseCircleIcon size={textSize} />}
 				onPress={cancelSaveSome}
 			>Cancel</Button>
 		);
 		const SaveChosen = () => (
 			<Button
-				bg="tertiary.500"
+				scheme="tertiary"
 				m={1.5}
 				py={1}
 				px={1.5}
-				_text={{color: "tertiary.50"}}
-				startIcon={<SaveIcon color="tertiary.50" size={textSize} />}
+				startIcon={<SaveIcon size={textSize} />}
 				onPress={saveSomeFunc}
 			>Save</Button>
 		);
@@ -193,8 +189,9 @@ const WordLists = () => {
 					<IconButton
 						alignSelf="flex-end"
 						onPress={() => toast.closeAll()}
-						bg="transparent"
-						icon={<CloseIcon color="success.50" size={textSize} />}
+						variant="ghost"
+						scheme="success"
+						icon={<CloseIcon size={textSize} />}
 						p={1}
 						m={0}
 					/>
@@ -208,10 +205,11 @@ const WordLists = () => {
 					</Box>
 					<Button
 						bg="darker"
+						scheme="success"
 						px={2}
 						py={1}
 						mb={1}
-						_text={{color: "success.50", fontSize: textSize}}
+						_text={{fontSize: textSize}}
 						onPress={() => {
 							navigate("/lex");
 							toast.closeAll();
@@ -284,21 +282,23 @@ const WordLists = () => {
 						borderColor: "primary.500"
 					} : {
 						opacity: 75,
-						variant: "outline"
+						variant: "outline",
+						color: "text.50"
 					};
 					return (
 						<Button
-							colorScheme="primary"
+							scheme="primary"
 							key={list}
 							size="xs"
 							borderRadius="full"
 							py={1}
 							m={1}
 							onPress={() => dispatch(toggleDisplayedList(list))}
+							_text={{
+								fontSize: buttonTextSize
+							}}
 							{...displayProps}
-						>
-							<Text fontSize={buttonTextSize} color="text.50">{list}</Text>
-						</Button>
+						>{list}</Button>
 					);
 				})}
 			</HStack>
@@ -319,7 +319,7 @@ const WordLists = () => {
 					<Modal.Header
 						bg="primary.500"
 						borderBottomWidth={0}
-						px={3}
+						pl={3}
 					>
 						<HStack
 							justifyContent="space-between"
@@ -328,7 +328,8 @@ const WordLists = () => {
 							<Text color={primaryContrast} fontSize={headerSize}>Add to Lexicon</Text>
 							<IconButton
 								variant="ghost"
-								icon={<CloseCircleIcon size={headerSize} color={primaryContrast} />}
+								scheme="primary"
+								icon={<CloseCircleIcon size={headerSize} />}
 								onPress={() => setAddToLexicon([])}
 							/>
 						</HStack>
@@ -373,8 +374,8 @@ const WordLists = () => {
 								m={2}
 							>Cancel</Button>
 							<Button
-								bg="success.500"
-								_text={{color: "success.50", fontSize: textSize}}
+								scheme="success"
+								_text={{fontSize: textSize}}
 								px={2}
 								py={1}
 								m={2}

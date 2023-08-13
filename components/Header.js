@@ -1,10 +1,11 @@
 import React from "react";
-import { Text, HStack, Box, useBreakpointValue, ZStack, IconButton } from "native-base";
+import { Text, HStack, Box, useBreakpointValue, ZStack } from "native-base";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //import { openModal } from '../store/dFuncs';
 import MenuModal from "../pages/MenuModal";
+import IconButton from "./IconButton";
 import { allMainPages } from '../appLayoutInfo';
 import LexiconContextMenu from "../pages/contextMenus/LexContextMenu";
 import WordListsContextMenu from '../pages/contextMenus/WordListsContextMenu';
@@ -90,7 +91,8 @@ const AppHeader = () => {
 				<Box flexGrow={1} flexShrink={0}></Box>
 				{extraChars && <IconButton
 					variant="ghost"
-					icon={<ExtraCharactersIcon color={"text.50"} size={textSize} />}
+					color="text.50"
+					icon={<ExtraCharactersIcon size={textSize} />}
 					onPress={() => {
 						dispatch(addPageToHistory(pathname));
 						navigate('/extrachars');

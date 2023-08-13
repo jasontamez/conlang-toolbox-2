@@ -7,7 +7,6 @@ import {
 	Pressable,
 	Text as Tx,
 	Divider,
-	IconButton,
 	ZStack,
 	View,
 	ScrollView
@@ -16,6 +15,7 @@ import { Modal, useWindowDimensions } from 'react-native';
 import { AnimatePresence, MotiView } from 'moti';
 
 import * as Icons from '../components/icons';
+import IconButton from '../components/IconButton';
 import { addPageToHistory } from '../store/historySlice';
 import { fontSizesInPx, setMenuToggleName } from '../store/appStateSlice';
 import { appMenuFormat } from '../appLayoutInfo';
@@ -367,6 +367,7 @@ const MenuModal = () => {
 			<IconButton
 				variant="ghost"
 				icon={<Icons.MenuIcon color="text.50" size={menuSize} />}
+				pressedBg="darker"
 				onPress={() => setMenuOpen(true)}
 				flexGrow={0}
 				flexShrink={0}

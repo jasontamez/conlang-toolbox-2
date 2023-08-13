@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import {
 	Text,
 	HStack,
-	Button,
 	VStack,
 	useContrastText,
 	Modal,
-	IconButton
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,6 +13,8 @@ import {
 	DropDown,
 	TextAreaSetting
 } from '../../components/inputTags';
+import Button from "../../components/Button";
+import IconButton from "../../components/IconButton";
 import {
 	ClearIcon,
 	CloseCircleIcon,
@@ -26,7 +26,7 @@ import getSizes from "../../helpers/getSizes";
 
 const WEInput = () => {
 	const { input } = useSelector(state => state.we);
-	const { disableConfirms, sizes } = useSelector(state => state.appState);
+	const { disableConfirms } = useSelector(state => state.appState);
 	const { lexicon, columns } = useSelector(state => state.lexicon);
 	const dispatch = useDispatch();
 	const [stateInput, setStateInput] = useState("");
@@ -37,9 +37,7 @@ const WEInput = () => {
 	const [cols, setCols] = useState(null);
 	const [importDisabled, setImportDisabled] = useState(false);
 	const [buttonSize, textSize, inputSize] = getSizes("lg", "md", "sm");
-	const warningContrast = useContrastText("warning.500");
 	const primaryContrast = useContrastText("primary.500");
-	const secondaryContrast = useContrastText("secondary.500");
 	useEffect(() => {
 		if(input && clearDisabled) {
 			setClearDisabled(false);
@@ -49,7 +47,7 @@ const WEInput = () => {
 		setStateInput(input);
 	}, [input]);
 	useState(() => {
-		if (columns.length > 0) {
+		if (lexicon.length > 0 && columns.length > 0) {
 			const cc = columns.map(col => { return {...col}; });
 			setCols(cc);
 			importDisabled && setImportDisabled(false);
@@ -117,8 +115,9 @@ const WEInput = () => {
 							<IconButton
 								flexGrow={0}
 								flexShrink={0}
-								icon={<CloseCircleIcon color={primaryContrast} size={textSize} />}
+								icon={<CloseCircleIcon size={textSize} />}
 								onPress={() => setImportModalOpen(false)}
+								scheme="primary"
 							/>
 						</HStack>
 					</Modal.Header>
@@ -135,7 +134,6 @@ const WEInput = () => {
 								labelFunc={() => column ? column.label : "[Empty Lexicon]"}
 								onChange={(v) => setColumn(v)}
 								title="Columns:"
-								color={secondaryContrast}
 								options={getCols().map((item) => {
 									const {id, label} = item;
 									return {
@@ -160,13 +158,14 @@ const WEInput = () => {
 							<Button
 								startIcon={<CloseCircleIcon color="text.50" size={buttonSize} />}
 								bg="darker"
+								color="text.50"
+								pressedBg="lighter"
 								px={2}
 								py={1}
 								mx={1}
 								onPress={() => setImportModalOpen(false)}
 								_text={{
-									fontSize: buttonSize,
-									color: "text.50"
+									fontSize: buttonSize
 								}}
 							>Cancel</Button>
 							<Button
@@ -218,31 +217,29 @@ const WEInput = () => {
 			>
 				<Button
 					borderRadius="full"
-					bg={clearDisabled ? "gray.500" : "warning.500"}
+					scheme="warning"
 					_text={{
-						fontSize: buttonSize,
-						color: warningContrast
+						fontSize: buttonSize
 					}}
-					disabled={clearDisabled}
+					isDisabled={clearDisabled}
 					py={0.5}
 					px={3}
 					m={1}
-					startIcon={<ClearIcon color={clearDisabled ? "gray.900" : warningContrast} size={buttonSize} />}
+					startIcon={<ClearIcon size={buttonSize} />}
 					onPress={maybeClearInput}
 				>Clear</Button>
 				<Button
 					borderRadius="full"
-					bg={importDisabled ? "gray.500" : "primary.500"}
+					scheme="primary"
 					_text={{
-						fontSize: buttonSize,
-						color: primaryContrast
+						fontSize: buttonSize
 					}}
-					disabled={importDisabled}
+					isDisabled={importDisabled}
 					py={0.5}
 					px={3}
 					m={1}
 					onPress={() => setImportModalOpen(true)}
-					startIcon={<ImportIcon color={importDisabled ? "gray.900" : primaryContrast} size={buttonSize} />}
+					startIcon={<ImportIcon size={buttonSize} />}
 				>Import From Lexicon</Button>
 			</HStack>
 		</VStack>

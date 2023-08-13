@@ -9,14 +9,14 @@ import {
 	VStack,
 	useBreakpointValue,
 	Switch,
-	Menu,
-	Button
+	Menu
 } from "native-base";
 import { useWindowDimensions } from 'react-native';
 
 import { SortEitherIcon } from './icons';
 import NewSlider from './NewSlider';
 import { fontSizesInPx } from '../store/appStateSlice';
+import Button from './Button';
 
 // $v(unknown property, default value)
 //    returns the property if it exists, or default value otherwise
@@ -465,8 +465,10 @@ export const DropDown = (props) => {
 	const {
 		placement = "bottom left",
 		closeOnSelect = true,
-		bg = "secondary.500",
-		color = "secondary.50",
+		bg,
+		color,
+		pressedBg,
+		scheme = "secondary",
 		fontSize = "sm",
 		titleSize,
 		menuSize,
@@ -482,8 +484,8 @@ export const DropDown = (props) => {
 	// <DropDown
 	//    placement = {string; default "bottom left"}
 	//    closeOnSelect = {boolean; default true}
-	//    bg = {string; background color; defaults to secondary.500}
-	//    color = {string; foreground color; defaults to secondary.50}
+	//    scheme = {string; Button color scheme; defaults to secondary}
+	//    bg,color,pressedBg = {string; overrides scheme}
 	//    fontSize = {enum; font size}
 	//    titleSize = {enum; optional; font size for Menu title}
 	//    menuSize = {enum; optional; font size for Menu.ItemOption}
@@ -496,6 +498,7 @@ export const DropDown = (props) => {
 	//    options = {Array; {key: string, label: string, value: any}}
 	//    buttonProps = {Object; additional props for the <Button>}
 	// />
+	const coloring = color || `${scheme}.50`;
 	return (
 		<Menu
 			placement={placement}
@@ -507,6 +510,9 @@ export const DropDown = (props) => {
 						ml={2}
 						mr={1}
 						bg={bg}
+						color={color}
+						pressedBg={pressedBg}
+						scheme={scheme}
 						_stack={{
 							justifyContent: "space-between",
 							alignItems: "center",
@@ -515,14 +521,14 @@ export const DropDown = (props) => {
 								overflow: "hidden"
 							}
 						}}
-						startIcon={startIcon || <SortEitherIcon size={fontSize} mr={1} color={color} flexGrow={0} flexShrink={0} />}
+						startIcon={startIcon || <SortEitherIcon size={fontSize} mr={1} flexGrow={0} flexShrink={0} />}
 						{...buttonProps}
 						{...props}
 					>
 						<Box
 							overflow="hidden"
 						>
-							<Text fontSize={fontSize} color={color} isTruncated textAlign="left" noOfLines={1}>{labelFunc()}</Text>
+							<Text fontSize={fontSize} color={coloring} isTruncated textAlign="left" noOfLines={1}>{labelFunc()}</Text>
 						</Box>
 					</Button>
 				)
@@ -557,10 +563,12 @@ export const DropDownMenu = (props) => {
 	const {
 		placement = "bottom left",
 		closeOnSelect = true,
-		bg = "secondary.500",
-		color = "secondary.50",
-		markedColor = "secondary.50",
-		markedBg = "secondary.600",
+		scheme = "secondary",
+		bg,
+		color,
+		pressedBg,
+		markedColor,
+		markedBg,
 		isMarked,
 		fontSize = "sm",
 		titleSize,
@@ -574,10 +582,10 @@ export const DropDownMenu = (props) => {
 	// <DropDown
 	//    placement = {string; default "bottom left"}
 	//    closeOnSelect = {boolean; default true}
-	//    bg = {string; background color; defaults to secondary.500}
-	//    color = {string; foreground color; defaults to secondary.50}
-	//    markedColor = {string; special text color; defaults to secondary.50}
-	//    markedBg = {string; special bg color; defaults to secondary.600}
+	//    scheme = {string; Button color scheme; defaults to secondary}
+	//    bg,color,pressedBg = {string; overrides scheme}
+	//    markedColor = {string; special text color; defaults to `scheme`.50}
+	//    markedBg = {string; special bg color; defaults to `scheme`.600}
 	//    isMarked = {Function; optional; given menu key as argument}
 	//    fontSize = {enum; font size}
 	//    titleSize = {enum; optional; font size for Menu title}
@@ -589,6 +597,9 @@ export const DropDownMenu = (props) => {
 	//    buttonProps = {Object; additional props for the <Button>}
 	// />
 	const labelText = labelFunc();
+	const coloring = color || `${scheme}.50`;
+	const markF = markedColor || `${scheme}.50`;
+	const markB = markedBg || `${scheme}.600`;
 	return (
 		<Menu
 			placement={placement}
@@ -599,7 +610,10 @@ export const DropDownMenu = (props) => {
 						p={1}
 						ml={2}
 						mr={1}
+						scheme={scheme}
 						bg={bg}
+						color={color}
+						pressedBg={pressedBg}
 						_stack={{
 							justifyContent: "space-between",
 							alignItems: "center",
@@ -608,14 +622,14 @@ export const DropDownMenu = (props) => {
 								overflow: "hidden"
 							}
 						}}
-						startIcon={startIcon || <SortEitherIcon size={fontSize} mr={1} color={color} flexGrow={0} flexShrink={0} />}
+						startIcon={startIcon || <SortEitherIcon size={fontSize} mr={1} flexGrow={0} flexShrink={0} />}
 						{...buttonProps}
 						{...props}
 					>
 						<Box
 							overflow="hidden"
 						>
-							<Text fontSize={fontSize} color={color} isTruncated textAlign="left" noOfLines={1}>{labelText}</Text>
+							<Text fontSize={fontSize} color={coloring} isTruncated textAlign="left" noOfLines={1}>{labelText}</Text>
 						</Box>
 					</Button>
 				)
@@ -631,9 +645,9 @@ export const DropDownMenu = (props) => {
 							key={key}
 							_text={{
 								fontSize: menuSize || fontSize,
-								color: isMarked && isMarked(key) ? markedColor : "text.50"
+								color: isMarked && isMarked(key) ? markF : "text.50"
 							}}
-							bg={isMarked && isMarked(key) ? markedBg : "main.900"}
+							bg={isMarked && isMarked(key) ? markB : "main.900"}
 							onPress={onPress}
 						>
 							{label}

@@ -3,8 +3,6 @@ import {
 	Text,
 	VStack,
 	HStack,
-	IconButton,
-	Button,
 	Modal,
 	Center,
 	useContrastText,
@@ -16,6 +14,8 @@ import {
 	ExportIcon,
 	ImportIcon
 } from './icons';
+import Button from './Button';
+import IconButton from './IconButton';
 import getSizes from '../helpers/getSizes';
 import { ToggleSwitch } from './inputTags';
 
@@ -109,10 +109,11 @@ const ExportImportModal = ({
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>{importedInfo ? "Im" : "Ex"}port Options</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={() => exitModal()}
 							flexGrow={0}
 							flexShrink={0}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -209,6 +210,8 @@ const ExportImportModal = ({
 					<HStack justifyContent="space-between" p={1} flexWrap="wrap">
 						<Button
 							bg="darker"
+							pressedBg="lighter"
+							color="text.50"
 							px={2}
 							py={1}
 							mx={1}
@@ -251,10 +254,11 @@ export const ExportHowModal = ({
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Export</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={closeModal}
 							flexGrow={0}
 							flexShrink={0}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -276,21 +280,20 @@ export const ExportHowModal = ({
 				<Modal.Footer>
 					<HStack justifyContent="space-between" p={1} space={4} w="full" flexWrap="wrap">
 						<Button
-							bg="info.500"
-							startIcon={<ExportIcon size={textSize} color="info.50" />}
+							scheme="info"
+							startIcon={<ExportIcon size={textSize} />}
 							px={2}
 							py={1}
 							onPress={closeAndExport}
-							_text={{ fontSize: textSize, color: "info.50" }}
+							_text={{ fontSize: textSize }}
 							disabled={isLoading}
 						>Export to File</Button>
 						<Button
-							bg="success.500"
 							px={2}
 							py={1}
 							mx={1}
 							onPress={closeModal}
-							_text={{ fontSize: textSize, color: "success.50" }}
+							_text={{ fontSize: textSize }}
 						>Done</Button>
 					</HStack>
 				</Modal.Footer>
@@ -315,10 +318,11 @@ export const ImportHowModal = ({
 					<HStack justifyContent="flex-end" alignItems="center">
 						<Text flex={1} px={3} fontSize={headerSize} color={primaryContrast} textAlign="left" isTruncated>Import</Text>
 						<IconButton
-							icon={<CloseCircleIcon color={primaryContrast} size={headerSize} />}
+							icon={<CloseCircleIcon size={headerSize} />}
 							onPress={closeModal}
 							flexGrow={0}
 							flexShrink={0}
+							scheme="primary"
 						/>
 					</HStack>
 				</Modal.Header>
@@ -341,18 +345,17 @@ export const ImportHowModal = ({
 				<Modal.Footer>
 					<HStack justifyContent="space-between" p={1} space={4} w="full" flexWrap="wrap">
 						<Button
-							bg="info.500"
-							startIcon={<ImportIcon size={textSize} color="info.50" />}
+							scheme="info"
+							startIcon={<ImportIcon size={textSize} />}
 							px={2}
 							py={1}
 							onPress={() => {
 								closeModal();
 								importFromFile();
 							}}
-							_text={{ fontSize: textSize, color: "info.50" }}
+							_text={{ fontSize: textSize }}
 						>Import From File</Button>
 						<Button
-							bg="success.500"
 							px={2}
 							py={1}
 							mx={1}
@@ -360,7 +363,7 @@ export const ImportHowModal = ({
 								closeModal();
 								importFromText(toImport);
 							}}
-							_text={{ fontSize: textSize, color: "success.50" }}
+							_text={{ fontSize: textSize }}
 						>Import Text</Button>
 					</HStack>
 				</Modal.Footer>
