@@ -536,7 +536,7 @@ export const DropDown = (props) => {
 		>
 			<Menu.OptionGroup
 				title={title}
-				_title={{fontSize: titleSize || fontSize}}
+				_title={{fontSize: titleSize || fontSize, color: "primary.500"}}
 				defaultValue={defaultValue}
 				value={value}
 				type="radio"
@@ -637,7 +637,7 @@ export const DropDownMenu = (props) => {
 		>
 			<Menu.Group
 				title={title}
-				_title={{fontSize: titleSize || fontSize}}
+				_title={{fontSize: titleSize || fontSize, color: "primary.500"}}
 			>
 				{
 					options.map(({key, onPress, label}) => (

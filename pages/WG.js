@@ -30,17 +30,20 @@ const WG = () => {
 	const pathname = location.pathname;
 	const ButtonLabel = useBreakpointValue({
 		base: () => <></>,
-		sm: ({color, label}) => <Text
+		sm: ({color, label, opacity}) => (
+			<Text
 				textAlign="center"
 				fontSize={buttonTextSize}
 				color={color}
 				noOfLines={1}
+				opacity={opacity}
 			>{label}</Text>
+		)
 	});
 	const NavTab = ({ isCurrent, TabIcon, link, label }) => {
 		const bg = isCurrent ? "lighter" : "transparent";
 		const Inner = ({isPressed}) => {
-			const colorString = isCurrent || isPressed ? "primary.500" : "main.600";
+			const colorProps = isCurrent || isPressed ? { color: "primary.500" } : { color: "text.50", opacity: 30 };
 			return (
 				<VStack
 					alignItems="center"
@@ -51,8 +54,8 @@ const WG = () => {
 						width: (width - 6) / 5
 					}}
 				>
-					<TabIcon color={colorString} size={iconSize} />
-					<ButtonLabel color={colorString} label={label} />
+					<TabIcon size={iconSize} {...colorProps} />
+					<ButtonLabel label={label} {...colorProps} />
 				</VStack>
 			)
 		};

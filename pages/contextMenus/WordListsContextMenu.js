@@ -64,7 +64,7 @@ const WordListsContextMenu = () => {
 					value={centerMenuOption}
 					type="checkbox"
 					title="Options"
-					_title={{fontSize: textSize}}
+					_title={{fontSize: textSize, color: "primary.500"}}
 					onChange={(v) => handleCenterText(v)}
 				>
 					<Menu.ItemOption

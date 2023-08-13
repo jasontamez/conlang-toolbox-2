@@ -1006,10 +1006,10 @@ const WGOutput = () => {
 							py={1}
 						>
 							<Text
-								opacity={80}
+								opacity={50}
 								fontSize={headerSize}
 								letterSpacing={largeSize}
-								color="main.600"
+								color="main.50"
 							>General Controls</Text>
 						</Box>
 						<ToggleSwitch
@@ -1018,7 +1018,7 @@ const WGOutput = () => {
 							labelSize={textSize}
 							desc="Note: this may cause Transforms to stop working"
 							descSize={descSize}
-							descProps={{ color: "main.500" }}
+							descProps={{ opacity: 50 }}
 							switchState={showSyllableBreaks}
 							switchToggle={() => dispatch(setShowSyllableBreaks(!showSyllableBreaks))}
 						/>
@@ -1029,10 +1029,10 @@ const WGOutput = () => {
 							mt={2}
 						>
 							<Text
-								opacity={80}
+								opacity={50}
 								fontSize={headerSize}
 								letterSpacing={largeSize}
-								color="main.600"
+								color="main.50"
 							>Pseudo-Text Controls</Text>
 						</Box>
 						<Box mb={1} pt={2}>
@@ -1063,10 +1063,10 @@ const WGOutput = () => {
 							mt={2}
 						>
 							<Text
-								opacity={80}
+								opacity={50}
 								fontSize={headerSize}
 								letterSpacing={largeSize}
-								color="main.600"
+								color="main.50"
 							>Word List and Syllable List Controls</Text>
 						</Box>
 						<ToggleSwitch
@@ -1173,6 +1173,7 @@ const WGOutput = () => {
 									onChange={(v) => setWhereToSaveInLex(v)}
 									defaultValue={whereToSaveInLex}
 									title="Choose a Column:"
+									_title={{ fontSize: descSize, color: "primary.500" }}
 									options={columns.map((item) => {
 										const {id, label} = item;
 										return {
@@ -1282,6 +1283,7 @@ const WGOutput = () => {
 						onChange={(v) => {nextAnimations || setOutput(v)}}
 						defaultValue={output}
 						title="Display:"
+						_title={{ fontSize: descSize, color: "primary.500" }}
 						options={outputOptions}
 						scheme="tertiary"
 					/>

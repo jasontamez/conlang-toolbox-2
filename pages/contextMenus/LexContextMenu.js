@@ -102,7 +102,7 @@ const LexiconContextMenu = () => {
 			>
 				<Menu.OptionGroup
 					title="Options"
-					_title={{ fontSize: smallerSize }}
+					_title={{ fontSize: smallerSize, color: "primary.500" }}
 					defaultValue={checkboxOptions}
 					type="checkbox"
 					onChange={(v) => handleLexiconOptions(v)}
@@ -133,7 +133,7 @@ const LexiconContextMenu = () => {
 				</Menu.OptionGroup>
 				<Menu.OptionGroup
 					title="Display Font"
-					_title={{ fontSize: smallerSize }}
+					_title={{ fontSize: smallerSize, color: "primary.500" }}
 					defaultValue={fontType}
 					type="radio"
 					onChange={(v) => dispatch(setFontType(v))}
@@ -143,7 +143,7 @@ const LexiconContextMenu = () => {
 				<Divider my={2} mx="auto" w="5/6" bg="main.50" opacity={25} />
 				<Menu.Group
 					title="Advanced"
-					_title={{ fontSize: smallerSize }}
+					_title={{ fontSize: smallerSize, color: "primary.500" }}
 				>
 					<Menu.Item onPress={() => showColumnsRange()}>
 						<HStack

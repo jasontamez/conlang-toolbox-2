@@ -165,7 +165,7 @@ const NewSlider = ({
 								ValueContainer ?
 									<ValueContainer>{v}</ValueContainer>
 								:
-									<Text fontSize={fontSize}>{v}</Text>
+									<Text fontSize={fontSize} color={`${colorScheme}.50`}>{v}</Text>
 							)}
 						</Circle>
 					</ReAnimated.View>

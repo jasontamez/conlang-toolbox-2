@@ -87,7 +87,7 @@ const ExportImportModal = ({
 		},
 		labelSize: headerSize,
 		descSize: textSize,
-		descProps: { color: "main.500" }
+		descProps: { opacity: 50 }
 	};
 	const masterToggleProps = {
 		...toggleProps,

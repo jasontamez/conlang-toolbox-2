@@ -1304,7 +1304,7 @@ const WGOutput = () => {
 							labelSize={textSize}
 							desc="Only has an effect in Output-Only mode"
 							descSize={descSize}
-							descProps={{ color: "main.500" }}
+							descProps={{ opacity: 50 }}
 							switchState={multicolumn}
 							switchToggle={() => dispatch(setFlag(["multicolumn", !multicolumn]))}
 						/>
@@ -1318,7 +1318,7 @@ const WGOutput = () => {
 							labelSize={textSize}
 							desc="This is essentially an input-only Transform"
 							descSize={descSize}
-							descProps={{ color: "main.500" }}
+							descProps={{ opacity: 50 }}
 							switchState={inputLower}
 							switchToggle={() => dispatch(setFlag(["inputLower", !inputLower]))}
 						/>
@@ -1332,7 +1332,7 @@ const WGOutput = () => {
 							labelSize={textSize}
 							desc="This is essentially an input-only Transform, and it will not work well with non-Latin scripts"
 							descSize={descSize}
-							descProps={{ color: "main.500" }}
+							descProps={{ opacity: 50 }}
 							switchState={inputAlpha}
 							switchToggle={() => dispatch(setFlag(["inputAlpha", !inputAlpha]))}
 						/>
@@ -1435,6 +1435,7 @@ const WGOutput = () => {
 									onChange={(v) => setWhereToSaveInLex(v)}
 									defaultValue={whereToSaveInLex}
 									title="Output Display:"
+									_title={{ fontSize: descSize, color: "primary.500" }}
 									options={columns.map(col => {
 										const {id, label} = col;
 										return {
@@ -1546,6 +1547,7 @@ const WGOutput = () => {
 						onChange={(v) => { nextAnimations || dispatch(setOutput(v)) }}
 						defaultValue={outputStyle}
 						title="Display:"
+						_title={{ fontSize: descSize, color: "primary.500" }}
 						options={outputStyles}
 						scheme="tertiary"
 					/>

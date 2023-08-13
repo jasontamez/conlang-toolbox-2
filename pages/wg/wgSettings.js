@@ -113,10 +113,10 @@ const WGSettings = () => {
 				borderColor="main.700"
 			>
 				<Text
-					opacity={80}
+					opacity={50}
 					fontSize={textSize}
 					letterSpacing="lg"
-					color="main.600"
+					color="main.50"
 				>{props.children}</Text>
 			</Box>
 		);

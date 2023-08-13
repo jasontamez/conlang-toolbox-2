@@ -1255,7 +1255,7 @@ const Lex = () => {
 						>
 							<Menu.Group
 								title="Columns"
-								_title={{fontSize: smallerSize}}
+								_title={{fontSize: smallerSize, color: "primary.500"}}
 							>
 								<Menu.Item
 									onPress={() => setModalOpen('edit')}
@@ -1287,7 +1287,7 @@ const Lex = () => {
 						>
 							<Menu.Group
 								title="Lexicon"
-								_title={{fontSize: smallerSize}}
+								_title={{fontSize: smallerSize, color: "primary.500"}}
 							>
 								<Menu.Item
 									_text={{fontSize: textSize}}

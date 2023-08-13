@@ -92,7 +92,7 @@ const Layout = () => {
 		<NativeBaseProvider
 			theme={themeObject}
 			safeArea
-			bg="main.500"
+			bg="main.900"
 		>
 			<StatusBar
 				backgroundColor={themeObject.colors.main["900"]}

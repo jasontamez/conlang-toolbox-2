@@ -134,6 +134,7 @@ const WEInput = () => {
 								labelFunc={() => column ? column.label : "[Empty Lexicon]"}
 								onChange={(v) => setColumn(v)}
 								title="Columns:"
+								_title={{ fontSize: textSize, color: "primary.500" }}
 								options={getCols().map((item) => {
 									const {id, label} = item;
 									return {

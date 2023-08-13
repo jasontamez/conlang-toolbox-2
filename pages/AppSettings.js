@@ -286,7 +286,7 @@ const AppSettings = () => {
 				labelSize={titleSize}
 				desc="Eliminates yes/no prompts when deleting or overwriting data."
 				descSize={descSize}
-				descProps={{ color: "main.500" }}
+				descProps={{ opacity: 50 }}
 				switchState={disableConfirms}
 				switchToggle={() => dispatch(setDisableConfirms(!disableConfirms))}
 			/>
@@ -321,6 +321,7 @@ const AppSettings = () => {
 				>
 					<Menu.OptionGroup
 						title="Text size:"
+						_title={{ fontSize: descSize, color: "primary.500" }}
 						defaultValue={sizeName}
 						type="radio"
 						onChange={(newSize) => dispatch(setBaseTextSize(newSize))}
@@ -356,6 +357,7 @@ const AppSettings = () => {
 				>
 					<Menu.OptionGroup
 						title="Theme:"
+						_title={{ fontSize: descSize, color: "primary.500" }}
 						defaultValue={theme}
 						type="radio"
 						onChange={(newTheme) => dispatch(setTheme(newTheme))}
@@ -403,7 +405,7 @@ const AppSettings = () => {
 					borderBottomColor="main.900"
 				>
 					<Text fontSize={titleSize}>Export App Info</Text>
-					<Text fontSize={descSize} color="main.500">Save a copy to your device for backup or transfer to a different device.</Text>
+					<Text fontSize={descSize} opacity={50}>Save a copy to your device for backup or transfer to a different device.</Text>
 				</VStack>
 			</Pressable>
 			<Pressable _pressed={{bg: "lighter"}} onPress={() => {
@@ -418,7 +420,7 @@ const AppSettings = () => {
 					borderBottomColor="main.900"
 				>
 					<Text fontSize={titleSize}>Import App Info</Text>
-					<Text fontSize={descSize} color="main.500">Import a copy of a previous backup, or from a different device.</Text>
+					<Text fontSize={descSize} opacity={50}>Import a copy of a previous backup, or from a different device.</Text>
 				</VStack>
 			</Pressable>
 		</ScrollView>
