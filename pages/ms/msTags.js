@@ -167,7 +167,7 @@ export const Tabular = (props) => {
 			ml={indent * 4}
 			variant="tabular"
 		>
-			<VStack>
+			<VStack px={2} pb={1}>
 				<HStack>
 					{columns.map((col, i) => {
 						return (

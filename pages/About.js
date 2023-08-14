@@ -11,7 +11,6 @@ import {
 	useBreakpointValue
 } from 'native-base';
 import { useOutletContext } from "react-router-dom";
-import { useDispatch } from 'react-redux';
 import packageJson from '../package.json';
 
 import {
@@ -22,13 +21,11 @@ import {
 	WordGenIcon,
 	WordListsIcon
 } from '../components/icons';
-import { setBaseTextSize } from '../store/appStateSlice';
 import getSizes from '../helpers/getSizes';
 
 const About = () => {
-	const dispatch = useDispatch();
 	const [navigate] = useOutletContext();
-	const [headerSize, textSize] = getSizes("xl", "md");
+	const [headerSize, textSize, contactSize] = getSizes("xl", "sm", "xs");
 	const indentMargin = useBreakpointValue({
 		base: 4,
 		sm: 8,
@@ -42,9 +39,17 @@ const About = () => {
 			navigate(goto);
 		}, [goto]);
 		const Inner = ({isPressed}) => {
-			const color = isPressed ? "primary.100" : "primary.500";
+			const color = "primary.500";
+			const opacity = isPressed ? 50 : 100;
 			return (
-				<>
+				<Box
+					bg="main.800"
+					shadow={3}
+					mt={firstElement ? 4 : 6}
+					opacity={opacity}
+					mx={8}
+					borderRadius="xl"
+				>
 					<HStack
 						p={4}
 						alignItems="center"
@@ -62,17 +67,11 @@ const About = () => {
 						</Text>
 					</HStack>
 					<VStack p={4} pt={0}>{children}</VStack>
-				</>
+				</Box>
 			);
 		};
 		return (
-			<Press
-				bg="main.800"
-				shadow={3}
-				onPress={otherFunc || onPress}
-				mt={firstElement ? 4 : 6}
-				children={(props) => <Inner {...props} />}
-			/>
+			<Press onPress={otherFunc || onPress} children={(props) => <Inner {...props} />} />
 		)
 	});
 
@@ -83,6 +82,7 @@ const About = () => {
 			bg="lighter"
 			p={2}
 			mb={3}
+			borderRadius="lg"
 		>
 			<Text fontSize={textSize} textAlign="center">{children}</Text>
 		</Box>
@@ -103,37 +103,11 @@ const About = () => {
 		)
 	});
 
-	const SectionHeader = memo(({SectionIcon, text}) => {
-		return (
-			<HStack
-				p={4}
-				alignItems="center"
-				justifyContent="center"
-				space={3}
-				flexWrap="wrap"
-			>
-				<SectionIcon color="primary.500" size={textSize} />
-				<Text bold
-					color="primary.500"
-					fontSize={headerSize}
-					textAlign="center"
-				>
-					{text}
-				</Text>
-			</HStack>
-		)
-	});
-
 	return (
 		<ScrollView
 			p={3}
 			bg="darker"
 		>
-			{ /*
-			<Pressable otherFunc={() => dispatch(setBaseTextSize("2xl"))} firstElement p={4}><Text fontSize="xl">Embiggen</Text></Pressable>
-			<Pressable otherFunc={() => dispatch(setBaseTextSize("xs"))} firstElement p={6}><Text fontSize="xs">Ensmallen</Text></Pressable>
-			<Pressable otherFunc={() => dispatch(setBaseTextSize("sm"))} firstElement p={6}><Text fontSize="sm">Endefaulten</Text></Pressable>
-			*/ }
 			<Pressable goto="/ms" firstElement SectionIcon={MorphoSyntaxIcon} title={"Morpho\u00ADSyntax"}>
 				<Highlight>This tool is for designing the basic structure of your language.</Highlight>
 				<Indented>Covers large-scale structures and small</Indented>
@@ -177,22 +151,23 @@ const About = () => {
 				<Indented>Save your often-used characters as Favorites bar for easy access</Indented>
 			</Pressable>
 			<VStack
+				mx={4}
 				mt={20}
-				shadow={3}
-				bg="main.800"
-				p={4}
-				pt={0}
 				alignItems="center"
+				bg="main.800"
+				pb={4}
+				shadow={3}
+				borderTopRadius="full"
 			>
-				<Heading color="primary.500" p={4} fontSize={headerSize}>App Info</Heading>
+				<Heading color="primary.500" p={4} fontSize={textSize}>App Info</Heading>
 				<HStack mx={4}>
-					<Text fontSize={textSize}>v.{packageJson.version}</Text>
+					<Text fontSize={contactSize}>v.{packageJson.version}</Text>
 				</HStack>
 				<HStack my={3} mx={4} space={2} alignItems="center" justifyContent="center" flexWrap="wrap">
-					<Text fontSize={textSize} textAlign="center">Contact:</Text>
+					<Text fontSize={contactSize} textAlign="center">Contact:</Text>
 					<Link
 						href="mailto:jasontankapps@gmail.com"
-						_text={{fontSize: textSize, textAlign: "center"}}
+						_text={{fontSize: contactSize, textAlign: "center"}}
 					>jasontankapps@gmail.com</Link>
 				</HStack>
 			</VStack>

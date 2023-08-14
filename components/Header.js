@@ -62,6 +62,8 @@ const AppHeader = () => {
 			w="full"
 			justifyContent="center"
 			alignItems="center"
+			borderBottomColor="main.800"
+			borderBottomWidth={1}
 			{...boxProps}
 		>
 			<HStack

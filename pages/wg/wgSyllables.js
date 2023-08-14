@@ -11,6 +11,8 @@ import { Keyboard, useWindowDimensions } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence, MotiView } from "moti";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { useOutletContext } from "react-router-dom";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 import {
 	EditIcon,
@@ -33,8 +35,6 @@ import { fontSizesInPx } from "../../store/appStateSlice";
 import Button from "../../components/Button";
 import IconButton from "../../components/IconButton";
 import FullPageModal from "../../components/FullBodyModal";
-import { useOutletContext } from "react-router-dom";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 const WGSyllables = () => {
 	const {
@@ -52,9 +52,6 @@ const WGSyllables = () => {
 	const emSize = fontSizesInPx[textSize] || fontSizesInPx.xs;
 	const { width, height } = useWindowDimensions();
 	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
-	useEffect(() => {
-		console.log(`height: ${height}`);
-	}, [height])
 	const SyllableBox = ({ title, syllablesValue, propName }) => {
 		const [modalOpen, setModalOpen] = useState(false);
 		const baseHeight = (height - (appHeaderHeight * 1.75) - 8);
@@ -63,19 +60,17 @@ const WGSyllables = () => {
 		const toggleOpacity = useSharedValue(1);
 		const toggleHeight = useSharedValue(appHeaderHeight * 3);
 		const handleKeyboardShow = useCallback(({endCoordinates}) => {
-			console.log(endCoordinates.height);
 			bodyHeight.value = withTiming(baseHeight - endCoordinates.height / 2, { duration: 50 });
 			topPadding.value = withTiming(endCoordinates.height / 2 - appHeaderHeight * 0.75, { duration: 50 });
 			toggleOpacity.value = withTiming(0, { duration: 50 });
 			toggleHeight.value = withTiming(0, { duration: 50});
-		}, [baseHeight, bodyHeight, toggleOpacity, toggleHeight])
+		}, [baseHeight, bodyHeight, toggleOpacity, toggleHeight]);
 		const handleKeyboardHide = useCallback(({endCoordinates}) => {
-			console.log(endCoordinates.height);
 			bodyHeight.value = withTiming(baseHeight - endCoordinates.height / 2, { duration: 50 });
 			topPadding.value = withTiming(endCoordinates.height / 2 - appHeaderHeight * 0.75, { duration: 50 });
 			toggleOpacity.value = withTiming(1, { duration: 50 });
 			toggleHeight.value = withTiming(appHeaderHeight * 3, { duration: 50 });
-		}, [baseHeight, bodyHeight, toggleOpacity, toggleHeight])
+		}, [baseHeight, bodyHeight, toggleOpacity, toggleHeight]);
 		useEffect(() => {
 			const listener = Keyboard.addListener("keyboardDidShow", handleKeyboardShow);
 			return () => listener.remove();
@@ -223,71 +218,72 @@ const WGSyllables = () => {
 			);
 		};
 		return (
-		<VStack
-			py={2.5}
-			px={2}
-			space={2}
-		>
-			<FullPageModal
-				modalOpen={modalOpen}
-				closeModal={() => setModalOpen(false)}
-				HeaderOverride={() => <Header />}
-				BodyContent={(props) => (<Body {...props} />)}
-				FooterOverride={() => <></>}
-			/>
-			<HStack
-				w="full"
-				alignItems="flex-start"
-				justifyContent="flex-start"
-				space={2.5}
+			<VStack
+				py={2.5}
+				px={2}
+				space={2}
 			>
-				<VStack
-					h="full"
+				<FullPageModal
+					modalOpen={modalOpen}
+					closeModal={() => setModalOpen(false)}
+					HeaderOverride={() => <Header />}
+					BodyContent={(props) => (<Body {...props} />)}
+					FooterOverride={() => <></>}
+				/>
+				<HStack
+					w="full"
+					alignItems="flex-start"
 					justifyContent="flex-start"
-					alignItems="flex-end"
-					flexGrow={0}
-					mt={2}
+					space={2.5}
 				>
 					<VStack
+						h="full"
 						justifyContent="flex-start"
 						alignItems="flex-end"
-						style={{minWidth: emSize * 8}}
+						flexGrow={0}
+						mt={2}
 					>
-						{title.split(" ").map((t, i) => (
-							<Text textAlign="right" fontSize={textSize} bold key={`${title}/${t}/${i}`}>{t}</Text>
-						))}
+						<VStack
+							justifyContent="flex-start"
+							alignItems="flex-end"
+							style={{minWidth: emSize * 8}}
+						>
+							{title.split(" ").map((t, i) => (
+								<Text textAlign="right" fontSize={textSize} bold key={`${title}/${t}/${i}`}>{t}</Text>
+							))}
+						</VStack>
+						{syllableDropoffOverrides[propName] !== null &&
+							<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
+								<Text lineHeight={descSize} fontSize={descSize} italic>{syllableDropoffOverrides[propName]}%</Text>
+							</Box>
+						}
 					</VStack>
-					{syllableDropoffOverrides[propName] !== null &&
-						<Box key={`${title}-override`} bg="lighter" px={1.5} py={1} m={0.5} mt={3}>
-							<Text lineHeight={descSize} fontSize={descSize} italic>{syllableDropoffOverrides[propName]}%</Text>
-						</Box>
-					}
-				</VStack>
-				<Box
-					key={`${title}-Inactive`}
-					bg="lighter"
-					py={2}
-					px={3}
-					minW={32}
-					style={{
-						maxWidth: width
-							- (emSize * 10) // label (8) + edit button (2)
-							- 24 // xPadding
-					}}
-				>
-					<Text fontSize={descSize} italic={syllablesValue === ""}>{syllablesValue || "(empty)"}</Text>
-				</Box>
-				<IconButton
-					flexShrink={0}
-					alignSelf="center"
-					onPress={() => setModalOpen(true)}
-					p={1}
-					variant="ghost"
-					icon={<EditIcon color="primary.400" size={textSize} />}
-				/>
-			</HStack>
-		</VStack>
-	)};
+					<Box
+						key={`${title}-Inactive`}
+						bg="lighter"
+						py={2}
+						px={3}
+						minW={32}
+						style={{
+							maxWidth: width
+								- (emSize * 10) // label (8) + edit button (2)
+								- 24 // xPadding
+						}}
+					>
+						<Text fontSize={descSize} italic={syllablesValue === ""}>{syllablesValue || "(empty)"}</Text>
+					</Box>
+					<IconButton
+						flexShrink={0}
+						alignSelf="center"
+						onPress={() => setModalOpen(true)}
+						p={1}
+						variant="ghost"
+						icon={<EditIcon color="primary.400" size={textSize} />}
+					/>
+				</HStack>
+			</VStack>
+		);
+	};
 	return (
 		<VStack h="full">
 			<GestureHandlerRootView><ScrollView>

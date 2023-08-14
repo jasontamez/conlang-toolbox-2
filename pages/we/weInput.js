@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
 	Text,
 	HStack,
 	VStack,
-	Modal,
+	Modal
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
+import { useOutletContext } from "react-router-dom";
+import Animated, { useAnimatedStyle, withTiming, useSharedValue } from "react-native-reanimated";
+import { Keyboard } from "react-native";
 
 import { editInput } from "../../store/weSlice";
 import {
@@ -35,8 +38,33 @@ const WEInput = () => {
 	const [column, setColumn] = useState(null);
 	const [cols, setCols] = useState(null);
 	const [importDisabled, setImportDisabled] = useState(false);
+	const [appHeaderHeight, viewHeight, tabBarHeight, navigate] = useOutletContext();
 	const [buttonSize, textSize, inputSize] = getSizes("lg", "md", "sm");
+
+	const inputBoxHeight = useSharedValue(viewHeight - tabBarHeight);
+	const handleKeyboardShow = useCallback(({endCoordinates}) => {
+		// tab bar disappears when keyboard appears, so add that back in to viewHeight
+		inputBoxHeight.value = withTiming(viewHeight - endCoordinates.height, { duration: 50 });
+	}, [inputBoxHeight, inputBoxHeight, tabBarHeight]);
+	const handleKeyboardHide = useCallback(({endCoordinates}) => {
+		inputBoxHeight.value = withTiming(viewHeight - tabBarHeight - endCoordinates.height, { duration: 50 });
+	}, [inputBoxHeight, inputBoxHeight, tabBarHeight]);
 	useEffect(() => {
+		const listener = Keyboard.addListener("keyboardDidShow", handleKeyboardShow);
+		return () => listener.remove();
+	}, [handleKeyboardShow]);
+	useEffect(() => {
+		const listener = Keyboard.addListener("keyboardDidHide", handleKeyboardHide);
+		return () => listener.remove();
+	}, [handleKeyboardHide]);
+	const mainAnimatedStyle = useAnimatedStyle(() => ({
+		height: inputBoxHeight.value,
+		alignItems: "center",
+		justifyContent: "center"
+	}));
+
+	useEffect(() => {
+		// handle the disabled status of the Clear button
 		if(input && clearDisabled) {
 			setClearDisabled(false);
 		} else if (!input && !clearDisabled) {
@@ -45,6 +73,7 @@ const WEInput = () => {
 		setStateInput(input);
 	}, [input]);
 	useState(() => {
+		// handle the disabled status of the Import button
 		if (lexicon.length > 0 && columns.length > 0) {
 			const cc = columns.map(col => { return {...col}; });
 			setCols(cc);
@@ -54,7 +83,7 @@ const WEInput = () => {
 			importDisabled || setImportDisabled(true);
 			column && setColumn(null);
 		}
-	}, [columns]);
+	}, [lexicon, columns]);
 
 	const maybeClearInput = () => {
 		if(disableConfirms) {
@@ -91,12 +120,7 @@ const WEInput = () => {
 	};
 
 	return (
-		<VStack
-			h="full"
-			maxH="full"
-			justifyContent="space-between"
-			alignItems="center"
-		>
+		<VStack style={{ height: viewHeight }}>
 			<StandardAlert
 				alertOpen={clearAlert}
 				setAlertOpen={setClearAlert}
@@ -180,32 +204,33 @@ const WEInput = () => {
 					</Modal.Footer>
 				</Modal.Content>
 			</Modal>
-			<TextAreaSetting
-				text={null}
-				value={stateInput}
-				placeholder="Enter the words to evolve here, one word per line"
-				onChangeText={
-					(t) => {
-						debounce(
-							() => dispatch(editInput(t)),
-							{ namespace: "WEinput "}
-						);
-						setStateInput(t);
+			<Animated.View style={mainAnimatedStyle}>
+				<TextAreaSetting
+					text={null}
+					value={stateInput}
+					placeholder="Enter the words to evolve here, one word per line"
+					onChangeText={
+						(t) => {
+							debounce(
+								() => dispatch(editInput(t)),
+								{ namespace: "WEinput "}
+							);
+							setStateInput(t);
+						}
 					}
-				}
-				boxProps={{
-					w: "full",
-					h: "full",
-					flex: 1,
-					px: 4,
-					py: 2
-				}}
-				inputProps={{
-					h: "full",
-					w: "full",
-					fontSize: inputSize
-				}}
-			/>
+					boxProps={{
+						flex: 1,
+						px: 4,
+						py: 2
+					}}
+					inputProps={{
+						h: "full",
+						w: "full",
+						flex: 1,
+						fontSize: inputSize
+					}}
+				/>
+			</Animated.View>
 			<HStack
 				alignItems="flex-end"
 				justifyContent="space-between"
@@ -213,6 +238,7 @@ const WEInput = () => {
 				w="full"
 				px={2}
 				py={1}
+				style={{height: tabBarHeight}}
 			>
 				<Button
 					borderRadius="full"
