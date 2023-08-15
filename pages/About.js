@@ -38,8 +38,7 @@ const About = () => {
 		const onPress = useCallback(() => {
 			navigate(goto);
 		}, [goto]);
-		const Inner = ({isPressed}) => {
-			const color = "primary.500";
+		const Inner = memo(({isPressed, firstElement}) => {
 			const opacity = isPressed ? 50 : 100;
 			return (
 				<Box
@@ -57,9 +56,9 @@ const About = () => {
 						space={3}
 						flexWrap="wrap"
 					>
-						<SectionIcon color={color} size={textSize} />
+						<SectionIcon color="primary.500" size={textSize} />
 						<Text bold
-							color={color}
+							color="primary.500"
 							fontSize={headerSize}
 							textAlign="center"
 						>
@@ -69,9 +68,9 @@ const About = () => {
 					<VStack p={4} pt={0}>{children}</VStack>
 				</Box>
 			);
-		};
+		});
 		return (
-			<Press onPress={otherFunc || onPress} children={(props) => <Inner {...props} />} />
+			<Press onPress={otherFunc || onPress} children={(props) => <Inner firstElement={firstElement} {...props} />} />
 		)
 	});
 

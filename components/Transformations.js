@@ -5,7 +5,6 @@ import {
 	VStack,
 	Fab,
 	Modal,
-	useContrastText,
 	useToast
 } from "native-base";
 import React, { useEffect, useRef, useState, useCallback } from "react";

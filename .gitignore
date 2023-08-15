@@ -64,6 +64,8 @@ web-build/
 dist/
 
 package-lock.json
+android/keystores/
+credentials.json
 
 # Temporary ignoring
 assets/sounds

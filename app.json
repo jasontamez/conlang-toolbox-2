@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "conlang-toolbox-app",
-    "slug": "net.jasontank.conlangtoolbox",
+    "name": "Conlang Toolbox",
+    "slug": "conlang-toolbox",
     "version": "1.0.0",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -22,10 +22,15 @@
     },
     "android": {
       "package": "net.jasontank.conlangtoolbox",
-      "versionCode": "10"
+      "versionCode": "11"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3d7cc347-c19c-4651-93db-346c8556167b"
+      }
     }
   },
   "logging": true
