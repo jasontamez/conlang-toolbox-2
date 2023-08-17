@@ -3,12 +3,13 @@ import { NativeRouter } from 'react-router-native';
 import { Route, Routes } from 'react-router';
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { useWindowDimensions, StatusBar, BackHandler } from 'react-native';
+import { useWindowDimensions, Dimensions, StatusBar, BackHandler } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { NativeBaseProvider, VStack } from 'native-base';
 import 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
+import * as NavigationBar from 'expo-navigation-bar';
 
 import StandardAlert from './components/StandardAlert';
 import getTheme from './helpers/theme';
@@ -47,6 +48,8 @@ SplashScreen.preventAutoHideAsync();
 
 const App = () => {
 	const {store, persistor} = getStoreInfo();
+	NavigationBar.setVisibilityAsync('hidden');
+	NavigationBar.setBehaviorAsync('overlay-swipe');
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
@@ -89,11 +92,7 @@ const Layout = () => {
 		hasCheckedForOldCustomInfo
 	]);
 	return (
-		<NativeBaseProvider
-			theme={themeObject}
-			safeArea
-			bg="main.900"
-		>
+		<NativeBaseProvider theme={themeObject}>
 			<StatusBar
 				backgroundColor={themeObject.colors.main["900"]}
 				barStyle={theme.indexOf("Light") === -1 ? "light-content" : "dark-content"}
@@ -141,8 +140,9 @@ const MainOutlet = ({setBackButtonAlert}) => {
 };
 
 const AppRoutes = () => {
-	const {width, height} = useWindowDimensions();
 	const [backButtonAlert, setBackButtonAlert] = useState(false);
+	const deviceHeight = Dimensions.get('screen').height;
+	const {width, height} = useWindowDimensions();
 	return (
 		<NativeRouter>
 			<StandardAlert
@@ -156,17 +156,12 @@ const AppRoutes = () => {
 				detatchButtons
 			/>
 			<VStack
-				h="full"
 				alignItems="stretch"
 				justifyContent="space-between"
-				w="full"
-				position="absolute"
-				top={0}
-				bottom={0}
 				bg="main.800"
 				style={{
-					maxWidth: width,
-					maxHeight: height
+					width,
+					height
 				}}
 			>
 				<AppHeader />
@@ -203,6 +198,7 @@ const AppRoutes = () => {
 					</Route>
 				</Routes>
 			</VStack>
+			<VStack style={{height: deviceHeight - height, width}} bg="main.900" />
 		</NativeRouter>
 	);
 };
