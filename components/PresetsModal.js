@@ -104,7 +104,7 @@ const PresetsModal = ({
 									key={`${label}-RadioButton`}
 									size={textSize}
 									value={label}
-									_text={{fontSize: inputSize}}
+									_text={{fontSize: inputSize, color: "text.50"}}
 									my={1}
 								>{label}</Radio>
 							);

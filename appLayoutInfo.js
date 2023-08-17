@@ -227,7 +227,7 @@ const ExtraCharacters = {
 		bg: "primary.500"
 	},
 	textProps: {
-		color: 'primary.500'
+		color: 'primary.50'
 	},
 	extraChars: false,
 	rightHeader: [ "ExtraCharsHeaderButton" ],

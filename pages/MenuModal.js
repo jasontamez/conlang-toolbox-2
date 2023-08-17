@@ -335,10 +335,9 @@ const MenuModal = () => {
 				animationType="fade"
 			>
 				<HStack
-					h="full"
-					minHeight="full"
 					bg="#00000066"
 					safeArea
+					style={{height}}
 				>
 					<ScrollView bg="main.800">
 						<VStack
